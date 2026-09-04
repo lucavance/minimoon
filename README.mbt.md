@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Documentation](docs/README.md) · [Bilingual code analysis](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
-Minimoon is MoonBit for WeChat MiniApp Skyline. Version `0.1.0` combines an
+Minimoon is MoonBit for WeChat MiniApp Skyline. Version `0.1.1` combines an
 Elm-style authoring API with App Contract v7, runtime ABI v10, renderer protocol
 v7, and a CommonJS MiniApp host boundary.
 
@@ -196,7 +196,7 @@ minimoon devtools record . \
   --status passed \
   --recorded-at <actual-timestamp> \
   --tool-version "<actual-version>" \
-  --notes "Minimoon 0.1.0 checklist passed"
+  --notes "Minimoon 0.1.1 checklist passed"
 minimoon verify . --release
 ```
 
@@ -228,12 +228,12 @@ evidence. Rerun `check:candidate` before staging changes.
 a 250 KiB hard ceiling, and at least 16 KiB of reserved headroom.
 
 The floor was revalidated on 2026-09-04 with `moon 0.1.20260827` and
-`moonc v0.10.11`. Repository and
-generated-starter tooling pin Node `26.8.1` and Bun `1.4.0`. The only maintained
-standalone JavaScript is
-`scripts/bridge/weapp_tailwindcss_adapter.mjs`; production and validation host
-sources are MoonBit-owned templates, while committed MiniApp JavaScript is
-generated.
+`moonc v0.10.11`. Repository and generated-starter tooling support Node
+`>=24.11.0`; CI validates the Node 24.11.0 lower boundary and the Node 26.8.1
+primary environment, while Bun remains pinned to `1.4.0`. The only maintained
+standalone JavaScript is `scripts/bridge/weapp_tailwindcss_adapter.mjs`;
+production and validation host sources are MoonBit-owned templates, while
+committed MiniApp JavaScript is generated.
 
 ```text
 src/
@@ -254,5 +254,5 @@ examples/
   miniapp_conformance_app/ one four-page real-host fixture
 ```
 
-Minimoon `0.1.0` remains pre-1.0. Product version is defined by `moon.mod` and
+Minimoon `0.1.1` remains pre-1.0. Product version is defined by `moon.mod` and
 `CHANGELOG.md`; version Git tags are not used.

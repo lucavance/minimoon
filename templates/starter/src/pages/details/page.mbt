@@ -63,12 +63,12 @@ fn app(
   source : @minimoon.Val[String],
 ) -> @minimoon.Val[@minimoon.Node] {
   let (model, emit) = @minimoon.create_state(
-    { enabled: false, visits: 0 },
+    { enabled: false, visits: 0, },
     update=(current, message, _) => {
       match message {
-        Toggle => @minimoon.no_cmd({ ..current, enabled: !current.enabled })
+        Toggle => @minimoon.no_cmd({ ..current, enabled: !current.enabled, })
         PageShown =>
-          @minimoon.no_cmd({ ..current, visits: current.visits + 1 })
+          @minimoon.no_cmd({ ..current, visits: current.visits + 1, })
         Back =>
           @minimoon.with_cmd(
             current,
@@ -80,9 +80,7 @@ fn app(
     },
     subscriptions=(_, emit) => context.on_show(emit(PageShown)),
   )
-  model.view2(source, (current, value) => {
-    view(current, emit, value)
-  })
+  model.view2(source, (current, value) => view(current, emit, value))
 }
 
 ///|

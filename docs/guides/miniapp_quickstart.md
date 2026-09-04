@@ -2,9 +2,9 @@
 
 ## Prerequisites
 
-Use `moon 0.1.20260827` with `moonc v0.10.11` or newer. JavaScript tooling is
-reproducible with the generated `.node-version` (`26.8.1`) and Bun `1.4.0`;
-keep the exact package versions and PostCSS override emitted by `minimoon init`.
+Use `moon 0.1.20260827` with `moonc v0.10.11` or newer. JavaScript tooling
+supports Node `>=24.11.0`, and Bun is pinned to `1.4.0`; keep the exact package
+versions and PostCSS override emitted by `minimoon init`.
 
 ## 1. Install the CLI from a checkout
 
@@ -13,7 +13,7 @@ moon install --path src/cmd/minimoon
 minimoon --version
 ```
 
-Expected product version: `0.1.0`.
+Expected product version: `0.1.1`.
 
 ## 2. Create and build
 
@@ -80,7 +80,7 @@ minimoon devtools record . \
   --status passed \
   --recorded-at <actual-timestamp> \
   --tool-version "<actual-version>" \
-  --notes "Minimoon 0.1.0 checklist passed"
+  --notes "Minimoon 0.1.1 checklist passed"
 minimoon verify . --release
 ```
 

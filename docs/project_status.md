@@ -1,7 +1,7 @@
 # Project status
 
-Minimoon `0.1.0` is the first non-prerelease baseline. The current source and
-generated reports define the product.
+Minimoon `0.1.1` is the current patch release over the first non-prerelease
+baseline. The current source and generated reports define the product.
 
 ## Current implementation
 
@@ -19,9 +19,10 @@ ordered host scheduling, and disposal.
 ## Toolchain validation
 
 The repository baseline was revalidated on 2026-09-04 with `moon 0.1.20260827`,
-`moonc v0.10.11`, Node `26.8.1`, and Bun `1.4.0`. CI accepts no
-older Moon or moonc version and installs the JavaScript dependency graph from
-the committed lockfile.
+`moonc v0.10.11`, and Bun `1.4.0`. JavaScript tooling supports Node
+`>=24.11.0`; CI validates the Node 24.11.0 lower boundary and the Node 26.8.1
+primary environment, and installs the JavaScript dependency graph from the
+committed lockfile.
 
 ## Evidence state
 

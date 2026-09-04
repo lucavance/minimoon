@@ -8,6 +8,22 @@ tags.
 
 No unreleased changes.
 
+## [0.1.1] - 2026-09-04
+
+### Changed
+
+- Declared Node `>=24.11.0` support for repository and generated-starter
+  JavaScript tooling, with CI coverage at Node 24.11.0 and 26.8.1. Generated
+  starters use the compatibility range without a version-manager-specific pin;
+  Bun remains pinned to `1.4.0`.
+
+### Fixed
+
+- Formatted the embedded starter sources for the current MoonBit toolchain so
+  a fresh `minimoon init` passes `moon fmt --check` without local rewrites.
+- Added generated-starter formatting to the generator gate so future formatter
+  drift fails before publication.
+
 ## [0.1.0] - 2026-09-04
 
 This is the first non-prerelease Minimoon release. Third-party source attribution

@@ -160,16 +160,16 @@ fn component_source(name : String) -> String {
   "pub enum Msg {\n  Increment\n}\n\n" +
   "///|\n" +
   "pub fn props(label~ : String, event_key~ : String) -> Props {\n" +
-  "  { label, event_key }\n}\n\n" +
+  "  { label, event_key, }\n}\n\n" +
   "///|\n" +
   "pub fn update_model(model : Model, _message : Msg) -> Model {\n" +
-  "  { value: model.value + 1 }\n}\n\n" +
+  "  { value: model.value + 1, }\n}\n\n" +
   "///|\n" +
   "pub fn component(props : @minimoon.Val[Props]) -> @minimoon.Val[@minimoon.Node] {\n" +
-  "  let (model, emit) = @minimoon.create_pure_state(\n" +
-  "    { value: 0 },\n" +
-  "    update=(current, message) => update_model(current, message),\n" +
-  "  )\n" +
+  "  let (model, emit) = @minimoon.create_pure_state({ value: 0, }, update=(\n" +
+  "    current,\n" +
+  "    message,\n" +
+  "  ) => update_model(current, message))\n" +
   "  props.view2(model, (props, current) => {\n" +
   "    @minimoon.button(\n" +
   "      on_tap=emit(Increment),\n" +
@@ -259,14 +259,11 @@ async fn run_add_component(
   guard module_id.val != "" else {
     fail("moon.mod does not contain a module name")
   }
-  let dependency = "  " +
-    (module_id.val + "/components/" + name).escape() +
-    " @" +
-    name +
-    ",\n"
+  let component_package = module_id.val + "/components/" + name
+  let dependency = "  " + component_package.escape() + ",\n"
   let old_manifest = @fs.read_file(page_manifest).text()
-  guard !old_manifest.contains("@" + name) else {
-    fail("page import alias already exists: " + name)
+  guard !old_manifest.contains(component_package.escape()) else {
+    fail("component page import already exists: " + name)
   }
   guard old_manifest.has_prefix("import {\n") else {
     fail("page moon.pkg must begin with an import block")
@@ -287,11 +284,13 @@ async fn run_add_component(
       "    id=\"component_test\",\n" +
       "    route=@minimoon.route(\"pages/component_test/component_test\"),\n" +
       "    title=\"Component Test\",\n" +
-      "    build=_ => component(\n" +
-      "      @minimoon.Val::constant(\n" +
-      "        props(label=\"Status\", event_key=\"status/increment\"),\n" +
-      "      ),\n" +
-      "    ),\n" +
+      "    build=_ => {\n" +
+      "      component(\n" +
+      "        @minimoon.Val::constant(\n" +
+      "          props(label=\"Status\", event_key=\"status/increment\"),\n" +
+      "        ),\n" +
+      "      )\n" +
+      "    },\n" +
       "  )\n" +
       "  let runtime = definition.create_runtime()\n" +
       "  let _ = runtime.mount()\n" +

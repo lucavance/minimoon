@@ -382,6 +382,13 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
     "moon.mod",
     ("lampclaw/minimoon@" + @versions.product_version()).escape(),
   )
+  run(
+    root,
+    "Packaged registry consumer formatting",
+    "moon",
+    ["fmt", "--check"],
+    cwd=consumer,
+  )
   @fs.symlink(
     target=join(root, "node_modules"),
     join(consumer, "node_modules"),
@@ -431,10 +438,8 @@ async fn generator_suite(root : String) -> Unit {
     "packageManager",
   )
   let repository_overrides = json_field(repository_package, "overrides")
-  let repository_node_version = @fs.read_file(join(root, ".node-version")).text()
-  guard repository_node_version ==
-    json_string(repository_engines, "node") + "\n" else {
-    abort("repository .node-version and engines.node have drifted")
+  guard json_string(repository_engines, "node") == supported_node_engine else {
+    abort("repository engines.node must be " + supported_node_engine)
   }
   @fs.mkdir(bin, permission=0o755, recursive=true)
   run(root, "Install native minimoon CLI", "moon", [
@@ -492,6 +497,16 @@ async fn generator_suite(root : String) -> Unit {
   )
   require_text(registry_app, "README.md", "MoonBit package registry")
   forbid_text(registry_app, "README.md", "local source checkout by `moon.work`")
+  guard !@fs.exists(join(registry_app, ".node-version")) else {
+    abort("standalone registry template must not contain .node-version")
+  }
+  run(
+    root,
+    "Standalone registry template formatting",
+    "moon",
+    ["fmt", "--check"],
+    cwd=registry_app,
+  )
   require_command_failure(
     "Mutually exclusive candidate and release verification",
     executable,
@@ -507,7 +522,7 @@ async fn generator_suite(root : String) -> Unit {
     for
       file in [
         "moon.mod", "moon.work", "miniapp.minimoon.json", "package.json", "README.md",
-        ".gitignore", ".node-version", "styles/tailwind.css",
+        ".gitignore", "styles/tailwind.css",
       ] {
       guard @fs.exists(join(app, file)) else {
         abort(template + " template is missing " + file)
@@ -527,9 +542,8 @@ async fn generator_suite(root : String) -> Unit {
       "moon.mod",
       ("lampclaw/minimoon@" + product_version).escape(),
     )
-    guard @fs.read_file(join(app, ".node-version")).text() ==
-      repository_node_version else {
-      abort(template + " template has stale .node-version")
+    guard !@fs.exists(join(app, ".node-version")) else {
+      abort(template + " template must not contain .node-version")
     }
     let generated_package = read_json(app, "package.json")
     let generated_dev_dependencies = json_field(
@@ -753,7 +767,9 @@ async fn generator_suite(root : String) -> Unit {
       require_file(app, "src/components/status_badge/component.mbt")
       require_file(app, "src/components/status_badge/component_test.mbt")
       require_file(app, "src/pages/home/status_badge.component.mbt")
-      require_text(app, "src/pages/home/moon.pkg", "@status_badge")
+      require_text(
+        app, "src/pages/home/moon.pkg", "lampclaw/starter/components/status_badge",
+      )
       require_text(
         app, "src/components/status_badge/component.mbt", "@minimoon.create_pure_state",
       )
@@ -904,6 +920,16 @@ async fn generator_suite(root : String) -> Unit {
         )
       }
     }
+    run(
+      root,
+      template + " template formatting",
+      "moon",
+      [
+        "fmt", "--check", "moon.mod", "src/pages/home", "src/pages/details", "src/pages/activity_log",
+        "src/components/status_badge",
+      ],
+      cwd=app,
+    )
     run(
       root,
       template + " template MoonBit check",

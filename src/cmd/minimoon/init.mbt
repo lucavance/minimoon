@@ -125,7 +125,7 @@ fn render_moon_mod(package_name : String, description : String) -> String {
   "readme = \"README.md\"\n\n" +
   "repository = \"\"\n\n" +
   "license = \"Apache-2.0\"\n\n" +
-  "keywords = [\"elm-style\", \"miniapp\", \"minimoon\"]\n\n" +
+  "keywords = [ \"elm-style\", \"miniapp\", \"minimoon\" ]\n\n" +
   "description = " +
   json_string(description) +
   "\n\n" +
@@ -231,13 +231,12 @@ fn create_init_manifest(plan : InitPlan) -> InitManifest {
       plan.local_root is Some(_),
     ),
   })
-  files.push({ path: ".node-version", content: "26.8.1\n", })
   files.push({
     path: "package.json",
     content: "{\n" +
     "  \"private\": true,\n" +
     "  \"engines\": {\n" +
-    "    \"node\": \"26.8.1\"\n" +
+    "    \"node\": \">=24.11.0\"\n" +
     "  },\n" +
     "  \"devDependencies\": {\n" +
     "    \"@tailwindcss/cli\": \"4.3.3\",\n" +

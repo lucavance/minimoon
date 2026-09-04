@@ -4,11 +4,11 @@
 
 ## 1. 当前质量结论 / Current Quality Conclusion
 
-Minimoon 0.1.0 已有完整的自动 candidate gate：MoonBit native/js tests、coverage floors、生成稳定性、host simulation、性能 work counters、体积预算、archive consumer 和 CI handoff。它能高置信度发现确定性回归，但不能替代微信真实渲染线程、真机内存和调试链路延迟。
+Minimoon 0.1.1 已有完整的自动 candidate gate：MoonBit native/js tests、coverage floors、生成稳定性、host simulation、性能 work counters、体积预算、archive consumer 和 CI handoff。它能高置信度发现确定性回归，但不能替代微信真实渲染线程、真机内存和调试链路延迟。
 
 > **English:**
 >
-> Minimoon 0.1.0 has a complete automated candidate gate: MoonBit native/JS tests, coverage floors, generation stability, host simulation, performance work counters, size budgets, archive consumers, and CI handoff. It detects deterministic regressions with high confidence but cannot replace WeChat’s real rendering thread, physical-device memory, or debugging-path latency.
+> Minimoon 0.1.1 has a complete automated candidate gate: MoonBit native/JS tests, coverage floors, generation stability, host simulation, performance work counters, size budgets, archive consumers, and CI handoff. It detects deterministic regressions with high confidence but cannot replace WeChat’s real rendering thread, physical-device memory, or debugging-path latency.
 
 ```mermaid
 flowchart TB
@@ -168,7 +168,7 @@ MoonBit benchmarks 覆盖 100、500、2,000 nodes 的 scope ownership、scalar/k
 
 ```mermaid
 quadrantChart
-    title Minimoon 0.1.0 risk map / 风险地图
+    title Minimoon 0.1.1 risk map / 风险地图
     x-axis Low likelihood / 低概率 --> High likelihood / 高概率
     y-axis Low impact / 低影响 --> High impact / 高影响
     quadrant-1 Prioritize / 优先处理

@@ -5,7 +5,13 @@ let supported_moon_floor = "0.1.20260827"
 let supported_moonc_floor = "0.10.11"
 
 ///|
-let supported_node_version = "26.8.1"
+let supported_node_engine = ">=24.11.0"
+
+///|
+let node_lts_floor = "24.11.0"
+
+///|
+let primary_node_version = "26.8.1"
 
 ///|
 let supported_bun_version = "1.4.0"
@@ -145,6 +151,33 @@ async fn static_suite(root : String) -> Unit {
     ".github/workflows/test.yml",
     "supported floor " + supported_moonc_floor,
   )
+  require_text(
+    root,
+    ".github/workflows/test.yml",
+    "node-version: " + primary_node_version,
+  )
+  require_text(
+    root,
+    ".github/workflows/test.yml",
+    "node-version: " + node_lts_floor,
+  )
+  require_text(root, ".github/workflows/test.yml", "node-lts-compat:")
+  require_text(root, ".github/workflows/test.yml", "Node 24 LTS compatibility")
+  require_text(root, ".github/workflows/test.yml", "moon test --target js")
+  require_text(
+    root, ".github/workflows/test.yml", "moon run src/cmd/minimoon --target native -- check --suite generator",
+  )
+  forbid_text(root, ".github/workflows/test.yml", "node-version-file")
+  guard !@fs.exists(join(root, ".node-version")) else {
+    abort(
+      "repository must express Node compatibility through engines, not .node-version",
+    )
+  }
+  require_text(
+    root,
+    "package.json",
+    "\"node\": \"" + supported_node_engine + "\"",
+  )
   require_text(root, ".gitignore", "**/generated/devtools.evidence.json")
   require_untracked_path(
     root, "examples/miniapp_conformance_app/generated/devtools.evidence.json",
@@ -171,7 +204,7 @@ async fn static_suite(root : String) -> Unit {
       token in [
         "moon " + supported_moon_floor,
         "moonc v" + supported_moonc_floor,
-        supported_node_version,
+        supported_node_engine,
         supported_bun_version,
       ] {
       require_text(root, path, token)

@@ -15,13 +15,10 @@ pub enum Msg {
 }
 
 ///|
-fn update(
-  model : Model,
-  msg : Msg,
-) -> (Model, @minimoon.Cmd) {
+fn update(model : Model, msg : Msg) -> (Model, @minimoon.Cmd) {
   match msg {
-    Increment => @minimoon.no_cmd({ ..model, count: model.count + 1 })
-    Decrement => @minimoon.no_cmd({ ..model, count: model.count - 1 })
+    Increment => @minimoon.no_cmd({ ..model, count: model.count + 1, })
+    Decrement => @minimoon.no_cmd({ ..model, count: model.count - 1, })
     NameInput(name) => @minimoon.no_cmd({ ..model, name, })
     OpenDetails =>
       @minimoon.with_cmd(
@@ -32,7 +29,7 @@ fn update(
           ]),
         ),
       )
-    PageShown => @minimoon.no_cmd({ ..model, visits: model.visits + 1 })
+    PageShown => @minimoon.no_cmd({ ..model, visits: model.visits + 1, })
   }
 }
 
@@ -96,7 +93,7 @@ pub fn program() -> @minimoon.Page {
     id="home",
     route=@minimoon.route("pages/home/home"),
     title="Home",
-    model={ count: 0, name: "Minimoon", visits: 0 },
+    model={ count: 0, name: "Minimoon", visits: 0, },
     update=(current, message, _) => update(current, message),
     view~,
     capabilities=[@minimoon.NavigateTo],

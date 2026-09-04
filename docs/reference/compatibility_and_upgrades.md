@@ -36,9 +36,11 @@ is the verified MiniApp host format for 0.1.x; ESM is not an implied upgrade.
   `.mbti` files are checked to detect accidental architectural drift.
 
 The supported toolchain floor is `moon 0.1.20260827` with `moonc v0.10.11`.
-Repository and generated-starter JavaScript tooling pin Node `26.8.1` and Bun
-`1.4.0`. Raising any of these versions requires updating CI, the package
-consumer gate, starter guidance, and the compatibility notes in one change.
+Repository and generated-starter JavaScript tooling support Node `>=24.11.0`,
+with CI coverage at the 24.11.0 lower boundary and in the 26.8.1 primary
+environment; Bun is pinned to `1.4.0`. Raising any floor or pin requires
+updating CI, the package consumer gate, starter guidance, and the compatibility
+notes in one change.
 
 ## Upgrade procedure
 

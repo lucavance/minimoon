@@ -1,6 +1,6 @@
 name = "lampclaw/minimoon"
 
-version = "0.1.0"
+version = "0.1.1"
 
 import {
   "moonbitlang/async@0.21.2",
@@ -36,7 +36,6 @@ options(
   exclude: [
     ".github",
     ".githooks",
-    ".node-version",
     "AGENTS.md",
     "README.zh-CN.mbt.md",
     "bun.lock",

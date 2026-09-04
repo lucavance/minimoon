@@ -2,7 +2,7 @@
 
 [English](README.md) · [文档索引](docs/README.md) · [双语代码分析](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
-Minimoon 是面向微信小程序 Skyline 的 MoonBit UI 框架。`0.1.0` 以 Elm-style
+Minimoon 是面向微信小程序 Skyline 的 MoonBit UI 框架。`0.1.1` 以 Elm-style
 编写模型为入口，采用 App Contract v7、runtime ABI v10、renderer protocol v7
 和 CommonJS 小程序宿主边界。
 
@@ -172,7 +172,7 @@ minimoon devtools record . \
   --status passed \
   --recorded-at <实际时间> \
   --tool-version "<实际版本>" \
-  --notes "Minimoon 0.1.0 checklist passed"
+  --notes "Minimoon 0.1.1 checklist passed"
 minimoon verify . --release
 ```
 
@@ -203,10 +203,10 @@ testing 可选包增加接口。
 硬上限与至少 16 KiB 的预留余量。
 
 工具链下限已于 2026-09-04 使用 `moon 0.1.20260827` 与 `moonc v0.10.11`
-重新验证。仓库和生成的
-starter 都固定使用 Node `26.8.1` 与 Bun `1.4.0`。唯一独立维护的 JavaScript
-是 `scripts/bridge/weapp_tailwindcss_adapter.mjs`；生产和验证宿主源码由
-MoonBit 模板持有，提交的小程序 JavaScript 均为生成产物。
+重新验证。仓库和生成的 starter 支持 Node `>=24.11.0`；CI 验证 24.11.0
+最低边界与 26.8.1 主环境，Bun 则继续固定为 `1.4.0`。唯一独立维护的
+JavaScript 是 `scripts/bridge/weapp_tailwindcss_adapter.mjs`；生产和验证宿主
+源码由 MoonBit 模板持有，提交的小程序 JavaScript 均为生成产物。
 
-Minimoon `0.1.0` 仍属于 pre-1.0。产品版本由 `moon.mod` 与 `CHANGELOG.md`
+Minimoon `0.1.1` 仍属于 pre-1.0。产品版本由 `moon.mod` 与 `CHANGELOG.md`
 定义，不使用 Git 版本标签。

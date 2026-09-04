@@ -23,7 +23,15 @@ while fingerprint-bound
 is local and Git-ignored. Local release verification does not publish its
 timestamp, tool version, notes, or outcome in the repository.
 
-## After 0.1.0
+## 0.1.1 starter maintenance
+
+The `0.1.1` patch keeps the 0.1 public API and generated host protocols
+unchanged while making a fresh `minimoon init` formatter-stable under the
+supported MoonBit toolchain. It also expresses JavaScript runtime compatibility
+as Node `>=24.11.0` rather than an exact local-version file. Generator and CI
+gates enforce both properties.
+
+## 0.1.x maintenance
 
 1. Treat the exact gate-passing 0.1.0 archive as the immutable registry baseline.
 2. Drive API additions from sustained application dogfooding rather than
