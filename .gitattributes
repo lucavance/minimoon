@@ -1,0 +1,19 @@
+# GitHub Linguist should not count committed MiniApp build and review output as
+# maintained source.
+examples/*/dist/** linguist-generated=true
+examples/*/generated/** linguist-generated=true
+
+# MoonBit's runtime contains whitespace lookup strings. Release minification
+# preserves those strings as multiline template literals, where end-of-line
+# spaces are semantic data rather than source formatting defects.
+examples/*/dist/**/*.runtime.js whitespace=-blank-at-eol,-blank-at-eof
+
+# Formatter-stable generated MoonBit source.
+**/*.generated.mbt linguist-generated=true
+
+# Tailwind-generated source WXSS copied into generated MiniApp pages.
+examples/*/styles/*.wxss linguist-generated=true
+
+# moon info package surfaces — generated, not authored MoonBit. The current
+# generator emits one stable terminal blank line.
+**/*.mbti linguist-generated=true whitespace=-blank-at-eof

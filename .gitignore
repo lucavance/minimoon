@@ -1,0 +1,28 @@
+.DS_Store
+
+# MoonBit build output
+_build/
+.mooncakes/
+.tmp/
+
+# Frontend examples
+node_modules/
+dist/
+!examples/miniapp_conformance_app/dist/
+!examples/miniapp_conformance_app/dist/**
+
+# Developer-local WeChat project settings and real AppIDs
+examples/*/dist/project.private.config.json
+
+# Local command shims and editor settings
+.bin/
+.vscode/
+
+# Local agent/editor state
+.moonagent/
+
+# Logs and local environment files
+*.log
+.env
+.env.*
+!.env.example

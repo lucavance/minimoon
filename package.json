@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "minimoon": "moon run src/cmd/minimoon --target native --",
+    "metrics": "moon run src/cmd/minimoon --target native -- metrics",
+    "verify:example": "moon run src/cmd/minimoon --target native -- verify examples/miniapp_conformance_app",
+    "check:mvp": "moon run src/cmd/minimoon --target native -- check mvp",
+    "check:candidate": "moon run src/cmd/minimoon --target native -- check candidate",
+    "check:all": "moon run src/cmd/minimoon --target native -- check all",
+    "check:docs": "moon run src/cmd/minimoon --target native -- check --suite docs",
+    "check:api": "moon run src/cmd/minimoon --target native -- check --suite api",
+    "check:coverage": "moon run src/cmd/minimoon --target native -- check --suite coverage",
+    "check:perf": "moon run src/cmd/minimoon --target native -- check --suite perf",
+    "docs:diagrams": "moon run src/cmd/minimoon_docs --target native -- render",
+    "docs:diagrams:check": "moon run src/cmd/minimoon_docs --target native -- check",
+    "coverage": "moon clean --target-dir _build/coverage && moon test --enable-coverage --target-dir _build/coverage && (cd _build/coverage && moon_cove_report -f summary --source-paths ../.. --ignore-missing-files)",
+    "miniapp:generate": "moon run src/cmd/minimoon --target native -- build examples/miniapp_conformance_app"
+  },
+  "engines": {
+    "node": "26.8.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.3",
+    "acorn": "8.18.0",
+    "eslint-scope": "9.1.2",
+    "postcss": "8.5.26",
+    "tailwindcss": "4.3.3",
+    "weapp-tailwindcss": "5.5.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "bun",
+      "version": "1.4.0",
+      "onFail": "download"
+    }
+  },
+  "overrides": {
+    "postcss": "8.5.26"
+  }
+}

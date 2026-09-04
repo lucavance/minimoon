@@ -1,0 +1,4 @@
+members = [
+  ".",
+  "examples/miniapp_conformance_app",
+]
