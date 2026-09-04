@@ -1,0 +1,9 @@
+import {
+  "lampclaw/minimoon/tooling_miniapp" @miniapp_tooling,
+  "moonbitlang/async/fs",
+  "moonbitlang/async/process",
+  "moonbitlang/core/json",
+  "moonbitlang/x/path",
+}
+
+supported_targets = "native"
