@@ -1,0 +1,16 @@
+flowchart TB
+    Root[RootScope<br/>page instance / 页面实例]
+    Static[static page state<br/>静态页面状态]
+    AssocA[key A scope<br/>state + subscriptions]
+    AssocB[key B scope<br/>state + subscriptions]
+    Dynamic[enumerated tag scope<br/>动态 tag scope]
+    Hidden[hidden cached scope<br/>暂停但保留 / paused but retained]
+    Removed[committed removal<br/>提交后释放]
+
+    Root --> Static
+    Root --> AssocA
+    Root --> AssocB
+    Root --> Dynamic
+    Dynamic --> Hidden
+    AssocB -. candidate removal .-> Removed
+    Removed -. rollback restores .-> AssocB

@@ -1,0 +1,15 @@
+flowchart LR
+    HostEvent[宿主事件 / Host event]
+    Decode[typed decoder<br/>类型解码]
+    Msg[Msg]
+    Update[update Model Msg]
+    Result[Model + Cmd]
+    View[view Model]
+    Node[Node tree<br/>节点树]
+    Renderer[transactional renderer<br/>事务渲染]
+    Effect[Cmd / effect / navigation]
+
+    HostEvent --> Decode --> Msg --> Update --> Result
+    Result --> View --> Node --> Renderer
+    Result --> Effect
+    Effect -. completion Msg .-> Update

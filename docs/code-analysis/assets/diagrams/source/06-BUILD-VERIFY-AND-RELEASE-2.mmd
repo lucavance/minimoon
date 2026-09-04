@@ -1,0 +1,16 @@
+flowchart TB
+    Source[source + contract]
+    Candidate[build release candidate]
+    Static[MoonBit check, fmt, tests, coverage]
+    Generated[syntax, globals, host smoke, layout, budgets]
+    Fingerprint[artifact fingerprint]
+    Handoff[CI handoff archive]
+    DevTools[manual Developer Tools checklist]
+    Evidence[evidence JSON bound to fingerprint]
+    Release[verify --release]
+
+    Source --> Candidate --> Static --> Generated --> Fingerprint --> Handoff
+    Handoff --> DevTools --> Evidence
+    Fingerprint --> Release
+    Evidence --> Release
+    Release -->|both match| ReleaseReady[release-ready result / 可发布结果]

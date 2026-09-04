@@ -1,0 +1,21 @@
+flowchart LR
+    App[应用 Model / Msg / update<br/>Application state machine]
+    Public[根包公开 API<br/>Root public API]
+    Val[Val runtime<br/>增量组合 / incremental composition]
+    Graph[Duplix graph<br/>事务与作用域 / transactions and scopes]
+    Renderer[MiniApp renderer<br/>规范化与 diff / normalization and diff]
+    Runtime[Resident runtime<br/>命令与订阅 / commands and subscriptions]
+    Generator[App Contract v5 generator<br/>构建与验证 / build and verify]
+    Host[CommonJS host scheduler<br/>队列、ack、COW / queue, ack, COW]
+    Skyline[WeChat Skyline<br/>WXML / setData / wx.*]
+
+    App --> Public
+    Public --> Val
+    Val --> Graph
+    Graph --> Renderer
+    Renderer --> Runtime
+    Runtime --> Generator
+    Generator --> Host
+    Host --> Skyline
+    Skyline -. event payload .-> Host
+    Host -. decoded Msg .-> Runtime

@@ -1,0 +1,23 @@
+flowchart LR
+    subgraph MoonBit[MoonBit resident runtime / MoonBit 驻留运行时]
+      Model[typed Model]
+      Update[RunningComponent::dispatch]
+      Project[checked projection]
+      Queue[RuntimeCommandQueue]
+      Effects[pending effects + subscriptions]
+    end
+    subgraph ABI[JSON runtime ABI]
+      Entry[dispatch_batch / lifecycle / resolve]
+      Commands[RuntimeCommand batch]
+    end
+    subgraph JS[Generated CommonJS host / 生成 CommonJS 宿主]
+      Scheduler[one-render-in-flight scheduler]
+      Protocol[protocol validation + COW shadow]
+      Adapters[setData / groupUpdates / wx.*]
+    end
+
+    Model --> Update --> Project --> Queue --> Commands
+    Update --> Effects --> Queue
+    Entry --> Update
+    Commands --> Scheduler --> Protocol --> Adapters
+    Adapters -. event or completion .-> Entry

@@ -1,0 +1,33 @@
+flowchart TB
+    subgraph Public[应用边界 / Application boundary]
+      App[应用包 / App packages]
+      Root[lampclaw/minimoon<br/>公开且 opaque / public and opaque]
+    end
+    subgraph Incremental[增量所有权 / Incremental ownership]
+      Val[val_runtime]
+      Duplix[internal_duplix + internal_slotmap]
+    end
+    subgraph Render[渲染所有权 / Rendering ownership]
+      Renderer[renderer_miniapp]
+      Runtime[runtime_core]
+    end
+    subgraph Tooling[构建期 / Build time]
+      ToolingMini[tooling_miniapp]
+      Build[tooling_minimoon_build]
+      Verify[tooling_minimoon_verify]
+      CLI[cmd/minimoon]
+    end
+    subgraph Host[生成宿主 / Generated host]
+      Templates[internal_host_js templates]
+      JS[CommonJS runtime + host + protocol]
+      Markup[shared WXML + app WXSS]
+    end
+
+    App --> Root
+    Root --> Val --> Duplix
+    Root --> Renderer --> Runtime
+    Duplix --> Renderer
+    CLI --> Build --> ToolingMini
+    CLI --> Verify
+    ToolingMini --> Templates --> JS
+    ToolingMini --> Markup

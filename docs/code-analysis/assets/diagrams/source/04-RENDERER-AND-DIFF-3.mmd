@@ -1,0 +1,9 @@
+stateDiagram-v2
+    [*] --> R0: initial tree / 初始树
+    R0 --> Candidate1: runtime computes revision 1
+    Candidate1 --> R1: host acknowledgement / 宿主确认
+    Candidate1 --> Snapshot1: timeout or rejected patch
+    Snapshot1 --> R1: full-tree retry acknowledged
+    Snapshot1 --> Closed: second timeout or write failure
+    R1 --> Candidate2: next accepted state
+    Candidate2 --> R2: acknowledgement

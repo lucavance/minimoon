@@ -1,0 +1,12 @@
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Writing: render command
+    Writing --> Acknowledged: setData callback < 3000 ms
+    Acknowledged --> Idle: publish revision and pump
+    Writing --> SnapshotRetry: timeout or first write error
+    SnapshotRetry --> Retrying: runtime snapshot validated
+    Retrying --> Acknowledged: full-tree callback
+    Retrying --> Closed: second timeout or write failure
+    SnapshotRetry --> Closed: invalid snapshot
+    Idle --> Closed: protocol/runtime failure
+    Closed --> [*]

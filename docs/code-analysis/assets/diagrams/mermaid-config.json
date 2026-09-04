@@ -1,0 +1,32 @@
+{
+  "deterministicIds": true,
+  "deterministicIDSeed": "minimoon-code-analysis-0.1.0",
+  "fontFamily": "Noto Sans CJK SC, Noto Sans CJK TC, Noto Sans, Arial, sans-serif",
+  "flowchart": {
+    "curve": "basis",
+    "htmlLabels": true,
+    "nodeSpacing": 36,
+    "rankSpacing": 48,
+    "useMaxWidth": false
+  },
+  "sequence": {
+    "actorMargin": 60,
+    "diagramMarginX": 40,
+    "diagramMarginY": 20,
+    "messageMargin": 36,
+    "useMaxWidth": false
+  },
+  "themeVariables": {
+    "background": "#ffffff",
+    "fontFamily": "Noto Sans CJK SC, Noto Sans CJK TC, Noto Sans, Arial, sans-serif",
+    "fontSize": "16px",
+    "lineColor": "#334155",
+    "primaryColor": "#eef4ff",
+    "primaryBorderColor": "#4263a8",
+    "primaryTextColor": "#172033",
+    "secondaryColor": "#ecfdf5",
+    "secondaryBorderColor": "#15803d",
+    "tertiaryColor": "#fff7ed",
+    "tertiaryBorderColor": "#c2410c"
+  }
+}

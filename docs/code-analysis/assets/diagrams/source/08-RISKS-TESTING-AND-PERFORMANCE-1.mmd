@@ -1,0 +1,15 @@
+flowchart TB
+    Unit[MoonBit unit + whitebox tests<br/>单元与白盒测试]
+    Cross[native + JS target parity<br/>双 target 一致性]
+    Coverage[coverage floors<br/>覆盖率下限]
+    Generation[deterministic generation<br/>确定性生成]
+    Host[generated host simulation<br/>宿主模拟]
+    Perf[work counters + benchmarks + byte budgets]
+    Archive[registry archive consumer]
+    Candidate[CI candidate handoff]
+    DevTools[WeChat Developer Tools]
+    Device[physical device / 真机]
+    Evidence[fingerprint-bound evidence]
+
+    Unit --> Cross --> Coverage --> Generation --> Host --> Perf --> Archive --> Candidate
+    Candidate --> DevTools --> Device --> Evidence

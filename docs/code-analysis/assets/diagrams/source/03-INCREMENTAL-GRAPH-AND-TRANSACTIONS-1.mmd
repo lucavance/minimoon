@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant Host as host entry / 宿主条目
+    participant Graph as Graph
+    participant State as state slots / 状态槽
+    participant Scope as branch scopes / 分支作用域
+    participant Render as renderer projection / 渲染投影
+
+    Host->>Graph: begin()
+    Graph->>State: stage candidate values
+    Graph->>Scope: stage visibility/create/remove
+    Graph->>Render: materialize candidate tree
+    alt validation and projection accepted
+      Render-->>Graph: candidate commit callbacks
+      Graph->>State: publish committed values
+      Graph->>Scope: dispose committed removals
+      Graph->>Graph: revision += 1
+    else decoder, identity, or projection rejected
+      Render-->>Graph: candidate rollback callbacks
+      Graph->>Scope: restore cache and visibility
+      Graph->>State: restore committed values
+    end

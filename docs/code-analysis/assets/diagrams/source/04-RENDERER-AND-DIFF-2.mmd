@@ -1,0 +1,23 @@
+flowchart TB
+    Old[committed normalized tree<br/>已提交规范化树]
+    New[next normalized tree<br/>新规范化树]
+    Shape{kind + identity match?}
+    Scalar[set text / props / events]
+    Children{children identity kind}
+    Indexed[splice indexed suffix<br/>或递归 diff]
+    Keyed[keyed LIS + splice + move]
+    Unsafe[unsafe / mixed identity]
+    Cost{patch <= 75% replace<br/>and host writes <= 32?}
+    Patch[PatchViewTree]
+    Replace[ReplaceViewTree]
+
+    Old --> Shape
+    New --> Shape
+    Shape -->|yes| Scalar --> Children
+    Shape -->|no| Unsafe
+    Children -->|i:*| Indexed --> Cost
+    Children -->|k:*| Keyed --> Cost
+    Children -->|invalid| Unsafe
+    Cost -->|yes| Patch
+    Cost -->|no| Replace
+    Unsafe --> Replace

@@ -1,0 +1,92 @@
+name: API friction
+description: Report a supported Minimoon authoring workflow that is awkward, verbose, or error-prone.
+title: "[API friction]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe one minimized workflow. Remove AppIDs, credentials, private paths, user data, and proprietary source before submitting.
+  - type: input
+    id: version
+    attributes:
+      label: Minimoon version
+      description: Exact package version, such as 0.1.0.
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Minimoon commit
+      description: Full Git commit used by a source-bound dogfood workspace, or "registry package".
+      placeholder: Full commit SHA or registry package
+    validations:
+      required: true
+  - type: input
+    id: fingerprint
+    attributes:
+      label: Artifact fingerprint
+      description: Verification fingerprint, or "not generated" if the workflow did not reach a build.
+      placeholder: fnv1a64-relpath-v2:... or not generated
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include MoonBit, Node, Bun, OS, Developer Tools/base-library/device when relevant.
+      placeholder: |-
+        MoonBit:
+        Node:
+        Bun:
+        OS:
+        Developer Tools / base library / device:
+    validations:
+      required: true
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Minimized authoring workflow
+      description: Show the smallest public-API-only code or sequence that exposes the friction.
+      render: moonbit
+    validations:
+      required: true
+  - type: textarea
+    id: friction
+    attributes:
+      label: What made the workflow difficult?
+      description: Explain the ambiguity, verbosity, unsafe default, or likely mistake and the preferred experience.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction and comparison
+      description: Give numbered steps and state whether the same workflow was tried in the maintained Conformance fixture.
+      placeholder: |-
+        1.
+        2.
+        Conformance fixture result:
+    validations:
+      required: true
+  - type: textarea
+    id: renderer_stats
+    attributes:
+      label: Renderer or lifecycle statistics
+      description: Include work counters when relevant; otherwise write "not applicable".
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Current workaround and cost
+      description: Include extra code, allocations, generated size, or maintenance cost; write "none" when blocked.
+    validations:
+      required: true
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Redaction check
+      options:
+        - label: I reviewed all text, code, logs, paths, and attachments and removed AppIDs, credentials, private data, and proprietary content.
+          required: true

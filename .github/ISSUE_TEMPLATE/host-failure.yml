@@ -1,0 +1,105 @@
+name: MiniApp host failure
+description: Report incorrect generated output, lifecycle behavior, routing, rendering, or device/Developer Tools behavior.
+title: "[Host failure]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use the exact failing artifact. Do not edit or manufacture Conformance release evidence, and redact private application data before submitting.
+  - type: input
+    id: version
+    attributes:
+      label: Minimoon version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Minimoon commit
+      description: Full Git commit used by the failing build, or "registry package".
+    validations:
+      required: true
+  - type: input
+    id: fingerprint
+    attributes:
+      label: Failing artifact fingerprint
+      placeholder: fnv1a64-relpath-v2:...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Host environment
+      description: Include MoonBit, Node, Bun, OS, Developer Tools, online base library, renderer, device model, and device OS as applicable.
+      placeholder: |-
+        MoonBit:
+        Node:
+        Bun:
+        Host OS:
+        Developer Tools:
+        Online base library:
+        Renderer:
+        Device / device OS:
+    validations:
+      required: true
+  - type: dropdown
+    id: host_path
+    attributes:
+      label: Failing host path
+      options:
+        - Developer Tools simulator
+        - Preview on physical device
+        - Device debugging
+        - Automated host simulation
+        - Generated artifact inspection
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Give a minimal application shape and numbered steps, then state whether Conformance reproduces it.
+      placeholder: |-
+        Minimal page/component shape:
+        1.
+        2.
+        Conformance fixture result:
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the first relevant error and affected generated path; attach only redacted excerpts.
+    validations:
+      required: true
+  - type: textarea
+    id: renderer_stats
+    attributes:
+      label: Renderer and lifecycle statistics
+      description: Include render work, revisions, retained state/subscription counts, or "unavailable".
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Workaround and impact
+      description: Describe the workaround and its correctness, size, performance, or maintenance cost; write "none" if blocked.
+    validations:
+      required: true
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Evidence and redaction checks
+      options:
+        - label: I tested the exact fingerprint reported above and did not copy or manually edit release-evidence JSON.
+          required: true
+        - label: I reviewed all text, logs, paths, screenshots, and attachments and removed AppIDs, credentials, private data, and proprietary content.
+          required: true

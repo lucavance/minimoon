@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant Build as page build / 页面构建
+    participant State as Val + Emit
+    participant Runtime as resident runtime / 驻留运行时
+    participant Host as generated host / 生成宿主
+    participant WX as wx.* / timer
+
+    Build->>State: init(emit) -> Model + Cmd
+    State->>Runtime: accepted command
+    Runtime->>Host: InvokeCapability or StartSubscription
+    Host->>WX: declared adapter call
+    WX-->>Host: success / fail / tick
+    Host-->>Runtime: resolve_effect or subscription
+    Runtime-->>State: typed Msg
+    State->>Runtime: new Model + Cmd
+    Build-->>Runtime: subscriptions(Model)
+    Runtime->>Host: stop removed keys / start new keys

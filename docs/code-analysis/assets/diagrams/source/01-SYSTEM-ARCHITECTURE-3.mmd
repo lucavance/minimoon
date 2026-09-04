@@ -1,0 +1,33 @@
+flowchart LR
+    subgraph Maintained[维护源码 / Maintained source]
+      Moon[MoonBit source]
+      HostTemplate[MoonBit-owned JS templates]
+      Adapter[bounded Tailwind adapter]
+    end
+    subgraph Generated[提交的生成物 / Committed generated artifacts]
+      RuntimeJS[minimoon.runtime.js]
+      HostJS[minimoon.host.js]
+      ProtocolJS[minimoon.protocol.js]
+      InitialJS[minimoon.initial.js]
+      WXML[shared template + page stubs]
+      WXSS[app.wxss]
+    end
+    subgraph External[外部宿主 / External host]
+      DevTools[WeChat Developer Tools]
+      Device[Physical device / 真机]
+      WXAPI[Skyline + glass-easel + wx.*]
+    end
+
+    Moon --> RuntimeJS
+    HostTemplate --> HostJS
+    HostTemplate --> ProtocolJS
+    Moon --> InitialJS
+    Adapter --> WXSS
+    Moon --> WXML
+    RuntimeJS --> DevTools
+    HostJS --> DevTools
+    ProtocolJS --> DevTools
+    InitialJS --> DevTools
+    WXML --> DevTools
+    WXSS --> DevTools
+    DevTools --> Device --> WXAPI

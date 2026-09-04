@@ -1,0 +1,18 @@
+flowchart LR
+    View[typed view / 类型化 view]
+    Registry[candidate Events registry<br/>候选事件表]
+    Validate[identity + decoder + subscription validation<br/>身份、解码器、订阅校验]
+    Normalize[normalized MiniApp tree<br/>规范化树]
+    Cache[retained subtree cache<br/>保留子树缓存]
+    Diff[tree diff]
+    Select[patch cost policy<br/>patch 成本策略]
+    Patch[PatchViewTree]
+    Replace[ReplaceViewTree]
+
+    View --> Validate
+    Registry --> Validate
+    Validate --> Normalize
+    Cache <--> Normalize
+    Normalize --> Diff --> Select
+    Select --> Patch
+    Select --> Replace

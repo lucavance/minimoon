@@ -1,0 +1,17 @@
+flowchart LR
+    R0[old root / 旧 root]
+    C0[old children array]
+    N0[old target node]
+    R1[new root copy / 新 root 副本]
+    C1[new children copy]
+    N1[new target copy]
+    SharedA[unchanged sibling A<br/>共享兄弟 A]
+    SharedB[unchanged subtree B<br/>共享子树 B]
+
+    R0 --> C0 --> N0
+    C0 --> SharedA
+    R0 --> SharedB
+    R1 --> C1 --> N1
+    C1 --> SharedA
+    R1 --> SharedB
+    N0 -. patch path copied .-> N1

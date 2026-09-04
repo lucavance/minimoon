@@ -1,0 +1,23 @@
+flowchart TB
+    API[public API change<br/>公开 API 修改]
+    Node[new control or prop<br/>新控件或属性]
+    Patch[new patch operation<br/>新 patch 操作]
+    ABI[runtime ABI change]
+    Host[host scheduler change]
+    Toolchain[toolchain/source split<br/>工具链或源码拆分]
+
+    MBTI[root .mbti + docs + starter]
+    Materialize[UI DSL + materialization]
+    Normalize[normalizer + WXML]
+    Protocol[protocol validator + COW]
+    Smoke[host smoke + generated fixtures]
+    Evidence[new fingerprint + DevTools evidence]
+    Perf[size + perf + coverage gates]
+
+    API --> MBTI --> Smoke
+    Node --> Materialize --> Normalize --> Smoke --> Evidence
+    Patch --> Normalize --> Protocol --> Smoke --> Evidence
+    ABI --> Protocol --> Smoke --> Evidence
+    Host --> Protocol --> Smoke --> Perf --> Evidence
+    Toolchain --> Smoke
+    Toolchain --> Evidence

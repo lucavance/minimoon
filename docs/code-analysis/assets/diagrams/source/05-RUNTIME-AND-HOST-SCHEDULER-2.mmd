@@ -1,0 +1,25 @@
+flowchart TB
+    Event[UI event arrives / UI 事件到达]
+    Tail{queue tail is dispatch?}
+    SameScroll{adjacent scroll<br/>same key?}
+    ReplaceLatest[replace last payload<br/>只保留最新 scroll]
+    Append[append event losslessly<br/>无损追加]
+    Barrier[non-scroll event<br/>合并屏障]
+    Limit{batch size < 2048?}
+    Fail[fail closed]
+    Pump{idle and open?}
+    Dispatch[dispatch complete batch]
+    Await[await render ack]
+
+    Event --> Tail
+    Tail -->|no| Append
+    Tail -->|yes| SameScroll
+    SameScroll -->|yes| ReplaceLatest
+    SameScroll -->|no| Limit
+    Limit -->|yes| Append
+    Limit -->|no| Fail
+    Append --> Barrier
+    Barrier --> Pump
+    ReplaceLatest --> Pump
+    Pump -->|yes| Dispatch --> Await
+    Pump -->|no| Event

@@ -1,0 +1,21 @@
+flowchart LR
+    Config[miniapp.minimoon.json<br/>App Contract v5]
+    PagePkg[page packages<br/>program -> Page]
+    Contract[compiled page contracts<br/>编译页面 contract]
+    AppRuntime[application MoonBit runtime<br/>应用 runtime]
+    Host[host + protocol templates]
+    Initial[compact initial trees]
+    Tailwind[Tailwind + bounded adapter]
+    Dist[dist directory<br/>可导入目录]
+    Reports[generated manifest + reports]
+
+    Config --> Contract
+    PagePkg --> Contract
+    Contract --> AppRuntime
+    Contract --> Initial
+    Host --> Dist
+    AppRuntime --> Dist
+    Initial --> Dist
+    Tailwind --> Dist
+    Contract --> Reports
+    Dist --> Reports

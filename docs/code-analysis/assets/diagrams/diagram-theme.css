@@ -1,0 +1,28 @@
+svg {
+  font-family: "Noto Sans CJK SC", "Noto Sans CJK TC", "Noto Sans", Arial, sans-serif;
+  background: #ffffff;
+}
+
+.node rect,
+.node circle,
+.node ellipse,
+.node polygon,
+.node path {
+  stroke-width: 1.4px;
+}
+
+.edgePath path,
+.flowchart-link {
+  stroke: #334155;
+  stroke-width: 1.4px;
+}
+
+.cluster rect {
+  fill: #f8fafc;
+  stroke: #94a3b8;
+}
+
+.edgeLabel,
+.labelBkg {
+  background-color: #ffffff;
+}

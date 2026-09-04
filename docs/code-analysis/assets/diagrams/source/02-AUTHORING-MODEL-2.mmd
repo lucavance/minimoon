@@ -1,0 +1,20 @@
+flowchart TB
+    Page[Page graph / 页面图]
+    Input[page input Val]
+    StateA[local Val A]
+    StateB[local Val B]
+    Map[Val::map2..map9]
+    Assoc[Val::assoc<br/>keyed local scopes]
+    Switch[Val::switch / enumerate]
+    Root[Val Node root]
+
+    Page --> Input
+    Page --> StateA
+    Page --> StateB
+    Input --> Map
+    StateA --> Map
+    StateB --> Map
+    Map --> Assoc
+    Map --> Switch
+    Assoc --> Root
+    Switch --> Root

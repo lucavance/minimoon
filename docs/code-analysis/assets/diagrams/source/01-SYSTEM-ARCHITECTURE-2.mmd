@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant WX as Skyline event / Skyline 事件
+    participant Host as Generated host scheduler / 生成调度器
+    participant API as Runtime ABI
+    participant Page as PageRuntime
+    participant Graph as Transactional graph / 事务图
+    participant Diff as Normalizer + diff / 规范化与 diff
+    participant Data as setData + ack
+
+    WX->>Host: tap / input / scroll payload
+    Host->>Host: enqueue, coalesce adjacent same-key scroll
+    Host->>API: dispatch_batch(instance, JSON)
+    API->>Page: decode every entry
+    Page->>Graph: begin, run CmdMessage
+    Graph->>Diff: materialize candidate Node
+    Diff-->>Graph: accepted tree or validation error
+    Graph-->>Page: commit or rollback
+    Page-->>Host: one revisioned command batch
+    Host->>Data: patch or replace + commit sentinel
+    Data-->>Host: acknowledgement callback
+    Host->>Host: publish revision, drain next entry
