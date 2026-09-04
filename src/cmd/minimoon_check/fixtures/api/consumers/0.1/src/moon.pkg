@@ -1,0 +1,8 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon/components" @headless,
+  "lampclaw/minimoon/components/styles" @styles,
+  "lampclaw/minimoon/testing" @testing,
+}
+
+supported_targets = "js+native"

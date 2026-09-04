@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "productSeries": "0.1",
+  "appContractVersion": 7,
+  "runtimeApiVersion": 10,
+  "rendererProtocolVersion": 7,
+  "packages": {
+    "root": {
+      "source": "src/pkg.generated.mbti",
+      "snapshot": "root.mbti",
+      "policy": "exact"
+    },
+    "components": {
+      "source": "src/components/pkg.generated.mbti",
+      "snapshot": "components.mbti",
+      "policy": "additive"
+    },
+    "styles": {
+      "source": "src/components/styles/pkg.generated.mbti",
+      "snapshot": "styles.mbti",
+      "policy": "additive"
+    },
+    "testing": {
+      "source": "src/testing/pkg.generated.mbti",
+      "snapshot": "testing.mbti",
+      "policy": "additive"
+    }
+  }
+}

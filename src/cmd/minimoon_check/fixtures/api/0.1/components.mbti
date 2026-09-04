@@ -1,0 +1,152 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/components"
+
+import {
+  "lampclaw/minimoon",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn accordion_item(key~ : String, label~ : String, panel~ : @minimoon.Node, disabled? : Bool) -> AccordionItem
+
+pub fn[Input] accordion_item_with_input(key~ : String, label~ : String, panel~ : (Input) -> @minimoon.Node, disabled? : Bool) -> AccordionItemWithInput[Input]
+
+pub fn accordion_multiple(id~ : String, items~ : Array[AccordionItem], initial_open_keys? : Array[String], label? : String, disabled? : Bool, orientation? : Orientation, root_class? : String, item_class? : String, trigger_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn accordion_multiple_controlled(id~ : String, items~ : Array[AccordionItem], open_keys~ : @minimoon.Val[Array[String]], on_change~ : @minimoon.Emit[Array[String]], label? : String, disabled? : Bool, orientation? : Orientation, root_class? : String, item_class? : String, trigger_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] accordion_multiple_controlled_with_input(id~ : String, items~ : Array[AccordionItemWithInput[Input]], input~ : @minimoon.Val[Input], open_keys~ : @minimoon.Val[Array[String]], on_change~ : @minimoon.Emit[Array[String]], label? : String, disabled? : Bool, orientation? : Orientation, root_class? : String, item_class? : String, trigger_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] accordion_multiple_with_input(id~ : String, items~ : Array[AccordionItemWithInput[Input]], input~ : @minimoon.Val[Input], initial_open_keys? : Array[String], label? : String, disabled? : Bool, orientation? : Orientation, root_class? : String, item_class? : String, trigger_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn accordion_single(id~ : String, items~ : Array[AccordionItem], initial_open_key? : String, label? : String, collapsible? : Bool, disabled? : Bool, orientation? : Orientation, root_class? : String, item_class? : String, trigger_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn accordion_single_controlled(id~ : String, items~ : Array[AccordionItem], open_key~ : @minimoon.Val[String?], on_change~ : @minimoon.Emit[String?], label? : String, collapsible? : Bool, disabled? : Bool, orientation? : Orientation, root_class? : String, item_class? : String, trigger_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] accordion_single_controlled_with_input(id~ : String, items~ : Array[AccordionItemWithInput[Input]], input~ : @minimoon.Val[Input], open_key~ : @minimoon.Val[String?], on_change~ : @minimoon.Emit[String?], label? : String, collapsible? : Bool, disabled? : Bool, orientation? : Orientation, root_class? : String, item_class? : String, trigger_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] accordion_single_with_input(id~ : String, items~ : Array[AccordionItemWithInput[Input]], input~ : @minimoon.Val[Input], initial_open_key? : String, label? : String, collapsible? : Bool, disabled? : Bool, orientation? : Orientation, root_class? : String, item_class? : String, trigger_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn dialog(DialogSpec, initially_open? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn dialog_controlled(DialogSpec, open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] dialog_controlled_with_input(DialogSpecWithInput[Input], input~ : @minimoon.Val[Input], open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn dialog_spec(id~ : String, title~ : String, trigger_label~ : String, content~ : (@minimoon.Cmd) -> @minimoon.Node, description? : String, close_label? : String, disabled? : Bool, close_on_overlay? : Bool, root_class? : String, trigger_class? : String, overlay_class? : String, surface_class? : String, title_class? : String, description_class? : String, close_class? : String) -> DialogSpec
+
+pub fn[Input] dialog_spec_with_input(id~ : String, title~ : String, trigger_label~ : String, content~ : (@minimoon.Cmd, Input) -> @minimoon.Node, description? : String, close_label? : String, disabled? : Bool, close_on_overlay? : Bool, root_class? : String, trigger_class? : String, overlay_class? : String, surface_class? : String, title_class? : String, description_class? : String, close_class? : String) -> DialogSpecWithInput[Input]
+
+pub fn[Input : Eq] dialog_with_input(DialogSpecWithInput[Input], input~ : @minimoon.Val[Input], initially_open? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn disclosure(DisclosureSpec, initially_expanded? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn disclosure_controlled(DisclosureSpec, expanded~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] disclosure_controlled_with_input(DisclosureSpecWithInput[Input], input~ : @minimoon.Val[Input], expanded~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn disclosure_spec(id~ : String, label~ : String, panel~ : @minimoon.Node, root_class? : String, trigger_class? : String, panel_class? : String) -> DisclosureSpec
+
+pub fn[Input] disclosure_spec_with_input(id~ : String, label~ : String, panel~ : (Input) -> @minimoon.Node, root_class? : String, trigger_class? : String, panel_class? : String) -> DisclosureSpecWithInput[Input]
+
+pub fn[Input : Eq] disclosure_with_input(DisclosureSpecWithInput[Input], input~ : @minimoon.Val[Input], initially_expanded? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn dropdown(MenuSpec, initial_state? : MenuState) -> @minimoon.Val[@minimoon.Node]
+
+pub fn dropdown_controlled(MenuSpec, state~ : @minimoon.Val[MenuState], on_change~ : @minimoon.Emit[MenuState]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn dropdown_spec(id~ : String, trigger_label~ : String, items~ : Array[MenuEntry], placement? : MenuPlacement, disabled? : Bool, root_class? : String, trigger_class? : String, dismiss_class? : String, content_class? : String, item_class? : String, label_class? : String, separator_class? : String, submenu_trigger_class? : String, submenu_content_class? : String) -> MenuSpec
+
+pub fn menu_checkbox_item(key~ : String, label~ : String, on_select? : @minimoon.Cmd, disabled? : Bool) -> MenuEntry
+
+pub fn menu_item(key~ : String, label~ : String, on_select? : @minimoon.Cmd, disabled? : Bool, close_on_select? : Bool) -> MenuEntry
+
+pub fn menu_label(key~ : String, label~ : String) -> MenuEntry
+
+pub fn menu_radio_item(key~ : String, label~ : String, group~ : String, value~ : String, on_select? : @minimoon.Cmd, disabled? : Bool) -> MenuEntry
+
+pub fn menu_separator(key~ : String) -> MenuEntry
+
+pub fn menu_state(open? : Bool, checked_keys? : Array[String], radio_values? : Array[(String, String)]) -> MenuState
+
+pub fn menu_submenu(key~ : String, label~ : String, items~ : Array[MenuEntry], disabled? : Bool) -> MenuEntry
+
+pub fn sheet(SheetSpec, initially_open? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn sheet_controlled(SheetSpec, open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] sheet_controlled_with_input(SheetSpecWithInput[Input], input~ : @minimoon.Val[Input], open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn sheet_spec(id~ : String, title~ : String, trigger_label~ : String, content~ : (@minimoon.Cmd) -> @minimoon.Node, side? : SheetSide, description? : String, close_label? : String, disabled? : Bool, close_on_overlay? : Bool, root_class? : String, trigger_class? : String, overlay_class? : String, surface_class? : String, title_class? : String, description_class? : String, close_class? : String) -> SheetSpec
+
+pub fn[Input] sheet_spec_with_input(id~ : String, title~ : String, trigger_label~ : String, content~ : (@minimoon.Cmd, Input) -> @minimoon.Node, side? : SheetSide, description? : String, close_label? : String, disabled? : Bool, close_on_overlay? : Bool, root_class? : String, trigger_class? : String, overlay_class? : String, surface_class? : String, title_class? : String, description_class? : String, close_class? : String) -> SheetSpecWithInput[Input]
+
+pub fn[Input : Eq] sheet_with_input(SheetSpecWithInput[Input], input~ : @minimoon.Val[Input], initially_open? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn tab_item(key~ : String, label~ : String, panel~ : @minimoon.Node, disabled? : Bool) -> TabItem
+
+pub fn[Input] tab_item_with_input(key~ : String, label~ : String, panel~ : (Input) -> @minimoon.Node, disabled? : Bool) -> TabItemWithInput[Input]
+
+pub fn tabs(id~ : String, items~ : Array[TabItem], initial_selected_key? : String, label? : String, disabled? : Bool, orientation? : Orientation, root_class? : String, list_class? : String, tab_class_name? : String, active_tab_class? : String, inactive_tab_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn tabs_controlled(id~ : String, items~ : Array[TabItem], selected_key~ : @minimoon.Val[String?], on_change~ : @minimoon.Emit[String?], label? : String, disabled? : Bool, orientation? : Orientation, root_class? : String, list_class? : String, tab_class_name? : String, active_tab_class? : String, inactive_tab_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] tabs_controlled_with_input(id~ : String, items~ : Array[TabItemWithInput[Input]], input~ : @minimoon.Val[Input], selected_key~ : @minimoon.Val[String?], on_change~ : @minimoon.Emit[String?], label? : String, disabled? : Bool, orientation? : Orientation, root_class? : String, list_class? : String, tab_class_name? : String, active_tab_class? : String, inactive_tab_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] tabs_with_input(id~ : String, items~ : Array[TabItemWithInput[Input]], input~ : @minimoon.Val[Input], initial_selected_key? : String, label? : String, disabled? : Bool, orientation? : Orientation, root_class? : String, list_class? : String, tab_class_name? : String, active_tab_class? : String, inactive_tab_class? : String, panel_class? : String) -> @minimoon.Val[@minimoon.Node]
+
+// Errors
+
+// Types and methods
+type AccordionItem
+
+type AccordionItemWithInput[Input]
+
+type DialogSpec
+
+type DialogSpecWithInput[Input]
+
+type DisclosureSpec
+
+type DisclosureSpecWithInput[Input]
+
+type MenuEntry
+
+pub(all) enum MenuPlacement {
+  BottomStart
+  BottomEnd
+  TopStart
+  TopEnd
+} derive(Eq, @debug.Debug)
+
+type MenuSpec
+
+type MenuState derive(Eq)
+pub fn MenuState::is_checked(Self, String) -> Bool
+pub fn MenuState::is_open(Self) -> Bool
+pub fn MenuState::radio_value(Self, String) -> String?
+pub fn MenuState::with_open(Self, Bool) -> Self
+
+pub(all) enum Orientation {
+  Horizontal
+  Vertical
+} derive(Eq, @debug.Debug)
+
+pub(all) enum SheetSide {
+  Top
+  Right
+  Bottom
+  Left
+} derive(Eq, @debug.Debug)
+
+type SheetSpec
+
+type SheetSpecWithInput[Input]
+
+type TabItem
+
+type TabItemWithInput[Input]
+
+// Type aliases
+
+// Traits

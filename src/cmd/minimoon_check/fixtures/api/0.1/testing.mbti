@@ -1,0 +1,97 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/testing"
+
+import {
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn all(Array[Selector]) -> Selector
+
+pub fn by_event(String) -> Selector
+
+pub fn by_id(String) -> Selector
+
+pub fn by_kind(String) -> Selector
+
+pub fn by_label(String) -> Selector
+
+pub fn by_prop(String, Json) -> Selector
+
+pub fn by_role(String) -> Selector
+
+pub fn by_section(String) -> Selector
+
+pub fn by_text(String) -> Selector
+
+pub fn containing_text(String) -> Selector
+
+pub fn mount(@minimoon.Page) -> TestRuntime
+
+// Errors
+
+// Types and methods
+pub enum Selector {
+  Kind(String)
+  Id(String)
+  Section(String)
+  Text(String)
+  TextContaining(String)
+  Prop(String, Json)
+  Event(String)
+  Role(String)
+  Label(String)
+  All(Array[Selector])
+}
+
+type TestNode
+pub fn TestNode::children(Self) -> Array[Self]
+pub fn TestNode::event(Self, String) -> String?
+pub fn TestNode::identity(Self) -> String
+pub fn TestNode::kind(Self) -> String
+pub fn TestNode::prop(Self, String) -> Json?
+pub fn TestNode::snapshot(Self) -> String
+pub fn TestNode::text(Self) -> String
+pub fn TestNode::text_content(Self) -> String
+
+type TestRuntime
+pub fn TestRuntime::blur_input(Self, Selector, String) -> String
+pub fn TestRuntime::blur_textarea(Self, Selector, String, Int) -> String
+pub fn TestRuntime::change(Self, Selector, Json) -> String
+pub fn TestRuntime::confirm(Self, Selector, String) -> String
+pub fn TestRuntime::dispose(Self) -> String
+pub fn TestRuntime::focus(Self, Selector, String, Int) -> String
+pub fn TestRuntime::get(Self, Selector) -> TestNode
+pub fn TestRuntime::input(Self, Selector, String) -> String
+pub fn TestRuntime::lifecycle(Self, String, payload? : Json) -> String
+pub fn TestRuntime::lower(Self, Selector) -> String
+pub fn TestRuntime::page_id(Self) -> String
+pub fn TestRuntime::query(Self, Selector) -> TestNode?
+pub fn TestRuntime::query_all(Self, Selector) -> Array[TestNode]
+pub fn TestRuntime::scroll(Self, Selector, scroll_left~ : Double, scroll_top~ : Double, scroll_height~ : Double, scroll_width~ : Double, delta_x~ : Double, delta_y~ : Double) -> String
+pub fn TestRuntime::snapshot(Self) -> String
+pub fn TestRuntime::tap(Self, Selector) -> String
+pub fn TestRuntime::tick(Self, String) -> String
+pub fn TestRuntime::tree(Self) -> TestNode
+pub fn TestRuntime::upper(Self, Selector) -> String
+pub fn TestRuntime::within(Self, Selector) -> TestScope
+
+type TestScope
+pub fn TestScope::blur_input(Self, Selector, String) -> String
+pub fn TestScope::blur_textarea(Self, Selector, String, Int) -> String
+pub fn TestScope::change(Self, Selector, Json) -> String
+pub fn TestScope::confirm(Self, Selector, String) -> String
+pub fn TestScope::focus(Self, Selector, String, Int) -> String
+pub fn TestScope::get(Self, Selector) -> TestNode
+pub fn TestScope::input(Self, Selector, String) -> String
+pub fn TestScope::lower(Self, Selector) -> String
+pub fn TestScope::query(Self, Selector) -> TestNode?
+pub fn TestScope::query_all(Self, Selector) -> Array[TestNode]
+pub fn TestScope::scroll(Self, Selector, scroll_left~ : Double, scroll_top~ : Double, scroll_height~ : Double, scroll_width~ : Double, delta_x~ : Double, delta_y~ : Double) -> String
+pub fn TestScope::tap(Self, Selector) -> String
+pub fn TestScope::upper(Self, Selector) -> String
+pub fn TestScope::within(Self, Selector) -> Self
+
+// Type aliases
+
+// Traits

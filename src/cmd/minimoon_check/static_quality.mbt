@@ -1,0 +1,330 @@
+///|
+let supported_moon_floor = "0.1.20260827"
+
+///|
+let supported_moonc_floor = "0.10.11"
+
+///|
+let supported_node_version = "26.8.1"
+
+///|
+let supported_bun_version = "1.4.0"
+
+///|
+fn moon_identifier_character(char : UInt16) -> Bool {
+  (char >= 'a' && char <= 'z') ||
+  (char >= 'A' && char <= 'Z') ||
+  (char >= '0' && char <= '9') ||
+  char == '_'
+}
+
+///|
+fn signature_contains_type(signature : String, name : String) -> Bool {
+  guard signature.length() >= name.length() else { return false }
+  for index = 0; index <= signature.length() - name.length(); index = index + 1 {
+    if signature[index:].has_prefix(name) &&
+      (index == 0 || !moon_identifier_character(signature[index - 1])) {
+      let mut cursor = index + name.length()
+      while cursor < signature.length() &&
+            (
+              signature[cursor] == ' ' ||
+              signature[cursor] == '\t' ||
+              signature[cursor] == '\r' ||
+              signature[cursor] == '\n'
+            ) {
+        cursor = cursor + 1
+      }
+      if cursor < signature.length() && signature[cursor] == '[' {
+        return true
+      }
+    }
+  }
+  false
+}
+
+///|
+fn append_extern_signature_violations(
+  violations : Array[String],
+  signature : String,
+  line : Int,
+) -> Unit {
+  let declaration = match signature.find("=") {
+    Some(end) => signature[0:end].to_owned()
+    None => signature
+  }
+  if signature_contains_type(declaration, "ReadOnlyArray") {
+    violations.push(
+      "line " +
+      line.to_string() +
+      ": extern \"js\" signatures must use FixedArray[T], not ReadOnlyArray[T]",
+    )
+  }
+  if signature_contains_type(declaration, "Array") {
+    violations.push(
+      "line " +
+      line.to_string() +
+      ": extern \"js\" signatures must use FixedArray[T], not Array[T]",
+    )
+  }
+}
+
+///|
+fn starts_js_extern_signature(line : String) -> Bool {
+  let marker = "extern \"js\" fn"
+  match line.find(marker) {
+    None => false
+    Some(0) => true
+    Some(index) => {
+      let prefix = line[0:index].trim()
+      prefix == "pub" || (prefix.has_prefix("pub(") && prefix.has_suffix(")"))
+    }
+  }
+}
+
+///|
+fn moon_source_boundary_violations(source : String) -> Array[String] {
+  let violations : Array[String] = []
+  let deprecated_constructor = "StringBuilder::" + "new"
+  if source.contains(deprecated_constructor) {
+    violations.push(
+      "deprecated StringBuilder constructor is forbidden; use StringBuilder(...) instead",
+    )
+  }
+  let mut collecting = false
+  let mut signature = ""
+  let mut start_line = 0
+  let mut line_number = 0
+  for view in source.split("\n") {
+    line_number = line_number + 1
+    let line = view.trim().to_owned()
+    if !collecting && starts_js_extern_signature(line) {
+      collecting = true
+      signature = line
+      start_line = line_number
+    } else if collecting {
+      signature = signature + " " + line
+    }
+    if collecting && line.contains("=") {
+      append_extern_signature_violations(violations, signature, start_line)
+      collecting = false
+      signature = ""
+    }
+  }
+  violations
+}
+
+///|
+async fn static_suite(root : String) -> Unit {
+  for
+    path in [
+      ".github/workflows/test.yml", "src/README.mbt.md", "src/cmd/minimoon/main.mbt",
+      "src/cmd/minimoon/templates.generated.mbt", "src/pkg.generated.mbti", "src/renderer_miniapp/page_program_10_contract.mbt",
+      "src/tooling_minimoon_build/build.mbt", "src/tooling_minimoon_verify/verify_00_files.mbt",
+      "src/tooling_miniapp/generator.mbt", "src/internal_host_js/host_bridge.mbt",
+      "src/internal_versions/versions.mbt", "scripts/bridge/weapp_tailwindcss_adapter.mjs",
+    ] {
+    require_file(root, path)
+  }
+  require_text(
+    root,
+    ".github/workflows/test.yml",
+    "version_at_least \"" + supported_moon_floor + "\" \"$installed_moon\"",
+  )
+  require_text(
+    root,
+    ".github/workflows/test.yml",
+    "supported floor " + supported_moon_floor,
+  )
+  require_text(
+    root,
+    ".github/workflows/test.yml",
+    "version_at_least \"" + supported_moonc_floor + "\" \"$installed_moonc\"",
+  )
+  require_text(
+    root,
+    ".github/workflows/test.yml",
+    "supported floor " + supported_moonc_floor,
+  )
+  forbid_text(
+    root, ".github/workflows/test.yml", "version_at_least \"0.10.6\" \"$installed_moonc\"",
+  )
+  forbid_text(
+    root, ".github/workflows/test.yml", "moonc $installed_moonc is below the supported floor 0.10.6",
+  )
+  for
+    path in [
+      "AGENTS.md", "README.mbt.md", "README.zh-CN.mbt.md", "docs/guides/miniapp_quickstart.md",
+      "docs/reference/compatibility_and_upgrades.md", "docs/project_status.md",
+    ] {
+    for
+      token in [
+        "moon " + supported_moon_floor,
+        "moonc v" + supported_moonc_floor,
+        supported_node_version,
+        supported_bun_version,
+      ] {
+      require_text(root, path, token)
+    }
+  }
+  require_text(root, "src/cmd/minimoon/main.mbt", "@argparse.Command")
+  require_text(
+    root, "src/cmd/minimoon/templates.generated.mbt", "embedded_template_files",
+  )
+  require_text(root, "src/authoring_core.mbt", "struct Val")
+  require_text(root, "src/authoring_core.mbt", "pub(all) struct Emit")
+  require_text(root, "src/authoring_core.mbt", "Emit::map")
+  require_text(
+    root, "src/authoring_core.mbt", "pub fn[Model : Eq, Msg] create_state",
+  )
+  require_text(root, "src/authoring_core.mbt", "create_state_with_init")
+  require_text(root, "src/authoring_core.mbt", "create_state_with_input")
+  require_text(root, "src/authoring_core.mbt", "create_pure_state")
+  require_text(root, "src/authoring_core.mbt", "create_variable")
+  require_text(root, "src/authoring_core.mbt", "create_resource")
+  require_text(root, "src/authoring_core.mbt", "pub fn[Model] no_cmd")
+  require_text(root, "src/authoring_core.mbt", "pub fn[Model] with_cmd")
+  require_text(root, "src/authoring_core.mbt", "pub fn[Model] with_cmds")
+  require_text(root, "src/authoring_core.mbt", "Val::view2")
+  require_text(root, "src/authoring_core.mbt", "Val::view9")
+  require_text(root, "src/authoring_page.mbt", "pub fn page")
+  for leaked in ["@renderer", "@runtime", "@val", "@ui", "internal_miniapp"] {
+    forbid_text(root, "src/pkg.generated.mbti", leaked)
+  }
+  for
+    removed in [
+      "type State", "type Transition", "type Resource", "pub fn state(", "pub fn state_with_input(",
+      "pub fn variable(", "pub fn resource(", "pub fn[Model] next(",
+    ] {
+    forbid_text(root, "src/pkg.generated.mbti", removed)
+  }
+  require_text(root, "src/val_runtime/val_runtime_10_state.mbt", "Val::assoc")
+  require_text(
+    root, "src/renderer_miniapp/page_program_10_contract.mbt", "PageProgram",
+  )
+  require_text(root, "src/tooling_miniapp/generator.mbt", "runtimeApiVersion")
+  require_same_text(root, "README.mbt.md", "README.md")
+  require_same_text(root, "README.zh-CN.mbt.md", "README.zh-CN.md")
+  for path in repository_moonbit_sources(root) {
+    let violations = moon_source_boundary_violations(
+      @fs.read_file(join(root, path)).text(),
+    )
+    guard violations.is_empty() else {
+      abort(path + ": " + violations.join("; "))
+    }
+  }
+  for
+    legacy in [
+      "examples/miniapp_counter_fake", "examples/miniapp_js_runtime_bridge_spike",
+      "examples/miniapp_counter", "examples/miniapp_components_app", "examples/miniapp_dynamic_app",
+      "examples/miniapp_minimal_app", "examples/miniapp_profile_app", "src/renderer_miniapp_codegen",
+      "src/renderer_miniapp_js", "src/renderer_miniapp_metadata", "src/renderer_miniapp_runtime",
+      "src/renderer_miniapp_testing", "src/tooling_minimoon_config", "src/tooling_miniapp_app_driver",
+      "src/tooling_miniapp_codegen", "src/tooling_miniapp_counter_driver", "src/tooling_miniapp_prepare",
+      "src/tooling_miniapp_writer", "src/tea_runtime", "src/signal_core", "src/patch_graph",
+      "src/projection_experiment", "src/internal_miniapp",
+    ] {
+    guard !@fs.exists(join(root, legacy)) else {
+      abort("removed V1 path must not return: " + legacy)
+    }
+  }
+  for
+    dependency in [
+      "renderer_miniapp_runtime", "renderer_miniapp_metadata", "renderer_miniapp_codegen",
+      "signal_core", "patch_graph",
+    ] {
+    forbid_text(root, "src/renderer_miniapp/moon.pkg", dependency)
+  }
+  for
+    page_package in [
+      "examples/miniapp_conformance_app/src/pages/showcase/moon.pkg", "examples/miniapp_conformance_app/src/pages/home/moon.pkg",
+      "examples/miniapp_conformance_app/src/pages/lab/moon.pkg", "examples/miniapp_conformance_app/src/pages/details/moon.pkg",
+      "examples/miniapp_conformance_app/src/components/toggle_card/moon.pkg", "templates/starter/src/pages/home/moon.pkg",
+      "templates/starter/src/pages/details/moon.pkg",
+    ] {
+    require_text(root, page_package, "\"lampclaw/minimoon\"")
+    forbid_text(root, page_package, "lampclaw/minimoon/miniapp")
+    for internal_package in ["renderer_miniapp", "runtime_core", "ui_dsl"] {
+      forbid_text(root, page_package, internal_package)
+    }
+  }
+  for internal_package in ["renderer_miniapp", "runtime_core", "ui_dsl"] {
+    forbid_text(
+      root,
+      "src/cmd/minimoon/templates.generated.mbt",
+      "lampclaw/minimoon/" + internal_package,
+    )
+  }
+  forbid_text(
+    root, "src/cmd/minimoon/templates.generated.mbt", "lampclaw/minimoon/miniapp",
+  )
+  for
+    application_source in [
+      "src/cmd/minimoon/templates.generated.mbt", "templates/starter/src/pages/home/page.mbt",
+      "templates/starter/src/pages/details/page.mbt", "examples/miniapp_conformance_app/src/pages/showcase/page.mbt",
+      "examples/miniapp_conformance_app/src/pages/home/page.mbt", "examples/miniapp_conformance_app/src/pages/lab/page.mbt",
+      "examples/miniapp_conformance_app/src/pages/details/page.mbt", "examples/miniapp_conformance_app/src/components/toggle_card/card.mbt",
+    ] {
+    for
+      stale_public_name in [
+        "MiniappCommands", "MiniappDecodeError", "MiniappScrollDetail", "MiniappCapability",
+        "@minimoon.state(", "@minimoon.state_with_input(", "@minimoon.variable(",
+        "@minimoon.resource(", "@minimoon.next(", ".sender()", "emit.emit(",
+      ] {
+      forbid_text(root, application_source, stale_public_name)
+    }
+  }
+  let allowed = "scripts/bridge/weapp_tailwindcss_adapter.mjs"
+  for path in repository_scripts(root) {
+    guard path == allowed || generated_script(path) else {
+      abort("unexpected maintained script is forbidden: " + path)
+    }
+  }
+  let adapter = @fs.read_file(join(root, allowed)).text()
+  guard adapter.split("\n").length() <= 101 else {
+    abort("weapp-tailwindcss adapter exceeds 100 lines")
+  }
+  guard adapter.trim() == @build.adapter_source().trim() else {
+    abort("embedded weapp-tailwindcss adapter has drifted from " + allowed)
+  }
+  for
+    package_dir in [
+      "src/components", "src/internal_duplix", "src/renderer_miniapp", "src/runtime_core",
+      "src/tooling_minimoon_verify", "src/val_runtime",
+    ] {
+    @fs.walk(
+      join(root, package_dir),
+      (path, names) => {
+        for name in names {
+          if name.has_suffix(".mbt") &&
+            !name.has_suffix("_test.mbt") &&
+            !name.has_suffix("_wbtest.mbt") &&
+            !name.has_suffix("_bench.mbt") {
+            let file = join(path, name)
+            let lines = @fs.read_file(file).text().split("\n").length()
+            guard lines <= 450 else {
+              abort(
+                package_dir +
+                "/" +
+                name +
+                " exceeds the 450-line production source budget: " +
+                lines.to_string(),
+              )
+            }
+          }
+        }
+      },
+      max_concurrency=1,
+    )
+  }
+}
+
+///|
+async fn quality_suite(root : String) -> Unit {
+  run(root, "MoonBit warning-free source check", "moon", [
+    "check", "--deny-warn",
+  ])
+  run(root, "MoonBit formatting check", "moon", ["fmt", "--check"])
+  run(root, "MoonBit public API check", "moon", ["info"])
+}
+
+///|

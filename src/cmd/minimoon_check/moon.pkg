@@ -1,0 +1,16 @@
+import {
+  "lampclaw/minimoon/internal_host_validation" @host_validation,
+  "lampclaw/minimoon/internal_versions" @versions,
+  "lampclaw/minimoon/tooling_minimoon_build" @build,
+  "lampclaw/minimoon/tooling_minimoon_verify" @verify,
+  "moonbitlang/async",
+  "moonbitlang/async/fs",
+  "moonbitlang/async/process",
+  "moonbitlang/core/env",
+  "moonbitlang/core/json",
+  "moonbitlang/x/path",
+}
+
+supported_targets = "native"
+
+pkgtype(kind: "executable")
