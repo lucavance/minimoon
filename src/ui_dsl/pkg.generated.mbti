@@ -1,0 +1,90 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/ui_dsl"
+
+// Values
+pub fn alt_attr(String) -> Attr
+
+pub fn attr(String, String) -> Attr
+
+pub fn[C : IsChildren] button(id? : String, class? : String, on_click? : String, attrs? : Array[Attr], C) -> Node
+
+pub fn class_attr(String) -> Attr
+
+pub fn click_event(String) -> String
+
+pub fn[C : IsChildren] div(id? : String, class? : String, attrs? : Array[Attr], C) -> Node
+
+pub fn element(String, id? : String, class? : String, attrs? : Array[Attr], children? : Array[Node]) -> Node
+
+pub fn fragment(Array[Node]) -> Node
+
+pub fn[C : IsChildren] h1(id? : String, class? : String, attrs? : Array[Attr], C) -> Node
+
+pub fn image(id? : String, class? : String, src? : String, alt? : String, attrs? : Array[Attr]) -> Node
+
+pub fn input(id? : String, class? : String, attrs? : Array[Attr]) -> Node
+
+pub fn keyed(String, Node) -> KeyedNode
+
+pub fn keyed_fragment(Array[KeyedNode]) -> Node
+
+pub fn keyed_nodes(Node) -> Array[KeyedNode]
+
+pub fn map_event_keys(Node, (String) -> String) -> Node
+
+pub fn nothing() -> Node
+
+pub fn[C : IsChildren] p(id? : String, class? : String, attrs? : Array[Attr], C) -> Node
+
+pub fn render_to_string(Node) -> String
+
+pub fn retained(Int, Node) -> Node
+
+pub fn[C : IsChildren] span(id? : String, class? : String, attrs? : Array[Attr], C) -> Node
+
+pub fn src_attr(String) -> Attr
+
+pub fn style_attr(String) -> Attr
+
+pub fn text(String) -> Node
+
+pub fn value_attr(String) -> Attr
+
+pub fn[C : IsChildren] view(C) -> Node
+
+// Errors
+
+// Types and methods
+pub struct Attr {
+  name : String
+  value : String
+}
+
+pub struct KeyedNode {
+  key : String
+  node : Node
+}
+pub fn KeyedNode::key(Self) -> String
+pub fn KeyedNode::node(Self) -> Node
+
+pub enum Node {
+  Element(String, Array[Attr], Array[Node])
+  Text(String)
+  Fragment(Array[Node])
+  KeyedFragment(Array[KeyedNode])
+  Retained(Int, Node)
+  Empty
+}
+pub impl IsChildren for Node
+
+// Type aliases
+pub type EventKey = String
+
+pub type Key = String
+
+// Traits
+pub trait IsChildren {
+  fn to_children(Self) -> Array[Node]
+}
+pub impl IsChildren for String
+pub impl IsChildren for Array[Node]

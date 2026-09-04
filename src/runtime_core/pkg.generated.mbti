@@ -1,0 +1,260 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/runtime_core"
+
+import {
+  "lampclaw/minimoon/ui_dsl",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/ref",
+}
+
+// Values
+pub fn[Model, Msg] checked_component(model~ : Model, update~ : (Model, Msg) -> (Model, Cmd[Msg]), view~ : (Model, (Msg) -> Cmd[Msg]) -> @ui_dsl.Node, project~ : (Model) -> Result[String, String], projection_guard? : (Model, Model) -> Bool) -> Component[Model, Msg]
+
+pub fn[Msg] cmd_batch(Array[Cmd[Msg]]) -> Cmd[Msg]
+
+pub fn dispose_context(String) -> RuntimeCommand
+
+pub fn emit_host_event(String, String, String) -> RuntimeCommand
+
+pub fn[Msg] host_effect(HostEffectRequest, (HostEffectOutcome) -> Msg) -> Cmd[Msg]
+
+pub fn host_effect_request(String, String) -> HostEffectRequest
+
+pub fn[Msg] local_effect(((Msg) -> Unit, () -> Unit) -> () -> Unit) -> Cmd[Msg]
+
+pub fn[ChildMsg, ParentMsg] map_cmd(Cmd[ChildMsg], (ChildMsg) -> ParentMsg) -> Cmd[ParentMsg]
+
+pub fn[Msg] message(Msg) -> Cmd[Msg]
+
+pub fn mount_context(String) -> RuntimeCommand
+
+pub fn[Msg] navigate_back_cmd(Int) -> Cmd[Msg]
+
+pub fn navigate_back_command(Int) -> RuntimeCommand
+
+pub fn[Msg] navigate_back_or_redirect_cmd(Int, String) -> Cmd[Msg]
+
+pub fn navigate_back_or_redirect_command(Int, String) -> RuntimeCommand
+
+pub fn[Msg] navigate_to_cmd(String) -> Cmd[Msg]
+
+pub fn navigate_to_command(String) -> RuntimeCommand
+
+pub fn[Model, Msg] no_cmd(Model) -> (Model, Cmd[Msg])
+
+pub fn[Model, Msg] no_cmd_update(Model) -> (Model, Cmd[Msg])
+
+pub fn[Msg] none() -> Cmd[Msg]
+
+pub fn patch_view_tree(String, String, base_revision? : Int, revision? : Int) -> RuntimeCommand
+
+pub fn[Msg] redirect_to_cmd(String) -> Cmd[Msg]
+
+pub fn redirect_to_command(String) -> RuntimeCommand
+
+pub fn replace_view_tree(String, String, base_revision? : Int, revision? : Int) -> RuntimeCommand
+
+pub fn runtime_command_diagnostics(Array[RuntimeCommand]) -> RuntimeCommandBatchDiagnostics
+
+pub fn runtime_commands_json(Array[RuntimeCommand]) -> String
+
+pub fn runtime_error(String, String, String) -> RuntimeCommand
+
+pub fn start_subscription_command(String, String, Int) -> RuntimeCommand
+
+pub fn stop_subscription_command(String, String) -> RuntimeCommand
+
+pub fn[Model, Msg] with_cmd(Model, Cmd[Msg]) -> (Model, Cmd[Msg])
+
+pub fn[Model, Msg] with_cmd_update(Cmd[Msg], Model) -> (Model, Cmd[Msg])
+
+pub fn[Model, Msg] with_cmds(Model, Array[Cmd[Msg]]) -> (Model, Cmd[Msg])
+
+pub fn[Model, Msg] with_navigate_back(Model, Int) -> (Model, Cmd[Msg])
+
+pub fn[Model, Msg] with_navigate_to(Model, String) -> (Model, Cmd[Msg])
+
+pub fn[Model, Msg] with_redirect_to(Model, String) -> (Model, Cmd[Msg])
+
+// Errors
+
+// Types and methods
+pub enum Cmd[Msg] {
+  CmdNone
+  CmdMessage(Msg)
+  CmdBatch(Array[Cmd[Msg]])
+  CmdLocalEffect(((Msg) -> Unit, () -> Unit) -> () -> Unit)
+  CmdHostEffect(HostEffectRequest, (HostEffectOutcome) -> Msg)
+  CmdNavigateTo(String)
+  CmdRedirectTo(String)
+  CmdNavigateBack(Int)
+  CmdNavigateBackOrRedirect(Int, String)
+}
+
+pub struct Component[Model, Msg] {
+  model : Model
+  update : (Model, Msg) -> (Model, Cmd[Msg])
+  view : (Model, (Msg) -> Cmd[Msg]) -> @ui_dsl.Node
+  project : (Model) -> Result[String, String]
+  projection_guard : ((Model, Model) -> Bool)?
+}
+pub fn[Model, Msg] Component::render(Self[Model, Msg]) -> @ui_dsl.Node
+pub fn[Model, Msg] Component::run_host(Self[Model, Msg], component_id~ : String, queue~ : RuntimeCommandQueue, wake_async? : (Int) -> Unit) -> RunningComponent[Model, Msg]
+pub fn[Model, Msg] Component::with_model(Self[Model, Msg], Model) -> Self[Model, Msg]
+
+pub struct ComponentContext {
+  id : String
+  mounted : @ref.Ref[Bool]
+  disposed : @ref.Ref[Bool]
+  cleanups : @ref.Ref[Array[() -> Unit]]
+  queue : RuntimeCommandQueue
+}
+pub fn ComponentContext::batch(Self, () -> Unit) -> Unit
+pub fn ComponentContext::dispose(Self) -> ContextWriteResult
+pub fn ComponentContext::emit(Self, RuntimeCommand) -> ContextWriteResult
+pub fn ComponentContext::emit_event(Self, String, String) -> ContextWriteResult
+pub fn ComponentContext::id(Self) -> String
+pub fn ComponentContext::is_disposed(Self) -> Bool
+pub fn ComponentContext::is_mounted(Self) -> Bool
+pub fn ComponentContext::lifecycle_state(Self) -> ComponentLifecycleState
+pub fn ComponentContext::mount(Self) -> ContextWriteResult
+pub fn ComponentContext::new(String, RuntimeCommandQueue) -> Self
+pub fn ComponentContext::on_cleanup(Self, () -> Unit) -> ContextWriteResult
+pub fn[T] ComponentContext::run_in_scope(Self, () -> T) -> T
+pub fn ComponentContext::update_state(Self, String) -> ContextWriteResult
+
+pub enum ComponentLifecycleState {
+  ComponentCreated
+  ComponentMounted
+  ComponentDisposed
+}
+
+pub enum ContextWriteResult {
+  ContextWriteOk
+  ContextDisposed
+}
+pub fn ContextWriteResult::is_disposed(Self) -> Bool
+pub fn ContextWriteResult::is_ok(Self) -> Bool
+
+pub(all) enum EffectResolveResult {
+  EffectResolved
+  EffectUnknownRequest
+  EffectAlreadyResolved
+  EffectContextDisposed
+} derive(Eq, @debug.Debug)
+
+pub(all) enum HostEffectOutcome {
+  HostEffectOk(String)
+  HostEffectErr(String, String, String)
+} derive(Eq, @debug.Debug)
+
+pub struct HostEffectRequest {
+  capability : String
+  payload : String
+}
+
+type PendingHostEffect[Msg]
+
+type PendingLocalMessage[Msg]
+
+pub struct RunningComponent[Model, Msg] {
+  context : ComponentContext
+  model : @ref.Ref[Model]
+  update : (Model, Msg) -> (Model, Cmd[Msg])
+  view : (Model, (Msg) -> Cmd[Msg]) -> @ui_dsl.Node
+  project : (Model) -> Result[String, String]
+  projection_guard : ((Model, Model) -> Bool)?
+  wake_async : (Int) -> Unit
+  next_local_effect_id : @ref.Ref[Int]
+  pending_local_effects : Map[Int, () -> Unit]
+  next_local_message_sequence : @ref.Ref[Int]
+  pending_local_messages : Array[PendingLocalMessage[Msg]]
+  next_effect_request_id : @ref.Ref[Int]
+  pending_effects : Map[String, PendingHostEffect[Msg]]
+}
+pub fn[Model, Msg] RunningComponent::context(Self[Model, Msg]) -> ComponentContext
+pub fn[Model, Msg] RunningComponent::dispatch(Self[Model, Msg], Msg) -> ContextWriteResult
+pub fn[Model, Msg] RunningComponent::dispose(Self[Model, Msg]) -> ContextWriteResult
+pub fn[Model, Msg] RunningComponent::drain_local_messages(Self[Model, Msg], through~ : Int) -> ContextWriteResult
+pub fn[Model, Msg] RunningComponent::model(Self[Model, Msg]) -> Model
+pub fn[Model, Msg] RunningComponent::mount(Self[Model, Msg]) -> ContextWriteResult
+pub fn[Model, Msg] RunningComponent::pending_effect_count(Self[Model, Msg]) -> Int
+pub fn[Model, Msg] RunningComponent::pending_local_effect_count(Self[Model, Msg]) -> Int
+pub fn[Model, Msg] RunningComponent::pending_local_message_count(Self[Model, Msg]) -> Int
+pub fn[Model, Msg] RunningComponent::render(Self[Model, Msg]) -> @ui_dsl.Node
+pub fn[Model, Msg] RunningComponent::render_to_string(Self[Model, Msg]) -> String
+pub fn[Model, Msg] RunningComponent::resolve_host_effect(Self[Model, Msg], String, HostEffectOutcome) -> EffectResolveResult
+pub fn[Model, Msg] RunningComponent::transition(Self[Model, Msg], (Model) -> Model) -> ContextWriteResult
+
+pub enum RuntimeCommand {
+  ReplaceViewTree(String, Int, Int, String)
+  PatchViewTree(String, Int, Int, String)
+  RuntimeError(String, String, String)
+  InvokeCapability(String, String, String, String)
+  NavigateTo(String)
+  RedirectTo(String)
+  NavigateBack(Int)
+  NavigateBackOrRedirect(Int, String)
+  StartSubscription(String, String, Int)
+  StopSubscription(String, String)
+  CancelEffect(String, String)
+  EmitHostEvent(String, String, String)
+  MountContext(String)
+  DisposeContext(String)
+}
+pub fn RuntimeCommand::describe(Self) -> String
+pub fn RuntimeCommand::schema_json(Self) -> String
+pub fn RuntimeCommand::schema_json_size(Self) -> Int
+
+pub struct RuntimeCommandBatchDiagnostics {
+  command_count : Int
+  state_update_count : Int
+  effect_count : Int
+  event_count : Int
+  lifecycle_count : Int
+  payload_size : Int
+  warning : String
+  breakdown : String
+  description : String
+}
+pub fn RuntimeCommandBatchDiagnostics::describe(Self) -> String
+
+pub struct RuntimeCommandQueue {
+  commands : @ref.Ref[Array[RuntimeCommand]]
+  suspend_depth : @ref.Ref[Int]
+  sink : (Array[RuntimeCommand]) -> Unit
+}
+pub fn RuntimeCommandQueue::batch(Self, () -> Unit) -> Unit
+pub fn RuntimeCommandQueue::begin_batch(Self) -> Unit
+pub fn RuntimeCommandQueue::end_batch(Self) -> Unit
+pub fn RuntimeCommandQueue::flush(Self) -> Unit
+pub fn RuntimeCommandQueue::new((Array[RuntimeCommand]) -> Unit) -> Self
+pub fn RuntimeCommandQueue::pending_count(Self) -> Int
+pub fn RuntimeCommandQueue::push(Self, RuntimeCommand) -> Unit
+
+// Type aliases
+pub type CheckedStateProjector[Model] = (Model) -> Result[String, String]
+
+pub type CommandView[Model, Msg] = (Model, (Msg) -> Cmd[Msg]) -> @ui_dsl.Node
+
+pub type ComponentId = String
+
+pub type EffectCapability = String
+
+pub type EffectRequestId = String
+
+pub type Emit[Msg] = (Msg) -> Cmd[Msg]
+
+pub type EventKey = String
+
+pub type HostPayload = String
+
+pub type ProjectionGuard[Model] = (Model, Model) -> Bool
+
+pub type PureUpdate[Model, Msg] = (Model, Msg) -> Model
+
+pub type SubscriptionKey = String
+
+pub type Update[Model, Msg] = (Model, Msg) -> (Model, Cmd[Msg])
+
+// Traits

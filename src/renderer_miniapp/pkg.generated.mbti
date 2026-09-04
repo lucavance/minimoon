@@ -1,0 +1,242 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/renderer_miniapp"
+
+import {
+  "lampclaw/minimoon/runtime_core",
+  "lampclaw/minimoon/ui_dsl",
+  "moonbitlang/core/ref",
+  "moonbitlang/core/set",
+}
+
+// Values
+pub fn decode_error(String) -> MiniappDecodeError
+
+pub fn dynamic_page_wxml(String, templates_src? : String) -> String
+
+pub fn dynamic_templates_wxml() -> String
+
+pub fn event_detail_value(Json) -> String
+
+pub fn[Msg] events() -> Events[Msg]
+
+pub fn[Msg] events_for_owner(Int) -> Events[Msg]
+
+pub fn[Msg] every(key~ : String, interval_ms~ : Int, msg~ : Msg) -> HostSubscription[Msg]
+
+pub fn[Msg] input_value_event(String, (String) -> Msg) -> PageEvent[Msg]
+
+pub fn[Msg] lifecycle_event(PageLifecycleHook, (Json) -> Result[Msg, MiniappDecodeError]) -> PageLifecycleEvent[Msg]
+
+pub fn[Msg] lifecycle_message(PageLifecycleHook, Msg) -> PageLifecycleEvent[Msg]
+
+pub fn miniapp_capability(String) -> MiniappCapability
+
+pub fn[Msg] no_subscriptions() -> Subscriptions[Msg]
+
+pub fn[Msg] normalize_miniapp_tree(@ui_dsl.Node, Array[PageEvent[Msg]]) -> Json
+
+pub fn[Msg] normalize_miniapp_tree_checked(@ui_dsl.Node, Array[PageEvent[Msg]]) -> Result[Json, String]
+
+pub fn[Msg] page_event(key~ : String, kind~ : PageEventKind, decode~ : (Json) -> Result[Msg, MiniappDecodeError]) -> PageEvent[Msg]
+
+pub fn page_event_kind(String) -> PageEventKind
+
+pub fn[Msg] page_input(String, (String) -> Result[Msg, MiniappDecodeError]) -> PageInput[Msg]
+
+pub fn page_lifecycle_hook(String) -> PageLifecycleHook
+
+pub fn[Model, Msg] page_program(id~ : String, route~ : String, title~ : String, model~ : Model, update~ : (Model, Msg) -> (Model, @runtime_core.Cmd[Msg]), view~ : (Events[Msg], Model) -> @ui_dsl.Node, projection_guard? : (Model, Model) -> Bool, capabilities? : Array[MiniappCapability], lifecycle? : Array[PageLifecycleEvent[Msg]], inputs? : Array[PageInput[Msg]], init? : Msg, subscriptions? : (Model) -> Subscriptions[Msg]) -> PageProgram[Model, Msg]
+
+pub fn render_page_wxml(String, @ui_dsl.Node) -> String
+
+pub fn runtime_api_version() -> Int
+
+pub fn[Model, Msg] simple_page_program(id~ : String, route~ : String, title~ : String, model~ : Model, update~ : (Model, Msg) -> Model, view~ : (Events[Msg], Model) -> @ui_dsl.Node, projection_guard? : (Model, Model) -> Bool, capabilities? : Array[MiniappCapability], lifecycle? : Array[PageLifecycleEvent[Msg]], inputs? : Array[PageInput[Msg]], init? : Msg, subscriptions? : (Model) -> Subscriptions[Msg]) -> PageProgram[Model, Msg]
+
+pub fn[Msg] string_page_input(String, (String) -> Msg) -> PageInput[Msg]
+
+pub fn[Msg] subscriptions(Array[HostSubscription[Msg]]) -> Subscriptions[Msg]
+
+pub fn[Msg] tap_event(String, Msg) -> PageEvent[Msg]
+
+// Errors
+
+// Types and methods
+pub struct Events[Msg] {
+  owner_id : Int
+  entries : @ref.Ref[Array[PageEvent[Msg]]]
+  entry_keys : @ref.Ref[@set.Set[String]]
+  entry_index : @ref.Ref[Map[String, PageEvent[Msg]]]
+  scopes : @ref.Ref[Array[String]]
+  scope_keys : @ref.Ref[@set.Set[String]]
+  issues : @ref.Ref[Array[String]]
+  subscriptions : @ref.Ref[Array[HostSubscription[Msg]]]
+  scope_cleanups : @ref.Ref[Map[String, () -> Unit]]
+  candidate_commits : @ref.Ref[Array[() -> Unit]]
+  candidate_rollbacks : @ref.Ref[Array[() -> Unit]]
+}
+pub fn[Msg] Events::change_bool(Self[Msg], String, (Bool) -> Msg) -> PageEvent[Msg]
+pub fn[Msg] Events::change_current(Self[Msg], String, (Int) -> Msg) -> PageEvent[Msg]
+pub fn[Msg] Events::change_index(Self[Msg], String, (Int) -> Msg) -> PageEvent[Msg]
+pub fn[Msg] Events::change_string(Self[Msg], String, (String) -> Msg) -> PageEvent[Msg]
+pub fn[Msg] Events::change_strings(Self[Msg], String, (Array[String]) -> Msg) -> PageEvent[Msg]
+pub fn[Msg] Events::custom(Self[Msg], String, PageEventKind, (Json) -> Result[Msg, MiniappDecodeError]) -> PageEvent[Msg]
+pub fn[Msg] Events::entries(Self[Msg]) -> Array[PageEvent[Msg]]
+pub fn[ParentMsg, ChildMsg] Events::include_scoped(Self[ParentMsg], String, Self[ChildMsg], (ChildMsg) -> ParentMsg) -> Unit
+pub fn[ParentMsg, ChildMsg] Events::include_scoped_subscriptions(Self[ParentMsg], String, Subscriptions[ChildMsg], (ChildMsg) -> ParentMsg) -> Unit
+pub fn[Msg] Events::input_value(Self[Msg], String, (String) -> Msg) -> PageEvent[Msg]
+pub fn[Msg] Events::on_candidate_commit(Self[Msg], () -> Unit) -> Unit
+pub fn[Msg] Events::on_candidate_rollback(Self[Msg], () -> Unit) -> Unit
+pub fn[Msg] Events::on_scope_cleanup(Self[Msg], String, () -> Unit) -> Unit
+pub fn[Msg] Events::owner_id(Self[Msg]) -> Int
+pub fn[Msg] Events::reject(Self[Msg], String) -> Unit
+pub fn[Msg] Events::scroll(Self[Msg], String, (MiniappScrollDetail) -> Msg) -> PageEvent[Msg]
+pub fn[Msg] Events::tap(Self[Msg], String, Msg) -> PageEvent[Msg]
+
+pub struct HostSubscription[Msg] {
+  key : String
+  interval_ms : Int
+  msg : Msg
+}
+
+pub enum MiniappCapability {
+  Login
+  GetStorage
+  SetStorage
+  Request
+  ShowToast
+  GetLocation
+  ChooseMedia
+  RequestPayment
+  NavigateTo
+  RedirectTo
+  NavigateBack
+  Custom(String)
+} derive(Eq)
+pub fn MiniappCapability::name(Self) -> String
+
+pub struct MiniappDecodeError {
+  message : String
+}
+pub fn MiniappDecodeError::message(Self) -> String
+
+pub struct MiniappScrollDetail {
+  scroll_left : Double
+  scroll_top : Double
+  scroll_height : Double
+  scroll_width : Double
+  delta_x : Double
+  delta_y : Double
+}
+
+pub struct PageEvent[Msg] {
+  key : String
+  kind : PageEventKind
+  decode : (Json) -> Result[Msg, MiniappDecodeError]
+}
+pub fn[Msg] PageEvent::decode(Self[Msg], Json) -> Result[Msg, MiniappDecodeError]
+pub fn[Msg] PageEvent::key(Self[Msg]) -> String
+pub fn[Msg] PageEvent::kind(Self[Msg]) -> PageEventKind
+
+pub enum PageEventKind {
+  Tap
+  Input
+  Change
+  Confirm
+  Focus
+  Blur
+  Submit
+  CustomEvent(String)
+} derive(Eq)
+pub fn PageEventKind::host_name(Self) -> String
+
+pub struct PageInput[Msg] {
+  name : String
+  decode : (String) -> Result[Msg, MiniappDecodeError]
+}
+pub fn[Msg] PageInput::decode(Self[Msg], String) -> Result[Msg, MiniappDecodeError]
+pub fn[Msg] PageInput::name(Self[Msg]) -> String
+
+pub struct PageLifecycleEvent[Msg] {
+  hook : PageLifecycleHook
+  decode : (Json) -> Result[Msg, MiniappDecodeError]
+}
+pub fn[Msg] PageLifecycleEvent::decode(Self[Msg], Json) -> Result[Msg, MiniappDecodeError]
+pub fn[Msg] PageLifecycleEvent::hook(Self[Msg]) -> PageLifecycleHook
+
+pub enum PageLifecycleHook {
+  Load
+  Show
+  Hide
+  Unload
+  PullDownRefresh
+  ReachBottom
+} derive(Eq)
+pub fn PageLifecycleHook::host_name(Self) -> String
+
+pub struct PageProgram[Model, Msg] {
+  id : String
+  route : String
+  title : String
+  initial : Model
+  component_owner_id : Int
+  component : @runtime_core.Component[Model, Msg]
+  view : (Events[Msg], Model) -> @ui_dsl.Node
+  contract_tree : Json
+  active_tree : @ref.Ref[Json]
+  active_events : @ref.Ref[Array[PageEvent[Msg]]]
+  active_event_index : @ref.Ref[Map[String, PageEvent[Msg]]]
+  active_subscriptions : @ref.Ref[Array[HostSubscription[Msg]]]
+  active_scope_cleanups : @ref.Ref[Map[String, () -> Unit]]
+  capabilities : Array[MiniappCapability]
+  lifecycle : Array[PageLifecycleEvent[Msg]]
+  inputs : Array[PageInput[Msg]]
+  init : Msg?
+}
+pub fn[Model, Msg] PageProgram::capabilities(Self[Model, Msg]) -> Array[MiniappCapability]
+pub fn[Model, Msg] PageProgram::component(Self[Model, Msg]) -> @runtime_core.Component[Model, Msg]
+pub fn[Model, Msg] PageProgram::contract(Self[Model, Msg]) -> String
+pub fn[Model, Msg] PageProgram::contract_json(Self[Model, Msg]) -> Json
+pub fn[Model, Msg] PageProgram::create_runtime(Self[Model, Msg]) -> PageRuntime
+pub fn[Model, Msg] PageProgram::decode_event(Self[Model, Msg], String, Json) -> Result[Msg?, MiniappDecodeError]
+pub fn[Model, Msg] PageProgram::decode_input(Self[Model, Msg], String, String) -> Result[Msg?, MiniappDecodeError]
+pub fn[Model, Msg] PageProgram::decode_lifecycle(Self[Model, Msg], PageLifecycleHook, Json) -> Result[Msg?, MiniappDecodeError]
+pub fn[Model, Msg] PageProgram::events(Self[Model, Msg]) -> Array[PageEvent[Msg]]
+pub fn[Model, Msg] PageProgram::id(Self[Model, Msg]) -> String
+pub fn[Model, Msg] PageProgram::initial_model(Self[Model, Msg]) -> Model
+pub fn[Model, Msg] PageProgram::initial_tree(Self[Model, Msg]) -> Json
+pub fn[Model, Msg] PageProgram::inputs(Self[Model, Msg]) -> Array[PageInput[Msg]]
+pub fn[Model, Msg] PageProgram::lifecycle(Self[Model, Msg]) -> Array[PageLifecycleEvent[Msg]]
+pub fn[Model, Msg] PageProgram::render(Self[Model, Msg]) -> @ui_dsl.Node
+pub fn[Model, Msg] PageProgram::route(Self[Model, Msg]) -> String
+pub fn[Model, Msg] PageProgram::title(Self[Model, Msg]) -> String
+pub fn[Model, Msg] PageProgram::wxml(Self[Model, Msg]) -> String
+
+pub struct PageRuntime {
+  page_id : String
+  mount : () -> String
+  dispatch : (String, String) -> String
+  dispatch_batch : (String) -> String
+  lifecycle : (String, String) -> String
+  resolve_effect : (String, String, String) -> String
+  subscription : (String, String) -> String
+  snapshot : () -> String
+  dispose : () -> String
+}
+pub fn PageRuntime::dispatch(Self, String, String) -> String
+pub fn PageRuntime::dispatch_batch(Self, String) -> String
+pub fn PageRuntime::dispose(Self) -> String
+pub fn PageRuntime::lifecycle(Self, String, String) -> String
+pub fn PageRuntime::mount(Self) -> String
+pub fn PageRuntime::page_id(Self) -> String
+pub fn PageRuntime::resolve_effect(Self, String, String, String) -> String
+pub fn PageRuntime::snapshot(Self) -> String
+pub fn PageRuntime::subscription(Self, String, String) -> String
+
+pub struct Subscriptions[Msg] {
+  entries : Array[HostSubscription[Msg]]
+}
+
+// Type aliases
+
+// Traits
