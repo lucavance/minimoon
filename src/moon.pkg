@@ -1,0 +1,15 @@
+import {
+  "lampclaw/minimoon/renderer_miniapp" @renderer,
+  "lampclaw/minimoon/runtime_core" @runtime,
+  "lampclaw/minimoon/ui_dsl" @ui,
+  "lampclaw/minimoon/val_runtime" @val,
+  "moonbitlang/core/encoding/utf8",
+  "moonbitlang/core/immut/vector",
+  "moonbitlang/core/json",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
+
+supported_targets = "js+native"
