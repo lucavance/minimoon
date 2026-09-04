@@ -1,0 +1,149 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .node-version
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.4.0
+
+      - name: Install JS tooling
+        run: |
+          node --version
+          bun --version
+          bun install --frozen-lockfile
+
+      - name: Dependency advisory scan
+        continue-on-error: true
+        timeout-minutes: 3
+        run: bun audit --audit-level=high
+
+      - name: MoonBit environment
+        run: |
+          moon update
+          version_output="$(moon version --all)"
+          printf '%s\n' "$version_output"
+          installed_moon="$(printf '%s\n' "$version_output" | awk '$1 == "moon" { print $2; exit }')"
+          installed_moonc="$(printf '%s\n' "$version_output" | awk '$1 == "moonc" { sub(/^v/, "", $2); split($2, parts, "+"); print parts[1]; exit }')"
+          version_at_least() {
+            [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n 1)" = "$1" ]
+          }
+          version_at_least "0.1.20260827" "$installed_moon" || {
+            echo "moon $installed_moon is below the supported floor 0.1.20260827" >&2
+            exit 1
+          }
+          version_at_least "0.10.11" "$installed_moonc" || {
+            echo "moonc $installed_moonc is below the supported floor 0.10.11" >&2
+            exit 1
+          }
+
+      - name: Minimoon candidate gate
+        run: |
+          moon info
+          moon fmt --check
+          moon test --target native
+          moon test --target js
+          bun run check:coverage
+          bun run check:candidate
+          git diff --check
+
+      - name: Release gate when evidence is present
+        run: |
+          if [ -f examples/miniapp_conformance_app/generated/devtools.evidence.json ]; then
+            bun run check:all
+            bun run check:mvp
+          else
+            echo "Fresh Developer Tools evidence is pending; candidate gate is authoritative."
+          fi
+
+      - name: Generated and interface drift
+        run: |
+          git diff --exit-code
+          git status
+
+      - name: Prepare WeChat Developer Tools handoff
+        run: |
+          handoff_dir="_build/devtools-handoff"
+          fixture="examples/miniapp_conformance_app"
+          mkdir -p "$handoff_dir"
+          cp -R "$fixture/dist" "$handoff_dir/dist"
+          cp "$fixture/generated/manifest.json" "$handoff_dir/manifest.json"
+          cp "$fixture/generated/verify_report.json" "$handoff_dir/verify_report.json"
+          cp "$fixture/generated/smoke_checklist.json" "$handoff_dir/smoke_checklist.json"
+          cp docs/operations/miniapp_devtools_validation.md "$handoff_dir/VALIDATION.md"
+          (cd "$handoff_dir" && find dist -type f -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+          report_status="$(jq -er '.status | if type == "string" then . else error("status must be a string") end' "$handoff_dir/verify_report.json")"
+          report_release="$(jq -er '.release | if type == "boolean" then tostring else error("release must be a boolean") end' "$handoff_dir/verify_report.json")"
+          fingerprint="$(jq -er '.artifactFingerprint | if type == "string" and length > 0 then . else error("artifactFingerprint must be a non-empty string") end' "$handoff_dir/verify_report.json")"
+          if [ "$report_status" != "passed" ]; then
+            echo "candidate handoff requires a passed automated report" >&2
+            exit 1
+          fi
+          evidence_status="pending-manual-devtools-validation"
+          evidence_file="$fixture/generated/devtools.evidence.json"
+          if [ -f "$evidence_file" ] && jq -e \
+            --arg fingerprint "$fingerprint" \
+            '.scope == "current-v7" and .status == "passed" and .artifactFingerprint == $fingerprint' \
+            "$evidence_file" >/dev/null; then
+            if [ "$report_release" != "true" ]; then
+              echo "matching passed evidence requires a release verification report" >&2
+              exit 1
+            fi
+            cp "$evidence_file" "$handoff_dir/devtools.evidence.json"
+            evidence_status="passed-existing-fingerprint-bound-evidence"
+          elif [ "$report_release" != "false" ]; then
+            echo "release verification report requires matching passed DevTools evidence" >&2
+            exit 1
+          fi
+          jq -n \
+            --arg commit "$GITHUB_SHA" \
+            --arg fingerprint "$fingerprint" \
+            --arg runner "$RUNNER_OS" \
+            --arg evidence_status "$evidence_status" \
+            '{schemaVersion: 1, fixture: "miniapp_conformance_app", commit: $commit, artifactFingerprint: $fingerprint, runner: $runner, importDirectory: "dist/", projectSettings: {renderer: "skyline", es6: true, enhance: true, minified: true, minimumBaseLibrary: "3.17.0"}, evidenceStatus: $evidence_status}' \
+            > "$handoff_dir/HANDOFF.json"
+          (cd "$handoff_dir" && zip -X -qr miniapp_conformance_app-dist.zip dist)
+          (cd "$handoff_dir" && sha256sum miniapp_conformance_app-dist.zip > ARCHIVE_SHA256)
+
+      - name: Upload WeChat Developer Tools handoff
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: minimoon-devtools-${{ github.sha }}
+          path: _build/devtools-handoff/
+          if-no-files-found: error
+          retention-days: 14
