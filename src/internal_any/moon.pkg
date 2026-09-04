@@ -1,0 +1,3 @@
+// Adapted from moonbit-community/rabbita b6cbf52 (Apache-2.0).
+
+supported_targets = "js+native"

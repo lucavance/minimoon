@@ -1,0 +1,8 @@
+import {
+  "lampclaw/minimoon/internal_any" @any,
+  "lampclaw/minimoon/internal_duplix" @duplix,
+  "lampclaw/minimoon/internal_slotmap" @slotmap,
+  "moonbitlang/core/immut/vector",
+}
+
+supported_targets = "js+native"

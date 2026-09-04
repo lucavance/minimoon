@@ -1,0 +1,8 @@
+import {
+  "moonbitlang/core/queue",
+  "moonbitlang/core/immut/vector",
+  "moonbitlang/core/bench",
+  "lampclaw/minimoon/internal_slotmap" @slotmap,
+}
+
+supported_targets = "js+native"

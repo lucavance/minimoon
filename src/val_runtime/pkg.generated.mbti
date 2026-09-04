@@ -1,0 +1,153 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/val_runtime"
+
+import {
+  "lampclaw/minimoon/internal_duplix",
+  "moonbitlang/core/immut/vector",
+  "moonbitlang/core/ref",
+}
+
+// Values
+pub fn[A, E : Error] attempt((Result[A, E]) -> Cmd, async () -> A raise E) -> Cmd
+
+pub fn batch(Array[Cmd]) -> Cmd
+
+pub fn[Model : Eq, Msg] create_pure_state(Model, update~ : (Model, Msg) -> Model) -> (Val[Model], Emit[Msg])
+
+pub fn[T : Eq] create_resource((Emit[Result[T, Error]]) -> Cmd) -> Val[Status[T]]
+
+pub fn[Model : Eq, Msg] create_state(Model, update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd), subscriptions? : (Model, Emit[Msg]) -> Sub) -> (Val[Model], Emit[Msg])
+
+pub fn[Model : Eq, Msg] create_state_with_init(init~ : (Emit[Msg]) -> (Model, Cmd), update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd), subscriptions? : (Model, Emit[Msg]) -> Sub) -> (Val[Model], Emit[Msg])
+
+pub fn[Model : Eq, Msg, Input : Eq] create_state_with_input(init~ : (Emit[Msg], Input) -> (Model, Cmd), update~ : (Model, Input, Msg, Emit[Msg]) -> (Model, Cmd), subscriptions? : (Model, Input, Emit[Msg]) -> Sub, input~ : Val[Input]) -> (Val[Model], Emit[Msg])
+
+pub fn[Model : Eq] create_variable(Model) -> (Val[Model], Emit[(Model) -> Model])
+
+pub fn decode_error(String) -> DecodeError
+
+pub fn delay(Cmd, Int) -> Cmd
+
+pub fn effect(async () -> Unit noraise) -> Cmd
+
+pub fn every(String, Int, Cmd) -> Sub
+
+pub fn host_effect(String, String, (HostOutcome) -> Cmd) -> Cmd
+
+pub fn lifecycle(String, (Json) -> Result[Cmd, DecodeError]) -> Sub
+
+pub fn navigate_back(Int) -> Cmd
+
+pub fn navigate_back_or_redirect(Int, String) -> Cmd
+
+pub fn navigate_to(String) -> Cmd
+
+pub let no_sub : Sub
+
+pub let none : Cmd
+
+pub fn[A] perform((A) -> Cmd, async () -> A noraise) -> Cmd
+
+pub fn redirect_to(String) -> Cmd
+
+pub fn sub_batch(Array[Sub]) -> Sub
+
+// Errors
+
+// Types and methods
+pub(all) enum Cmd {
+  CmdNone
+  CmdMessage(() -> Cmd)
+  CmdBatch(Array[Cmd])
+  CmdEffect(((Cmd) -> Unit, () -> Unit) -> () -> Unit)
+  CmdHostEffect(String, String, (HostOutcome) -> Cmd)
+  CmdNavigateTo(String)
+  CmdRedirectTo(String)
+  CmdNavigateBack(Int)
+  CmdNavigateBackOrRedirect(Int, String)
+}
+
+pub struct DecodeError {
+  message : String
+}
+pub fn DecodeError::message(Self) -> String
+
+pub(all) struct Emit[Msg]((Msg) -> Cmd)
+pub fn[Msg] Emit::emit(Self[Msg], Msg) -> Cmd
+pub fn[A, B] Emit::map(Self[A], (B) -> A) -> Self[B]
+
+pub struct Graph {
+  generation : GraphGeneration
+  root_scope : @internal_duplix.RootScope
+  transaction_active : @ref.Ref[Bool]
+  revision : @ref.Ref[Int]
+  pending_changes : @ref.Ref[Int]
+  commits : @ref.Ref[Array[() -> Unit]]
+  rollbacks : @ref.Ref[Array[() -> Unit]]
+  state_registry : StateRegistry
+  subscriptions : SubscriptionRegistry
+  initial_commands : @ref.Ref[Array[Cmd]]
+  disposed : @ref.Ref[Bool]
+}
+pub fn Graph::begin(Self) -> Unit
+pub fn[A] Graph::build(Self, () -> A) -> A
+pub fn Graph::candidate_revision(Self) -> Int
+pub fn Graph::commit(Self) -> Unit
+pub fn[Model : Eq] Graph::create_input(Self, Model) -> (Val[Model], Emit[Model])
+pub fn Graph::current_subscriptions(Self) -> Sub
+pub fn Graph::dispose(Self) -> Unit
+pub fn Graph::new() -> Self
+pub fn Graph::rollback(Self) -> Unit
+pub fn[A] Graph::run(Self, () -> A) -> A
+pub fn Graph::take_initial_command(Self) -> Cmd
+
+type GraphGeneration derive(Eq)
+
+pub(all) enum HostOutcome {
+  HostOk(String)
+  HostErr(String, String, String)
+}
+
+type StateRegistry
+
+pub enum Status[T] {
+  Pending
+  Loaded(T)
+  Failed(Error)
+}
+pub impl[T] @internal_duplix.Enumerate for Status[T]
+pub impl[T : Eq] Eq for Status[T]
+
+pub(all) enum Sub {
+  SubNone
+  SubBatch(Array[Sub])
+  SubEvery(String, Int, Cmd)
+  SubLifecycle(String, (Json) -> Result[Cmd, DecodeError])
+}
+
+type SubscriptionRegistry
+
+pub struct Val[A](@internal_duplix.Node[A])
+pub fn[K : Hash + Eq, V : Eq, C : Eq] Val::assoc(Self[@vector.Vector[(K, V)]], (K, Self[V]) -> Self[C]) -> Self[@vector.Vector[C]]
+pub fn[K : Hash + Eq, V : Eq, C : Eq] Val::assoc_by(Self[@vector.Vector[V]], (K, Self[V]) -> Self[C], by~ : (V) -> K) -> Self[@vector.Vector[C]]
+pub fn[A] Val::constant(A) -> Self[A]
+pub fn[E : @internal_duplix.Enumerate + Eq, C : Eq] Val::enumerate(Self[E], (E, Self[E]) -> Self[C]) -> Self[C]
+pub fn[E : Eq, C : Eq] Val::enumerate_bounded_by(Self[E], capacity~ : Int, build~ : (E, Self[E]) -> Self[C], by~ : (E) -> String) -> Self[C]
+pub fn[E : Eq, C : Eq] Val::enumerate_by(Self[E], (E, Self[E]) -> Self[C], by~ : (E) -> String) -> Self[C]
+pub fn[A : Eq, B] Val::map(Self[A], (A) -> B) -> Self[B]
+pub fn[A : Eq, B : Eq, C] Val::map2(Self[A], Self[B], (A, B) -> C) -> Self[C]
+pub fn[A : Eq, B : Eq, C : Eq, D] Val::map3(Self[A], Self[B], Self[C], (A, B, C) -> D) -> Self[D]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E] Val::map4(Self[A], Self[B], Self[C], Self[D], (A, B, C, D) -> E) -> Self[E]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F] Val::map5(Self[A], Self[B], Self[C], Self[D], Self[E], (A, B, C, D, E) -> F) -> Self[F]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G] Val::map6(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], (A, B, C, D, E, F) -> G) -> Self[G]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H] Val::map7(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], (A, B, C, D, E, F, G) -> H) -> Self[H]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H : Eq, I] Val::map8(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], Self[H], (A, B, C, D, E, F, G, H) -> I) -> Self[I]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H : Eq, I : Eq, J] Val::map9(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], Self[H], Self[I], (A, B, C, D, E, F, G, H, I) -> J) -> Self[J]
+pub fn[A : Eq] Val::read(Self[A]) -> A
+pub fn[E : @internal_duplix.Enumerate + Eq, C : Eq] Val::switch(Self[E], (E, Self[E]) -> Self[C]) -> Self[C]
+pub fn[E : Eq, C : Eq] Val::switch_by(Self[E], (E, Self[E]) -> Self[C], by~ : (E) -> String) -> Self[C]
+
+// Type aliases
+pub using @internal_duplix {trait Enumerate}
+
+// Traits

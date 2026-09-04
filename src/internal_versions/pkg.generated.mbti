@@ -1,0 +1,19 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/internal_versions"
+
+// Values
+pub fn app_contract_version() -> Int
+
+pub fn product_version() -> String
+
+pub fn renderer_protocol_version() -> Int
+
+pub fn runtime_api_version() -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

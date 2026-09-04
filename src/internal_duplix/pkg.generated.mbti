@@ -1,0 +1,66 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/internal_duplix"
+
+import {
+  "lampclaw/minimoon/internal_slotmap",
+  "moonbitlang/core/immut/vector",
+  "moonbitlang/core/ref",
+}
+
+// Values
+pub fn cleanup() -> Unit
+
+pub fn[T] constant(T) -> Node[T]
+
+pub fn[T : Eq] input(T) -> (Node[T], (T) -> Unit)
+
+pub fn on_cleanup(() -> Unit) -> Unit
+
+pub fn on_visibility((Bool) -> Unit) -> Unit
+
+pub fn[A] transaction((() -> Unit, () -> Unit) -> Unit, () -> A) -> A
+
+// Errors
+
+// Types and methods
+type DirtyFlag
+pub impl Compare for DirtyFlag
+pub impl Eq for DirtyFlag
+
+type Node[T]
+pub fn[K : Hash + Eq, V : Eq, C : Eq] Node::assoc(Self[@vector.Vector[(K, V)]], (K, Self[V]) -> Self[C]) -> Self[@vector.Vector[C]]
+pub fn[K : Hash + Eq, V : Eq, C : Eq] Node::assoc_by(Self[@vector.Vector[V]], (K, Self[V]) -> Self[C], by~ : (V) -> K) -> Self[@vector.Vector[C]]
+pub fn[A : Eq, B : Eq] Node::bind(Self[A], (A) -> Self[B]) -> Self[B]
+pub fn[E : Enumerate + Eq, A : Eq] Node::enumerate(Self[E], (E, Self[E]) -> Self[A]) -> Self[A]
+pub fn[E : Eq, A : Eq] Node::enumerate_bounded_by(Self[E], capacity~ : Int, (E, Self[E]) -> Self[A], by~ : (E) -> String) -> Self[A]
+pub fn[E : Eq, A : Eq] Node::enumerate_by(Self[E], (E, Self[E]) -> Self[A], by~ : (E) -> String) -> Self[A]
+pub fn[A : Eq, B] Node::map(Self[A], (A) -> B) -> Self[B]
+pub fn[A : Eq, B] Node::map1(Self[A], (A) -> B) -> Self[B]
+pub fn[A : Eq, B : Eq, C] Node::map2(Self[A], Self[B], (A, B) -> C) -> Self[C]
+pub fn[A : Eq, B : Eq, C : Eq, D] Node::map3(Self[A], Self[B], Self[C], (A, B, C) -> D) -> Self[D]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E] Node::map4(Self[A], Self[B], Self[C], Self[D], (A, B, C, D) -> E) -> Self[E]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F] Node::map5(Self[A], Self[B], Self[C], Self[D], Self[E], (A, B, C, D, E) -> F) -> Self[F]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G] Node::map6(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], (A, B, C, D, E, F) -> G) -> Self[G]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H] Node::map7(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], (A, B, C, D, E, F, G) -> H) -> Self[H]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H : Eq, I] Node::map8(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], Self[H], (A, B, C, D, E, F, G, H) -> I) -> Self[I]
+pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H : Eq, I : Eq, J] Node::map9(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], Self[H], Self[I], (A, B, C, D, E, F, G, H, I) -> J) -> Self[J]
+pub fn[A : Eq] Node::read(Self[A]) -> A
+pub fn[E : Enumerate + Eq, A : Eq] Node::switch(Self[E], (E, Self[E]) -> Self[A]) -> Self[A]
+pub fn[E : Eq, A : Eq] Node::switch_by(Self[E], (E, Self[E]) -> Self[A], by~ : (E) -> String) -> Self[A]
+pub impl[T] Compare for Node[T]
+pub impl[T] Eq for Node[T]
+
+pub struct RootScope {
+  id : @internal_slotmap.Id
+  disposed : @ref.Ref[Bool]
+}
+pub fn RootScope::dispose(Self) -> Unit
+pub fn RootScope::new() -> Self
+pub fn[A] RootScope::run(Self, () -> A) -> A
+
+// Type aliases
+
+// Traits
+pub(open) trait Enumerate {
+  fn tag(Self) -> String
+}
