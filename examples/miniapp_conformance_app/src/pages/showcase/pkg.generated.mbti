@@ -1,0 +1,30 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/miniapp_conformance_app/pages/showcase"
+
+import {
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn program() -> @minimoon.Page
+
+// Errors
+
+// Types and methods
+pub struct Model {
+  updates : Int
+  visits : Int
+} derive(Eq)
+
+pub enum Msg {
+  Increment
+  Reset
+  PageShown
+  OpenConsole
+  OpenLab
+  OpenDetails
+}
+
+// Type aliases
+
+// Traits

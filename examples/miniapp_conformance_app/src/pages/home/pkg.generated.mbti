@@ -1,0 +1,66 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/miniapp_conformance_app/pages/home"
+
+import {
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn program() -> @minimoon.Page
+
+// Errors
+
+// Types and methods
+pub struct Model {
+  count : Int
+  name : String
+  visible : Bool
+  login_status : String
+  login_code : String
+  storage_status : String
+  storage_value : String
+  request_status : String
+  request_body : String
+  toast_status : String
+  location : String
+  media : String
+  error : String
+} derive(Eq)
+
+pub enum Msg {
+  Inc
+  Dec
+  Reset
+  NameInput(String)
+  Login
+  Logout
+  LoginSucceeded(String)
+  LoginFailed(String)
+  LoadStorage
+  SaveStorage
+  StorageLoaded(String)
+  StorageSaved
+  StorageFailed(String)
+  LoadRequest
+  RequestLoaded(String)
+  RequestFailed(String)
+  ShowToast
+  ToastShown
+  ToastFailed(String)
+  Locate
+  LocationLoaded(String)
+  LocationFailed(String)
+  ChooseMedia
+  MediaChosen(String)
+  MediaFailed(String)
+  OpenLab
+  OpenDetails
+  ReplaceDetails
+  BackToStudio
+  PageShown
+  PageHidden
+}
+
+// Type aliases
+
+// Traits

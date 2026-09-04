@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "release": false,
+  "artifactFingerprint": "fnv1a64-relpath-v2:6a7a9ec081e6e00",
+  "checks": [
+    {
+      "name": "devtools-host-boundary",
+      "status": "passed",
+      "detail": "generated CommonJS uses the verified WeChat ES6-to-ES5, enhanced compilation, and minification boundary"
+    },
+    {
+      "name": "shared-page-artifacts",
+      "status": "passed",
+      "detail": "one recursive WXML template and application WXSS serve empty per-page WXSS stubs"
+    },
+    {
+      "name": "skyline-page-config",
+      "status": "passed",
+      "detail": "all pages use renderer=skyline and navigationStyle=custom without ineffective system navigation fields"
+    },
+    {
+      "name": "generated-files",
+      "status": "passed",
+      "detail": "shared host/protocol/initial/runtime/WXML/WXSS and all page artifacts present"
+    },
+    {
+      "name": "bun-check",
+      "status": "passed",
+      "detail": "generated shared host/protocol/initial/runtime and page JavaScript parsed"
+    },
+    {
+      "name": "host-smoke",
+      "status": "passed",
+      "detail": "Page Definition API registration, dynamic-class/WXSS parity, hydration, mount, dynamic tree, and dispose passed"
+    },
+    {
+      "name": "custom-navigation-config",
+      "status": "passed",
+      "detail": "app.json omits system navigation fields that custom Skyline pages ignore"
+    },
+    {
+      "name": "renderer-v7-host",
+      "status": "passed",
+      "detail": "renderer protocol v7 uses Skyline, glass-easel, and Page Definition API registration"
+    },
+    {
+      "name": "page-order",
+      "status": "passed",
+      "detail": "config order matches app.json and defines the home page"
+    },
+    {
+      "name": "devtools-evidence",
+      "status": "passed",
+      "detail": "pending; required only by verify --release"
+    }
+  ]
+}

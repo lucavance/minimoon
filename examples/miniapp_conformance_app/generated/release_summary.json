@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 7,
+  "runtimeApiVersion": 10,
+  "rendererProtocolVersion": 7,
+  "rendererUpdateStrategy": "automatic-diff",
+  "hostRegistration": "page-definition-api",
+  "rendererPatchPolicy": {
+    "minSavingsPercent": 25,
+    "maxHostWrites": 32
+  },
+  "rendererStats": [
+    "patchCommands",
+    "replaceCommands",
+    "patchOps",
+    "setOps",
+    "spliceOps",
+    "moveOps",
+    "hostWriteOps",
+    "groupUpdateCalls",
+    "setDataCalls",
+    "renderCommits",
+    "patchFallbacks",
+    "rejectedPatches",
+    "subscriptionStarts",
+    "subscriptionStops",
+    "effectCancellations",
+    "asyncDrains",
+    "receivedUiEvents",
+    "coalescedEvents",
+    "eventBatches",
+    "maxEventBatch",
+    "maxQueueDepth",
+    "schedulerWarnings",
+    "schedulerFailures",
+    "renderRetries",
+    "renderTimeouts",
+    "renderAckSamples",
+    "renderAckTotalMs",
+    "renderAckMaxMs",
+    "renderAckLastMs",
+    "shadowCopies"
+  ],
+  "name": "miniapp_conformance_app",
+  "mode": "release",
+  "automated": {
+    "status": "passed",
+    "pageCount": 4,
+    "artifactFingerprint": "fnv1a64-relpath-v2:6a7a9ec081e6e00"
+  },
+  "devtools": {
+    "status": "pending",
+    "evidence": null
+  }
+}

@@ -1,0 +1,5 @@
+@import "tailwindcss" source(none);
+@source "../src/**/*.mbt";
+@source not "../src/**/*_test.mbt";
+@source not "../src/**/*_wbtest.mbt";
+@source inline("min-h-[100vh] bg-slate-100 px-[40rpx] pt-[120rpx] text-slate-800 text-[40rpx] font-semibold text-sky-700 text-violet-700 mt-[12rpx] mt-[16rpx] mt-[20rpx] text-[26rpx] text-[56rpx] text-slate-600 rounded-[16rpx] rounded-[10rpx] bg-white bg-slate-700 bg-sky-600 bg-slate-100 bg-violet-600 bg-emerald-600 px-[20rpx] px-[24rpx] px-[28rpx] py-[12rpx] py-[14rpx] py-[24rpx] flex gap-[12rpx] text-white");

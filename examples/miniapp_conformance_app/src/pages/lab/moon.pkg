@@ -1,0 +1,16 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon/components/styles" @components,
+  "lampclaw/miniapp_conformance_app/components/toggle_card" @card,
+  "moonbitlang/core/immut/vector",
+}
+
+supported_targets = "js"
+
+import {
+  "moonbitlang/core/test",
+} for "test"
+
+import {
+  "moonbitlang/async",
+} for "wbtest"
