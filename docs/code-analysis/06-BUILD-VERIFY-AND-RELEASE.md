@@ -4,15 +4,15 @@
 
 ## 1. App Contract 是构建输入 / App Contract Is the Build Input
 
-应用的 `miniapp.minimoon.json` 使用 App Contract v5，列出应用名、页面 package、输出目录和样式输入。generator 不读取手写 page metadata；它逐页编译 `program() -> Page` contract，再生成 application runtime 和共享 host artifacts。
+应用的 `miniapp.minimoon.json` 使用 App Contract v7，列出应用名、页面 package、输出目录和样式输入。generator 不读取手写 page metadata；它逐页编译 `program() -> Page` contract，再生成 application runtime 和共享 host artifacts。
 
 > **English:**
 >
-> An application’s `miniapp.minimoon.json` uses App Contract v5 to list the application name, page packages, output directory, and style inputs. The generator does not read handwritten page metadata. It compiles each page’s `program() -> Page` contract, then generates the application runtime and shared host artifacts.
+> An application’s `miniapp.minimoon.json` uses App Contract v7 to list the application name, page packages, output directory, and style inputs. The generator does not read handwritten page metadata. It compiles each page’s `program() -> Page` contract, then generates the application runtime and shared host artifacts.
 
 ```mermaid
 flowchart LR
-    Config[miniapp.minimoon.json<br/>App Contract v5]
+    Config[miniapp.minimoon.json<br/>App Contract v7]
     PagePkg[page packages<br/>program -> Page]
     Contract[compiled page contracts<br/>编译页面 contract]
     AppRuntime[application MoonBit runtime<br/>应用 runtime]
@@ -41,7 +41,11 @@ flowchart LR
 ```moonbit
 let pages = array(raw, "pages")
 guard pages.length() > 0 else {
-  abort("App Contract v5 pages must not be empty")
+  abort(
+    "App Contract v" +
+    @versions.app_contract_version().to_string() +
+    " pages must not be empty",
+  )
 }
 let module_id = module_name(@fs.read_file(join(app_root, "moon.mod")).text())
 let release = mode == "release"
@@ -130,8 +134,13 @@ pub async fn build(
   @miniapp_tooling.write_release_summary(generated, mode)
   let dist = string(generated, "distDirAbs")
   println(
-    "MiniApp " + string(generated, "name", fallback="app") +
-    " generated from App Contract v5 in " + mode + " mode at " +
+    "MiniApp " +
+    string(generated, "name", fallback="app") +
+    " generated from App Contract v" +
+    field(generated, "schemaVersion").stringify() +
+    " in " +
+    mode +
+    " mode at " +
     Path::relative(dist, base=root).to_string(),
   )
   dist

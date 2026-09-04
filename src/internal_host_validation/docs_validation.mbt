@@ -76,6 +76,23 @@ pub fn docs_check_source() -> String {
     #|  return wanted === found ? [] : [`${source}: stale or missing diagram assets`]
     #|}
     #|
+    #|function versionReferenceProblems(source, content, expected) {
+    #|  const problems = []
+    #|  const boundaries = [
+    #|    ["App Contract", /\bApp Contract v(\d+)\b/gi, Number(expected.contractVersion)],
+    #|    ["runtime ABI", /\b(?:runtime )?ABI(?: |-)v(\d+)\b/gi, Number(expected.runtimeVersion)],
+    #|    ["renderer protocol", /\b(?:renderer )?protocol(?: |-)v(\d+)\b/gi, Number(expected.protocolVersion)],
+    #|  ]
+    #|  for (const [label, pattern, current] of boundaries) {
+    #|    for (const match of content.matchAll(pattern)) {
+    #|      if (Number(match[1]) !== current) {
+    #|        problems.push(`${source}: stale documentation version: ${match[0]}; expected ${label} v${current}`)
+    #|      }
+    #|    }
+    #|  }
+    #|  return problems
+    #|}
+    #|
     #|function fixtureReportProblems(fixture, report, summary, evidence, expected) {
     #|  const problems = []
     #|  const problem = (message) => problems.push(`${fixture}: ${message}`)
@@ -160,6 +177,10 @@ pub fn docs_check_source() -> String {
     #|}
     #|
     #|function runSelfTest() {
+    #|  const expected = { contractVersion, runtimeVersion, protocolVersion }
+    #|  const mismatchedContract = `App Contract v${Number(contractVersion) + 1}`
+    #|  const mismatchedRuntime = `runtime ABI v${Number(runtimeVersion) + 1}`
+    #|  const mismatchedProtocol = `renderer protocol v${Number(protocolVersion) + 1}`
     #|  const cases = [
     #|    ["missing English", bilingualProblems("fixture.md", "# 标题 / Title\n\n## 章节 / Section\n\n只有中文。\n"), "missing its English translation"],
     #|    ["stale symbol", missingSymbolProblems("fixture.md", "fn present() {}", ["missing"]), "stale source symbol"],
@@ -167,16 +188,18 @@ pub fn docs_check_source() -> String {
     #|    ["missing viewBox", pngScaleProblems("fixture.svg", null, 30, 30, 3), "viewBox is missing or invalid"],
     #|    ["wrong PNG scale", pngScaleProblems("fixture.png", "0 0 10 10", 29, 30, 3), "PNG scale mismatch"],
     #|    ["stale asset", inventoryProblems("fixture", ["one.svg"], ["one.svg", "old.svg"]), "stale or missing diagram assets"],
+    #|    ["stale contract version", versionReferenceProblems("fixture.md", mismatchedContract, expected), "stale documentation version"],
+    #|    ["stale runtime version", versionReferenceProblems("fixture.md", mismatchedRuntime, expected), "stale documentation version"],
+    #|    ["stale protocol version", versionReferenceProblems("fixture.md", mismatchedProtocol, expected), "stale documentation version"],
     #|  ]
     #|  for (const [name, problems, expected] of cases) {
     #|    if (!problems.some((problem) => problem.includes(expected))) throw new Error(`documentation self-test did not reject ${name}`)
     #|  }
-    #|  const expected = { contractVersion: "7", runtimeVersion: "10", protocolVersion: "7" }
     #|  const report = { schemaVersion: 1, status: "passed", release: true, artifactFingerprint: "fixture-fingerprint" }
     #|  const summary = {
-    #|    schemaVersion: 7,
-    #|    runtimeApiVersion: 10,
-    #|    rendererProtocolVersion: 7,
+    #|    schemaVersion: Number(contractVersion),
+    #|    runtimeApiVersion: Number(runtimeVersion),
+    #|    rendererProtocolVersion: Number(protocolVersion),
     #|    name: "fixture",
     #|    mode: "release",
     #|    automated: { status: "passed", artifactFingerprint: "fixture-fingerprint" },
@@ -184,10 +207,10 @@ pub fn docs_check_source() -> String {
     #|  }
     #|  const evidence = {
     #|    schemaVersion: 1,
-    #|    scope: "current-v7",
+    #|    scope: `current-v${contractVersion}`,
     #|    status: "passed",
     #|    app: "fixture",
-    #|    recordedAt: "2026-09-04T05:50:00Z",
+    #|    recordedAt: "fixture-timestamp",
     #|    tool: "WeChat Developer Tools",
     #|    toolVersion: "fixture-version",
     #|    artifactFingerprint: "fixture-fingerprint",
@@ -278,13 +301,6 @@ pub fn docs_check_source() -> String {
     #|  "performance_architecture_plan.md",
     #|  "miniapp_devtools_screenshots.md",
     #|  "fnv1a64-relpath-v1:",
-    #|  "ABI v7",
-    #|  "ABI-v7",
-    #|  "protocol v3",
-    #|  "protocol-v3",
-    #|  "App Contract v4",
-    #|  "runtime ABI v8",
-    #|  "renderer protocol v4",
     #|  "setting.es6=false",
     #|  "setting.enhance=false",
     #|  "setting.minified=false",
@@ -295,6 +311,13 @@ pub fn docs_check_source() -> String {
     #|  const legacyReference = source === "CHANGELOG.md"
     #|  for (const token of banned) {
     #|    if (!legacyReference && content.includes(token)) fail(`${source}: stale documentation token: ${token}`)
+    #|  }
+    #|  if (!legacyReference) {
+    #|    for (const problem of versionReferenceProblems(source, content, {
+    #|      contractVersion,
+    #|      runtimeVersion,
+    #|      protocolVersion,
+    #|    })) fail(problem)
     #|  }
     #|}
     #|const analysisRoot = "docs/code-analysis"

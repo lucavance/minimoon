@@ -11,6 +11,7 @@ test "documentation validator covers drift and status failures" {
   assert_true(source.contains("stale or missing diagram assets"))
   assert_true(source.contains("documentation validator self-test passed"))
   assert_true(source.contains("stale documentation token"))
+  assert_true(source.contains("stale documentation version"))
   assert_true(source.contains("verify_report status is not passed"))
   assert_true(source.contains("Developer Tools evidence does not match"))
   assert_true(

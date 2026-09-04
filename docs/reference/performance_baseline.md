@@ -31,25 +31,16 @@ and all page bridges:
 | committed Conformance fixture | 406,000 bytes |
 | generated starter | 247,000 bytes |
 
-Release generation minifies the host and runtime syntax. On `moon
-0.1.20260824` / `moonc v0.10.10` with Bun 1.4.0, the ABI v10 authoring
-checkpoint measured 325,978 runtime bytes, 14,247 host bytes, 38,558
-initial-tree bytes, and 385,574 aggregate JavaScript bytes. The 344,000,
-15,000, 41,000, and 406,000 ceilings were set by the deterministic
-1,000-byte-rounded `measured / 0.95` rule.
+Release generation minifies the host and runtime syntax. The current baseline
+uses `moon 0.1.20260827`, `moonc v0.10.11`, Node 26.8.1, and Bun 1.4.0. Its
+Conformance release measures 327,428 runtime bytes, 14,247 host bytes, 38,558
+initial-tree bytes, and 387,024 aggregate JavaScript bytes.
 
-The graph-lifetime candidate now measures 328,915 runtime bytes and 388,511
-aggregate JavaScript bytes; host and initial-tree bytes are unchanged. The
-existing ceilings were not raised: 15,085 runtime bytes and 17,489 aggregate
-bytes remain. Unrelated protocol, WXML, and WXSS budgets are unchanged.
-
-A controlled rebuild of the pre-change source measured 317,892 runtime bytes
-with this toolchain versus its previously committed 283,839-byte output: a net
-34,053-byte toolchain change. On the same unminified bundle, the Moon compiler
-contributed 34,263 bytes while Bun 1.4.0 was 210 bytes smaller than Bun 1.3.14.
-The current cumulative feature delta is 11,023 bytes, including 2,937 bytes for
-the graph-owned lifetime registry. The supported Moon toolchain floor is
-unchanged.
+Against the maintained ceilings, 16,572 runtime bytes, 753 host bytes, 2,442
+initial-tree bytes, and 18,976 aggregate JavaScript bytes remain. The gate
+recalculates these values from current generated artifacts; changing a ceiling
+requires an explicit review of the linked implementation and both maintained
+application shapes.
 
 ```bash
 minimoon check --suite perf

@@ -1,6 +1,6 @@
 # Project status
 
-Minimoon `0.1.0` is the first public release candidate. The current source and
+Minimoon `0.1.0` is the first non-prerelease baseline. The current source and
 generated reports define the product.
 
 ## Current implementation
@@ -44,7 +44,8 @@ registry archive compatibility. `bun run check:all` followed by
 from the exact release bytes in WeChat Developer Tools. Running
 `check:candidate` afterward restores the tracked reports to candidate state.
 
-Publication, Git tags, GitHub releases, and real-host evidence are always
-explicit operator actions. See [Roadmap](roadmap.md),
+Registry publication remains an explicit operator action. The 0.1 release
+process does not create version tags or GitHub releases, and real-host evidence
+remains local. See [Roadmap](roadmap.md),
 [Architecture](architecture.md), and the
 [release handoff](operations/release_candidate_handoff.md).

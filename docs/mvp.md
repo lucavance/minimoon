@@ -56,7 +56,7 @@ remains an internal implementation detail.
 
 ## Not included
 
-- an already executed public registry publication, tag, or hosted release
+- automated registry publication, version-tag creation, or hosted-release creation
 - another renderer target or ESM migration of the verified host boundary
 - direct WeChat Developer Tools or physical-device CI automation
 - an application backend or real payment workflow

@@ -1,6 +1,6 @@
 # Roadmap
 
-## 0.1.0 first public release
+## 0.1.0 first non-prerelease release
 
 The complete current implementation is the `0.1.0` public baseline:
 
@@ -25,7 +25,7 @@ timestamp, tool version, notes, or outcome in the repository.
 
 ## After 0.1.0
 
-1. Publish only the exact archive that passed the release gates.
+1. Treat the exact gate-passing 0.1.0 archive as the immutable registry baseline.
 2. Drive API additions from sustained application dogfooding rather than
    expanding the public surface speculatively.
 3. Extend the Conformance fixture before adding another release fixture.

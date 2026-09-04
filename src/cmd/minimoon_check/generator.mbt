@@ -847,8 +847,8 @@ async fn generator_suite(root : String) -> Unit {
         abort("Starter build did not preserve its local private project config")
       }
       let evidence_args = [
-        "devtools", "record", app, "--status", "passed", "--recorded-at", "2026-09-04T13:50:00+08:00",
-        "--tool-version", "test-devtools", "--notes", "generator suite evidence",
+        "devtools", "record", app, "--status", "passed", "--recorded-at", "2000-01-01T00:00:00Z",
+        "--tool-version", "fixture-devtools", "--notes", "generator suite evidence",
       ]
       require_command_failure(
         "DevTools evidence requires release artifacts", executable, evidence_args,

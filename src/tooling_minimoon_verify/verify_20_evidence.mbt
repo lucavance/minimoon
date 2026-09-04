@@ -186,9 +186,7 @@ pub async fn record_devtools(
     raise Failure::Failure("DevTools status must be passed or failed")
   }
   guard recorded_at != "" else {
-    raise Failure::Failure(
-      "--recorded-at is required, for example 2026-09-04T13:50:00+08:00",
-    )
+    raise Failure::Failure("--recorded-at is required in RFC 3339 format")
   }
   guard tool_version != "" else {
     raise Failure::Failure("--tool-version is required")

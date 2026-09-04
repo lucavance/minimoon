@@ -1,7 +1,7 @@
 # Compatibility and upgrades
 
-Minimoon is pre-1.0. This policy defines what the project checks; it does not
-claim that the current package candidate has already been published.
+Minimoon is pre-1.0. This policy defines the compatibility guarantees maintained
+throughout the 0.1.x line.
 
 ## Compatibility surfaces
 
@@ -11,7 +11,7 @@ trees, host commands, and generated helper functions are not public APIs.
 Applications that explicitly import the optional `components`,
 `components/styles`, or `testing` packages also treat their `.mbti` files as
 public additive surfaces; existing static component and global testing methods
-remain source-compatible in this candidate.
+remain source-compatible throughout the 0.1.x line.
 
 Generated applications have three versioned boundaries:
 

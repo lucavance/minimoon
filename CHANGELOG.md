@@ -1,8 +1,8 @@
 # Changelog
 
 Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-The product version is defined by `moon.mod`; Git tags are created only by an
-explicit release operation.
+The product version is defined by `moon.mod`; Minimoon versions do not use Git
+tags.
 
 ## [Unreleased]
 
@@ -10,7 +10,7 @@ No unreleased changes.
 
 ## [0.1.0] - 2026-09-04
 
-This is the first public Minimoon release. Third-party source attribution
+This is the first non-prerelease Minimoon release. Third-party source attribution
 remains in `THIRD_PARTY_NOTICES.md` and the relevant source files.
 
 ### Added

@@ -1,10 +1,9 @@
 # MiniApp JavaScript compatibility troubleshooting
 
 This runbook covers a generated distribution that fails before a page can
-register or mount in WeChat. The 0.1.0 candidate retains the previously
-verified direct CommonJS boundary with Developer Tools ES6-to-ES5
-transformation, enhanced compilation, and code
-minification enabled.
+register or mount in WeChat. The 0.1.0 release baseline uses the direct
+CommonJS boundary with Developer Tools ES6-to-ES5 transformation, enhanced
+compilation, and code minification enabled.
 
 ## Recognize the first failing stage
 
@@ -20,8 +19,8 @@ symptoms usually follow from it.
 
 ## Parser compatibility
 
-The original preview failure involved optional chaining in both the host
-template and linked MoonBit core output. The maintained fix has two owners:
+The maintained parser-compatibility case covers optional chaining in both the
+host template and linked MoonBit core output. Its handling has two owners:
 
 - host templates use explicit compatible guards;
 - the runtime postprocessor normalizes the known linked crypto expression.

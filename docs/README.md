@@ -36,7 +36,7 @@ source excerpts, and diagrams stay reviewable as a single artifact. This
 maintainer suite and its high-resolution assets are source-repository material;
 they are intentionally excluded from the 250 KiB registry archive.
 
-- [`code-analysis/README.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md) — reading map, provenance, and source snapshot
+- [`code-analysis/README.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md) — current-source reading map and provenance
 - [`code-analysis/01-SYSTEM-ARCHITECTURE.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/01-SYSTEM-ARCHITECTURE.md) — layers, ownership, and event path
 - [`code-analysis/02-AUTHORING-MODEL.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/02-AUTHORING-MODEL.md) — Model/Msg, `Cmd`, `Val`, components, and subscriptions
 - [`code-analysis/03-INCREMENTAL-GRAPH-AND-TRANSACTIONS.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/03-INCREMENTAL-GRAPH-AND-TRANSACTIONS.md) — candidate state, rollback, scopes, and keyed caches

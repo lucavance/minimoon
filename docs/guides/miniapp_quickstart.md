@@ -26,8 +26,8 @@ minimoon verify .
 ```
 
 The explicit `--minimoon-root` creates `moon.work` for local framework
-development. Once the package is published, omit that option to create a
-standalone registry consumer. Registry mode keeps the versioned dependency in
+development. When consuming a published registry version, omit that option to
+create a standalone consumer. Registry mode keeps the versioned dependency in
 `moon.mod` and emits no `moon.work`.
 
 The application imports only `lampclaw/minimoon`, exports `program() -> Page`,
