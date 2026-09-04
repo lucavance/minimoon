@@ -63,4 +63,5 @@ remains an internal implementation detail.
 
 Automated validation must pass before handoff. A release claim additionally
 requires fingerprint-matching real-host evidence for the exact App Contract v7,
-runtime ABI v10, renderer protocol v7 Conformance bytes.
+runtime ABI v10, renderer protocol v7 Conformance bytes. That evidence is a
+local release input and is never part of repository or CI state.

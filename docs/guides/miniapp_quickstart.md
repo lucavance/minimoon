@@ -84,7 +84,9 @@ minimoon devtools record . \
 minimoon verify . --release
 ```
 
-New applications start with real-host evidence pending. Never copy another
-application's evidence. For framework coverage use the single
+The generated evidence file remains local and Git-ignored; never commit it or
+copy another application's evidence. `verify --candidate` ignores that local
+file and restores public candidate reports after a release decision. For
+framework coverage use the single
 [`miniapp_conformance_app`](../../examples/miniapp_conformance_app/README.md)
 and its four-page checklist.

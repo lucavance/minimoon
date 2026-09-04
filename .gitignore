@@ -14,6 +14,9 @@ dist/
 # Developer-local WeChat project settings and real AppIDs
 examples/*/dist/project.private.config.json
 
+# Local real-host validation evidence
+**/generated/devtools.evidence.json
+
 # Local command shims and editor settings
 .bin/
 .vscode/

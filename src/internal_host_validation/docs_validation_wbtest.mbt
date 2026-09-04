@@ -20,12 +20,12 @@ test "documentation validator covers drift and status failures" {
   )
   assert_true(
     source.contains(
-      "stale pending status conflicts with the completed release report",
+      "active status must state that real-host evidence is local and Git-ignored",
     ),
   )
   assert_true(
     source.contains(
-      "stale completed status conflicts with the candidate report",
+      "active status must not publish transient real-host completion",
     ),
   )
   assert_true(source.contains("live state:"))

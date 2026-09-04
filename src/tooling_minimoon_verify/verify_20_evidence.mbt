@@ -30,20 +30,22 @@ async fn evidence_check(
   required : Bool,
 ) -> Json {
   let file = join(app_root, "generated/devtools.evidence.json")
-  let current = matching_evidence(app_root, fingerprint)
+  let current = if required {
+    matching_evidence(app_root, fingerprint)
+  } else {
+    false
+  }
   status(
     "devtools-evidence",
     current || !required,
-    if current {
+    if !required {
+      "pending; required only by verify --release"
+    } else if current {
       "passed evidence matches current artifact fingerprint"
     } else if !@fs.exists(file) {
-      if required {
-        "current App Contract v" +
-        @versions.app_contract_version().to_string() +
-        " DevTools evidence is required for release"
-      } else {
-        "pending; required only by verify --release"
-      }
+      "current App Contract v" +
+      @versions.app_contract_version().to_string() +
+      " DevTools evidence is required for release"
     } else {
       "evidence is historical, failed, or belongs to a different artifact fingerprint"
     },
@@ -150,7 +152,11 @@ pub async fn verify(app_root : String, require_devtools : Bool) -> Json {
     ),
   )
   let fingerprint = artifact_fingerprint(app_root)
-  let current_evidence = matching_evidence(app_root, fingerprint)
+  let current_evidence = if require_devtools {
+    matching_evidence(app_root, fingerprint)
+  } else {
+    false
+  }
   let automated_passed = checks.all(check => string(check, "status") == "passed")
   checks.push(evidence_check(app_root, fingerprint, require_devtools))
   let passed = checks.all(check => string(check, "status") == "passed")

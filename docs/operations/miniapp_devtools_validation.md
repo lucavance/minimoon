@@ -2,11 +2,12 @@
 
 ## Status source
 
-The repository has one real-host fixture. Its
-`generated/verify_report.json` is the current automated status and
-`generated/devtools.evidence.json`, when present, is the fingerprint-bound
-host record. A release is valid only when the report has `status: "passed"`
-and `release: true`, and its evidence matches the exact `dist/` bytes.
+The repository has one real-host fixture. Its tracked
+`generated/verify_report.json` records reproducible candidate status.
+`generated/devtools.evidence.json`, when present, is the local,
+fingerprint-bound host record and is ignored by Git. A local release decision
+is valid only when the report has `status: "passed"` and `release: true`, and
+its evidence matches the exact `dist/` bytes.
 
 Do not copy a validation date, tool version, evidence file, or artifact
 fingerprint from an older build or another application.
@@ -168,12 +169,16 @@ minimoon verify examples/miniapp_conformance_app --release
 ```
 
 Rebuilding or changing `dist/` invalidates the record. Automated checks do not
-substitute for this interaction checklist.
+substitute for this interaction checklist. The evidence file, including its
+timestamp, tool version, notes, and result, must remain local and must never be
+committed or pushed.
 
 If any checklist item fails, record the real outcome locally with
 `--status failed`, the actual timestamp and tool version, and notes containing
 the first console error plus relevant renderer counters. Keep screenshots and
 raw logs outside the repository and never edit evidence JSON manually. Do not
 commit or push a release claim. Fix the source, rebuild, and repeat the entire
-validation whenever the artifact fingerprint changes; only the final passed
-evidence belongs in the release-bound repository state.
+validation whenever the artifact fingerprint changes. Passed evidence remains
+local as well. After local publication or handoff, run
+`bun run check:candidate` to restore the tracked reports to candidate state
+before staging repository changes.

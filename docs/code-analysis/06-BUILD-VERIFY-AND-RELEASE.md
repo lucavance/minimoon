@@ -173,6 +173,12 @@ candidate gate 可在 Linux CI 完成：warning-free check、格式、native/js 
 >
 > The candidate gate can complete in Linux CI: warning-free checks, formatting, native/JS tests, coverage, generation stability, syntax/host simulation, size/performance, and archive-consumer validation. The release gate additionally requires passed real Developer Tools evidence for the current fingerprint.
 
+evidence JSON 只作为本机 release gate 输入，由 Git 忽略。candidate gate 不读取它，CI 不复制或上传它，因此公开报告不会暴露验证时间、工具版本、备注或结果。
+
+> **English:**
+>
+> Evidence JSON is a Git-ignored input to the local release gate only. The candidate gate does not read it, and CI neither copies nor uploads it, so public reports do not expose the validation time, tool version, notes, or outcome.
+
 > **源码 / Source:** [`src/tooling_minimoon_verify/verify_00_files.mbt`](../../src/tooling_minimoon_verify/verify_00_files.mbt) · symbols: `fingerprint_entry`, `artifact_fingerprint`
 
 ```moonbit
@@ -232,14 +238,14 @@ checks.push(
 
 ## 6. 当前证据状态的解释 / Interpreting the Current Evidence State
 
-当前 automated report 为 passed，但 `release=false`。尚未记录与当前 artifact fingerprint 匹配的 DevTools passed evidence，因此 release summary 正确显示 pending；手写文档故意不固定这些瞬时标识。
+受跟踪的 automated report 固定为 passed candidate，且 `release=false`；release summary 的 DevTools 状态固定为 pending。这是公开仓库策略，不表示或推断任何操作者的本机验证状态。
 
 > **English:**
 >
-> The current automated report is passed with `release=false`. No passed Developer Tools evidence matching the current artifact fingerprint has been recorded yet, so the release summary correctly remains pending; handwritten documentation intentionally avoids pinning those transient identifiers.
+> The tracked automated report is always a passed candidate with `release=false`, and the release summary always keeps Developer Tools pending. This is public-repository policy and neither states nor implies an operator's local validation status.
 
-文档或测试工作不能手工改 evidence 解除 pending。只有导入当前未修改 `dist/` 完成真实 checklist、记录实际工具版本/时间并再次 `verify --release`，才能形成新的 release claim。
+文档或测试工作不能手工改 evidence 解除 pending。操作者只有在本机导入当前未修改 `dist/`、完成真实 checklist、记录实际工具版本/时间并再次 `verify --release` 后，才能作出本地 release 决策；随后运行 `check:candidate` 恢复公开候选报告。
 
 > **English:**
 >
-> Documentation or test work must not edit evidence to clear pending status. A new release claim requires importing the current unchanged `dist/`, completing the real checklist, recording the actual tool version/time, and running `verify --release` again.
+> Documentation or test work must not edit evidence to clear pending status. A local release decision requires importing the current unchanged `dist/`, completing the real checklist, recording the actual tool version/time, and running `verify --release`; `check:candidate` then restores the public candidate reports.

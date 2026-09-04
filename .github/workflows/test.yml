@@ -82,15 +82,6 @@ jobs:
           bun run check:candidate
           git diff --check
 
-      - name: Release gate when evidence is present
-        run: |
-          if [ -f examples/miniapp_conformance_app/generated/devtools.evidence.json ]; then
-            bun run check:all
-            bun run check:mvp
-          else
-            echo "Fresh Developer Tools evidence is pending; candidate gate is authoritative."
-          fi
-
       - name: Generated and interface drift
         run: |
           git diff --exit-code
@@ -114,28 +105,15 @@ jobs:
             echo "candidate handoff requires a passed automated report" >&2
             exit 1
           fi
-          evidence_status="pending-manual-devtools-validation"
-          evidence_file="$fixture/generated/devtools.evidence.json"
-          if [ -f "$evidence_file" ] && jq -e \
-            --arg fingerprint "$fingerprint" \
-            '.scope == "current-v7" and .status == "passed" and .artifactFingerprint == $fingerprint' \
-            "$evidence_file" >/dev/null; then
-            if [ "$report_release" != "true" ]; then
-              echo "matching passed evidence requires a release verification report" >&2
-              exit 1
-            fi
-            cp "$evidence_file" "$handoff_dir/devtools.evidence.json"
-            evidence_status="passed-existing-fingerprint-bound-evidence"
-          elif [ "$report_release" != "false" ]; then
-            echo "release verification report requires matching passed DevTools evidence" >&2
+          if [ "$report_release" != "false" ]; then
+            echo "CI handoff accepts candidate verification reports only" >&2
             exit 1
           fi
           jq -n \
             --arg commit "$GITHUB_SHA" \
             --arg fingerprint "$fingerprint" \
             --arg runner "$RUNNER_OS" \
-            --arg evidence_status "$evidence_status" \
-            '{schemaVersion: 1, fixture: "miniapp_conformance_app", commit: $commit, artifactFingerprint: $fingerprint, runner: $runner, importDirectory: "dist/", projectSettings: {renderer: "skyline", es6: true, enhance: true, minified: true, minimumBaseLibrary: "3.17.0"}, evidenceStatus: $evidence_status}' \
+            '{schemaVersion: 1, fixture: "miniapp_conformance_app", commit: $commit, artifactFingerprint: $fingerprint, runner: $runner, importDirectory: "dist/", projectSettings: {renderer: "skyline", es6: true, enhance: true, minified: true, minimumBaseLibrary: "3.17.0"}, evidenceStatus: "pending-manual-devtools-validation"}' \
             > "$handoff_dir/HANDOFF.json"
           (cd "$handoff_dir" && zip -X -qr miniapp_conformance_app-dist.zip dist)
           (cd "$handoff_dir" && sha256sum miniapp_conformance_app-dist.zip > ARCHIVE_SHA256)

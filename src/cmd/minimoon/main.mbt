@@ -178,7 +178,7 @@ async fn main {
           OptionArg("tool-version", about="WeChat Developer Tools version."),
           OptionArg("notes", about="Optional validation notes."),
         ],
-        about="Record auditable WeChat Developer Tools evidence.",
+        about="Record local WeChat Developer Tools evidence.",
       ),
       Command(
         "metrics",

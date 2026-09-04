@@ -14,13 +14,14 @@ The complete current implementation is the `0.1.0` public baseline:
 - deterministic coverage, API, generator, host, performance, archive, and CI
   gates.
 
-The current candidate is pending fresh Developer Tools validation. Authoritative
-state is recorded only in
-[`verify_report.json`](../examples/miniapp_conformance_app/generated/verify_report.json),
-[`release_summary.json`](../examples/miniapp_conformance_app/generated/release_summary.json),
+The public repository keeps only reproducible candidate state in
+[`verify_report.json`](../examples/miniapp_conformance_app/generated/verify_report.json)
 and
+[`release_summary.json`](../examples/miniapp_conformance_app/generated/release_summary.json),
+while fingerprint-bound
 [`devtools.evidence.json`](../examples/miniapp_conformance_app/generated/devtools.evidence.json)
-when that fingerprint-bound evidence exists.
+is local and Git-ignored. Local release verification does not publish its
+timestamp, tool version, notes, or outcome in the repository.
 
 ## After 0.1.0
 

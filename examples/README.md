@@ -18,9 +18,10 @@ the conformance application's kitchen-sink UI.
 Build and verify from the repository root:
 
 ```bash
-bun run check:mvp
+bun run check:candidate
 ```
 
-`generated/verify_report.json` is the automated status source;
-`generated/devtools.evidence.json`, when present, is the fingerprint-bound
-real-host status source. Documentation never copies artifact fingerprints.
+`generated/verify_report.json` is the tracked automated candidate source.
+`generated/devtools.evidence.json`, when present, is a local, Git-ignored,
+fingerprint-bound real-host record. Documentation never copies artifact
+fingerprints or local validation outcomes.

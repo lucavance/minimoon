@@ -110,7 +110,6 @@ flowchart LR
 > - Use chapter 06 for artifact and release ownership.
 > - Use chapter 07 as a change-impact lookup.
 > - Use chapter 08 before accepting architectural or performance claims.
-> - Use chapter 09 to understand why the current boundaries exist.
 
 ## 5. 证据标记 / Evidence Markers
 

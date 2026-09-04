@@ -200,6 +200,9 @@ minimoon devtools record . \
 minimoon verify . --release
 ```
 
+`generated/devtools.evidence.json` is local and Git-ignored. Its timestamp,
+tool version, notes, and outcome are never committed or uploaded by CI.
+
 ## Repository validation
 
 ```bash
@@ -211,18 +214,18 @@ bun run check:coverage
 bun run check:docs
 bun run check:api
 bun run check:candidate
-bun run check:all
-bun run check:mvp
 git diff --check
 ```
 
 `check:api` locks the root `0.1.x` interface exactly and permits only additive
 changes in the optional components, styles, and testing packages.
-`check:candidate` is the Linux-safe automatic handoff gate. `check:all` and
-`check:mvp` remain release gates and therefore require current fingerprint-bound
-Developer Tools evidence. `moon package --frozen --list` also enforces the
-registry archive allowlist, a 250 KiB hard ceiling, and at least 16 KiB of
-reserved headroom.
+`check:candidate` is the Linux-safe automatic handoff gate and always leaves
+tracked reports in candidate state, even when local evidence exists. For a
+local release decision, run `bun run check:all` followed by
+`bun run check:mvp`; both require current fingerprint-bound Developer Tools
+evidence. Rerun `check:candidate` before staging changes.
+`moon package --frozen --list` also enforces the registry archive allowlist,
+a 250 KiB hard ceiling, and at least 16 KiB of reserved headroom.
 
 The floor was revalidated on 2026-09-04 with `moon 0.1.20260827` and
 `moonc v0.10.11`. Repository and

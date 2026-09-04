@@ -145,6 +145,17 @@ async fn static_suite(root : String) -> Unit {
     ".github/workflows/test.yml",
     "supported floor " + supported_moonc_floor,
   )
+  require_text(root, ".gitignore", "**/generated/devtools.evidence.json")
+  require_untracked_path(
+    root, "examples/miniapp_conformance_app/generated/devtools.evidence.json",
+  )
+  forbid_text(
+    root, ".github/workflows/test.yml", "Release gate when evidence is present",
+  )
+  forbid_text(root, ".github/workflows/test.yml", "devtools.evidence.json")
+  require_text(
+    root, ".github/workflows/test.yml", "CI handoff accepts candidate verification reports only",
+  )
   forbid_text(
     root, ".github/workflows/test.yml", "version_at_least \"0.10.6\" \"$installed_moonc\"",
   )

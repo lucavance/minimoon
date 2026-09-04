@@ -83,6 +83,21 @@ async fn forbid_text(root : String, path : String, needle : String) -> Unit {
 }
 
 ///|
+async fn require_untracked_path(root : String, path : String) -> Unit {
+  let (code, output) = @process.collect_stdout(
+    "git",
+    ["ls-files", "--cached", "--", path],
+    cwd=root,
+  ) catch {
+    err => abort("failed to inspect tracked files: \{err}")
+  }
+  guard code == 0 else { abort("git ls-files failed") }
+  guard output.text().trim() == "" else {
+    abort("developer-local file must not be tracked: " + path)
+  }
+}
+
+///|
 async fn read_json(root : String, path : String) -> Json {
   require_file(root, path)
   @json.parse(@fs.read_file(join(root, path)).text()) catch {

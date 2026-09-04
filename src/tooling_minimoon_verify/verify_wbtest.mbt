@@ -163,6 +163,35 @@ async test "DevTools evidence scope follows the current App Contract" {
 }
 
 ///|
+async test "candidate verification keeps local evidence private" {
+  let root = @fs.tmpdir(prefix="minimoon-private-evidence")
+  {
+    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    let fingerprint = "fixture-fingerprint"
+    write_json(
+      join(root, "generated/devtools.evidence.json"),
+      Json::object({
+        "scope": Json::string(current_evidence_scope()),
+        "status": Json::string("passed"),
+        "artifactFingerprint": Json::string(fingerprint),
+      }),
+    )
+    let candidate = evidence_check(root, fingerprint, false)
+    assert_eq(string(candidate, "status"), "passed")
+    assert_eq(
+      string(candidate, "detail"),
+      "pending; required only by verify --release",
+    )
+    let release = evidence_check(root, fingerprint, true)
+    assert_eq(
+      string(release, "detail"),
+      "passed evidence matches current artifact fingerprint",
+    )
+  }
+  @fs.rmdir(root, recursive=true)
+}
+
+///|
 test "host smoke follows the initial page lifecycle order and verifies disposal" {
   let source = host_smoke_source(["/tmp/pages/home/home.js"])
   assert_true(source.contains("globalThis.TextEncoder = undefined"))

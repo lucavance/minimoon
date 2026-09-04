@@ -195,7 +195,7 @@ quadrantChart
 
 ## 8. 仍需人工或长期闭环的项目 / Items Requiring Human or Long-Term Closure
 
-- 当前 hardening candidate 需要与其精确 fingerprint 对应的新 Developer Tools evidence。
+- 每个 release 决策都需要本机保存、与精确 fingerprint 对应的 Developer Tools evidence。
 - 真机 ack latency、内存与调试链路不能由 Bun/CI 完整模拟。
 - dogfood 应用需要更长周期的真实使用和独立 stress workflow。
 - 外部分发、registry publication、兼容周期与升级策略仍需显式 release 决策。
@@ -203,7 +203,7 @@ quadrantChart
 
 > **English:**
 >
-> - The current hardening candidate needs new Developer Tools evidence for its exact fingerprint.
+> - Every release decision needs locally retained Developer Tools evidence for its exact fingerprint.
 > - Bun/CI cannot fully simulate physical-device acknowledgement latency, memory, or debugging transport.
 > - The dogfood application needs longer real usage and its independent stress workflow.
 > - External distribution, registry publication, compatibility cadence, and upgrade policy still require explicit release decisions.

@@ -11,11 +11,11 @@ The canonical source is the current `lucavance/minimoon` repository.
 | App Contract, runtime ABI, renderer protocol | `internal_versions` |
 | JavaScript dependencies | root `package.json` |
 | Generated artifact fingerprint and automated status | Conformance fixture `generated/verify_report.json` |
-| DevTools version, timestamp, and real-host result | Conformance fixture `generated/devtools.evidence.json` |
+| DevTools version, timestamp, and real-host result | Local, Git-ignored Conformance fixture `generated/devtools.evidence.json` |
 | Product direction | [`roadmap.md`](roadmap.md) |
 
 Handwritten documents explain behavior and workflow. They do not copy artifact
-fingerprints, DevTools timestamps, or generated status.
+fingerprints, DevTools timestamps, or local validation outcomes.
 
 The current engineering checkpoint, constraints, and next-phase priorities are
 maintained in

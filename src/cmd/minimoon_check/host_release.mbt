@@ -37,48 +37,12 @@ async fn host_suite(root : String) -> Unit {
 }
 
 ///|
-priv enum CandidateEvidenceState {
-  CandidateEvidencePending
-  CandidateEvidencePassed
-}
-
-///|
-fn candidate_evidence_state(
-  summary : Json,
-  evidence : Json?,
-  report_fingerprint : String,
-) -> CandidateEvidenceState {
+fn candidate_summary_is_public(summary : Json) -> Bool {
   let devtools = json_field(summary, "devtools")
-  match json_string(devtools, "status") {
-    "pending" =>
-      match json_field(devtools, "evidence") {
-        Null => CandidateEvidencePending
-        _ => abort("pending candidate summary must not name DevTools evidence")
-      }
-    "passed" => {
-      guard json_string(devtools, "status") == "passed" &&
-        json_string(devtools, "evidence") == "generated/devtools.evidence.json" &&
-        json_string(devtools, "artifactFingerprint") == report_fingerprint else {
-        abort(
-          "candidate summary does not match current passed DevTools evidence",
-        )
-      }
-      match evidence {
-        None => abort("passed candidate summary requires DevTools evidence")
-        Some(value) => {
-          guard json_string(value, "scope") ==
-            "current-v" + @versions.app_contract_version().to_string() &&
-            json_string(value, "status") == "passed" &&
-            json_string(value, "artifactFingerprint") == report_fingerprint else {
-            abort(
-              "passed DevTools evidence must match the candidate fingerprint",
-            )
-          }
-          CandidateEvidencePassed
-        }
-      }
-    }
-    status => abort("unsupported candidate DevTools status: " + status)
+  guard json_string(devtools, "status") == "pending" else { return false }
+  match json_field(devtools, "evidence") {
+    Null => true
+    _ => false
   }
 }
 
@@ -87,7 +51,6 @@ async fn candidate_suite(root : String) -> Unit {
   build_examples(root, "release")
   verify_examples(root, false)
   for app in example_apps {
-    let app_root = join(root, "examples/" + app)
     let report = read_json(
       root,
       "examples/" + app + "/generated/verify_report.json",
@@ -115,42 +78,10 @@ async fn candidate_suite(root : String) -> Unit {
       json_string(automated, "artifactFingerprint") == report_fingerprint else {
       abort(app + " candidate summary does not describe verified release bytes")
     }
-    let evidence_path = "examples/" + app + "/generated/devtools.evidence.json"
-    let evidence = if @fs.exists(join(root, evidence_path)) {
-      Some(read_json(root, evidence_path))
-    } else {
-      None
-    }
-    match candidate_evidence_state(summary, evidence, report_fingerprint) {
-      CandidateEvidencePending => ()
-      CandidateEvidencePassed => {
-        let release_report = @verify.verify(app_root, true)
-        guard json_string(release_report, "status") == "passed" &&
-          json_bool(release_report, "release") &&
-          json_string(release_report, "artifactFingerprint") ==
-          report_fingerprint else {
-          abort(app + " release verification did not restore passed evidence")
-        }
-        let release_summary = read_json(
-          root,
-          "examples/" + app + "/generated/release_summary.json",
-        )
-        let release_automated = json_field(release_summary, "automated")
-        guard json_string(release_summary, "mode") == "release" &&
-          json_string(release_automated, "status") == "passed" &&
-          json_string(release_automated, "artifactFingerprint") ==
-          report_fingerprint else {
-          abort(app + " restored release summary does not match verified bytes")
-        }
-        match
-          candidate_evidence_state(
-            release_summary, evidence, report_fingerprint,
-          ) {
-          CandidateEvidencePassed => ()
-          CandidateEvidencePending =>
-            abort(app + " restored release unexpectedly became pending")
-        }
-      }
+    guard candidate_summary_is_public(summary) else {
+      abort(
+        app + " candidate summary must keep local DevTools evidence private",
+      )
     }
   }
 }

@@ -176,6 +176,9 @@ minimoon devtools record . \
 minimoon verify . --release
 ```
 
+`generated/devtools.evidence.json` 仅保存在本机并由 Git 忽略；其中的时间、
+工具版本、备注和验证结果不会被提交，也不会由 CI 上传。
+
 ## 仓库门禁
 
 ```bash
@@ -187,17 +190,17 @@ bun run check:coverage
 bun run check:docs
 bun run check:api
 bun run check:candidate
-bun run check:all
-bun run check:mvp
 git diff --check
 ```
 
 `check:api` 精确锁定 `0.1.x` 根包接口，并仅允许 components、styles 与
 testing 可选包增加接口。
-`check:candidate` 是可在 Linux 执行的自动候选交接门禁；`check:all` 和
-`check:mvp` 仍是 release 门禁，因此要求与当前指纹匹配的开发者工具证据。
-`moon package --frozen --list` 同时约束 registry 包白名单、250 KiB 硬上限与
-至少 16 KiB 的预留余量。
+`check:candidate` 是可在 Linux 执行的自动候选交接门禁；即使本机已有证据，
+它也始终把受跟踪报告恢复为 candidate 状态。本地作出 release 决策时，依次
+运行 `bun run check:all` 与 `bun run check:mvp`，两者都要求与当前指纹匹配的
+开发者工具证据；暂存改动前再运行一次 `check:candidate`。
+`moon package --frozen --list` 同时约束 registry 包白名单、250 KiB
+硬上限与至少 16 KiB 的预留余量。
 
 工具链下限已于 2026-09-04 使用 `moon 0.1.20260827` 与 `moonc v0.10.11`
 重新验证。仓库和生成的

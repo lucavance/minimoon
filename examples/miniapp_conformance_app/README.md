@@ -48,4 +48,5 @@ Also include rapid repeated taps, focus/blur/confirm, overlay and menu
 dismissal/selection, shared-template rendering, and a clean
 scheduler/retry/timeout counter check. Automated status lives in
 `generated/verify_report.json`; real-host evidence is valid only for the exact
-artifact fingerprint recorded in `generated/devtools.evidence.json`.
+artifact fingerprint recorded in the local, Git-ignored
+`generated/devtools.evidence.json`. Never commit or push that file.
