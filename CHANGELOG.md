@@ -6,6 +6,33 @@ tags.
 
 ## [Unreleased]
 
+## [0.2.0]
+
+### Added
+
+- Independent `lampclaw/minimoon_ui 0.1.0` module with Skyline-native RUI
+  component adaptations, headless algorithms, typed themes and build resources.
+- Typed native button content, form/label, image lifecycle, input options,
+  slider/progress, touch events and revision-bound node measurement.
+- Declarative page layers which preserve Val scope ownership while lifting
+  host content outside scrolling containers.
+- Six-page UI showcase and independent UI API, archive-consumer, resource,
+  deterministic generation and candidate-verification gates.
+- Separate core/UI CI handoff bundles, archive-documentation checks, and
+  clean-worktree checks covering tracked and untracked files.
+- Pinned Rabbita 0.15.6 / RUI 0.1.1 provenance and symbol-level native
+  migration records. UI changes have their own
+  [changelog](https://github.com/lucavance/minimoon/blob/main/ui/CHANGELOG.md).
+
+### Compatibility
+
+- App Contract and renderer protocol advance from 7 to 8; runtime ABI stays 10.
+  Rebuild all generated artifacts together and obtain new real-host evidence.
+- Existing core call patterns and optional components/minimal themes remain
+  covered by the frozen 0.1 consumer. New public snapshots define the 0.2 line.
+- RUI remains a provenance reference, not a browser-runtime dependency.
+  UI's MIT attribution is separate from core's existing Apache-2.0 notices.
+
 ### Changed
 
 - Raised the repository and generated-starter Node floor to `>=24.20.0`, with
@@ -13,17 +40,12 @@ tags.
 - Updated PostCSS to `8.5.28`, weapp-tailwindcss to `5.5.1`, and refreshed the
   transitive JavaScript dependency lockfile. Existing starter consumers should
   update their package manifests and lockfiles before rebuilding.
-- Regenerated the Conformance runtime with the updated tooling (74 bytes
-  smaller). Its artifact fingerprint changed, so a release requires fresh
-  WeChat Developer Tools validation; tracked reports remain candidate-only.
+- Regenerated both fixtures with the versioned native host/resource changes.
+  Changed fingerprints require separate WeChat Developer Tools validation;
+  public repository reports remain candidate-only.
 
-### Added
-
-- Added a pinned Rabbita 0.15.6 / RUI 0.1.1 reference audit, including all 64
-  RUI showcase entries and the distinction between adapted source, conceptual
-  equivalents, native substitutes, and unimplemented capabilities.
-- Scheduled MiniApp-suitable RUI-inspired component development for the next
-  iteration. This dependency and documentation change adds no component API.
+Publication availability is recorded separately in
+[project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 
 ## [0.1.1] - 2026-09-04
 

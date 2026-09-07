@@ -1,0 +1,17 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon_ui_showcase/pages/overlays"
+
+import {
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn program() -> @minimoon.Page
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

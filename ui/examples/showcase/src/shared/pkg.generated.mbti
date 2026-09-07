@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon_ui_showcase/shared"
+
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon_ui",
+}
+
+// Values
+pub fn constant(@minimoon.Node) -> @minimoon.Val[@minimoon.Node]
+
+pub fn display(String, @minimoon.Node) -> @minimoon.Val[@minimoon.Node]
+
+pub fn page(String, String, (@minimoon_ui.UiContext) -> @minimoon.Val[@minimoon.Node]) -> @minimoon.Page
+
+pub fn sample(String, @minimoon.Val[@minimoon.Node]) -> @minimoon.Val[@minimoon.Node]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

@@ -149,20 +149,42 @@ pub fn[C : IsChildren] p(
 pub fn image(
   src~ : String,
   alt? : String = "",
+  mode? : ImageMode,
+  on_load? : Emit[ImageLoadDetail],
+  on_error? : Emit[String],
+  load_key? : String = "",
+  error_key? : String = "",
   id? : String = "",
   class? : String = "",
   style? : String = "",
   data_section? : String = "",
   semantics? : Semantics,
 ) -> Node {
-  wrap_node(
-    @ui.image(
-      id~,
-      class~,
-      src~,
-      alt~,
-      attrs=raw_element_attrs(style, data_section, semantics?),
-    ),
-    [],
-  )
+  let attrs = raw_element_attrs(style, data_section, semantics?)
+  if mode is Some(value) {
+    raw_string_attr(attrs, "mode", value.host_name())
+  }
+  let bindings : Array[NodeBinding] = []
+  let load_binding = on_load.map(send => {
+    event_binding(
+      @renderer.page_event_kind("load"),
+      payload => detail_image_load(payload).map(value => send(value)),
+      explicit_key=load_key,
+    )
+  })
+  let error_binding = on_error.map(send => {
+    event_binding(
+      @renderer.page_event_kind("error"),
+      payload => detail_image_error(payload).map(value => send(value)),
+      explicit_key=error_key,
+    )
+  })
+  for binding in [load_binding, error_binding] {
+    if binding is Some(value) {
+      append_direct_binding(bindings, value)
+    }
+  }
+  raw_event_attr(attrs, "on_load", "load", load_binding)
+  raw_event_attr(attrs, "on_error", "error", error_binding)
+  wrap_node(@ui.image(id~, class~, src~, alt~, attrs~), bindings)
 }

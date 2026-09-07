@@ -1,6 +1,7 @@
 ///|
 async fn generated_checks(app_root : String, manifest : Json) -> Array[Json] {
   let checks : Array[Json] = []
+  checks.push(resource_assets_status(app_root, manifest))
   let dist = join(app_root, "dist")
   let temp = join(app_root, ".minimoon-tmp/verify")
   if @fs.exists(join(app_root, ".minimoon-tmp")) {

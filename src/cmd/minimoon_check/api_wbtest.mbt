@@ -108,6 +108,7 @@ test "API manifest rejects product and protocol drift" {
 ///|
 test "unknown product series requires a reviewed API baseline" {
   assert_true(api_baseline_series("0.1.9") is Some("0.1"))
+  assert_true(api_baseline_series("0.2.0") is Some("0.2"))
   assert_true(api_baseline_series("0.4.0") is None)
   assert_true(api_baseline_series("invalid") is None)
 }

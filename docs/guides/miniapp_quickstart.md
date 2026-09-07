@@ -6,32 +6,38 @@ Use `moon 0.1.20260827` with `moonc v0.10.11` or newer. JavaScript tooling
 supports Node `>=24.20.0`, and Bun is pinned to `1.4.2`; keep the exact package
 versions and PostCSS override emitted by `minimoon init`.
 
-## 1. Install the CLI from a checkout
+## 1. Install the matching CLI
 
 ```bash
-moon install --path src/cmd/minimoon
+moon install lampclaw/minimoon/cmd/minimoon@0.2.0
 minimoon --version
 ```
 
-Expected product version: `0.1.1`.
+Expected product version: `0.2.0`. See
+[project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
+for current registry availability. For local development, run
+`moon install --path src/cmd/minimoon` from a Minimoon checkout instead.
 
 ## 2. Create and build
 
 ```bash
-minimoon init /tmp/my-app --minimoon-root "$PWD"
+minimoon init /tmp/my-app
 cd /tmp/my-app
 bun install
 minimoon build .
 minimoon verify .
 ```
 
-The explicit `--minimoon-root` creates `moon.work` for local framework
-development. When consuming a published registry version, omit that option to
-create a standalone consumer. Registry mode keeps the versioned dependency in
-`moon.mod` and emits no `moon.work`.
+Registry mode keeps `lampclaw/minimoon@0.2.0` in `moon.mod` and emits no
+`moon.work`. For local framework development, pass `--minimoon-root "$PWD"`
+when running `init` from the framework checkout; it creates a workspace binding.
 
-The application imports only `lampclaw/minimoon`, exports `program() -> Page`,
-and lists page packages in App Contract v7 `miniapp.minimoon.json`.
+The default starter imports only `lampclaw/minimoon`, exports
+`program() -> Page`, and lists page packages in App Contract v8
+`miniapp.minimoon.json`. It has no implicit UI dependency. For native UI, add
+`lampclaw/minimoon_ui@0.1.0`, import its root as `@ui`, and declare its build
+resources as shown in the
+[UI guide](https://github.com/lucavance/minimoon/blob/main/ui/README.mbt.md).
 
 ## 3. Add state
 
@@ -80,13 +86,15 @@ minimoon devtools record . \
   --status passed \
   --recorded-at <actual-timestamp> \
   --tool-version "<actual-version>" \
-  --notes "Minimoon 0.1.1 checklist passed"
+  --notes "Minimoon 0.2.0 checklist passed"
 minimoon verify . --release
 ```
 
 The generated evidence file remains local and Git-ignored; never commit it or
 copy another application's evidence. `verify --candidate` ignores that local
 file and restores public candidate reports after a release decision. For
-framework coverage use the single
-[`miniapp_conformance_app`](../../examples/miniapp_conformance_app/README.md)
-and its four-page checklist.
+framework coverage use the core
+[`miniapp_conformance_app`](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_conformance_app/README.md)
+and its four-page checklist, plus the independent six-page
+[UI showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
+when evaluating the UI module. Their host evidence is separate.

@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon_ui_showcase/pages/feedback"
+
+import {
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn program() -> @minimoon.Page
+
+// Errors
+
+// Types and methods
+type Messages derive(Eq)
+
+// Type aliases
+
+// Traits

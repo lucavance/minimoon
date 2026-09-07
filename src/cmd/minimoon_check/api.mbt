@@ -170,7 +170,12 @@ fn api_product_series(version : String) -> String? {
 ///|
 fn api_baseline_series(version : String) -> String? {
   match api_product_series(version) {
-    Some(series) => if series == "0.1" { Some(series) } else { None }
+    Some(series) =>
+      if series == "0.1" || series == "0.2" {
+        Some(series)
+      } else {
+        None
+      }
     None => None
   }
 }
@@ -229,22 +234,29 @@ async fn api_suite(root : String) -> Unit {
     abort(manifest_violations.join("; "))
   }
   let packages = json_field(manifest, "packages")
-  for
-    entry in [
-      ("root", "src/pkg.generated.mbti", "root.mbti", "exact", true),
+  let package_snapshots = [
+    ("root", "src/pkg.generated.mbti", "root.mbti", "exact", true),
+    (
+      "components", "src/components/pkg.generated.mbti", "components.mbti", "additive",
+      false,
+    ),
+    (
+      "styles", "src/components/styles/pkg.generated.mbti", "styles.mbti", "additive",
+      false,
+    ),
+    (
+      "testing", "src/testing/pkg.generated.mbti", "testing.mbti", "additive", false,
+    ),
+  ]
+  if product_series == "0.2" {
+    package_snapshots.push(
       (
-        "components", "src/components/pkg.generated.mbti", "components.mbti", "additive",
-        false,
+        "resources", "src/resources/pkg.generated.mbti", "resources.mbti", "exact",
+        true,
       ),
-      (
-        "styles", "src/components/styles/pkg.generated.mbti", "styles.mbti", "additive",
-        false,
-      ),
-      (
-        "testing", "src/testing/pkg.generated.mbti", "testing.mbti", "additive",
-        false,
-      ),
-    ] {
+    )
+  }
+  for entry in package_snapshots {
     let (label, source, snapshot, policy, exact) = entry
     let package_entry = json_field(packages, label)
     guard json_string(package_entry, "source") == source &&
@@ -265,6 +277,7 @@ async fn api_suite(root : String) -> Unit {
     }
   }
   frozen_api_consumer_gate(root)
+  ui_api_suite(root)
   println(
     "\nMinimoon " + product_series + " public API compatibility checks passed",
   )

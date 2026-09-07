@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@source "../src/**/*.mbt";
+@source not "../src/**/*_test.mbt";
+
+.gallery-page { box-sizing: border-box; padding: 48px 20px 32px; }
+.gallery-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.gallery-sample { display: flex; flex-direction: column; gap: 12px; padding: 20px 0; border-bottom: 1px solid var(--mmui-border); }
+.gallery-heading { font-size: 18px; font-weight: 600; }
+.gallery-preview { min-height: 32px; }

@@ -2,9 +2,9 @@
 
 [中文文档](README.zh-CN.md) · [Documentation](docs/README.md) · [Bilingual code analysis](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
-Minimoon is MoonBit for WeChat MiniApp Skyline. Version `0.1.1` combines an
-Elm-style authoring API with App Contract v7, runtime ABI v10, renderer protocol
-v7, and a CommonJS MiniApp host boundary.
+Minimoon is MoonBit for WeChat MiniApp Skyline. Version `0.2.0` combines an
+Elm-style authoring API with App Contract v8, runtime ABI v10, renderer protocol
+v8, and a CommonJS MiniApp host boundary.
 
 ```text
 Model / Msg / update / Cmd / Sub
@@ -14,28 +14,32 @@ Model / Msg / update / Cmd / Sub
   -> ordered host scheduler and acknowledged Skyline render
 ```
 
-Applications import only `lampclaw/minimoon`. Authors do not write `setData`,
+Applications import `lampclaw/minimoon` and may opt into the independent
+`lampclaw/minimoon_ui` module. Authors do not write `setData`,
 JavaScript bridges, mutable signals, projection fields, or renderer patches.
 Local components may still own state machines inside keyed or dynamic `Val`
 branches.
 
 ## Install and create an app
 
-Install the CLI from a Minimoon checkout while preparing the registry package:
+For a published version, install the matching registry CLI and create a
+standalone application:
 
 ```bash
-moon install --path src/cmd/minimoon
-minimoon init /tmp/my-app --minimoon-root "$PWD" # local workspace mode
+moon install lampclaw/minimoon/cmd/minimoon@0.2.0
+minimoon init /tmp/my-app
 cd /tmp/my-app
 bun install
 minimoon build .
 minimoon verify .
 ```
 
-Without `--minimoon-root`, `minimoon init /tmp/my-app` creates a standalone
-registry consumer: its versioned `lampclaw/minimoon` import remains in
-`moon.mod` and no `moon.work` is emitted. The package candidate is checked from
-its actual archive before publication; publishing is a separate release action.
+Registry mode keeps `lampclaw/minimoon@0.2.0` in `moon.mod` and emits no
+`moon.work`. Current publication availability is recorded in the repository's
+[project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
+For local framework development, run `moon install --path src/cmd/minimoon`
+from a Minimoon checkout, then `minimoon init /tmp/my-app --minimoon-root "$PWD"`.
+That explicit option creates a workspace binding to the checkout.
 
 The CLI embeds one production-oriented two-page `starter` and supports
 incremental development and typed scaffolding:
@@ -131,14 +135,29 @@ modal state, orientation, popup ownership, labels, and descriptions through the
 checked renderer protocol. Native `input` and `textarea` focus, blur, and
 confirm payloads remain typed at the authoring boundary.
 
+## Optional Minimoon UI
+
+The independently versioned `lampclaw/minimoon_ui 0.1.0` module targets core
+`0.2.0`. Import it as `@ui` alongside the root framework. It adapts RUI
+0.1.1 to typed MiniApp nodes, page-owned state, touch interaction and opt-in
+Vega WXSS. Existing optional components and minimal themes remain compatible.
+See the [UI guide and source](https://github.com/lucavance/minimoon/tree/main/ui)
+for installation, the component capability map and the six-page showcase.
+
+Core 0.2 adds typed native controls, touch events, layout measurement and
+declarative `layer`/`layer_root` composition. Build-only resource providers
+supply WXSS and SVG assets without linking UI resources into application JS.
+These new bytes require fresh Skyline validation; candidate status does not
+imply a published package or a real-host pass.
+
 ## MiniApp boundary
 
-Configuration uses App Contract v7. `componentTheme` is optional; omitting it
+Configuration uses App Contract v8. `componentTheme` is optional; omitting it
 adds no built-in component CSS:
 
 ```json
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "name": "my_app",
   "componentTheme": "minimal-v2",
   "pages": [
@@ -196,7 +215,7 @@ minimoon devtools record . \
   --status passed \
   --recorded-at <actual-timestamp> \
   --tool-version "<actual-version>" \
-  --notes "Minimoon 0.1.1 checklist passed"
+  --notes "Minimoon 0.2.0 checklist passed"
 minimoon verify . --release
 ```
 
@@ -217,15 +236,23 @@ bun run check:candidate
 git diff --check
 ```
 
-`check:api` locks the root `0.1.x` interface exactly and permits only additive
-changes in the optional components, styles, and testing packages.
-`check:candidate` is the Linux-safe automatic handoff gate and always leaves
-tracked reports in candidate state, even when local evidence exists. For a
+`check:api` locks the core `0.2` root and resources interfaces exactly, compiles
+the frozen 0.1 consumer, and permits only additive changes in the optional
+components, styles and testing packages. UI `0.1` has separate additive
+snapshots for its root, headless, theme and resources packages.
+`check:candidate` is the Linux-safe automatic handoff gate; a successful run
+leaves tracked reports in candidate state, even when local evidence exists.
+Coverage is the separate `check:coverage` gate shown above. For a
 local release decision, run `bun run check:all` followed by
 `bun run check:mvp`; both require current fingerprint-bound Developer Tools
-evidence. Rerun `check:candidate` before staging changes.
-`moon package --frozen --list` also enforces the registry archive allowlist,
-a 250 KiB hard ceiling, and at least 16 KiB of reserved headroom.
+evidence for both the four-page core fixture and six-page UI showcase. Rerun
+`check:candidate` before publication and staging to restore public reports;
+require unchanged fingerprints and a clean source checkout. The
+[release runbook](docs/operations/release_candidate_handoff.md) defines the
+ordered core/UI publication and registry-only consumer checks.
+The repository archive gate uses `moon package --frozen --list`, then enforces
+the registry archive allowlist, a 250 KiB hard ceiling and at least 16 KiB of
+reserved headroom for each module.
 
 The floor was revalidated on 2026-09-04 with `moon 0.1.20260827` and
 `moonc v0.10.11`. Repository and generated-starter tooling support Node
@@ -247,12 +274,14 @@ src/
   internal_host_validation/ repository-only host/docs/perf validation
   testing/                optional normalized-tree test runtime
   components/             optional headless and styled components
-  tooling_miniapp/        App Contract v7 artifact generator
+  tooling_miniapp/        App Contract v8 artifact generator
   tooling_minimoon_*      build and verification pipeline
   cmd/minimoon/           native CLI and embedded starter
 examples/
-  miniapp_conformance_app/ one four-page real-host fixture
+  miniapp_conformance_app/ core four-page real-host fixture
+ui/                       independent native component module
+  examples/showcase/      UI six-page real-host fixture
 ```
 
-Minimoon `0.1.1` remains pre-1.0. Product version is defined by `moon.mod` and
+Minimoon `0.2.0` remains pre-1.0. Product version is defined by `moon.mod` and
 `CHANGELOG.md`; version Git tags are not used.

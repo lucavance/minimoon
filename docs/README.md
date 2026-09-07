@@ -7,12 +7,12 @@ The canonical source is the current `lucavance/minimoon` repository.
 
 | Fact | Canonical source |
 | --- | --- |
-| Product version | root `moon.mod`, mirrored and checked in `internal_versions` |
+| Core and UI versions | root `moon.mod` (mirrored in `internal_versions`) and independent `ui/moon.mod` |
 | App Contract, runtime ABI, renderer protocol | `internal_versions` |
 | JavaScript dependencies | root `package.json` |
-| Generated artifact fingerprint and automated status | Conformance fixture `generated/verify_report.json` |
-| DevTools version, timestamp, and real-host result | Local, Git-ignored Conformance fixture `generated/devtools.evidence.json` |
-| Product direction | [`roadmap.md`](roadmap.md) |
+| Generated artifact fingerprint and automated status | Each core/UI fixture's `generated/verify_report.json` |
+| DevTools version, timestamp, and real-host result | Each fixture's separate local, Git-ignored `generated/devtools.evidence.json` |
+| Product direction | [`roadmap.md`](https://github.com/lucavance/minimoon/blob/main/docs/roadmap.md) |
 
 Handwritten documents explain behavior and workflow. They do not copy artifact
 fingerprints, DevTools timestamps, or local validation outcomes.
@@ -25,9 +25,9 @@ maintained in
 
 - [`project_status.md`](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md) — current checkpoint and next-phase priorities
 - [`positioning.md`](positioning.md) — product boundary and success criterion
-- [`mvp.md`](mvp.md) — 0.1.0 product capability baseline
+- [`mvp.md`](mvp.md) — core 0.2 and UI 0.1 product capability baseline
 - [`architecture.md`](architecture.md) — runtime ownership and transaction path
-- [`roadmap.md`](roadmap.md) — active and deferred work
+- [`roadmap.md`](https://github.com/lucavance/minimoon/blob/main/docs/roadmap.md) — active and deferred work
 
 ## Bilingual code analysis
 
@@ -59,15 +59,16 @@ they are intentionally excluded from the 250 KiB registry archive.
 
 ## Reference
 
-- [`reference/compile_model.md`](reference/compile_model.md)
-- [`reference/miniapp_renderer.md`](reference/miniapp_renderer.md)
-- [`reference/renderer_protocol.md`](reference/renderer_protocol.md)
+- [`reference/compile_model.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/compile_model.md)
+- [`reference/miniapp_renderer.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/miniapp_renderer.md)
+- [`reference/renderer_protocol.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/renderer_protocol.md)
 - [`reference/miniapp_host_capabilities.md`](reference/miniapp_host_capabilities.md)
 - [`reference/miniapp_fixture_matrix.md`](reference/miniapp_fixture_matrix.md)
-- [`reference/moonbit_ownership.md`](reference/moonbit_ownership.md)
+- [`reference/moonbit_ownership.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/moonbit_ownership.md)
 - [`reference/performance_baseline.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/performance_baseline.md)
 - [`reference/compatibility_and_upgrades.md`](reference/compatibility_and_upgrades.md)
-- [`reference/rabbita_and_rui_audit.md`](reference/rabbita_and_rui_audit.md) — pinned reference comparison, all 64 RUI entries, and next-iteration candidates
+- [`reference/rabbita_and_rui_audit.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) — historical pre-migration comparison of all 64 RUI entries
+- [UI guide](https://github.com/lucavance/minimoon/blob/main/ui/README.mbt.md), [changelog](https://github.com/lucavance/minimoon/blob/main/ui/CHANGELOG.md), [migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md), and [six-page showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
 
 ## Operations
 

@@ -179,9 +179,23 @@ async fn static_suite(root : String) -> Unit {
     "\"node\": \"" + supported_node_engine + "\"",
   )
   require_text(root, ".gitignore", "**/generated/devtools.evidence.json")
-  require_untracked_path(
-    root, "examples/miniapp_conformance_app/generated/devtools.evidence.json",
-  )
+  for fixture in ["examples/miniapp_conformance_app", "ui/examples/showcase"] {
+    for
+      private_file in [
+        "/generated/devtools.evidence.json", "/dist/project.private.config.json",
+      ] {
+      let path = fixture + private_file
+      require_untracked_path(root, path)
+      let (code, _, _) = @process.collect_output(
+        "git",
+        ["check-ignore", "--no-index", "--quiet", "--", path],
+        cwd=root,
+      )
+      guard code == 0 else {
+        abort("developer-local fixture file must be ignored: " + path)
+      }
+    }
+  }
   forbid_text(
     root, ".github/workflows/test.yml", "Release gate when evidence is present",
   )
@@ -189,6 +203,17 @@ async fn static_suite(root : String) -> Unit {
   require_text(
     root, ".github/workflows/test.yml", "CI handoff accepts candidate verification reports only",
   )
+  for
+    token in [
+      "package_handoff examples/miniapp_conformance_app miniapp_conformance_app core 4",
+      "package_handoff ui/examples/showcase minimoon_ui_showcase ui 6", "name: minimoon-devtools-${{ github.sha }}",
+      "name: minimoon-ui-devtools-${{ github.sha }}", "path: _build/devtools-handoff/core/",
+      "path: _build/devtools-handoff/ui/", "git status --porcelain --untracked-files=all",
+      "CI requires a clean tracked and untracked worktree",
+    ] {
+    require_text(root, ".github/workflows/test.yml", token)
+  }
+  ci_handoff_gate(root)
   forbid_text(
     root, ".github/workflows/test.yml", "version_at_least \"0.10.6\" \"$installed_moonc\"",
   )
@@ -248,6 +273,7 @@ async fn static_suite(root : String) -> Unit {
   require_text(root, "src/tooling_miniapp/generator.mbt", "runtimeApiVersion")
   require_same_text(root, "README.mbt.md", "README.md")
   require_same_text(root, "README.zh-CN.mbt.md", "README.zh-CN.md")
+  require_same_text(root, "ui/README.mbt.md", "ui/README.md")
   for path in repository_moonbit_sources(root) {
     let violations = moon_source_boundary_violations(
       @fs.read_file(join(root, path)).text(),
@@ -333,7 +359,7 @@ async fn static_suite(root : String) -> Unit {
   for
     package_dir in [
       "src/components", "src/internal_duplix", "src/renderer_miniapp", "src/runtime_core",
-      "src/tooling_minimoon_verify", "src/val_runtime",
+      "src/tooling_minimoon_verify", "src/val_runtime", "ui/src",
     ] {
     @fs.walk(
       join(root, package_dir),

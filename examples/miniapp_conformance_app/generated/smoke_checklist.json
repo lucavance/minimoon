@@ -1,6 +1,6 @@
 {
   "runtimeApiVersion": 10,
-  "rendererProtocolVersion": 7,
+  "rendererProtocolVersion": 8,
   "pages": [
     "pages/showcase/showcase",
     "pages/home/home",
@@ -9,7 +9,7 @@
   ],
   "checks": [
     "Page Definition API registration on glass-easel",
-    "renderer v7 acknowledged typed props/events patch and replacement commits",
+    "renderer v8 acknowledged typed props/events patch and replacement commits",
     "mount and initial dynamic tree",
     "typed event dispatch",
     "lifecycle dispatch",

@@ -29,7 +29,7 @@ async fn copy_frozen_api_consumer(root : String, destination : String) -> Unit {
 ///|
 async fn frozen_api_consumer_gate(root : String) -> Unit {
   let product_version = @versions.product_version()
-  guard product_version.has_prefix(frozen_api_consumer_series + ".") else {
+  guard api_baseline_series(product_version) is Some(_) else {
     abort(
       "no frozen public API consumer exists for product version " +
       product_version,

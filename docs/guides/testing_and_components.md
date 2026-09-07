@@ -86,7 +86,7 @@ bytes in `generated/manifest.json`. Omitting the field preserves headless
 behavior and adds no theme CSS.
 
 Components emit dialog/menu roles, checked/modal state, orientation, popup
-ownership, and labelled/described relationships into renderer protocol v7.
+ownership, and labelled/described relationships into renderer protocol v8.
 Interaction is intentionally platform-faithful: tap opens submenus; there is no
 synthetic DOM keydown, focus trap, portal, or collision engine. Behavior tests
 should prefer semantic/text selectors; real-host validation must also check

@@ -1,0 +1,15 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon_ui/headless",
+  "lampclaw/minimoon_ui/theme",
+}
+
+import {
+  "lampclaw/minimoon/testing",
+} for "test"
+
+supported_targets = "js+native"
+
+import {
+  "moonbitlang/core/json",
+} for "wbtest"

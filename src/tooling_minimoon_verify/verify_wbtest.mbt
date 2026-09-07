@@ -5,9 +5,9 @@ async fn write_fingerprint_fixture(root : String, app_source : String) -> Unit {
       "generated/manifest.json",
       (
         #|{
-        #|  "schemaVersion": 7,
+        #|  "schemaVersion": 8,
         #|  "runtimeApiVersion": 10,
-        #|  "rendererProtocolVersion": 5,
+        #|  "rendererProtocolVersion": 8,
         #|  "pages": [{ "route": "pages/home/home" }]
         #|}
         #|
@@ -46,6 +46,99 @@ async fn write_fingerprint_fixture(root : String, app_source : String) -> Unit {
       permission=0o600,
     )
   }
+}
+
+///|
+test "resource verifier shares the generator portable relative-path policy" {
+  for
+    path in [
+      "assets/./icon.svg", "assets/../icon.svg", "assets/x y.svg", "assets/%2e/icon.svg",
+      "assets//icon.svg", "assets/icon.js", "app.wxss",
+    ] {
+    assert_false(safe_resource_asset(path))
+  }
+  assert_true(safe_resource_asset("assets/icons/a..b.svg"))
+  assert_true(safe_resource_asset("assets/icons/license.txt"))
+}
+
+///|
+async test "resource verification rejects missing or unsafe declared assets" {
+  let root = @fs.tmpdir(prefix="minimoon-resource-verification")
+  {
+    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    let manifest = Json::object({
+      "resources": Json::array([
+        Json::object({
+          "id": Json::string("sample"),
+          "version": Json::string("1.0.0"),
+          "assets": Json::array([Json::string("assets/sample/icon.svg")]),
+        }),
+      ]),
+    })
+    assert_eq(
+      string(resource_assets_status(root, manifest), "status"),
+      "failed",
+    )
+    write(join(root, "dist/assets/sample/icon.svg"), "<svg/>")
+    assert_eq(
+      string(resource_assets_status(root, manifest), "status"),
+      "passed",
+    )
+    let unsafe_manifest = Json::object({
+      "resources": Json::array([
+        Json::object({
+          "id": Json::string("sample"),
+          "version": Json::string("1.0.0"),
+          "assets": Json::array([Json::string("assets/../app.js")]),
+        }),
+      ]),
+    })
+    assert_eq(
+      string(resource_assets_status(root, unsafe_manifest), "status"),
+      "failed",
+    )
+  }
+  @fs.rmdir(root, recursive=true)
+}
+
+///|
+async test "resource SVG bytes and provider manifest descriptors bind the artifact fingerprint" {
+  let root = @fs.tmpdir(prefix="minimoon-resource-fingerprint")
+  {
+    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    write_fingerprint_fixture(root, "App({})\n")
+    let original = artifact_fingerprint(root)
+    write(
+      join(root, "dist/assets/test/icon.svg"),
+      "<svg><title>Light</title></svg>",
+    )
+    let with_asset = artifact_fingerprint(root)
+    assert_not_eq(with_asset, original)
+    write(
+      join(root, "dist/assets/test/icon.svg"),
+      "<svg><title>Dark</title></svg>",
+    )
+    assert_not_eq(artifact_fingerprint(root), with_asset)
+    let with_changed_asset = artifact_fingerprint(root)
+    let manifest = object(
+      read_json(join(root, "generated/manifest.json")),
+      "fixture",
+    )
+    manifest["resources"] = Json::array([
+      Json::object({
+        "id": Json::string("test"),
+        "version": Json::string("1.0.0"),
+        "features": Json::array([Json::string("button")]),
+        "assets": Json::array([Json::string("assets/test/icon.svg")]),
+      }),
+    ])
+    write(
+      join(root, "generated/manifest.json"),
+      Json::object(manifest).stringify(),
+    )
+    assert_not_eq(artifact_fingerprint(root), with_changed_asset)
+  }
+  @fs.rmdir(root, recursive=true)
 }
 
 ///|
@@ -134,7 +227,7 @@ test "custom navigation app config omits ineffective window fields" {
 
 ///|
 async test "DevTools evidence scope follows the current App Contract" {
-  assert_eq(current_evidence_scope(), "current-v7")
+  assert_eq(current_evidence_scope(), "current-v8")
   let root = @fs.tmpdir(prefix="minimoon-evidence-scope")
   {
     errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })

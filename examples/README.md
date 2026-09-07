@@ -1,14 +1,15 @@
-# Maintained example
+# Maintained verification examples
 
-The repository keeps one release-bound real-host fixture:
+The repository keeps separate core and UI real-host fixtures:
 
 | Example | Pages | Coverage |
 | --- | ---: | --- |
 | [`miniapp_conformance_app`](miniapp_conformance_app/README.md) | 4 | bilingual showcase, state, query input, lifecycle, capabilities, navigation, incremental diff, local components, subscriptions, scrolling, native controls, semantic content navigation, optional theme, and page-instance isolation |
+| [UI showcase](../ui/examples/showcase/README.md) | 6 | all 64 RUI families plus Form/Theme, native controls, layers, touch measurement, resources and ownership |
 
-This consolidation makes every generated-byte change require one Developer
-Tools import and one artifact fingerprint. `swiper` remains a control under
-test; real page navigation is the primary application structure, and the Lab
+Each fixture has its own Developer Tools import and artifact fingerprint.
+Shared host changes require both to be revalidated. `swiper` remains a control
+under test; real page navigation is the primary application structure, and the Lab
 page uses a vertical `scroll-view` for long-form interaction testing.
 
 The production-oriented source embedded by `minimoon init` is separate and

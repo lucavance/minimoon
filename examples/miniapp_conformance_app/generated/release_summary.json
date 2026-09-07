@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "runtimeApiVersion": 10,
-  "rendererProtocolVersion": 7,
+  "rendererProtocolVersion": 8,
   "rendererUpdateStrategy": "automatic-diff",
   "hostRegistration": "page-definition-api",
   "rendererPatchPolicy": {
@@ -45,7 +45,7 @@
   "automated": {
     "status": "passed",
     "pageCount": 4,
-    "artifactFingerprint": "fnv1a64-relpath-v2:d82e290998cb79dd"
+    "artifactFingerprint": "fnv1a64-relpath-v2:bb3d1ccdaa99aed1"
   },
   "devtools": {
     "status": "pending",

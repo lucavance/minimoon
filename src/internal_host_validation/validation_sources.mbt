@@ -63,12 +63,12 @@ pub fn scheduler_host_smoke_source() -> String {
     #|  },
     #|  minimoon_runtime_dispatch_batch(id, raw) {
     #|    const events = JSON.parse(raw)
-    #|    if (!Array.isArray(events) || events.some((event) => !event || !["increment", "barrier", "scroll", "delay", "render-effect"].includes(event.key))) throw new Error("invalid fake runtime event batch")
+    #|    if (!Array.isArray(events) || events.some((event) => !event || !["increment", "barrier", "scroll", "delay", "render-effect", "render-measure"].includes(event.key))) throw new Error("invalid fake runtime event batch")
     #|    dispatchBatches.push(events)
     #|    const state = states.get(id)
     #|    const base = state.revision
     #|    for (const event of events) {
-    #|      if (event.key === "increment" || event.key === "barrier" || event.key === "render-effect") state.count += 1
+    #|      if (event.key === "increment" || event.key === "barrier" || event.key === "render-effect" || event.key === "render-measure") state.count += 1
     #|      else if (event.key === "scroll") state.scrollTop = Number(event.payload.detail.scrollTop || 0)
     #|      else state.pendingEffect = "reused-delay"
     #|    }
@@ -76,6 +76,7 @@ pub fn scheduler_host_smoke_source() -> String {
     #|    state.revision += 1
     #|    state.tree.text = `${state.count}:${state.scrollTop}`
     #|    const render = { type: "PatchViewTree", component_id: "scheduler", base_revision: base, revision: state.revision, ops: [{ op: "set", path: ["text"], value: state.tree.text }] }
+    #|    if (events.some((event) => event.key === "render-measure")) { state.pendingEffect = "measure-after-render"; return JSON.stringify([render, { type: "InvokeCapability", component_id: "scheduler", request_id: state.pendingEffect, capability: "minimoon.measureNodes", payload: { ids: ["anchor", "missing"] } }]) }
     #|    if (events.some((event) => event.key === "render-effect")) {
     #|      state.pendingEffect = "acknowledgement-probe"
     #|      return JSON.stringify([render, { type: "InvokeCapability", component_id: "scheduler", request_id: state.pendingEffect, capability: "wx.acknowledgementProbe", payload: {} }])
@@ -107,7 +108,7 @@ pub fn scheduler_host_smoke_source() -> String {
     #|  minimoon_runtime_dispose(id) { const state = states.get(id); states.delete(id); return state && state.pendingEffect ? JSON.stringify([{ type: "CancelEffect", component_id: "scheduler", request_id: state.pendingEffect }]) : "[]" },
     #|}
     #|const { registerMinimoonPage } = require(path.resolve(hostFile))
-    #|registerMinimoonPage(runtime, "scheduler", initialTree, ["wx.throwNow", "wx.callbackThenThrow", "wx.acknowledgementProbe"])
+    #|registerMinimoonPage(runtime, "scheduler", initialTree, ["wx.throwNow", "wx.callbackThenThrow", "wx.acknowledgementProbe", "minimoon.measureNodes"])
     #|if (!definition) throw new Error("scheduler page was not registered")
     #|const resolve = (root, tokens) => { let value = root; for (const token of tokens) value = value[token]; return value }
     #|const assign = (root, tokens, value) => { const parent = resolve(root, tokens.slice(0, -1)); parent[tokens[tokens.length - 1]] = value }
@@ -308,6 +309,57 @@ pub fn scheduler_host_smoke_source() -> String {
     #|if (barrierBatch.map((event) => event.key).join(",") !== "scroll,barrier,scroll" || barrierBatch[2].payload.detail.scrollTop !== 3) throw new Error(`scroll/tap ordering changed: ${JSON.stringify(barrierBatch)}`)
     #|acknowledge(barrier)
     #|definition.onUnload.call(barrier)
+    #|
+    #|const touchHost = makeHost()
+    #|dispatchTap(touchHost)
+    #|const touchEvent = (id, x) => ({ currentTarget: { dataset: { minimoonTouchstart: "increment", minimoonTouchmove: "increment", minimoonTouchend: "increment", minimoonTouchcancel: "increment", minimoonLongpress: "increment" } }, touches: [{ identifier: id, clientX: x, clientY: 2.5, pageX: x, pageY: 100.25, privateNativeObject: {} }], changedTouches: [{ identifier: id, clientX: x, clientY: 2.5, pageX: x, pageY: 100.25 }], timeStamp: 10.125 })
+    #|touchHost.__mmDispatchTouchStart(touchEvent(1, 0.25))
+    #|touchHost.__mmDispatchTouchMove(touchEvent(1, 1.25))
+    #|touchHost.__mmDispatchTouchMove(touchEvent(1, 2.25))
+    #|touchHost.__mmDispatchTouchMove(touchEvent(2, 3.25))
+    #|touchHost.__mmDispatchTouchEnd(touchEvent(2, 4.25))
+    #|touchHost.__mmDispatchTouchMove(touchEvent(2, 5.25))
+    #|touchHost.__mmDispatchTouchCancel(touchEvent(2, 6.25))
+    #|touchHost.__mmDispatchLongPress(touchEvent(3, 7.25))
+    #|const touchBatch = touchHost._q[0].events
+    #|if (touchBatch.length !== 7 || touchHost._st.coalescedEvents !== 1 || touchBatch[1].payload.touches[0].clientX !== 2.25 || touchBatch[1].payload.timeStamp !== 10.125 || "privateNativeObject" in touchBatch[1].payload.touches[0]) throw new Error("touch serialization lost precision or coalesced across a gesture barrier")
+    #|definition.onUnload.call(touchHost)
+    #|
+    #|const measuring = makeHost()
+    #|const queries = []
+    #|measuring.createSelectorQuery = () => { const selectors = []; const query = { select(selector) { selectors.push(selector); return { boundingClientRect() { return query } } }, exec(callback) { queries.push({ selectors, callback }) } }; return query }
+    #|const measureCommand = id => ({ type: "InvokeCapability", component_id: "scheduler", request_id: id, capability: "minimoon.measureNodes", payload: { ids: ["anchor", "missing"] } })
+    #|const rectangles = [{ id: "anchor", left: -1.25, top: 2.5, right: 8.75, bottom: 22.5, width: 10, height: 20 }, null]
+    #|dispatchTap(measuring, "render-measure")
+    #|if (queries.length !== 0) throw new Error("measurement ran before render acknowledgement")
+    #|acknowledge(measuring)
+    #|if (queries.length !== 1 || queries[0].selectors.join(",") !== "#anchor,#missing") throw new Error("measurement did not use page-owned ID selectors")
+    #|const measureStart = effectResolutions.length
+    #|queries[0].callback(rectangles)
+    #|queries[0].callback(rectangles)
+    #|if (effectResolutions.length !== measureStart + 1 || effectResolutions[measureStart].phase !== "success" || JSON.parse(effectResolutions[measureStart].payload).nodes[0].left !== -1.25 || JSON.parse(effectResolutions[measureStart].payload).nodes[1] !== null) throw new Error("measurement result lost precision, missing nodes, or first-terminal protection")
+    #|measuring._iv(measureCommand("stale-callback"))
+    #|dispatchTap(measuring)
+    #|acknowledge(measuring)
+    #|queries[1].callback(rectangles)
+    #|if (effectResolutions.at(-1).requestId !== "stale-callback" || effectResolutions.at(-1).phase !== "failure") throw new Error("stale measurement callback was accepted")
+    #|measuring._iv(measureCommand("stale-delivery"))
+    #|dispatchTap(measuring)
+    #|queries[2].callback(rectangles)
+    #|acknowledge(measuring)
+    #|if (effectResolutions.at(-1).requestId !== "stale-delivery" || effectResolutions.at(-1).phase !== "failure") throw new Error("measurement became stale in the scheduler queue but was accepted")
+    #|const invalidMeasureStart = effectResolutions.length
+    #|for (const ids of [["#anchor"], ["a b"], ["anchor", "anchor"], Array.from({ length: 129 }, (_, i) => `id${i}`)]) measuring._iv({ ...measureCommand("invalid-measure"), payload: { ids } })
+    #|if (effectResolutions.length !== invalidMeasureStart + 4 || effectResolutions.slice(invalidMeasureStart).some(entry => entry.phase !== "invalid_payload") || queries.length !== 3) throw new Error("measurement accepted a selector, duplicate, or oversized request")
+    #|measuring._iv(measureCommand("cancelled-measure"))
+    #|measuring._ce({ type: "CancelEffect", component_id: "scheduler", request_id: "cancelled-measure" })
+    #|const cancelledMeasureStart = effectResolutions.length
+    #|queries[3].callback(rectangles)
+    #|if (effectResolutions.length !== cancelledMeasureStart) throw new Error("cancelled measurement completed")
+    #|measuring._iv(measureCommand("unloaded-measure"))
+    #|definition.onUnload.call(measuring)
+    #|queries[4].callback(rectangles)
+    #|if (effectResolutions.length !== cancelledMeasureStart) throw new Error("measurement completed after page unload")
     #|
     #|const timeout = makeHost()
     #|const timeoutState = states.get(timeout.__mmInstanceId)

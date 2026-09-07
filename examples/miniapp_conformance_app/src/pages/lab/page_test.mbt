@@ -315,7 +315,7 @@ test "conformance lab uses ABI v10, shared WXML, and query isolation marker" {
   inspect(runtime.snapshot().contains("instance: second"), content="true")
   let contract = program().contract()
   inspect(contract.contains("\"runtimeApiVersion\":10"), content="true")
-  inspect(contract.contains("\"rendererProtocolVersion\":7"), content="true")
+  inspect(contract.contains("\"rendererProtocolVersion\":8"), content="true")
   let wxml = program().wxml()
   inspect(wxml.contains("minimoon_dynamic_node"), content="true")
   inspect(wxml.contains("minimoon.templates.wxml"), content="true")

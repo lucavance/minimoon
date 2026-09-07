@@ -42,9 +42,13 @@ three host paths:
 3. Device debugging for lifecycle, navigation, input, overlay, and failure
    recovery paths affected since the previous candidate.
 
-The canonical Conformance fixture remains the release-evidence owner. Dogfood
-results are application feedback and must not be copied into, or used to edit,
-its evidence JSON manually.
+The canonical four-page Conformance fixture owns core release evidence; the
+independent six-page `ui/examples/showcase` owns UI release evidence. A paired
+core/UI release requires both. Dogfood results are application feedback, not
+evidence for either fixture, and must never be copied into or used to edit
+their evidence JSON manually. Record whether the dogfood consumer resolves
+core `0.2.0` alone or the verified core `0.2.0` / UI `0.1.0` pair, including
+any development workspace override.
 
 ## Observation record
 
@@ -58,7 +62,7 @@ runs without exposing application data:
 - renderer work statistics or lifecycle counters when available;
 - smallest reproducible application shape and numbered reproduction steps;
 - expected and actual behavior;
-- whether the problem reproduces in the maintained Conformance fixture;
+- whether the problem reproduces in Conformance or the independent UI showcase;
 - current workaround and its cost, or an explicit statement that none exists;
 - confirmation that AppIDs, credentials, private paths, user data, screenshots,
   logs, and generated snippets were reviewed and redacted before submission.

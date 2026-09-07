@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/foundation/foundation",
+    "pages/overlays/overlays",
+    "pages/forms/forms",
+    "pages/data/data",
+    "pages/layout/layout",
+    "pages/feedback/feedback"
+  ],
+  "renderer": "skyline",
+  "componentFramework": "glass-easel",
+  "lazyCodeLoading": "requiredComponents",
+  "rendererOptions": {
+    "skyline": {
+      "disableABTest": true
+    }
+  }
+}

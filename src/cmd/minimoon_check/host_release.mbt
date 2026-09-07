@@ -1,15 +1,18 @@
 ///|
 async fn host_suite(root : String) -> Unit {
-  run(root, "MoonBit native tests", "moon", ["test"])
+  run(root, "MoonBit native tests", "moon", ["test", "--target", "native"])
   run(root, "MoonBit JavaScript target tests", "moon", [
     "test", "--target", "js",
   ])
   run(root, "MoonBit JavaScript target check", "moon", [
     "check", "--target", "js", "--deny-warn",
   ])
+  run_ui_tests(root, "native")
+  run_ui_tests(root, "js")
   build_examples(root, "dev")
   verify_examples(root, false)
   audit_generated_javascript(root, "dev")
+  build_verify_ui_gallery(root, "dev", false)
   let conformance_root = join(root, "examples/" + conformance_fixture)
   let conformance_report = @verify.verify(conformance_root, false)
   guard json_string(conformance_report, "status") == "passed" else {
@@ -38,51 +41,104 @@ async fn host_suite(root : String) -> Unit {
 
 ///|
 fn candidate_summary_is_public(summary : Json) -> Bool {
-  let devtools = json_field(summary, "devtools")
-  guard json_string(devtools, "status") == "pending" else { return false }
-  match json_field(devtools, "evidence") {
-    Null => true
-    _ => false
+  candidate_field(summary, "devtools") ==
+  Json::object({ "status": Json::string("pending"), "evidence": Json::null() })
+}
+
+///|
+fn candidate_field(value : Json, key : String) -> Json {
+  match value {
+    Object(fields) => fields.get(key).unwrap_or(Json::null())
+    _ => Json::null()
   }
+}
+
+///|
+fn candidate_artifact_problems(
+  name : String,
+  report : Json,
+  manifest : Json,
+  summary : Json,
+  fingerprint : String,
+) -> Array[String] {
+  let problems : Array[String] = []
+  if candidate_field(report, "schemaVersion") != Json::number(1.0) ||
+    candidate_field(report, "status") != Json::string("passed") ||
+    candidate_field(report, "release") != Json::boolean(false) {
+    problems.push("candidate verification must pass without host evidence")
+  }
+  match candidate_field(report, "checks") {
+    Array(checks) =>
+      if checks.is_empty() ||
+        checks.any(check => {
+          candidate_field(check, "status") != Json::string("passed")
+        }) {
+        problems.push("candidate verification checks must all pass")
+      }
+    _ => problems.push("candidate verification checks are missing")
+  }
+  if fingerprint == "" ||
+    candidate_field(report, "artifactFingerprint") != Json::string(fingerprint) {
+    problems.push(
+      "candidate report fingerprint differs from current artifact bytes",
+    )
+  }
+  for value in [manifest, summary] {
+    for
+      entry in [
+        ("schemaVersion", @versions.app_contract_version()),
+        ("runtimeApiVersion", @versions.runtime_api_version()),
+        ("rendererProtocolVersion", @versions.renderer_protocol_version()),
+      ] {
+      let (field, expected) = entry
+      if candidate_field(value, field) != Json::number(expected.to_double()) {
+        problems.push("candidate artifact version differs: " + field)
+      }
+    }
+    if candidate_field(value, "name") != Json::string(name) {
+      problems.push("candidate artifact fixture name differs")
+    }
+  }
+  if candidate_field(manifest, "pageBridgeEncoding") !=
+    Json::string("shared-compact-node-v1") {
+    problems.push("candidate must contain release compact artifacts")
+  }
+  let automated = candidate_field(summary, "automated")
+  if candidate_field(summary, "mode") != Json::string("release") ||
+    candidate_field(automated, "status") != Json::string("passed") ||
+    candidate_field(automated, "artifactFingerprint") !=
+    Json::string(fingerprint) {
+    problems.push("candidate summary does not describe verified release bytes")
+  }
+  if !candidate_summary_is_public(summary) {
+    problems.push("candidate summary must keep local DevTools evidence private")
+  }
+  problems
+}
+
+///|
+async fn check_candidate_artifacts(
+  root : String,
+  fixture : String,
+  name : String,
+) -> Unit {
+  let problems = candidate_artifact_problems(
+    name,
+    read_json(root, fixture + "/generated/verify_report.json"),
+    read_json(root, fixture + "/generated/manifest.json"),
+    read_json(root, fixture + "/generated/release_summary.json"),
+    @verify.artifact_fingerprint(join(root, fixture)),
+  )
+  guard problems.is_empty() else { abort(fixture + ": " + problems.join("; ")) }
 }
 
 ///|
 async fn candidate_suite(root : String) -> Unit {
   build_examples(root, "release")
   verify_examples(root, false)
+  build_verify_ui_gallery(root, "release", false)
   for app in example_apps {
-    let report = read_json(
-      root,
-      "examples/" + app + "/generated/verify_report.json",
-    )
-    guard json_string(report, "status") == "passed" &&
-      !json_bool(report, "release") else {
-      abort(app + " candidate verification must pass without host evidence")
-    }
-    let manifest = read_json(
-      root,
-      "examples/" + app + "/generated/manifest.json",
-    )
-    guard json_string(manifest, "pageBridgeEncoding") ==
-      "shared-compact-node-v1" else {
-      abort(app + " candidate must contain release compact artifacts")
-    }
-    let summary = read_json(
-      root,
-      "examples/" + app + "/generated/release_summary.json",
-    )
-    let report_fingerprint = json_string(report, "artifactFingerprint")
-    let automated = json_field(summary, "automated")
-    guard json_string(summary, "mode") == "release" &&
-      json_string(automated, "status") == "passed" &&
-      json_string(automated, "artifactFingerprint") == report_fingerprint else {
-      abort(app + " candidate summary does not describe verified release bytes")
-    }
-    guard candidate_summary_is_public(summary) else {
-      abort(
-        app + " candidate summary must keep local DevTools evidence private",
-      )
-    }
+    check_candidate_artifacts(root, "examples/" + app, app)
   }
 }
 
@@ -90,6 +146,7 @@ async fn candidate_suite(root : String) -> Unit {
 async fn release_suite(root : String) -> Unit {
   build_examples(root, "release")
   verify_examples(root, true)
+  build_verify_ui_gallery(root, "release", true)
   for app in example_apps {
     let summary = read_json(
       root,

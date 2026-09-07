@@ -77,6 +77,7 @@ pub(all) enum Capability {
   NavigateTo
   RedirectTo
   NavigateBack
+  MeasureNodes
 } derive(Debug, Eq)
 
 ///|
@@ -93,6 +94,7 @@ pub fn Capability::name(self : Capability) -> String {
     NavigateTo => "wx.navigateTo"
     RedirectTo => "wx.redirectTo"
     NavigateBack => "wx.navigateBack"
+    MeasureNodes => "minimoon.measureNodes"
   }
 }
 

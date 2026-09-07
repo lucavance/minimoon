@@ -1,6 +1,6 @@
 name = "lampclaw/minimoon"
 
-version = "0.1.1"
+version = "0.2.0"
 
 import {
   "moonbitlang/async@0.21.2",
@@ -42,11 +42,18 @@ options(
     "docs/code-analysis",
     "docs/project_status.md",
     "docs/reference/performance_baseline.md",
+    "docs/reference/rabbita_and_rui_audit.md",
+    "docs/roadmap.md",
+    "docs/reference/moonbit_ownership.md",
+    "docs/reference/renderer_protocol.md",
+    "docs/reference/miniapp_renderer.md",
+    "docs/reference/compile_model.md",
     "examples",
     "moon.work",
     "package.json",
     "scripts",
     "templates",
+    "ui",
     "top_wbtest.mbt",
     "src/cmd/minimoon_check",
     "src/cmd/minimoon_metrics",

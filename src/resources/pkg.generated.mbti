@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/resources"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn encode(ResourceBundle) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct ResourceAsset {
+  path : String
+  content : String
+} derive(Eq, @debug.Debug)
+
+pub(all) struct ResourceBundle {
+  id : String
+  version : String
+  wxss : String
+  assets : Array[ResourceAsset]
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits

@@ -1,0 +1,7 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon_ui" @ui,
+  "lampclaw/minimoon_ui/theme",
+}
+
+supported_targets = "js+native"

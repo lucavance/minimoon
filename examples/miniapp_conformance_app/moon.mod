@@ -1,9 +1,9 @@
 name = "lampclaw/miniapp_conformance_app"
 
-version = "0.1.1"
+version = "0.2.0"
 
 import {
-  "lampclaw/minimoon@0.1.1",
+  "lampclaw/minimoon@0.2.0",
   "moonbitlang/async@0.21.2",
 }
 

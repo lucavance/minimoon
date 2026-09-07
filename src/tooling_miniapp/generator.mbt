@@ -36,6 +36,15 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     )
   }
   let module_id = module_name(@fs.read_file(join(app_root, "moon.mod")).text())
+  let resources = compile_resources(app_root, raw) catch {
+    error => {
+      let message = write_config_issue(
+        document, config_file, "MMN2002", "resource provider did not produce a valid build resource bundle",
+        "/resources", "Check the native provider's resources(features) function and asset paths.",
+      )
+      raise Failure::Failure(message + "\ncaused by: \{error}")
+    }
+  }
   let release = mode == "release"
   let contracts : Array[Json] = []
   let routes : Array[String] = []
@@ -110,6 +119,9 @@ pub async fn generate(config_path : String, mode : String) -> Json {
   }
   write(join(dist, "app.js"), "App({})\n")
   write(join(dist, "app.wxss"), "")
+  for asset in array(resources, "assets") {
+    write(join(dist, string(asset, "path")), string(asset, "content"))
+  }
   write(
     join(dist, "minimoon.templates.wxml"),
     @renderer.dynamic_templates_wxml(),
@@ -172,6 +184,7 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     }),
     "rendererStats": renderer_stats_manifest(),
     "componentTheme": component_theme_manifest(component_theme),
+    "resources": field(resources, "descriptors"),
     "name": Json::string(name),
     "pages": Json::array(contracts),
   })
@@ -223,6 +236,7 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     "tailwindInputAbs": Json::string(join(app_root, tailwind_input_relative)),
     "sourceWxssAbs": Json::string(join(app_root, source_wxss_relative)),
     "componentTheme": Json::string(component_theme),
+    "resourcesWxss": field(resources, "wxss"),
     "appMetadata": Json::object({
       "pages": Json::array(
         contracts.map(contract => {

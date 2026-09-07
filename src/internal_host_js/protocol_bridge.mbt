@@ -7,6 +7,12 @@ pub fn shared_protocol_bridge() -> String {
     #|const eventFields = new Set(["tap", "input", "change", "confirm", "focus", "blur", "scroll", "upper", "lower"])
     #|const booleanProps = new Set(["scrollX", "scrollY", "disabled", "focus", "checked", "autoplay", "circular", "ariaExpanded", "ariaSelected", "ariaDisabled", "ariaHidden", "ariaChecked", "ariaModal"])
     #|const numberProps = new Set(["scrollTop", "scrollLeft", "upperThreshold", "lowerThreshold", "maxlength", "current", "interval", "duration"])
+    #|for (const kind of ["label", "form", "slider", "progress"]) nodeKinds.add(kind)
+    #|propFields.add("vertical"); booleanProps.add("vertical")
+    #|for (const key of ["name", "type", "password", "selectionStart", "selectionEnd", "formType", "for", "catchMove", "min", "max", "step", "showValue", "activeColor", "backgroundColor", "blockColor", "blockSize", "percent", "strokeWidth", "showInfo", "active", "ariaRequired", "ariaInvalid", "ariaBusy", "ariaLive", "ariaValueMin", "ariaValueMax", "ariaValueNow", "ariaValueText"]) propFields.add(key)
+    #|for (const key of ["submit", "reset", "changing", "load", "error", "longpress", "touchstart", "touchmove", "touchend", "touchcancel"]) eventFields.add(key)
+    #|for (const key of ["password", "catchMove", "showValue", "showInfo", "active", "ariaRequired", "ariaInvalid", "ariaBusy"]) booleanProps.add(key)
+    #|for (const key of ["selectionStart", "selectionEnd", "min", "max", "step", "blockSize", "percent", "strokeWidth", "ariaValueMin", "ariaValueMax", "ariaValueNow"]) numberProps.add(key)
     #|
     #|function exactKeys(value, keys) {
     #|  if (!value || typeof value !== "object" || Array.isArray(value)) return false
@@ -17,7 +23,7 @@ pub fn shared_protocol_bridge() -> String {
     #|  if (!props || typeof props !== "object" || Array.isArray(props)) return false
     #|  for (const [key, value] of Object.entries(props)) {
     #|    if (!propFields.has(key)) return false
-    #|    if (booleanProps.has(key) ? typeof value !== "boolean" : numberProps.has(key) ? !Number.isInteger(value) : key === "range" || (key === "value" && Array.isArray(value)) ? !Array.isArray(value) || !value.every((item) => typeof item === "string") : typeof value !== "string" && !(key === "value" && Number.isInteger(value))) return false
+    #|    if (booleanProps.has(key) ? typeof value !== "boolean" : key === "scrollTop" || key === "scrollLeft" ? !Number.isFinite(value) : numberProps.has(key) ? !Number.isInteger(value) : key === "range" || (key === "value" && Array.isArray(value)) ? !Array.isArray(value) || !value.every((item) => typeof item === "string") : typeof value !== "string" && !(key === "value" && Number.isInteger(value))) return false
     #|  }
     #|  return true
     #|}
@@ -120,6 +126,50 @@ pub fn shared_protocol_bridge() -> String {
     #|  return node
     #|}
     #|
-    #|module.exports = { exactKeys, validateNode, applyPatch, createRendererStats, decodeCompactNode }
+    #|function eventPayload(event, type) {
+    #|  const payload = { detail: event.detail || {}, target: (event.target || {}).dataset || {}, currentTarget: (event.currentTarget || {}).dataset || {} }
+    #|  if (type.startsWith("touch") || type === "longpress") {
+    #|    const points = items => Array.isArray(items) ? items.map(point => ({ identifier: point.identifier, clientX: point.clientX, clientY: point.clientY, pageX: point.pageX, pageY: point.pageY })) : []
+    #|    payload.touches = points(event.touches); payload.changedTouches = points(event.changedTouches); payload.timeStamp = event.timeStamp
+    #|  }
+    #|  return payload
+    #|}
+    #|function touchIdentity(payload) { const ids = name => (payload[name] || []).map(point => point.identifier).sort((a, b) => a - b).join(","); return `${ids("touches")}|${ids("changedTouches")}` }
+    #|function validMeasurementPayload(payload) {
+    #|  return exactKeys(payload, ["ids"]) && Array.isArray(payload.ids) && payload.ids.length <= 128 && payload.ids.every(id => typeof id === "string" && /^[A-Za-z0-9_-]+$/.test(id)) && new Set(payload.ids).size === payload.ids.length
+    #|}
+    #|function measurementNodes(results, ids) {
+    #|  if (!Array.isArray(results) || results.length !== ids.length) return { error: "invalid measurement result count" }
+    #|  const nodes = []
+    #|  for (let index = 0; index < results.length; index++) {
+    #|    const rect = results[index]
+    #|    if (rect == null) { nodes.push(null); continue }
+    #|    if (rect.id !== ids[index] || ["left", "top", "right", "bottom", "width", "height"].some(key => !Number.isFinite(rect[key])) || rect.width < 0 || rect.height < 0) return { error: "invalid measurement rectangle" }
+    #|    nodes.push({ id: rect.id, left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height })
+    #|  }
+    #|  return { nodes }
+    #|}
+    #|const eventDispatchers = {
+    #|  __mmDispatchTap(event) { this._dk(event, "minimoonTap", "tap") },
+    #|  __mmDispatchInput(event) { this._dk(event, "minimoonInput", "input") },
+    #|  __mmDispatchChange(event) { this._dk(event, "minimoonChange", "change") },
+    #|  __mmDispatchConfirm(event) { this._dk(event, "minimoonConfirm", "confirm") },
+    #|  __mmDispatchFocus(event) { this._dk(event, "minimoonFocus", "focus") },
+    #|  __mmDispatchBlur(event) { this._dk(event, "minimoonBlur", "blur") },
+    #|  __mmDispatchScroll(event) { this._dk(event, "minimoonScroll", "scroll") },
+    #|  __mmDispatchUpper(event) { this._dk(event, "minimoonUpper", "upper") },
+    #|  __mmDispatchLower(event) { this._dk(event, "minimoonLower", "lower") },
+    #|  __mmDispatchSubmit(event) { this._dk(event, "minimoonSubmit", "submit") },
+    #|  __mmDispatchReset(event) { this._dk(event, "minimoonReset", "reset") },
+    #|  __mmDispatchChanging(event) { this._dk(event, "minimoonChanging", "changing") },
+    #|  __mmDispatchLoad(event) { this._dk(event, "minimoonLoad", "load") },
+    #|  __mmDispatchError(event) { this._dk(event, "minimoonError", "error") },
+    #|  __mmDispatchLongPress(event) { this._dk(event, "minimoonLongpress", "longpress") },
+    #|  __mmDispatchTouchStart(event) { this._dk(event, "minimoonTouchstart", "touchstart") },
+    #|  __mmDispatchTouchMove(event) { this._dk(event, "minimoonTouchmove", "touchmove") },
+    #|  __mmDispatchTouchEnd(event) { this._dk(event, "minimoonTouchend", "touchend") },
+    #|  __mmDispatchTouchCancel(event) { this._dk(event, "minimoonTouchcancel", "touchcancel") },
+    #|}
+    #|module.exports = { exactKeys, validateNode, applyPatch, createRendererStats, decodeCompactNode, eventDispatchers, eventPayload, touchIdentity, validMeasurementPayload, measurementNodes }
   )
 }

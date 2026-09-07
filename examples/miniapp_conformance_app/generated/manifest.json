@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "adapter": "page_program",
   "runtimeApiVersion": 10,
-  "rendererProtocolVersion": 7,
+  "rendererProtocolVersion": 8,
   "rendererUpdateStrategy": "automatic-diff",
   "hostRegistration": "page-definition-api",
   "runtimeLayout": "application",
@@ -14,7 +14,7 @@
     "minimoon.initial.js"
   ],
   "runtimeBytes": {
-    "application": 327354
+    "application": 334158
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -58,12 +58,13 @@
     "hash": "fnv1a64-v1:d121caf619ed4f30",
     "bytes": 2293
   },
+  "resources": [],
   "name": "miniapp_conformance_app",
   "pages": [
     {
-      "schemaVersion": 7,
+      "schemaVersion": 8,
       "runtimeApiVersion": 10,
-      "rendererProtocolVersion": 7,
+      "rendererProtocolVersion": 8,
       "id": "showcase",
       "route": "pages/showcase/showcase",
       "title": "Minimoon Studio",
@@ -685,9 +686,9 @@
       "inputs": []
     },
     {
-      "schemaVersion": 7,
+      "schemaVersion": 8,
       "runtimeApiVersion": 10,
-      "rendererProtocolVersion": 7,
+      "rendererProtocolVersion": 8,
       "id": "home",
       "route": "pages/home/home",
       "title": "Minimoon Home",
@@ -1556,9 +1557,9 @@
       "inputs": []
     },
     {
-      "schemaVersion": 7,
+      "schemaVersion": 8,
       "runtimeApiVersion": 10,
-      "rendererProtocolVersion": 7,
+      "rendererProtocolVersion": 8,
       "id": "lab",
       "route": "pages/lab/lab",
       "title": "Runtime Lab",
@@ -2958,6 +2959,7 @@
                 "text": "",
                 "props": {
                   "current": 0,
+                  "vertical": false,
                   "autoplay": false,
                   "circular": true,
                   "interval": 5000,
@@ -3854,9 +3856,9 @@
       "inputs": []
     },
     {
-      "schemaVersion": 7,
+      "schemaVersion": 8,
       "runtimeApiVersion": 10,
-      "rendererProtocolVersion": 7,
+      "rendererProtocolVersion": 8,
       "id": "details",
       "route": "pages/details/details",
       "title": "Lifecycle Details",

@@ -12,17 +12,17 @@ lampclaw/minimoon public API
     -> runtime_core
        resident state, effects, command queue
     -> tooling_miniapp
-       App Contract v7 compilation and artifact writing
+       App Contract v8 compilation and artifact writing
     -> internal_host_js
        ordered scheduler, render acknowledgement, wx.* facade
     -> generated CommonJS + shared WXML/WXSS + page stubs
     -> Skyline / glass-easel / setData / wx.*
 ```
 
-Applications import only `lampclaw/minimoon`. Every application-facing type is
-owned by that root package; generated interfaces expose no implementation
-package names. The renderer, runtime, graph, host templates, and tooling remain
-internal packages.
+Applications import `lampclaw/minimoon` and may opt into public optional
+packages or the independent `lampclaw/minimoon_ui` module. Core authoring types
+are root-owned; public interfaces expose no implementation package names. The
+renderer, runtime, graph, host templates, and tooling remain internal packages.
 
 ## Graph and local ownership
 
@@ -165,9 +165,10 @@ checklist. The sorted, length-framed app-relative paths make checkout location
 irrelevant while ensuring WXSS, shared WXML, future assets, and manual acceptance
 scope cannot drift behind a still-valid evidence record.
 
-App Contract v7 and renderer protocol v7 add native focus/blur/confirm events
-and finite dialog/menu semantic props to the normalized tree and protocol
-validator. Runtime ABI v10 adds the page-owned local-effect wake/drain contract
+App Contract v8 and renderer protocol v8 add native form/image/slider/progress
+controls, precise touch payloads, and build-resource descriptors to the v7
+focus/blur/confirm and dialog/menu baseline. Runtime ABI v10 retains the
+page-owned local-effect wake/drain contract
 independently of the source-level authoring API. `minimal-v1` retains its exact
 bytes;
 `minimal-v2` extends it with bounded overlay and menu CSS. A stylesheet is
@@ -196,8 +197,28 @@ bytes are never restored merely to retain evidence.
 `internal_any` contains the small private erased-value primitive adapted from
 Rabbita main at `b6cbf52`.
 [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) records both original
-provenance points. No separate MiniApp facade package owns public types in
-0.1.0. The [Rabbita/RUI audit](reference/rabbita_and_rui_audit.md) compares the
+provenance points. No separate MiniApp facade package owns public core types.
+The [Rabbita/RUI audit](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) compares the
 current implementation against Rabbita 0.15.6 and RUI 0.1.1 without changing
-those source pins. RUI-inspired component additions are scheduled for the
-next iteration in the [roadmap](roadmap.md).
+those source pins. The independent UI module adapts the pinned RUI capabilities
+with its own MIT notices and
+[native migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md).
+
+## Independent native UI
+
+Core 0.2 owns finite native controls, precise touch payloads, layout measurement,
+and generic build resources. `lampclaw/minimoon_ui` owns component behavior,
+Vega theme recipes, icons and its independent six-page verification application.
+Core never imports UI; UI imports only public core packages, not renderer or
+graph internals. The original optional components remain source-compatible.
+
+`layer` is a typed declarative marker removed by `layer_root` before normal
+materialization. Lifted surfaces are keyed siblings after the page body; event
+bindings and reactive content remain owned by their original Val scopes.
+Removed branches leave no global registry entries. `UiContext` owns page
+visibility and one toast queue; UI code does not author JavaScript or setData.
+
+App Contract v8 resources name a dependency provider and a canonical feature list.
+A native build probe returns a typed WXSS/static-asset bundle. Validation precedes
+destructive output generation. Resource paths, contents and descriptors join the
+artifact fingerprint; CSS and SVG strings stay out of the application JS graph.

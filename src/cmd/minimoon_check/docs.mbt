@@ -16,6 +16,13 @@ async fn docs_suite(root : String) -> Unit {
     create_mode=CreateOrTruncate,
     permission=0o600,
   )
+  @fs.mkdir(join(bad_links, "ui"), permission=0o700)
+  @fs.write_file(
+    join(bad_links, "ui/README.mbt.md"),
+    "[missing UI guide](docs/missing.md)\n",
+    create_mode=CreateOrTruncate,
+    permission=0o600,
+  )
   let args = [
     script,
     root,
@@ -54,7 +61,10 @@ async fn docs_suite(root : String) -> Unit {
   }
   guard bad_code != 0 &&
     (bad_stdout.text() + bad_stderr.text()).contains(
-      "broken local Markdown link",
+      "README.md: broken local Markdown link",
+    ) &&
+    (bad_stdout.text() + bad_stderr.text()).contains(
+      "ui/README.mbt.md: broken local Markdown link",
     ) else {
     @fs.rmdir(temp, recursive=true)
     abort("documentation check did not reject its broken-link fixture")
@@ -75,6 +85,16 @@ async fn docs_suite(root : String) -> Unit {
     ) else {
     @fs.rmdir(temp, recursive=true)
     abort("documentation validator negative cases did not pass")
+  }
+  for fixture in ["examples/miniapp_conformance_app", "ui/examples/showcase"] {
+    let report = read_json(root, fixture + "/generated/verify_report.json")
+    let actual = @verify.artifact_fingerprint(join(root, fixture))
+    guard json_string(report, "artifactFingerprint") == actual else {
+      @fs.rmdir(temp, recursive=true)
+      abort(
+        fixture + " documentation report does not match current artifact bytes",
+      )
+    }
   }
   println(
     "\n==> Documentation links, bilingual sources, diagrams, facts, and fixture reports",

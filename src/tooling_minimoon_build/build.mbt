@@ -199,12 +199,17 @@ pub async fn generate_tailwind(loaded : Json) -> Unit {
       "weapp-tailwindcss conversion",
     )
     let theme = string(loaded, "componentTheme")
-    if theme != "" {
-      let theme_css = @miniapp_tooling.component_theme_css(theme)
+    let resources_css = string(loaded, "resourcesWxss")
+    if theme != "" || resources_css != "" {
+      let theme_css = if theme == "" {
+        ""
+      } else {
+        @miniapp_tooling.component_theme_css(theme)
+      }
       let source_wxss = string(loaded, "sourceWxssAbs")
       let dist_wxss = join(string(loaded, "distDirAbs"), "app.wxss")
       let generated_css = @fs.read_file(source_wxss).text()
-      let themed_css = theme_css + generated_css
+      let themed_css = resources_css + theme_css + generated_css
       write(source_wxss, themed_css)
       write(dist_wxss, themed_css)
     }

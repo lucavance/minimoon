@@ -43,137 +43,6 @@ fn[Msg] render_event_validation_error(
 }
 
 ///|
-fn common_tree_attr(name : String) -> Bool {
-  name == "id" ||
-  name == "class" ||
-  name == "style" ||
-  name == "data-minimoon-section" ||
-  name == "aria-role" ||
-  name == "aria-label" ||
-  name == "aria-expanded" ||
-  name == "aria-selected" ||
-  name == "aria-disabled" ||
-  name == "aria-hidden" ||
-  name == "aria-checked" ||
-  name == "aria-modal" ||
-  name == "aria-controls" ||
-  name == "aria-labelledby" ||
-  name == "aria-describedby" ||
-  name == "aria-orientation" ||
-  name == "aria-haspopup"
-}
-
-///|
-fn supported_tree_attr(tag : String, name : String) -> Bool {
-  if common_tree_attr(name) || name == "on_click" {
-    return true
-  }
-  match tag {
-    "button" => name == "disabled"
-    "input" =>
-      name == "value" ||
-      name == "placeholder" ||
-      name == "disabled" ||
-      name == "focus" ||
-      name == "on_input" ||
-      name == "on_confirm" ||
-      name == "on_focus" ||
-      name == "on_blur"
-    "img" | "image" => name == "src" || name == "alt" || name == "aria-label"
-    "scroll-view" =>
-      name == "scroll-x" ||
-      name == "scroll-y" ||
-      name == "scroll-top" ||
-      name == "scroll-left" ||
-      name == "scroll-into-view" ||
-      name == "upper-threshold" ||
-      name == "lower-threshold" ||
-      name == "on_scroll" ||
-      name == "on_scrolltoupper" ||
-      name == "on_scrolltolower"
-    "textarea" =>
-      name == "value" ||
-      name == "placeholder" ||
-      name == "maxlength" ||
-      name == "disabled" ||
-      name == "focus" ||
-      name == "on_input" ||
-      name == "on_confirm" ||
-      name == "on_focus" ||
-      name == "on_blur"
-    "switch" =>
-      name == "checked" ||
-      name == "disabled" ||
-      name == "color" ||
-      name == "on_change"
-    "checkbox-group" | "radio-group" => name == "on_change"
-    "checkbox" | "radio" =>
-      name == "value" ||
-      name == "checked" ||
-      name == "disabled" ||
-      name == "color"
-    "picker" =>
-      name == "mode" ||
-      name == "value" ||
-      name == "value-index" ||
-      name == "range-json" ||
-      name == "disabled" ||
-      name == "on_change"
-    "swiper" =>
-      name == "current" ||
-      name == "autoplay" ||
-      name == "circular" ||
-      name == "interval" ||
-      name == "duration" ||
-      name == "on_change"
-    "swiper-item" => name == "item-id"
-    "navigator" => name == "url" || name == "open-type"
-    _ => false
-  }
-}
-
-///|
-fn event_attr_kind(name : String) -> PageEventKind? {
-  match name {
-    "on_click" => Some(Tap)
-    "on_input" => Some(Input)
-    "on_change" => Some(Change)
-    "on_confirm" => Some(page_event_kind("confirm"))
-    "on_focus" => Some(page_event_kind("focus"))
-    "on_blur" => Some(page_event_kind("blur"))
-    "on_scroll" => Some(page_event_kind("scroll"))
-    "on_scrolltoupper" => Some(page_event_kind("scrolltoupper"))
-    "on_scrolltolower" => Some(page_event_kind("scrolltolower"))
-    _ => None
-  }
-}
-
-///|
-fn supported_tree_tag(tag : String) -> Bool {
-  tag == "div" ||
-  tag == "view" ||
-  tag == "h1" ||
-  tag == "span" ||
-  tag == "p" ||
-  tag == "text" ||
-  tag == "img" ||
-  tag == "image" ||
-  tag == "button" ||
-  tag == "input" ||
-  tag == "scroll-view" ||
-  tag == "textarea" ||
-  tag == "switch" ||
-  tag == "checkbox-group" ||
-  tag == "checkbox" ||
-  tag == "radio-group" ||
-  tag == "radio" ||
-  tag == "picker" ||
-  tag == "swiper" ||
-  tag == "swiper-item" ||
-  tag == "navigator"
-}
-
-///|
 fn[Msg] checked_tree_props(
   tag : String,
   attrs : Array[@ui.Attr],
@@ -210,12 +79,21 @@ fn[Msg] checked_tree_props(
       | "checked"
       | "autoplay"
       | "circular"
+      | "vertical"
       | "aria-expanded"
       | "aria-selected"
       | "aria-disabled"
       | "aria-hidden"
       | "aria-checked"
-      | "aria-modal" =>
+      | "aria-modal"
+      | "aria-required"
+      | "aria-invalid"
+      | "aria-busy"
+      | "password"
+      | "catch-move"
+      | "show-value"
+      | "show-info"
+      | "active" =>
         output.props[prop_name(attr.name)] = Json::boolean(value == "true")
       "scroll-top"
       | "scroll-left"
@@ -225,7 +103,18 @@ fn[Msg] checked_tree_props(
       | "value-index"
       | "current"
       | "interval"
-      | "duration" => {
+      | "duration"
+      | "selection-start"
+      | "selection-end"
+      | "min"
+      | "max"
+      | "step"
+      | "block-size"
+      | "percent"
+      | "stroke-width"
+      | "aria-valuemin"
+      | "aria-valuemax"
+      | "aria-valuenow" => {
         let number = match signed_decimal(value) {
           Some(number) => number
           None => return Err("invalid integer MiniApp attribute: " + attr.name)
@@ -235,6 +124,14 @@ fn[Msg] checked_tree_props(
         } else {
           prop_name(attr.name)
         }] = Json::number(number.to_double(), repr=number.to_string())
+      }
+      "scroll-top-px" | "scroll-left-px" => {
+        let parsed : Json? = Some(@json.parse(value)) catch { _ => None }
+        match parsed {
+          Some(Number(number, ..)) if number >= 0.0 && number - number == 0.0 =>
+            output.props[prop_name(attr.name)] = Json::number(number)
+          _ => return Err("scroll position must be finite and nonnegative")
+        }
       }
       "range-json" => {
         let range : Json? = Some(@json.parse(value)) catch { _ => None }
@@ -408,6 +305,10 @@ fn miniapp_tree_kind(tag : String) -> String {
     "swiper" => "swiper"
     "swiper-item" => "swiper-item"
     "navigator" => "navigator"
+    "label" => "label"
+    "form" => "form"
+    "slider" => "slider"
+    "progress" => "progress"
     tag => abort("unsupported MiniApp render tag: " + tag)
   }
 }

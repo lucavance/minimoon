@@ -167,9 +167,9 @@ test "typed page program owns route, dynamic tree, view, and capabilities" {
   let contract = program.contract_json()
   match contract {
     Object(fields) => {
-      assert_eq(fields["schemaVersion"], Json::number(7.0, repr="7"))
+      assert_eq(fields["schemaVersion"], Json::number(8.0, repr="8"))
       assert_eq(fields["runtimeApiVersion"], Json::number(10.0, repr="10"))
-      assert_eq(fields["rendererProtocolVersion"], Json::number(7.0, repr="7"))
+      assert_eq(fields["rendererProtocolVersion"], Json::number(8.0, repr="8"))
       assert_eq(fields["route"], Json::string("pages/profile/profile"))
       assert_eq(fields.contains("events"), false)
     }
@@ -203,26 +203,22 @@ test "generated WXML keeps textarea and picker model bindings host-safe" {
   let wxml = dynamic_templates_wxml()
   assert_eq(
     wxml.contains(
-      "<textarea wx:elif=\"{{node.kind === 'textarea'}}\" id=\"{{node.props.id}}\"",
+      "<textarea wx:elif=\"{{node.kind === 'textarea'}}\" id=\"{{p.id}}\"",
     ),
     true,
   )
-  assert_eq(wxml.contains("model:value=\"{{node.props.value}}\""), true)
+  assert_eq(wxml.contains("model:value=\"{{p.value}}\""), true)
   assert_eq(wxml.contains("bind:input=\"__mmDispatchInput\""), true)
   assert_true(wxml.contains("bind:focus=\"__mmDispatchFocus\""))
   assert_true(wxml.contains("bind:blur=\"__mmDispatchBlur\""))
   assert_eq(wxml.contains("bind:change=\"__mmDispatchChange\""), true)
   assert_eq(wxml.contains("</textarea>"), true)
-  assert_true(wxml.contains("aria-role=\"{{node.props.role}}\""))
-  assert_true(wxml.contains("aria-expanded=\"{{node.props.ariaExpanded}}\""))
-  assert_true(wxml.contains("aria-checked=\"{{node.props.ariaChecked}}\""))
-  assert_true(wxml.contains("aria-modal=\"{{node.props.ariaModal}}\""))
-  assert_true(
-    wxml.contains("aria-describedby=\"{{node.props.ariaDescribedBy}}\""),
-  )
-  assert_true(
-    wxml.contains("aria-labelledby=\"{{node.props.ariaLabelledBy}}\""),
-  )
+  assert_true(wxml.contains("aria-role=\"{{p.role}}\""))
+  assert_true(wxml.contains("aria-expanded=\"{{p.ariaExpanded}}\""))
+  assert_true(wxml.contains("aria-checked=\"{{p.ariaChecked}}\""))
+  assert_true(wxml.contains("aria-modal=\"{{p.ariaModal}}\""))
+  assert_true(wxml.contains("aria-describedby=\"{{p.ariaDescribedBy}}\""))
+  assert_true(wxml.contains("aria-labelledby=\"{{p.ariaLabelledBy}}\""))
 }
 
 ///|
@@ -234,9 +230,22 @@ test "generated page WXML imports the shared recursive template" {
   assert_eq(
     wxml,
     "<import src=\"../../../minimoon.templates.wxml\" />\n" +
-    "<template is=\"minimoon_dynamic_node\" data=\"{{node: controls.tree}}\" />\n",
+    "<template is=\"minimoon_dynamic_node\" data=\"{{node: controls.tree, p: controls.tree.props, e: controls.tree.events}}\" />\n",
   )
   assert_false(wxml.contains("<template name="))
+}
+
+///|
+test "recursive WXML passes short aliases without dropping node or event bindings" {
+  let wxml = dynamic_templates_wxml()
+  let calls = wxml.split("is=\"minimoon_dynamic_node\"").length() - 1
+  assert_true(calls > 10)
+  assert_eq(wxml.split("p: child.props, e: child.events").length() - 1, calls)
+  assert_true(wxml.contains("{{node.children}}"))
+  assert_true(wxml.contains("{{p.ariaValueNow}}"))
+  assert_true(wxml.contains("{{e.touchcancel}}"))
+  assert_true(wxml.contains("catchtouchmove=\"__mmDispatchTouchMove\""))
+  assert_true(wxml.length() < 20000)
 }
 
 ///|

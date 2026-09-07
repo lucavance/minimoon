@@ -18,7 +18,7 @@ included in this repository as `LICENSE`.
 
 ## Review-only references
 
-The [Rabbita/RUI audit](docs/reference/rabbita_and_rui_audit.md) compares the
+The [Rabbita/RUI audit](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) compares the
 current implementation with Rabbita 0.15.6 and RUI 0.1.1 at commit
 `b1291945fd0201a0b5b39513b88585d6122db7bc`. These are comparison points, not
 new source attribution pins or package dependencies.

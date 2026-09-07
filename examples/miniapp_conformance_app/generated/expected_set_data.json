@@ -2841,6 +2841,7 @@
             "text": "",
             "props": {
               "current": 0,
+              "vertical": false,
               "autoplay": false,
               "circular": true,
               "interval": 5000,

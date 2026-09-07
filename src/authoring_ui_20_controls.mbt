@@ -85,6 +85,12 @@ fn detail_textarea_blur(
 pub fn input(
   value~ : String,
   on_input~ : Emit[String],
+  input_type? : InputType,
+  maxlength? : Int,
+  password? : Bool,
+  selection_start? : Int,
+  selection_end? : Int,
+  name? : String = "",
   event_key? : String = "",
   disabled? : Bool = false,
   focus? : Bool = false,
@@ -101,6 +107,26 @@ pub fn input(
   placeholder? : String = "",
   semantics? : Semantics,
 ) -> Node {
+  if maxlength is Some(limit) {
+    guard limit >= -1 else {
+      abort("input maxlength must be -1 or nonnegative")
+    }
+  }
+  for selection in [selection_start, selection_end] {
+    if selection is Some(position) {
+      guard position >= -1 else {
+        abort("input selection positions must be -1 or nonnegative")
+      }
+    }
+  }
+  if selection_start is Some(start) &&
+    selection_end is Some(end) &&
+    start >= 0 &&
+    end >= 0 {
+    guard start <= end else {
+      abort("input selection start must not exceed its end")
+    }
+  }
   let binding = event_binding(
     @renderer.page_event_kind("input"),
     payload => {
@@ -141,6 +167,22 @@ pub fn input(
   }
   let attrs = raw_element_attrs(style, data_section, semantics?)
   attrs.push(@ui.value_attr(value))
+  if input_type is Some(value) {
+    raw_string_attr(attrs, "type", value.host_name())
+  }
+  if maxlength is Some(value) {
+    raw_int_attr(attrs, "maxlength", value)
+  }
+  if password is Some(value) {
+    raw_bool_attr(attrs, "password", value)
+  }
+  if selection_start is Some(value) {
+    raw_int_attr(attrs, "selection-start", value)
+  }
+  if selection_end is Some(value) {
+    raw_int_attr(attrs, "selection-end", value)
+  }
+  raw_string_attr(attrs, "name", name)
   raw_bool_attr(attrs, "disabled", disabled)
   raw_bool_attr(attrs, "focus", focus)
   raw_event_attr(attrs, "on_input", "input", Some(binding))
@@ -153,6 +195,7 @@ pub fn input(
 
 ///|
 pub fn switch(
+  name? : String = "",
   checked~ : Bool,
   on_change~ : Emit[Bool],
   event_key? : String = "",
@@ -175,6 +218,7 @@ pub fn switch(
     explicit_key=event_key,
   )
   let attrs = raw_element_attrs(style, data_section, semantics?)
+  raw_string_attr(attrs, "name", name)
   raw_bool_attr(attrs, "checked", checked)
   raw_bool_attr(attrs, "disabled", disabled)
   raw_string_attr(attrs, "color", color)
@@ -184,6 +228,7 @@ pub fn switch(
 
 ///|
 pub fn[C : IsChildren] checkbox_group(
+  name? : String = "",
   on_change~ : Emit[Array[String]],
   event_key? : String = "",
   id? : String = "",
@@ -206,6 +251,7 @@ pub fn[C : IsChildren] checkbox_group(
   let bindings = child_bindings(children)
   append_direct_binding(bindings, binding)
   let attrs = raw_element_attrs(style, data_section)
+  raw_string_attr(attrs, "name", name)
   raw_event_attr(attrs, "on_change", "change", Some(binding))
   wrap_node(
     @ui.element(
@@ -244,6 +290,7 @@ pub fn[C : IsChildren] checkbox(
 
 ///|
 pub fn[C : IsChildren] radio_group(
+  name? : String = "",
   on_change~ : Emit[String],
   event_key? : String = "",
   id? : String = "",
@@ -266,6 +313,7 @@ pub fn[C : IsChildren] radio_group(
   let bindings = child_bindings(children)
   append_direct_binding(bindings, binding)
   let attrs = raw_element_attrs(style, data_section)
+  raw_string_attr(attrs, "name", name)
   raw_event_attr(attrs, "on_change", "change", Some(binding))
   wrap_node(
     @ui.element(
@@ -397,6 +445,8 @@ pub fn[C : IsChildren] scroll_view(
   scroll_y? : Bool = false,
   scroll_top? : Int = 0,
   scroll_left? : Int = 0,
+  scroll_top_px? : Double,
+  scroll_left_px? : Double,
   scroll_into_view? : String = "",
   upper_threshold? : Int = 50,
   lower_threshold? : Int = 50,
@@ -449,8 +499,24 @@ pub fn[C : IsChildren] scroll_view(
   let attrs = raw_element_attrs(style, data_section)
   raw_bool_attr(attrs, "scroll-x", scroll_x)
   raw_bool_attr(attrs, "scroll-y", scroll_y)
-  raw_int_attr(attrs, "scroll-top", scroll_top)
-  raw_int_attr(attrs, "scroll-left", scroll_left)
+  match scroll_top_px {
+    Some(value) => {
+      guard finite_number(value) && value >= 0.0 else {
+        abort("scroll_top_px must be finite and nonnegative")
+      }
+      attrs.push(@ui.attr("scroll-top-px", value.to_string()))
+    }
+    None => raw_int_attr(attrs, "scroll-top", scroll_top)
+  }
+  match scroll_left_px {
+    Some(value) => {
+      guard finite_number(value) && value >= 0.0 else {
+        abort("scroll_left_px must be finite and nonnegative")
+      }
+      attrs.push(@ui.attr("scroll-left-px", value.to_string()))
+    }
+    None => raw_int_attr(attrs, "scroll-left", scroll_left)
+  }
   raw_string_attr(attrs, "scroll-into-view", scroll_into_view)
   raw_int_attr(attrs, "upper-threshold", upper_threshold)
   raw_int_attr(attrs, "lower-threshold", lower_threshold)
@@ -471,6 +537,7 @@ pub fn[C : IsChildren] scroll_view(
 
 ///|
 pub fn textarea(
+  name? : String = "",
   value~ : String,
   on_input~ : Emit[String],
   input_key? : String = "",
@@ -534,6 +601,7 @@ pub fn textarea(
     }
   }
   let attrs = raw_element_attrs(style, data_section, semantics?)
+  raw_string_attr(attrs, "name", name)
   attrs.push(@ui.value_attr(value))
   raw_string_attr(attrs, "placeholder", placeholder)
   raw_int_attr(attrs, "maxlength", maxlength)
@@ -548,6 +616,7 @@ pub fn textarea(
 
 ///|
 pub fn[C : IsChildren] picker_selector(
+  name? : String = "",
   options~ : Array[String],
   selected~ : Int,
   on_change~ : Emit[Int],
@@ -572,6 +641,7 @@ pub fn[C : IsChildren] picker_selector(
   let bindings = child_bindings(children)
   append_direct_binding(bindings, binding)
   let attrs = raw_element_attrs(style, "")
+  raw_string_attr(attrs, "name", name)
   attrs.push(@ui.attr("mode", "selector"))
   attrs.push(
     @ui.attr(
@@ -590,6 +660,7 @@ pub fn[C : IsChildren] picker_selector(
 
 ///|
 pub fn[C : IsChildren] picker_date(
+  name? : String = "",
   value~ : String,
   on_change~ : Emit[String],
   disabled? : Bool = false,
@@ -613,6 +684,7 @@ pub fn[C : IsChildren] picker_date(
   let bindings = child_bindings(children)
   append_direct_binding(bindings, binding)
   let attrs = raw_element_attrs(style, "")
+  raw_string_attr(attrs, "name", name)
   attrs.push(@ui.attr("mode", "date"))
   attrs.push(@ui.attr("value", value))
   raw_bool_attr(attrs, "disabled", disabled)
@@ -625,6 +697,7 @@ pub fn[C : IsChildren] picker_date(
 
 ///|
 pub fn[C : IsChildren] picker_time(
+  name? : String = "",
   value~ : String,
   on_change~ : Emit[String],
   disabled? : Bool = false,
@@ -648,6 +721,7 @@ pub fn[C : IsChildren] picker_time(
   let bindings = child_bindings(children)
   append_direct_binding(bindings, binding)
   let attrs = raw_element_attrs(style, "")
+  raw_string_attr(attrs, "name", name)
   attrs.push(@ui.attr("mode", "time"))
   attrs.push(@ui.attr("value", value))
   raw_bool_attr(attrs, "disabled", disabled)
@@ -660,6 +734,7 @@ pub fn[C : IsChildren] picker_time(
 
 ///|
 pub fn[C : IsChildren] picker_region(
+  name? : String = "",
   value~ : Array[String],
   on_change~ : Emit[Array[String]],
   disabled? : Bool = false,
@@ -683,6 +758,7 @@ pub fn[C : IsChildren] picker_region(
   let bindings = child_bindings(children)
   append_direct_binding(bindings, binding)
   let attrs = raw_element_attrs(style, "")
+  raw_string_attr(attrs, "name", name)
   attrs.push(@ui.attr("mode", "region"))
   attrs.push(
     @ui.attr(
@@ -701,6 +777,7 @@ pub fn[C : IsChildren] picker_region(
 ///|
 pub fn[C : IsChildren] swiper(
   current? : Int = 0,
+  vertical? : Bool = false,
   autoplay? : Bool = false,
   circular? : Bool = false,
   interval? : Int = 5000,
@@ -732,6 +809,7 @@ pub fn[C : IsChildren] swiper(
   }
   let attrs = raw_element_attrs(style, "")
   raw_int_attr(attrs, "current", current)
+  raw_bool_attr(attrs, "vertical", vertical)
   raw_bool_attr(attrs, "autoplay", autoplay)
   raw_bool_attr(attrs, "circular", circular)
   raw_int_attr(attrs, "interval", interval)

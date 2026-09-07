@@ -1,12 +1,13 @@
 ///|
 pub fn shared_host_bridge() -> String {
   let source =
-    #|const { exactKeys, validateNode, applyPatch, createRendererStats } = require("./minimoon.protocol.js")
+    #|const { exactKeys, validateNode, applyPatch, createRendererStats, eventDispatchers, eventPayload, touchIdentity, validMeasurementPayload, measurementNodes } = require("./minimoon.protocol.js")
     #|function registerMinimoonPage(runtime, minimoonPageId, minimoonInitialTree, minimoonCapabilityList) {
     #|if (runtime.minimoon_runtime_version() !== __MM_RUNTIME_VERSION__ || runtime.minimoon_runtime_state_abi_version() !== __MM_RUNTIME_VERSION__) throw new Error("Minimoon runtime ABI v__MM_RUNTIME_VERSION__ required")
     #|const minimoonCapabilities = new Set(minimoonCapabilityList)
     #|
     #|Page({
+    #|  ...eventDispatchers,
     #|  data: { [minimoonPageId]: { tree: minimoonInitialTree, commit: 0 } },
     #|  onLoad(options) {
     #|    this._st = createRendererStats()
@@ -60,18 +61,8 @@ pub fn shared_host_bridge() -> String {
     #|    event = event || {}
     #|    const currentTarget = event.currentTarget || {}
     #|    const key = (currentTarget.dataset || {})[field] || ""
-    #|    const payload = { detail: event.detail || {}, target: (event.target || {}).dataset || {}, currentTarget: currentTarget.dataset || {} }
-    #|    if (key) this._ed(type, key, payload)
+    #|    if (key) this._ed(type, key, eventPayload(event, type))
     #|  },
-    #|  __mmDispatchTap(event) { this._dk(event, "minimoonTap", "tap") },
-    #|  __mmDispatchInput(event) { this._dk(event, "minimoonInput", "input") },
-    #|  __mmDispatchChange(event) { this._dk(event, "minimoonChange", "change") },
-    #|  __mmDispatchConfirm(event) { this._dk(event, "minimoonConfirm", "confirm") },
-    #|  __mmDispatchFocus(event) { this._dk(event, "minimoonFocus", "focus") },
-    #|  __mmDispatchBlur(event) { this._dk(event, "minimoonBlur", "blur") },
-    #|  __mmDispatchScroll(event) { this._dk(event, "minimoonScroll", "scroll") },
-    #|  __mmDispatchUpper(event) { this._dk(event, "minimoonUpper", "upper") },
-    #|  __mmDispatchLower(event) { this._dk(event, "minimoonLower", "lower") },
     #|  _lc(hook, payload) { this._en({ kind: "lifecycle", hook, payload: payload || {} }) },
     #|  _ed(type, key, payload) {
     #|    if (this._cl || !this.__mmInstanceId) return
@@ -80,6 +71,7 @@ pub fn shared_host_bridge() -> String {
     #|    if (tail && tail.kind === "dispatch") {
     #|      const last = tail.events.length ? tail.events[tail.events.length - 1] : null
     #|      if (type === "scroll" && last && last.type === "scroll" && last.key === key) { tail.events[tail.events.length - 1] = { type, key, payload }; this._st.coalescedEvents += 1; return }
+    #|      if (last && last.type === type && last.key === key && (type === "changing" || (type === "touchmove" && touchIdentity(last.payload) === touchIdentity(payload)))) { tail.events[tail.events.length - 1] = { type, key, payload }; this._st.coalescedEvents += 1; return }
     #|      if (tail.events.length >= 2048) { this._fc("event batch exceeded the 2048 entry limit"); return }
     #|      tail.events.push({ type, key, payload })
     #|      this._ob(tail)
@@ -131,7 +123,7 @@ pub fn shared_host_bridge() -> String {
     #|      else if (entry.kind === "mount") raw = runtime.minimoon_runtime_mount(this.__mmInstanceId)
     #|      else if (entry.kind === "subscription") raw = runtime.minimoon_runtime_subscription(this.__mmInstanceId, entry.key, "{}")
     #|      else if (entry.kind === "drain") { this._st.asyncDrains += 1; raw = runtime.minimoon_runtime_lifecycle(this.__mmInstanceId, "$minimoon:drain", JSON.stringify({ through: entry.through })) }
-    #|      else if (entry.kind === "effect") raw = runtime.minimoon_runtime_resolve_effect(this.__mmInstanceId, entry.requestId, entry.phase, JSON.stringify(entry.payload || {}))
+    #|      else if (entry.kind === "effect") { const stale = entry.measureRevision != null && entry.measureRevision !== this._rv; raw = runtime.minimoon_runtime_resolve_effect(this.__mmInstanceId, entry.requestId, stale ? "failure" : entry.phase, JSON.stringify(stale ? { error: "measurement superseded by a newer render" } : (entry.payload || {}))) }
     #|      else throw new Error(`unknown scheduler entry: ${entry.kind}`)
     #|    } catch (error) { this._fc("runtime entry failed", error); return }
     #|    this._hr(raw, generation)
@@ -323,7 +315,7 @@ pub fn shared_host_bridge() -> String {
     #|  _iv(command) {
     #|    const generation = this._gn
     #|    const instanceId = this.__mmInstanceId
-    #|    const finish = (phase, payload) => { if (generation !== this._gn || instanceId !== this.__mmInstanceId || !instanceId || this._cl || !this._ef.has(command.request_id)) return; this._ef.delete(command.request_id); this._en({ kind: "effect", requestId: command.request_id, phase, payload: payload || {} }) }
+    #|    const finish = (phase, payload, measureRevision) => { if (generation !== this._gn || instanceId !== this.__mmInstanceId || !instanceId || this._cl || !this._ef.has(command.request_id)) return; this._ef.delete(command.request_id); this._en({ kind: "effect", requestId: command.request_id, phase, payload: payload || {}, measureRevision }) }
     #|    this._ef.set(command.request_id, () => {})
     #|    if (command.capability === "minimoon.timeout") {
     #|      const timeoutPayload = command.payload
@@ -331,6 +323,24 @@ pub fn shared_host_bridge() -> String {
     #|      const handle = setTimeout(() => finish("success", { value: "" }), timeoutPayload.ms); this._ef.set(command.request_id, () => clearTimeout(handle)); return
     #|    }
     #|    if (!minimoonCapabilities.has(command.capability)) { finish("failure", { error: `undeclared capability: ${command.capability}` }); return }
+    #|    if (command.capability === "minimoon.measureNodes") {
+    #|      const payload = command.payload
+    #|      if (!validMeasurementPayload(payload)) { finish("invalid_payload", { error: "invalid measurement IDs" }); return }
+    #|      const revision = this._rv
+    #|      if (payload.ids.length === 0) { finish("success", { nodes: [] }, revision); return }
+    #|      if (typeof this.createSelectorQuery !== "function") { finish("unavailable", { error: "page selector query unavailable" }); return }
+    #|      try {
+    #|        const query = this.createSelectorQuery()
+    #|        for (const id of payload.ids) query.select(`#${id}`).boundingClientRect()
+    #|        query.exec(results => {
+    #|          if (revision !== this._rv) { finish("failure", { error: "measurement superseded by a newer render" }); return }
+    #|          const result = measurementNodes(results, payload.ids)
+    #|          if (result.error) { finish("invalid_payload", result); return }
+    #|          finish("success", result, revision)
+    #|        })
+    #|      } catch (error) { finish("failure", { error: String(error.message || error) }) }
+    #|      return
+    #|    }
     #|    const method = command.capability.startsWith("wx.") ? command.capability.slice(3) : ""
     #|    if (!method || typeof wx === "undefined" || typeof wx[method] !== "function") { finish("unavailable", { error: `${command.capability} unavailable` }); return }
     #|    const options = { ...(command.payload || {}) }

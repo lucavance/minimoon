@@ -1,4 +1,4 @@
-# Minimoon 0.1.0 product baseline
+# Minimoon 0.2 product baseline
 
 The baseline is a complete MoonBit-to-Skyline path through the root
 `lampclaw/minimoon` API. Business logic uses Elm-style state machines, UI and
@@ -43,6 +43,10 @@ remains an internal implementation detail.
 - lossless discrete-event scheduling plus bounded latest-only adjacent scroll
   coalescing and acknowledgement/queue metrics
 - archive-validated registry initialization and Linux candidate handoff
+- typed touch, image, form, label, slider and progress controls, native node
+  measurement, and declarative page-owned layers
+- opt-in `lampclaw/minimoon_ui 0.1.0`: native RUI component migration, typed
+  Vega theme/direction, deterministic build resources and a six-page showcase
 
 ## Maintained fixture and starter
 
@@ -53,6 +57,7 @@ remains an internal implementation detail.
 | Conformance / Lab | set/splice/move/replacement, controlled native reconciliation, reactive slots, scrolling, local components, focus events, overlays, menu semantics, isolation |
 | Conformance / Details | independent input/lifecycle and stack-aware fallback |
 | `templates/starter` | production-oriented Home + Details initializer source |
+| `ui/examples/showcase` | independent UI families, themes, native interactions and lifecycle |
 
 ## Not included
 
@@ -62,6 +67,6 @@ remains an internal implementation detail.
 - an application backend or real payment workflow
 
 Automated validation must pass before handoff. A release claim additionally
-requires fingerprint-matching real-host evidence for the exact App Contract v7,
-runtime ABI v10, renderer protocol v7 Conformance bytes. That evidence is a
+requires fingerprint-matching real-host evidence for the exact App Contract v8,
+runtime ABI v10, renderer protocol v8 Conformance and UI showcase bytes. That evidence is a
 local release input and is never part of repository or CI state.

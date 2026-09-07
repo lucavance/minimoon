@@ -78,18 +78,21 @@ Elm-style Model / Msg / update / Cmd / Sub
   version facts; `src/internal_host_js` owns published build/verify host
   JavaScript templates, while `src/internal_host_validation` owns repository-only
   host, documentation, and performance validation sources.
-- `src/tooling_miniapp` owns the current App Contract v7 host-artifact
+- `src/tooling_miniapp` owns the current App Contract v8 host-artifact
   generator.
 - `src/tooling_minimoon_build`, `src/tooling_minimoon_verify`, and
   `src/cmd/minimoon` own generation, verification, and the CLI.
-- `examples/miniapp_conformance_app` is the single maintained four-page
+- `ui/` owns the independent native component module, themes and build resources;
+  `ui/examples/showcase` is its separate six-page verification fixture.
+- `examples/miniapp_conformance_app` is the single maintained core four-page
   release fixture. `templates/starter` is the separate two-page source embedded
   by `minimoon init`.
 - `scripts/bridge/weapp_tailwindcss_adapter.mjs` is the only standalone
   maintained JavaScript source adapter; embedded host JavaScript is MoonBit
   owned, and all committed example JavaScript is generated.
 
-Applications import only `lampclaw/minimoon`. The public API does not expose a
+Applications import `lampclaw/minimoon` and may opt into the independently
+versioned `lampclaw/minimoon_ui` module. The public API does not expose a
 mutable `Signal[T]`, direct patches, `setData`, or JavaScript bridge authoring.
 CommonJS remains the verified MiniApp host boundary.
 
@@ -202,9 +205,12 @@ The final repository review must confirm:
 
 After real-host validation, run `bun run check:all` followed by
 `bun run check:mvp` locally. Both release gates require the ignored,
-fingerprint-bound Developer Tools evidence. After publication or release
-handoff, rerun `bun run check:candidate` before staging so tracked reports
-return to the public candidate state.
+fingerprint-bound Developer Tools evidence for both maintained fixtures.
+Before publication or release handoff, rerun `bun run check:candidate` so
+tracked reports return to the public candidate state. Require unchanged
+source, package contents and both fingerprints, then a clean worktree; changed
+fingerprints require renewed host validation. Repeat candidate restoration
+before staging any later repository changes.
 
 ## WeChat Developer Tools Validation
 

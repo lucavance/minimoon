@@ -1,2 +1,2 @@
 <import src="../../minimoon.templates.wxml" />
-<template is="minimoon_dynamic_node" data="{{node: details.tree}}" />
+<template is="minimoon_dynamic_node" data="{{node: details.tree, p: details.tree.props, e: details.tree.events}}" />

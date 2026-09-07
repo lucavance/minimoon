@@ -2,11 +2,11 @@
 
 ## 0.1.0 first non-prerelease release
 
-The complete current implementation is the `0.1.0` public baseline:
+The original `0.1.0` public baseline established:
 
 - Elm-style state machines, callable `Emit`, transactional `Val` composition,
   and page-owned effects and subscriptions;
-- App Contract v7, runtime ABI v10, renderer protocol v7, CommonJS output, and
+- contract and renderer version `7`, runtime ABI v10, CommonJS output, and
   Skyline Page Definition API registration;
 - normalized tree testing plus optional headless and styled component
   packages;
@@ -39,41 +39,60 @@ gates enforce both properties.
 3. Extend the Conformance fixture before adding another release fixture.
 4. Revalidate generated-byte changes in the real WeChat host.
 
-## Next iteration: RUI-inspired MiniApp components
+## Historical RUI subset assessment (superseded)
 
 The dependency refresh and
 [Rabbita 0.15.6 / RUI 0.1.1 audit](reference/rabbita_and_rui_audit.md) establish
-the next component iteration. The current change schedules this work and
-does not add components. The audit maps all 64 RUI showcase entries; six have
+the earlier proposed component iteration. That assessment only scheduled work;
+the approved full migration below supersedes it. The audit mapped all 64 RUI
+showcase entries; six had
 existing optional-component counterparts, while other entries include native
 substitutes, style recipes, reusable behavior gaps, and browser-only designs.
 
-Evaluate and implement in this order, using concrete application cases to
-bound each batch:
+It proposed Field/Alert Dialog first, then native Slider/searchable selection,
+then Message Scroller and notifications. That scheduling is no longer an
+outstanding component backlog: the approved full-native implementation below
+covers those families and the subsequent data/date/navigation candidates.
+Browser-only APIs remain intentionally replaced by native contracts, not
+promised as future DOM compatibility.
 
-1. Field/form feedback and Alert Dialog: shared labels/help/errors, typed native
-   control integration, explicit confirmation/cancellation, and dismissal policy.
-2. Progress/Slider and Combobox/Searchable Select: establish required host
-   controls, events, and semantics before adding reusable behavior.
-3. Message Scroller with message layout recipes, then custom Toast/Sonner:
-   scroll retention, new-message feedback, and scope-owned notification cleanup.
+## Core 0.2 and independent UI 0.1
 
-Calendar/ranges, Attachment, Input OTP, Pagination, Data Table, navigation/
-Sidebar, Drawer, and Toggle/Toggle Group remain subsequent candidates. Pure
-style recipes enter the package only when dogfooding demonstrates shared
-behavior. Browser hover, context menus, portals/collision engines, desktop
-resizing, and SSR are outside this component iteration.
+The approved full-native migration supersedes the earlier demand-driven subset.
+Its fixed source is Rabbita 0.15.6 / RUI 0.1.1 at `b1291945`; it covers all 64
+showcase components plus Form/Theme and public auxiliary capabilities.
+The implementation includes core foundations, 20 presentation components,
+13 overlays/disclosures, 14 form controls, 8 data/date components, 6 layout/navigation
+components and 3 feedback components.
 
-Before implementation, record the application scenario, native alternative,
-remaining behavior, provenance/license choice, and API compatibility impact.
-Keep existing optional APIs and theme contracts compatible; any new root
-control, semantic variant, or protocol field needs a separately planned
-versioned change because the 0.1.x root API is locked.
+The independent `lampclaw/minimoon_ui` module has default, headless, theme and
+build-resource packages. Core 0.2 provides missing native controls and measurement;
+Contract 8 / renderer 8 advance together while ABI 10 and CommonJS remain.
+Old components and minimal themes remain compatible; the starter does not gain
+an implicit UI dependency.
 
-Completion requires native/JS semantic behavior tests, controlled/self-owned
-and reactive-slot coverage where applicable, keyed/hide/dispose ownership
-checks, API/generator/size gates, and the affected Conformance scenarios.
-Revalidate changed artifacts in WeChat Developer Tools before a release claim.
+The [UI migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md)
+distinguishes actual implemented capabilities, native substitutions and outstanding
+work. API names or 64 showcase headings alone are not evidence of full parity.
+Both applications require exact-fingerprint Skyline validation before release.
+
+The UI fixture's
+[`verify_report.json`](../ui/examples/showcase/generated/verify_report.json)
+and [`release_summary.json`](../ui/examples/showcase/generated/release_summary.json)
+are independent public candidate records. Its
+[`devtools.evidence.json`](../ui/examples/showcase/generated/devtools.evidence.json)
+is local and Git-ignored, just like the core fixture's evidence above.
+
+## Release preparation
+
+Freeze the synchronized documentation, core/UI archives, source commit and
+two CI handoff bundles before manual acceptance. Follow the
+[release runbook](operations/release_candidate_handoff.md): both fixtures need
+real Skyline acceptance, then local release gates, candidate report restoration,
+and unchanged fingerprints before core-first/UI-second registry publication.
+Fresh consumers outside all workspaces verify actual registry resolution.
+Current publication availability belongs in
+[project status](project_status.md), not in immutable package contents.
 
 ## Deferred
 

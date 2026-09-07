@@ -26,7 +26,7 @@ Branch removal is candidate-transactional. The old branch is temporarily hidden
 from subscriptions, disposed only after render validation succeeds, and restored
 unchanged if the candidate is rejected.
 
-Renderer protocol v7 indexes prior and next child identities, then computes an
+Renderer protocol v8 indexes prior and next child identities, then computes an
 O(n log n) longest-increasing subsequence to minimize moves. Deterministic
 coverage includes duplicate rejection, rotations, reverse order, mixed
 move/update cases, and 100/500/2000-child stress inputs. It falls back to

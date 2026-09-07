@@ -1,0 +1,48 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon_ui/theme"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn theme(mode? : ColorMode, direction? : TextDirection, tokens? : Tokens) -> Theme
+
+pub fn tokens(mode? : ColorMode) -> Tokens
+
+// Errors
+
+// Types and methods
+pub(all) enum ColorMode {
+  Light
+  Dark
+} derive(Eq, @debug.Debug)
+
+pub(all) enum TextDirection {
+  Ltr
+  Rtl
+} derive(Eq, @debug.Debug)
+
+pub struct Theme {
+  mode : ColorMode
+  direction : TextDirection
+  tokens : Tokens
+} derive(Eq, @debug.Debug)
+pub fn Theme::class_name(Self) -> String
+pub fn Theme::style(Self) -> String
+
+pub(all) struct Tokens {
+  background : String
+  foreground : String
+  primary : String
+  primary_foreground : String
+  muted : String
+  muted_foreground : String
+  border : String
+  destructive : String
+  radius : Int
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits

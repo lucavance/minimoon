@@ -1,0 +1,12 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon/testing",
+  "lampclaw/minimoon_ui_showcase/pages/foundation",
+  "lampclaw/minimoon_ui_showcase/pages/overlays",
+  "lampclaw/minimoon_ui_showcase/pages/forms",
+  "lampclaw/minimoon_ui_showcase/pages/data",
+  "lampclaw/minimoon_ui_showcase/pages/layout",
+  "lampclaw/minimoon_ui_showcase/pages/feedback",
+} for "test"
+
+supported_targets = "js+native"

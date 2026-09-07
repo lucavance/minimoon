@@ -191,7 +191,9 @@ fn[Msg] checked_normalize_node(
               kind == "input" ||
               kind == "image" ||
               kind == "textarea" ||
-              kind == "switch"
+              kind == "switch" ||
+              kind == "slider" ||
+              kind == "progress"
             ) &&
             children.length() > 0 {
             return Err("MiniApp " + kind + " nodes must not have children")
@@ -319,50 +321,69 @@ pub fn[Msg] normalize_miniapp_tree_checked(
 
 ///|
 pub fn dynamic_templates_wxml() -> String {
-  let semantics = " aria-role=\"{{node.props.role}}\" aria-expanded=\"{{node.props.ariaExpanded}}\" aria-selected=\"{{node.props.ariaSelected}}\" aria-disabled=\"{{node.props.ariaDisabled}}\" aria-hidden=\"{{node.props.ariaHidden}}\" aria-checked=\"{{node.props.ariaChecked}}\" aria-modal=\"{{node.props.ariaModal}}\" aria-controls=\"{{node.props.ariaControls}}\" aria-labelledby=\"{{node.props.ariaLabelledBy}}\" aria-describedby=\"{{node.props.ariaDescribedBy}}\" aria-orientation=\"{{node.props.ariaOrientation}}\" aria-haspopup=\"{{node.props.ariaHasPopup}}\""
+  // Short template-local aliases preserve every binding and avoid duplicating
+  // long property paths in each native tag. The normalized wire tree is unchanged.
+  let semantics = " aria-role=\"{{p.role}}\" aria-expanded=\"{{p.ariaExpanded}}\" aria-selected=\"{{p.ariaSelected}}\" aria-disabled=\"{{p.ariaDisabled}}\" aria-hidden=\"{{p.ariaHidden}}\" aria-checked=\"{{p.ariaChecked}}\" aria-modal=\"{{p.ariaModal}}\" aria-controls=\"{{p.ariaControls}}\" aria-labelledby=\"{{p.ariaLabelledBy}}\" aria-describedby=\"{{p.ariaDescribedBy}}\" aria-orientation=\"{{p.ariaOrientation}}\" aria-haspopup=\"{{p.ariaHasPopup}}\" aria-required=\"{{p.ariaRequired}}\" aria-invalid=\"{{p.ariaInvalid}}\" aria-busy=\"{{p.ariaBusy}}\" aria-live=\"{{p.ariaLive}}\" aria-valuemin=\"{{p.ariaValueMin}}\" aria-valuemax=\"{{p.ariaValueMax}}\" aria-valuenow=\"{{p.ariaValueNow}}\" aria-valuetext=\"{{p.ariaValueText}}\""
   "<template name=\"minimoon_dynamic_node\">\n" +
   "  <block wx:if=\"{{node.kind === 'empty'}}\"></block>\n" +
   "  <block wx:elif=\"{{node.kind === 'fragment'}}\">\n" +
   "    <block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\">\n" +
-  "      <template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" />\n" +
+  "      <template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" />\n" +
   "    </block>\n" +
   "  </block>\n" +
-  "  <text wx:elif=\"{{node.kind === 'text'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" aria-label=\"{{node.props.ariaLabel}}\"" +
+  "  <text wx:elif=\"{{node.kind === 'text'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" aria-label=\"{{p.ariaLabel}}\"" +
   semantics +
-  " data-minimoon-section=\"{{node.props.section}}\" data-minimoon-tap=\"{{node.events.tap}}\" bindtap=\"__mmDispatchTap\">{{node.text}}</text>\n" +
-  "  <view wx:elif=\"{{node.kind === 'view'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" aria-label=\"{{node.props.ariaLabel}}\"" +
+  " data-minimoon-section=\"{{p.section}}\" data-minimoon-tap=\"{{e.tap}}\" bindtap=\"__mmDispatchTap\">{{node.text}}</text>\n" +
+  "  <view wx:elif=\"{{node.kind === 'view' && p.catchMove}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" aria-label=\"{{p.ariaLabel}}\"" +
   semantics +
-  " data-minimoon-section=\"{{node.props.section}}\" data-minimoon-tap=\"{{node.events.tap}}\" bindtap=\"__mmDispatchTap\">\n" +
-  "    <block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block>\n" +
+  " data-minimoon-longpress=\"{{e.longpress}}\" data-minimoon-touchstart=\"{{e.touchstart}}\" data-minimoon-touchmove=\"{{e.touchmove}}\" data-minimoon-touchend=\"{{e.touchend}}\" data-minimoon-touchcancel=\"{{e.touchcancel}}\" bindlongpress=\"__mmDispatchLongPress\" bindtouchstart=\"__mmDispatchTouchStart\" catchtouchmove=\"__mmDispatchTouchMove\" bindtouchend=\"__mmDispatchTouchEnd\" bindtouchcancel=\"__mmDispatchTouchCancel\" data-minimoon-section=\"{{p.section}}\" data-minimoon-tap=\"{{e.tap}}\" bindtap=\"__mmDispatchTap\">\n" +
+  "    <block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block>\n" +
   "  </view>\n" +
-  "  <button wx:elif=\"{{node.kind === 'button'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" disabled=\"{{node.props.disabled}}\" aria-label=\"{{node.props.ariaLabel}}\"" +
+  "  <view wx:elif=\"{{node.kind === 'view'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" aria-label=\"{{p.ariaLabel}}\"" +
   semantics +
-  " data-minimoon-section=\"{{node.props.section}}\" data-minimoon-tap=\"{{node.events.tap}}\" catchtap=\"__mmDispatchTap\">\n" +
-  "    <block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block>\n" +
+  " data-minimoon-longpress=\"{{e.longpress}}\" data-minimoon-touchstart=\"{{e.touchstart}}\" data-minimoon-touchmove=\"{{e.touchmove}}\" data-minimoon-touchend=\"{{e.touchend}}\" data-minimoon-touchcancel=\"{{e.touchcancel}}\" bindlongpress=\"__mmDispatchLongPress\" bindtouchstart=\"__mmDispatchTouchStart\" bindtouchmove=\"__mmDispatchTouchMove\" bindtouchend=\"__mmDispatchTouchEnd\" bindtouchcancel=\"__mmDispatchTouchCancel\" data-minimoon-section=\"{{p.section}}\" data-minimoon-tap=\"{{e.tap}}\" bindtap=\"__mmDispatchTap\">\n" +
+  "    <block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block>\n" +
+  "  </view>\n" +
+  "  <button wx:elif=\"{{node.kind === 'button'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" disabled=\"{{p.disabled}}\" name=\"{{p.name}}\" form-type=\"{{p.formType}}\" aria-label=\"{{p.ariaLabel}}\"" +
+  semantics +
+  " data-minimoon-section=\"{{p.section}}\" data-minimoon-tap=\"{{e.tap}}\" catchtap=\"__mmDispatchTap\">\n" +
+  "    <block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block>\n" +
   "  </button>\n" +
-  "  <input wx:elif=\"{{node.kind === 'input'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" value=\"{{node.props.value}}\" placeholder=\"{{node.props.placeholder}}\" disabled=\"{{node.props.disabled}}\" focus=\"{{node.props.focus}}\" aria-label=\"{{node.props.ariaLabel}}\"" +
+  "  <input wx:elif=\"{{node.kind === 'input'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" type=\"{{p.type || 'text'}}\" name=\"{{p.name}}\" password=\"{{p.password}}\" maxlength=\"{{p.maxlength == null ? 140 : p.maxlength}}\" selection-start=\"{{p.selectionStart == null ? -1 : p.selectionStart}}\" selection-end=\"{{p.selectionEnd == null ? -1 : p.selectionEnd}}\" value=\"{{p.value}}\" placeholder=\"{{p.placeholder}}\" disabled=\"{{p.disabled}}\" focus=\"{{p.focus}}\" aria-label=\"{{p.ariaLabel}}\"" +
   semantics +
-  " data-minimoon-section=\"{{node.props.section}}\" data-minimoon-input=\"{{node.events.input}}\" data-minimoon-confirm=\"{{node.events.confirm}}\" data-minimoon-focus=\"{{node.events.focus}}\" data-minimoon-blur=\"{{node.events.blur}}\" bindinput=\"__mmDispatchInput\" bindconfirm=\"__mmDispatchConfirm\" bindfocus=\"__mmDispatchFocus\" bindblur=\"__mmDispatchBlur\" />\n" +
-  "  <image wx:elif=\"{{node.kind === 'image'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" src=\"{{node.props.src}}\" aria-label=\"{{node.props.ariaLabel || node.props.alt}}\"" +
+  " data-minimoon-section=\"{{p.section}}\" data-minimoon-input=\"{{e.input}}\" data-minimoon-confirm=\"{{e.confirm}}\" data-minimoon-focus=\"{{e.focus}}\" data-minimoon-blur=\"{{e.blur}}\" bindinput=\"__mmDispatchInput\" bindconfirm=\"__mmDispatchConfirm\" bindfocus=\"__mmDispatchFocus\" bindblur=\"__mmDispatchBlur\" />\n" +
+  "  <image wx:elif=\"{{node.kind === 'image'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" src=\"{{p.src}}\" mode=\"{{p.mode || 'scaleToFill'}}\" aria-label=\"{{p.ariaLabel || p.alt}}\"" +
   semantics +
-  " data-minimoon-section=\"{{node.props.section}}\" data-minimoon-tap=\"{{node.events.tap}}\" bindtap=\"__mmDispatchTap\" />\n" +
-  "  <scroll-view wx:elif=\"{{node.kind === 'scroll-view'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" scroll-x=\"{{node.props.scrollX}}\" scroll-y=\"{{node.props.scrollY}}\" scroll-top=\"{{node.props.scrollTop}}\" scroll-left=\"{{node.props.scrollLeft}}\" scroll-into-view=\"{{node.props.scrollIntoView}}\" upper-threshold=\"{{node.props.upperThreshold}}\" lower-threshold=\"{{node.props.lowerThreshold}}\" data-minimoon-scroll=\"{{node.events.scroll}}\" data-minimoon-upper=\"{{node.events.upper}}\" data-minimoon-lower=\"{{node.events.lower}}\" bindscroll=\"__mmDispatchScroll\" bindscrolltoupper=\"__mmDispatchUpper\" bindscrolltolower=\"__mmDispatchLower\">\n" +
-  "    <block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block>\n" +
+  " data-minimoon-section=\"{{p.section}}\" data-minimoon-tap=\"{{e.tap}}\" bindtap=\"__mmDispatchTap\" data-minimoon-load=\"{{e.load}}\" data-minimoon-error=\"{{e.error}}\" bindload=\"__mmDispatchLoad\" binderror=\"__mmDispatchError\" />\n" +
+  "  <scroll-view wx:elif=\"{{node.kind === 'scroll-view'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" scroll-x=\"{{p.scrollX}}\" scroll-y=\"{{p.scrollY}}\" scroll-top=\"{{p.scrollTop}}\" scroll-left=\"{{p.scrollLeft}}\" scroll-into-view=\"{{p.scrollIntoView}}\" upper-threshold=\"{{p.upperThreshold}}\" lower-threshold=\"{{p.lowerThreshold}}\" data-minimoon-scroll=\"{{e.scroll}}\" data-minimoon-upper=\"{{e.upper}}\" data-minimoon-lower=\"{{e.lower}}\" bindscroll=\"__mmDispatchScroll\" bindscrolltoupper=\"__mmDispatchUpper\" bindscrolltolower=\"__mmDispatchLower\">\n" +
+  "    <block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block>\n" +
   "  </scroll-view>\n" +
-  "  <textarea wx:elif=\"{{node.kind === 'textarea'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" model:value=\"{{node.props.value}}\" placeholder=\"{{node.props.placeholder}}\" maxlength=\"{{node.props.maxlength}}\" disabled=\"{{node.props.disabled}}\" focus=\"{{node.props.focus}}\" aria-label=\"{{node.props.ariaLabel}}\"" +
+  "  <textarea wx:elif=\"{{node.kind === 'textarea'}}\" id=\"{{p.id}}\" name=\"{{p.name}}\" class='{{p.className}}' style=\"{{p.style}}\" model:value=\"{{p.value}}\" placeholder=\"{{p.placeholder}}\" maxlength=\"{{p.maxlength}}\" disabled=\"{{p.disabled}}\" focus=\"{{p.focus}}\" aria-label=\"{{p.ariaLabel}}\"" +
   semantics +
-  " data-minimoon-section=\"{{node.props.section}}\" data-minimoon-input=\"{{node.events.input}}\" data-minimoon-confirm=\"{{node.events.confirm}}\" data-minimoon-focus=\"{{node.events.focus}}\" data-minimoon-blur=\"{{node.events.blur}}\" bind:input=\"__mmDispatchInput\" bind:confirm=\"__mmDispatchConfirm\" bind:focus=\"__mmDispatchFocus\" bind:blur=\"__mmDispatchBlur\"></textarea>\n" +
-  "  <switch wx:elif=\"{{node.kind === 'switch'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" checked=\"{{node.props.checked}}\" disabled=\"{{node.props.disabled}}\" color=\"{{node.props.color}}\" aria-label=\"{{node.props.ariaLabel}}\"" +
+  " data-minimoon-section=\"{{p.section}}\" data-minimoon-input=\"{{e.input}}\" data-minimoon-confirm=\"{{e.confirm}}\" data-minimoon-focus=\"{{e.focus}}\" data-minimoon-blur=\"{{e.blur}}\" bind:input=\"__mmDispatchInput\" bind:confirm=\"__mmDispatchConfirm\" bind:focus=\"__mmDispatchFocus\" bind:blur=\"__mmDispatchBlur\"></textarea>\n" +
+  "  <switch wx:elif=\"{{node.kind === 'switch'}}\" id=\"{{p.id}}\" name=\"{{p.name}}\" class='{{p.className}}' style=\"{{p.style}}\" checked=\"{{p.checked}}\" disabled=\"{{p.disabled}}\" color=\"{{p.color}}\" aria-label=\"{{p.ariaLabel}}\"" +
   semantics +
-  " data-minimoon-change=\"{{node.events.change}}\" bindchange=\"__mmDispatchChange\" />\n" +
-  "  <checkbox-group wx:elif=\"{{node.kind === 'checkbox-group'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" data-minimoon-change=\"{{node.events.change}}\" bindchange=\"__mmDispatchChange\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block></checkbox-group>\n" +
-  "  <checkbox wx:elif=\"{{node.kind === 'checkbox'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" value=\"{{node.props.value}}\" checked=\"{{node.props.checked}}\" disabled=\"{{node.props.disabled}}\" color=\"{{node.props.color}}\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block></checkbox>\n" +
-  "  <radio-group wx:elif=\"{{node.kind === 'radio-group'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" data-minimoon-change=\"{{node.events.change}}\" bindchange=\"__mmDispatchChange\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block></radio-group>\n" +
-  "  <radio wx:elif=\"{{node.kind === 'radio'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" value=\"{{node.props.value}}\" checked=\"{{node.props.checked}}\" disabled=\"{{node.props.disabled}}\" color=\"{{node.props.color}}\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block></radio>\n" +
-  "  <picker wx:elif=\"{{node.kind === 'picker'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" mode=\"{{node.props.mode}}\" model:value=\"{{node.props.value}}\" range=\"{{node.props.range}}\" disabled=\"{{node.props.disabled}}\" data-minimoon-change=\"{{node.events.change}}\" bind:change=\"__mmDispatchChange\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block></picker>\n" +
-  "  <swiper wx:elif=\"{{node.kind === 'swiper'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" current=\"{{node.props.current}}\" autoplay=\"{{node.props.autoplay}}\" circular=\"{{node.props.circular}}\" interval=\"{{node.props.interval}}\" duration=\"{{node.props.duration}}\" data-minimoon-change=\"{{node.events.change}}\" bindchange=\"__mmDispatchChange\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block></swiper>\n" +
-  "  <swiper-item wx:elif=\"{{node.kind === 'swiper-item'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" item-id=\"{{node.props.itemId}}\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block></swiper-item>\n" +
-  "  <navigator wx:elif=\"{{node.kind === 'navigator'}}\" id=\"{{node.props.id}}\" class='{{node.props.className}}' style=\"{{node.props.style}}\" url=\"{{node.props.url}}\" open-type=\"{{node.props.openType}}\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child}}\" /></block></navigator>\n" +
+  " data-minimoon-change=\"{{e.change}}\" bindchange=\"__mmDispatchChange\" />\n" +
+  "  <checkbox-group wx:elif=\"{{node.kind === 'checkbox-group'}}\" id=\"{{p.id}}\" name=\"{{p.name}}\" class='{{p.className}}' style=\"{{p.style}}\" data-minimoon-change=\"{{e.change}}\" bindchange=\"__mmDispatchChange\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></checkbox-group>\n" +
+  "  <checkbox wx:elif=\"{{node.kind === 'checkbox'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" value=\"{{p.value}}\" checked=\"{{p.checked}}\" disabled=\"{{p.disabled}}\" color=\"{{p.color}}\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></checkbox>\n" +
+  "  <radio-group wx:elif=\"{{node.kind === 'radio-group'}}\" id=\"{{p.id}}\" name=\"{{p.name}}\" class='{{p.className}}' style=\"{{p.style}}\" data-minimoon-change=\"{{e.change}}\" bindchange=\"__mmDispatchChange\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></radio-group>\n" +
+  "  <radio wx:elif=\"{{node.kind === 'radio'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" value=\"{{p.value}}\" checked=\"{{p.checked}}\" disabled=\"{{p.disabled}}\" color=\"{{p.color}}\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></radio>\n" +
+  "  <picker wx:elif=\"{{node.kind === 'picker'}}\" id=\"{{p.id}}\" name=\"{{p.name}}\" class='{{p.className}}' style=\"{{p.style}}\" mode=\"{{p.mode}}\" model:value=\"{{p.value}}\" range=\"{{p.range}}\" disabled=\"{{p.disabled}}\" data-minimoon-change=\"{{e.change}}\" bind:change=\"__mmDispatchChange\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></picker>\n" +
+  "  <swiper wx:elif=\"{{node.kind === 'swiper'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" vertical=\"{{p.vertical}}\" current=\"{{p.current}}\" autoplay=\"{{p.autoplay}}\" circular=\"{{p.circular}}\" interval=\"{{p.interval}}\" duration=\"{{p.duration}}\" data-minimoon-change=\"{{e.change}}\" bindchange=\"__mmDispatchChange\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></swiper>\n" +
+  "  <swiper-item wx:elif=\"{{node.kind === 'swiper-item'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" item-id=\"{{p.itemId}}\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></swiper-item>\n" +
+  "  <navigator wx:elif=\"{{node.kind === 'navigator'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" url=\"{{p.url}}\" open-type=\"{{p.openType}}\"><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></navigator>\n" +
+  "  <label wx:elif=\"{{node.kind === 'label'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" aria-label=\"{{p.ariaLabel}}\" for=\"{{p.for}}\"" +
+  semantics +
+  "><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></label>\n" +
+  "  <form wx:elif=\"{{node.kind === 'form'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" aria-label=\"{{p.ariaLabel}}\" data-minimoon-submit=\"{{e.submit}}\" data-minimoon-reset=\"{{e.reset}}\" bindsubmit=\"__mmDispatchSubmit\" bindreset=\"__mmDispatchReset\"" +
+  semantics +
+  "><block wx:for=\"{{node.children}}\" wx:key=\"identity\" wx:for-item=\"child\"><template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" /></block></form>\n" +
+  "  <slider wx:elif=\"{{node.kind === 'slider'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" aria-label=\"{{p.ariaLabel}}\" name=\"{{p.name}}\" value=\"{{p.value}}\" min=\"{{p.min}}\" max=\"{{p.max}}\" step=\"{{p.step}}\" disabled=\"{{p.disabled}}\" show-value=\"{{p.showValue}}\" activeColor=\"{{p.activeColor}}\" backgroundColor=\"{{p.backgroundColor}}\" block-color=\"{{p.blockColor}}\" block-size=\"{{p.blockSize}}\" data-minimoon-change=\"{{e.change}}\" data-minimoon-changing=\"{{e.changing}}\" bindchange=\"__mmDispatchChange\" bindchanging=\"__mmDispatchChanging\"" +
+  semantics +
+  " />\n" +
+  "  <progress wx:elif=\"{{node.kind === 'progress'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" aria-label=\"{{p.ariaLabel}}\" percent=\"{{p.percent}}\" stroke-width=\"{{p.strokeWidth}}\" show-info=\"{{p.showInfo}}\" active=\"{{p.active}}\" activeColor=\"{{p.activeColor}}\" backgroundColor=\"{{p.backgroundColor}}\"" +
+  semantics +
+  " />\n" +
   "</template>\n"
 }
 
@@ -376,5 +397,9 @@ pub fn dynamic_page_wxml(
   "\" />\n" +
   "<template is=\"minimoon_dynamic_node\" data=\"{{node: " +
   page_id +
-  ".tree}}\" />\n"
+  ".tree, p: " +
+  page_id +
+  ".tree.props, e: " +
+  page_id +
+  ".tree.events}}\" />\n"
 }

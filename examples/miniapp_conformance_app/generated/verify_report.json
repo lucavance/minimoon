@@ -2,8 +2,13 @@
   "schemaVersion": 1,
   "status": "passed",
   "release": false,
-  "artifactFingerprint": "fnv1a64-relpath-v2:d82e290998cb79dd",
+  "artifactFingerprint": "fnv1a64-relpath-v2:bb3d1ccdaa99aed1",
   "checks": [
+    {
+      "name": "build-resources",
+      "status": "passed",
+      "detail": "declared native provider assets exist below dist/assets and participate in the artifact fingerprint"
+    },
     {
       "name": "devtools-host-boundary",
       "status": "passed",
@@ -40,9 +45,9 @@
       "detail": "app.json omits system navigation fields that custom Skyline pages ignore"
     },
     {
-      "name": "renderer-v7-host",
+      "name": "renderer-v8-host",
       "status": "passed",
-      "detail": "renderer protocol v7 uses Skyline, glass-easel, and Page Definition API registration"
+      "detail": "renderer protocol v8 uses Skyline, glass-easel, and Page Definition API registration"
     },
     {
       "name": "page-order",

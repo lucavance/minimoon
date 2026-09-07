@@ -202,6 +202,7 @@ async fn codegen_suite(root : String) -> Unit {
     @fs.read_file(join(root, "src/cmd/minimoon/templates.generated.mbt")).text() else {
     abort("embedded template generation is not formatter-stable")
   }
+  ui_gallery_codegen_gate(root)
 }
 
 ///|
@@ -217,17 +218,15 @@ let registry_documentation_files : Array[String] = [
   "docs/guides/resource_state_design.md", "docs/guides/subscription_scope.md", "docs/guides/testing_and_components.md",
   "docs/mvp.md", "docs/operations/dogfood.md", "docs/operations/miniapp_devtools_validation.md",
   "docs/operations/miniapp_javascript_compatibility.md", "docs/operations/release_candidate_handoff.md",
-  "docs/positioning.md", "docs/reference/compatibility_and_upgrades.md", "docs/reference/compile_model.md",
-  "docs/reference/miniapp_fixture_matrix.md", "docs/reference/miniapp_host_capabilities.md",
-  "docs/reference/miniapp_renderer.md", "docs/reference/moonbit_ownership.md", "docs/reference/rabbita_and_rui_audit.md",
-  "docs/reference/renderer_protocol.md", "docs/roadmap.md",
+  "docs/positioning.md", "docs/reference/compatibility_and_upgrades.md", "docs/reference/miniapp_fixture_matrix.md",
+  "docs/reference/miniapp_host_capabilities.md",
 ]
 
 ///|
 let registry_source_directories : Array[String] = [
   "src", "src/cmd/minimoon", "src/components", "src/components/styles", "src/internal_any",
   "src/internal_duplix", "src/internal_host_js", "src/internal_slotmap", "src/internal_versions",
-  "src/renderer_miniapp", "src/runtime_core", "src/testing", "src/tooling_miniapp",
+  "src/renderer_miniapp", "src/resources", "src/runtime_core", "src/testing", "src/tooling_miniapp",
   "src/tooling_minimoon_build", "src/tooling_minimoon_verify", "src/ui_dsl", "src/val_runtime",
 ]
 
@@ -307,7 +306,8 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
   }
   for
     required in [
-      "moon.mod", "LICENSE", "src/README.mbt.md", "src/pkg.generated.mbti", "src/cmd/minimoon/main.mbt",
+      "moon.mod", "LICENSE", "CHANGELOG.md", "README.mbt.md", "README.md", "README.zh-CN.md",
+      "src/README.mbt.md", "src/pkg.generated.mbti", "src/cmd/minimoon/main.mbt",
       "src/cmd/minimoon/templates.generated.mbt",
     ] {
     guard packaged_paths.contains(required) else {
@@ -359,6 +359,8 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
   run(root, "Unpack registry candidate", "unzip", [
     "-q", archive, "-d", package_root,
   ])
+  archive_documentation_self_test(root, distribution)
+  archive_documentation_gate(root, distribution, package_root, "core")
   run(
     root,
     "Install CLI from registry candidate",
@@ -422,6 +424,7 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
     ["verify", consumer, "--candidate"],
     cwd=consumer,
   )
+  ui_distribution_package_gate(root, distribution, package_executable)
 }
 
 ///|

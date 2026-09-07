@@ -1,20 +1,26 @@
 # Project status
 
-Minimoon `0.1.1` is the current patch release over the first non-prerelease
-baseline. The current source and generated reports define the product.
+Minimoon core `0.2.0` and the independent `lampclaw/minimoon_ui 0.1.0` are
+the current unpublished candidates. The 0.1 API consumer baseline remains
+frozen and checked. Source and generated reports define candidate readiness.
 
 ## Current implementation
 
-Application code imports only `lampclaw/minimoon`. Elm-style state machines
+Application code imports `lampclaw/minimoon`, plus `lampclaw/minimoon_ui`
+when opting into native UI components. Elm-style state machines
 compose pages and local components through `Val`; a page-owned transactional
 incremental graph drives normalized MiniApp tree diffs and generated CommonJS
-Skyline artifacts. App Contract v7, runtime ABI v10, and renderer protocol v7
+Skyline artifacts. App Contract v8, runtime ABI v10, and renderer protocol v8
 remain independent technical compatibility numbers.
 
 The maintained release surface consists of one two-page starter and one
 four-page Conformance application covering authoring, native controls,
 components, capabilities, navigation, lifecycle, incremental rendering,
 ordered host scheduling, and disposal.
+
+The independent UI module has a six-page showcase covering all 64 pinned RUI
+families, Form and Theme. Its native resource provider, API snapshots, archive
+consumer and generated-host checks are separate from core's starter contract.
 
 ## Toolchain validation
 
@@ -24,38 +30,54 @@ The supported toolchain uses `moon 0.1.20260827`, `moonc v0.10.11`, and Bun
 primary environment, and installs the JavaScript dependency graph from the
 committed lockfile.
 
-## Next iteration
+## RUI native migration
 
-RUI-inspired component development is scheduled for the next iteration, after
-the dependency refresh and the pinned
-[Rabbita/RUI audit](reference/rabbita_and_rui_audit.md). The
-[roadmap](roadmap.md#next-iteration-rui-inspired-miniapp-components) orders the
-candidate work and defines its acceptance criteria. This audit introduces no
-new component API.
+The approved full migration uses Rabbita 0.15.6 / RUI 0.1.1 at `b1291945`.
+The [symbol-level migration map](../ui/docs/migration.md) covers all 517 upstream
+public symbols, distinguishing native equivalents, consolidation and explicit
+browser-host substitutions. Native/JS tests establish behavior; exact-artifact
+Skyline validation remains a separate, pending release prerequisite.
 
 ## Evidence state
 
 The public repository deliberately records only reproducible candidate state.
-Its tracked status is owned by the Conformance fixture's
+Core tracked status is owned by the Conformance fixture's
 [`verify_report.json`](../examples/miniapp_conformance_app/generated/verify_report.json)
 and
 [`release_summary.json`](../examples/miniapp_conformance_app/generated/release_summary.json).
 Fingerprint-bound
 [`devtools.evidence.json`](../examples/miniapp_conformance_app/generated/devtools.evidence.json)
-is local and Git-ignored. It may authorize a local release without publishing
+is local and Git-ignored. UI status is independently owned by its
+[`verify_report.json`](../ui/examples/showcase/generated/verify_report.json),
+[`release_summary.json`](../ui/examples/showcase/generated/release_summary.json)
+and local and Git-ignored
+[`devtools.evidence.json`](../ui/examples/showcase/generated/devtools.evidence.json).
+Matching evidence may authorize a local release without publishing
 the validation timestamp, tool version, notes, or outcome in source history.
 
 ## Verification policy
 
-`bun run check:candidate` proves formatting, interfaces, native and JavaScript
-behavior, coverage, generation stability, host simulation, performance, and
-registry archive compatibility. `bun run check:all` followed by
+`bun run check:coverage` and `bun run check:candidate` together check coverage,
+formatting, interfaces, native and JavaScript behavior, generation stability,
+host simulation, performance and registry archive compatibility. Coverage is
+an explicit separate gate, not a substep of `check:candidate`.
+`bun run check:all` followed by
 `bun run check:mvp` is a local release decision requiring evidence recorded
 from the exact release bytes in WeChat Developer Tools. Running
-`check:candidate` afterward restores the tracked reports to candidate state.
+`check:candidate` before publication restores the tracked reports to candidate
+state; require unchanged source, archive contents and both artifact fingerprints.
 
-Registry publication remains an explicit operator action. The 0.1 release
+Registry publication remains an explicit operator action. The release
 process does not create version tags or GitHub releases, and real-host evidence
-remains local. See [Roadmap](roadmap.md),
+remains local. See [Roadmap](https://github.com/lucavance/minimoon/blob/main/docs/roadmap.md),
 [Architecture](architecture.md), and the
 [release handoff](operations/release_candidate_handoff.md).
+
+## Publication checkpoint
+
+The intended order is core `0.2.0`, a fresh registry-only core consumer, UI
+`0.1.0`, then a fresh consumer of both registry modules. Neither publication is
+claimed here until the two-fixture host prerequisite and local release gates
+are complete. After publication, record only the actual publication date,
+source commit and registry links here; keep real-host records local and do not
+rewrite the contents of an already published module version.

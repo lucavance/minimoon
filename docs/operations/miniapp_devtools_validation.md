@@ -2,12 +2,18 @@
 
 ## Status source
 
-The repository has one real-host fixture. Its tracked
-`generated/verify_report.json` records reproducible candidate status.
+The repository has two independent real-host fixtures:
+
+| Fixture | Scope | CI artifact |
+| --- | --- | --- |
+| `examples/miniapp_conformance_app` | Core, four pages | `minimoon-devtools-<commit>` |
+| `ui/examples/showcase` | UI, six pages | `minimoon-ui-devtools-<commit>` |
+
+Each tracked `generated/verify_report.json` records reproducible candidate status.
 `generated/devtools.evidence.json`, when present, is the local,
 fingerprint-bound host record and is ignored by Git. A local release decision
-is valid only when the report has `status: "passed"` and `release: true`, and
-its evidence matches the exact `dist/` bytes.
+is valid only when both local reports have `status: "passed"` and
+`release: true`, and their separate evidence matches each exact artifact set.
 
 Do not copy a validation date, tool version, evidence file, or artifact
 fingerprint from an older build or another application.
@@ -23,16 +29,22 @@ unchanged.
 ```bash
 moon run src/cmd/minimoon --target native -- \
   build examples/miniapp_conformance_app --mode release
+moon run src/cmd/minimoon --target native -- \
+  build ui/examples/showcase --mode release
 ```
 
-Import `examples/miniapp_conformance_app/dist/` directly. Do not edit generated
-files after building.
+Import each fixture's `dist/` directly. Do not edit generated files after
+building. Run the entire relevant checklist separately in the Skyline
+simulator, physical-device preview and device debugging with a clean console.
 
-For a CI candidate, download the `minimoon-devtools-<commit>` artifact, verify
-`ARCHIVE_SHA256` and `SHA256SUMS`, extract
-`miniapp_conformance_app-dist.zip`, and import its unchanged `dist/`. Confirm
-that `HANDOFF.json` names the commit and the same framework artifact fingerprint
-as `verify_report.json`.
+For CI candidates, download both artifacts from the same frozen commit. In
+each bundle, run `sha256sum --check --strict SHA256SUMS` and
+`sha256sum --check --strict ARCHIVE_SHA256`. The core ZIP is
+`miniapp_conformance_app-dist.zip`; the UI ZIP is
+`minimoon_ui_showcase-dist.zip`. Import each unchanged `dist/`. Confirm that
+each `HANDOFF.json` names the expected commit, app directory, core/UI versions,
+toolchain and the same framework artifact fingerprint as its report. Keep
+manifests and checklists paired with their own application.
 
 ## Tool settings
 
@@ -54,7 +66,7 @@ host globals such as `TextEncoder`, follow the
 [`MiniApp JavaScript compatibility troubleshooting`](miniapp_javascript_compatibility.md)
 runbook before recording evidence.
 
-## Interaction checklist
+## Core interaction checklist
 
 Showcase:
 
@@ -155,6 +167,31 @@ Normal interaction must not report a retry, timeout, or scheduler failure. Rapid
 tap counts must remain exact. Sustained scroll may increase `coalescedEvents`,
 but scroll coalescing must never cross an intervening tap or another event key.
 
+## UI interaction checklist
+
+The UI fixture's `generated/smoke_checklist.json` is the exact acceptance
+scope, including its ordered `devtoolsChecks`. Exercise all six pages:
+
+- Foundation: disabled buttons, labels, avatar load/error/fallback and status
+  content; switch light/dark and LTR/RTL without resetting local state.
+- Overlays: nested surfaces, viewport placement, controlled state on hide/show,
+  dismiss layers, long-press and explicit-tap context menus, touch tooltips.
+- Forms: native IME/paste/confirm, errors, OTP completion, submit/reset,
+  disabled choices, single and multiple selection, native/custom sliders,
+  minimum gap, vertical/RTL measurement and touch cancellation.
+- Data: calendar modes and month boundaries, disabled dates, date presets,
+  Command/Combobox filtering, numeric table sort, column visibility, keyed row
+  selection/pagination, native cell spans and chart presentation primitives.
+- Layout: native Carousel swipe, Resizable bounds/cancel, Scroll Area, Sidebar
+  gestures/navigation and Attachment actions.
+- Feedback: message end-following and prepend reading-position retention,
+  Toast/Sonner actions, expiry, dismissal and hidden-page timer pausing.
+
+Every route must unload without stale measurement, timer, event or state
+delivery. Native substitutions in the
+[migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md)
+define the supported behavior; they are not missing browser tests.
+
 ## Record evidence
 
 Only after the exact release directory passes:
@@ -166,10 +203,21 @@ minimoon devtools record examples/miniapp_conformance_app \
   --tool-version "<actual-version>" \
   --notes "exact four-page release checklist passed"
 minimoon verify examples/miniapp_conformance_app --release
+minimoon devtools record ui/examples/showcase \
+  --status passed \
+  --recorded-at <actual-timestamp> \
+  --tool-version "<actual-version>" \
+  --notes "exact six-page release checklist passed"
+minimoon verify ui/examples/showcase --release
 ```
 
-Rebuilding or changing `dist/` invalidates the record. Automated checks do not
-substitute for this interaction checklist. The evidence file, including its
+Record each application only after its own actual pass, in the validation
+checkout that contains the tested artifacts. `verify` rebuilds artifacts;
+compare its resulting fingerprint with the one actually tested. An unchanged
+fingerprint preserves evidence; any changed distributable, manifest or
+checklist requires renewed acceptance. Do not copy an evidence file from
+another application or checkout. Automated checks do not substitute for this
+interaction checklist. Each evidence file, including its
 timestamp, tool version, notes, and result, must remain local and must never be
 committed or pushed.
 
@@ -179,6 +227,8 @@ the first console error plus relevant renderer counters. Keep screenshots and
 raw logs outside the repository and never edit evidence JSON manually. Do not
 commit or push a release claim. Fix the source, rebuild, and repeat the entire
 validation whenever the artifact fingerprint changes. Passed evidence remains
-local as well. After local publication or handoff, run
-`bun run check:candidate` to restore the tracked reports to candidate state
-before staging repository changes.
+local as well. Follow the
+[release handoff](release_candidate_handoff.md): run `check:all`, then
+`check:mvp`, and restore candidate reports with `check:candidate` before
+publication or handoff. Require unchanged fingerprints and a clean source
+checkout; candidate restoration does not delete ignored evidence.

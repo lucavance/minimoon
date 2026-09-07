@@ -1,0 +1,1137 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon_ui"
+
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon_ui/headless",
+  "lampclaw/minimoon_ui/theme",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn accordion(id~ : String, items~ : @minimoon.Val[Array[Panel]], initial_open_keys? : Array[String], multiple? : Bool, collapsible? : Bool, disabled? : Bool, force_mount? : Bool, show_indicator? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] accordion_content(id? : String, open? : Bool, force_mount? : Bool, labelled_by? : String, C) -> @minimoon.Node
+
+pub fn accordion_controlled(id~ : String, items~ : @minimoon.Val[Array[Panel]], open_keys~ : @minimoon.Val[Array[String]], on_change~ : @minimoon.Emit[Array[String]], multiple? : Bool, collapsible? : Bool, disabled? : Bool, force_mount? : Bool, show_indicator? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] accordion_item(id? : String, open? : Bool, disabled? : Bool, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] accordion_root(id? : String, disabled? : Bool, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] accordion_trigger(value~ : String, on_change~ : @minimoon.Emit[String], open? : Bool, disabled? : Bool, controls? : String, id? : String, show_indicator? : Bool, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] alert(variant? : Tone, id? : String, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] alert_action(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] alert_description(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn alert_dialog(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], on_confirm~ : @minimoon.Cmd, confirm_label? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] alert_title(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] aspect_ratio(ratio? : Double, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] attachment(C, state? : AttachmentState, size? : AttachmentSize, orientation? : Orientation, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn attachment_action(label~ : String, on_tap~ : @minimoon.Cmd, content? : @minimoon.Node, variant? : ButtonVariant, size? : ButtonSize, disabled? : Bool, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] attachment_actions(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] attachment_content(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] attachment_description(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] attachment_group(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn attachment_media(src? : String, alt? : String, variant? : MediaVariant, content? : @minimoon.Node, error? : Bool, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] attachment_title(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn attachment_trigger(label~ : String, on_tap~ : @minimoon.Cmd, content? : @minimoon.Node, disabled? : Bool, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] attachment_trigger_link(target~ : @minimoon.Route, disabled? : Bool, label? : String, id? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] avatar(size? : Size, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] avatar_badge(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] avatar_fallback(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] avatar_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] avatar_group_count(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn avatar_image(src~ : String, alt? : String, on_load? : @minimoon.Emit[@minimoon.ImageLoadDetail], on_error? : @minimoon.Emit[String], id? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] avatar_with_fallback(src~ : @minimoon.Val[String], alt? : String, size? : Size, id? : String, on_status_change? : @minimoon.Emit[AvatarImageStatus], C) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] badge(variant? : Tone, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] badge_link(on_tap~ : @minimoon.Cmd, variant? : Tone, disabled? : Bool, id? : String, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] breadcrumb(label? : String, C) -> @minimoon.Node
+
+pub fn breadcrumb_ellipsis() -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] breadcrumb_item(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] breadcrumb_link(on_tap~ : @minimoon.Cmd, disabled? : Bool, id? : String, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] breadcrumb_list(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] breadcrumb_page(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn breadcrumb_separator() -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] bubble(variant? : Tone, alignment? : Alignment, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] bubble_content(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] bubble_content_button(on_tap~ : @minimoon.Cmd, disabled? : Bool, id? : String, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] bubble_content_link(on_tap~ : @minimoon.Cmd, disabled? : Bool, id? : String, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] bubble_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] bubble_reactions(side? : ReactionSide, alignment? : Alignment, id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] button(on_tap? : @minimoon.Cmd, variant? : ButtonVariant, size? : ButtonSize, disabled? : Bool, form_type? : @minimoon.FormButtonType, id? : String, event_key? : String, class? : String, style? : String, label? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] button_group(orientation? : Orientation, C) -> @minimoon.Node
+
+pub fn button_group_separator(orientation? : Orientation) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] button_group_text(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn calendar(id~ : String, initial_month~ : @headless.CalendarDate, initial_selected? : @headless.DateSelection, disabled_date? : (@headless.CalendarDate) -> Bool, week_start? : Int, today? : @headless.CalendarDate, show_outside_days? : Bool, disabled? : Bool, on_select? : @minimoon.Emit[@headless.DateSelection], on_month_change? : @minimoon.Emit[@headless.CalendarDate]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn calendar_controlled(id~ : String, month~ : @minimoon.Val[@headless.CalendarDate], on_month_change~ : @minimoon.Emit[@headless.CalendarDate], selected~ : @minimoon.Val[@headless.DateSelection], on_change~ : @minimoon.Emit[@headless.DateSelection], disabled_date? : (@headless.CalendarDate) -> Bool, week_start? : Int, today? : @headless.CalendarDate, show_outside_days? : Bool, disabled? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] card(size? : Size, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] card_action(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] card_content(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] card_description(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] card_footer(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] card_header(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] card_title(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn carousel(id~ : String, items~ : @minimoon.Val[Array[Panel]], autoplay? : Bool, circular? : Bool, vertical? : Bool, interval? : Int) -> @minimoon.Val[@minimoon.Node]
+
+pub fn carousel_active_index(CarouselScope) -> Int
+
+pub fn carousel_can_next(CarouselScope) -> Bool
+
+pub fn carousel_can_previous(CarouselScope) -> Bool
+
+pub fn[C : @minimoon.IsChildren] carousel_content(CarouselScope, C, id? : String, autoplay? : Bool, interval? : Int, height? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn carousel_controlled(id~ : String, items~ : @minimoon.Val[Array[Panel]], current~ : @minimoon.Val[Int], on_change~ : @minimoon.Emit[Int], autoplay? : Bool, circular? : Bool, vertical? : Bool, interval? : Int) -> @minimoon.Val[@minimoon.Node]
+
+pub fn carousel_is_looping(CarouselScope) -> Bool
+
+pub fn[C : @minimoon.IsChildren] carousel_item(CarouselScope, index~ : Int, C, key? : String, aria_label? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn carousel_items(CarouselScope, items~ : Array[Panel], autoplay? : Bool, interval? : Int, height? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] carousel_next(CarouselScope, C, disabled? : Bool, aria_label? : String, class? : String) -> @minimoon.Node
+
+pub fn carousel_orientation(CarouselScope) -> Orientation
+
+pub fn[C : @minimoon.IsChildren] carousel_previous(CarouselScope, C, disabled? : Bool, aria_label? : String, class? : String) -> @minimoon.Node
+
+pub fn carousel_provider(id~ : String, count~ : @minimoon.Val[Int], render~ : (CarouselScope) -> @minimoon.Node, default_index? : Int, on_change? : @minimoon.Emit[Int], circular? : Bool, orientation? : Orientation, aria_label? : String, class? : String, style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn carousel_provider_controlled(id~ : String, count~ : @minimoon.Val[Int], current~ : @minimoon.Val[Int], on_change~ : @minimoon.Emit[Int], render~ : (CarouselScope) -> @minimoon.Node, circular? : Bool, orientation? : Orientation, aria_label? : String, class? : String, style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] carousel_provider_controlled_with_input(id~ : String, count~ : @minimoon.Val[Int], current~ : @minimoon.Val[Int], on_change~ : @minimoon.Emit[Int], input~ : @minimoon.Val[Input], render~ : (CarouselScope, Input) -> @minimoon.Node, circular? : Bool, orientation? : Orientation, aria_label? : String, class? : String, style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] carousel_provider_with_input(id~ : String, count~ : @minimoon.Val[Int], input~ : @minimoon.Val[Input], render~ : (CarouselScope, Input) -> @minimoon.Node, default_index? : Int, on_change? : @minimoon.Emit[Int], circular? : Bool, orientation? : Orientation, aria_label? : String, class? : String, style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn carousel_scroll_next(CarouselScope) -> @minimoon.Cmd
+
+pub fn carousel_scroll_previous(CarouselScope) -> @minimoon.Cmd
+
+pub fn carousel_scroll_to(CarouselScope, Int) -> @minimoon.Cmd
+
+pub fn carousel_slide_count(CarouselScope) -> Int
+
+pub fn[C : @minimoon.IsChildren] chart_container(C, id? : String, label? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] chart_legend(C, position? : ChartLegendPosition) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] chart_legend_content(C, position? : ChartLegendPosition) -> @minimoon.Node
+
+pub fn chart_legend_item(label~ : String, color? : String) -> @minimoon.Node
+
+pub fn chart_style(Array[(String, String)]) -> String
+
+pub fn[C : @minimoon.IsChildren] chart_tooltip(C, visible? : Bool) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] chart_tooltip_content(C, active? : Bool) -> @minimoon.Node
+
+pub fn chart_tooltip_item(label~ : String, value~ : String, color? : String, indicator? : ChartIndicator) -> @minimoon.Node
+
+pub fn chart_tooltip_label(String) -> @minimoon.Node
+
+pub fn checkbox(name? : String, id~ : String, initially_checked? : Bool, label? : String, disabled? : Bool, indeterminate? : Bool, read_only? : Bool, invalid? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn checkbox_controlled(name? : String, id~ : String, checked~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], label? : String, disabled? : Bool, indeterminate? : Bool, read_only? : Bool, invalid? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn checkbox_state(name? : String, id~ : String, initial? : CheckState, label? : String, disabled? : Bool, read_only? : Bool, invalid? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn checkbox_state_controlled(name? : String, id~ : String, state~ : @minimoon.Val[CheckState], on_change~ : @minimoon.Emit[CheckState], label? : String, disabled? : Bool, read_only? : Bool, invalid? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn choice_option(key~ : String, label~ : String, disabled? : Bool, group? : String) -> ChoiceOption
+
+pub fn collapsible(id~ : String, title~ : String, content~ : @minimoon.Val[@minimoon.Node], initially_open? : Bool, disabled? : Bool, force_mount? : Bool, show_indicator? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] collapsible_content(id? : String, open? : Bool, force_mount? : Bool, labelled_by? : String, C) -> @minimoon.Node
+
+pub fn collapsible_controlled(id~ : String, title~ : String, content~ : @minimoon.Val[@minimoon.Node], open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], disabled? : Bool, force_mount? : Bool, show_indicator? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] collapsible_root(id? : String, open? : Bool, disabled? : Bool, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] collapsible_trigger(on_change~ : @minimoon.Emit[Bool], open? : Bool, disabled? : Bool, controls? : String, id? : String, show_indicator? : Bool, C) -> @minimoon.Node
+
+pub fn combobox(UiContext, id~ : String, label~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], initial_value? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] combobox_chip(ComboboxScope, value~ : String, C, removable? : Bool) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] combobox_chips(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn combobox_chips_input(ComboboxScope, placeholder? : String) -> @minimoon.Node
+
+pub fn combobox_clear(ComboboxScope, label? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] combobox_collection(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] combobox_content(ComboboxScope, C) -> @minimoon.Node
+
+pub fn combobox_controlled(UiContext, id~ : String, label~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] combobox_empty(C, visible? : Bool) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] combobox_group(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn combobox_input(ComboboxScope, placeholder? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] combobox_item(ComboboxScope, value~ : String, C, disabled? : Bool) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] combobox_label(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] combobox_list(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn combobox_option(value~ : String, label~ : String, disabled? : Bool) -> ChoiceOption
+
+pub fn combobox_provider(UiContext, id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], initial? : ComboboxState, multiple? : Bool, disabled? : Bool, invalid? : Bool, required? : Bool, on_query_change? : @minimoon.Emit[String], on_values_change? : @minimoon.Emit[Array[String]], on_open_change? : @minimoon.Emit[Bool], render? : (ComboboxScope) -> @minimoon.Node) -> @minimoon.Val[@minimoon.Node]
+
+pub fn combobox_provider_controlled(UiContext, id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], state~ : @minimoon.Val[ComboboxState], on_change~ : @minimoon.Emit[ComboboxState], multiple? : Bool, disabled? : Bool, invalid? : Bool, required? : Bool, placeholder? : String, empty_text? : String, on_query_change? : @minimoon.Emit[String], on_values_change? : @minimoon.Emit[Array[String]], on_open_change? : @minimoon.Emit[Bool], filter? : (ChoiceOption, String) -> Bool, render? : (ComboboxScope) -> @minimoon.Node) -> @minimoon.Val[@minimoon.Node]
+
+pub fn combobox_separator() -> @minimoon.Node
+
+pub fn combobox_state(values? : Array[String], query? : String, open? : Bool) -> ComboboxState
+
+pub fn combobox_trigger(ComboboxScope, label? : String) -> @minimoon.Node
+
+pub fn combobox_value(ComboboxScope, placeholder? : String) -> @minimoon.Node
+
+pub fn command(id~ : String, items~ : @minimoon.Val[Array[MenuItem]], placeholder? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn command_close(CommandScope) -> @minimoon.Cmd
+
+pub fn command_dialog(UiContext, id~ : String, title~ : String, trigger_label~ : String, render~ : (CommandScope) -> @minimoon.Node, initial_query? : String, initially_open? : Bool, should_filter? : Bool, filter? : (String, String, Array[String]) -> Bool, close_on_select? : Bool, close_on_overlay? : Bool, on_query_change? : @minimoon.Emit[String], on_value_select? : @minimoon.Emit[String], on_open_change? : @minimoon.Emit[Bool]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] command_dialog_trigger(CommandScope, C, disabled? : Bool) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] command_empty(C, visible~ : Bool) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] command_group(C, heading? : String) -> @minimoon.Node
+
+pub fn command_input(CommandScope, placeholder? : String, disabled? : Bool) -> @minimoon.Node
+
+pub fn command_is_open(CommandScope) -> Bool
+
+pub fn[C : @minimoon.IsChildren] command_item(CommandScope, value~ : String, C, keywords? : Array[String], disabled? : Bool, force_mount? : Bool, on_select? : @minimoon.Emit[String], on_click? : @minimoon.Cmd) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] command_list(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn command_open(CommandScope) -> @minimoon.Cmd
+
+pub fn command_provider(id~ : String, render~ : (CommandScope) -> @minimoon.Node, initial_query? : String, on_value_select? : @minimoon.Emit[String], on_query_change? : @minimoon.Emit[String], should_filter? : Bool, filter? : (String, String, Array[String]) -> Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn command_provider_controlled(id~ : String, query~ : @minimoon.Val[String], on_query_change~ : @minimoon.Emit[String], render~ : (CommandScope) -> @minimoon.Node, on_value_select? : @minimoon.Emit[String], should_filter? : Bool, filter? : (String, String, Array[String]) -> Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn command_query(CommandScope) -> String
+
+pub fn command_separator() -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] command_shortcut(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn context_menu(UiContext, id~ : String, trigger_label~ : String, items~ : @minimoon.Val[Array[MenuItem]]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[T] data_column(key~ : String, label~ : String, text~ : (T) -> String, render? : (T) -> @minimoon.Node, sortable? : Bool, searchable? : Bool, hideable? : Bool, compare? : (T, T) -> Int, numeric_value? : (T) -> Double) -> DataColumn[T]
+
+pub fn[T : Eq] data_table(id~ : String, rows~ : @minimoon.Val[Array[T]], columns~ : Array[DataColumn[T]], row_key~ : (T) -> String, page_size? : Int, selectable? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[T : Eq] data_table_controlled(id~ : String, rows~ : @minimoon.Val[Array[T]], columns~ : Array[DataColumn[T]], row_key~ : (T) -> String, state~ : @minimoon.Val[TableState], on_change~ : @minimoon.Emit[TableState], selectable? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn date_picker(UiContext, id~ : String, label~ : String, initial_month~ : @headless.CalendarDate, selected~ : @minimoon.Val[@headless.DateSelection], on_change~ : @minimoon.Emit[@headless.DateSelection], disabled_date? : (@headless.CalendarDate) -> Bool, disabled? : Bool, today? : @headless.CalendarDate, show_outside_days? : Bool, week_start? : Int, presets? : Array[DatePickerPreset], format_value? : (@headless.DateSelection) -> String, initially_open? : Bool, on_open_change? : @minimoon.Emit[Bool], close_on_select? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn date_picker_controlled(UiContext, id~ : String, label~ : String, initial_month~ : @headless.CalendarDate, selected~ : @minimoon.Val[@headless.DateSelection], on_change~ : @minimoon.Emit[@headless.DateSelection], open~ : @minimoon.Val[Bool], on_open_change~ : @minimoon.Emit[Bool], disabled_date? : (@headless.CalendarDate) -> Bool, disabled? : Bool, today? : @headless.CalendarDate, show_outside_days? : Bool, week_start? : Int, presets? : Array[DatePickerPreset], format_value? : (@headless.DateSelection) -> String, close_on_select? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn date_picker_preset(label~ : String, value~ : @headless.CalendarDate) -> DatePickerPreset
+
+pub fn date_range_picker(UiContext, id~ : String, label~ : String, initial_month~ : @headless.CalendarDate, selected~ : @minimoon.Val[@headless.DateSelection], on_change~ : @minimoon.Emit[@headless.DateSelection], disabled_date? : (@headless.CalendarDate) -> Bool, disabled? : Bool, presets? : Array[DatePickerPreset], format_value? : (@headless.DateSelection) -> String, on_open_change? : @minimoon.Emit[Bool]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn date_range_picker_preset(label~ : String, start~ : @headless.CalendarDate, end~ : @headless.CalendarDate) -> DatePickerPreset
+
+pub fn dialog(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], initially_open? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn dialog_controlled(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], close_on_overlay? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] direction(@theme.TextDirection, C) -> @minimoon.Node
+
+pub fn dismiss_all_toasts(UiContext) -> @minimoon.Cmd
+
+pub fn dismiss_toast(UiContext, String) -> @minimoon.Cmd
+
+pub fn drawer(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], side? : Side, initially_open? : Bool, disabled? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn drawer_controlled(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], side? : Side, disabled? : Bool, close_on_overlay? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn dropdown_menu(UiContext, id~ : String, trigger_label~ : String, items~ : @minimoon.Val[Array[MenuItem]]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn dropdown_menu_controlled(UiContext, id~ : String, trigger_label~ : String, items~ : @minimoon.Val[Array[MenuItem]], open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], context_menu? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] empty(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] empty_content(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] empty_description(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] empty_header(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] empty_media(variant? : MediaVariant, id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] empty_title(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] field(FieldState, orientation? : Orientation, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] field_content(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] field_description(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] field_error(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] field_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] field_label(for_id~ : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] field_legend(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] field_separator(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] field_set(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn field_state(id~ : String, label~ : String, description? : String, error? : String, required? : Bool, disabled? : Bool) -> FieldState
+
+pub fn[C : @minimoon.IsChildren] field_title(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[Input : Eq] field_with_input(@minimoon.Val[FieldState], @minimoon.Val[Input], (FieldState, Input) -> @minimoon.Node) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] form(on_submit~ : @minimoon.Emit[Map[String, Json]], on_reset? : @minimoon.Cmd, values? : Map[String, Json], submit_key? : String, reset_key? : String, id? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] form_control(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] form_description(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] form_field(FieldState, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] form_item(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] form_label(for_id~ : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] form_message(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn hover_card(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn input(id~ : String, initial_value? : String, options? : InputOptions, on_confirm? : @minimoon.Emit[String]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn input_controlled(id~ : String, value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], options? : InputOptions, on_confirm? : @minimoon.Emit[String], semantics? : @minimoon.Semantics, on_focus? : @minimoon.Emit[@minimoon.FocusDetail], on_blur? : @minimoon.Emit[@minimoon.InputBlurDetail]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] input_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] input_group_addon(align? : AddonAlign, id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] input_group_button(variant? : ButtonVariant, size? : ButtonSize, on_tap~ : @minimoon.Cmd, disabled? : Bool, id? : String, class? : String, C) -> @minimoon.Node
+
+pub fn input_group_control(@minimoon.Node) -> @minimoon.Node
+
+pub fn input_group_input(id~ : String, value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], options? : InputOptions) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] input_group_text(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn input_group_textarea(id~ : String, value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], options? : InputOptions) -> @minimoon.Val[@minimoon.Node]
+
+pub fn input_options(disabled? : Bool, read_only? : Bool, invalid? : Bool, placeholder? : String, maxlength? : Int, input_type? : @minimoon.InputType, password? : Bool, focus? : Bool, name? : String, selection_start? : Int, selection_end? : Int) -> InputOptions
+
+pub fn input_otp(id~ : String, initial_value? : String, length? : Int, disabled? : Bool, numeric? : Bool, separator_after? : Int, invalid? : Bool, label? : String, accept? : (Char) -> Bool, render? : (OtpScope) -> @minimoon.Node, on_complete? : @minimoon.Emit[String]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn input_otp_controlled(id~ : String, value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], length? : Int, disabled? : Bool, numeric? : Bool, separator_after? : Int, invalid? : Bool, label? : String, accept? : (Char) -> Bool, render? : (OtpScope) -> @minimoon.Node, on_complete? : @minimoon.Emit[String]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] input_otp_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn input_otp_separator() -> @minimoon.Node
+
+pub fn input_otp_slot(value? : String, active? : Bool, id? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item(variant? : Tone, size? : Size, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item_actions(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item_content(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item_description(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item_footer(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item_header(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item_link(on_tap~ : @minimoon.Cmd, variant? : Tone, size? : Size, disabled? : Bool, id? : String, class? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item_media(variant? : MediaVariant, id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn item_separator() -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] item_title(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] kbd(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] kbd_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] label(for_id~ : String, required? : Bool, disabled? : Bool, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] marker(variant? : MarkerVariant, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] marker_content(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] marker_icon(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] marker_link(on_tap~ : @minimoon.Cmd, variant? : MarkerVariant, disabled? : Bool, id? : String, class? : String, C) -> @minimoon.Node
+
+pub fn menu_checkbox_item(key~ : String, label~ : String, checked~ : Bool, on_change~ : @minimoon.Emit[Bool], disabled? : Bool) -> MenuItem
+
+pub fn menu_customize(MenuItem, content? : @minimoon.Node, shortcut? : String, inset? : Bool, destructive? : Bool, close_on_select? : Bool, indicator_placement? : MenuIndicatorPlacement) -> MenuItem
+
+pub fn menu_group(key~ : String, items~ : Array[MenuItem], label? : String) -> MenuItem
+
+pub fn menu_item(key~ : String, label~ : String, on_select~ : @minimoon.Cmd, disabled? : Bool) -> MenuItem
+
+pub fn menu_label(key~ : String, label~ : String) -> MenuItem
+
+pub fn menu_radio_item(key~ : String, label~ : String, selected~ : Bool, on_select~ : @minimoon.Cmd, disabled? : Bool) -> MenuItem
+
+pub fn menu_separator(key~ : String) -> MenuItem
+
+pub fn[C : @minimoon.IsChildren] menu_shortcut(C) -> @minimoon.Node
+
+pub fn menu_submenu(key~ : String, label~ : String, items~ : Array[MenuItem], disabled? : Bool) -> MenuItem
+
+pub fn menubar(UiContext, id~ : String, groups~ : Array[MenuGroup]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn menubar_controlled(UiContext, id~ : String, groups~ : Array[MenuGroup], value~ : @minimoon.Val[String?], on_value_change~ : @minimoon.Emit[String?]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] message(alignment? : Alignment, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] message_avatar(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] message_content(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] message_footer(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] message_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] message_header(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn message_item(key~ : String, content~ : @minimoon.Node) -> MessageItem
+
+pub fn message_scroller(UiContext, id~ : String, items~ : @minimoon.Val[Array[MessageItem]], content_revision? : @minimoon.Val[Int], initially_at_end? : Bool, height? : String, show_buttons? : Bool, render_button? : (MessageScrollDirection, @minimoon.Cmd, Bool) -> @minimoon.Node) -> @minimoon.Val[@minimoon.Node]
+
+pub fn native_select(name? : String, id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], initial_value? : String, placeholder? : String, disabled? : Bool, invalid? : Bool, required? : Bool, size? : Size) -> @minimoon.Val[@minimoon.Node]
+
+pub fn native_select_controlled(name? : String, id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], placeholder? : String, disabled? : Bool, invalid? : Bool, required? : Bool, size? : Size) -> @minimoon.Val[@minimoon.Node]
+
+pub fn native_select_optgroup(label~ : String, Array[ChoiceOption]) -> Array[ChoiceOption]
+
+pub fn native_select_option(key~ : String, label~ : String, disabled? : Bool, group? : String) -> ChoiceOption
+
+pub fn navigation_menu(Array[NavigationItem], id? : String) -> @minimoon.Node
+
+pub fn navigation_menu_activate(NavigationMenuScope, String) -> @minimoon.Cmd
+
+pub fn navigation_menu_close(NavigationMenuScope) -> @minimoon.Cmd
+
+pub fn[C : @minimoon.IsChildren] navigation_menu_content(NavigationMenuItemScope, C, class? : String, style? : String) -> @minimoon.Node
+
+pub fn navigation_menu_indicator(NavigationMenuItemScope, class? : String) -> @minimoon.Node
+
+pub fn navigation_menu_item(NavigationMenuScope, value~ : String, render~ : (NavigationMenuItemScope) -> @minimoon.Node, disabled? : Bool, class? : String, style? : String) -> @minimoon.Node
+
+pub fn navigation_menu_item_is_open(NavigationMenuItemScope) -> Bool
+
+pub fn[C : @minimoon.IsChildren] navigation_menu_link(target~ : @minimoon.Route, C, active? : Bool, scope? : NavigationMenuScope, class? : String, style? : String, on_tap? : @minimoon.Cmd) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] navigation_menu_list(NavigationMenuScope, C, class? : String, style? : String) -> @minimoon.Node
+
+pub fn navigation_menu_provider_controlled(UiContext, id~ : String, value~ : @minimoon.Val[String?], on_value_change~ : @minimoon.Emit[String?], render~ : (NavigationMenuScope) -> @minimoon.Node, viewport? : Bool, aria_label? : String, side_offset? : Double, align_offset? : Double) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] navigation_menu_provider_controlled_with_input(UiContext, id~ : String, input~ : @minimoon.Val[Input], value~ : @minimoon.Val[String?], on_value_change~ : @minimoon.Emit[String?], render~ : (NavigationMenuScope, Input) -> @minimoon.Node, viewport? : Bool, aria_label? : String, side_offset? : Double, align_offset? : Double) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] navigation_menu_provider_with_input(UiContext, id~ : String, input~ : @minimoon.Val[Input], render~ : (NavigationMenuScope, Input) -> @minimoon.Node, default_value? : String, viewport? : Bool, on_value_change? : @minimoon.Emit[String?], aria_label? : String, side_offset? : Double, align_offset? : Double) -> @minimoon.Val[@minimoon.Node]
+
+pub fn navigation_menu_root(UiContext, id~ : String, render~ : (NavigationMenuScope) -> @minimoon.Node, default_value? : String, viewport? : Bool, on_value_change? : @minimoon.Emit[String?], aria_label? : String, side_offset? : Double, align_offset? : Double) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] navigation_menu_trigger(NavigationMenuItemScope, C, disabled? : Bool, class? : String, on_tap? : @minimoon.Cmd) -> @minimoon.Node
+
+pub fn navigation_menu_value(NavigationMenuScope) -> String?
+
+pub fn[C : @minimoon.IsChildren] navigation_menu_viewport(NavigationMenuScope, C, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] overlay_action(OverlayScope, C, on_tap~ : @minimoon.Cmd, close? : Bool, key? : String) -> @minimoon.Node
+
+pub fn overlay_arrow(side? : Side) -> @minimoon.Node
+
+pub fn overlay_close(OverlayScope, reason? : OverlayCloseReason) -> @minimoon.Cmd
+
+pub fn[C : @minimoon.IsChildren] overlay_close_button(OverlayScope, C, on_tap? : @minimoon.Cmd, key? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] overlay_content(OverlayScope, C, show_close? : Bool, close_label? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn overlay_controlled(UiContext, id~ : String, title~ : String, trigger_label~ : String, trigger_label_value? : @minimoon.Val[String], content~ : @minimoon.Val[@minimoon.Node], open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], kind? : OverlayKind, disabled? : Bool, close_on_overlay? : Bool, placement? : @headless.Placement) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] overlay_description(OverlayScope, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] overlay_footer(C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] overlay_header(C) -> @minimoon.Node
+
+pub fn overlay_is_open(OverlayScope) -> Bool
+
+pub fn overlay_open(OverlayScope) -> @minimoon.Cmd
+
+pub fn overlay_provider(UiContext, id~ : String, render~ : (OverlayScope) -> @minimoon.Node, initially_open? : Bool, kind? : OverlayKind, disabled? : Bool, modal? : Bool, close_on_overlay? : Bool, force_mount? : Bool, placement? : @headless.Placement, side_offset? : Double, align_offset? : Double, delay_ms? : Int, close_delay_ms? : Int, on_close? : @minimoon.Emit[OverlayCloseReason], on_open_change? : @minimoon.Emit[Bool]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn overlay_provider_controlled(UiContext, id~ : String, open~ : @minimoon.Val[Bool], on_open_change~ : @minimoon.Emit[Bool], render~ : (OverlayScope) -> @minimoon.Node, kind? : OverlayKind, disabled? : Bool, modal? : Bool, close_on_overlay? : Bool, force_mount? : Bool, placement? : @headless.Placement, side_offset? : Double, align_offset? : Double, delay_ms? : Int, close_delay_ms? : Int, on_close? : @minimoon.Emit[OverlayCloseReason]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] overlay_provider_controlled_with_input(UiContext, id~ : String, input~ : @minimoon.Val[Input], open~ : @minimoon.Val[Bool], on_open_change~ : @minimoon.Emit[Bool], render~ : (OverlayScope, Input) -> @minimoon.Node, kind? : OverlayKind, disabled? : Bool, modal? : Bool, close_on_overlay? : Bool, force_mount? : Bool, placement? : @headless.Placement, side_offset? : Double, align_offset? : Double, delay_ms? : Int, close_delay_ms? : Int, on_close? : @minimoon.Emit[OverlayCloseReason]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] overlay_title(OverlayScope, C) -> @minimoon.Node
+
+pub fn overlay_toggle(OverlayScope) -> @minimoon.Cmd
+
+pub fn[C : @minimoon.IsChildren] overlay_trigger(OverlayScope, C, on_tap? : @minimoon.Cmd, class? : String) -> @minimoon.Node
+
+pub fn pagination(id~ : String, total~ : @minimoon.Val[Int], page_size? : Int) -> @minimoon.Val[@minimoon.Node]
+
+pub fn pagination_controlled(id~ : String, page~ : @minimoon.Val[Int], total~ : @minimoon.Val[Int], on_change~ : @minimoon.Emit[Int], page_size? : Int) -> @minimoon.Val[@minimoon.Node]
+
+pub fn panel(key~ : String, title~ : String, content~ : @minimoon.Node, disabled? : Bool, icon? : @minimoon.Node, trigger? : @minimoon.Node) -> Panel
+
+pub fn popover(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], placement? : @headless.Placement) -> @minimoon.Val[@minimoon.Node]
+
+pub fn progress(value~ : Double, min? : Double, max? : Double, label? : String, indeterminate? : Bool, show_value? : Bool) -> @minimoon.Node
+
+pub fn progress_indicator(value~ : Double, min? : Double, max? : Double) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] progress_label(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] progress_track(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn progress_value(value~ : Double, min? : Double, max? : Double, text? : String) -> @minimoon.Node
+
+pub fn radio_group(name? : String, id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], initial_value? : String, disabled? : Bool, orientation? : Orientation) -> @minimoon.Val[@minimoon.Node]
+
+pub fn radio_group_controlled(name? : String, id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], disabled? : Bool, orientation? : Orientation) -> @minimoon.Val[@minimoon.Node]
+
+pub fn radio_group_item(value~ : String, checked? : Bool, disabled? : Bool, label? : String, id? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] radio_group_root(on_change~ : @minimoon.Emit[String], name? : String, id? : String, orientation? : Orientation, C) -> @minimoon.Node
+
+pub fn resizable(UiContext, id~ : String, panes~ : @minimoon.Val[Array[ResizablePane]], initial_sizes? : Array[Double], orientation? : Orientation, direction? : @theme.TextDirection, disabled? : Bool, style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn resizable_controlled(UiContext, id~ : String, panes~ : @minimoon.Val[Array[ResizablePane]], sizes~ : @minimoon.Val[Array[Double]], on_change~ : @minimoon.Emit[Array[Double]], on_commit? : @minimoon.Emit[Array[Double]], orientation? : Orientation, direction? : @theme.TextDirection, disabled? : Bool, style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn resizable_pane(key~ : String, content~ : @minimoon.Node, minimum? : Double, maximum? : Double) -> ResizablePane
+
+pub fn root(@minimoon.PageContext, (UiContext) -> @minimoon.Val[@minimoon.Node], theme? : @minimoon.Val[@theme.Theme], toast_limit? : Int) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] scroll_area(C, id? : String, horizontal? : Bool, vertical? : Bool, height? : Int, on_scroll? : @minimoon.Emit[@minimoon.ScrollDetail], on_upper? : @minimoon.Cmd, on_lower? : @minimoon.Cmd) -> @minimoon.Node
+
+pub fn select(UiContext, id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], initial_value? : String, placeholder? : String, disabled? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] select_content(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn select_controlled(UiContext, id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], placeholder? : String, disabled? : Bool, open? : @minimoon.Val[Bool], initially_open? : Bool, on_open_change? : @minimoon.Emit[Bool], invalid? : Bool, required? : Bool, placement? : @headless.Placement, side_offset? : Double, align_offset? : Double, render_option? : (ChoiceOption, Bool) -> @minimoon.Node, render_value? : (String, Array[ChoiceOption]) -> @minimoon.Node, render_content? : (Array[@minimoon.Node]) -> @minimoon.Node) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] select_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] select_item(on_tap~ : @minimoon.Cmd, selected? : Bool, disabled? : Bool, id? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] select_label(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn select_option(key~ : String, label~ : String, disabled? : Bool, group? : String) -> ChoiceOption
+
+pub fn select_scroll_down_button(on_scroll~ : @minimoon.Cmd, disabled? : Bool) -> @minimoon.Node
+
+pub fn select_scroll_up_button(on_scroll~ : @minimoon.Cmd, disabled? : Bool) -> @minimoon.Node
+
+pub fn select_separator() -> @minimoon.Node
+
+pub fn select_trigger(on_tap~ : @minimoon.Cmd, value~ : String, id~ : String, expanded? : Bool, disabled? : Bool, invalid? : Bool, required? : Bool, content? : @minimoon.Node) -> @minimoon.Node
+
+pub fn select_value(Array[ChoiceOption], String, placeholder? : String) -> String
+
+pub fn separator(orientation? : Orientation, decorative? : Bool) -> @minimoon.Node
+
+pub fn sheet(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], side? : Side) -> @minimoon.Val[@minimoon.Node]
+
+pub fn sidebar(id~ : String, content~ : @minimoon.Val[@minimoon.Node], initially_collapsed? : Bool, label? : String, width? : Int) -> @minimoon.Val[@minimoon.Node]
+
+pub fn sidebar_close_mobile(SidebarScope) -> @minimoon.Cmd
+
+pub fn sidebar_collapse(SidebarScope) -> @minimoon.Cmd
+
+pub fn[C : @minimoon.IsChildren] sidebar_content(C, id? : String, class? : String, height? : String) -> @minimoon.Node
+
+pub fn sidebar_controlled(id~ : String, content~ : @minimoon.Val[@minimoon.Node], collapsed~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], label? : String, width? : Int) -> @minimoon.Val[@minimoon.Node]
+
+pub fn sidebar_expand(SidebarScope) -> @minimoon.Cmd
+
+pub fn[C : @minimoon.IsChildren] sidebar_footer(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_group(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_group_action(SidebarSurfaceScope, on_tap~ : @minimoon.Cmd, C, disabled? : Bool, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_group_content(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_group_label(SidebarSurfaceScope, C, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_header(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn sidebar_input(value~ : String, on_input~ : @minimoon.Emit[String], name? : String, placeholder? : String, disabled? : Bool, id? : String, event_key? : String, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_inset(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn sidebar_is_collapsed(SidebarScope) -> Bool
+
+pub fn sidebar_is_mobile_open(SidebarScope) -> Bool
+
+pub fn[C : @minimoon.IsChildren] sidebar_menu(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_menu_action(SidebarSurfaceScope, on_tap~ : @minimoon.Cmd, C, disabled? : Bool, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_menu_badge(SidebarSurfaceScope, C, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_menu_button(SidebarSurfaceScope, C, target? : @minimoon.Route, is_active? : Bool, variant? : SidebarMenuButtonVariant, size? : SidebarMenuButtonSize, disabled? : Bool, aria_label? : String, on_tap? : @minimoon.Cmd, icon? : @minimoon.Node, id? : String, event_key? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_menu_button_with_tooltip(SidebarSurfaceScope, id~ : String, tooltip~ : String, C, target? : @minimoon.Route, is_active? : Bool, variant? : SidebarMenuButtonVariant, size? : SidebarMenuButtonSize, disabled? : Bool, aria_label? : String, on_tap? : @minimoon.Cmd, icon? : @minimoon.Node, tooltip_side? : Side, tooltip_align? : Alignment, tooltip_side_offset? : Double, tooltip_align_offset? : Double, tooltip_show_arrow? : Bool, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_menu_item(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn sidebar_menu_skeleton(show_icon? : Bool, width? : Int, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_menu_sub(SidebarSurfaceScope, C, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_menu_sub_button(SidebarSurfaceScope, C, target? : @minimoon.Route, is_active? : Bool, disabled? : Bool, on_tap? : @minimoon.Cmd, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_menu_sub_item(C, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn sidebar_open_mobile(SidebarScope) -> @minimoon.Cmd
+
+pub fn sidebar_provider(UiContext, id~ : String, render~ : (SidebarScope) -> @minimoon.Node, default_collapsed? : Bool, default_mobile_open? : Bool, default_width? : Double, on_collapsed_change? : @minimoon.Emit[Bool], on_mobile_open_change? : @minimoon.Emit[Bool], on_width_change? : @minimoon.Emit[Double], style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn sidebar_provider_controlled(UiContext, id~ : String, state~ : @minimoon.Val[SidebarState], on_change~ : @minimoon.Emit[SidebarState], render~ : (SidebarScope) -> @minimoon.Node, style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] sidebar_provider_controlled_with_input(UiContext, id~ : String, state~ : @minimoon.Val[SidebarState], on_change~ : @minimoon.Emit[SidebarState], input~ : @minimoon.Val[Input], render~ : (SidebarScope, Input) -> @minimoon.Node, style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[Input : Eq] sidebar_provider_with_input(UiContext, id~ : String, input~ : @minimoon.Val[Input], render~ : (SidebarScope, Input) -> @minimoon.Node, default_collapsed? : Bool, default_mobile_open? : Bool, default_width? : Double, on_collapsed_change? : @minimoon.Emit[Bool], on_mobile_open_change? : @minimoon.Emit[Bool], on_width_change? : @minimoon.Emit[Double], style? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn sidebar_rail(SidebarSurfaceScope, min_width? : Double, max_width? : Double, class? : String) -> @minimoon.Node
+
+pub fn sidebar_separator(class? : String) -> @minimoon.Node
+
+pub fn sidebar_set_width(SidebarScope, Double) -> @minimoon.Cmd
+
+pub fn sidebar_state(collapsed? : Bool, mobile_open? : Bool, width? : Double) -> SidebarState
+
+pub fn sidebar_surface(SidebarScope, render~ : (SidebarSurfaceScope) -> @minimoon.Node, side? : SidebarSide, variant? : SidebarVariant, collapsible? : SidebarCollapsible, mobile? : Bool, hidden? : Bool, aria_label? : String, id? : String, class? : String, style? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] sidebar_trigger(SidebarScope, C, mobile? : Bool, disabled? : Bool, id? : String, class? : String, on_tap? : @minimoon.Cmd) -> @minimoon.Node
+
+pub fn sidebar_width(SidebarScope) -> Double
+
+pub fn skeleton(width? : Int, height? : Int, round? : Bool) -> @minimoon.Node
+
+pub fn slider(UiContext, id~ : String, default_value? : Int, spec? : @headless.SliderSpec, orientation? : Orientation, direction? : @theme.TextDirection, disabled? : Bool, label? : String, on_value_change? : @minimoon.Emit[Int], on_value_commit? : @minimoon.Emit[Int]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn slider_controlled(UiContext, id~ : String, value~ : @minimoon.Val[Int], on_change~ : @minimoon.Emit[Int], on_commit? : @minimoon.Emit[Int], spec? : @headless.SliderSpec, orientation? : Orientation, direction? : @theme.TextDirection, disabled? : Bool, label? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn slider_values(UiContext, id~ : String, default_values~ : Array[Int], spec? : @headless.SliderSpec, orientation? : Orientation, direction? : @theme.TextDirection, disabled? : Bool, label? : String, on_value_change? : @minimoon.Emit[Array[Int]], on_value_commit? : @minimoon.Emit[Array[Int]]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn slider_values_controlled(UiContext, id~ : String, values~ : @minimoon.Val[Array[Int]], on_change~ : @minimoon.Emit[Array[Int]], on_commit? : @minimoon.Emit[Array[Int]], spec? : @headless.SliderSpec, orientation? : Orientation, direction? : @theme.TextDirection, disabled? : Bool, label? : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn sonner(UiContext, position? : ToastPosition, rich_colors? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn spinner(label? : String, size? : Size) -> @minimoon.Node
+
+pub fn stack(Array[@minimoon.Val[@minimoon.Node]]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn switch(name? : String, id~ : String, initially_checked? : Bool, label? : String, disabled? : Bool, read_only? : Bool, invalid? : Bool, size? : Size) -> @minimoon.Val[@minimoon.Node]
+
+pub fn switch_controlled(name? : String, id~ : String, checked~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], label? : String, disabled? : Bool, read_only? : Bool, invalid? : Bool, size? : Size) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] table(C, id? : String, class? : String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] table_body(C) -> @minimoon.Node
+
+pub fn table_caption(String) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] table_cell(C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] table_footer(C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] table_head(C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] table_header(C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] table_row(C, selected? : Bool) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] table_span_cell(C, colspan? : Int, rowspan? : Int, header? : Bool) -> TableSpanCell
+
+pub fn[C : @minimoon.IsChildren] table_span_head(C, colspan? : Int, rowspan? : Int) -> TableSpanCell
+
+pub fn table_spanning(rows~ : Array[Array[TableSpanCell]], columns~ : Int, row_height? : Int, min_width? : Int, id? : String) -> @minimoon.Node
+
+pub fn table_state(page_size? : Int) -> TableState
+
+pub fn tabs(id~ : String, items~ : @minimoon.Val[Array[Panel]], initial_selected? : String, vertical? : Bool, force_mount? : Bool, list_variant? : TabsListVariant) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] tabs_content(id? : String, selected? : Bool, force_mount? : Bool, labelled_by? : String, C) -> @minimoon.Node
+
+pub fn tabs_controlled(id~ : String, items~ : @minimoon.Val[Array[Panel]], selected~ : @minimoon.Val[String?], on_change~ : @minimoon.Emit[String?], vertical? : Bool, force_mount? : Bool, list_variant? : TabsListVariant) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] tabs_list(id? : String, vertical? : Bool, variant? : TabsListVariant, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] tabs_root(id? : String, vertical? : Bool, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] tabs_trigger(value~ : String, on_change~ : @minimoon.Emit[String], selected? : Bool, disabled? : Bool, controls? : String, id? : String, C) -> @minimoon.Node
+
+pub fn textarea(id~ : String, initial_value? : String, options? : InputOptions) -> @minimoon.Val[@minimoon.Node]
+
+pub fn textarea_controlled(id~ : String, value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], options? : InputOptions, on_confirm? : @minimoon.Emit[String], semantics? : @minimoon.Semantics, on_focus? : @minimoon.Emit[@minimoon.FocusDetail], on_blur? : @minimoon.Emit[@minimoon.TextareaBlurDetail]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn theme(@minimoon.Val[@theme.Theme], @minimoon.Val[@minimoon.Node]) -> @minimoon.Val[@minimoon.Node]
+
+pub fn toast(UiContext, Toast) -> @minimoon.Cmd
+
+pub fn[C : @minimoon.IsChildren] toast_action(on_tap~ : @minimoon.Cmd, C) -> @minimoon.Node
+
+pub fn toast_close(UiContext, id~ : String, label? : String) -> @minimoon.Node
+
+pub fn toast_description(String) -> @minimoon.Node
+
+pub fn toast_notice(id~ : String, title~ : String, description? : String, duration_ms? : Int, variant? : ToastVariant, action_label? : String, action? : @minimoon.Cmd, on_close? : @minimoon.Cmd) -> Toast
+
+pub fn[C : @minimoon.IsChildren] toast_surface(C, variant? : ToastVariant, open? : Bool, id? : String) -> @minimoon.Node
+
+pub fn toast_title(String) -> @minimoon.Node
+
+pub fn toaster(UiContext, position? : ToastPosition, rich_colors? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn toggle(id~ : String, content~ : @minimoon.Val[@minimoon.Node], initially_pressed? : Bool, disabled? : Bool, variant? : ButtonVariant, size? : Size, invalid? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn toggle_controlled(id~ : String, pressed~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], content~ : @minimoon.Val[@minimoon.Node], disabled? : Bool, variant? : ButtonVariant, size? : Size, invalid? : Bool) -> @minimoon.Val[@minimoon.Node]
+
+pub fn toggle_group(id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], initial_value? : Array[String], multiple? : Bool, disabled? : Bool, orientation? : Orientation, variant? : ButtonVariant, size? : Size, spacing? : Int, render? : (ChoiceOption, Bool) -> @minimoon.Node) -> @minimoon.Val[@minimoon.Node]
+
+pub fn toggle_group_controlled(id~ : String, options~ : @minimoon.Val[Array[ChoiceOption]], value~ : @minimoon.Val[Array[String]], on_change~ : @minimoon.Emit[Array[String]], multiple? : Bool, disabled? : Bool, orientation? : Orientation, variant? : ButtonVariant, size? : Size, spacing? : Int, render? : (ChoiceOption, Bool) -> @minimoon.Node) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] toggle_group_item(on_tap~ : @minimoon.Cmd, pressed? : Bool, disabled? : Bool, id? : String, C) -> @minimoon.Node
+
+pub fn tooltip(UiContext, id~ : String, trigger_label~ : String, text~ : String) -> @minimoon.Val[@minimoon.Node]
+
+pub fn[C : @minimoon.IsChildren] typography_blockquote(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_h1(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_h2(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_h3(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_h4(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_inline_code(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_large(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_lead(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_list(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_muted(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_p(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+pub fn[C : @minimoon.IsChildren] typography_small(id? : String, class? : String, style? : String, C) -> @minimoon.Node
+
+// Errors
+
+// Types and methods
+pub(all) enum AddonAlign {
+  InlineStart
+  InlineEnd
+  BlockStart
+  BlockEnd
+} derive(Eq, @debug.Debug)
+
+pub(all) enum Alignment {
+  Start
+  Center
+  End
+} derive(Eq, @debug.Debug)
+
+pub(all) enum AttachmentSize {
+  AttachmentDefaultSize
+  AttachmentSm
+  AttachmentXs
+} derive(Eq, @debug.Debug)
+
+pub(all) enum AttachmentState {
+  AttachmentIdle
+  AttachmentUploading
+  AttachmentProcessing
+  AttachmentError
+  AttachmentDone
+} derive(Eq, @debug.Debug)
+
+pub(all) enum AvatarImageStatus {
+  AvatarLoading
+  AvatarLoaded
+  AvatarError
+} derive(Eq, @debug.Debug)
+
+pub(all) enum ButtonSize {
+  Default
+  Xs
+  Sm
+  Lg
+  Icon
+  IconXs
+  IconSm
+  IconLg
+} derive(Eq, @debug.Debug)
+
+pub(all) enum ButtonVariant {
+  Default
+  Outline
+  Secondary
+  Ghost
+  Destructive
+  Link
+} derive(Eq, @debug.Debug)
+
+type CarouselScope
+
+pub(all) enum ChartIndicator {
+  ChartDot
+  ChartLine
+  ChartDashed
+} derive(Eq, @debug.Debug)
+
+pub(all) enum ChartLegendPosition {
+  LegendTop
+  LegendBottom
+} derive(Eq, @debug.Debug)
+
+pub(all) enum CheckState {
+  Unchecked
+  Checked
+  Indeterminate
+} derive(Eq, @debug.Debug)
+
+pub(all) struct ChoiceOption {
+  key : String
+  label : String
+  disabled : Bool
+  group : String
+} derive(Eq, @debug.Debug)
+
+type ComboboxScope
+pub fn ComboboxScope::choose(Self, String) -> @minimoon.Cmd
+pub fn ComboboxScope::close(Self) -> @minimoon.Cmd
+pub fn ComboboxScope::open(Self) -> @minimoon.Cmd
+pub fn ComboboxScope::options(Self, filtered? : Bool) -> Array[ChoiceOption]
+pub fn ComboboxScope::remove(Self, String) -> @minimoon.Cmd
+pub fn ComboboxScope::state(Self) -> ComboboxState
+
+pub(all) struct ComboboxState {
+  values : Array[String]
+  query : String
+  open : Bool
+} derive(Eq, @debug.Debug)
+
+type CommandScope
+pub fn CommandScope::matches(Self, String, keywords? : Array[String]) -> Bool
+
+type DataColumn[T]
+
+pub struct DatePickerPreset {
+  label : String
+  value : @headless.DateSelection
+} derive(Eq, @debug.Debug)
+
+pub struct FieldState {
+  id : String
+  label : String
+  description : String
+  error : String
+  required : Bool
+  disabled : Bool
+} derive(Eq, @debug.Debug)
+pub fn FieldState::semantics(Self, role? : @minimoon.SemanticRole) -> @minimoon.Semantics
+
+pub struct InputOptions {
+  disabled : Bool
+  read_only : Bool
+  invalid : Bool
+  placeholder : String
+  maxlength : Int
+  input_type : @minimoon.InputType
+  password : Bool
+  focus : Bool
+  name : String
+  selection_start : Int?
+  selection_end : Int?
+} derive(Eq, @debug.Debug)
+
+pub(all) enum MarkerVariant {
+  PlainMarker
+  SeparatorMarker
+  BorderMarker
+} derive(Eq, @debug.Debug)
+
+pub(all) enum MediaVariant {
+  PlainMedia
+  IconMedia
+  ImageMedia
+} derive(Eq, @debug.Debug)
+
+pub(all) struct MenuGroup {
+  key : String
+  label : String
+  items : @minimoon.Val[Array[MenuItem]]
+}
+
+pub(all) enum MenuIndicatorPlacement {
+  IndicatorStart
+  IndicatorEnd
+} derive(Eq, @debug.Debug)
+
+type MenuItem
+pub impl Eq for MenuItem
+
+pub(all) struct MessageItem {
+  key : String
+  content : @minimoon.Node
+} derive(Eq)
+
+pub(all) enum MessageScrollDirection {
+  ScrollStart
+  ScrollEnd
+} derive(Eq, @debug.Debug)
+
+pub(all) struct NavigationItem {
+  key : String
+  label : String
+  target : @minimoon.Route
+}
+
+type NavigationMenuItemScope
+
+type NavigationMenuScope
+
+pub(all) enum Orientation {
+  Horizontal
+  Vertical
+} derive(Eq, @debug.Debug)
+
+pub struct OtpScope {
+  value : String
+  length : Int
+  active_index : Int
+  disabled : Bool
+  invalid : Bool
+} derive(Eq, @debug.Debug)
+
+pub(all) enum OverlayCloseReason {
+  CloseButton
+  Backdrop
+  Action
+  PageHidden
+  Programmatic
+} derive(Eq, @debug.Debug)
+
+pub(all) enum OverlayKind {
+  DialogSurface
+  AlertSurface
+  SheetSurface(Side)
+  PopoverSurface
+  PreviewSurface
+  TooltipSurface
+  ContextSurface
+} derive(Eq, @debug.Debug)
+
+type OverlayScope
+
+pub(all) struct Panel {
+  key : String
+  title : String
+  content : @minimoon.Node
+  disabled : Bool
+  icon : @minimoon.Node?
+  trigger : @minimoon.Node?
+} derive(Eq)
+
+pub(all) enum ReactionSide {
+  ReactionTop
+  ReactionBottom
+} derive(Eq, @debug.Debug)
+
+pub(all) struct ResizablePane {
+  key : String
+  content : @minimoon.Node
+  minimum : Double
+  maximum : Double
+} derive(Eq)
+
+pub(all) enum Side {
+  Top
+  Right
+  Bottom
+  Left
+} derive(Eq, @debug.Debug)
+
+pub(all) enum SidebarCollapsible {
+  SidebarOffcanvas
+  SidebarIcon
+  SidebarFixed
+} derive(Eq, @debug.Debug)
+
+pub(all) enum SidebarMenuButtonSize {
+  SidebarMenuSm
+  SidebarMenuDefault
+  SidebarMenuLg
+} derive(Eq, @debug.Debug)
+
+pub(all) enum SidebarMenuButtonVariant {
+  SidebarMenuButtonDefault
+  SidebarMenuButtonOutline
+} derive(Eq, @debug.Debug)
+
+type SidebarScope
+
+pub(all) enum SidebarSide {
+  SidebarLeft
+  SidebarRight
+} derive(Eq, @debug.Debug)
+
+pub(all) struct SidebarState {
+  collapsed : Bool
+  mobile_open : Bool
+  width : Double
+} derive(Eq, @debug.Debug)
+
+type SidebarSurfaceScope
+pub fn SidebarSurfaceScope::is_icon_only(Self) -> Bool
+pub fn SidebarSurfaceScope::variant(Self) -> SidebarVariant
+
+pub(all) enum SidebarVariant {
+  SidebarDefault
+  SidebarFloating
+  SidebarInset
+} derive(Eq, @debug.Debug)
+
+pub(all) enum Size {
+  Small
+  Medium
+  Large
+} derive(Eq, @debug.Debug)
+
+pub struct TableSpanCell {
+  content : @minimoon.Node
+  colspan : Int
+  rowspan : Int
+  header : Bool
+}
+
+pub(all) struct TableState {
+  query : String
+  page : Int
+  page_size : Int
+  sort_key : String
+  descending : Bool
+  selected_keys : Array[String]
+  hidden_columns : Array[String]
+} derive(Eq, @debug.Debug)
+
+pub(all) enum TabsListVariant {
+  TabsDefault
+  TabsLine
+} derive(Eq, @debug.Debug)
+
+type Toast
+pub impl Eq for Toast
+
+pub(all) enum ToastPosition {
+  ToastTopLeft
+  ToastTopCenter
+  ToastTopRight
+  ToastBottomLeft
+  ToastBottomCenter
+  ToastBottomRight
+} derive(Eq, @debug.Debug)
+
+pub(all) enum ToastVariant {
+  ToastDefault
+  ToastDestructive
+  ToastSuccess
+} derive(Eq, @debug.Debug)
+
+pub(all) enum Tone {
+  Default
+  Secondary
+  Outline
+  Destructive
+  Muted
+  Tinted
+  Ghost
+  Link
+} derive(Eq, @debug.Debug)
+
+type UiContext
+pub fn UiContext::visible(Self) -> @minimoon.Val[Bool]
+
+// Type aliases
+
+// Traits

@@ -17,7 +17,7 @@ Minimoon is Elm-style without forcing one global application model. A local
 component can own a state machine inside a keyed or dynamic `Val` branch. `Val`
 is a read-only incremental value; mutable signals are not public.
 
-## Product surface in 0.1.0
+## Product surface in 0.2.0
 
 - module: `lampclaw/minimoon`
 - state: opaque `Cmd`, callable `Emit[Msg]`, and model-first tuple updates;
@@ -39,7 +39,7 @@ is a read-only incremental value; mutable signals are not public.
 - optional packages: normalized-tree testing, headless interactive components,
   additive input-driven content slots, and versioned `minimal-v1` /
   `minimal-v2` styles
-- host target: WeChat MiniApp Skyline and App Contract v7
+- host target: WeChat MiniApp Skyline and App Contract v8
 - generated module format: CommonJS
 
 The author-facing `(Val, Emit)` shape is influenced by Rabbita, but Minimoon
@@ -48,8 +48,10 @@ boundary. Neither framework exposes a mutable `Signal`; Minimoon applications
 also cannot manipulate graph cells, host patches, or raw `wx.*` callbacks.
 Original source provenance is recorded in
 [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md); the
-[Rabbita/RUI audit](reference/rabbita_and_rui_audit.md) records the pinned
-capability comparison and future component candidates.
+[Rabbita/RUI audit](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) records the pinned
+historical capability comparison; the independent UI
+[migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md)
+records the implemented native adaptations.
 
 ## Success criterion
 
@@ -57,3 +59,11 @@ Minimoon succeeds when a MoonBit application can express stateful, keyed,
 lifecycle-aware MiniApp pages without handwritten JavaScript, while generated
 release bytes remain deterministic, bounded, and independently verifiable in
 WeChat Developer Tools.
+
+## Optional native component library
+
+Core `0.2.0` supports the separately packaged `lampclaw/minimoon_ui 0.1.0`
+library. Its native
+RUI adaptation follows the same Val/page ownership model; it does not introduce
+HTML, DOM, SSR, browser events or handwritten bridge authoring. UI is opt-in,
+independently versioned and excluded from the core registry archive.

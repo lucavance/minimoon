@@ -33,3 +33,26 @@ test "ABI v10 host captures, merges, and drains asynchronous runtime wakes" {
     ),
   )
 }
+
+///|
+test "typed UI host paths are finite, page-owned, and revision-guarded" {
+  let host = shared_host_bridge()
+  let protocol = shared_protocol_bridge()
+  for
+    marker in [
+      "this.createSelectorQuery()", "entry.measureRevision !== this._rv", "revision !== this._rv",
+      "...eventDispatchers", "validMeasurementPayload(payload)", "measurementNodes(results, payload.ids)",
+    ] {
+    assert_true(host.contains(marker))
+  }
+  for
+    marker in [
+      "__mmDispatchTouchStart", "__mmDispatchTouchMove", "__mmDispatchTouchEnd",
+      "__mmDispatchTouchCancel", "__mmDispatchLongPress", "__mmDispatchChanging",
+      "__mmDispatchSubmit", "__mmDispatchReset", "__mmDispatchLoad", "__mmDispatchError",
+      "payload.ids.length <= 128", "\"slider\"", "\"progress\"", "\"form\"", "\"label\"",
+      "\"touchcancel\"", "\"ariaValueNow\"",
+    ] {
+    assert_true(protocol.contains(marker))
+  }
+}

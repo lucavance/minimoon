@@ -529,6 +529,18 @@ async fn load_config_document(config_file : String) -> ConfigDocument {
           )
         None => ()
       }
+      for resource_issue in resource_config_issues(value) {
+        issues.push(
+          issue_at(
+            "MMN1010",
+            resource_issue.1,
+            config_file,
+            resource_issue.0,
+            "Declare a native MoonBit resource provider and an optional feature array.",
+            spans,
+          ),
+        )
+      }
     }
     _ =>
       issues.push(

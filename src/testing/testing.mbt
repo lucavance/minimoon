@@ -9,6 +9,7 @@ pub enum Selector {
   TextContaining(String)
   Prop(String, Json)
   Event(String)
+  BoundEvent(String)
   Role(String)
   Label(String)
   All(Array[Selector])
@@ -47,6 +48,12 @@ pub fn by_prop(name : String, value : Json) -> Selector {
 ///|
 pub fn by_event(name : String) -> Selector {
   Event(name)
+}
+
+///|
+/// Match an explicit event route, independently of the native event name.
+pub fn by_event_key(key : String) -> Selector {
+  BoundEvent(key)
 }
 
 ///|
@@ -137,6 +144,12 @@ fn selector_matches(value : Json, selector : Selector) -> Bool {
     Event(name) =>
       object_field(object_field(value, "events").unwrap_or(Json::null()), name)
       is Some(_)
+    BoundEvent(key) =>
+      match object_field(value, "events") {
+        Some(Object(events)) =>
+          events.values().any(value => value == Json::string(key))
+        _ => false
+      }
     Role(role) =>
       string_field(object_field(value, "props").unwrap_or(Json::null()), "role") ==
       Some(role)

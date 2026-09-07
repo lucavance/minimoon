@@ -1,0 +1,79 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon_ui/headless"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn calendar_date(year~ : Int, month~ : Int, day~ : Int) -> CalendarDate
+
+pub fn days_in_month(Int, Int) -> Int
+
+pub fn page_count(Int, Int) -> Int
+
+pub fn place(Bounds, Bounds, Bounds, Placement, gap? : Double, align_offset? : Double) -> Bounds
+
+pub fn resize_pair(Array[Double], Int, Double, Array[Double], Array[Double]) -> Array[Double]
+
+pub fn slider_spec(min? : Int, max? : Int, step? : Int, min_steps_between? : Int) -> SliderSpec
+
+// Errors
+
+// Types and methods
+pub(all) struct Bounds {
+  left : Double
+  top : Double
+  width : Double
+  height : Double
+} derive(Eq, @debug.Debug)
+
+pub struct CalendarDate {
+  year : Int
+  month : Int
+  day : Int
+} derive(Eq, @debug.Debug)
+pub fn CalendarDate::add_days(Self, Int) -> Self
+pub fn CalendarDate::add_months(Self, Int) -> Self
+pub fn CalendarDate::iso(Self) -> String
+pub fn CalendarDate::ordinal(Self) -> Int
+pub fn CalendarDate::weekday(Self) -> Int
+
+pub(all) enum DateSelection {
+  Single(CalendarDate?)
+  Multiple(Array[CalendarDate])
+  Range(CalendarDate?, CalendarDate?)
+} derive(Eq, @debug.Debug)
+pub fn DateSelection::choose(Self, CalendarDate) -> Self
+pub fn DateSelection::contains(Self, CalendarDate) -> Bool
+
+pub(all) enum Placement {
+  BottomStart
+  BottomCenter
+  BottomEnd
+  TopStart
+  TopCenter
+  TopEnd
+  LeftStart
+  LeftCenter
+  LeftEnd
+  RightStart
+  RightCenter
+  RightEnd
+} derive(Eq, @debug.Debug)
+
+pub struct SliderSpec {
+  min : Int
+  max : Int
+  step : Int
+  min_steps_between : Int
+} derive(Eq, @debug.Debug)
+pub fn SliderSpec::fraction(Self, Int) -> Double
+pub fn SliderSpec::nearest(Self, Array[Int], Double) -> Int
+pub fn SliderSpec::normalize(Self, Array[Int]) -> Array[Int]
+pub fn SliderSpec::snap(Self, Double) -> Int
+pub fn SliderSpec::update(Self, Array[Int], Int, Double) -> Array[Int]
+
+// Type aliases
+
+// Traits

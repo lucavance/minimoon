@@ -30,4 +30,13 @@ test "documentation validator covers drift and status failures" {
     ),
   )
   assert_true(source.contains("live state:"))
+  assert_true(source.contains("ui/examples/showcase"))
+  assert_true(source.contains("moduleVersionProblems"))
+  assert_true(source.contains("manifest protocol version differs"))
+  assert_true(
+    source.contains(
+      "candidate release_summary must keep Developer Tools pending",
+    ),
+  )
+  assert_true(source.contains("local Markdown link escapes archive"))
 }

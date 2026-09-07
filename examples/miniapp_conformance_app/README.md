@@ -1,6 +1,8 @@
 # MiniApp conformance application
 
-This is the repository's only maintained real-host fixture. One release build
+This is the core framework's maintained real-host fixture for `0.2.0`.
+The independent UI module has its own
+[six-page showcase](../../ui/examples/showcase/README.md). One core release build
 and one artifact fingerprint cover four page routes:
 
 - `src/pages/showcase`: bilingual Minimoon Studio narrative, local state,
@@ -50,3 +52,8 @@ scheduler/retry/timeout counter check. Automated status lives in
 `generated/verify_report.json`; real-host evidence is valid only for the exact
 artifact fingerprint recorded in the local, Git-ignored
 `generated/devtools.evidence.json`. Never commit or push that file.
+
+CI publishes this candidate as `minimoon-devtools-<commit>`; the UI bundle is
+`minimoon-ui-devtools-<commit>`. Both need their own Skyline acceptance before
+the paired release. Follow the
+[handoff runbook](../../docs/operations/release_candidate_handoff.md).

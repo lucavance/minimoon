@@ -1,0 +1,5 @@
+import {
+  "lampclaw/minimoon/resources" @build_resources,
+}
+
+supported_targets = "js+native"

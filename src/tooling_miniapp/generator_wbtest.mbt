@@ -95,14 +95,17 @@ test "page bridge uses the application runtime and gates navigation" {
   assert_false(protocol.contains("?."))
   assert_false(protocol.contains("??"))
   let wxml = @renderer.dynamic_templates_wxml()
+  assert_true(bridge.contains("...eventDispatchers"))
   for
     handler in [
       "__mmDispatchTap", "__mmDispatchInput", "__mmDispatchChange", "__mmDispatchConfirm",
       "__mmDispatchFocus", "__mmDispatchBlur", "__mmDispatchScroll", "__mmDispatchUpper",
-      "__mmDispatchLower",
+      "__mmDispatchLower", "__mmDispatchSubmit", "__mmDispatchReset", "__mmDispatchChanging",
+      "__mmDispatchLoad", "__mmDispatchError", "__mmDispatchLongPress", "__mmDispatchTouchStart",
+      "__mmDispatchTouchMove", "__mmDispatchTouchEnd", "__mmDispatchTouchCancel",
     ] {
     assert_true(wxml.contains(handler))
-    assert_true(bridge.contains(handler + "("))
+    assert_true(protocol.contains(handler + "("))
   }
   assert_false(wxml.contains("__minimoonDispatch"))
 }
@@ -256,7 +259,7 @@ async test "config diagnostics report duplicate keys and missing packages withou
       config,
       (
         #|{
-        #|  "schemaVersion": 7,
+        #|  "schemaVersion": 8,
         #|  "name": "first",
         #|  "name": "second",
         #|  "pages": [{ "package": "src/pages/home" }]
@@ -292,14 +295,14 @@ async test "config diagnostics reject traversal paths without touching dist" {
     let config = join(root, "miniapp.minimoon.json")
     let documents : Array[Json] = [
       Json::object({
-        "schemaVersion": Json::number(7.0),
+        "schemaVersion": Json::number(8.0),
         "name": Json::string("unsafe-package"),
         "pages": Json::array([
           Json::object({ "package": Json::string("src/../outside") }),
         ]),
       }),
       Json::object({
-        "schemaVersion": Json::number(7.0),
+        "schemaVersion": Json::number(8.0),
         "name": Json::string("unsafe-dist"),
         "pages": Json::array([
           Json::object({ "package": Json::string("src/pages/home") }),
@@ -307,7 +310,7 @@ async test "config diagnostics reject traversal paths without touching dist" {
         "distDir": Json::string("../outside"),
       }),
       Json::object({
-        "schemaVersion": Json::number(7.0),
+        "schemaVersion": Json::number(8.0),
         "name": Json::string("unsafe-tailwind-input"),
         "pages": Json::array([
           Json::object({ "package": Json::string("src/pages/home") }),
@@ -315,7 +318,7 @@ async test "config diagnostics reject traversal paths without touching dist" {
         "tailwindInput": Json::string("styles/../outside.css"),
       }),
       Json::object({
-        "schemaVersion": Json::number(7.0),
+        "schemaVersion": Json::number(8.0),
         "name": Json::string("unsafe-source-wxss"),
         "pages": Json::array([
           Json::object({ "package": Json::string("src/pages/home") }),
@@ -358,7 +361,7 @@ async test "config diagnostics validate the optional component theme" {
       write(
         config,
         Json::object({
-          "schemaVersion": Json::number(7.0, repr="7"),
+          "schemaVersion": Json::number(8.0, repr="8"),
           "name": Json::string("theme-test"),
           "componentTheme": theme,
           "pages": Json::array([
@@ -384,7 +387,7 @@ async test "config diagnostics validate the optional component theme" {
       write(
         config,
         Json::object({
-          "schemaVersion": Json::number(7.0, repr="7"),
+          "schemaVersion": Json::number(8.0, repr="8"),
           "name": Json::string("theme-test"),
           "componentTheme": Json::string(theme),
           "pages": Json::array([
@@ -431,7 +434,7 @@ async test "config diagnostics validate optional DevTools checks" {
       write(
         config,
         Json::object({
-          "schemaVersion": Json::number(7.0, repr="7"),
+          "schemaVersion": Json::number(8.0, repr="8"),
           "name": Json::string("devtools-check-test"),
           "devtoolsChecks": checks,
           "pages": Json::array([
@@ -456,7 +459,7 @@ async test "config diagnostics validate optional DevTools checks" {
     write(
       config,
       Json::object({
-        "schemaVersion": Json::number(7.0, repr="7"),
+        "schemaVersion": Json::number(8.0, repr="8"),
         "name": Json::string("devtools-check-test"),
         "devtoolsChecks": Json::array([
           Json::string("first"),
@@ -487,7 +490,7 @@ async test "invalid JSON records a source-located diagnostic" {
   {
     errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
     let config = join(root, "miniapp.minimoon.json")
-    write(config, "{\n  \"schemaVersion\": 7,\n  ?\n}\n")
+    write(config, "{\n  \"schemaVersion\": 8,\n  ?\n}\n")
     let failed = try {
       let _ = load_config_document(config)
       false

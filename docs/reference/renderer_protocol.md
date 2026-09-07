@@ -35,7 +35,7 @@ Props and events have finite allowlists. Authoring-retention identity never
 appears in this protocol. Cache, routes, subscriptions, and the active tree
 change atomically; rejected candidates cannot poison the accepted cache.
 
-Protocol v7 carries finite semantic props: `role`, `ariaLabel`, `ariaExpanded`,
+Protocol v8 carries finite semantic props: `role`, `ariaLabel`, `ariaExpanded`,
 `ariaSelected`, `ariaDisabled`, `ariaHidden`, `ariaChecked`, `ariaModal`,
 `ariaControls`, `ariaLabelledBy`, `ariaDescribedBy`, `ariaOrientation`, and
 `ariaHasPopup`. Boolean semantic states stay booleans through normalization and
@@ -44,7 +44,7 @@ host validation. Focus, blur, and confirm remain finite event keys.
 ## Renderer commands
 
 `ReplaceViewTree(component_id, base_revision, revision, tree)` carries the
-complete tree. `PatchViewTree(..., ops)` carries protocol-v7 operations:
+complete tree. `PatchViewTree(..., ops)` carries protocol-v8 operations:
 
 - `set`: replace `text`, `props`, or `events`;
 - `splice`: change a children range;

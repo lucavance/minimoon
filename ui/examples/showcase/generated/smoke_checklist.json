@@ -1,0 +1,36 @@
+{
+  "runtimeApiVersion": 10,
+  "rendererProtocolVersion": 8,
+  "pages": [
+    "pages/foundation/foundation",
+    "pages/overlays/overlays",
+    "pages/forms/forms",
+    "pages/data/data",
+    "pages/layout/layout",
+    "pages/feedback/feedback"
+  ],
+  "checks": [
+    "Page Definition API registration on glass-easel",
+    "renderer v8 acknowledged typed props/events patch and replacement commits",
+    "mount and initial dynamic tree",
+    "typed event dispatch",
+    "lifecycle dispatch",
+    "request-ID effect completion",
+    "dispose",
+    "All six category pages open and the 64 component headings are present",
+    "Every page switches light/dark themes and LTR/RTL direction without resetting component state",
+    "Foundation button disabled state, native label association, avatar fallback and semantic status presentation",
+    "Overlays open, nest, position inside viewport, dismiss correctly and retain controlled dialog state over hide/show",
+    "Context Menu long press and explicit tap both work; tooltip and Hover Card have touch access",
+    "Forms native input and textarea IME/paste/confirm, field errors, OTP completion and form submission",
+    "Checkbox, Radio Group, Switch, native/custom Select and Toggle Group respect disabled options",
+    "Slider single/native and multiple/custom thumbs preserve step and minimum gap; vertical and RTL touch cancellation work",
+    "Calendar single/multiple/range selection, disabled dates, today marker, hidden outside days and month boundaries; Date Picker presets, live label and dismissal",
+    "Command/Combobox filter choices; Data Table numeric sorts, column visibility, filters, selects and paginates without losing row identity; native Table colspan/rowspan geometry",
+    "Chart custom content, dot/line/dashed indicators, legend and tooltip presentation do not assume a browser chart engine",
+    "Carousel swipe, Resizable touch bounds/cancel, Scroll Area, Sidebar, navigation and attachment actions",
+    "Message Scroller follows only at end and preserves reading position when older messages are prepended",
+    "Toast and Sonner actions, dismissals, queue expiry and hide/show pause semantics",
+    "Every page unloads cleanly without stale measurement, timer, event or state delivery"
+  ]
+}

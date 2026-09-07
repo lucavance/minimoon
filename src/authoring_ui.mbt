@@ -65,6 +65,24 @@ pub(all) enum SemanticRole {
   MenuItemCheckboxRole
   MenuItemRadioRole
   SeparatorRole
+  AlertRole
+  AlertDialogRole
+  CheckboxRole
+  RadioRole
+  RadioGroupRole
+  SwitchRole
+  TextboxRole
+  ComboboxRole
+  ListboxRole
+  OptionRole
+  SliderRole
+  ProgressbarRole
+  StatusRole
+  TooltipRole
+  TableRole
+  RowRole
+  CellRole
+  ColumnHeaderRole
 } derive(Eq, Debug)
 
 ///|
@@ -82,6 +100,14 @@ struct Semantics {
   described_by : String
   orientation : String
   has_popup : String
+  required : Bool?
+  invalid : Bool?
+  busy : Bool?
+  live : String
+  value_min : Int?
+  value_max : Int?
+  value_now : Int?
+  value_text : String
 }
 
 ///|
@@ -102,6 +128,24 @@ fn SemanticRole::host_name(self : SemanticRole) -> String {
     MenuItemCheckboxRole => "menuitemcheckbox"
     MenuItemRadioRole => "menuitemradio"
     SeparatorRole => "separator"
+    AlertRole => "alert"
+    AlertDialogRole => "alertdialog"
+    CheckboxRole => "checkbox"
+    RadioRole => "radio"
+    RadioGroupRole => "radiogroup"
+    SwitchRole => "switch"
+    TextboxRole => "textbox"
+    ComboboxRole => "combobox"
+    ListboxRole => "listbox"
+    OptionRole => "option"
+    SliderRole => "slider"
+    ProgressbarRole => "progressbar"
+    StatusRole => "status"
+    TooltipRole => "tooltip"
+    TableRole => "table"
+    RowRole => "row"
+    CellRole => "cell"
+    ColumnHeaderRole => "columnheader"
   }
 }
 
@@ -120,6 +164,14 @@ pub fn semantics(
   described_by? : String = "",
   orientation? : String = "",
   has_popup? : String = "",
+  required? : Bool,
+  invalid? : Bool,
+  busy? : Bool,
+  live? : String = "",
+  value_min? : Int,
+  value_max? : Int,
+  value_now? : Int,
+  value_text? : String = "",
 ) -> Semantics {
   {
     role: role.map(value => value.host_name()).unwrap_or(""),
@@ -135,6 +187,14 @@ pub fn semantics(
     described_by,
     orientation,
     has_popup,
+    required,
+    invalid,
+    busy,
+    live,
+    value_min,
+    value_max,
+    value_now,
+    value_text,
   }
 }
 
@@ -167,6 +227,21 @@ fn raw_semantics_attrs(attrs : Array[@ui.Attr], value : Semantics?) -> Unit {
       raw_string_attr(attrs, "aria-describedby", value.described_by)
       raw_string_attr(attrs, "aria-orientation", value.orientation)
       raw_string_attr(attrs, "aria-haspopup", value.has_popup)
+      raw_optional_bool_attr(attrs, "aria-required", value.required)
+      raw_optional_bool_attr(attrs, "aria-invalid", value.invalid)
+      raw_optional_bool_attr(attrs, "aria-busy", value.busy)
+      raw_string_attr(attrs, "aria-live", value.live)
+      raw_string_attr(attrs, "aria-valuetext", value.value_text)
+      for
+        pair in [
+          ("aria-valuemin", value.value_min),
+          ("aria-valuemax", value.value_max),
+          ("aria-valuenow", value.value_now),
+        ] {
+        if pair.1 is Some(number) {
+          raw_int_attr(attrs, pair.0, number)
+        }
+      }
     }
     None => ()
   }

@@ -85,44 +85,140 @@ jobs:
       - name: Generated and interface drift
         run: |
           git diff --exit-code
-          git status
 
-      - name: Prepare WeChat Developer Tools handoff
+      - name: Prepare WeChat Developer Tools handoffs
         run: |
-          handoff_dir="_build/devtools-handoff"
-          fixture="examples/miniapp_conformance_app"
-          mkdir -p "$handoff_dir"
-          cp -R "$fixture/dist" "$handoff_dir/dist"
-          cp "$fixture/generated/manifest.json" "$handoff_dir/manifest.json"
-          cp "$fixture/generated/verify_report.json" "$handoff_dir/verify_report.json"
-          cp "$fixture/generated/smoke_checklist.json" "$handoff_dir/smoke_checklist.json"
-          cp docs/operations/miniapp_devtools_validation.md "$handoff_dir/VALIDATION.md"
-          (cd "$handoff_dir" && find dist -type f -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
-          report_status="$(jq -er '.status | if type == "string" then . else error("status must be a string") end' "$handoff_dir/verify_report.json")"
-          report_release="$(jq -er '.release | if type == "boolean" then tostring else error("release must be a boolean") end' "$handoff_dir/verify_report.json")"
-          fingerprint="$(jq -er '.artifactFingerprint | if type == "string" and length > 0 then . else error("artifactFingerprint must be a non-empty string") end' "$handoff_dir/verify_report.json")"
-          if [ "$report_status" != "passed" ]; then
-            echo "candidate handoff requires a passed automated report" >&2
+          set -euo pipefail
+          core_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' moon.mod)"
+          ui_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' ui/moon.mod)"
+          if [ "$core_version" != "0.2.0" ] || [ "$ui_version" != "0.1.0" ] ||
+             ! grep -Fq "\"lampclaw/minimoon@$core_version\"" ui/moon.mod; then
+            echo "CI handoff requires the reviewed core 0.2.0 / UI 0.1.0 release pair" >&2
             exit 1
           fi
-          if [ "$report_release" != "false" ]; then
-            echo "CI handoff accepts candidate verification reports only" >&2
-            exit 1
-          fi
-          jq -n \
-            --arg commit "$GITHUB_SHA" \
-            --arg fingerprint "$fingerprint" \
-            --arg runner "$RUNNER_OS" \
-            '{schemaVersion: 1, fixture: "miniapp_conformance_app", commit: $commit, artifactFingerprint: $fingerprint, runner: $runner, importDirectory: "dist/", projectSettings: {renderer: "skyline", es6: true, enhance: true, minified: true, minimumBaseLibrary: "3.17.0"}, evidenceStatus: "pending-manual-devtools-validation"}' \
-            > "$handoff_dir/HANDOFF.json"
-          (cd "$handoff_dir" && zip -X -qr miniapp_conformance_app-dist.zip dist)
-          (cd "$handoff_dir" && sha256sum miniapp_conformance_app-dist.zip > ARCHIVE_SHA256)
+          moon_version="$(moon version --all)"
+          node_version="$(node --version)"
+          bun_version="$(bun --version)"
 
-      - name: Upload WeChat Developer Tools handoff
+          package_handoff() {
+            local fixture="$1" name="$2" bundle="$3" page_count="$4"
+            local handoff_dir="_build/devtools-handoff/$bundle"
+            local report="$fixture/generated/verify_report.json"
+            local fingerprint file
+            jq -e '.schemaVersion == 1 and .status == "passed" and (.checks | length > 0) and all(.checks[]; .status == "passed")' "$report" >/dev/null || {
+              echo "candidate handoff requires a passed automated report" >&2
+              exit 1
+            }
+            jq -e '.release == false' "$report" >/dev/null || {
+              echo "CI handoff accepts candidate verification reports only" >&2
+              exit 1
+            }
+            fingerprint="$(jq -er '.artifactFingerprint | select(type == "string" and test("^fnv1a64-relpath-v2:[0-9a-f]{16}$"))' "$report")"
+            jq -e --arg name "$name" --arg fingerprint "$fingerprint" --arg ui_version "$ui_version" --arg bundle "$bundle" --argjson page_count "$page_count" \
+              --slurpfile manifest "$fixture/generated/manifest.json" \
+              --slurpfile checklist "$fixture/generated/smoke_checklist.json" \
+              '.mode == "release" and .name == $name and .schemaVersion == 8 and .runtimeApiVersion == 10 and .rendererProtocolVersion == 8 and
+               .automated.status == "passed" and .automated.pageCount == $page_count and .automated.artifactFingerprint == $fingerprint and
+               .devtools.status == "pending" and .devtools.evidence == null and .devtools.artifactFingerprint == null and (.devtools | keys) == ["evidence", "status"] and
+               $manifest[0].name == $name and $manifest[0].schemaVersion == 8 and $manifest[0].runtimeApiVersion == 10 and $manifest[0].rendererProtocolVersion == 8 and
+               $manifest[0].pageBridgeEncoding == "shared-compact-node-v1" and
+               ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 8 and .runtimeApiVersion == 10 and .rendererProtocolVersion == 8) and
+               ($bundle != "ui" or any($manifest[0].resources[]; .package == "lampclaw/minimoon_ui/resources" and .version == $ui_version)) and
+               $checklist[0].runtimeApiVersion == 10 and $checklist[0].rendererProtocolVersion == 8 and
+               $checklist[0].pages == [$manifest[0].pages[].route] and ($checklist[0].checks | length > 0)' \
+              "$fixture/generated/release_summary.json" >/dev/null || {
+              echo "CI handoff requires matching versions, pages, fingerprints, and pending private-evidence-free summaries" >&2
+              exit 1
+            }
+            jq -e '.appid == "touristappid" and .setting.es6 == true and .setting.enhance == true and .setting.minified == true and .setting.skylineRenderEnable == true' \
+              "$fixture/dist/project.config.json" >/dev/null || {
+              echo "CI handoff requires public placeholder AppID and reviewed Developer Tools settings" >&2
+              exit 1
+            }
+            jq -e '.renderer == "skyline" and .componentFramework == "glass-easel"' "$fixture/dist/app.json" >/dev/null
+            if [ -n "$(find "$fixture/dist" ! -type d ! -type f -print -quit)" ]; then
+              echo "CI handoff rejects symlinks and non-regular dist entries" >&2
+              exit 1
+            fi
+            while IFS= read -r -d '' file; do
+              case "$file" in
+                "$fixture/dist/project.private.config.example.json")
+                  jq -e '. == {appid: "xxxxx-your-wechat-miniapp-appid", libVersion: "3.17.0"}' "$file" >/dev/null || {
+                    echo "CI handoff requires the public private-config example to contain only placeholder AppID and baseline library" >&2
+                    exit 1
+                  }
+                  ;;
+                */.*|*/project.private.*|*evidence*|*.pem|*.key|*.log|*/node_modules/*|*/_build/*)
+                  echo "CI handoff rejects private, hidden, credential, log, and cache files" >&2
+                  exit 1
+                  ;;
+              esac
+              git ls-files --error-unmatch -- "$file" >/dev/null 2>&1 || {
+                echo "CI handoff accepts committed dist files only" >&2
+                exit 1
+              }
+            done < <(find "$fixture/dist" -type f -print0)
+            mkdir -p "$handoff_dir"
+            if [ -n "$(find "$handoff_dir" -mindepth 1 -print -quit)" ]; then
+              echo "CI handoff output directory must be empty" >&2
+              exit 1
+            fi
+            cp -R "$fixture/dist" "$handoff_dir/dist"
+            for file in manifest.json verify_report.json release_summary.json smoke_checklist.json; do
+              cp "$fixture/generated/$file" "$handoff_dir/$file"
+            done
+            cp docs/operations/miniapp_devtools_validation.md "$handoff_dir/VALIDATION.md"
+            jq -n \
+              --arg fixture "$name" --arg appDirectory "$fixture" \
+              --arg commit "$GITHUB_SHA" --arg fingerprint "$fingerprint" --arg runner "$RUNNER_OS" \
+              --arg coreVersion "$core_version" --arg uiVersion "$ui_version" \
+              --arg moon "$moon_version" --arg node "$node_version" --arg bun "$bun_version" \
+              '{schemaVersion: 2, fixture: $fixture, appDirectory: $appDirectory, commit: $commit, artifactFingerprint: $fingerprint,
+                versions: {minimoon: $coreVersion, minimoonUi: $uiVersion, appContract: 8, runtimeAbi: 10, rendererProtocol: 8},
+                toolchain: {moon: $moon, node: $node, bun: $bun}, runner: $runner, importDirectory: "dist/",
+                projectSettings: {renderer: "skyline", es6: true, enhance: true, minified: true, minimumBaseLibrary: "3.17.0"},
+                evidenceStatus: "pending-manual-devtools-validation"}' > "$handoff_dir/HANDOFF.json"
+            if grep -ERq 'wx[[:xdigit:]]{16}|BEGIN ([A-Z ]+ )?PRIVATE KEY' "$handoff_dir"; then
+              echo "CI handoff rejects real AppIDs and credential material" >&2
+              exit 1
+            fi
+            (
+              cd "$handoff_dir"
+              find dist manifest.json verify_report.json release_summary.json smoke_checklist.json VALIDATION.md HANDOFF.json -type f -print0 |
+                LC_ALL=C sort -z | xargs -0 sha256sum > SHA256SUMS
+              sha256sum --check --strict SHA256SUMS
+              zip -X -qr "$name-dist.zip" dist
+              sha256sum "$name-dist.zip" > ARCHIVE_SHA256
+              sha256sum --check --strict ARCHIVE_SHA256
+            )
+          }
+
+          package_handoff examples/miniapp_conformance_app miniapp_conformance_app core 4
+          package_handoff ui/examples/showcase minimoon_ui_showcase ui 6
+
+      - name: Final source cleanliness
+        run: |
+          source_status="$(git status --porcelain --untracked-files=all)"
+          if [ -n "$source_status" ]; then
+            printf '%s\n' "$source_status"
+            echo "CI requires a clean tracked and untracked worktree" >&2
+            exit 1
+          fi
+          git diff --exit-code
+
+      - name: Upload core WeChat Developer Tools handoff
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: minimoon-devtools-${{ github.sha }}
-          path: _build/devtools-handoff/
+          path: _build/devtools-handoff/core/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload UI WeChat Developer Tools handoff
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: minimoon-ui-devtools-${{ github.sha }}
+          path: _build/devtools-handoff/ui/
           if-no-files-found: error
           retention-days: 14
 
@@ -166,4 +262,13 @@ jobs:
           moon test --target js
           moon run src/cmd/minimoon --target native -- check --suite generator
           git diff --check
+
+      - name: Final source cleanliness
+        run: |
+          source_status="$(git status --porcelain --untracked-files=all)"
+          if [ -n "$source_status" ]; then
+            printf '%s\n' "$source_status"
+            echo "CI requires a clean tracked and untracked worktree" >&2
+            exit 1
+          fi
           git diff --exit-code

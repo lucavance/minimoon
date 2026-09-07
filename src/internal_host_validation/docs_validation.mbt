@@ -19,6 +19,24 @@ pub fn docs_check_source() -> String {
     #|const normalized = (relative) => read(relative).replace(/\s+/g, " ")
     #|const sha256 = (data) => crypto.createHash("sha256").update(data).digest("hex")
     #|const posix = (value) => value.split(path.sep).join("/")
+    #|const fixtures = [
+    #|  { name: "miniapp_conformance_app", directory: "examples/miniapp_conformance_app" },
+    #|  { name: "minimoon_ui_showcase", directory: "ui/examples/showcase" },
+    #|]
+    #|
+    #|function moduleVersionProblems(source, content, expected) {
+    #|  const problems = []
+    #|  for (const [module, version] of Object.entries(expected)) {
+    #|    const escaped = module.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    #|    const pattern = new RegExp(`${escaped}(?:@|[ \\x60]+)([0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?)`, "g")
+    #|    const versions = [...content.matchAll(pattern)].map((match) => match[1])
+    #|    if (!versions.includes(version)) problems.push(`${source}: missing current module version ${module}@${version}`)
+    #|    for (const found of versions) {
+    #|      if (found !== version) problems.push(`${source}: stale module version ${module}@${found}; expected ${version}`)
+    #|    }
+    #|  }
+    #|  return problems
+    #|}
     #|
     #|function bilingualProblems(source, content) {
     #|  const problems = []
@@ -93,7 +111,7 @@ pub fn docs_check_source() -> String {
     #|  return problems
     #|}
     #|
-    #|function fixtureReportProblems(fixture, report, summary, evidence, expected) {
+    #|function fixtureReportProblems(fixture, report, summary, evidence, expected, manifest) {
     #|  const problems = []
     #|  const problem = (message) => problems.push(`${fixture}: ${message}`)
     #|  const fingerprint = report?.artifactFingerprint
@@ -102,20 +120,28 @@ pub fn docs_check_source() -> String {
     #|  if (report?.status !== "passed") problem("verify_report status is not passed")
     #|  if (typeof report?.release !== "boolean") problem("verify_report release flag is missing")
     #|  if (typeof fingerprint !== "string" || fingerprint.length === 0) problem("verify_report fingerprint is missing")
+    #|  if (!Array.isArray(report?.checks) || report.checks.length === 0 || report.checks.some((check) => check?.status !== "passed")) problem("verify_report checks must all pass")
+    #|  if (manifest?.schemaVersion !== Number(expected.contractVersion)) problem("manifest contract version differs from internal_versions")
+    #|  if (manifest?.runtimeApiVersion !== Number(expected.runtimeVersion)) problem("manifest runtime version differs from internal_versions")
+    #|  if (manifest?.rendererProtocolVersion !== Number(expected.protocolVersion)) problem("manifest protocol version differs from internal_versions")
+    #|  if (manifest?.name !== fixture) problem("manifest fixture name differs from its configured name")
+    #|  if (manifest?.pageBridgeEncoding !== "shared-compact-node-v1") problem("manifest does not describe release compact artifacts")
     #|  if (summary?.schemaVersion !== Number(expected.contractVersion)) problem("release_summary contract version differs from internal_versions")
     #|  if (summary?.runtimeApiVersion !== Number(expected.runtimeVersion)) problem("release_summary runtime version differs from internal_versions")
     #|  if (summary?.rendererProtocolVersion !== Number(expected.protocolVersion)) problem("release_summary protocol version differs from internal_versions")
-    #|  if (summary?.name !== fixture) problem("release_summary fixture name differs from its directory")
+    #|  if (summary?.name !== fixture) problem("release_summary fixture name differs from its configured name")
     #|  if (summary?.mode !== "release") problem("release_summary does not describe release-mode bytes")
     #|  if (summary?.automated?.status !== report?.status) problem("release_summary status differs from verify_report")
     #|  if (summary?.automated?.artifactFingerprint !== fingerprint) problem("release_summary fingerprint differs from verify_report")
     #|  if (!devtools || typeof devtools !== "object") {
     #|    problem("release_summary DevTools state is missing")
     #|  } else if (devtools.status === "pending") {
+    #|    if (Object.keys(devtools).sort().join(",") !== "evidence,status") problem("pending release_summary must contain only public pending fields")
     #|    if (devtools.evidence !== null) problem("pending release_summary must not name Developer Tools evidence")
     #|    if (devtools.artifactFingerprint != null) problem("pending release_summary must not retain a Developer Tools fingerprint")
     #|    if (report?.release === true) problem("release verification cannot be complete while Developer Tools evidence is pending")
     #|  } else if (devtools.status === "passed") {
+    #|    if (report?.release !== true) problem("candidate release_summary must keep Developer Tools pending")
     #|    if (devtools.evidence !== "generated/devtools.evidence.json") problem("release_summary Developer Tools evidence path is not canonical")
     #|    if (devtools.artifactFingerprint !== fingerprint) problem("release_summary Developer Tools fingerprint differs from verify_report")
     #|    if (!evidence) {
@@ -146,11 +172,8 @@ pub fn docs_check_source() -> String {
     #|
     #|function statusDocumentProblems(source, content, states) {
     #|  const problems = []
-    #|  const requiredLinks = [
-    #|    "../examples/miniapp_conformance_app/generated/verify_report.json",
-    #|    "../examples/miniapp_conformance_app/generated/release_summary.json",
-    #|    "../examples/miniapp_conformance_app/generated/devtools.evidence.json",
-    #|  ]
+    #|  const requiredLinks = fixtures.flatMap(({ directory }) =>
+    #|    ["verify_report.json", "release_summary.json", "devtools.evidence.json"].map((file) => `../${directory}/generated/${file}`))
     #|  for (const link of requiredLinks) {
     #|    if (!content.includes(`(${link})`)) problems.push(`${source}: active status must link ${link}`)
     #|  }
@@ -191,11 +214,13 @@ pub fn docs_check_source() -> String {
     #|    ["stale contract version", versionReferenceProblems("fixture.md", mismatchedContract, expected), "stale documentation version"],
     #|    ["stale runtime version", versionReferenceProblems("fixture.md", mismatchedRuntime, expected), "stale documentation version"],
     #|    ["stale protocol version", versionReferenceProblems("fixture.md", mismatchedProtocol, expected), "stale documentation version"],
+    #|    ["wrong core module version", moduleVersionProblems("fixture.md", "lampclaw/minimoon@9.9.9", { "lampclaw/minimoon": productVersion }), "stale module version"],
+    #|    ["wrong UI module version", moduleVersionProblems("fixture.md", "lampclaw/minimoon_ui 9.9.9", { "lampclaw/minimoon_ui": "0.1.0" }), "stale module version"],
     #|  ]
     #|  for (const [name, problems, expected] of cases) {
     #|    if (!problems.some((problem) => problem.includes(expected))) throw new Error(`documentation self-test did not reject ${name}`)
     #|  }
-    #|  const report = { schemaVersion: 1, status: "passed", release: true, artifactFingerprint: "fixture-fingerprint" }
+    #|  const report = { schemaVersion: 1, status: "passed", release: true, artifactFingerprint: "fixture-fingerprint", checks: [{ status: "passed" }] }
     #|  const summary = {
     #|    schemaVersion: Number(contractVersion),
     #|    runtimeApiVersion: Number(runtimeVersion),
@@ -205,6 +230,7 @@ pub fn docs_check_source() -> String {
     #|    automated: { status: "passed", artifactFingerprint: "fixture-fingerprint" },
     #|    devtools: { status: "passed", evidence: "generated/devtools.evidence.json", artifactFingerprint: "fixture-fingerprint" },
     #|  }
+    #|  const manifest = { ...summary, pageBridgeEncoding: "shared-compact-node-v1" }
     #|  const evidence = {
     #|    schemaVersion: 1,
     #|    scope: `current-v${contractVersion}`,
@@ -215,25 +241,38 @@ pub fn docs_check_source() -> String {
     #|    toolVersion: "fixture-version",
     #|    artifactFingerprint: "fixture-fingerprint",
     #|  }
-    #|  const release = fixtureReportProblems("fixture", report, summary, evidence, expected)
+    #|  const validate = (reportValue, summaryValue, evidenceValue = null, manifestValue = manifest) => fixtureReportProblems("fixture", reportValue, summaryValue, evidenceValue, expected, manifestValue)
+    #|  const release = validate(report, summary, evidence)
     #|  if (release.problems.length !== 0 || release.state.phase !== "release") throw new Error("documentation self-test rejected a consistent release state")
     #|  const candidateReport = { ...report, release: false }
     #|  const candidateSummary = { ...summary, devtools: { status: "pending", evidence: null } }
-    #|  const candidate = fixtureReportProblems("fixture", candidateReport, candidateSummary, null, expected)
+    #|  const candidate = validate(candidateReport, candidateSummary)
     #|  if (candidate.problems.length !== 0 || candidate.state.phase !== "candidate") throw new Error("documentation self-test rejected a consistent candidate state")
     #|  const badPath = { ...summary, devtools: { ...summary.devtools, evidence: "wrong.json" } }
-    #|  if (!fixtureReportProblems("fixture", report, badPath, evidence, expected).problems.some((problem) => problem.includes("evidence path is not canonical"))) throw new Error("documentation self-test did not reject a stale evidence path")
-    #|  const pendingRelease = fixtureReportProblems("fixture", report, candidateSummary, null, expected)
+    #|  if (!validate(report, badPath, evidence).problems.some((problem) => problem.includes("evidence path is not canonical"))) throw new Error("documentation self-test did not reject a stale evidence path")
+    #|  const pendingRelease = validate(report, candidateSummary)
     #|  if (!pendingRelease.problems.some((problem) => problem.includes("evidence is pending"))) throw new Error("documentation self-test did not reject a release report with pending evidence")
-    #|  const statusLinks = [
-    #|    "../examples/miniapp_conformance_app/generated/verify_report.json",
-    #|    "../examples/miniapp_conformance_app/generated/release_summary.json",
-    #|    "../examples/miniapp_conformance_app/generated/devtools.evidence.json",
-    #|  ].map((link) => `[](${link})`).join("\n")
+    #|  const badReports = [
+    #|    ["failed automated report", validate({ ...candidateReport, status: "failed" }, candidateSummary), "status is not passed"],
+    #|    ["failed check in passed report", validate({ ...candidateReport, checks: [{ status: "failed" }] }, candidateSummary), "checks must all pass"],
+    #|    ["missing release flag", validate({ ...candidateReport, release: undefined }, candidateSummary), "release flag is missing"],
+    #|    ["candidate leaked evidence", validate(candidateReport, summary, evidence), "must keep Developer Tools pending"],
+    #|    ["pending fingerprint leak", validate(candidateReport, { ...candidateSummary, devtools: { ...candidateSummary.devtools, artifactFingerprint: "private" } }), "must not retain"],
+    #|    ["mismatched summary fingerprint", validate(candidateReport, { ...candidateSummary, automated: { status: "passed", artifactFingerprint: "stale" } }), "fingerprint differs"],
+    #|    ["wrong manifest version", validate(candidateReport, candidateSummary, null, { ...manifest, rendererProtocolVersion: Number(protocolVersion) + 1 }), "manifest protocol version differs"],
+    #|    ["development manifest", validate(candidateReport, candidateSummary, null, { ...manifest, pageBridgeEncoding: "debug" }), "release compact artifacts"],
+    #|    ["wrong UI fixture name", fixtureReportProblems("minimoon_ui_showcase", candidateReport, candidateSummary, null, expected, manifest), "fixture name differs"],
+    #|  ]
+    #|  for (const [name, result, diagnostic] of badReports) {
+    #|    if (!result.problems.some((problem) => problem.includes(diagnostic))) throw new Error(`documentation self-test did not reject ${name}`)
+    #|  }
+    #|  const statusLinks = fixtures.flatMap(({ directory }) =>
+    #|    ["verify_report.json", "release_summary.json", "devtools.evidence.json"].map((file) => `[](../${directory}/generated/${file})`)).join("\n")
     #|  const policyStatus = `${statusLinks}\nReal-host evidence is local and Git-ignored.`
     #|  if (statusDocumentProblems("fixture.md", policyStatus, [release.state]).length !== 0) throw new Error("documentation self-test rejected release-independent evidence policy")
     #|  if (statusDocumentProblems("fixture.md", policyStatus, [candidate.state]).length !== 0) throw new Error("documentation self-test rejected candidate evidence policy")
     #|  if (!statusDocumentProblems("fixture.md", statusLinks, [candidate.state]).some((problem) => problem.includes("local and Git-ignored"))) throw new Error("documentation self-test did not require the local-evidence policy")
+    #|  if (!statusDocumentProblems("fixture.md", policyStatus.replace(/.*ui\/examples\/showcase.*\n/g, ""), [candidate.state]).some((problem) => problem.includes("ui/examples/showcase"))) throw new Error("documentation self-test did not require UI fixture status links")
     #|  const completedStatus = `${policyStatus}\nLifecycle real-host validation and release verification are complete for the current generated bytes.`
     #|  if (!statusDocumentProblems("fixture.md", completedStatus, [release.state]).some((problem) => problem.includes("must not publish transient real-host completion"))) throw new Error("documentation self-test did not reject transient completion text")
     #|}
@@ -244,18 +283,22 @@ pub fn docs_check_source() -> String {
     #|  process.exit(0)
     #|}
     #|
-    #|const listed = spawnSync(
-    #|  "git",
-    #|  ["ls-files", "--cached", "--others", "--exclude-standard", "--", "*.md"],
-    #|  { cwd: root, encoding: "utf8" },
-    #|)
-    #|if (listed.error || listed.status !== 0) {
-    #|  throw listed.error || new Error(`git ls-files exited with ${listed.status}: ${listed.stderr}`)
+    #|let markdown
+    #|if (mode === "--archive-links") {
+    #|  markdown = []
+    #|  const collect = (directory) => {
+    #|    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    #|      const file = path.join(directory, entry.name)
+    #|      if (entry.isDirectory()) collect(file)
+    #|      else if (entry.isFile() && entry.name.endsWith(".md")) markdown.push(posix(path.relative(root, file)))
+    #|    }
+    #|  }
+    #|  collect(root)
+    #|} else {
+    #|  const listed = spawnSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "--", "*.md"], { cwd: root, encoding: "utf8" })
+    #|  if (listed.error || listed.status !== 0) throw listed.error || new Error(`git ls-files exited with ${listed.status}: ${listed.stderr}`)
+    #|  markdown = listed.stdout.split("\n").filter(Boolean).filter((relative) => fs.existsSync(absolute(relative)))
     #|}
-    #|const markdown = listed.stdout
-    #|  .split("\n")
-    #|  .filter(Boolean)
-    #|  .filter((relative) => fs.existsSync(absolute(relative)))
     #|const markdownSet = new Set(markdown)
     #|
     #|const linkPattern = /!?\[[^\]]*\]\(([^)\n]+)\)/g
@@ -276,11 +319,18 @@ pub fn docs_check_source() -> String {
     #|    const resolved = target.startsWith("/")
     #|      ? path.join(root, target.slice(1))
     #|      : path.resolve(path.dirname(absolute(source)), target)
-    #|    const optionalPendingEvidence = resolved === absolute("examples/miniapp_conformance_app/generated/devtools.evidence.json")
+    #|    if (mode === "--archive-links") {
+    #|      const contained = (file) => file === root || file.startsWith(root + path.sep)
+    #|      if (!contained(resolved) || (fs.existsSync(resolved) && !contained(fs.realpathSync(resolved)))) {
+    #|        fail(`${source}: local Markdown link escapes archive: ${match[1]}`)
+    #|        continue
+    #|      }
+    #|    }
+    #|    const optionalPendingEvidence = mode !== "--archive-links" && fixtures.some(({ directory }) => resolved === absolute(`${directory}/generated/devtools.evidence.json`))
     #|    if (!fs.existsSync(resolved) && !optionalPendingEvidence) fail(`${source}: broken local Markdown link: ${match[1]}`)
     #|  }
     #|}
-    #|if (mode === "--links-only") {
+    #|if (mode === "--links-only" || mode === "--archive-links") {
     #|  if (errors.length) {
     #|    process.stderr.write(`${errors.join("\n")}\n`)
     #|    process.exit(1)
@@ -497,6 +547,16 @@ pub fn docs_check_source() -> String {
     #|}
     #|
     #|if (!read("moon.mod").includes(`version = "${productVersion}"`)) fail("moon.mod product version differs from internal_versions")
+    #|const uiModuleVersion = read("ui/moon.mod").match(/^version\s*=\s*"([^"]+)"/m)?.[1]
+    #|if (!uiModuleVersion) fail("ui/moon.mod is missing its independent version")
+    #|for (const problem of moduleVersionProblems("ui/moon.mod", read("ui/moon.mod"), { "lampclaw/minimoon": productVersion })) fail(problem)
+    #|const moduleVersions = { "lampclaw/minimoon": productVersion, "lampclaw/minimoon_ui": uiModuleVersion }
+    #|for (const source of ["README.mbt.md", "README.zh-CN.mbt.md", "ui/README.mbt.md"]) {
+    #|  for (const problem of moduleVersionProblems(source, read(source), moduleVersions)) fail(problem)
+    #|}
+    #|for (const [source, mirror] of [["README.mbt.md", "README.md"], ["README.zh-CN.mbt.md", "README.zh-CN.md"], ["ui/README.mbt.md", "ui/README.md"]]) {
+    #|  if (!fs.existsSync(absolute(mirror)) || read(source) !== read(mirror)) fail(`${mirror}: must mirror ${source}`)
+    #|}
     #|for (const readme of ["README.mbt.md", "README.zh-CN.mbt.md"]) {
     #|  const content = normalized(readme)
     #|  for (const token of [
@@ -557,28 +617,29 @@ pub fn docs_check_source() -> String {
     #|}
     #|if (!fs.existsSync(absolute("src/README.mbt.md"))) fail("root package compile-checked authoring README is missing")
     #|
-    #|const fixtures = ["miniapp_conformance_app"]
     #|const fixtureStates = []
     #|const exampleIndex = read("examples/README.md")
-    #|for (const fixture of fixtures) {
-    #|  const fixtureReadme = `examples/${fixture}/README.md`
+    #|for (const { name: fixture, directory } of fixtures) {
+    #|  const fixtureReadme = `${directory}/README.md`
     #|  if (!markdownSet.has(fixtureReadme)) fail(`missing maintained fixture README: ${fixtureReadme}`)
-    #|  if (!exampleIndex.includes(`(${fixture}/README.md)`)) fail(`examples/README.md does not index ${fixture}`)
-    #|  const reportPath = `examples/${fixture}/generated/verify_report.json`
-    #|  const summaryPath = `examples/${fixture}/generated/release_summary.json`
-    #|  if (!fs.existsSync(absolute(reportPath)) || !fs.existsSync(absolute(summaryPath))) {
+    #|  if (directory.startsWith("examples/") && !exampleIndex.includes(`(${fixture}/README.md)`)) fail(`examples/README.md does not index ${fixture}`)
+    #|  const reportPath = `${directory}/generated/verify_report.json`
+    #|  const summaryPath = `${directory}/generated/release_summary.json`
+    #|  const manifestPath = `${directory}/generated/manifest.json`
+    #|  if (![reportPath, summaryPath, manifestPath].every((file) => fs.existsSync(absolute(file)))) {
     #|    fail(`${fixture}: generated verification reports are missing`)
     #|    continue
     #|  }
     #|  const report = JSON.parse(read(reportPath))
     #|  const summary = JSON.parse(read(summaryPath))
-    #|  const evidencePath = `examples/${fixture}/generated/devtools.evidence.json`
-    #|  const evidence = fs.existsSync(absolute(evidencePath)) ? JSON.parse(read(evidencePath)) : null
+    #|  const manifest = JSON.parse(read(manifestPath))
+    #|  const evidencePath = `${directory}/generated/devtools.evidence.json`
+    #|  const evidence = report.release === true && fs.existsSync(absolute(evidencePath)) ? JSON.parse(read(evidencePath)) : null
     #|  const validation = fixtureReportProblems(fixture, report, summary, evidence, {
     #|    contractVersion,
     #|    runtimeVersion,
     #|    protocolVersion,
-    #|  })
+    #|  }, manifest)
     #|  for (const problem of validation.problems) fail(problem)
     #|  fixtureStates.push(validation.state)
     #|}

@@ -10,9 +10,12 @@ node_modules/
 dist/
 !examples/miniapp_conformance_app/dist/
 !examples/miniapp_conformance_app/dist/**
+!ui/examples/showcase/dist/
+!ui/examples/showcase/dist/**
 
 # Developer-local WeChat project settings and real AppIDs
 examples/*/dist/project.private.config.json
+ui/examples/showcase/dist/project.private.config.json
 
 # Local real-host validation evidence
 **/generated/devtools.evidence.json

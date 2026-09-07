@@ -125,6 +125,8 @@ async fn coverage_suite(root : String) -> Unit {
   run(root, "run JavaScript MoonBit tests with coverage", "moon", [
     "test", "--target", "js", "--enable-coverage", "--target-dir", target_dir,
   ])
+  run_ui_tests(root, "native", coverage_target=target_dir)
+  run_ui_tests(root, "js", coverage_target=target_dir)
   println("\n==> analyze MoonBit production coverage")
   let coverage_root = join(root, target_dir)
   let args = ["-f", "summary", "--source-paths", root, "--ignore-missing-files"]
@@ -189,6 +191,12 @@ async fn coverage_suite(root : String) -> Unit {
   })
   require_coverage_group(entries, "val_runtime package", 75, path => {
     is_coverage_production_source(path) && path.has_prefix("src/val_runtime/")
+  })
+  require_coverage_group(entries, "independent UI production packages", 70, path => {
+    path.has_prefix("ui/src/") &&
+    !path.has_suffix("_test.mbt") &&
+    !path.has_suffix("_wbtest.mbt") &&
+    !path.has_suffix("_bench.mbt")
   })
   println("MoonBit production coverage checks passed")
 }

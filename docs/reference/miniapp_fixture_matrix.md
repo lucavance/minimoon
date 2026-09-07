@@ -1,6 +1,6 @@
 # MiniApp fixture matrix
 
-## Release fixture
+## Core release fixture
 
 | Fixture | Page | Primary contract |
 | --- | --- | --- |
@@ -14,6 +14,17 @@ verification report, and one real-host artifact fingerprint. Real pages are
 the primary navigation structure. Swiper is deliberately kept inside Lab as a
 control test rather than used as a substitute for routing.
 
+## Independent UI fixture
+
+[`ui/examples/showcase`](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
+is the separate six-page release fixture for `lampclaw/minimoon_ui 0.1.0`
+with core `0.2.0`. It covers 64 RUI families plus Form and Theme: foundation,
+overlay/disclosure, forms, data/date, layout/navigation and feedback behavior.
+Its native/JS tests, generated resource checks, candidate report, artifact
+fingerprint and local host evidence are independent of Conformance. Both
+fixtures must pass when the shared core host or UI release is changed; one
+application's evidence cannot authorize the other.
+
 ## Initializer template
 
 `templates/starter` is the only embedded `minimoon init` template. It has Home
@@ -24,7 +35,7 @@ the generator suite; it is not a second committed release fixture.
 The fixture and generated starter must pass:
 
 - warning-free JS-target compilation and tests
-- App Contract v7 / runtime ABI v10 / renderer protocol v7 validation
+- App Contract v8 / runtime ABI v10 / renderer protocol v8 validation
 - one application-wide runtime/shared host pair with page-aware dispatch
 - deterministic release generation and embedded-template drift checks
 - generated JavaScript parsing and Page Definition API registration

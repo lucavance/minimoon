@@ -2,8 +2,8 @@
 
 [English](README.md) · [文档索引](docs/README.md) · [双语代码分析](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
-Minimoon 是面向微信小程序 Skyline 的 MoonBit UI 框架。`0.1.1` 以 Elm-style
-编写模型为入口，采用 App Contract v7、runtime ABI v10、renderer protocol v7
+Minimoon 是面向微信小程序 Skyline 的 MoonBit UI 框架。`0.2.0` 以 Elm-style
+编写模型为入口，采用 App Contract v8、runtime ABI v10、renderer protocol v8
 和 CommonJS 小程序宿主边界。
 
 ```text
@@ -14,26 +14,29 @@ Model / Msg / update / Cmd / Sub
   -> 有序宿主调度与带确认的 Skyline 渲染
 ```
 
-应用只导入 `lampclaw/minimoon`。作者不直接编写 `setData`、JavaScript 桥接、
+应用导入 `lampclaw/minimoon`，并可选用独立的 `lampclaw/minimoon_ui` 模块。
+作者不直接编写 `setData`、JavaScript 桥接、
 可变 Signal、投影字段或 renderer patch；局部组件仍可在 keyed 或动态 `Val`
 分支中拥有自己的状态机。
 
 ## 安装与创建应用
 
-准备 registry 包期间，先从 Minimoon checkout 安装 CLI：
+使用已发布版本时，从 registry 安装匹配的 CLI，再创建独立应用：
 
 ```bash
-moon install --path src/cmd/minimoon
-minimoon init /tmp/my-app --minimoon-root "$PWD" # 本地 workspace 模式
+moon install lampclaw/minimoon/cmd/minimoon@0.2.0
+minimoon init /tmp/my-app
 cd /tmp/my-app
 bun install
 minimoon build .
 minimoon verify .
 ```
 
-不传 `--minimoon-root` 时，`minimoon init /tmp/my-app` 会生成独立 registry
-consumer：`moon.mod` 保留带版本的 `lampclaw/minimoon` 依赖，且不会生成
-`moon.work`。发布前会从实际压缩包验证候选包；真正发布仍是独立的 release 操作。
+Registry 模式在 `moon.mod` 中保留 `lampclaw/minimoon@0.2.0`，不生成
+`moon.work`。当前发布可用性见仓库的
+[项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)。
+本地框架开发时，在 Minimoon checkout 运行 `moon install --path src/cmd/minimoon`，
+再执行 `minimoon init /tmp/my-app --minimoon-root "$PWD"`，显式创建绑定本地源码的 workspace。
 
 CLI 内嵌一个面向生产起步的双页 `starter`，并支持增量开发和类型化脚手架：
 
@@ -117,14 +120,26 @@ Disclosure、单选/多选 Accordion、Tabs、Dialog、Sheet 与 Dropdown；
 popup 关联、label 与 description 送入受校验的 renderer protocol；`input` 与
 `textarea` 的 focus、blur、confirm payload 也保持类型化。
 
+## 可选 Minimoon UI
+
+独立模块 `lampclaw/minimoon_ui 0.1.0` 依赖核心 `0.2.0`，以 `@ui` 导入。
+它把 RUI 0.1.1 的组件能力适配为类型化小程序节点、页面独占状态、触控交互
+和按需生成的 Vega WXSS。旧组件包与 minimal 主题仍保持兼容。
+安装、能力映射和六页展示应用见
+[UI 模块文档](https://github.com/lucavance/minimoon/tree/main/ui)。
+
+核心 0.2 新增原生控件、触摸事件、布局测量和声明式 `layer`／`layer_root`。
+构建期资源提供包生成 WXSS／SVG，不把资源字符串带入应用 JavaScript。
+新产物需要重新验证 Skyline；候选状态不代表已经发布或通过真实宿主验证。
+
 ## 小程序边界
 
-配置使用 App Contract v7。`componentTheme` 可省略；省略时不会增加内置组件
+配置使用 App Contract v8。`componentTheme` 可省略；省略时不会增加内置组件
 CSS：
 
 ```json
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "name": "my_app",
   "componentTheme": "minimal-v2",
   "pages": [
@@ -172,7 +187,7 @@ minimoon devtools record . \
   --status passed \
   --recorded-at <实际时间> \
   --tool-version "<实际版本>" \
-  --notes "Minimoon 0.1.1 checklist passed"
+  --notes "Minimoon 0.2.0 checklist passed"
 minimoon verify . --release
 ```
 
@@ -193,14 +208,19 @@ bun run check:candidate
 git diff --check
 ```
 
-`check:api` 精确锁定 `0.1.x` 根包接口，并仅允许 components、styles 与
-testing 可选包增加接口。
-`check:candidate` 是可在 Linux 执行的自动候选交接门禁；即使本机已有证据，
-它也始终把受跟踪报告恢复为 candidate 状态。本地作出 release 决策时，依次
+`check:api` 精确锁定核心 `0.2` 的根包与 resources 接口，编译冻结的 0.1 consumer，
+并仅允许 components、styles 与 testing 可选包增加接口。UI `0.1` 为根包、
+headless、theme 与 resources 分别维护可加性接口快照。
+`check:candidate` 是可在 Linux 执行的自动候选交接门禁；成功完成后，即使本机已有证据，
+它也会把受跟踪报告恢复为 candidate 状态。覆盖率由上方独立的 `check:coverage`
+门禁验证。本地作出 release 决策时，依次
 运行 `bun run check:all` 与 `bun run check:mvp`，两者都要求与当前指纹匹配的
-开发者工具证据；暂存改动前再运行一次 `check:candidate`。
-`moon package --frozen --list` 同时约束 registry 包白名单、250 KiB
-硬上限与至少 16 KiB 的预留余量。
+开发者工具证据，覆盖核心四页示例与 UI 六页 showcase。发布及暂存前再运行
+`check:candidate` 恢复公开报告，并要求两套指纹不变、源码 checkout 干净。
+[发布操作指南](docs/operations/release_candidate_handoff.md) 定义核心/UI 的发布顺序及
+纯 registry consumer 检查。
+仓库归档门禁先执行 `moon package --frozen --list`，再检查每个模块的 registry 包
+白名单、250 KiB 硬上限与至少 16 KiB 的预留余量。
 
 工具链下限已于 2026-09-04 使用 `moon 0.1.20260827` 与 `moonc v0.10.11`
 重新验证。仓库和生成的 starter 支持 Node `>=24.20.0`；CI 验证 24.20.0
@@ -208,5 +228,5 @@ testing 可选包增加接口。
 JavaScript 是 `scripts/bridge/weapp_tailwindcss_adapter.mjs`；生产和验证宿主
 源码由 MoonBit 模板持有，提交的小程序 JavaScript 均为生成产物。
 
-Minimoon `0.1.1` 仍属于 pre-1.0。产品版本由 `moon.mod` 与 `CHANGELOG.md`
+Minimoon `0.2.0` 仍属于 pre-1.0。产品版本由 `moon.mod` 与 `CHANGELOG.md`
 定义，不使用 Git 版本标签。

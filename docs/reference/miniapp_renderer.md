@@ -17,7 +17,7 @@ details behind the root package.
 
 ## Normalized tree and diff
 
-Renderer protocol v7 nodes contain kind, identity, text, typed props/events,
+Renderer protocol v8 nodes contain kind, identity, text, typed props/events,
 and children. The diff can emit scalar `set`, array `splice`, keyed `move`, or
 an atomic `ReplaceViewTree`. Private retained identities are stripped before
 the protocol boundary.

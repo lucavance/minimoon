@@ -52,7 +52,7 @@ flowchart LR
     Graph[Duplix graph<br/>事务与作用域 / transactions and scopes]
     Renderer[MiniApp renderer<br/>规范化与 diff / normalization and diff]
     Runtime[Resident runtime<br/>命令与订阅 / commands and subscriptions]
-    Generator[App Contract v7 generator<br/>构建与验证 / build and verify]
+    Generator[App Contract v8 generator<br/>构建与验证 / build and verify]
     Host[CommonJS host scheduler<br/>队列、ack、COW / queue, ack, COW]
     Skyline[WeChat Skyline<br/>WXML / setData / wx.*]
 
@@ -116,8 +116,8 @@ flowchart LR
 
 ## 6. 与现有文档的关系 / Relationship to Existing Documentation
 
-本专题解释“代码为何这样工作”，而现有 [Architecture](../architecture.md)、[MVP](../mvp.md)、[renderer reference](../reference/miniapp_renderer.md) 和 [Developer Tools validation](../operations/miniapp_devtools_validation.md) 仍然是行为约束与操作流程的规范来源。发生冲突时，应以源码、生成报告和现有规范文档为准，并更新本专题。
+本专题解释“代码为何这样工作”，而现有 [Architecture](../architecture.md)、[MVP](../mvp.md)、[renderer reference](https://github.com/lucavance/minimoon/blob/main/docs/reference/miniapp_renderer.md) 和 [Developer Tools validation](../operations/miniapp_devtools_validation.md) 仍然是行为约束与操作流程的规范来源。发生冲突时，应以源码、生成报告和现有规范文档为准，并更新本专题。
 
 > **English:**
 >
-> This suite explains why the code works as it does. The existing [Architecture](../architecture.md), [MVP](../mvp.md), [renderer reference](../reference/miniapp_renderer.md), and [Developer Tools validation](../operations/miniapp_devtools_validation.md) remain normative for behavior and operations. If a conflict appears, source code, generated reports, and normative documents win, and this suite must be updated.
+> This suite explains why the code works as it does. The existing [Architecture](../architecture.md), [MVP](../mvp.md), [renderer reference](https://github.com/lucavance/minimoon/blob/main/docs/reference/miniapp_renderer.md), and [Developer Tools validation](../operations/miniapp_devtools_validation.md) remain normative for behavior and operations. If a conflict appears, source code, generated reports, and normative documents win, and this suite must be updated.
