@@ -138,6 +138,7 @@ pub fn shared_protocol_bridge() -> String {
     #|function validMeasurementPayload(payload) {
     #|  return exactKeys(payload, ["ids"]) && Array.isArray(payload.ids) && payload.ids.length <= 128 && payload.ids.every(id => typeof id === "string" && /^[A-Za-z0-9_-]+$/.test(id)) && new Set(payload.ids).size === payload.ids.length
     #|}
+    #|function validRequestPayload(options) { return !(Object.keys(options).some(key => !["url", "method", "header", "data", "timeout"].includes(key)) || typeof options.url !== "string" || !/^https:\/\//.test(options.url) || !["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"].includes(options.method) || !options.header || typeof options.header !== "object" || Array.isArray(options.header) || Object.values(options.header).some(value => typeof value !== "string") || ("data" in options && (typeof options.data !== "string" || ["GET", "HEAD"].includes(options.method))) || ("timeout" in options && (!Number.isInteger(options.timeout) || options.timeout <= 0))) }
     #|function measurementNodes(results, ids) {
     #|  if (!Array.isArray(results) || results.length !== ids.length) return { error: "invalid measurement result count" }
     #|  const nodes = []
@@ -170,6 +171,6 @@ pub fn shared_protocol_bridge() -> String {
     #|  __mmDispatchTouchEnd(event) { this._dk(event, "minimoonTouchend", "touchend") },
     #|  __mmDispatchTouchCancel(event) { this._dk(event, "minimoonTouchcancel", "touchcancel") },
     #|}
-    #|module.exports = { exactKeys, validateNode, applyPatch, createRendererStats, decodeCompactNode, eventDispatchers, eventPayload, touchIdentity, validMeasurementPayload, measurementNodes }
+    #|module.exports = { exactKeys, validateNode, applyPatch, createRendererStats, decodeCompactNode, eventDispatchers, eventPayload, touchIdentity, validMeasurementPayload, validRequestPayload, measurementNodes }
   )
 }

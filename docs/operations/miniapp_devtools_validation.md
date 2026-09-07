@@ -87,6 +87,24 @@ Home:
   their status panels without console errors
 - these paths have generated-host payload/result smoke coverage, but exercise
   them again here against actual `wx.*`; the automated mock is not host evidence
+- HTTP uses the public `https://httpbingo.org` service, not a private acceptance
+  server. Select each Home HTTP scenario, then tap Request: GET Unicode/special
+  character/repeated queries; POST JSON; POST repeated-field form; PUT raw text;
+  DELETE; HEAD and OPTIONS with empty bodies; HTTP 400 and 500 as loaded results;
+  and `/delay/3` with a 500 ms timeout as a failed request. Check status code,
+  selected echo fields and errors. Inspect method and request headers in the
+  Network panel, especially for empty HEAD/OPTIONS responses. Use only the
+  built-in synthetic data.
+- Start the delayed request and leave Home: no late update or console error may
+  occur. Repeat the affected checklist in Skyline simulator, device preview and
+  device debugging. Public-service or platform restrictions are a blocked case,
+  not a pass; do not silently substitute a mock or another provider.
+- The base URL input can use a public HTTPS service implementing the same echo
+  protocol. Record which public service was actually used in local notes.
+  The fixture's `urlCheck=false` developer setting does not prove production
+  request-domain eligibility. Debug bypass success and configured-domain success
+  are different results; public API testing does not establish production TLS,
+  domain registration or account readiness. No private AppID belongs in Git.
 - show/hide state follows page navigation
 - NavigateTo opens Lab and Details; RedirectTo replaces Home with Details
 - Back returns to Showcase; direct Home entry redirects to Showcase as fallback

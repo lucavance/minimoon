@@ -21,6 +21,9 @@ pub struct Model {
   storage_value : String
   request_status : String
   request_body : String
+  request_code : String
+  request_case : Int
+  request_base : String
   toast_status : String
   location : String
   media : String
@@ -42,7 +45,9 @@ pub enum Msg {
   StorageSaved
   StorageFailed(String)
   LoadRequest
-  RequestLoaded(String)
+  RequestCase(Int)
+  RequestBase(String)
+  RequestLoaded(Int, String)
   RequestFailed(String)
   ShowToast
   ToastShown

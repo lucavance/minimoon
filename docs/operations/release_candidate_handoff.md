@@ -46,6 +46,36 @@ the source SHA, toolchain versions, package contents and both artifact
 fingerprints. A newer commit is a new candidate, not an implicit continuation
 of the same acceptance.
 
+## Validation temporary storage
+
+`minimoon check` supervises a separate worker. Each invocation exclusively
+creates a random `run-*` directory below `../.minimoon-check-tmp/`, relative to
+the repository root. This keeps large unpacked packages and consumer builds
+on the checkout's parent volume instead of a quota-limited system `/tmp`.
+The base is deliberately outside the repository: nested consumers must not
+inherit its `moon.work`. The default works without machine-specific paths in CI.
+
+`MINIMOON_CHECK_TMPDIR` overrides the base with an absolute path or a path
+relative to the repository. Choose an existing writable volume outside all
+Moon workspaces. The supervisor creates missing base directories and logs the
+exact run path. The inherited system `TMPDIR` does not override this default;
+the worker and child tools receive the run path as `TMPDIR`, `TMP` and `TEMP`.
+All repository-check fixtures use that owned run instead of async/fs's Linux
+system-temp implementation. Standalone tooling unit tests still use their
+small, individually cleaned system-temp fixtures.
+
+The parent removes only its freshly created run after normal completion,
+nonzero exit, worker crash or launch failure. API consumers also release their
+directories immediately after success. Concurrent runs own separate paths;
+cleanup does not follow fixture symlinks into shared dependencies. Existing
+parent contents, older runs and legacy `/tmp/minimoon-*` files are never swept.
+If the supervisor itself is forcibly killed or the machine stops, its run may
+remain: confirm that no process uses the exact logged directory before manual
+cleanup. This is not a general system-temp cleaner or a quota configuration.
+
+Reports and performance samples remain in the repository's ignored `_build/`;
+temporary-storage changes do not waive any gate or create real-host evidence.
+
 ## Independent CI bundles
 
 | Artifact | Application | ZIP |

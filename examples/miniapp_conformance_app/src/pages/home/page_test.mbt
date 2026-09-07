@@ -14,7 +14,7 @@ test "home page owns query, count, and request-ID effects" {
   )
   let request = runtime.dispatch("home/request", "{}")
   inspect(
-    request.contains("https://www.wanandroid.com/banner/json"),
+    request.contains("https://httpbingo.org/get?existing=yes"),
     content="true",
   )
   inspect(!request.contains("/api/profile"), content="true")
@@ -52,13 +52,13 @@ test "home transitions preserve request and lifecycle state" {
   let request = runtime.dispatch("home/request", "{}")
   inspect(request.contains("\"request_id\":\"home:0\""), content="true")
   let _ = runtime.resolve_effect(
-    "home:0", "success", "{\"statusCode\":200,\"data\":{\"errorCode\":0},\"header\":{},\"cookies\":[]}",
+    "home:0", "success", "{\"statusCode\":200,\"data\":{\"method\":\"GET\"},\"header\":{},\"cookies\":[]}",
   )
   inspect(
-    runtime.snapshot().contains("\"text\":\"request: loaded\""),
+    runtime.snapshot().contains("request: loaded · HTTP 200"),
     content="true",
   )
-  inspect(runtime.snapshot().contains("errorCode"), content="true")
+  assert_true(runtime.snapshot().contains("GET"))
   inspect(
     runtime.dispatch("home/open-lab", "{}").contains("/pages/lab/lab"),
     content="true",

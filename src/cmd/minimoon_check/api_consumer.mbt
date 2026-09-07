@@ -45,7 +45,7 @@ async fn frozen_api_consumer_gate(root : String) -> Unit {
     root,
     "_build/publish/lampclaw-minimoon-" + product_version + ".zip",
   )
-  let temp = @fs.tmpdir(prefix="minimoon-api-consumer")
+  let temp = check_temporary("minimoon-api-consumer")
   let package_root = join(temp, "package")
   let consumer = join(temp, "consumer")
   @fs.mkdir(package_root, permission=0o755, recursive=true)
@@ -76,4 +76,5 @@ async fn frozen_api_consumer_gate(root : String) -> Unit {
       cwd=temp,
     )
   }
+  @fs.rmdir(temp, recursive=true)
 }

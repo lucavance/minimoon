@@ -160,7 +160,7 @@ async fn codegen_suite(root : String) -> Unit {
     root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", "request-output",
   )
   require_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", "https://www.wanandroid.com/banner/json",
+    root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", "https://httpbingo.org",
   )
   forbid_text(
     root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", "https://example.com/api/profile",
@@ -328,12 +328,14 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
     "_build/publish/lampclaw-minimoon-" + @versions.product_version() + ".zip",
   )
   let archive_size = @fs.read_file(archive).binary().length()
-  let hard_limit = 250 * 1024
-  let required_reserve = 16 * 1024
-  let operating_limit = hard_limit - required_reserve
-  guard archive_size <= operating_limit else {
+  let hard_limit = registry_archive_hard_limit
+  let operating_limit = registry_archive_operating_limit
+  let reserve_kib = (registry_archive_reserve / 1024).to_string()
+  guard byte_budget_allows(archive_size, operating_limit) else {
     abort(
-      "registry package must retain at least 16 KiB reserve under the 250 KiB hard cap: " +
+      "registry package must retain at least " +
+      reserve_kib +
+      " KiB reserve under the 250 KiB hard cap: " +
       archive_size.to_string() +
       " / " +
       operating_limit.to_string() +
@@ -345,7 +347,9 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
     archive_size.to_string() +
     " / " +
     operating_limit.to_string() +
-    " operating bytes (16 KiB reserved below " +
+    " operating bytes (" +
+    reserve_kib +
+    " KiB reserved below " +
     hard_limit.to_string() +
     ")",
   )
@@ -429,7 +433,7 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
 
 ///|
 async fn generator_suite(root : String) -> Unit {
-  let temp = @fs.tmpdir(prefix="minimoon-generator")
+  let temp = check_temporary("minimoon-generator")
   let bin = join(temp, "bin")
   let repository_package = read_json(root, "package.json")
   let repository_dev_dependencies = json_field(

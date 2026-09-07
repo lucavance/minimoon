@@ -1,5 +1,14 @@
 # Roadmap
 
+## HTTP and application state
+
+The current HTTP iteration adds typed methods, query/header/body encoding,
+timeouts, deterministic host tests and public-API Home acceptance scenarios.
+It introduces no UI components or privately deployed acceptance server.
+After HTTP acceptance, design application-level, typed shared state with an
+explicit lifecycle from real application needs; do not expose an unowned global
+mutable signal as a shortcut.
+
 ## 0.1.0 first non-prerelease release
 
 The original `0.1.0` public baseline established:

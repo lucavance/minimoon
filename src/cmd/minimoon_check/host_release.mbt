@@ -37,6 +37,7 @@ async fn host_suite(root : String) -> Unit {
     join(root, "examples/miniapp_conformance_app/dist/pages/details/details.js"),
     join(root, "examples/miniapp_conformance_app/dist/pages/lab/lab.js"),
   ])
+  http_probe(root, true)
 }
 
 ///|

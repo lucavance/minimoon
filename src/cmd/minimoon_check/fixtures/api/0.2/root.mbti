@@ -111,7 +111,7 @@ pub fn[C : IsChildren] radio_group(name? : String, on_change~ : Emit[String], ev
 
 pub fn redirect_to(Route) -> Cmd
 
-pub fn request(String, Emit[Result[RequestResult, HostError]]) -> Cmd
+pub fn request(String, Emit[Result[RequestResult, HostError]], http_method? : HttpMethod, query? : Array[Query], headers? : Map[String, String], body? : RequestBody, timeout_ms? : Int) -> Cmd
 
 pub fn request_payment(PaymentParams, Emit[Result[Unit, HostError]]) -> Cmd
 
@@ -205,6 +205,15 @@ pub(all) enum HostErrorKind {
   Failed
   Unavailable
   InvalidPayload
+} derive(Eq, @debug.Debug)
+
+pub(all) enum HttpMethod {
+  Get
+  Post
+  Put
+  Delete
+  Head
+  Options
 } derive(Eq, @debug.Debug)
 
 pub struct ImageLoadDetail {
@@ -331,6 +340,12 @@ pub fn PaymentParams::new(time_stamp~ : String, nonce_str~ : String, package_val
 pub struct Query {
   name : String
   value : String
+}
+
+pub(all) enum RequestBody {
+  JsonBody(Json)
+  FormBody(Array[(String, String)])
+  TextBody(String)
 }
 
 pub struct RequestResult {

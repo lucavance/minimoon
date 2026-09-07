@@ -9,14 +9,6 @@ pub struct StorageResult {
 }
 
 ///|
-pub struct RequestResult {
-  status_code : Int
-  data : Json
-  headers : Map[String, String]
-  cookies : Array[String]
-}
-
-///|
 pub struct LocationResult {
   latitude : Double
   longitude : Double
@@ -282,77 +274,6 @@ fn decode_storage(value : Json) -> Result[StorageResult, HostError] {
 }
 
 ///|
-fn headers(fields : Map[String, Json]) -> Map[String, String] {
-  let output : Map[String, String] = Map([])
-  match fields.get("header") {
-    Some(Object(values)) =>
-      for name, value in values {
-        output[name] = match value {
-          String(value) => value
-          value => value.stringify()
-        }
-      }
-    _ => ()
-  }
-  output
-}
-
-///|
-fn cookies(fields : Map[String, Json]) -> Array[String] {
-  match fields.get("cookies") {
-    Some(Array(values)) =>
-      values.filter_map(value => {
-        match value {
-          String(value) => Some(value)
-          _ => None
-        }
-      })
-    _ => []
-  }
-}
-
-///|
-fn decode_request(value : Json) -> Result[RequestResult, HostError] {
-  let capability = Request
-  match object_result(capability, value) {
-    Err(error) => Err(error)
-    Ok(fields) =>
-      match fields.get("statusCode") {
-        Some(Number(status, ..)) =>
-          match host_int32(status) {
-            Some(status_code) =>
-              Ok({
-                status_code,
-                data: fields.get("data").unwrap_or(Json::null()),
-                headers: headers(fields),
-                cookies: cookies(fields),
-              })
-            None =>
-              Err(
-                invalid_payload(
-                  capability, "wx.request result.statusCode must be an integer from 0 to 2147483647",
-                  value,
-                ),
-              )
-          }
-        Some(_) =>
-          Err(
-            invalid_payload(
-              capability, "wx.request result.statusCode must be an integer from 0 to 2147483647",
-              value,
-            ),
-          )
-        None =>
-          Err(
-            invalid_payload(
-              capability, "wx.request result.statusCode is missing", value,
-            ),
-          )
-      }
-  }
-}
-
-///|
 fn decode_location(value : Json) -> Result[LocationResult, HostError] {
   let capability = GetLocation
   match object_result(capability, value) {
@@ -492,19 +413,6 @@ pub fn set_storage(
     SetStorage,
     Json::object({ "key": Json::string(key), "data": value }),
     decode_unit,
-    resolve,
-  )
-}
-
-///|
-pub fn request(
-  url : String,
-  resolve : Emit[Result[RequestResult, HostError]],
-) -> Cmd {
-  host_effect(
-    Request,
-    Json::object({ "url": Json::string(url) }),
-    decode_request,
     resolve,
   )
 }

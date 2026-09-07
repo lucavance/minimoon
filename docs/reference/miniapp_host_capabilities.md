@@ -57,6 +57,50 @@ Capabilities use root `Capability`; routes use `Route`; payment input uses
 operation must appear in the page declaration. Undeclared or unavailable
 methods are rejected by the host.
 
+## HTTP requests
+
+`request(url, resolve, http_method?, query?, headers?, body?, timeout_ms?)`
+uses `HttpMethod::{Get, Post, Put, Delete, Head, Options}` (default `Get`).
+The label is `http_method` because MoonBit reserves `method`.
+Declare `Request` in the page's capabilities. For example:
+
+```moonbit
+@minimoon.request(
+  "https://httpbingo.org/post",
+  emit.map(result => RequestFinished(result)),
+  http_method=Post,
+  query=[@minimoon.query("tag", "one"), @minimoon.query("tag", "two")],
+  headers={ "X-Minimoon-Test": "public-smoke" },
+  body=JsonBody(Json::object({ "message": Json::string("测试") })),
+  timeout_ms=15000,
+)
+```
+
+`JsonBody(Json)` serializes exactly once. `FormBody(Array[(String, String)])`
+uses UTF-8 percent encoding, including `%20` for spaces, and preserves repeated
+fields. `TextBody(String)` is sent unchanged. Queries use the same encoding,
+preserve order/duplicates and append to an existing URL query. Supply raw values,
+not pre-escaped values. No body, JSON `null`, and empty text remain distinct.
+
+Default body content types are `application/json`,
+`application/x-www-form-urlencoded`, and `text/plain; charset=utf-8`.
+Explicit JSON content types may also be `application/*+json`; form types must
+match form encoding. Matching ignores case and parameters. Text permits a
+caller-selected content type. Conflicts produce an error, not an override.
+Request header names are normalized to lowercase; duplicate case variants,
+invalid names/values and `Referer` are rejected. Response header names retain
+host casing; cookies retain the existing result representation.
+
+URLs must be absolute HTTPS without credentials, whitespace or fragments.
+GET/HEAD bodies and non-positive timeouts are rejected. Omitted timeouts use
+the host default. Arguments are snapshotted at command construction; validation
+errors are delivered only when the command runs, without network access and
+without echoing URL credentials, request bodies or headers into error metadata.
+There are no implicit retries, binary bodies, response-format options or PATCH
+support. HTTP 400/401/500 still return `Ok(RequestResult)`; inspect
+`status_code` for application policy. Transport failures return `Err(HostError)`.
+Outstanding request tasks are aborted on page disposal and late results ignored.
+
 ## Result normalization
 
 - login: `Result[LoginResult, HostError]`
@@ -92,6 +136,18 @@ This is deterministic automated coverage of generated JavaScript, not a claim
 that the current fingerprint passed WeChat Developer Tools. The real-host
 checklist remains required, and payment remains backend/account-owned rather
 than part of this mock success workflow.
+
+The host suite also runs the generated Home HTTP scenarios offline, including
+timeout, synchronous failure, unavailable API, malformed response, concurrent
+out-of-order completion, duplicate callbacks and unload cancellation.
+`bun run check:http-live` loads the same generated page and uses a Bun-fetch
+`wx.request` transport shim against [httpbingo](https://httpbingo.org/).
+It sends fixed synthetic data, serially, without retries; report output is
+`_build/http-live/report.json`. `MINIMOON_HTTP_BASE_URL` can point to an HTTPS
+service implementing the same httpbingo echo protocol. This opt-in network
+check is excluded from CI/candidate/release gates. It neither uses credentials
+nor creates real-host evidence, and does not replace the
+[WeChat checklist](../operations/miniapp_devtools_validation.md).
 
 ## Backend and privacy boundaries
 

@@ -17,6 +17,8 @@
     "dispose",
     "Showcase state, routes, and rapid lossless taps",
     "Home controlled input, capabilities, and navigation",
+    "Home public httpbingo API: GET encoded and repeated query, JSON/form POST, text PUT, DELETE, HEAD/OPTIONS empty response, HTTP 400/500 loaded status, and timeout failure",
+    "Home delayed HTTP request unload remains silent; repeat public API scenarios in Skyline simulator, device preview and debugging without treating urlCheck bypass as production-domain validation",
     "Lab native input focus, blur, and confirm",
     "Lab focused keyed input retains value, focus, cursor, and selection while only another identity moves",
     "Lab controlled input reset preserves keyed native identity and uses scalar set work without move, splice, replacement, fallback, retry, timeout, or scheduler failure",

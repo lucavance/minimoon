@@ -28,7 +28,17 @@ minimoon verify examples/miniapp_conformance_app
 ```
 
 Import the unchanged `dist/` directory into WeChat Developer Tools for the
-release checklist. In Lab, exercise these probes explicitly:
+release checklist. In Home, select each HTTP scenario and tap Request. The
+default public API is `https://httpbingo.org`: GET query, JSON/form POST, text
+PUT, DELETE, HEAD, OPTIONS, HTTP 400/500 and timeout. Inspect the status code
+and selected echo fields; non-2xx is a loaded result, timeout is failed.
+Leave Home during the delayed request to check disposal. No private server is
+needed. From the repository root, `bun run check:http-live` exercises the same
+generated Home with a fetch transport shim; it is not a real WeChat pass.
+See the [host checklist](../../docs/operations/miniapp_devtools_validation.md)
+for simulator/device modes and public-domain restrictions.
+
+In Lab, exercise these probes explicitly:
 
 1. Enter a unique value in the keyed input. Tap `Arm focused reorder (10s)`,
    refocus the input, place the cursor or select a range, and then do not touch

@@ -10,6 +10,10 @@ tags.
 
 ### Added
 
+- Typed HTTP methods, ordered queries, headers, JSON/form/text request bodies
+  and per-request timeouts; invalid arguments resolve locally as `InvalidPayload`.
+- Ten public-API Home scenarios and opt-in `bun run check:http-live`, with
+  deterministic generated-page HTTP coverage in the offline host suite.
 - Independent `lampclaw/minimoon_ui 0.1.0` module with Skyline-native RUI
   component adaptations, headless algorithms, typed themes and build resources.
 - Typed native button content, form/label, image lifecycle, input options,
@@ -35,6 +39,11 @@ tags.
 
 ### Changed
 
+- Moved repository-check temporary consumers onto the checkout's parent volume,
+  with configurable storage, isolated runs and supervisor-owned failure cleanup.
+- Reviewed HTTP growth budgets: core archive reserve is now 8 KiB under the
+  unchanged 250 KiB hard ceiling; Conformance runtime/aggregate JavaScript
+  ceilings are 360,000/424,000 bytes. UI, starter and other limits are unchanged.
 - Raised the repository and generated-starter Node floor to `>=24.20.0`, with
   CI coverage at 24.20.0 and 26.8.1; pinned Bun to `1.4.2`.
 - Updated PostCSS to `8.5.28`, weapp-tailwindcss to `5.5.1`, and refreshed the

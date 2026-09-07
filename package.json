@@ -11,6 +11,7 @@
     "check:docs": "moon run src/cmd/minimoon --target native -- check --suite docs",
     "check:api": "moon run src/cmd/minimoon --target native -- check --suite api",
     "check:coverage": "moon run src/cmd/minimoon --target native -- check --suite coverage",
+    "check:http-live": "moon run src/cmd/minimoon --target native -- check --suite http-live",
     "check:perf": "moon run src/cmd/minimoon --target native -- check --suite perf",
     "docs:diagrams": "moon run src/cmd/minimoon_docs --target native -- render",
     "docs:diagrams:check": "moon run src/cmd/minimoon_docs --target native -- check",

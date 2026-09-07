@@ -171,7 +171,7 @@ fn ci_handoff_check_source() -> String {
 
 ///|
 async fn ci_handoff_gate(root : String) -> Unit {
-  let temp = @fs.tmpdir(prefix="minimoon-ci-check")
+  let temp = check_temporary("minimoon-ci-check")
   let script = join(temp, "ci_handoff_check.cjs")
   @fs.write_file(
     script,

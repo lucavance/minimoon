@@ -115,16 +115,16 @@ function createRendererStats() {
 
 ## 5. 体积预算与当前余量 / Byte Budgets and Current Headroom
 
-当前 Conformance JavaScript 为 386,950 bytes，aggregate ceiling 为 406,000 bytes，保留 19,050 bytes 余量。runtime 为 327,354/344,000 bytes，host 为 14,247/15,000 bytes，initial trees 为 38,558/41,000 bytes。host 是当前余量比例更小的边界。
+HTTP 预算评审后的 Conformance JavaScript 为 414,673 bytes，aggregate ceiling 为 424,000 bytes，保留 9,327 bytes 余量。runtime 为 350,209/360,000 bytes，host 为 14,818/15,000 bytes，initial trees 为 38,981/41,000 bytes。host 是当前余量比例更小的边界。调整依据见[预算评审](../reference/performance_baseline.md#approved-http-budget-review)。
 
 > **English:**
 >
-> Current Conformance JavaScript is 386,950 bytes against a 406,000-byte aggregate ceiling, leaving 19,050 bytes. Runtime is 327,354/344,000 bytes, host is 14,247/15,000 bytes, and initial trees are 38,558/41,000 bytes. The host is currently the boundary with the smallest proportional headroom.
+> After the HTTP budget review, Conformance JavaScript is 414,673 bytes against a 424,000-byte aggregate ceiling, leaving 9,327 bytes. Runtime is 350,209/360,000 bytes, host is 14,818/15,000 bytes, and initial trees are 38,981/41,000 bytes. The host remains the boundary with the smallest proportional headroom. See the [budget review](../reference/performance_baseline.md#approved-http-budget-review) for the rationale.
 
 > **源码 / Source:** [`src/cmd/minimoon_check/performance.mbt`](../../src/cmd/minimoon_check/performance.mbt) · symbol: `perf_suite` artifact budgets
 
 ```moonbit
-guard runtime_size <= 344000 else {
+guard byte_budget_allows(runtime_size, conformance_runtime_limit) else {
   abort(runtime_path + " exceeds application runtime budget")
 }
 guard host_size <= 15000 else {
@@ -137,9 +137,9 @@ guard initial_size <= 41000 else {
   abort(initial_path + " exceeds shared initial-tree budget")
 }
 
-let aggregate_limit = 406000
+let aggregate_limit = conformance_javascript_limit
 let remaining = aggregate_limit - aggregate.val
-guard aggregate.val <= aggregate_limit else {
+guard byte_budget_allows(aggregate.val, aggregate_limit) else {
   abort(app + " exceeds aggregate JavaScript performance budget")
 }
 ```

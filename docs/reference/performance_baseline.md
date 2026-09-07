@@ -12,7 +12,7 @@ small indexed page registration/template stubs.
 
 | Artifact | Ceiling |
 | --- | ---: |
-| Conformance application runtime | 344,000 bytes |
+| Conformance application runtime | 360,000 bytes |
 | generated starter runtime | 220,000 bytes |
 | shared host | 15,000 bytes |
 | shared protocol | 10,000 bytes |
@@ -28,19 +28,41 @@ and all page bridges:
 
 | Application | Ceiling |
 | --- | ---: |
-| committed Conformance fixture | 406,000 bytes |
+| committed Conformance fixture | 424,000 bytes |
 | generated starter | 247,000 bytes |
 
-Release generation minifies the host and runtime syntax. The current baseline
-uses `moon 0.1.20260827`, `moonc v0.10.11`, Node 26.8.1, and Bun 1.4.2. Its
-Conformance release measures 327,354 runtime bytes, 14,247 host bytes, 38,558
-initial-tree bytes, and 386,950 aggregate JavaScript bytes.
+Release generation minifies the host and runtime syntax. The HTTP calibration
+on 2026-09-07 uses `moon 0.1.20260827`, `moonc v0.10.11`, Node 24.20.0, and
+Bun 1.4.2. Its Conformance release measures 350,209 runtime bytes, 14,818 host
+bytes, 9,492 protocol bytes, 38,981 initial-tree bytes, and 414,673 aggregate
+JavaScript bytes. Remaining headroom is respectively 9,791, 182, 508, 2,019,
+and 9,327 bytes. Host remains the tightest proportional budget.
 
-Against the maintained ceilings, 16,646 runtime bytes, 753 host bytes, 2,442
-initial-tree bytes, and 19,050 aggregate JavaScript bytes remain. The gate
-recalculates these values from current generated artifacts; changing a ceiling
-requires an explicit review of the linked implementation and both maintained
-application shapes.
+## Approved HTTP budget review
+
+The pre-HTTP baseline is committed `01acb76`, not the older pre-UI calibration.
+Its runtime is 334,158 bytes and aggregate JavaScript is 397,590 bytes. Typed
+request encoding/validation and ten Home scenarios add 16,051 runtime bytes and
+17,083 aggregate bytes. The reviewed runtime ceiling moves from 344,000 to
+360,000 and the aggregate ceiling from 406,000 to 424,000: these increases
+retain approximately the previous absolute headroom. They do not auto-scale
+with future builds. The shared host/protocol delta is 621 bytes. UI runtime
+stays at 524,530 bytes; its aggregate only grows by those shared 621 bytes,
+from 684,480 to 685,101. UI and generated-starter ceilings are unchanged.
+
+Both module archives retain the repository's 250 KiB hard ceiling. Core's
+required reserve changes from 16 KiB to 8 KiB, so its operating ceiling is
+247,808 bytes (242 KiB); UI retains its 16 KiB reserve and 239,616-byte ceiling.
+The pre-review HTTP archive measured 244,875 bytes before this documentation
+update, above the old 239,616-byte operating ceiling. The gate measures the
+final archive again, including documentation. No allowlist, package exclusion,
+coverage threshold, scheduler bound or timing check is relaxed.
+
+The three reviewed limits and inclusive-boundary tests live in
+[`budgets.mbt`](../../src/cmd/minimoon_check/budgets.mbt) and its white-box tests.
+Every future increase requires another implementation/size review; a one-byte
+overrun still fails. The gate recalculates current bytes rather than treating
+these calibration samples as permanent expected outputs.
 
 ```bash
 minimoon check --suite perf

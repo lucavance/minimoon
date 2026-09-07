@@ -1,7 +1,7 @@
 ///|
 pub fn shared_host_bridge() -> String {
   let source =
-    #|const { exactKeys, validateNode, applyPatch, createRendererStats, eventDispatchers, eventPayload, touchIdentity, validMeasurementPayload, measurementNodes } = require("./minimoon.protocol.js")
+    #|const { exactKeys, validateNode, applyPatch, createRendererStats, eventDispatchers, eventPayload, touchIdentity, validMeasurementPayload, validRequestPayload, measurementNodes } = require("./minimoon.protocol.js")
     #|function registerMinimoonPage(runtime, minimoonPageId, minimoonInitialTree, minimoonCapabilityList) {
     #|if (runtime.minimoon_runtime_version() !== __MM_RUNTIME_VERSION__ || runtime.minimoon_runtime_state_abi_version() !== __MM_RUNTIME_VERSION__) throw new Error("Minimoon runtime ABI v__MM_RUNTIME_VERSION__ required")
     #|const minimoonCapabilities = new Set(minimoonCapabilityList)
@@ -344,6 +344,7 @@ pub fn shared_host_bridge() -> String {
     #|    const method = command.capability.startsWith("wx.") ? command.capability.slice(3) : ""
     #|    if (!method || typeof wx === "undefined" || typeof wx[method] !== "function") { finish("unavailable", { error: `${command.capability} unavailable` }); return }
     #|    const options = { ...(command.payload || {}) }
+    #|    if (method === "request" && !validRequestPayload(options)) { finish("invalid_payload", { error: "invalid request payload" }); return }
     #|    const fail = (error) => { error = error || {}; const message = String(error.errMsg || error.message || `${command.capability} failed`); finish("failure", { error: message, errCode: error.errCode == null ? null : error.errCode, errMsg: String(error.errMsg || error.message || "") }) }
     #|    let task
     #|    try { task = wx[method]({ ...options, success: (result) => finish("success", this._ev(result)), fail }) }

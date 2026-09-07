@@ -9,6 +9,9 @@ pub struct Model {
   storage_value : String
   request_status : String
   request_body : String
+  request_code : String
+  request_case : Int
+  request_base : String
   toast_status : String
   location : String
   media : String
@@ -31,7 +34,9 @@ pub enum Msg {
   StorageSaved
   StorageFailed(String)
   LoadRequest
-  RequestLoaded(String)
+  RequestCase(Int)
+  RequestBase(String)
+  RequestLoaded(Int, String)
   RequestFailed(String)
   ShowToast
   ToastShown
@@ -62,6 +67,9 @@ fn initial_model() -> Model {
     storage_value: "",
     request_status: "idle",
     request_body: "",
+    request_code: "",
+    request_case: 0,
+    request_base: "https://httpbingo.org",
     toast_status: "idle",
     location: "",
     media: "",
@@ -145,24 +153,35 @@ fn update(
     StorageSaved => @minimoon.no_cmd({ ..model, storage_status: "saved", })
     StorageFailed(error) =>
       @minimoon.no_cmd({ ..model, storage_status: "failed", error, })
+    RequestCase(index) => @minimoon.no_cmd({ ..model, request_case: index, })
+    RequestBase(base) => @minimoon.no_cmd({ ..model, request_base: base, })
     LoadRequest =>
       @minimoon.with_cmd(
-        { ..model, request_status: "loading", request_body: "", error: "", },
-        @minimoon.request(
-          "https://www.wanandroid.com/banner/json",
+        {
+          ..model,
+          request_status: "loading",
+          request_body: "",
+          request_code: "",
+          error: "",
+        },
+        http_case(
+          model.request_case,
+          model.request_base,
           emit.map(result => {
             match result {
-              Ok(response) => RequestLoaded(response.data.stringify())
+              Ok(response) =>
+                RequestLoaded(response.status_code, http_summary(response))
               Err(error) => RequestFailed(error.message)
             }
           }),
         ),
       )
-    RequestLoaded(body) =>
+    RequestLoaded(code, body) =>
       @minimoon.no_cmd({
         ..model,
         request_status: "loaded",
         request_body: body,
+        request_code: code.to_string(),
       })
     RequestFailed(error) =>
       @minimoon.no_cmd({ ..model, request_status: "failed", error, })
@@ -329,7 +348,9 @@ fn request_panel(model : Model) -> @minimoon.Node {
     style="width: 100%; max-width: calc(100vw - 48rpx); align-items: stretch; gap: 6rpx; word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",
     [
       @minimoon.p(class="block font-semibold", [
-        @minimoon.text("request: " + model.request_status),
+        @minimoon.text(
+          "request: " + model.request_status + " · HTTP " + model.request_code,
+        ),
       ]),
       @minimoon.p(
         class="block text-slate-600",
@@ -523,6 +544,20 @@ fn view(
         @minimoon.text(" · "),
         @minimoon.text("value: " + model.storage_value),
       ]),
+      @minimoon.input(
+        value=model.request_base,
+        on_input=emit.map(value => RequestBase(value)),
+        event_key="home/http-base",
+        placeholder="HTTPS httpbingo-compatible base URL",
+      ),
+      @minimoon.picker_selector(
+        options=http_cases(),
+        selected=model.request_case,
+        on_change=emit.map(value => RequestCase(value)),
+        event_key="home/http-case",
+        "HTTP scenario: " +
+        http_cases().get(model.request_case).unwrap_or("GET"),
+      ),
       request_panel(model),
       status_panel("toast-state", [
         @minimoon.text("toast: " + model.toast_status),

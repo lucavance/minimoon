@@ -173,7 +173,7 @@ async fn perf_suite(root : String) -> Unit {
       .binary()
       .length()
     let initial_size = @fs.read_file(join(root, initial_path)).binary().length()
-    guard runtime_size <= 344000 else {
+    guard byte_budget_allows(runtime_size, conformance_runtime_limit) else {
       abort(runtime_path + " exceeds application runtime budget")
     }
     guard host_size <= 15000 else {
@@ -234,7 +234,7 @@ async fn perf_suite(root : String) -> Unit {
         }
       }
     }
-    let aggregate_limit = 406000
+    let aggregate_limit = conformance_javascript_limit
     let remaining = aggregate_limit - aggregate.val
     let headroom = remaining.to_double() / aggregate_limit.to_double() * 100.0
     println(
@@ -250,7 +250,7 @@ async fn perf_suite(root : String) -> Unit {
       headroom.to_string() +
       "%)",
     )
-    guard aggregate.val <= aggregate_limit else {
+    guard byte_budget_allows(aggregate.val, aggregate_limit) else {
       abort(app + " exceeds aggregate JavaScript performance budget")
     }
   }

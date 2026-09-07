@@ -14,7 +14,7 @@
     "minimoon.initial.js"
   ],
   "runtimeBytes": {
-    "application": 334158
+    "application": 350209
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -1376,8 +1376,58 @@
             ]
           },
           {
-            "kind": "view",
+            "kind": "input",
             "identity": "i:13",
+            "text": "",
+            "props": {
+              "value": "https://httpbingo.org",
+              "disabled": false,
+              "focus": false,
+              "placeholder": "HTTPS httpbingo-compatible base URL"
+            },
+            "events": {
+              "input": "home/http-base"
+            },
+            "children": []
+          },
+          {
+            "kind": "picker",
+            "identity": "i:14",
+            "text": "",
+            "props": {
+              "mode": "selector",
+              "range": [
+                "GET query",
+                "POST JSON",
+                "POST form",
+                "PUT text",
+                "DELETE",
+                "HEAD",
+                "OPTIONS",
+                "HTTP 400",
+                "HTTP 500",
+                "Timeout"
+              ],
+              "value": 0,
+              "disabled": false
+            },
+            "events": {
+              "change": "home/http-case"
+            },
+            "children": [
+              {
+                "kind": "text",
+                "identity": "i:0",
+                "text": "HTTP scenario: GET query",
+                "props": {},
+                "events": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "view",
+            "identity": "i:15",
             "text": "",
             "props": {
               "style": "width: 100%; max-width: calc(100vw - 48rpx); align-items: stretch; gap: 6rpx; word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",
@@ -1398,7 +1448,7 @@
                   {
                     "kind": "text",
                     "identity": "i:0",
-                    "text": "request: idle",
+                    "text": "request: idle · HTTP ",
                     "props": {},
                     "events": {},
                     "children": []
@@ -1429,7 +1479,7 @@
           },
           {
             "kind": "view",
-            "identity": "i:14",
+            "identity": "i:16",
             "text": "",
             "props": {
               "style": "width: 100%; max-width: calc(100vw - 48rpx); word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",
@@ -1450,7 +1500,7 @@
           },
           {
             "kind": "view",
-            "identity": "i:15",
+            "identity": "i:17",
             "text": "",
             "props": {
               "style": "width: 100%; max-width: calc(100vw - 48rpx); word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",
@@ -1471,7 +1521,7 @@
           },
           {
             "kind": "view",
-            "identity": "i:16",
+            "identity": "i:18",
             "text": "",
             "props": {
               "style": "width: 100%; max-width: calc(100vw - 48rpx); word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",
@@ -1492,7 +1542,7 @@
           },
           {
             "kind": "view",
-            "identity": "i:17",
+            "identity": "i:19",
             "text": "",
             "props": {
               "style": "width: 100%; max-width: calc(100vw - 48rpx); word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",
@@ -1513,7 +1563,7 @@
           },
           {
             "kind": "view",
-            "identity": "i:18",
+            "identity": "i:20",
             "text": "",
             "props": {
               "style": "width: 100%; max-width: calc(100vw - 48rpx); word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",

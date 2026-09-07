@@ -1,6 +1,6 @@
 ///|
 async fn docs_suite(root : String) -> Unit {
-  let temp = @fs.tmpdir(prefix="minimoon-docs-check")
+  let temp = check_temporary("minimoon-docs-check")
   let script = join(temp, "docs_check.cjs")
   @fs.write_file(
     script,

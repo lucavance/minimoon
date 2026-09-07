@@ -52,6 +52,11 @@ minimoon add component status_badge --page home
 
 ## Authoring model
 
+Typed `request` supports HTTP methods, ordered queries, headers, JSON/form/text
+bodies and timeouts. See the [HTTP contract](docs/reference/miniapp_host_capabilities.md#http-requests).
+Run `bun run check:http-live` from this checkout for opt-in public-API testing
+of the generated Home page; it does not replace WeChat host acceptance.
+
 Each configured page package exports `program() -> Page`:
 
 ```moonbit
@@ -251,8 +256,15 @@ require unchanged fingerprints and a clean source checkout. The
 [release runbook](docs/operations/release_candidate_handoff.md) defines the
 ordered core/UI publication and registry-only consumer checks.
 The repository archive gate uses `moon package --frozen --list`, then enforces
-the registry archive allowlist, a 250 KiB hard ceiling and at least 16 KiB of
-reserved headroom for each module.
+the registry archive allowlist and a 250 KiB hard ceiling for each module.
+Reserved headroom is at least 8 KiB for core and 16 KiB for UI.
+
+Repository checks use fresh run directories in `../.minimoon-check-tmp/`, on
+the checkout's parent volume and outside its Moon workspace. Override the base
+with `MINIMOON_CHECK_TMPDIR` (relative to the checkout or absolute). The parent
+process cleans its run after success, failure or worker crash; child tools
+inherit that run's `TMPDIR`, `TMP` and `TEMP`. See the [temporary-storage
+notes](docs/operations/release_candidate_handoff.md#validation-temporary-storage).
 
 The floor was revalidated on 2026-09-04 with `moon 0.1.20260827` and
 `moonc v0.10.11`. Repository and generated-starter tooling support Node

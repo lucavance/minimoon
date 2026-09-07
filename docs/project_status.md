@@ -6,6 +6,11 @@ frozen and checked. Source and generated reports define candidate readiness.
 
 ## Current implementation
 
+The HTTP candidate adds methods, query/header/body encoding and timeouts without
+changing Contract v8, ABI v10 or protocol v8. Home has ten public-API scenarios;
+`bun run check:http-live` is opt-in and is not real-host evidence. Both fixtures
+need matching Skyline revalidation after shared host bytes change.
+
 Application code imports `lampclaw/minimoon`, plus `lampclaw/minimoon_ui`
 when opting into native UI components. Elm-style state machines
 compose pages and local components through `Val`; a page-owned transactional

@@ -734,9 +734,9 @@ pub fn navigation_host_smoke_source() -> String {
     #|  getStorage(options) { const terminal = effectOptions("getStorage", options, { key: "minimoon-conformance-home" }); terminal.success({ data: "stored" }) },
     #|  setStorage(options) { const terminal = effectOptions("setStorage", options, { key: "minimoon-conformance-home", data: "0" }); terminal.success({}) },
     #|  request(options) {
-    #|    const terminal = effectOptions("request", options, { url: "https://www.wanandroid.com/banner/json" })
+    #|    const terminal = effectOptions("request", options, { url: "https://httpbingo.org/get?existing=yes&message=Minimoon%20%E6%B5%8B%E8%AF%95%20%2B%26%3D&tag=one&tag=two", method: "GET", header: { "x-minimoon-test": "public-smoke" }, timeout: 15000 })
     #|    if (requestMode === "deferred") { pendingRequest = terminal; return { abort() { requestAborts += 1 } } }
-    #|    terminal.success({ statusCode: 200, data: { ok: true }, header: { "content-type": "application/json" }, cookies: ["session=host"] })
+    #|    terminal.success({ statusCode: 200, data: { method: "GET" }, header: { "content-type": "application/json" }, cookies: ["session=host"] })
     #|    return { abort() { requestAborts += 1 } }
     #|  },
     #|  showToast(options) { const terminal = effectOptions("showToast", options, { title: "Count: 0" }); terminal.success({}) },
@@ -852,7 +852,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|dispatch(homeDefinition, capabilityHome, "home/save-storage")
     #|if (!JSON.stringify(capabilityHome.data).includes("storage: saved")) throw new Error("wx.setStorage success did not resolve into Home state")
     #|dispatch(homeDefinition, capabilityHome, "home/request")
-    #|if (!JSON.stringify(capabilityHome.data).includes("request: loaded") || !JSON.stringify(capabilityHome.data).includes('\\"ok\\":true')) throw new Error("wx.request success did not resolve into Home state")
+    #|if (!JSON.stringify(capabilityHome.data).includes("request: loaded · HTTP 200") || !JSON.stringify(capabilityHome.data).includes('\\"method\\":\\"GET\\"')) throw new Error("wx.request success did not resolve into Home state")
     #|dispatch(homeDefinition, capabilityHome, "home/toast")
     #|if (!JSON.stringify(capabilityHome.data).includes("toast: shown")) throw new Error("wx.showToast success did not resolve into Home state")
     #|dispatch(homeDefinition, capabilityHome, "home/location")

@@ -11,7 +11,7 @@ fn dynamic_app_host_smoke_source() -> String {
 
 ///|
 async fn dynamic_app_host_smoke(root : String, page_file : String) -> Unit {
-  let temp = @fs.tmpdir(prefix="minimoon-dynamic-app-smoke")
+  let temp = check_temporary("minimoon-dynamic-app-smoke")
   let script = join(temp, "host_smoke.cjs")
   @fs.write_file(
     script,
@@ -38,7 +38,7 @@ async fn dynamic_app_host_smoke(root : String, page_file : String) -> Unit {
 
 ///|
 async fn scheduler_host_smoke(root : String, host_file : String) -> Unit {
-  let temp = @fs.tmpdir(prefix="minimoon-scheduler-smoke")
+  let temp = check_temporary("minimoon-scheduler-smoke")
   let script = join(temp, "scheduler_smoke.cjs")
   @fs.write_file(
     script,
@@ -88,7 +88,7 @@ async fn navigation_host_smoke(
   root : String,
   page_files : Array[String],
 ) -> Unit {
-  let temp = @fs.tmpdir(prefix="minimoon-navigation-smoke")
+  let temp = check_temporary("minimoon-navigation-smoke")
   let script = join(temp, "host_smoke.cjs")
   @fs.write_file(
     script,

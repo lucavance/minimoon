@@ -1,5 +1,10 @@
 # Minimoon
 
+公共 `request` 支持 HTTP 方法、有序查询参数、请求头、JSON/表单/文本请求体及超时。
+详见 [HTTP 契约](docs/reference/miniapp_host_capabilities.md#http-requests)。
+仓库内运行 `bun run check:http-live` 可通过公共 API 验证生成的 Home 页面；
+这不是微信真实宿主验收，也不会生成宿主通过证据。
+
 [English](README.md) · [文档索引](docs/README.md) · [双语代码分析](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
 Minimoon 是面向微信小程序 Skyline 的 MoonBit UI 框架。`0.2.0` 以 Elm-style
@@ -220,7 +225,12 @@ headless、theme 与 resources 分别维护可加性接口快照。
 [发布操作指南](docs/operations/release_candidate_handoff.md) 定义核心/UI 的发布顺序及
 纯 registry consumer 检查。
 仓库归档门禁先执行 `moon package --frozen --list`，再检查每个模块的 registry 包
-白名单、250 KiB 硬上限与至少 16 KiB 的预留余量。
+白名单与 250 KiB 硬上限；核心包至少预留 8 KiB，UI 包仍至少预留 16 KiB。
+
+仓库检查默认在旁边的 `../.minimoon-check-tmp/` 创建独立运行目录，使用仓库父目录
+所在的磁盘，且不继承当前 Moon 工作区。可用 `MINIMOON_CHECK_TMPDIR` 指定绝对路径
+或相对仓库的路径。父进程在成功、失败或检查子进程崩溃后清理本轮目录，并向工具
+传递该目录作为 `TMPDIR`、`TMP` 和 `TEMP`。详见[临时存储说明](docs/operations/release_candidate_handoff.md#validation-temporary-storage)。
 
 工具链下限已于 2026-09-04 使用 `moon 0.1.20260827` 与 `moonc v0.10.11`
 重新验证。仓库和生成的 starter 支持 Node `>=24.20.0`；CI 验证 24.20.0

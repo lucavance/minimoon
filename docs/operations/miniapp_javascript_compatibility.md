@@ -114,7 +114,7 @@ be reflected in order.
 Current gates cover compatibility-transform idempotence, exact UTF-8 cases,
 host execution with `globalThis.TextEncoder` absent, ECMAScript/global audits,
 direct Page registration, ordered event batching, render acknowledgement and
-timeout recovery, deterministic release generation, and a 406,000-byte
+timeout recovery, deterministic release generation, and a 424,000-byte
 aggregate JavaScript ceiling.
 
 Run the repository gates in the prescribed order, then follow

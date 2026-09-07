@@ -40,6 +40,27 @@ fn readme_page() -> Page {
 }
 ```
 
+## HTTP requests
+
+HTTP requests use the page's declared `Request` capability. Non-2xx status codes
+are transport successes; invalid arguments are deferred `InvalidPayload` errors.
+
+```moonbit check
+///|
+#warnings("-unused_value")
+fn readme_request(resolve : Emit[Result[RequestResult, HostError]]) -> Cmd {
+  request(
+    "https://httpbingo.org/post",
+    resolve,
+    http_method=Post,
+    query=[query("tag", "one"), query("tag", "two")],
+    headers={ "X-Minimoon-Test": "public-smoke" },
+    body=JsonBody(Json::object({ "message": Json::string("测试") })),
+    timeout_ms=15000,
+  )
+}
+```
+
 ## Local state and resources
 
 State constructors return the read-only incremental value and its emitter.
