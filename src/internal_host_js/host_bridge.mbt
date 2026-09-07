@@ -1,7 +1,8 @@
 ///|
-pub fn shared_host_bridge() -> String {
+pub fn shared_host_bridge(application? : Bool = false) -> String {
   let source =
     #|const { exactKeys, validateNode, applyPatch, createRendererStats, eventDispatchers, eventPayload, touchIdentity, validMeasurementPayload, validRequestPayload, measurementNodes } = require("./minimoon.protocol.js")
+    #|/* application */const applicationPages = new Map()
     #|function registerMinimoonPage(runtime, minimoonPageId, minimoonInitialTree, minimoonCapabilityList) {
     #|if (runtime.minimoon_runtime_version() !== __MM_RUNTIME_VERSION__ || runtime.minimoon_runtime_state_abi_version() !== __MM_RUNTIME_VERSION__) throw new Error("Minimoon runtime ABI v__MM_RUNTIME_VERSION__ required")
     #|const minimoonCapabilities = new Set(minimoonCapabilityList)
@@ -26,12 +27,16 @@ pub fn shared_host_bridge() -> String {
     #|    this._pr = null
     #|    this._cr = null
     #|    this.__mmInstanceId = null
-    #|    const hadRuntimeWake = Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV10")
-    #|    const previousRuntimeWake = globalThis.__minimoonRuntimeWakeV10
+    #|    const hadRuntimeWake = Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV11")
+    #|    const previousRuntimeWake = globalThis.__minimoonRuntimeWakeV11
+    #|/* application */    const previousSharedWake = globalThis.__minimoonSharedWakeV11
+    #|/* application */    let sharedScheduled = false
     #|    const wakeGeneration = this._gn
-    #|    globalThis.__minimoonRuntimeWakeV10 = (through) => this._aw(wakeGeneration, through)
+    #|    globalThis.__minimoonRuntimeWakeV11 = (through) => this._aw(wakeGeneration, through)
+    #|/* application */    globalThis.__minimoonSharedWakeV11 = () => { if (sharedScheduled) return; sharedScheduled = true; Promise.resolve().then(() => { sharedScheduled = false; if (this._gn === wakeGeneration) this._en({ kind: "shared" }) }) }
     #|    try { this.__mmInstanceId = runtime.minimoon_runtime_create_app(minimoonPageId) }
-    #|    finally { if (hadRuntimeWake) globalThis.__minimoonRuntimeWakeV10 = previousRuntimeWake; else delete globalThis.__minimoonRuntimeWakeV10 }
+    #|    finally { if (hadRuntimeWake) globalThis.__minimoonRuntimeWakeV11 = previousRuntimeWake; else delete globalThis.__minimoonRuntimeWakeV11; __MM_APP_RESTORE__ }
+    #|/* application */    if (runtime.minimoon_application_start) applicationPages.set(this, runtime)
     #|    this._en({ kind: "lifecycle", hook: "onLoad", payload: options || {} })
     #|  },
     #|  onReady() { this._en({ kind: "mount" }) },
@@ -40,6 +45,7 @@ pub fn shared_host_bridge() -> String {
     #|  onPullDownRefresh() { this._lc("onPullDownRefresh", {}) },
     #|  onReachBottom() { this._lc("onReachBottom", {}) },
     #|  onUnload() {
+    #|/* application */    applicationPages.delete(this)
     #|    const instanceId = this.__mmInstanceId
     #|    this._cl = true
     #|    this._gn = (this._gn || 0) + 1
@@ -89,6 +95,7 @@ pub fn shared_host_bridge() -> String {
     #|  },
     #|  _en(entry) {
     #|    if (this._cl || !this.__mmInstanceId) return
+    #|/* application */    if (entry.kind === "shared" && this._q.length && this._q[this._q.length - 1].kind === "shared") return
     #|    this._q.push(entry)
     #|    this._mq()
     #|    this._pu()
@@ -121,6 +128,7 @@ pub fn shared_host_bridge() -> String {
     #|      if (entry.kind === "dispatch") { this._st.eventBatches += 1; raw = runtime.minimoon_runtime_dispatch_batch(this.__mmInstanceId, JSON.stringify(entry.events.map(event => ({ key: event.key, payload: event.payload })))) }
     #|      else if (entry.kind === "lifecycle") raw = runtime.minimoon_runtime_lifecycle(this.__mmInstanceId, entry.hook, JSON.stringify(entry.payload || {}))
     #|      else if (entry.kind === "mount") raw = runtime.minimoon_runtime_mount(this.__mmInstanceId)
+    #|/* application */      else if (entry.kind === "shared") raw = runtime.minimoon_runtime_lifecycle(this.__mmInstanceId, "$minimoon:shared", "{}")
     #|      else if (entry.kind === "subscription") raw = runtime.minimoon_runtime_subscription(this.__mmInstanceId, entry.key, "{}")
     #|      else if (entry.kind === "drain") { this._st.asyncDrains += 1; raw = runtime.minimoon_runtime_lifecycle(this.__mmInstanceId, "$minimoon:drain", JSON.stringify({ through: entry.through })) }
     #|      else if (entry.kind === "effect") { const stale = entry.measureRevision != null && entry.measureRevision !== this._rv; raw = runtime.minimoon_runtime_resolve_effect(this.__mmInstanceId, entry.requestId, stale ? "failure" : entry.phase, JSON.stringify(stale ? { error: "measurement superseded by a newer render" } : (entry.payload || {}))) }
@@ -312,45 +320,7 @@ pub fn shared_host_bridge() -> String {
     #|    if (typeof wx === "undefined" || typeof wx[method] !== "function") { console.error(`[minimoon] unavailable capability: ${capability}`); return }
     #|    wx[method](options)
     #|  },
-    #|  _iv(command) {
-    #|    const generation = this._gn
-    #|    const instanceId = this.__mmInstanceId
-    #|    const finish = (phase, payload, measureRevision) => { if (generation !== this._gn || instanceId !== this.__mmInstanceId || !instanceId || this._cl || !this._ef.has(command.request_id)) return; this._ef.delete(command.request_id); this._en({ kind: "effect", requestId: command.request_id, phase, payload: payload || {}, measureRevision }) }
-    #|    this._ef.set(command.request_id, () => {})
-    #|    if (command.capability === "minimoon.timeout") {
-    #|      const timeoutPayload = command.payload
-    #|      if (!timeoutPayload || typeof timeoutPayload !== "object" || Array.isArray(timeoutPayload) || !exactKeys(timeoutPayload, ["ms"]) || !Number.isInteger(timeoutPayload.ms) || timeoutPayload.ms < 0) { finish("failure", { error: "invalid timeout payload" }); return }
-    #|      const handle = setTimeout(() => finish("success", { value: "" }), timeoutPayload.ms); this._ef.set(command.request_id, () => clearTimeout(handle)); return
-    #|    }
-    #|    if (!minimoonCapabilities.has(command.capability)) { finish("failure", { error: `undeclared capability: ${command.capability}` }); return }
-    #|    if (command.capability === "minimoon.measureNodes") {
-    #|      const payload = command.payload
-    #|      if (!validMeasurementPayload(payload)) { finish("invalid_payload", { error: "invalid measurement IDs" }); return }
-    #|      const revision = this._rv
-    #|      if (payload.ids.length === 0) { finish("success", { nodes: [] }, revision); return }
-    #|      if (typeof this.createSelectorQuery !== "function") { finish("unavailable", { error: "page selector query unavailable" }); return }
-    #|      try {
-    #|        const query = this.createSelectorQuery()
-    #|        for (const id of payload.ids) query.select(`#${id}`).boundingClientRect()
-    #|        query.exec(results => {
-    #|          if (revision !== this._rv) { finish("failure", { error: "measurement superseded by a newer render" }); return }
-    #|          const result = measurementNodes(results, payload.ids)
-    #|          if (result.error) { finish("invalid_payload", result); return }
-    #|          finish("success", result, revision)
-    #|        })
-    #|      } catch (error) { finish("failure", { error: String(error.message || error) }) }
-    #|      return
-    #|    }
-    #|    const method = command.capability.startsWith("wx.") ? command.capability.slice(3) : ""
-    #|    if (!method || typeof wx === "undefined" || typeof wx[method] !== "function") { finish("unavailable", { error: `${command.capability} unavailable` }); return }
-    #|    const options = { ...(command.payload || {}) }
-    #|    if (method === "request" && !validRequestPayload(options)) { finish("invalid_payload", { error: "invalid request payload" }); return }
-    #|    const fail = (error) => { error = error || {}; const message = String(error.errMsg || error.message || `${command.capability} failed`); finish("failure", { error: message, errCode: error.errCode == null ? null : error.errCode, errMsg: String(error.errMsg || error.message || "") }) }
-    #|    let task
-    #|    try { task = wx[method]({ ...options, success: (result) => finish("success", this._ev(result)), fail }) }
-    #|    catch (error) { fail(error); return }
-    #|    if (task && typeof task.abort === "function" && this._ef.has(command.request_id)) this._ef.set(command.request_id, () => task.abort())
-    #|  },
+    #|  _iv(command) { invokeMinimoonEffect.call(this, command, minimoonCapabilities) },
     #|  _ev(result) { return result == null ? null : result },
     #|  _fc(reason, error) {
     #|    if (this._cl) return
@@ -369,8 +339,32 @@ pub fn shared_host_bridge() -> String {
     #|})
     #|}
     #|
-    #|module.exports = { registerMinimoonPage }
-  source
+    #|/* application */function disposeMinimoonApplicationPages(runtime) { for (const [page, owner] of Array.from(applicationPages)) if (owner === runtime) page.onUnload() }
+    #|module.exports = { registerMinimoonPage __MM_APP_EXPORTS__ }
+  let source = source
+    .split("\n")
+    .filter(line => application || !line.contains("/* application */"))
+    .map(line => line.to_owned())
+    .collect()
+    .join("\n")
+    .replace_all(old="/* application */", new="")
+    .replace_all(
+      old="__MM_APP_RESTORE__",
+      new=if application {
+        "if (previousSharedWake === undefined) delete globalThis.__minimoonSharedWakeV11; else globalThis.__minimoonSharedWakeV11 = previousSharedWake"
+      } else {
+        ""
+      },
+    )
+    .replace_all(
+      old="__MM_APP_EXPORTS__",
+      new=if application {
+        ", invokeMinimoonEffect, disposeMinimoonApplicationPages"
+      } else {
+        ""
+      },
+    )
+  (source + "\n" + host_effect_invoker())
   .replace_all(
     old="__MM_RUNTIME_VERSION__",
     new=@versions.runtime_api_version().to_string(),

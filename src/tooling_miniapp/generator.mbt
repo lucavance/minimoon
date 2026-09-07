@@ -19,6 +19,7 @@ pub async fn generate(config_path : String, mode : String) -> Json {
   let app_root = dirname(config_file)
   let document = load_config_document(config_file)
   let raw = document.value
+  let application = object(raw, "MiniApp config").get("application")
   let name = string(raw, "name")
   guard name != "" else {
     abort(
@@ -52,7 +53,13 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     let page = pages[index]
     let package_path = string(page, "package")
     let compiled = try {
-      let contract = compile_page_contract(app_root, module_id, index, page)
+      let contract = compile_page_contract(
+        app_root,
+        module_id,
+        index,
+        page,
+        application?,
+      )
       validate_contract(contract, package_path)
       Ok(contract)
     } catch {
@@ -88,9 +95,18 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     contracts.push(contract)
   }
   let app_runtime = compile_app_runtime(
-    app_root, module_id, pages, contracts, release,
+    app_root,
+    module_id,
+    pages,
+    contracts,
+    release,
+    application?,
   )
-  let host_bridge = emit_host_bridge(app_root, shared_host_bridge(), release)
+  let host_bridge = emit_host_bridge(
+    app_root,
+    shared_host_bridge(application=application is Some(_)),
+    release,
+  )
   let protocol_bridge = emit_host_bridge(
     app_root,
     shared_protocol_bridge(),
@@ -117,7 +133,18 @@ pub async fn generate(config_path : String, mode : String) -> Json {
   if @fs.exists(dist) {
     @fs.rmdir(dist, recursive=true)
   }
-  write(join(dist, "app.js"), "App({})\n")
+  if application is Some(_) {
+    write(
+      join(dist, "minimoon.app.js"),
+      emit_host_bridge(app_root, @host_js.application_host_bridge(), release),
+    )
+    write(
+      join(dist, "app.js"),
+      "require(\"./minimoon.app.js\").registerMinimoonApp(require(\"./minimoon.runtime.js\"))\n",
+    )
+  } else {
+    write(join(dist, "app.js"), "App({})\n")
+  }
   write(join(dist, "app.wxss"), "")
   for asset in array(resources, "assets") {
     write(join(dist, string(asset, "path")), string(asset, "content"))
@@ -157,6 +184,15 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     write_page(dist, contracts[index], index)
   }
   let generated = join(app_root, "generated")
+  let shared_modules = [
+    Json::string("minimoon.runtime.js"),
+    Json::string("minimoon.host.js"),
+    Json::string("minimoon.protocol.js"),
+    Json::string("minimoon.initial.js"),
+  ]
+  if application is Some(_) {
+    shared_modules.push(Json::string("minimoon.app.js"))
+  }
   let manifest = Json::object({
     "schemaVersion": json_int(@versions.app_contract_version()),
     "adapter": Json::string("page_program"),
@@ -166,12 +202,8 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     "hostRegistration": Json::string("page-definition-api"),
     "runtimeLayout": Json::string("application"),
     "pageBridgeEncoding": Json::string("shared-compact-node-v1"),
-    "sharedModules": Json::array([
-      Json::string("minimoon.runtime.js"),
-      Json::string("minimoon.host.js"),
-      Json::string("minimoon.protocol.js"),
-      Json::string("minimoon.initial.js"),
-    ]),
+    "sharedModules": Json::array(shared_modules),
+    "application": application.unwrap_or(Json::null()),
     "runtimeBytes": Json::object({
       "application": Json::number(
         app_runtime_bytes.to_double(),

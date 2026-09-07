@@ -6,16 +6,24 @@ frozen and checked. Source and generated reports define candidate readiness.
 
 ## Current implementation
 
-The HTTP candidate adds methods, query/header/body encoding and timeouts without
-changing Contract v8, ABI v10 or protocol v8. Home has ten public-API scenarios;
+The HTTP work adds methods, query/header/body encoding and timeouts. Home has ten public-API scenarios;
 `bun run check:http-live` is opt-in and is not real-host evidence. Both fixtures
 need matching Skyline revalidation after shared host bytes change.
+
+The shared-state source iteration adds optional `App[Deps]`, typed domain
+machines, page-local `Shared[T]` projections, and independent application
+effects/lifecycle. Home and Details demonstrate shared count, request ownership
+and epoch-based response invalidation. The UI showcase and starter retain the
+no-application entry path. Contract `9` and runtime ABI `11` replace the earlier
+technical boundaries; renderer protocol `8` and product versions are unchanged.
+This source iteration is not a publication claim. See
+[shared-state guide](guides/shared_state.md) for acceptance requirements.
 
 Application code imports `lampclaw/minimoon`, plus `lampclaw/minimoon_ui`
 when opting into native UI components. Elm-style state machines
 compose pages and local components through `Val`; a page-owned transactional
 incremental graph drives normalized MiniApp tree diffs and generated CommonJS
-Skyline artifacts. App Contract v8, runtime ABI v10, and renderer protocol v8
+Skyline artifacts. App Contract v9, runtime ABI v11, and renderer protocol v8
 remain independent technical compatibility numbers.
 
 The maintained release surface consists of one two-page starter and one

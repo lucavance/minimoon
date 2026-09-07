@@ -117,14 +117,14 @@ jobs:
             jq -e --arg name "$name" --arg fingerprint "$fingerprint" --arg ui_version "$ui_version" --arg bundle "$bundle" --argjson page_count "$page_count" \
               --slurpfile manifest "$fixture/generated/manifest.json" \
               --slurpfile checklist "$fixture/generated/smoke_checklist.json" \
-              '.mode == "release" and .name == $name and .schemaVersion == 8 and .runtimeApiVersion == 10 and .rendererProtocolVersion == 8 and
+              '.mode == "release" and .name == $name and .schemaVersion == 9 and .runtimeApiVersion == 11 and .rendererProtocolVersion == 8 and
                .automated.status == "passed" and .automated.pageCount == $page_count and .automated.artifactFingerprint == $fingerprint and
                .devtools.status == "pending" and .devtools.evidence == null and .devtools.artifactFingerprint == null and (.devtools | keys) == ["evidence", "status"] and
-               $manifest[0].name == $name and $manifest[0].schemaVersion == 8 and $manifest[0].runtimeApiVersion == 10 and $manifest[0].rendererProtocolVersion == 8 and
+               $manifest[0].name == $name and $manifest[0].schemaVersion == 9 and $manifest[0].runtimeApiVersion == 11 and $manifest[0].rendererProtocolVersion == 8 and
                $manifest[0].pageBridgeEncoding == "shared-compact-node-v1" and
-               ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 8 and .runtimeApiVersion == 10 and .rendererProtocolVersion == 8) and
+               ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 9 and .runtimeApiVersion == 11 and .rendererProtocolVersion == 8) and
                ($bundle != "ui" or any($manifest[0].resources[]; .package == "lampclaw/minimoon_ui/resources" and .version == $ui_version)) and
-               $checklist[0].runtimeApiVersion == 10 and $checklist[0].rendererProtocolVersion == 8 and
+               $checklist[0].runtimeApiVersion == 11 and $checklist[0].rendererProtocolVersion == 8 and
                $checklist[0].pages == [$manifest[0].pages[].route] and ($checklist[0].checks | length > 0)' \
               "$fixture/generated/release_summary.json" >/dev/null || {
               echo "CI handoff requires matching versions, pages, fingerprints, and pending private-evidence-free summaries" >&2
@@ -173,8 +173,10 @@ jobs:
               --arg commit "$GITHUB_SHA" --arg fingerprint "$fingerprint" --arg runner "$RUNNER_OS" \
               --arg coreVersion "$core_version" --arg uiVersion "$ui_version" \
               --arg moon "$moon_version" --arg node "$node_version" --arg bun "$bun_version" \
+              --slurpfile manifest "$handoff_dir/manifest.json" \
               '{schemaVersion: 2, fixture: $fixture, appDirectory: $appDirectory, commit: $commit, artifactFingerprint: $fingerprint,
-                versions: {minimoon: $coreVersion, minimoonUi: $uiVersion, appContract: 8, runtimeAbi: 10, rendererProtocol: 8},
+                versions: {minimoon: $coreVersion, minimoonUi: $uiVersion,
+                  appContract: $manifest[0].schemaVersion, runtimeAbi: $manifest[0].runtimeApiVersion, rendererProtocol: $manifest[0].rendererProtocolVersion},
                 toolchain: {moon: $moon, node: $node, bun: $bun}, runner: $runner, importDirectory: "dist/",
                 projectSettings: {renderer: "skyline", es6: true, enhance: true, minified: true, minimumBaseLibrary: "3.17.0"},
                 evidenceStatus: "pending-manual-devtools-validation"}' > "$handoff_dir/HANDOFF.json"

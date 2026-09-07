@@ -7,6 +7,8 @@ import {
 }
 
 // Values
+pub fn[Deps] app(build~ : (AppContext) -> Deps, capabilities? : Array[Capability]) -> App[Deps]
+
 pub fn[A, E : Error] attempt(Emit[Result[A, E]], async () -> A raise E) -> Cmd
 
 pub fn batch(Array[Cmd]) -> Cmd
@@ -152,6 +154,37 @@ pub fn[Model] with_cmds(Model, Array[Cmd]) -> (Model, Cmd)
 // Errors
 
 // Types and methods
+type App[Deps]
+pub fn[Deps] App::capabilities(Self[Deps]) -> Array[Capability]
+pub fn[Deps] App::create_runtime(Self[Deps]) -> AppRuntime[Deps]
+pub fn[Deps, A] App::preview(Self[Deps], (Deps) -> A) -> A
+
+type AppContext
+pub fn[Model : Eq, Msg] AppContext::create_pure_state(Self, Model, update~ : (Model, Msg) -> Model) -> (Shared[Model], Emit[Msg])
+pub fn[Model : Eq, Msg] AppContext::create_state(Self, Model, update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd), subscriptions? : (Model, Emit[Msg]) -> Sub) -> (Shared[Model], Emit[Msg])
+pub fn[Model : Eq, Msg] AppContext::create_state_with_init(Self, init~ : (Emit[Msg]) -> (Model, Cmd), update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd), subscriptions? : (Model, Emit[Msg]) -> Sub) -> (Shared[Model], Emit[Msg])
+pub fn AppContext::every(Self, key~ : String, interval_ms~ : Int, command~ : Cmd) -> Sub
+pub fn AppContext::lifecycle(Self, AppLifecycleHook, (Json) -> Result[Cmd, DecodeError]) -> Sub
+pub fn AppContext::on_hide(Self, Cmd) -> Sub
+pub fn AppContext::on_launch(Self, Cmd) -> Sub
+pub fn AppContext::on_show(Self, Cmd) -> Sub
+
+pub(all) enum AppLifecycleHook {
+  Launch
+  Show
+  Hide
+} derive(Eq)
+
+type AppRuntime[Deps]
+pub fn[Deps] AppRuntime::create_page(Self[Deps], Page) -> PageRuntime
+pub fn[Deps] AppRuntime::deps(Self[Deps]) -> Deps
+pub fn[Deps] AppRuntime::dispatch(Self[Deps], Cmd) -> String
+pub fn[Deps] AppRuntime::dispose(Self[Deps]) -> String
+pub fn[Deps] AppRuntime::flush(Self[Deps]) -> String
+pub fn[Deps] AppRuntime::lifecycle(Self[Deps], String, String) -> String
+pub fn[Deps] AppRuntime::resolve_effect(Self[Deps], String, String, String) -> String
+pub fn[Deps] AppRuntime::subscription(Self[Deps], String) -> String
+
 pub(all) enum Capability {
   Login
   GetStorage
@@ -296,9 +329,8 @@ pub fn Page::route(Self) -> String
 pub fn Page::title(Self) -> String
 pub fn Page::wxml(Self) -> String
 
-pub struct PageContext {
-  marker : Unit
-}
+type PageContext
+pub fn[T : Eq] PageContext::bind(Self, Shared[T]) -> Val[T]
 pub fn PageContext::every(Self, key~ : String, interval_ms~ : Int, command~ : Cmd) -> Sub
 pub fn PageContext::lifecycle(Self, PageLifecycleHook, (Json) -> Result[Cmd, DecodeError]) -> Sub
 pub fn PageContext::on_hide(Self, Cmd) -> Sub
@@ -307,6 +339,7 @@ pub fn PageContext::on_pull_down_refresh(Self, Cmd) -> Sub
 pub fn PageContext::on_reach_bottom(Self, Cmd) -> Sub
 pub fn PageContext::on_show(Self, Cmd) -> Sub
 pub fn PageContext::on_unload(Self, Cmd) -> Sub
+pub fn[T : Eq, U : Eq] PageContext::select(Self, Shared[T], (T) -> U) -> Val[U]
 
 pub(all) enum PageLifecycleHook {
   Load
@@ -324,6 +357,7 @@ pub fn PageRuntime::dispose(Self) -> String
 pub fn PageRuntime::lifecycle(Self, String, String) -> String
 pub fn PageRuntime::mount(Self) -> String
 pub fn PageRuntime::page_id(Self) -> String
+pub fn PageRuntime::refresh(Self) -> String
 pub fn PageRuntime::resolve_effect(Self, String, String, String) -> String
 pub fn PageRuntime::snapshot(Self) -> String
 pub fn PageRuntime::subscription(Self, String, String) -> String
@@ -410,6 +444,8 @@ pub(all) enum SemanticRole {
 } derive(Eq, @debug.Debug)
 
 type Semantics
+
+type Shared[T]
 
 pub enum Status[T] {
   Pending

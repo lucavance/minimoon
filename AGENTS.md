@@ -78,7 +78,7 @@ Elm-style Model / Msg / update / Cmd / Sub
   version facts; `src/internal_host_js` owns published build/verify host
   JavaScript templates, while `src/internal_host_validation` owns repository-only
   host, documentation, and performance validation sources.
-- `src/tooling_miniapp` owns the current App Contract v8 host-artifact
+- `src/tooling_miniapp` owns the current App Contract v9 host-artifact
   generator.
 - `src/tooling_minimoon_build`, `src/tooling_minimoon_verify`, and
   `src/cmd/minimoon` own generation, verification, and the CLI.

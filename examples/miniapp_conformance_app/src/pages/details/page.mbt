@@ -13,6 +13,7 @@ pub enum Msg {
 fn app(
   context : @minimoon.PageContext,
   from : @minimoon.Val[String],
+  deps : @application.Deps,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (model, emit) = @minimoon.create_state(
     { visits: 0, },
@@ -30,7 +31,11 @@ fn app(
     },
     subscriptions=(_, emit) => context.on_show(emit(PageShown)),
   )
-  model.view2(from, (current, source) => {
+  model.view3(from, @application.panel(context, deps), (
+    current,
+    source,
+    shared_panel,
+  ) => {
     @minimoon.div(
       class="min-h-[100vh] bg-slate-700 px-[32rpx] pt-[96rpx] text-white",
       style="background: linear-gradient(145deg, #020617 0%, #172554 58%, #0f172a 100%);",
@@ -70,6 +75,7 @@ fn app(
               style="margin-left: 0; margin-right: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box; line-height: 1; min-height: 0;",
               "返回 / Back",
             ),
+            shared_panel,
           ],
         ),
       ],
@@ -85,13 +91,13 @@ fn decode_input(
 }
 
 ///|
-pub fn program() -> @minimoon.Page {
+pub fn program(deps : @application.Deps) -> @minimoon.Page {
   @minimoon.page_with_input(
     id="details",
     route=@minimoon.route("pages/details/details"),
     title="Lifecycle Details",
     capabilities=[@minimoon.NavigateBack, @minimoon.RedirectTo],
     decode_input~,
-    build=app,
+    build=(context, input) => app(context, input, deps),
   )
 }

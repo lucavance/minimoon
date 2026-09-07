@@ -68,6 +68,21 @@ runbook before recording evidence.
 
 ## Core interaction checklist
 
+Application-owned shared state (Home and Details):
+
+- Tap `Shared +1` on Home, open Details and increment again, then return. Both
+  panels must show the same count while page-local counters remain independent.
+- Start `Shared public API request` against `https://httpbingo.org/delay/2` and
+  leave the requesting page, including a redirect that unloads it. The result
+  must reach the other page without another tap; hiding and returning to the
+  application must preserve shared state. Public-service failure is not a pass.
+- Start the shared request and immediately tap `Clear and ignore old response`.
+  After the old response arrives, the shared status must remain idle on both
+  pages. Repeat navigation and unload with a clean console.
+- Validate these interactions separately in the Skyline simulator, device
+  preview and device debugging. The UI fixture retains its no-application entry
+  path and still requires its own complete checklist after shared host changes.
+
 Showcase:
 
 - the application opens on Minimoon Studio with a readable bilingual Hero and

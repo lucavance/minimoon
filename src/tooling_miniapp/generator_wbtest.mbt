@@ -24,9 +24,9 @@ test "page bridge uses the application runtime and gates navigation" {
   assert_true(page.contains("require(\"../../minimoon.host.js\")"))
   assert_true(page.contains("require(\"../../minimoon.initial.js\")"))
   assert_true(page.contains("minimoonInitialTree(0)"))
-  assert_true(bridge.contains("Minimoon runtime ABI v10 required"))
+  assert_true(bridge.contains("Minimoon runtime ABI v11 required"))
   assert_false(bridge.contains("runtime ABI v9"))
-  assert_true(bridge.contains("__minimoonRuntimeWakeV10"))
+  assert_true(bridge.contains("__minimoonRuntimeWakeV11"))
   assert_true(bridge.contains("Promise.resolve().then"))
   assert_true(
     bridge.contains(
@@ -41,7 +41,7 @@ test "page bridge uses the application runtime and gates navigation" {
   assert_true(bridge.contains("exactKeys(timeoutPayload, [\"ms\"])"))
   assert_false(
     bridge.contains(
-      "module.exports = { registerMinimoonPage, __minimoonRuntimeWakeV10 }",
+      "module.exports = { registerMinimoonPage, __minimoonRuntimeWakeV11 }",
     ),
   )
   assert_true(bridge.contains("minimoonCapabilities.has(capability)"))
@@ -206,10 +206,10 @@ test "release metadata declares every renderer statistic" {
 }
 
 ///|
-test "generated runtime exports ABI v10 page-aware creation and batch dispatch" {
+test "generated runtime exports ABI v11 page-aware creation and batch dispatch" {
   let source = runtime_package_source("app/page", "program", false)
   assert_true(
-    source.contains("minimoon_runtime_state_abi_version() -> Int { 10 }"),
+    source.contains("minimoon_runtime_state_abi_version() -> Int { 11 }"),
   )
   assert_false(
     source.contains("minimoon_runtime_state_abi_version() -> Int { 9 }"),

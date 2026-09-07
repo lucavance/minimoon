@@ -20,6 +20,7 @@ pub struct PageProgram[Model, Msg] {
   lifecycle : Array[PageLifecycleEvent[Msg]]
   inputs : Array[PageInput[Msg]]
   init : Msg?
+  refresh : Msg?
 }
 
 ///|
@@ -119,6 +120,7 @@ pub fn[Model, Msg] page_program(
   lifecycle? : Array[PageLifecycleEvent[Msg]] = [],
   inputs? : Array[PageInput[Msg]] = [],
   init? : Msg,
+  refresh? : Msg,
   subscriptions? : (Model) -> Subscriptions[Msg],
 ) -> PageProgram[Model, Msg] {
   validate_page_identity(id, route, title)
@@ -205,6 +207,7 @@ pub fn[Model, Msg] page_program(
     lifecycle,
     inputs,
     init,
+    refresh,
   }
 }
 

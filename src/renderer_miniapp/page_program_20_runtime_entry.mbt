@@ -11,6 +11,7 @@ pub struct PageRuntime {
   subscription : (String, String) -> String
   snapshot : () -> String
   dispose : () -> String
+  refresh : () -> String
 }
 
 ///|
@@ -20,12 +21,12 @@ pub fn runtime_api_version() -> Int {
 
 ///|
 #cfg(target="js")
-extern "js" fn capture_runtime_wake_v10() -> (Int) -> Unit =
-  #|() => typeof globalThis.__minimoonRuntimeWakeV10 === "function" ? globalThis.__minimoonRuntimeWakeV10 : (_through) => {}
+extern "js" fn capture_runtime_wake_v11() -> (Int) -> Unit =
+  #|() => typeof globalThis.__minimoonRuntimeWakeV11 === "function" ? globalThis.__minimoonRuntimeWakeV11 : (_through) => {}
 
 ///|
 #cfg(not(target="js"))
-fn capture_runtime_wake_v10() -> (Int) -> Unit {
+fn capture_runtime_wake_v11() -> (Int) -> Unit {
   _ => ()
 }
 
@@ -43,7 +44,7 @@ pub fn[Model, Msg] PageProgram::create_runtime(
       commands.val.push(command)
     }
   })
-  let wake_async = capture_runtime_wake_v10()
+  let wake_async = capture_runtime_wake_v11()
   let running = self.component.run_host(
     component_id=self.id,
     queue~,
@@ -277,6 +278,13 @@ pub fn[Model, Msg] PageProgram::create_runtime(
           take_commands()
         }
       }
+    },
+    refresh: fn() {
+      if self.refresh is Some(message) {
+        let _ = running.dispatch(message)
+      }
+      sync_subscriptions()
+      take_commands()
     },
     lifecycle: fn(hook_name, payload_json) {
       if hook_name == "$minimoon:drain" {

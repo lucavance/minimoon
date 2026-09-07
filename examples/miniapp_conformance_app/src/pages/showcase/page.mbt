@@ -220,7 +220,7 @@ fn view(model : Model, emit : @minimoon.Emit[Msg]) -> @minimoon.Node {
 }
 
 ///|
-pub fn program() -> @minimoon.Page {
+pub fn program(_deps : @application.Deps) -> @minimoon.Page {
   @minimoon.elmish_page(
     id="showcase",
     route=@minimoon.route("pages/showcase/showcase"),

@@ -115,7 +115,7 @@ integers in `0..2147483647`; fractional, negative, overflowing, or wrongly
 typed fields produce `InvalidPayload`. Numeric values are never truncated or
 coerced to strings.
 
-Runtime ABI v10 carries callback JSON into root-owned MoonBit decoders before
+Runtime ABI v11 carries callback JSON into root-owned MoonBit decoders before
 application state receives a result and gives suspended local effects a
 generation-bound, sequence-watermarked host wake path. Only same-turn or
 adjacent drain watermarks coalesce; intervening scheduler entries remain

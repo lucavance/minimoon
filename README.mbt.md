@@ -3,7 +3,7 @@
 [中文文档](README.zh-CN.md) · [Documentation](docs/README.md) · [Bilingual code analysis](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
 Minimoon is MoonBit for WeChat MiniApp Skyline. Version `0.2.0` combines an
-Elm-style authoring API with App Contract v8, runtime ABI v10, renderer protocol
+Elm-style authoring API with App Contract v9, runtime ABI v11, renderer protocol
 v8, and a CommonJS MiniApp host boundary.
 
 ```text
@@ -155,14 +155,23 @@ supply WXSS and SVG assets without linking UI resources into application JS.
 These new bytes require fresh Skyline validation; candidate status does not
 imply a published package or a real-host pass.
 
+## Application-owned shared state
+
+Opt into `App[Deps]` when pages share session, preferences or request state.
+The App builder creates independent typed domain machines; pages bind `Shared[T]`
+with `PageContext.bind/select` and retain their own local models. Shared requests
+survive page unload, foreground intervals pause on Hide, and explicit App
+disposal cancels tasks and rejects late delivery. There is no required global Model.
+See [shared-state setup and acceptance](docs/guides/shared_state.md).
+
 ## MiniApp boundary
 
-Configuration uses App Contract v8. `componentTheme` is optional; omitting it
+Configuration uses App Contract v9. `componentTheme` is optional; omitting it
 adds no built-in component CSS:
 
 ```json
 {
-  "schemaVersion": 8,
+  "schemaVersion": 9,
   "name": "my_app",
   "componentTheme": "minimal-v2",
   "pages": [
@@ -193,7 +202,7 @@ page scheduler instead of accepting uncertain state. Queue depth, coalescing,
 acknowledgement latency, retry, timeout, and COW shadow-copy work are observable
 through renderer stats.
 
-Runtime ABI v10 also gives page-owned local async commands an ordered host wake
+Runtime ABI v11 also gives page-owned local async commands an ordered host wake
 path. Suspended `perform` and `attempt` work can drain their resulting commands
 without waiting for another tap or lifecycle entry. Disposal cancels owned
 delivery, and framework `delay` timers are physically cleared by the host.
@@ -256,8 +265,9 @@ require unchanged fingerprints and a clean source checkout. The
 [release runbook](docs/operations/release_candidate_handoff.md) defines the
 ordered core/UI publication and registry-only consumer checks.
 The repository archive gate uses `moon package --frozen --list`, then enforces
-the registry archive allowlist and a 250 KiB hard ceiling for each module.
-Reserved headroom is at least 8 KiB for core and 16 KiB for UI.
+the registry archive allowlist and independently reviewed hard ceilings:
+280 KiB for core with at least 8 KiB reserved, and 250 KiB for UI with at least
+16 KiB reserved. These are repository budgets, not registry service limits.
 
 Repository checks use fresh run directories in `../.minimoon-check-tmp/`, on
 the checkout's parent volume and outside its Moon workspace. Override the base
@@ -286,7 +296,7 @@ src/
   internal_host_validation/ repository-only host/docs/perf validation
   testing/                optional normalized-tree test runtime
   components/             optional headless and styled components
-  tooling_miniapp/        App Contract v8 artifact generator
+  tooling_miniapp/        App Contract v9 artifact generator
   tooling_minimoon_*      build and verification pipeline
   cmd/minimoon/           native CLI and embedded starter
 examples/

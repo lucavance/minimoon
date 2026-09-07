@@ -8,6 +8,9 @@ async fn generated_javascript(root : String, app : String) -> Array[String] {
     "examples/" + app + "/dist/minimoon.initial.js",
     "examples/" + app + "/dist/minimoon.runtime.js",
   ]
+  if json_field(manifest, "application") != Json::null() {
+    javascript.push("examples/" + app + "/dist/minimoon.app.js")
+  }
   match json_field(manifest, "pages") {
     Array(pages) =>
       for page in pages {
@@ -30,7 +33,8 @@ fn javascript_audit_source() -> String {
     #|
     #|const bigintLiteral = /\b(?:0[xX][\da-fA-F]+|0[bB][01]+|0[oO][0-7]+|[0-9]+)n\b/g
     #|const allowed = {
-    #|  app: new Set(["App"]),
+    #|  app: new Set(["App", "require"]),
+    #|  application: new Set(["App", "Array", "Error", "JSON", "Map", "Number", "Promise", "Set", "clearInterval", "console", "globalThis", "module", "require", "setInterval", "undefined"]),
     #|  page: new Set(["require"]),
     #|  runtime: new Set([
     #|    "Array", "ArrayBuffer", "BigInt", "DataView", "Error", "JSON",
@@ -43,11 +47,17 @@ fn javascript_audit_source() -> String {
     #|    "globalThis", "module", "require", "setInterval", "setTimeout", "undefined", "wx",
     #|  ]),
     #|}
-    #|const allowedGlobalThisProperties = new Set(["crypto", "TextEncoder", "__minimoonRuntimeWakeV10"])
+    #|const allowedGlobalThisProperties = {
+    #|  app: new Set(), page: new Set(),
+    #|  application: new Set(["__minimoonAppWakeV11"]),
+    #|  host: new Set(["__minimoonRuntimeWakeV11", "__minimoonSharedWakeV11"]),
+    #|  runtime: new Set(["crypto", "TextEncoder", "__minimoonRuntimeWakeV11", "__minimoonAppWakeV11", "__minimoonSharedWakeV11"]),
+    #|}
     #|
     #|const kindOf = (file) => {
     #|  const name = path.basename(file)
     #|  if (name === "app.js") return "app"
+    #|  if (name === "minimoon.app.js") return "application"
     #|  if (name === "minimoon.host.js") return "host"
     #|  if (name === "minimoon.protocol.js" || name === "minimoon.initial.js") return "host"
     #|  if (name === "minimoon.runtime.js") return "runtime"
@@ -82,7 +92,7 @@ fn javascript_audit_source() -> String {
     #|    }
     #|  }
     #|  visit(ast)
-    #|  const unexpectedProperties = [...globalThisProperties].filter((name) => !allowedGlobalThisProperties.has(name)).sort()
+    #|  const unexpectedProperties = [...globalThisProperties].filter((name) => !allowedGlobalThisProperties[kind].has(name)).sort()
     #|  if (unexpectedProperties.length) throw new Error(`${file}: unexpected globalThis properties: ${unexpectedProperties.join(", ")}`)
     #|  return { globals, globalThisProperties: [...globalThisProperties].sort() }
     #|}
@@ -215,11 +225,11 @@ let registry_root_files : Array[String] = [
 let registry_documentation_files : Array[String] = [
   "docs/README.md", "docs/architecture.md", "docs/guides/api_ergonomics.md", "docs/guides/keyed_children_diff.md",
   "docs/guides/miniapp_authoring_example.md", "docs/guides/miniapp_quickstart.md",
-  "docs/guides/resource_state_design.md", "docs/guides/subscription_scope.md", "docs/guides/testing_and_components.md",
-  "docs/mvp.md", "docs/operations/dogfood.md", "docs/operations/miniapp_devtools_validation.md",
-  "docs/operations/miniapp_javascript_compatibility.md", "docs/operations/release_candidate_handoff.md",
-  "docs/positioning.md", "docs/reference/compatibility_and_upgrades.md", "docs/reference/miniapp_fixture_matrix.md",
-  "docs/reference/miniapp_host_capabilities.md",
+  "docs/guides/resource_state_design.md", "docs/guides/shared_state.md", "docs/guides/subscription_scope.md",
+  "docs/guides/testing_and_components.md", "docs/mvp.md", "docs/operations/dogfood.md",
+  "docs/operations/miniapp_devtools_validation.md", "docs/operations/miniapp_javascript_compatibility.md",
+  "docs/operations/release_candidate_handoff.md", "docs/positioning.md", "docs/reference/compatibility_and_upgrades.md",
+  "docs/reference/miniapp_fixture_matrix.md", "docs/reference/miniapp_host_capabilities.md",
 ]
 
 ///|
@@ -308,7 +318,7 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
     required in [
       "moon.mod", "LICENSE", "CHANGELOG.md", "README.mbt.md", "README.md", "README.zh-CN.md",
       "src/README.mbt.md", "src/pkg.generated.mbti", "src/cmd/minimoon/main.mbt",
-      "src/cmd/minimoon/templates.generated.mbt",
+      "src/cmd/minimoon/templates.generated.mbt", "docs/guides/shared_state.md",
     ] {
     guard packaged_paths.contains(required) else {
       abort("registry package is missing required path: " + required)
@@ -335,7 +345,9 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
     abort(
       "registry package must retain at least " +
       reserve_kib +
-      " KiB reserve under the 250 KiB hard cap: " +
+      " KiB reserve under the " +
+      (hard_limit / 1024).to_string() +
+      " KiB hard cap: " +
       archive_size.to_string() +
       " / " +
       operating_limit.to_string() +
@@ -652,8 +664,13 @@ async fn generator_suite(root : String) -> Unit {
     guard starter_runtime <= 220000 else {
       abort("starter runtime exceeds 220000-byte budget")
     }
-    guard starter_host <= 15000 else {
-      abort("starter host exceeds 15000-byte budget")
+    let starter_host_limit = shared_host_limit(false)
+    guard byte_budget_allows(starter_host, starter_host_limit) else {
+      abort(
+        "starter host exceeds " +
+        starter_host_limit.to_string() +
+        "-byte budget",
+      )
     }
     guard starter_protocol <= 10000 else {
       abort("starter protocol exceeds 10000-byte budget")

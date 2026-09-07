@@ -366,6 +366,7 @@ fn view(
   model : Model,
   emit : @minimoon.Emit[Msg],
   input_name : String,
+  shared_panel : @minimoon.Node,
 ) -> @minimoon.Node {
   let name = if model.name == "" { input_name } else { model.name }
   @minimoon.scroll_view(
@@ -570,6 +571,7 @@ fn view(
         @minimoon.text("visible: " + model.visible.to_string()),
       ]),
       status_panel("error-state", [@minimoon.text("error: " + model.error)]),
+      shared_panel,
     ],
   )
 }
@@ -578,6 +580,7 @@ fn view(
 fn app(
   context : @minimoon.PageContext,
   input_name : @minimoon.Val[String],
+  deps : @application.Deps,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (model, emit) = @minimoon.create_state(
     initial_model(),
@@ -589,7 +592,11 @@ fn app(
       ])
     },
   )
-  model.view2(input_name, (current, name) => view(current, emit, name))
+  model.view3(input_name, @application.panel(context, deps), (
+    current,
+    name,
+    shared_panel,
+  ) => view(current, emit, name, shared_panel))
 }
 
 ///|
@@ -600,7 +607,7 @@ fn decode_input(
 }
 
 ///|
-pub fn program() -> @minimoon.Page {
+pub fn program(deps : @application.Deps) -> @minimoon.Page {
   @minimoon.page_with_input(
     id="home",
     route=@minimoon.route("pages/home/home"),
@@ -618,6 +625,6 @@ pub fn program() -> @minimoon.Page {
       @minimoon.NavigateBack,
     ],
     decode_input~,
-    build=app,
+    build=(context, input) => app(context, input, deps),
   )
 }

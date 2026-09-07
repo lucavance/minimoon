@@ -1,5 +1,6 @@
 ///|
 pub fn host_smoke_source(page_files : Array[String]) -> String {
+  validation_application_boot() +
   "const fs = require(\"node:fs\")\n" +
   "globalThis.TextEncoder = undefined\n" +
   "const pageFiles = [" +
@@ -10,7 +11,7 @@ pub fn host_smoke_source(page_files : Array[String]) -> String {
   "globalThis.Component = () => { throw new Error(\"unvalidated Chaining page registration is forbidden\") }\n" +
   "globalThis.App = () => {}\n" +
   "globalThis.wx = { navigateTo() {}, redirectTo() {} }\n" +
-  "for (const file of pageFiles) require(file)\n" +
+  "for (const file of pageFiles) { bootApplication(file); require(file) }\n" +
   "if (definitions.length !== " +
   page_files.length().to_string() +
   ") throw new Error(\"Page Definition API registration count mismatch\")\n" +

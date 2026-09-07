@@ -54,7 +54,7 @@ pub fn scheduler_host_smoke_source() -> String {
     #|  minimoon_runtime_version: () => runtimeVersion,
     #|  minimoon_runtime_state_abi_version: () => runtimeVersion,
     #|  minimoon_runtime_create_app() {
-    #|    const wake = globalThis.__minimoonRuntimeWakeV10
+    #|    const wake = globalThis.__minimoonRuntimeWakeV11
     #|    if (typeof wake !== "function") throw new Error("runtime wake was not installed during create")
     #|    if (throwDuringCreate) throw new Error("synchronous runtime create throw")
     #|    const id = `scheduler-${nextInstance++}`
@@ -130,10 +130,10 @@ pub fn scheduler_host_smoke_source() -> String {
     #|}
     #|const makeHost = () => {
     #|  const host = makeUnloadedHost()
-    #|  const hadRuntimeWake = Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV10")
-    #|  const previousRuntimeWake = globalThis.__minimoonRuntimeWakeV10
+    #|  const hadRuntimeWake = Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV11")
+    #|  const previousRuntimeWake = globalThis.__minimoonRuntimeWakeV11
     #|  definition.onLoad.call(host, {})
-    #|  if (Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV10") !== hadRuntimeWake || (hadRuntimeWake && globalThis.__minimoonRuntimeWakeV10 !== previousRuntimeWake)) throw new Error("transient runtime wake was not restored")
+    #|  if (Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV11") !== hadRuntimeWake || (hadRuntimeWake && globalThis.__minimoonRuntimeWakeV11 !== previousRuntimeWake)) throw new Error("transient runtime wake was not restored")
     #|  definition.onReady.call(host)
     #|  return host
     #|}
@@ -154,14 +154,14 @@ pub fn scheduler_host_smoke_source() -> String {
     #|console.warn = (...args) => warnings.push(args.join(" "))
     #|
     #|const createThrowSentinelWake = () => {}
-    #|globalThis.__minimoonRuntimeWakeV10 = createThrowSentinelWake
+    #|globalThis.__minimoonRuntimeWakeV11 = createThrowSentinelWake
     #|const createThrowHost = makeUnloadedHost()
     #|throwDuringCreate = true
     #|let createThrowError = null
     #|try { definition.onLoad.call(createThrowHost, {}) } catch (error) { createThrowError = error } finally { throwDuringCreate = false }
     #|if (!createThrowError || !String(createThrowError.message || createThrowError).includes("synchronous runtime create throw")) throw new Error("synchronous runtime create failure did not propagate")
-    #|if (globalThis.__minimoonRuntimeWakeV10 !== createThrowSentinelWake || createThrowHost.__mmInstanceId !== null) throw new Error("runtime wake was not restored after synchronous runtime create failure")
-    #|delete globalThis.__minimoonRuntimeWakeV10
+    #|if (globalThis.__minimoonRuntimeWakeV11 !== createThrowSentinelWake || createThrowHost.__mmInstanceId !== null) throw new Error("runtime wake was not restored after synchronous runtime create failure")
+    #|delete globalThis.__minimoonRuntimeWakeV11
     #|
     #|const host = makeHost()
     #|const batchStart = dispatchBatches.length
@@ -218,10 +218,10 @@ pub fn scheduler_host_smoke_source() -> String {
     #|definition.onUnload.call(isolatedRight)
     #|
     #|const sentinelWake = () => {}
-    #|globalThis.__minimoonRuntimeWakeV10 = sentinelWake
+    #|globalThis.__minimoonRuntimeWakeV11 = sentinelWake
     #|const reusable = makeHost()
-    #|if (globalThis.__minimoonRuntimeWakeV10 !== sentinelWake) throw new Error("preexisting runtime wake was not restored")
-    #|delete globalThis.__minimoonRuntimeWakeV10
+    #|if (globalThis.__minimoonRuntimeWakeV11 !== sentinelWake) throw new Error("preexisting runtime wake was not restored")
+    #|delete globalThis.__minimoonRuntimeWakeV11
     #|const staleState = states.get(reusable.__mmInstanceId)
     #|const staleWake = staleState.wake
     #|staleWake(1)
@@ -515,6 +515,7 @@ pub fn scheduler_host_smoke_source() -> String {
 
 ///|
 pub fn dynamic_app_host_smoke_source() -> String {
+  @host_js.validation_application_boot() +
   (
     #|let definition
     #|let host
@@ -558,6 +559,7 @@ pub fn dynamic_app_host_smoke_source() -> String {
     #|  now = target
     #|  await flushMicrotasks()
     #|}
+    #|bootApplication(process.argv[2])
     #|require(process.argv[2])
     #|const pending = []
     #|const resolve = (root, path) => { let value = root; for (const token of path) value = value[token]; return value }
@@ -707,6 +709,7 @@ pub fn dynamic_app_host_smoke_source() -> String {
 
 ///|
 pub fn navigation_host_smoke_source() -> String {
+  @host_js.validation_application_boot() +
   (
     #|let definition
     #|globalThis.Page = (page) => { definition = page }
@@ -746,6 +749,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|const pageStack = []
     #|globalThis.getCurrentPages = () => pageStack
     #|const load = (file) => { definition = undefined; require(file); if (!definition) throw new Error(`Page was not registered: ${file}`); return definition }
+    #|bootApplication(process.argv[2])
     #|const showcaseDefinition = load(process.argv[2])
     #|const homeDefinition = load(process.argv[3])
     #|const detailsDefinition = load(process.argv[4])

@@ -167,8 +167,8 @@ test "typed page program owns route, dynamic tree, view, and capabilities" {
   let contract = program.contract_json()
   match contract {
     Object(fields) => {
-      assert_eq(fields["schemaVersion"], Json::number(8.0, repr="8"))
-      assert_eq(fields["runtimeApiVersion"], Json::number(10.0, repr="10"))
+      assert_eq(fields["schemaVersion"], Json::number(9.0, repr="9"))
+      assert_eq(fields["runtimeApiVersion"], Json::number(11.0, repr="11"))
       assert_eq(fields["rendererProtocolVersion"], Json::number(8.0, repr="8"))
       assert_eq(fields["route"], Json::string("pages/profile/profile"))
       assert_eq(fields.contains("events"), false)
@@ -534,9 +534,9 @@ test "typed page lifecycle and query inputs decode to application messages" {
 }
 
 ///|
-test "ABI v10 page runtime mounts, dispatches, snapshots, and disposes one page" {
+test "ABI v11 page runtime mounts, dispatches, snapshots, and disposes one page" {
   let runtime = page_program_test_fixture().create_runtime()
-  assert_eq(runtime_api_version(), 10)
+  assert_eq(runtime_api_version(), 11)
   assert_eq(runtime.page_id(), "profile")
   assert_eq(
     runtime.mount(),
@@ -652,7 +652,7 @@ test "renderer v6 replaces when an otherwise safe patch exceeds 32 host writes" 
 }
 
 ///|
-test "ABI v10 rejects malformed payloads and unknown host inputs explicitly" {
+test "ABI v11 rejects malformed payloads and unknown host inputs explicitly" {
   let runtime = page_program_test_fixture().create_runtime()
   let initial = runtime.snapshot()
   assert_eq(
@@ -674,7 +674,7 @@ test "ABI v10 rejects malformed payloads and unknown host inputs explicitly" {
 }
 
 ///|
-test "ABI v10 rejects page input and lifecycle decode failures before Model update" {
+test "ABI v11 rejects page input and lifecycle decode failures before Model update" {
   let program = simple_page_program(
     id="decode_boundary",
     route="pages/decode-boundary/decode-boundary",
@@ -723,7 +723,7 @@ enum InvalidViewMsg {
 }
 
 ///|
-test "ABI v10 rolls back Model when the next dynamic view is invalid" {
+test "ABI v11 rolls back Model when the next dynamic view is invalid" {
   let program = simple_page_program(
     id="invalid_view",
     route="pages/invalid-view/invalid-view",
@@ -906,16 +906,16 @@ fn local_effect_runtime_program(
 
 ///|
 #cfg(target="js")
-extern "js" fn install_runtime_wake_v10_for_test(wake : (Int) -> Unit) -> Unit =
-  #|(wake) => { globalThis.__minimoonRuntimeWakeV10 = wake }
+extern "js" fn install_runtime_wake_v11_for_test(wake : (Int) -> Unit) -> Unit =
+  #|(wake) => { globalThis.__minimoonRuntimeWakeV11 = wake }
 
 ///|
 #cfg(target="js")
-extern "js" fn clear_runtime_wake_v10_for_test() -> Unit =
-  #|() => { delete globalThis.__minimoonRuntimeWakeV10 }
+extern "js" fn clear_runtime_wake_v11_for_test() -> Unit =
+  #|() => { delete globalThis.__minimoonRuntimeWakeV11 }
 
 ///|
-test "ABI v10 internal drain publishes asynchronous local effect commands" {
+test "ABI v11 internal drain publishes asynchronous local effect commands" {
   let saved_emit : Ref[((LocalEffectRuntimeMsg) -> Unit)?] = Ref(None)
   let saved_finish : Ref[(() -> Unit)?] = Ref(None)
   let runtime = local_effect_runtime_program(saved_emit, saved_finish).create_runtime()
@@ -943,13 +943,13 @@ test "ABI v10 internal drain publishes asynchronous local effect commands" {
 
 ///|
 #cfg(target="js")
-test "ABI v10 captures one transient host wake for asynchronous local effects" {
+test "ABI v11 captures one transient host wake for asynchronous local effects" {
   let saved_emit : Ref[((LocalEffectRuntimeMsg) -> Unit)?] = Ref(None)
   let saved_finish : Ref[(() -> Unit)?] = Ref(None)
   let wakes : Ref[Array[Int]] = Ref([])
-  install_runtime_wake_v10_for_test(fn(through) { wakes.val.push(through) })
+  install_runtime_wake_v11_for_test(fn(through) { wakes.val.push(through) })
   let runtime = local_effect_runtime_program(saved_emit, saved_finish).create_runtime()
-  clear_runtime_wake_v10_for_test()
+  clear_runtime_wake_v11_for_test()
   let _ = runtime.mount()
   let _ = runtime.dispatch("StartLocalEffect", "{}")
   saved_emit.val.unwrap()(CompleteLocalEffect("first"))
@@ -970,7 +970,7 @@ test "ABI v10 captures one transient host wake for asynchronous local effects" {
 }
 
 ///|
-test "ABI v10 effect completion resolves the original request ID exactly once" {
+test "ABI v11 effect completion resolves the original request ID exactly once" {
   let runtime = effect_runtime_program().create_runtime()
   let _ = runtime.mount()
   let started = runtime.dispatch("StartEffect", "{}")
@@ -989,7 +989,7 @@ test "ABI v10 effect completion resolves the original request ID exactly once" {
 }
 
 ///|
-test "ABI v10 dispose cancels a pending effect before its context" {
+test "ABI v11 dispose cancels a pending effect before its context" {
   let runtime = effect_runtime_program().create_runtime()
   let _ = runtime.mount()
   let _ = runtime.dispatch("StartEffect", "{}")

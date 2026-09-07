@@ -99,7 +99,7 @@
               {
                 "kind": "text",
                 "identity": "i:0",
-                "text": "Typed state · Transactional Val · Runtime API v10",
+                "text": "Typed state · Transactional Val · Runtime API v11",
                 "props": {},
                 "events": {},
                 "children": []
@@ -1490,6 +1490,115 @@
             "props": {},
             "events": {},
             "children": []
+          }
+        ]
+      },
+      {
+        "kind": "view",
+        "identity": "i:21",
+        "text": "",
+        "props": {
+          "section": "shared-state",
+          "className": "mt-_b16rpx_B rounded-_b16rpx_B bg-white px-_b32rpx_B py-_b28rpx_B text-slate-800"
+        },
+        "events": {},
+        "children": [
+          {
+            "kind": "view",
+            "identity": "i:0",
+            "text": "",
+            "props": {},
+            "events": {},
+            "children": [
+              {
+                "kind": "text",
+                "identity": "i:0",
+                "text": "Application shared count: 0",
+                "props": {},
+                "events": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "view",
+            "identity": "i:1",
+            "text": "",
+            "props": {},
+            "events": {},
+            "children": [
+              {
+                "kind": "text",
+                "identity": "i:0",
+                "text": "Application request: idle",
+                "props": {},
+                "events": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "button",
+            "identity": "i:2",
+            "text": "",
+            "props": {
+              "disabled": false
+            },
+            "events": {
+              "tap": "shared/inc"
+            },
+            "children": [
+              {
+                "kind": "text",
+                "identity": "i:0",
+                "text": "Shared +1",
+                "props": {},
+                "events": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "button",
+            "identity": "i:3",
+            "text": "",
+            "props": {
+              "disabled": false
+            },
+            "events": {
+              "tap": "shared/load"
+            },
+            "children": [
+              {
+                "kind": "text",
+                "identity": "i:0",
+                "text": "Shared public API request",
+                "props": {},
+                "events": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "kind": "button",
+            "identity": "i:4",
+            "text": "",
+            "props": {
+              "disabled": false
+            },
+            "events": {
+              "tap": "shared/clear"
+            },
+            "children": [
+              {
+                "kind": "text",
+                "identity": "i:0",
+                "text": "Clear and ignore old response",
+                "props": {},
+                "events": {},
+                "children": []
+              }
+            ]
           }
         ]
       }
@@ -3928,6 +4037,115 @@
                 "props": {},
                 "events": {},
                 "children": []
+              }
+            ]
+          },
+          {
+            "kind": "view",
+            "identity": "i:7",
+            "text": "",
+            "props": {
+              "section": "shared-state",
+              "className": "mt-_b16rpx_B rounded-_b16rpx_B bg-white px-_b32rpx_B py-_b28rpx_B text-slate-800"
+            },
+            "events": {},
+            "children": [
+              {
+                "kind": "view",
+                "identity": "i:0",
+                "text": "",
+                "props": {},
+                "events": {},
+                "children": [
+                  {
+                    "kind": "text",
+                    "identity": "i:0",
+                    "text": "Application shared count: 0",
+                    "props": {},
+                    "events": {},
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "kind": "view",
+                "identity": "i:1",
+                "text": "",
+                "props": {},
+                "events": {},
+                "children": [
+                  {
+                    "kind": "text",
+                    "identity": "i:0",
+                    "text": "Application request: idle",
+                    "props": {},
+                    "events": {},
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "kind": "button",
+                "identity": "i:2",
+                "text": "",
+                "props": {
+                  "disabled": false
+                },
+                "events": {
+                  "tap": "shared/inc"
+                },
+                "children": [
+                  {
+                    "kind": "text",
+                    "identity": "i:0",
+                    "text": "Shared +1",
+                    "props": {},
+                    "events": {},
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "kind": "button",
+                "identity": "i:3",
+                "text": "",
+                "props": {
+                  "disabled": false
+                },
+                "events": {
+                  "tap": "shared/load"
+                },
+                "children": [
+                  {
+                    "kind": "text",
+                    "identity": "i:0",
+                    "text": "Shared public API request",
+                    "props": {},
+                    "events": {},
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "kind": "button",
+                "identity": "i:4",
+                "text": "",
+                "props": {
+                  "disabled": false
+                },
+                "events": {
+                  "tap": "shared/clear"
+                },
+                "children": [
+                  {
+                    "kind": "text",
+                    "identity": "i:0",
+                    "text": "Clear and ignore old response",
+                    "props": {},
+                    "events": {},
+                    "children": []
+                  }
+                ]
               }
             ]
           }

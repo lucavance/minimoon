@@ -66,7 +66,7 @@ fn ci_handoff_check_source() -> String {
     #|      checks: [{ name: "synthetic packaging control", status: "passed" }],
     #|    }))
     #|    write(directory, `${fixture}/generated/release_summary.json`, JSON.stringify({
-    #|      name, schemaVersion: 8, runtimeApiVersion: 10, rendererProtocolVersion: 8, mode: "release",
+    #|      name, schemaVersion: 9, runtimeApiVersion: 11, rendererProtocolVersion: 8, mode: "release",
     #|      automated: { status: "passed", pageCount: name === "miniapp_conformance_app" ? 4 : 6, artifactFingerprint: fingerprint },
     #|      devtools: { status: "pending", evidence: null },
     #|    }))
@@ -98,6 +98,20 @@ fn ci_handoff_check_source() -> String {
     #|  mutate(value)
     #|  write(directory, relative, JSON.stringify(value))
     #|}
+    #|function assertTechnicalVersions(handoff, manifest, summary, checklist) {
+    #|  for (const [field, sourceField, expected] of [
+    #|    ["appContract", "schemaVersion", 9],
+    #|    ["runtimeAbi", "runtimeApiVersion", 11],
+    #|    ["rendererProtocol", "rendererProtocolVersion", 8],
+    #|  ]) {
+    #|    assert.equal(handoff.versions[field], expected, `handoff ${field} must use the current version`)
+    #|    for (const source of [manifest, summary, ...manifest.pages]) {
+    #|      assert.equal(handoff.versions[field], source[sourceField], `handoff ${field} must match every generated contract`)
+    #|    }
+    #|    // Checklist schemaVersion is its document schema, not the App Contract.
+    #|    if (field !== "appContract") assert.equal(handoff.versions[field], checklist[sourceField], `handoff ${field} must match its checklist`)
+    #|  }
+    #|}
     #|try {
     #|  const positive = sandbox("positive")
     #|  requirePass(packageResult(positive), "dual handoff positive control")
@@ -110,6 +124,15 @@ fn ci_handoff_check_source() -> String {
     #|    assert.equal(handoff.commit, commit)
     #|    assert.equal(handoff.versions.minimoon, "0.2.0")
     #|    assert.equal(handoff.versions.minimoonUi, "0.1.0")
+    #|    const manifest = JSON.parse(fs.readFileSync(path.join(base, "manifest.json"), "utf8"))
+    #|    const summary = JSON.parse(fs.readFileSync(path.join(base, "release_summary.json"), "utf8"))
+    #|    const checklist = JSON.parse(fs.readFileSync(path.join(base, "smoke_checklist.json"), "utf8"))
+    #|    assertTechnicalVersions(handoff, manifest, summary, checklist)
+    #|    for (const [field, stale] of [["appContract", 8], ["runtimeAbi", 10], ["rendererProtocol", 7]]) {
+    #|      const oldHandoff = { ...handoff, versions: { ...handoff.versions, [field]: stale } }
+    #|      assert.throws(() => assertTechnicalVersions(oldHandoff, manifest, summary, checklist), /must use the current version/)
+    #|      cases++
+    #|    }
     #|    for (const tool of ["moon", "node", "bun"]) assert.ok(handoff.toolchain[tool])
     #|    const sums = fs.readFileSync(path.join(base, "SHA256SUMS"), "utf8")
     #|    for (const file of ["manifest.json", "smoke_checklist.json", "verify_report.json", "release_summary.json", "HANDOFF.json", "VALIDATION.md", "dist/app.js", "dist/project.private.config.example.json"]) {
@@ -131,6 +154,14 @@ fn ci_handoff_check_source() -> String {
     #|    reject(`${bundle}-report-schema`, (dir) => editJson(dir, report, (value) => { value.schemaVersion = 0 }), /passed automated report/)
     #|    reject(`${bundle}-noncompact`, (dir) => editJson(dir, `${fixture}/generated/manifest.json`, (value) => { value.pageBridgeEncoding = "development" }), /matching versions/)
     #|    reject(`${bundle}-wrong-version`, (dir) => editJson(dir, summary, (value) => { value.runtimeApiVersion = 9 }), /matching versions/)
+    #|    for (const [field, stale] of [["schemaVersion", 8], ["runtimeApiVersion", 10], ["rendererProtocolVersion", 7]]) {
+    #|      reject(`${bundle}-old-summary-${field}`, (dir) => editJson(dir, summary, (value) => { value[field] = stale }), /matching versions/)
+    #|      reject(`${bundle}-old-manifest-${field}`, (dir) => editJson(dir, `${fixture}/generated/manifest.json`, (value) => { value[field] = stale }), /matching versions/)
+    #|      reject(`${bundle}-old-page-${field}`, (dir) => editJson(dir, `${fixture}/generated/manifest.json`, (value) => { value.pages[0][field] = stale }), /matching versions/)
+    #|      if (field !== "schemaVersion") {
+    #|        reject(`${bundle}-old-checklist-${field}`, (dir) => editJson(dir, `${fixture}/generated/smoke_checklist.json`, (value) => { value[field] = stale }), /matching versions/)
+    #|      }
+    #|    }
     #|    reject(`${bundle}-wrong-fingerprint`, (dir) => editJson(dir, summary, (value) => { value.automated.artifactFingerprint = "wrong" }), /fingerprints/)
     #|    reject(`${bundle}-private-evidence`, (dir) => editJson(dir, summary, (value) => { value.devtools.evidence = "private-input" }), /private-evidence-free/)
     #|    reject(`${bundle}-evidence-fingerprint`, (dir) => editJson(dir, summary, (value) => { value.devtools.artifactFingerprint = "private-fingerprint" }), /private-evidence-free/)

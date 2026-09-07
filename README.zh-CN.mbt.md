@@ -8,7 +8,7 @@
 [English](README.md) · [文档索引](docs/README.md) · [双语代码分析](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
 Minimoon 是面向微信小程序 Skyline 的 MoonBit UI 框架。`0.2.0` 以 Elm-style
-编写模型为入口，采用 App Contract v8、runtime ABI v10、renderer protocol v8
+编写模型为入口，采用 App Contract v9、runtime ABI v11、renderer protocol v8
 和 CommonJS 小程序宿主边界。
 
 ```text
@@ -137,14 +137,22 @@ popup 关联、label 与 description 送入受校验的 renderer protocol；`inp
 构建期资源提供包生成 WXSS／SVG，不把资源字符串带入应用 JavaScript。
 新产物需要重新验证 Skyline；候选状态不代表已经发布或通过真实宿主验证。
 
+## 应用级共享状态
+
+页面需要共享会话、偏好或请求状态时，可选用 `App[Deps]`。App builder 创建多个
+独立的类型化领域状态机，页面通过 `PageContext.bind/select` 将 `Shared[T]` 绑定为
+页面局部 Val，同时保留自己的 Model。共享请求在页面卸载后继续，前台定时订阅在 Hide
+时暂停；显式 App 销毁会取消任务并忽略旧回调。不强制使用一个全局 Model。
+配置、生命周期和验收见 [共享状态指南](docs/guides/shared_state.md)。
+
 ## 小程序边界
 
-配置使用 App Contract v8。`componentTheme` 可省略；省略时不会增加内置组件
+配置使用 App Contract v9。`componentTheme` 可省略；省略时不会增加内置组件
 CSS：
 
 ```json
 {
-  "schemaVersion": 8,
+  "schemaVersion": 9,
   "name": "my_app",
   "componentTheme": "minimal-v2",
   "pages": [
@@ -169,7 +177,7 @@ commit sentinel 和 `setData` callback 确认；三秒超时后只执行一次�
 重试，第二次失败则关闭该页面调度器。队列深度、合并数量、确认延迟、重试、超时与
 COW shadow copy 工作量都可通过 renderer stats 观察。
 
-Runtime ABI v10 还为页面所有的局部异步命令提供有序宿主唤醒。挂起的 `perform`
+Runtime ABI v11 还为页面所有的局部异步命令提供有序宿主唤醒。挂起的 `perform`
 和 `attempt` 无需等待下一次点击或生命周期入口即可排空结果；页面销毁会取消结果
 投递，而框架 `delay` 的宿主计时器会被物理清除。
 
@@ -225,7 +233,8 @@ headless、theme 与 resources 分别维护可加性接口快照。
 [发布操作指南](docs/operations/release_candidate_handoff.md) 定义核心/UI 的发布顺序及
 纯 registry consumer 检查。
 仓库归档门禁先执行 `moon package --frozen --list`，再检查每个模块的 registry 包
-白名单与 250 KiB 硬上限；核心包至少预留 8 KiB，UI 包仍至少预留 16 KiB。
+白名单与独立评审的硬上限：核心包 280 KiB、至少预留 8 KiB；UI 包
+250 KiB、至少预留 16 KiB。这些是仓库预算，不是注册表服务的限制。
 
 仓库检查默认在旁边的 `../.minimoon-check-tmp/` 创建独立运行目录，使用仓库父目录
 所在的磁盘，且不继承当前 Moon 工作区。可用 `MINIMOON_CHECK_TMPDIR` 指定绝对路径

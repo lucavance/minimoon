@@ -33,7 +33,7 @@ Registry mode keeps `lampclaw/minimoon@0.2.0` in `moon.mod` and emits no
 when running `init` from the framework checkout; it creates a workspace binding.
 
 The default starter imports only `lampclaw/minimoon`, exports
-`program() -> Page`, and lists page packages in App Contract v8
+`program() -> Page`, and lists page packages in App Contract v9
 `miniapp.minimoon.json`. It has no implicit UI dependency. For native UI, add
 `lampclaw/minimoon_ui@0.1.0`, import its root as `@ui`, and declare its build
 resources as shown in the

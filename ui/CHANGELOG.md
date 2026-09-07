@@ -20,7 +20,7 @@ is recorded in the repository's
 
 ### Compatibility and provenance
 
-- Declares `lampclaw/minimoon@0.2.0`; App Contract v8, runtime ABI v10 and
+- Declares `lampclaw/minimoon@0.2.0`; App Contract v9, runtime ABI v11 and
   renderer protocol v8 artifacts must be rebuilt as one set.
 - References RUI 0.1.1 / Rabbita 0.15.6 at commit
   `b1291945fd0201a0b5b39513b88585d6122db7bc`; MIT and visual-recipe notices are

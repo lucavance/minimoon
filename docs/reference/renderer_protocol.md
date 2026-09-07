@@ -12,7 +12,7 @@ mount, single dispatch, batch dispatch, lifecycle, resolve-effect,
 subscription, snapshot, and dispose. Every mounted page receives an independent
 instance.
 
-The ABI v10 host/runtime convention additionally installs a temporary
+The ABI v11 host/runtime convention additionally installs a temporary
 generation-bound wake callback around synchronous runtime creation. The new
 page runtime captures it for later async local effects, which request a
 sequence-bounded internal command drain. It is not a CommonJS export or an

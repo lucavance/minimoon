@@ -35,7 +35,7 @@ the generator suite; it is not a second committed release fixture.
 The fixture and generated starter must pass:
 
 - warning-free JS-target compilation and tests
-- App Contract v8 / runtime ABI v10 / renderer protocol v8 validation
+- App Contract v9 / runtime ABI v11 / renderer protocol v8 validation
 - one application-wide runtime/shared host pair with page-aware dispatch
 - deterministic release generation and embedded-template drift checks
 - generated JavaScript parsing and Page Definition API registration

@@ -1,0 +1,36 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/miniapp_conformance_app/app"
+
+import {
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn panel(@minimoon.PageContext, Deps) -> @minimoon.Val[@minimoon.Node]
+
+pub fn program() -> @minimoon.App[Deps]
+
+// Errors
+
+// Types and methods
+pub struct Deps {
+  count : @minimoon.Shared[Int]
+  change_count : @minimoon.Emit[Int]
+  fetch : @minimoon.Shared[FetchModel]
+  send_fetch : @minimoon.Emit[FetchMsg]
+}
+
+pub struct FetchModel {
+  epoch : Int
+  label : String
+} derive(Eq)
+
+pub enum FetchMsg {
+  Load
+  Clear
+  Finished(Int, Result[@minimoon.RequestResult, @minimoon.HostError])
+}
+
+// Type aliases
+
+// Traits

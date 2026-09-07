@@ -1,5 +1,6 @@
 ///|
 async fn host_suite(root : String) -> Unit {
+  application_type_gate(root)
   run(root, "MoonBit native tests", "moon", ["test", "--target", "native"])
   run(root, "MoonBit JavaScript target tests", "moon", [
     "test", "--target", "js",
@@ -38,6 +39,7 @@ async fn host_suite(root : String) -> Unit {
     join(root, "examples/miniapp_conformance_app/dist/pages/lab/lab.js"),
   ])
   http_probe(root, true)
+  application_host_smoke(root, join(conformance_root, "dist"))
 }
 
 ///|
@@ -137,6 +139,10 @@ async fn check_candidate_artifacts(
 async fn candidate_suite(root : String) -> Unit {
   build_examples(root, "release")
   verify_examples(root, false)
+  application_host_smoke(
+    root,
+    join(root, "examples/" + conformance_fixture + "/dist"),
+  )
   build_verify_ui_gallery(root, "release", false)
   for app in example_apps {
     check_candidate_artifacts(root, "examples/" + app, app)

@@ -22,8 +22,8 @@ Generated applications have three versioned boundaries:
 
 | Boundary | Current version | Rule |
 | --- | ---: | --- |
-| App Contract | 8 | CLI accepts and generates the current schema only |
-| runtime ABI | 10 | runtime and host files must be generated together |
+| App Contract | 9 | generates schema 9; accepts schema 8 only without `application` |
+| runtime ABI | 11 | runtime and host files must be generated together |
 | renderer protocol | 8 | renderer commands and host decoder must match |
 
 Generated files from different builds or versions must never be mixed. CommonJS
@@ -93,9 +93,12 @@ core 0.2.0, not on Rabbita. Existing optional components and both minimal themes
 remain available. The frozen 0.1 consumer compiles against core 0.2; new enum
 variants can require updates to exhaustive matches in application code.
 
-Upgrade an application contract's `schemaVersion` from 7 to 8 and regenerate
-the entire output. CLI 0.2 accepts current-schema inputs only. Do not mix old
-renderer v7 output with renderer v8 host files; ABI remains v10.
+Upgrade an application contract's `schemaVersion` to `9` and regenerate the
+entire output. Schema `8` input remains accepted only without `application`.
+The optional application package exports `Deps` and `program() -> App[Deps]`;
+all opted-in page factories receive those dependencies. `PageContext` is opaque.
+See [shared-state migration](../guides/shared_state.md). Do not mix old renderer
+output with current host files; runtime ABI is `11`, renderer protocol stays `8`.
 
 UI applications opt into build resources with
 `resources: [{ "package": "lampclaw/minimoon_ui/resources", "features": [] }]`.

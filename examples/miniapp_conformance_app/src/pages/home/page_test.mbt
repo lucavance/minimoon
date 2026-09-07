@@ -1,6 +1,8 @@
 ///|
 test "home page owns query, count, and request-ID effects" {
-  let runtime = program().create_runtime()
+  let runtime_app = @application.program().create_runtime()
+  defer ignore(runtime_app.dispose())
+  let runtime = runtime_app.create_page(program(runtime_app.deps()))
   let _ = runtime.lifecycle("onLoad", "{\"name\":\"Query Home\"}")
   let _ = runtime.mount()
   inspect(runtime.snapshot().contains("hello: Query Home"), content="true")
@@ -18,7 +20,9 @@ test "home page owns query, count, and request-ID effects" {
     content="true",
   )
   inspect(!request.contains("/api/profile"), content="true")
-  let tree = program().initial_tree().stringify()
+  let tree = @application.program()
+    .preview(deps => program(deps).initial_tree())
+    .stringify()
   inspect(tree.contains("能力控制台"), content="true")
   inspect(tree.contains("\"section\":\"home-intro\""), content="true")
   inspect(tree.contains("\"section\":\"home-controls\""), content="true")
@@ -31,7 +35,9 @@ test "home page owns query, count, and request-ID effects" {
 
 ///|
 test "home transitions preserve request and lifecycle state" {
-  let runtime = program().create_runtime()
+  let runtime_app = @application.program().create_runtime()
+  defer ignore(runtime_app.dispose())
+  let runtime = runtime_app.create_page(program(runtime_app.deps()))
   let _ = runtime.mount()
   let _ = runtime.dispatch("home/inc", "{}")
   let _ = runtime.dispatch("home/inc", "{}")

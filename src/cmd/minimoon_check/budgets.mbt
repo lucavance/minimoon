@@ -1,7 +1,7 @@
 ///|
-// HTTP budget review, 2026-09-07: retain the core archive hard cap while
-// allocating 8 KiB of its former 16 KiB reserve to the typed request surface.
-let registry_archive_hard_limit : Int = 250 * 1024
+// Shared-state budget review, 2026-09-07: expand the repository-owned core
+// archive ceiling while retaining its 8 KiB reserve. UI budgets are unchanged.
+let registry_archive_hard_limit : Int = 280 * 1024
 
 ///|
 let registry_archive_reserve : Int = 8 * 1024
@@ -11,12 +11,27 @@ let registry_archive_operating_limit : Int = registry_archive_hard_limit -
   registry_archive_reserve
 
 ///|
-// Measured HTTP deltas: runtime +16,051 B; aggregate +17,083 B. Rounded
+// Measured shared-state deltas: runtime +22,881 B; aggregate +28,324 B. Rounded
 // increases preserve roughly the previous absolute headroom, not a multiplier.
-let conformance_runtime_limit : Int = 360000
+let conformance_runtime_limit : Int = 383000
 
 ///|
-let conformance_javascript_limit : Int = 424000
+let conformance_javascript_limit : Int = 453000
+
+///|
+let page_host_limit : Int = 15000
+
+///|
+let application_host_limit : Int = 16000
+
+///|
+fn shared_host_limit(application : Bool) -> Int {
+  if application {
+    application_host_limit
+  } else {
+    page_host_limit
+  }
+}
 
 ///|
 fn byte_budget_allows(size : Int, limit : Int) -> Bool {

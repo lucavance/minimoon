@@ -145,6 +145,12 @@ pub struct Graph {
   subscriptions : SubscriptionRegistry
   initial_commands : Ref[Array[Cmd]]
   disposed : Ref[Bool]
+  application : Ref[Application?]
+  shared_bindings : Ref[@slotmap.SlotMap[SharedBinding]]
+  shared_binding_order : Array[@slotmap.Id]
+  shared_visible : Ref[Bool]
+  shared_wake : Ref[() -> Unit]
+  shared_dispose : Ref[() -> Unit]
 }
 
 ///|
@@ -164,6 +170,12 @@ pub fn Graph::new() -> Graph {
     subscriptions: SubscriptionRegistry::new(),
     initial_commands: Ref([]),
     disposed: Ref(false),
+    application: Ref(ambient_application.val),
+    shared_bindings: Ref(SlotMap()),
+    shared_binding_order: [],
+    shared_visible: Ref(true),
+    shared_wake: Ref(fn() { () }),
+    shared_dispose: Ref(fn() { () }),
   }
 }
 
@@ -260,6 +272,7 @@ pub fn Graph::dispose(self : Graph) -> Unit {
   }
   self.rollback()
   self.disposed.val = true
+  self.detach_application()
   self.root_scope.dispose()
   self.pending_changes.val = 0
   self.state_registry.reset()

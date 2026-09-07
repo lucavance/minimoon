@@ -1,5 +1,5 @@
 {
-  "runtimeApiVersion": 10,
+  "runtimeApiVersion": 11,
   "rendererProtocolVersion": 8,
   "pages": [
     "pages/showcase/showcase",
@@ -15,6 +15,8 @@
     "lifecycle dispatch",
     "request-ID effect completion",
     "dispose",
+    "Home and Details share application count and public HTTP status while keeping independent page state; leaving the requesting page does not cancel application HTTP",
+    "Shared request Clear rejects an older public API response; background and foreground retain shared state and unload stays clean",
     "Showcase state, routes, and rapid lossless taps",
     "Home controlled input, capabilities, and navigation",
     "Home public httpbingo API: GET encoded and repeated query, JSON/form POST, text PUT, DELETE, HEAD/OPTIONS empty response, HTTP 400/500 loaded status, and timeout failure",

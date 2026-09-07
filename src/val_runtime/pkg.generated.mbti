@@ -3,6 +3,7 @@ package "lampclaw/minimoon/val_runtime"
 
 import {
   "lampclaw/minimoon/internal_duplix",
+  "lampclaw/minimoon/internal_slotmap",
   "moonbitlang/core/immut/vector",
   "moonbitlang/core/ref",
 }
@@ -55,6 +56,31 @@ pub fn sub_batch(Array[Sub]) -> Sub
 // Errors
 
 // Types and methods
+pub struct Application {
+  address : @internal_slotmap.Id
+  graph : Graph
+  messages : Array[Cmd]
+  pages : Array[Graph]
+  wake : @ref.Ref[() -> Unit]
+  started : @ref.Ref[Bool]
+  building : @ref.Ref[Bool]
+  disposed : @ref.Ref[Bool]
+}
+pub fn[A] Application::build(Self, () -> A) -> A
+pub fn[Model : Eq, Msg] Application::create_state_with_init(Self, (Emit[Msg]) -> (Model, Cmd), (Model, Msg, Emit[Msg]) -> (Model, Cmd), ((Model, Emit[Msg]) -> Sub)?) -> (Shared[Model], Emit[Msg])
+pub fn Application::dispose(Self) -> Unit
+pub fn Application::enqueue(Self, Cmd) -> Unit
+pub fn Application::graph(Self) -> Graph
+pub fn Application::is_disposed(Self) -> Bool
+pub fn Application::new() -> Self
+pub fn Application::next(Self) -> Cmd?
+pub fn Application::page_count(Self) -> Int
+pub fn Application::pending_count(Self) -> Int
+pub fn Application::publish(Self) -> Unit
+pub fn Application::set_wake(Self, () -> Unit) -> Unit
+pub fn Application::start(Self) -> Unit
+pub fn[A] Application::with_pages(Self, () -> A) -> A
+
 pub(all) enum Cmd {
   CmdNone
   CmdMessage(() -> Cmd)
@@ -88,7 +114,14 @@ pub struct Graph {
   subscriptions : SubscriptionRegistry
   initial_commands : @ref.Ref[Array[Cmd]]
   disposed : @ref.Ref[Bool]
+  application : @ref.Ref[Application?]
+  shared_bindings : @ref.Ref[@internal_slotmap.SlotMap[SharedBinding]]
+  shared_binding_order : Array[@internal_slotmap.Id]
+  shared_visible : @ref.Ref[Bool]
+  shared_wake : @ref.Ref[() -> Unit]
+  shared_dispose : @ref.Ref[() -> Unit]
 }
+pub fn Graph::attach_shared_runtime(Self, () -> Unit, () -> Unit) -> Unit
 pub fn Graph::begin(Self) -> Unit
 pub fn[A] Graph::build(Self, () -> A) -> A
 pub fn Graph::candidate_revision(Self) -> Int
@@ -97,8 +130,11 @@ pub fn[Model : Eq] Graph::create_input(Self, Model) -> (Val[Model], Emit[Model])
 pub fn Graph::current_subscriptions(Self) -> Sub
 pub fn Graph::dispose(Self) -> Unit
 pub fn Graph::new() -> Self
+pub fn Graph::refresh_shared(Self) -> Cmd
 pub fn Graph::rollback(Self) -> Unit
 pub fn[A] Graph::run(Self, () -> A) -> A
+pub fn[T : Eq, U : Eq] Graph::select_shared(Self, Shared[T], (T) -> U) -> Val[U]
+pub fn Graph::set_shared_visible(Self, Bool) -> Unit
 pub fn Graph::take_initial_command(Self) -> Cmd
 
 type GraphGeneration derive(Eq)
@@ -107,6 +143,13 @@ pub(all) enum HostOutcome {
   HostOk(String)
   HostErr(String, String, String)
 }
+
+pub struct Shared[T] {
+  address : @internal_slotmap.Id
+  value : Val[T]
+}
+
+type SharedBinding
 
 type StateRegistry
 

@@ -5,9 +5,15 @@
 The current HTTP iteration adds typed methods, query/header/body encoding,
 timeouts, deterministic host tests and public-API Home acceptance scenarios.
 It introduces no UI components or privately deployed acceptance server.
-After HTTP acceptance, design application-level, typed shared state with an
-explicit lifecycle from real application needs; do not expose an unowned global
-mutable signal as a shortcut.
+The next source iteration implements an optional `App[Deps]` root containing
+multiple typed domain state machines. `Shared[T]` values bind to page-local
+`Val` projections; pages keep their own models and transactional rendering.
+Application effects survive page unload, foreground subscriptions pause on
+Hide, and explicit disposal invalidates stale delivery. See
+[shared state](guides/shared_state.md) for ownership, migration and acceptance.
+Dynamic account/workspace scopes remain deferred; business request epochs
+invalidate responses after logout or reset. Generated-byte changes require a
+separate byte-budget review and exact-artifact Skyline validation before release.
 
 ## 0.1.0 first non-prerelease release
 
@@ -15,7 +21,7 @@ The original `0.1.0` public baseline established:
 
 - Elm-style state machines, callable `Emit`, transactional `Val` composition,
   and page-owned effects and subscriptions;
-- contract and renderer version `7`, runtime ABI v10, CommonJS output, and
+- contract and renderer version `7`, CommonJS output, and
   Skyline Page Definition API registration;
 - normalized tree testing plus optional headless and styled component
   packages;

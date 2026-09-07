@@ -1,6 +1,8 @@
 ///|
 test "details page decodes navigation input and owns lifecycle state" {
-  let runtime = program().create_runtime()
+  let runtime_app = @application.program().create_runtime()
+  defer ignore(runtime_app.dispose())
+  let runtime = runtime_app.create_page(program(runtime_app.deps()))
   let _ = runtime.lifecycle("onLoad", "{\"from\":\"test\"}")
   let _ = runtime.lifecycle("onShow", "{}")
   let tree = runtime.snapshot()
@@ -18,7 +20,9 @@ test "details page decodes navigation input and owns lifecycle state" {
 
 ///|
 test "details delegates stack-aware back fallback to the host" {
-  let runtime = program().create_runtime()
+  let runtime_app = @application.program().create_runtime()
+  defer ignore(runtime_app.dispose())
+  let runtime = runtime_app.create_page(program(runtime_app.deps()))
   let _ = runtime.mount()
   let command = runtime.dispatch("Back", "{}")
   inspect(

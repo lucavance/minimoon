@@ -910,7 +910,7 @@ fn decode_input(
 }
 
 ///|
-pub fn program() -> @minimoon.Page {
+pub fn program(_deps : @application.Deps) -> @minimoon.Page {
   program_with_probe_scheduler(resume_probe_after)
 }
 

@@ -308,7 +308,8 @@ async fn load_config_document(config_file : String) -> ConfigDocument {
   match value {
     Object(fields) => {
       match fields.get("schemaVersion") {
-        Some(Number(version, ..)) if version == schema_version.to_double() => ()
+        Some(Number(version, ..)) if version == schema_version.to_double() ||
+          (version == 8.0 && !fields.contains("application")) => ()
         Some(Number(_, ..)) =>
           issues.push(
             issue_at(
@@ -343,6 +344,7 @@ async fn load_config_document(config_file : String) -> ConfigDocument {
             ),
           )
       }
+      validate_application_config(fields, config_file, spans, issues)
       match fields.get("name") {
         Some(String(name)) if name != "" => ()
         Some(_) =>

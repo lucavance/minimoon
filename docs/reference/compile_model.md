@@ -7,8 +7,9 @@ behavior as metadata.
 
 ```json
 {
-  "schemaVersion": 7,
+  "schemaVersion": 9,
   "name": "miniapp_conformance_app",
+  "application": { "package": "src/app" },
   "componentTheme": "minimal-v2",
   "devtoolsChecks": ["Lab native input focus, blur, and confirm"],
   "pages": [
@@ -23,14 +24,19 @@ behavior as metadata.
 Each package exports `program()` by default; an optional `program` field can
 select another function.
 
+With `application`, the root package exports `Deps` and `program() -> App[Deps]`;
+each page factory takes `deps : @application.Deps`. Without it, page factories
+remain no-argument. Schema `8` input is accepted only on that legacy entry path.
+
 ## Contract extraction and runtime compilation
 
 Native tooling:
 
 1. resolves the application module from `moon.mod`;
 2. creates an app-local temporary executable importing one page package;
-3. evaluates `program().contract()` on the JavaScript target;
-4. validates Contract schema 7, runtime ABI 10, and renderer protocol 7;
+3. evaluates `app.preview(deps => page.program(deps).contract())` when opted in,
+   or `program().contract()` otherwise, without executing initialization commands;
+4. validates Contract schema `9`, runtime ABI `11`, and renderer protocol `8`;
 5. removes temporary source and target directories on success or failure.
 
 After every contract is valid, one formatted temporary MoonBit executable
@@ -49,6 +55,7 @@ dist/
   app.js, app.json, app.wxss, project.config.json, sitemap.json
   minimoon.host.js, minimoon.protocol.js, minimoon.initial.js,
   minimoon.runtime.js, minimoon.templates.wxml
+  minimoon.app.js                             only with application ownership
   project.private.config.example.json
   project.private.config.json                 optional ignored local override
   pages/.../<page>.json

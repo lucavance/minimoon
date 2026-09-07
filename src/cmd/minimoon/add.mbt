@@ -33,7 +33,12 @@ async fn write_formatted_moon(file : String, content : String) -> Unit {
 }
 
 ///|
-fn page_source(name : String, route : String, title : String) -> String {
+fn page_source(
+  name : String,
+  route : String,
+  title : String,
+  application? : Bool = false,
+) -> String {
   "///|\n" +
   "fn app(_context : @minimoon.PageContext) -> @minimoon.Val[@minimoon.Node] {\n" +
   "  @minimoon.Val::constant(@minimoon.div([@minimoon.h1(" +
@@ -41,7 +46,9 @@ fn page_source(name : String, route : String, title : String) -> String {
   ")]))\n" +
   "}\n\n" +
   "///|\n" +
-  "pub fn program() -> @minimoon.Page {\n" +
+  "pub fn program(" +
+  (if application { "_deps : @application.Deps" } else { "" }) +
+  ") -> @minimoon.Page {\n" +
   "  @minimoon.page(\n" +
   "    id=" +
   name.escape() +
@@ -58,18 +65,29 @@ fn page_source(name : String, route : String, title : String) -> String {
 }
 
 ///|
-fn page_test_source(route : String) -> String {
+fn page_test_source(route : String, application? : String) -> String {
   "///|\n" +
   "test \"generated page contract\" {\n" +
-  "  inspect(program().route(), content=" +
+  "  inspect(" +
+  (match application {
+    Some(program) =>
+      "@application." + program + "().preview(deps => program(deps).route())"
+    None => "program().route()"
+  }) +
+  ", content=" +
   route.escape() +
   ")\n" +
   "}\n"
 }
 
 ///|
-fn miniapp_package_manifest() -> String {
-  "import {\n  \"lampclaw/minimoon\",\n}\n\n" +
+fn miniapp_package_manifest(application? : String) -> String {
+  "import {\n  \"lampclaw/minimoon\",\n" +
+  (match application {
+    Some(package_id) => "  " + package_id.escape() + " @application,\n"
+    None => ""
+  }) +
+  "}\n\n" +
   "supported_targets = \"js\"\n\n" +
   "import {\n  \"moonbitlang/core/test\",\n} for \"test\"\n"
 }
@@ -98,6 +116,7 @@ async fn run_add_page(
     Object(fields) => fields
     _ => fail("miniapp.minimoon.json must contain an object")
   }
+  let application = scaffold_application(app_dir, fields.get("application"))
   let pages = match fields.get("pages") {
     Some(Array(pages)) => pages
     _ => fail("miniapp.minimoon.json pages must be an array")
@@ -121,15 +140,18 @@ async fn run_add_page(
   }
   @fs.mkdir(page_dir, permission=0o755, recursive=true)
   let result = try {
+    write_file(
+      join_path(page_dir, "moon.pkg"),
+      miniapp_package_manifest(application?=application.map(entry => entry.0)),
+    )
     write_formatted_moon(
       join_path(page_dir, "page.mbt"),
-      page_source(name, route, title),
+      page_source(name, route, title, application=application is Some(_)),
     )
     write_formatted_moon(
       join_path(page_dir, "page_test.mbt"),
-      page_test_source(route),
+      page_test_source(route, application?=application.map(entry => entry.1)),
     )
-    write_file(join_path(page_dir, "moon.pkg"), miniapp_package_manifest())
     write_file(config_path, Json::object(fields).stringify(indent=2) + "\n")
     None
   } catch {

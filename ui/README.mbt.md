@@ -37,7 +37,7 @@ Run `moon update` after declaring published dependencies. In this repository,
 include the application and both module directories in its workspace. A
 registry-only consumer must have no such local overrides.
 
-Enable build resources in App Contract v8:
+Enable build resources in App Contract v9:
 
 ```json
 {

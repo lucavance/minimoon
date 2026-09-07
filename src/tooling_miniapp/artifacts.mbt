@@ -40,8 +40,8 @@ fn validate_contract(contract : Json, package_path : String) -> Unit {
 }
 
 ///|
-fn shared_host_bridge() -> String {
-  @host_js.shared_host_bridge()
+fn shared_host_bridge(application? : Bool = false) -> String {
+  @host_js.shared_host_bridge(application~)
 }
 
 ///|

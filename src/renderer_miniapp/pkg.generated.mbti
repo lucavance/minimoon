@@ -45,7 +45,7 @@ pub fn[Msg] page_input(String, (String) -> Result[Msg, MiniappDecodeError]) -> P
 
 pub fn page_lifecycle_hook(String) -> PageLifecycleHook
 
-pub fn[Model, Msg] page_program(id~ : String, route~ : String, title~ : String, model~ : Model, update~ : (Model, Msg) -> (Model, @runtime_core.Cmd[Msg]), view~ : (Events[Msg], Model) -> @ui_dsl.Node, projection_guard? : (Model, Model) -> Bool, capabilities? : Array[MiniappCapability], lifecycle? : Array[PageLifecycleEvent[Msg]], inputs? : Array[PageInput[Msg]], init? : Msg, subscriptions? : (Model) -> Subscriptions[Msg]) -> PageProgram[Model, Msg]
+pub fn[Model, Msg] page_program(id~ : String, route~ : String, title~ : String, model~ : Model, update~ : (Model, Msg) -> (Model, @runtime_core.Cmd[Msg]), view~ : (Events[Msg], Model) -> @ui_dsl.Node, projection_guard? : (Model, Model) -> Bool, capabilities? : Array[MiniappCapability], lifecycle? : Array[PageLifecycleEvent[Msg]], inputs? : Array[PageInput[Msg]], init? : Msg, refresh? : Msg, subscriptions? : (Model) -> Subscriptions[Msg]) -> PageProgram[Model, Msg]
 
 pub fn render_page_wxml(String, @ui_dsl.Node) -> String
 
@@ -192,6 +192,7 @@ pub struct PageProgram[Model, Msg] {
   lifecycle : Array[PageLifecycleEvent[Msg]]
   inputs : Array[PageInput[Msg]]
   init : Msg?
+  refresh : Msg?
 }
 pub fn[Model, Msg] PageProgram::capabilities(Self[Model, Msg]) -> Array[MiniappCapability]
 pub fn[Model, Msg] PageProgram::component(Self[Model, Msg]) -> @runtime_core.Component[Model, Msg]
@@ -222,6 +223,7 @@ pub struct PageRuntime {
   subscription : (String, String) -> String
   snapshot : () -> String
   dispose : () -> String
+  refresh : () -> String
 }
 pub fn PageRuntime::dispatch(Self, String, String) -> String
 pub fn PageRuntime::dispatch_batch(Self, String) -> String
@@ -229,6 +231,7 @@ pub fn PageRuntime::dispose(Self) -> String
 pub fn PageRuntime::lifecycle(Self, String, String) -> String
 pub fn PageRuntime::mount(Self) -> String
 pub fn PageRuntime::page_id(Self) -> String
+pub fn PageRuntime::refresh(Self) -> String
 pub fn PageRuntime::resolve_effect(Self, String, String, String) -> String
 pub fn PageRuntime::snapshot(Self) -> String
 pub fn PageRuntime::subscription(Self, String, String) -> String

@@ -1,5 +1,5 @@
 {
-  "runtimeApiVersion": 10,
+  "runtimeApiVersion": 11,
   "rendererProtocolVersion": 8,
   "pages": [
     "pages/foundation/foundation",

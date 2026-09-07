@@ -4,11 +4,14 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
-## [Unreleased]
-
 ## [0.2.0]
 
 ### Added
+
+- Optional `App[Deps]` with independent typed domain state machines, `Shared[T]`,
+  scoped page bindings/selectors, application lifecycle and owned async effects.
+- Commit-only page outboxes, cross-page shared-state acceptance in Home/Details,
+  pure contract previews and application-aware `minimoon add page`.
 
 - Typed HTTP methods, ordered queries, headers, JSON/form/text request bodies
   and per-request timeouts; invalid arguments resolve locally as `InvalidPayload`.
@@ -30,8 +33,11 @@ tags.
 
 ### Compatibility
 
-- App Contract and renderer protocol advance from 7 to 8; runtime ABI stays 10.
+- App Contract advances from 7 to 9, runtime ABI from 10 to 11, and renderer
+  protocol from 7 to 8. Schema `8` input remains valid without `application`.
   Rebuild all generated artifacts together and obtain new real-host evidence.
+- Opted-in page factories take the application's `Deps`; `PageContext` is now
+  opaque. See the [shared-state guide](docs/guides/shared_state.md).
 - Existing core call patterns and optional components/minimal themes remain
   covered by the frozen 0.1 consumer. New public snapshots define the 0.2 line.
 - RUI remains a provenance reference, not a browser-runtime dependency.
@@ -39,11 +45,17 @@ tags.
 
 ### Changed
 
+- Reviewed application-state growth budgets: Conformance runtime/aggregate
+  JavaScript ceilings are 383,000/453,000 bytes, with a 16,000-byte App-enabled
+  host ceiling. The core archive hard ceiling is 280 KiB with an 8 KiB reserve.
+  No-App host, starter, UI archive and other gates remain unchanged.
+- CI handoff technical versions are derived from the validated manifest and
+  checked against both fixture summaries and checklists.
 - Moved repository-check temporary consumers onto the checkout's parent volume,
   with configurable storage, isolated runs and supervisor-owned failure cleanup.
-- Reviewed HTTP growth budgets: core archive reserve is now 8 KiB under the
-  unchanged 250 KiB hard ceiling; Conformance runtime/aggregate JavaScript
-  ceilings are 360,000/424,000 bytes. UI, starter and other limits are unchanged.
+- The preceding HTTP budget review retained a 250 KiB core archive hard ceiling
+  with an 8 KiB reserve and 360,000/424,000-byte runtime/aggregate ceilings;
+  the application-state review above supersedes those core ceilings.
 - Raised the repository and generated-starter Node floor to `>=24.20.0`, with
   CI coverage at 24.20.0 and 26.8.1; pinned Bun to `1.4.2`.
 - Updated PostCSS to `8.5.28`, weapp-tailwindcss to `5.5.1`, and refreshed the

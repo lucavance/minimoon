@@ -10,6 +10,15 @@ Minimoon 使用 Elm 风格状态机，但不要求一个全局应用 Model。每
 >
 > Minimoon uses Elm-style state machines without requiring one global application model. Each page or keyed/dynamic `Val` branch can create its own `(Val[Model], Emit[Msg])`. Messages are domain events, `update` computes `(Model, Cmd)`, and `view` reads the current model to produce an immutable `Node`.
 
+可选的 `App[Deps]` 增加应用级领域状态机；AppContext 创建 `(Shared[Model], Emit[Msg])`，
+PageContext 的 bind/select 将共享值投影到页面局部 Val。页面事务提交后才外发应用消息，
+应用提交不会被个别页面渲染失败回滚。详见 [共享状态指南](../guides/shared_state.md)。
+
+> Optional `App[Deps]` adds owned application domain machines. AppContext creates
+> `(Shared[Model], Emit[Msg])`; PageContext binds/selects page-local Val projections.
+> Page messages leave only after commit, and failed page rendering does not undo an
+> application commit. See the [shared-state guide](../guides/shared_state.md).
+
 ```mermaid
 flowchart LR
     HostEvent[宿主事件 / Host event]

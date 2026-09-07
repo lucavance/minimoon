@@ -1,6 +1,7 @@
 ///|
 // Repository-only transport shim: this is not WeChat host evidence.
 pub fn http_probe_source() -> String {
+  @host_js.validation_application_boot() +
   (
     #|const { writeFileSync } = require("node:fs")
     #|const assert = require("node:assert/strict")
@@ -110,6 +111,7 @@ pub fn http_probe_source() -> String {
     #|  report.cases.push({ name: "lifecycle-and-failures", status: "passed" })
     #|}
     #|;(async () => {
+    #|  bootApplication(process.argv[2])
     #|  require(process.argv[2])
     #|  requireCheck(definition, "generated Home did not register Page")
     #|  const base = offline ? "https://httpbingo.org" : process.env.MINIMOON_HTTP_BASE_URL || "https://httpbingo.org"

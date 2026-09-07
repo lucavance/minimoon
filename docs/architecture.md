@@ -1,5 +1,29 @@
 # Architecture
 
+## Optional application ownership
+
+`App[Deps]` creates a headless application graph and a generation-bound FIFO.
+Its builder may create several domain machines with different Model/Msg types;
+there is no mandatory global Model. `Shared[T]` has no public mutation/read API.
+`PageContext.bind/select` installs a scoped page-local projection; application
+commits notify only visible bindings whose selected value differs by `Eq`.
+
+Page transactions stage application messages in a commit outbox. A rejected
+page transaction publishes none. Once the application commits, page projection
+failures do not roll back application state; the next refresh can recover.
+There is deliberately no cross-page rendering transaction.
+
+Launch executes initialization once. Show/Hide control foreground intervals,
+not HTTP ownership. Page hide pauses projections; show catches up. Page unload
+detaches bindings and page tasks without destroying the application. Explicit
+application disposal invalidates addresses before cancelling tasks and releasing
+pages. The host has no invented application shutdown lifecycle. Compile previews
+create initial state, emit no commands, and dispose their temporary graphs.
+
+See [the shared-state guide](guides/shared_state.md) for factories, capabilities,
+business request epochs, and testing. This adapts Rabbita's owned state-machine
+composition; it does not import its browser host or require a global mutable store.
+
 ## End-to-end path
 
 ```text
@@ -12,7 +36,7 @@ lampclaw/minimoon public API
     -> runtime_core
        resident state, effects, command queue
     -> tooling_miniapp
-       App Contract v8 compilation and artifact writing
+       App Contract v9 compilation and artifact writing
     -> internal_host_js
        ordered scheduler, render acknowledgement, wx.* facade
     -> generated CommonJS + shared WXML/WXSS + page stubs
@@ -120,7 +144,7 @@ Each mounted page owns one scheduler:
 5. A batch warns once at 256 entries and fails closed before accepting an entry
    beyond 2048.
 
-Runtime ABI v10 installs an internal, generation-bound wake closure during the
+Runtime ABI v11 installs an internal, generation-bound wake closure during the
 synchronous runtime-creation entry. The created page runtime captures that
 closure, and a suspended local effect requests a sequence-bounded `drain`
 scheduler entry after it emits. Same-turn wakes and adjacent tail drains may
@@ -165,9 +189,9 @@ checklist. The sorted, length-framed app-relative paths make checkout location
 irrelevant while ensuring WXSS, shared WXML, future assets, and manual acceptance
 scope cannot drift behind a still-valid evidence record.
 
-App Contract v8 and renderer protocol v8 add native form/image/slider/progress
+App Contract v9 and renderer protocol v8 retain native form/image/slider/progress
 controls, precise touch payloads, and build-resource descriptors to the v7
-focus/blur/confirm and dialog/menu baseline. Runtime ABI v10 retains the
+focus/blur/confirm and dialog/menu baseline. Runtime ABI v11 retains the
 page-owned local-effect wake/drain contract
 independently of the source-level authoring API. `minimal-v1` retains its exact
 bytes;
@@ -218,7 +242,7 @@ bindings and reactive content remain owned by their original Val scopes.
 Removed branches leave no global registry entries. `UiContext` owns page
 visibility and one toast queue; UI code does not author JavaScript or setData.
 
-App Contract v8 resources name a dependency provider and a canonical feature list.
+App Contract v9 resources name a dependency provider and a canonical feature list.
 A native build probe returns a typed WXSS/static-asset bundle. Validation precedes
 destructive output generation. Resource paths, contents and descriptors join the
 artifact fingerprint; CSS and SVG strings stay out of the application JS graph.

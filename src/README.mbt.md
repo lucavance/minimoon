@@ -42,7 +42,7 @@ fn readme_page() -> Page {
 
 ## HTTP requests
 
-HTTP requests use the page's declared `Request` capability. Non-2xx status codes
+HTTP requests use their page or application's declared `Request` capability. Non-2xx status codes
 are transport successes; invalid arguments are deferred `InvalidPayload` errors.
 
 ```moonbit check

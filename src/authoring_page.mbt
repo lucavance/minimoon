@@ -2,11 +2,11 @@
 priv struct GraphMessage(Cmd)
 
 ///|
-struct PageRuntime(@renderer.PageRuntime)
+struct PageRuntime(@renderer.PageRuntime, @val.Graph)
 
 ///|
-pub struct PageContext {
-  marker : Unit
+struct PageContext {
+  graph : @val.Graph
 }
 
 ///|
@@ -256,7 +256,7 @@ struct Page {
   id : String
   route : String
   title : String
-  make_program : () -> @renderer.PageProgram[Int, GraphMessage]
+  make_program : () -> (@renderer.PageProgram[Int, GraphMessage], @val.Graph)
 }
 
 ///|
@@ -276,27 +276,44 @@ pub fn Page::title(self : Page) -> String {
 
 ///|
 pub fn Page::initial_tree(self : Page) -> Json {
-  (self.make_program)().initial_tree()
+  let (program, graph) = (self.make_program)()
+  let value = program.initial_tree()
+  graph.dispose()
+  value
 }
 
 ///|
 pub fn Page::contract(self : Page) -> String {
-  (self.make_program)().contract()
+  let (program, graph) = (self.make_program)()
+  let value = program.contract()
+  graph.dispose()
+  value
 }
 
 ///|
 pub fn Page::contract_json(self : Page) -> Json {
-  (self.make_program)().contract_json()
+  let (program, graph) = (self.make_program)()
+  let value = program.contract_json()
+  graph.dispose()
+  value
 }
 
 ///|
 pub fn Page::wxml(self : Page) -> String {
-  (self.make_program)().wxml()
+  let (program, graph) = (self.make_program)()
+  let value = program.wxml()
+  graph.dispose()
+  value
 }
 
 ///|
 pub fn Page::create_runtime(self : Page) -> PageRuntime {
-  PageRuntime((self.make_program)().create_runtime())
+  let (program, graph) = (self.make_program)()
+  let runtime = program.create_runtime()
+  graph.attach_shared_runtime(capture_shared_wake(), fn() {
+    ignore(runtime.dispose())
+  })
+  PageRuntime(runtime, graph)
 }
 
 ///|
@@ -332,6 +349,15 @@ pub fn PageRuntime::lifecycle(
   hook : String,
   payload_json : String,
 ) -> String {
+  if hook == "onHide" {
+    self.1.set_shared_visible(false)
+  }
+  if hook == "onShow" {
+    self.1.set_shared_visible(true)
+  }
+  if hook == "$minimoon:shared" {
+    return self.0.refresh()
+  }
   self.0.lifecycle(hook, payload_json)
 }
 
@@ -390,7 +416,7 @@ fn[Input : Eq] make_page(
     let graph = @val.Graph::new()
     let built = graph.build(fn() {
       let input = graph.create_input(initial_input)
-      let root = build({ marker: (), }, Val(input.0))
+      let root = build({ graph, }, Val(input.0))
       (root, input.1)
     })
     let root = built.0
@@ -426,13 +452,18 @@ fn[Input : Eq] make_page(
               }
             Err(error) => return Err(@renderer.decode_error(error.message()))
           }
+        } else if hook == Show {
+          batch([
+            Cmd(@val.CmdMessage(fn() { graph.refresh_shared() })),
+            lifecycle_message,
+          ])
         } else {
           lifecycle_message
         }
         Ok(GraphMessage(command))
       })
     })
-    @renderer.page_program(
+    let program = @renderer.page_program(
       id~,
       route=route_path,
       title~,
@@ -451,7 +482,11 @@ fn[Input : Eq] make_page(
       lifecycle=lifecycle_events,
       init=GraphMessage(graph.take_initial_command()),
       subscriptions=_ => graph_subscriptions(graph),
+      refresh=GraphMessage(
+        Cmd(@val.CmdMessage(fn() { graph.refresh_shared() })),
+      ),
     )
+    (program, graph)
   }
   { id, route: route_path, title, make_program, }
 }

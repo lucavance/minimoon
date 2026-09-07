@@ -2,11 +2,15 @@
 package "lampclaw/minimoon/internal_host_js"
 
 // Values
+pub fn application_host_bridge() -> String
+
 pub fn host_smoke_source(Array[String]) -> String
 
-pub fn shared_host_bridge() -> String
+pub fn shared_host_bridge(application? : Bool) -> String
 
 pub fn shared_protocol_bridge() -> String
+
+pub fn validation_application_boot() -> String
 
 pub fn verify_preload_source() -> String
 

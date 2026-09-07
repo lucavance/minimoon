@@ -176,8 +176,18 @@ async fn perf_suite(root : String) -> Unit {
     guard byte_budget_allows(runtime_size, conformance_runtime_limit) else {
       abort(runtime_path + " exceeds application runtime budget")
     }
-    guard host_size <= 15000 else {
-      abort(host_path + " exceeds shared host budget")
+    let host_limit = shared_host_limit(
+      json_field(manifest, "application") != Json::null(),
+    )
+    guard byte_budget_allows(host_size, host_limit) else {
+      abort(
+        host_path +
+        " exceeds shared host budget: " +
+        host_size.to_string() +
+        " / " +
+        host_limit.to_string() +
+        " bytes",
+      )
     }
     guard protocol_size <= 10000 else {
       abort(protocol_path + " exceeds shared protocol budget")
@@ -212,6 +222,11 @@ async fn perf_suite(root : String) -> Unit {
       initial_size +
       @fs.read_file(join(root, app_path)).binary().length(),
     )
+    let application_path = join(root, app_root + "minimoon.app.js")
+    if json_field(manifest, "application") != Json::null() {
+      require_file(root, app_root + "minimoon.app.js")
+      aggregate.val += @fs.read_file(application_path).binary().length()
+    }
     for page in pages {
       let route = json_string(page, "route")
       guard !@fs.exists(join(root, app_root + route + ".runtime.js")) else {

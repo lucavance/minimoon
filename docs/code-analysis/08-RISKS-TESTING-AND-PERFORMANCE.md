@@ -115,11 +115,11 @@ function createRendererStats() {
 
 ## 5. 体积预算与当前余量 / Byte Budgets and Current Headroom
 
-HTTP 预算评审后的 Conformance JavaScript 为 414,673 bytes，aggregate ceiling 为 424,000 bytes，保留 9,327 bytes 余量。runtime 为 350,209/360,000 bytes，host 为 14,818/15,000 bytes，initial trees 为 38,981/41,000 bytes。host 是当前余量比例更小的边界。调整依据见[预算评审](../reference/performance_baseline.md#approved-http-budget-review)。
+共享状态预算评审的 Conformance JavaScript 为 442,997 bytes，aggregate ceiling 为 453,000 bytes，保留 10,003 bytes 余量，已包含 3,464-byte `minimoon.app.js`。runtime 为 373,090/383,000 bytes，启用 App 的 host 为 15,499/16,000 bytes，initial trees 为 40,204/41,000 bytes。未启用 App 的 host 保持 15,000-byte 上限。调整依据见[预算评审](../reference/performance_baseline.md#approved-application-state-budget-review)。
 
 > **English:**
 >
-> After the HTTP budget review, Conformance JavaScript is 414,673 bytes against a 424,000-byte aggregate ceiling, leaving 9,327 bytes. Runtime is 350,209/360,000 bytes, host is 14,818/15,000 bytes, and initial trees are 38,981/41,000 bytes. The host remains the boundary with the smallest proportional headroom. See the [budget review](../reference/performance_baseline.md#approved-http-budget-review) for the rationale.
+> The shared-state calibration measures 442,997 Conformance JavaScript bytes against a 453,000-byte aggregate ceiling, leaving 10,003 bytes and including the 3,464-byte `minimoon.app.js`. Runtime is 373,090/383,000 bytes, App-enabled host is 15,499/16,000 bytes, and initial trees are 40,204/41,000 bytes. No-App hosts retain the 15,000-byte ceiling. See the [budget review](../reference/performance_baseline.md#approved-application-state-budget-review) for the rationale.
 
 > **源码 / Source:** [`src/cmd/minimoon_check/performance.mbt`](../../src/cmd/minimoon_check/performance.mbt) · symbol: `perf_suite` artifact budgets
 
@@ -127,8 +127,18 @@ HTTP 预算评审后的 Conformance JavaScript 为 414,673 bytes，aggregate cei
 guard byte_budget_allows(runtime_size, conformance_runtime_limit) else {
   abort(runtime_path + " exceeds application runtime budget")
 }
-guard host_size <= 15000 else {
-  abort(host_path + " exceeds shared host budget")
+let host_limit = shared_host_limit(
+  json_field(manifest, "application") != Json::null(),
+)
+guard byte_budget_allows(host_size, host_limit) else {
+  abort(
+    host_path +
+    " exceeds shared host budget: " +
+    host_size.to_string() +
+    " / " +
+    host_limit.to_string() +
+    " bytes",
+  )
 }
 guard protocol_size <= 10000 else {
   abort(protocol_path + " exceeds shared protocol budget")

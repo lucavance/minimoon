@@ -94,7 +94,11 @@ fn runtime_registry_source(
 fn app_runtime_package_source(
   pages : Array[Json],
   contracts : Array[Json],
+  application? : Json,
 ) -> String {
+  if application is Some(application) {
+    return application_runtime_source(pages, contracts, application)
+  }
   let factories : Array[String] = []
   let imports : Array[String] = []
   for index = 0; index < pages.length(); index = index + 1 {
@@ -156,6 +160,7 @@ fn runtime_proxy_function(
 fn app_runtime_package_manifest(
   module_id : String,
   pages : Array[Json],
+  application? : Json,
 ) -> String {
   let imports = ["  \"lampclaw/minimoon\" @minimoon,\n"]
   for index = 0; index < pages.length(); index = index + 1 {
@@ -164,11 +169,17 @@ fn app_runtime_package_manifest(
       "  " + page_import.escape() + " @page" + index.to_string() + ",\n",
     )
   }
-  "import {\n" + imports.join("") + "}\n\n" + runtime_link_options()
+  if application is Some(application) {
+    imports.push(application_import(module_id, application))
+  }
+  "import {\n" +
+  imports.join("") +
+  "}\n\n" +
+  runtime_link_options(application=application is Some(_))
 }
 
 ///|
-fn runtime_link_options() -> String {
+fn runtime_link_options(application? : Bool = false) -> String {
   "supported_targets = \"js\"\n\n" +
   "pkgtype(kind: \"executable\")\n\n" +
   "options(\n" +
@@ -187,6 +198,7 @@ fn runtime_link_options() -> String {
   "        \"minimoon_runtime_subscription\",\n" +
   "        \"minimoon_runtime_snapshot\",\n" +
   "        \"minimoon_runtime_dispose\",\n" +
+  (if application { application_export_options() } else { "" }) +
   "      ],\n" +
   "    },\n" +
   "  },\n" +
@@ -271,6 +283,7 @@ async fn compile_page_contract(
   module_id : String,
   index : Int,
   page : Json,
+  application? : Json,
 ) -> Json {
   let package_path = string(page, "package")
   guard package_path != "" else { abort("pages[].package must be a string") }
@@ -294,10 +307,27 @@ async fn compile_page_contract(
   if @fs.exists(target_dir) {
     @fs.rmdir(target_dir, recursive=true)
   }
-  write(join(temp_dir, "moon.pkg"), contract_package_manifest(page_import))
+  let manifest = contract_package_manifest(page_import)
+  let manifest = if application is Some(application) {
+    manifest.replace_all(
+      old="import {\n",
+      new="import {\n" + application_import(module_id, application),
+    )
+  } else {
+    manifest
+  }
+  write(join(temp_dir, "moon.pkg"), manifest)
   write(
     join(temp_dir, "main.mbt"),
-    runtime_package_source(page_import, program, true),
+    if application is Some(application) {
+      "///|\nfn main { println(@application." +
+      application_program(application) +
+      "().preview(deps => @page." +
+      program +
+      "(deps).contract())) }\n"
+    } else {
+      runtime_package_source(page_import, program, true)
+    },
   )
   let result = {
     errdefer {
@@ -443,6 +473,7 @@ async fn compile_app_runtime(
   pages : Array[Json],
   contracts : Array[Json],
   release : Bool,
+  application? : Json,
 ) -> String {
   let temp_name = "minimoon_app_runtime"
   let temp_relative = "src/" + temp_name
@@ -457,11 +488,11 @@ async fn compile_app_runtime(
   }
   write(
     join(temp_dir, "moon.pkg"),
-    app_runtime_package_manifest(module_id, pages),
+    app_runtime_package_manifest(module_id, pages, application?),
   )
   write(
     join(temp_dir, "main.mbt"),
-    app_runtime_package_source(pages, contracts),
+    app_runtime_package_source(pages, contracts, application?),
   )
   let result = {
     errdefer {
