@@ -229,8 +229,8 @@ a 250 KiB hard ceiling, and at least 16 KiB of reserved headroom.
 
 The floor was revalidated on 2026-09-04 with `moon 0.1.20260827` and
 `moonc v0.10.11`. Repository and generated-starter tooling support Node
-`>=24.11.0`; CI validates the Node 24.11.0 lower boundary and the Node 26.8.1
-primary environment, while Bun remains pinned to `1.4.0`. The only maintained
+`>=24.20.0`; CI validates the Node 24.20.0 lower boundary and the Node 26.8.1
+primary environment, while Bun is pinned to `1.4.2`. The only maintained
 standalone JavaScript is `scripts/bridge/weapp_tailwindcss_adapter.mjs`;
 production and validation host sources are MoonBit-owned templates, while
 committed MiniApp JavaScript is generated.

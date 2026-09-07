@@ -18,24 +18,24 @@
     "miniapp:generate": "moon run src/cmd/minimoon --target native -- build examples/miniapp_conformance_app"
   },
   "engines": {
-    "node": ">=24.11.0"
+    "node": ">=24.20.0"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.3",
     "acorn": "8.18.0",
     "eslint-scope": "9.1.2",
-    "postcss": "8.5.26",
+    "postcss": "8.5.28",
     "tailwindcss": "4.3.3",
-    "weapp-tailwindcss": "5.5.0"
+    "weapp-tailwindcss": "5.5.1"
   },
   "devEngines": {
     "packageManager": {
       "name": "bun",
-      "version": "1.4.0",
+      "version": "1.4.2",
       "onFail": "download"
     }
   },
   "overrides": {
-    "postcss": "8.5.26"
+    "postcss": "8.5.28"
   }
 }

@@ -36,11 +36,18 @@ is the verified MiniApp host format for 0.1.x; ESM is not an implied upgrade.
   `.mbti` files are checked to detect accidental architectural drift.
 
 The supported toolchain floor is `moon 0.1.20260827` with `moonc v0.10.11`.
-Repository and generated-starter JavaScript tooling support Node `>=24.11.0`,
-with CI coverage at the 24.11.0 lower boundary and in the 26.8.1 primary
-environment; Bun is pinned to `1.4.0`. Raising any floor or pin requires
+Repository and generated-starter JavaScript tooling support Node `>=24.20.0`,
+with CI coverage at the 24.20.0 lower boundary and in the 26.8.1 primary
+environment; Bun is pinned to `1.4.2`. Raising any floor or pin requires
 updating CI, the package consumer gate, starter guidance, and the compatibility
 notes in one change.
+
+The dependency refresh after 0.1.1 raises the previous Node `>=24.11.0` floor.
+Consumers on Node 24 must upgrade to 24.20.0 or newer before installing the
+updated tooling. PostCSS is pinned and overridden to 8.5.28, and
+weapp-tailwindcss is pinned to 5.5.1; update existing starter manifests as well
+as their lockfiles because regenerating framework artifacts does not rewrite
+an application's package manifest.
 
 ## Upgrade procedure
 

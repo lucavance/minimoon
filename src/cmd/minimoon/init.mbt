@@ -236,23 +236,23 @@ fn create_init_manifest(plan : InitPlan) -> InitManifest {
     content: "{\n" +
     "  \"private\": true,\n" +
     "  \"engines\": {\n" +
-    "    \"node\": \">=24.11.0\"\n" +
+    "    \"node\": \">=24.20.0\"\n" +
     "  },\n" +
     "  \"devDependencies\": {\n" +
     "    \"@tailwindcss/cli\": \"4.3.3\",\n" +
-    "    \"postcss\": \"8.5.26\",\n" +
+    "    \"postcss\": \"8.5.28\",\n" +
     "    \"tailwindcss\": \"4.3.3\",\n" +
-    "    \"weapp-tailwindcss\": \"5.5.0\"\n" +
+    "    \"weapp-tailwindcss\": \"5.5.1\"\n" +
     "  },\n" +
     "  \"devEngines\": {\n" +
     "    \"packageManager\": {\n" +
     "      \"name\": \"bun\",\n" +
-    "      \"version\": \"1.4.0\",\n" +
+    "      \"version\": \"1.4.2\",\n" +
     "      \"onFail\": \"download\"\n" +
     "    }\n" +
     "  },\n" +
     "  \"overrides\": {\n" +
-    "    \"postcss\": \"8.5.26\"\n" +
+    "    \"postcss\": \"8.5.28\"\n" +
     "  }\n" +
     "}\n",
   })

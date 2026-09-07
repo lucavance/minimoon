@@ -219,8 +219,8 @@ let registry_documentation_files : Array[String] = [
   "docs/operations/miniapp_javascript_compatibility.md", "docs/operations/release_candidate_handoff.md",
   "docs/positioning.md", "docs/reference/compatibility_and_upgrades.md", "docs/reference/compile_model.md",
   "docs/reference/miniapp_fixture_matrix.md", "docs/reference/miniapp_host_capabilities.md",
-  "docs/reference/miniapp_renderer.md", "docs/reference/moonbit_ownership.md", "docs/reference/renderer_protocol.md",
-  "docs/roadmap.md",
+  "docs/reference/miniapp_renderer.md", "docs/reference/moonbit_ownership.md", "docs/reference/rabbita_and_rui_audit.md",
+  "docs/reference/renderer_protocol.md", "docs/roadmap.md",
 ]
 
 ///|

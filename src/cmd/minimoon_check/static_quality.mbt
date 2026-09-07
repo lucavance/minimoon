@@ -5,16 +5,16 @@ let supported_moon_floor = "0.1.20260827"
 let supported_moonc_floor = "0.10.11"
 
 ///|
-let supported_node_engine = ">=24.11.0"
+let supported_node_engine = ">=24.20.0"
 
 ///|
-let node_lts_floor = "24.11.0"
+let node_lts_floor = "24.20.0"
 
 ///|
 let primary_node_version = "26.8.1"
 
 ///|
-let supported_bun_version = "1.4.0"
+let supported_bun_version = "1.4.2"
 
 ///|
 fn moon_identifier_character(char : UInt16) -> Bool {

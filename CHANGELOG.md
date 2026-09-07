@@ -6,7 +6,24 @@ tags.
 
 ## [Unreleased]
 
-No unreleased changes.
+### Changed
+
+- Raised the repository and generated-starter Node floor to `>=24.20.0`, with
+  CI coverage at 24.20.0 and 26.8.1; pinned Bun to `1.4.2`.
+- Updated PostCSS to `8.5.28`, weapp-tailwindcss to `5.5.1`, and refreshed the
+  transitive JavaScript dependency lockfile. Existing starter consumers should
+  update their package manifests and lockfiles before rebuilding.
+- Regenerated the Conformance runtime with the updated tooling (74 bytes
+  smaller). Its artifact fingerprint changed, so a release requires fresh
+  WeChat Developer Tools validation; tracked reports remain candidate-only.
+
+### Added
+
+- Added a pinned Rabbita 0.15.6 / RUI 0.1.1 reference audit, including all 64
+  RUI showcase entries and the distinction between adapted source, conceptual
+  equivalents, native substitutes, and unimplemented capabilities.
+- Scheduled MiniApp-suitable RUI-inspired component development for the next
+  iteration. This dependency and documentation change adds no component API.
 
 ## [0.1.1] - 2026-09-04
 

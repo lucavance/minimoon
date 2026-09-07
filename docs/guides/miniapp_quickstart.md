@@ -3,7 +3,7 @@
 ## Prerequisites
 
 Use `moon 0.1.20260827` with `moonc v0.10.11` or newer. JavaScript tooling
-supports Node `>=24.11.0`, and Bun is pinned to `1.4.0`; keep the exact package
+supports Node `>=24.20.0`, and Bun is pinned to `1.4.2`; keep the exact package
 versions and PostCSS override emitted by `minimoon init`.
 
 ## 1. Install the CLI from a checkout

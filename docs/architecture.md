@@ -194,8 +194,10 @@ bytes are never restored merely to retain evidence.
 
 `internal_duplix` and `internal_slotmap` contain adapted Rabbita 0.13.1 work;
 `internal_any` contains the small private erased-value primitive adapted from
-Rabbita main at `b6cbf52`. `THIRD_PARTY_NOTICES.md` records both provenance
-points. No separate MiniApp facade package owns public types in 0.1.0. Luna
-concepts were reviewed but no Luna source was copied; the audit and adoption
-decisions are recorded in
-[`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
+Rabbita main at `b6cbf52`.
+[`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) records both original
+provenance points. No separate MiniApp facade package owns public types in
+0.1.0. The [Rabbita/RUI audit](reference/rabbita_and_rui_audit.md) compares the
+current implementation against Rabbita 0.15.6 and RUI 0.1.1 without changing
+those source pins. RUI-inspired component additions are scheduled for the
+next iteration in the [roadmap](roadmap.md).

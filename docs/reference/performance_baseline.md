@@ -32,12 +32,12 @@ and all page bridges:
 | generated starter | 247,000 bytes |
 
 Release generation minifies the host and runtime syntax. The current baseline
-uses `moon 0.1.20260827`, `moonc v0.10.11`, Node 26.8.1, and Bun 1.4.0. Its
-Conformance release measures 327,428 runtime bytes, 14,247 host bytes, 38,558
-initial-tree bytes, and 387,024 aggregate JavaScript bytes.
+uses `moon 0.1.20260827`, `moonc v0.10.11`, Node 26.8.1, and Bun 1.4.2. Its
+Conformance release measures 327,354 runtime bytes, 14,247 host bytes, 38,558
+initial-tree bytes, and 386,950 aggregate JavaScript bytes.
 
-Against the maintained ceilings, 16,572 runtime bytes, 753 host bytes, 2,442
-initial-tree bytes, and 18,976 aggregate JavaScript bytes remain. The gate
+Against the maintained ceilings, 16,646 runtime bytes, 753 host bytes, 2,442
+initial-tree bytes, and 19,050 aggregate JavaScript bytes remain. The gate
 recalculates these values from current generated artifacts; changing a ceiling
 requires an explicit review of the linked implementation and both maintained
 application shapes.

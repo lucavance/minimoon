@@ -18,11 +18,20 @@ ordered host scheduling, and disposal.
 
 ## Toolchain validation
 
-The repository baseline was revalidated on 2026-09-04 with `moon 0.1.20260827`,
-`moonc v0.10.11`, and Bun `1.4.0`. JavaScript tooling supports Node
-`>=24.11.0`; CI validates the Node 24.11.0 lower boundary and the Node 26.8.1
+The supported toolchain uses `moon 0.1.20260827`, `moonc v0.10.11`, and Bun
+`1.4.2`. JavaScript tooling supports Node
+`>=24.20.0`; CI validates the Node 24.20.0 lower boundary and the Node 26.8.1
 primary environment, and installs the JavaScript dependency graph from the
 committed lockfile.
+
+## Next iteration
+
+RUI-inspired component development is scheduled for the next iteration, after
+the dependency refresh and the pinned
+[Rabbita/RUI audit](reference/rabbita_and_rui_audit.md). The
+[roadmap](roadmap.md#next-iteration-rui-inspired-miniapp-components) orders the
+candidate work and defines its acceptance criteria. This audit introduces no
+new component API.
 
 ## Evidence state
 

@@ -203,8 +203,8 @@ testing 可选包增加接口。
 硬上限与至少 16 KiB 的预留余量。
 
 工具链下限已于 2026-09-04 使用 `moon 0.1.20260827` 与 `moonc v0.10.11`
-重新验证。仓库和生成的 starter 支持 Node `>=24.11.0`；CI 验证 24.11.0
-最低边界与 26.8.1 主环境，Bun 则继续固定为 `1.4.0`。唯一独立维护的
+重新验证。仓库和生成的 starter 支持 Node `>=24.20.0`；CI 验证 24.20.0
+最低边界与 26.8.1 主环境，Bun 固定为 `1.4.2`。唯一独立维护的
 JavaScript 是 `scripts/bridge/weapp_tailwindcss_adapter.mjs`；生产和验证宿主
 源码由 MoonBit 模板持有，提交的小程序 JavaScript 均为生成产物。
 

@@ -46,8 +46,10 @@ The author-facing `(Val, Emit)` shape is influenced by Rabbita, but Minimoon
 owns a distinct host, lifecycle, transaction, renderer, and deployment
 boundary. Neither framework exposes a mutable `Signal`; Minimoon applications
 also cannot manipulate graph cells, host patches, or raw `wx.*` callbacks.
-The pinned tradeoff analysis is in
-[`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
+Original source provenance is recorded in
+[`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md); the
+[Rabbita/RUI audit](reference/rabbita_and_rui_audit.md) records the pinned
+capability comparison and future component candidates.
 
 ## Success criterion
 

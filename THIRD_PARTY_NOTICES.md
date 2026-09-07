@@ -16,6 +16,18 @@ generation-checked, page-owned state-message stores.
 Rabbita is licensed under the Apache License 2.0. A copy of that license is
 included in this repository as `LICENSE`.
 
+## Review-only references
+
+The [Rabbita/RUI audit](docs/reference/rabbita_and_rui_audit.md) compares the
+current implementation with Rabbita 0.15.6 and RUI 0.1.1 at commit
+`b1291945fd0201a0b5b39513b88585d6122db7bc`. These are comparison points, not
+new source attribution pins or package dependencies.
+
+RUI is separately MIT-licensed. Its notices also credit shadcn/ui Vega and
+React DayPicker. This audit and dependency update copy no RUI implementation
+or upstream visual recipes; any future adaptation must preserve the applicable
+notices and record its exact source revision.
+
 ## Development tooling
 
 Generated JavaScript validation uses

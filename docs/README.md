@@ -67,6 +67,7 @@ they are intentionally excluded from the 250 KiB registry archive.
 - [`reference/moonbit_ownership.md`](reference/moonbit_ownership.md)
 - [`reference/performance_baseline.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/performance_baseline.md)
 - [`reference/compatibility_and_upgrades.md`](reference/compatibility_and_upgrades.md)
+- [`reference/rabbita_and_rui_audit.md`](reference/rabbita_and_rui_audit.md) — pinned reference comparison, all 64 RUI entries, and next-iteration candidates
 
 ## Operations
 

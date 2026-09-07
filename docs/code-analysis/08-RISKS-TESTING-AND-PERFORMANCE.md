@@ -115,11 +115,11 @@ function createRendererStats() {
 
 ## 5. 体积预算与当前余量 / Byte Budgets and Current Headroom
 
-当前 Conformance JavaScript 为 387,024 bytes，aggregate ceiling 为 406,000 bytes，保留 18,976 bytes 余量。runtime 为 327,428/344,000 bytes，host 为 14,247/15,000 bytes，initial trees 为 38,558/41,000 bytes。host 是当前余量比例更小的边界。
+当前 Conformance JavaScript 为 386,950 bytes，aggregate ceiling 为 406,000 bytes，保留 19,050 bytes 余量。runtime 为 327,354/344,000 bytes，host 为 14,247/15,000 bytes，initial trees 为 38,558/41,000 bytes。host 是当前余量比例更小的边界。
 
 > **English:**
 >
-> Current Conformance JavaScript is 387,024 bytes against a 406,000-byte aggregate ceiling, leaving 18,976 bytes. Runtime is 327,428/344,000 bytes, host is 14,247/15,000 bytes, and initial trees are 38,558/41,000 bytes. The host is currently the boundary with the smallest proportional headroom.
+> Current Conformance JavaScript is 386,950 bytes against a 406,000-byte aggregate ceiling, leaving 19,050 bytes. Runtime is 327,354/344,000 bytes, host is 14,247/15,000 bytes, and initial trees are 38,558/41,000 bytes. The host is currently the boundary with the smallest proportional headroom.
 
 > **源码 / Source:** [`src/cmd/minimoon_check/performance.mbt`](../../src/cmd/minimoon_check/performance.mbt) · symbol: `perf_suite` artifact budgets
 
