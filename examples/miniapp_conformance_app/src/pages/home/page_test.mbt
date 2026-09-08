@@ -2,7 +2,9 @@
 test "home page owns query, count, and request-ID effects" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps()))
+  let runtime = runtime_app
+    .create_page(program(runtime_app.deps()), input={ "name": "Query Home" })
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{\"name\":\"Query Home\"}")
   let _ = runtime.mount()
   inspect(runtime.snapshot().contains("hello: Query Home"), content="true")
@@ -37,7 +39,8 @@ test "home page owns query, count, and request-ID effects" {
 test "home transitions preserve request and lifecycle state" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps()))
+  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let _ = runtime.dispatch("home/inc", "{}")
   let _ = runtime.dispatch("home/inc", "{}")

@@ -29,6 +29,7 @@ fn javascript_audit_source() -> String {
     #|import { parse } from "acorn"
     #|import { analyze } from "eslint-scope"
     #|import { readFileSync } from "node:fs"
+    #|import assert from "node:assert/strict"
     #|import path from "node:path"
     #|
     #|const bigintLiteral = /\b(?:0[xX][\da-fA-F]+|0[bB][01]+|0[oO][0-7]+|[0-9]+)n\b/g
@@ -49,9 +50,9 @@ fn javascript_audit_source() -> String {
     #|}
     #|const allowedGlobalThisProperties = {
     #|  app: new Set(), page: new Set(),
-    #|  application: new Set(["__minimoonAppWakeV11"]),
-    #|  host: new Set(["__minimoonRuntimeWakeV11", "__minimoonSharedWakeV11"]),
-    #|  runtime: new Set(["crypto", "TextEncoder", "__minimoonRuntimeWakeV11", "__minimoonAppWakeV11", "__minimoonSharedWakeV11"]),
+    #|  application: new Set(["__minimoonAppWakeV12"]),
+    #|  host: new Set(["__minimoonRuntimeWakeV12", "__minimoonSharedWakeV12"]),
+    #|  runtime: new Set(["crypto", "TextEncoder", "__minimoonRuntimeWakeV12", "__minimoonAppWakeV12", "__minimoonSharedWakeV12"]),
     #|}
     #|
     #|const kindOf = (file) => {
@@ -108,6 +109,16 @@ fn javascript_audit_source() -> String {
     #|for (const file of process.argv.slice(1)) {
     #|  try {
     #|    const result = inspect(readFileSync(file, "utf8"), kindOf(file), file)
+    #|    if (path.basename(file) === "minimoon.initial.js") {
+    #|      const initial = require(path.resolve(file))
+    #|      const manifest = JSON.parse(readFileSync(path.join(path.dirname(file), "../generated/manifest.json"), "utf8"))
+    #|      for (let index = 0; index < manifest.pages.length; index++) {
+    #|        assert.deepEqual(initial.minimoonInitialTree(index), {
+    #|          kind: "view", identity: "root", text: "", props: {}, events: {}, children: [],
+    #|        }, `${file}: host boot must not contain a preview tree`)
+    #|      }
+    #|      assert.throws(() => initial.minimoonInitialTree(manifest.pages.length), /unknown Minimoon initial tree/)
+    #|    }
     #|    console.log(`${file}: globals=[${result.globals.join(",")}] globalThis=[${result.globalThisProperties.join(",")}]`)
     #|  } catch (error) {
     #|    console.error(error.message)
@@ -160,29 +171,23 @@ async fn codegen_suite(root : String) -> Unit {
       let _ = read_json(root, base + file)
     }
   }
-  require_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", "showcase-hero",
-  )
-  require_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", "home-controls",
-  )
-  require_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", "request-output",
-  )
+  for
+    marker in [
+      "showcase-hero", "home-controls", "request-output", "details-card", "dynamic-lab",
+      "component-lab", "control-lab",
+    ] {
+    require_text(
+      root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", marker,
+    )
+    forbid_text(
+      root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", marker,
+    )
+  }
   require_text(
     root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", "https://httpbingo.org",
   )
   forbid_text(
     root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", "https://example.com/api/profile",
-  )
-  require_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", "details-card",
-  )
-  require_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", "dynamic-lab",
-  )
-  require_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", "component-lab",
   )
   require_text(
     root, "examples/miniapp_conformance_app/generated/smoke_checklist.json", "Lab native input focus, blur, and confirm",
@@ -195,9 +200,6 @@ async fn codegen_suite(root : String) -> Unit {
   )
   forbid_text(
     root, "examples/miniapp_conformance_app/dist/app.wxss", ".transition {",
-  )
-  require_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", "control-lab",
   )
   run(root, "Embedded template drift", "moon", [
     "run", "src/cmd/minimoon_template_generate", "--target", "native",
@@ -223,21 +225,23 @@ let registry_root_files : Array[String] = [
 
 ///|
 let registry_documentation_files : Array[String] = [
-  "docs/README.md", "docs/architecture.md", "docs/guides/api_ergonomics.md", "docs/guides/keyed_children_diff.md",
-  "docs/guides/miniapp_authoring_example.md", "docs/guides/miniapp_quickstart.md",
-  "docs/guides/resource_state_design.md", "docs/guides/shared_state.md", "docs/guides/subscription_scope.md",
-  "docs/guides/testing_and_components.md", "docs/mvp.md", "docs/operations/dogfood.md",
-  "docs/operations/miniapp_devtools_validation.md", "docs/operations/miniapp_javascript_compatibility.md",
-  "docs/operations/release_candidate_handoff.md", "docs/positioning.md", "docs/reference/compatibility_and_upgrades.md",
-  "docs/reference/miniapp_fixture_matrix.md", "docs/reference/miniapp_host_capabilities.md",
+  "docs/guides/http.md", "docs/README.md", "docs/architecture.md", "docs/guides/api_ergonomics.md",
+  "docs/guides/keyed_children_diff.md", "docs/guides/miniapp_authoring_example.md",
+  "docs/guides/miniapp_quickstart.md", "docs/guides/resource_state_design.md", "docs/guides/shared_state.md",
+  "docs/guides/subscription_scope.md", "docs/guides/testing_and_components.md", "docs/mvp.md",
+  "docs/operations/dogfood.md", "docs/operations/miniapp_devtools_validation.md",
+  "docs/operations/miniapp_javascript_compatibility.md", "docs/operations/release_candidate_handoff.md",
+  "docs/positioning.md", "docs/reference/compatibility_and_upgrades.md", "docs/reference/miniapp_fixture_matrix.md",
+  "docs/reference/miniapp_host_capabilities.md",
 ]
 
 ///|
 let registry_source_directories : Array[String] = [
-  "src", "src/cmd/minimoon", "src/components", "src/components/styles", "src/internal_any",
-  "src/internal_duplix", "src/internal_host_js", "src/internal_slotmap", "src/internal_versions",
-  "src/renderer_miniapp", "src/resources", "src/runtime_core", "src/testing", "src/tooling_miniapp",
-  "src/tooling_minimoon_build", "src/tooling_minimoon_verify", "src/ui_dsl", "src/val_runtime",
+  "src/http", "src", "src/cmd/minimoon", "src/components", "src/components/styles",
+  "src/internal_any", "src/internal_duplix", "src/internal_host_js", "src/internal_slotmap",
+  "src/internal_versions", "src/renderer_miniapp", "src/resources", "src/runtime_core",
+  "src/testing", "src/tooling_miniapp", "src/tooling_minimoon_build", "src/tooling_minimoon_verify",
+  "src/ui_dsl", "src/val_runtime",
 ]
 
 ///|
@@ -803,6 +807,15 @@ async fn generator_suite(root : String) -> Unit {
       require_text(
         app, "src/components/status_badge/component.mbt", "emit(Increment)",
       )
+      for
+        initialization in [
+          "definition.create_runtime().unwrap()", "runtime.lifecycle(\"onLoad\", \"{}\")",
+          "runtime.lifecycle(\"onShow\", \"{}\")",
+        ] {
+        require_text(
+          app, "src/components/status_badge/component_test.mbt", initialization,
+        )
+      }
       for
         stale in [
           "@minimoon.state(", "@minimoon.next(", ".sender()", ".value()",

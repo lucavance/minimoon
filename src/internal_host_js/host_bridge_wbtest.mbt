@@ -1,8 +1,8 @@
 ///|
-test "ABI v11 host captures, merges, and drains asynchronous runtime wakes" {
+test "ABI v12 host captures, merges, and drains asynchronous runtime wakes" {
   let host = shared_host_bridge()
   let protocol = shared_protocol_bridge()
-  assert_true(host.contains("__minimoonRuntimeWakeV11"))
+  assert_true(host.contains("__minimoonRuntimeWakeV12"))
   assert_true(host.contains("Promise.resolve().then"))
   assert_true(host.contains("generation !== this._gn"))
   assert_true(host.contains("this._dw !== token"))
@@ -29,7 +29,7 @@ test "ABI v11 host captures, merges, and drains asynchronous runtime wakes" {
   )
   assert_false(
     host.contains(
-      "module.exports = { registerMinimoonPage, __minimoonRuntimeWakeV11 }",
+      "module.exports = { registerMinimoonPage, __minimoonRuntimeWakeV12 }",
     ),
   )
 }
@@ -62,10 +62,10 @@ test "application host hooks are emitted only for opted-in applications" {
   let base = shared_host_bridge()
   let application = shared_host_bridge(application=true)
   assert_false(base.contains("applicationPages"))
-  assert_false(base.contains("__minimoonSharedWakeV11"))
+  assert_false(base.contains("__minimoonSharedWakeV12"))
   assert_false(base.contains("disposeMinimoonApplicationPages"))
   assert_true(application.contains("applicationPages.set(this, runtime)"))
-  assert_true(application.contains("__minimoonSharedWakeV11"))
+  assert_true(application.contains("__minimoonSharedWakeV12"))
   for source in [base, application] {
     assert_false(source.contains("__MM_APP_"))
     assert_false(source.contains("/* application */"))

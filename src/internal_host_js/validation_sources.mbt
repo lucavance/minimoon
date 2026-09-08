@@ -1,11 +1,17 @@
 ///|
-pub fn host_smoke_source(page_files : Array[String]) -> String {
+pub fn host_smoke_source(
+  page_files : Array[String],
+  inputs? : Array[Json] = [],
+) -> String {
   validation_application_boot() +
   "const fs = require(\"node:fs\")\n" +
   "globalThis.TextEncoder = undefined\n" +
   "const pageFiles = [" +
   page_files.map(file => file.escape()).join(", ") +
   "]\n" +
+  "const pageInputs = " +
+  Json::array(inputs).stringify() +
+  "\n" +
   "const definitions = []\n" +
   "globalThis.Page = (page) => definitions.push(page)\n" +
   "globalThis.Component = () => { throw new Error(\"unvalidated Chaining page registration is forbidden\") }\n" +
@@ -48,10 +54,11 @@ pub fn host_smoke_source(page_files : Array[String]) -> String {
   "    }\n" +
   "    if (callback) callback()\n" +
   "  }, replaceDataOnPath(path, value) { pending.push([\"set\", path, value]) }, spliceArrayDataOnPath(path, index, del, items) { pending.push([\"splice\", path, index, del, items]) }, groupUpdates(callback) { callback(); for (const op of pending.splice(0)) { if (op[0] === \"set\") assign(this.data, op[1], op[2]); else resolve(this.data, op[1]).splice(op[2], op[3], ...op[4]) } } }\n" +
-  "  page.onLoad.call(host, {})\n" +
+  "  page.onLoad.call(host, pageInputs[pageIndex] || {})\n" +
   "  page.onShow.call(host)\n" +
   "  page.onReady.call(host)\n" +
   "  if (!host.__mmInstanceId) throw new Error(\"runtime instance missing\")\n" +
+  "  assertStyleParity(host.data, wxss)\n" +
   "  page.onUnload.call(host)\n" +
   "  if (host.__mmInstanceId !== null) throw new Error(\"runtime instance was not cleared on unload\")\n" +
   "}\n"

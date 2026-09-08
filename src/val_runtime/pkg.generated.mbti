@@ -129,6 +129,7 @@ pub fn Graph::commit(Self) -> Unit
 pub fn[Model : Eq] Graph::create_input(Self, Model) -> (Val[Model], Emit[Model])
 pub fn Graph::current_subscriptions(Self) -> Sub
 pub fn Graph::dispose(Self) -> Unit
+pub fn Graph::has_shared_changes(Self) -> Bool
 pub fn Graph::new() -> Self
 pub fn Graph::refresh_shared(Self) -> Cmd
 pub fn Graph::rollback(Self) -> Unit

@@ -163,7 +163,13 @@ async fn generated_checks(app_root : String, manifest : Json) -> Array[Json] {
     ),
   )
   let smoke = join(temp, "host_smoke.cjs")
-  write(smoke, host_smoke_source(page_files))
+  write(
+    smoke,
+    host_smoke_source(
+      page_files,
+      inputs=array(manifest, "pages").map(page => field(page, "smokeInput")),
+    ),
+  )
   let (host_ok, host_detail) = run("bun", [smoke], app_root)
   checks.push(
     status(

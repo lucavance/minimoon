@@ -24,9 +24,9 @@ test "page bridge uses the application runtime and gates navigation" {
   assert_true(page.contains("require(\"../../minimoon.host.js\")"))
   assert_true(page.contains("require(\"../../minimoon.initial.js\")"))
   assert_true(page.contains("minimoonInitialTree(0)"))
-  assert_true(bridge.contains("Minimoon runtime ABI v11 required"))
+  assert_true(bridge.contains("Minimoon runtime ABI v12 required"))
   assert_false(bridge.contains("runtime ABI v9"))
-  assert_true(bridge.contains("__minimoonRuntimeWakeV11"))
+  assert_true(bridge.contains("__minimoonRuntimeWakeV12"))
   assert_true(bridge.contains("Promise.resolve().then"))
   assert_true(
     bridge.contains(
@@ -41,7 +41,7 @@ test "page bridge uses the application runtime and gates navigation" {
   assert_true(bridge.contains("exactKeys(timeoutPayload, [\"ms\"])"))
   assert_false(
     bridge.contains(
-      "module.exports = { registerMinimoonPage, __minimoonRuntimeWakeV11 }",
+      "module.exports = { registerMinimoonPage, __minimoonRuntimeWakeV12 }",
     ),
   )
   assert_true(bridge.contains("minimoonCapabilities.has(capability)"))
@@ -206,15 +206,19 @@ test "release metadata declares every renderer statistic" {
 }
 
 ///|
-test "generated runtime exports ABI v11 page-aware creation and batch dispatch" {
+test "generated runtime exports ABI v12 page-aware creation and batch dispatch" {
   let source = runtime_package_source("app/page", "program", false)
   assert_true(
-    source.contains("minimoon_runtime_state_abi_version() -> Int { 11 }"),
+    source.contains("minimoon_runtime_state_abi_version() -> Int { 12 }"),
   )
   assert_false(
     source.contains("minimoon_runtime_state_abi_version() -> Int { 9 }"),
   )
-  assert_true(source.contains("minimoon_runtime_create_app(page_id : String)"))
+  assert_true(
+    source.contains(
+      "minimoon_runtime_create_app(page_id : String, input_json : String)",
+    ),
+  )
   assert_true(source.contains("minimoon_runtime_dispatch_batch"))
 }
 
@@ -235,10 +239,12 @@ test "application runtime dispatches every configured page through one bundle" {
     Json::object({ "id": Json::string("settings") }),
   ]
   let source = app_runtime_package_source(pages, contracts)
-  assert_true(source.contains("\"home\" => @page0.program().create_runtime()"))
+  assert_true(
+    source.contains("\"home\" => @page0.program().create_runtime(input~)"),
+  )
   assert_true(
     source.contains(
-      "\"settings\" => @page1.settings_program().create_runtime()",
+      "\"settings\" => @page1.settings_program().create_runtime(input~)",
     ),
   )
   assert_true(source.contains("unknown runtime page id"))
@@ -259,7 +265,7 @@ async test "config diagnostics report duplicate keys and missing packages withou
       config,
       (
         #|{
-        #|  "schemaVersion": 8,
+        #|  "schemaVersion": 10,
         #|  "name": "first",
         #|  "name": "second",
         #|  "pages": [{ "package": "src/pages/home" }]
@@ -295,14 +301,14 @@ async test "config diagnostics reject traversal paths without touching dist" {
     let config = join(root, "miniapp.minimoon.json")
     let documents : Array[Json] = [
       Json::object({
-        "schemaVersion": Json::number(8.0),
+        "schemaVersion": Json::number(10.0),
         "name": Json::string("unsafe-package"),
         "pages": Json::array([
           Json::object({ "package": Json::string("src/../outside") }),
         ]),
       }),
       Json::object({
-        "schemaVersion": Json::number(8.0),
+        "schemaVersion": Json::number(10.0),
         "name": Json::string("unsafe-dist"),
         "pages": Json::array([
           Json::object({ "package": Json::string("src/pages/home") }),
@@ -310,7 +316,7 @@ async test "config diagnostics reject traversal paths without touching dist" {
         "distDir": Json::string("../outside"),
       }),
       Json::object({
-        "schemaVersion": Json::number(8.0),
+        "schemaVersion": Json::number(10.0),
         "name": Json::string("unsafe-tailwind-input"),
         "pages": Json::array([
           Json::object({ "package": Json::string("src/pages/home") }),
@@ -318,7 +324,7 @@ async test "config diagnostics reject traversal paths without touching dist" {
         "tailwindInput": Json::string("styles/../outside.css"),
       }),
       Json::object({
-        "schemaVersion": Json::number(8.0),
+        "schemaVersion": Json::number(10.0),
         "name": Json::string("unsafe-source-wxss"),
         "pages": Json::array([
           Json::object({ "package": Json::string("src/pages/home") }),
@@ -361,7 +367,7 @@ async test "config diagnostics validate the optional component theme" {
       write(
         config,
         Json::object({
-          "schemaVersion": Json::number(8.0, repr="8"),
+          "schemaVersion": Json::number(10.0, repr="10"),
           "name": Json::string("theme-test"),
           "componentTheme": theme,
           "pages": Json::array([
@@ -387,7 +393,7 @@ async test "config diagnostics validate the optional component theme" {
       write(
         config,
         Json::object({
-          "schemaVersion": Json::number(8.0, repr="8"),
+          "schemaVersion": Json::number(10.0, repr="10"),
           "name": Json::string("theme-test"),
           "componentTheme": Json::string(theme),
           "pages": Json::array([
@@ -434,7 +440,7 @@ async test "config diagnostics validate optional DevTools checks" {
       write(
         config,
         Json::object({
-          "schemaVersion": Json::number(8.0, repr="8"),
+          "schemaVersion": Json::number(10.0, repr="10"),
           "name": Json::string("devtools-check-test"),
           "devtoolsChecks": checks,
           "pages": Json::array([
@@ -459,7 +465,7 @@ async test "config diagnostics validate optional DevTools checks" {
     write(
       config,
       Json::object({
-        "schemaVersion": Json::number(8.0, repr="8"),
+        "schemaVersion": Json::number(10.0, repr="10"),
         "name": Json::string("devtools-check-test"),
         "devtoolsChecks": Json::array([
           Json::string("first"),

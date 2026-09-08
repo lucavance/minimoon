@@ -8,6 +8,13 @@ The module LICENSE retains the original RUI MIT notice. The source mapping is
 maintained in the [native migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md).
 Minimoon core retains its separate Apache-2.0 license.
 
+The controlled input/textarea authoring shape was additionally reviewed against
+RUI 0.1.2 source at `eccae7507360aec8465469bafb7fb4da5b260a2a`
+(2026-09-08). This is a scoped authoring update, not a claim that the complete
+0.1.2 interface has been migrated or published. The original 0.1.1 symbol map
+remains the migration inventory; native focus classes and lifecycle remain
+Minimoon-specific. RUI's MIT notices below continue to apply.
+
 # Third-party notices
 
 The following upstream description and license notices are retained from the

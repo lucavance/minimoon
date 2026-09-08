@@ -1,8 +1,9 @@
 # Project status
 
 Minimoon core `0.2.0` and the independent `lampclaw/minimoon_ui 0.1.0` are
-the current unpublished candidates. The 0.1 API consumer baseline remains
-frozen and checked. Source and generated reports define candidate readiness.
+the current unpublished candidates. The 0.1 API consumer remains a frozen
+historical record; current API gates compile the 0.2 consumer. Source and
+generated reports define candidate readiness.
 
 ## Current implementation
 
@@ -14,16 +15,23 @@ The shared-state source iteration adds optional `App[Deps]`, typed domain
 machines, page-local `Shared[T]` projections, and independent application
 effects/lifecycle. Home and Details demonstrate shared count, request ownership
 and epoch-based response invalidation. The UI showcase and starter retain the
-no-application entry path. Contract `9` and runtime ABI `11` replace the earlier
+no-application entry path. Contract `10` and runtime ABI `12` replace the earlier
 technical boundaries; renderer protocol `8` and product versions are unchanged.
 This source iteration is not a publication claim. See
 [shared-state guide](guides/shared_state.md) for acceptance requirements.
+
+The current authoring revision makes ordinary `page` builders, typed state
+constructors and `Val` composition the primary style, retaining `elmish_page`
+for simple pages. Required route inputs are decoded before graph creation;
+explicit previews run no commands, and initial commands wait for Ready/mount.
+An App-aware testing harness drives shared ready work with bounded quiescence.
+These API and host changes still require fresh exact-fingerprint host acceptance.
 
 Application code imports `lampclaw/minimoon`, plus `lampclaw/minimoon_ui`
 when opting into native UI components. Elm-style state machines
 compose pages and local components through `Val`; a page-owned transactional
 incremental graph drives normalized MiniApp tree diffs and generated CommonJS
-Skyline artifacts. App Contract v9, runtime ABI v11, and renderer protocol v8
+Skyline artifacts. App Contract v10, runtime ABI v12, and renderer protocol v8
 remain independent technical compatibility numbers.
 
 The maintained release surface consists of one two-page starter and one
@@ -37,8 +45,11 @@ consumer and generated-host checks are separate from core's starter contract.
 
 ## Toolchain validation
 
-The supported toolchain uses `moon 0.1.20260827`, `moonc v0.10.11`, and Bun
-`1.4.2`. JavaScript tooling supports Node
+The supported toolchain floor is `moon 0.1.20260904` with `moonc v0.10.12`;
+Bun is pinned to `1.4.2`. Both CI jobs directly use the official installer for
+prebuilt release `0.10.12+1634b282e`, not latest, without Rust. Existing local
+`moon 0.1.20260907` tools remain valid and do not require downgrading.
+JavaScript tooling supports Node
 `>=24.20.0`; CI validates the Node 24.20.0 lower boundary and the Node 26.8.1
 primary environment, and installs the JavaScript dependency graph from the
 committed lockfile.

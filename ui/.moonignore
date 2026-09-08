@@ -1,0 +1,29 @@
+# This module owns its packaging boundary, independently of the root module.
+.git/
+.gitignore
+.gitattributes
+.moonignore
+.DS_Store
+_build/
+.mooncakes/
+.tmp/
+.minimoon-tmp/
+node_modules/
+dist/
+.bin/
+.vscode/
+.moonagent/
+*.log
+.env
+.env.*
+*.pem
+*.key
+project.private.config.json
+devtools.evidence.json
+
+# Repository-only resources and tests do not belong in the UI registry archive.
+/examples/
+/docs/
+**/*_bench.mbt
+**/*_test.mbt
+**/*_wbtest.mbt

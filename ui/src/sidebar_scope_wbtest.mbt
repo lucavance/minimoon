@@ -3,86 +3,91 @@ fn sidebar_test_runtime(
   side : SidebarSide,
   collapsible : SidebarCollapsible,
 ) -> @minimoon.PageRuntime {
-  @minimoon.page(
-    id="sidebar_test",
-    route=@minimoon.route("pages/sidebar/index"),
-    title="Sidebar",
-    capabilities=[@minimoon.MeasureNodes],
-    build=page => {
-      root(page, context => {
-        let (revision, change) = @minimoon.create_variable(0)
-        sidebar_provider_with_input(context, id="side", input=revision, render=(
-          scope,
-          revision,
-        ) => {
-          @minimoon.fragment([
-            @minimoon.text(
-              "state:" +
-              sidebar_is_collapsed(scope).to_string() +
-              ":" +
-              sidebar_is_mobile_open(scope).to_string() +
-              ":" +
-              sidebar_width(scope).to_string() +
-              ":" +
-              revision.to_string(),
-            ),
-            @minimoon.button(
-              event_key="revision",
-              on_tap=change(value => value + 1),
-              "Change input",
-            ),
-            sidebar_trigger(scope, @minimoon.text("Toggle")),
-            sidebar_trigger(scope, mobile=true, @minimoon.text("Mobile")),
-            sidebar_surface(scope, side~, collapsible~, render=surface => {
-              @minimoon.fragment([
-                sidebar_header(@minimoon.text("Header")),
-                sidebar_group([
-                  sidebar_group_label(surface, @minimoon.text("Group label")),
-                  sidebar_group_content(
-                    sidebar_menu(
-                      sidebar_menu_item([
-                        sidebar_menu_button_with_tooltip(
-                          surface,
-                          id="helpful",
-                          tooltip="Helpful action",
-                          icon=@minimoon.text("H"),
-                          @minimoon.text("Expanded action"),
-                        ),
-                        sidebar_menu_badge(
-                          surface,
-                          @minimoon.text("Badge content"),
-                        ),
-                        sidebar_menu_sub(
-                          surface,
-                          sidebar_menu_sub_item(
-                            sidebar_menu_sub_button(
-                              surface,
-                              @minimoon.text("Nested entry"),
+  let runtime = @minimoon.page(
+      id="sidebar_test",
+      route=@minimoon.route("pages/sidebar/index"),
+      title="Sidebar",
+      capabilities=[@minimoon.MeasureNodes],
+      build=page => {
+        root(page, context => {
+          let (revision, change) = @minimoon.create_variable(0)
+          sidebar_provider_with_input(context, id="side", input=revision, render=(
+            scope,
+            revision,
+          ) => {
+            @minimoon.fragment([
+              @minimoon.text(
+                "state:" +
+                sidebar_is_collapsed(scope).to_string() +
+                ":" +
+                sidebar_is_mobile_open(scope).to_string() +
+                ":" +
+                sidebar_width(scope).to_string() +
+                ":" +
+                revision.to_string(),
+              ),
+              @minimoon.button(
+                event_key="revision",
+                on_tap=change(value => value + 1),
+                "Change input",
+              ),
+              sidebar_trigger(scope, @minimoon.text("Toggle")),
+              sidebar_trigger(scope, mobile=true, @minimoon.text("Mobile")),
+              sidebar_surface(scope, side~, collapsible~, render=surface => {
+                @minimoon.fragment([
+                  sidebar_header(@minimoon.text("Header")),
+                  sidebar_group([
+                    sidebar_group_label(surface, @minimoon.text("Group label")),
+                    sidebar_group_content(
+                      sidebar_menu(
+                        sidebar_menu_item([
+                          sidebar_menu_button_with_tooltip(
+                            surface,
+                            id="helpful",
+                            tooltip="Helpful action",
+                            icon=@minimoon.text("H"),
+                            @minimoon.text("Expanded action"),
+                          ),
+                          sidebar_menu_badge(
+                            surface,
+                            @minimoon.text("Badge content"),
+                          ),
+                          sidebar_menu_sub(
+                            surface,
+                            sidebar_menu_sub_item(
+                              sidebar_menu_sub_button(
+                                surface,
+                                @minimoon.text("Nested entry"),
+                              ),
                             ),
                           ),
-                        ),
-                      ]),
+                        ]),
+                      ),
                     ),
-                  ),
-                ]),
-                sidebar_footer(@minimoon.text("Footer")),
-                sidebar_rail(surface, min_width=200.0, max_width=300.0),
-              ])
-            }),
-            sidebar_surface(scope, mobile=true, side~, render=surface => {
-              sidebar_menu_button(
-                surface,
-                target=@minimoon.route("pages/next/index"),
-                event_key="mobile-link",
-                @minimoon.text("Mobile content"),
-              )
-            }),
-            sidebar_inset(@minimoon.text("Inset content")),
-          ])
+                  ]),
+                  sidebar_footer(@minimoon.text("Footer")),
+                  sidebar_rail(surface, min_width=200.0, max_width=300.0),
+                ])
+              }),
+              sidebar_surface(scope, mobile=true, side~, render=surface => {
+                sidebar_menu_button(
+                  surface,
+                  target=@minimoon.route("pages/next/index"),
+                  event_key="mobile-link",
+                  @minimoon.text("Mobile content"),
+                )
+              }),
+              sidebar_inset(@minimoon.text("Inset content")),
+            ])
+          })
         })
-      })
-    },
-  ).create_runtime()
+      },
+    )
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
+  let _ = runtime.lifecycle("onShow", "{}")
+  runtime
 }
 
 ///|

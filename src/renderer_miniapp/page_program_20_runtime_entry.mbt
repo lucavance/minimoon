@@ -1,56 +1,28 @@
 ///|
-/// A type-erased resident page instance. The application Model and Msg types
-/// remain captured by these closures and never cross the MiniApp host boundary.
-pub struct PageRuntime {
-  page_id : String
-  mount : () -> String
-  dispatch : (String, String) -> String
-  dispatch_batch : (String) -> String
-  lifecycle : (String, String) -> String
-  resolve_effect : (String, String, String) -> String
-  subscription : (String, String) -> String
-  snapshot : () -> String
-  dispose : () -> String
-  refresh : () -> String
-}
-
-///|
-pub fn runtime_api_version() -> Int {
-  @versions.runtime_api_version()
-}
-
-///|
-#cfg(target="js")
-extern "js" fn capture_runtime_wake_v11() -> (Int) -> Unit =
-  #|() => typeof globalThis.__minimoonRuntimeWakeV11 === "function" ? globalThis.__minimoonRuntimeWakeV11 : (_through) => {}
-
-///|
-#cfg(not(target="js"))
-fn capture_runtime_wake_v11() -> (Int) -> Unit {
-  _ => ()
-}
-
-///|
 pub fn[Model, Msg] PageProgram::create_runtime(
   self : PageProgram[Model, Msg],
+  boot? : Bool = false,
 ) -> PageRuntime {
   let commands : Ref[Array[@runtime.RuntimeCommand]] = Ref([])
   let initial_tree = self.initial_tree()
   let host_tree : Ref[String] = Ref(initial_tree.stringify())
   let host_tree_json : Ref[Json] = Ref(initial_tree)
   let host_revision = Ref(0)
+  let force_replace = Ref(false)
+  let boot_pending = Ref(boot)
   let queue = @runtime.RuntimeCommandQueue::new(batch => {
     for command in batch {
       commands.val.push(command)
     }
   })
-  let wake_async = capture_runtime_wake_v11()
-  let running = self.component.run_host(
-    component_id=self.id,
-    queue~,
-    wake_async~,
-  )
+  let wake_async = capture_runtime_wake_v12()
+  let through = Ref(0)
+  let running = self.component.run_host(component_id=self.id, queue~, wake_async=sequence => {
+    through.val = sequence
+    wake_async(sequence)
+  })
   let mounted = Ref(false)
+  let disposed = Ref(false)
   let active_subscription_intervals : Map[String, Int] = Map([])
   let subscription_messages : Map[String, Msg] = Map([])
   let sync_subscriptions = fn() {
@@ -99,7 +71,23 @@ pub fn[Model, Msg] PageProgram::create_runtime(
       }
     }
     let batch : Array[@runtime.RuntimeCommand] = []
-    if tree_requested.val {
+    if force_replace.val {
+      force_replace.val = false
+      let next_tree = self.active_tree.val
+      let payload = next_tree.stringify()
+      let next_revision = host_revision.val + 1
+      batch.push(
+        @runtime.replace_view_tree(
+          self.id,
+          payload,
+          base_revision=host_revision.val,
+          revision=next_revision,
+        ),
+      )
+      host_tree.val = payload
+      host_tree_json.val = next_tree
+      host_revision.val = next_revision
+    } else if tree_requested.val {
       let next_tree = self.active_tree.val
       match diff_miniapp_trees(host_tree_json.val, next_tree) {
         TreeDiffOk(ops) if ops.length() > 0 => {
@@ -156,6 +144,9 @@ pub fn[Model, Msg] PageProgram::create_runtime(
   {
     page_id: self.id,
     mount: fn() {
+      if disposed.val || mounted.val {
+        return "[]"
+      }
       match self.init {
         Some(message) => {
           let _ = running.dispatch(message)
@@ -280,11 +271,28 @@ pub fn[Model, Msg] PageProgram::create_runtime(
       }
     },
     refresh: fn() {
+      if disposed.val {
+        return "[]"
+      }
       if self.refresh is Some(message) {
         let _ = running.dispatch(message)
       }
       sync_subscriptions()
       take_commands()
+    },
+    flush: fn() {
+      if disposed.val {
+        return "[]"
+      }
+      let _ = running.drain_local_messages(through=through.val)
+      if self.refresh is Some(message) {
+        let _ = running.dispatch(message)
+      }
+      sync_subscriptions()
+      take_commands()
+    },
+    has_ready_work: fn() {
+      !disposed.val && running.pending_local_message_count() > 0
     },
     lifecycle: fn(hook_name, payload_json) {
       if hook_name == "$minimoon:drain" {
@@ -364,6 +372,10 @@ pub fn[Model, Msg] PageProgram::create_runtime(
           for msg in messages {
             let _ = running.dispatch(msg)
           }
+          if hook_name == "onLoad" && boot_pending.val {
+            boot_pending.val = false
+            force_replace.val = true
+          }
           sync_subscriptions()
           take_commands()
         }
@@ -414,6 +426,10 @@ pub fn[Model, Msg] PageProgram::create_runtime(
       "}"
     },
     dispose: fn() {
+      if disposed.val {
+        return "[]"
+      }
+      disposed.val = true
       for key in active_subscription_intervals.keys() {
         commands.val.push(@runtime.stop_subscription_command(self.id, key))
       }

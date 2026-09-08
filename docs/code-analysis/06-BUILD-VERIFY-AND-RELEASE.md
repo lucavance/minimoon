@@ -4,11 +4,11 @@
 
 ## 1. App Contract 是构建输入 / App Contract Is the Build Input
 
-应用的 `miniapp.minimoon.json` 使用 App Contract v9，列出应用名、页面 package、输出目录和样式输入。generator 不读取手写 page metadata；它逐页编译页面工厂产生的 contract，再生成 application runtime 和共享 host artifacts。未启用 `application` 时，工厂签名是 `program() -> Page`。
+应用的 `miniapp.minimoon.json` 使用 App Contract v10，列出应用名、页面 package、输出目录和样式输入。generator 不读取手写 page metadata；它逐页编译页面工厂产生的 contract，再生成 application runtime 和共享 host artifacts。未启用 `application` 时，工厂签名是 `program() -> Page`。
 
 > **English:**
 >
-> An application’s `miniapp.minimoon.json` uses App Contract v9 to list the application name, page packages, output directory, and style inputs. The generator does not read handwritten page metadata. It compiles contracts produced by page factories, then generates the application runtime and shared host artifacts. Without `application`, factories have the signature `program() -> Page`.
+> An application’s `miniapp.minimoon.json` uses App Contract v10 to list the application name, page packages, output directory, and style inputs. The generator does not read handwritten page metadata. It compiles contracts produced by page factories, then generates the application runtime and shared host artifacts. Without `application`, factories have the signature `program() -> Page`.
 
 启用 `application` 时，页面工厂改为 `program(deps : @application.Deps) -> Page`，
 契约提取在不会启动副作用的 `App.preview` 中执行，另生成 `minimoon.app.js`。
@@ -18,14 +18,18 @@
 > runs inside effect-free `App.preview`, and generation emits `minimoon.app.js`.
 > Without it, factories stay no-argument and registration remains `App({})`.
 
+带必填输入的页面使用显式 `preview_input` 提取 contract，真实输入则在宿主 Load 创建 runtime 前解码。`smokeInput` 只向自动宿主 smoke 提供测试参数，不成为实际默认值；空 boot tree 由首个 Load 的全量 revision-1 渲染替换。
+
+> Required-input pages use explicit `preview_input` for contract extraction; real input is decoded before runtime creation at host Load. `smokeInput` supplies automated host-smoke data only, never runtime defaults. The first Load replaces the empty boot tree with the complete revision-1 render.
+
 ```mermaid
 flowchart LR
-    Config[miniapp.minimoon.json<br/>App Contract v9]
+    Config[miniapp.minimoon.json<br/>App Contract v10]
     PagePkg[page packages<br/>program -> Page]
     Contract[compiled page contracts<br/>编译页面 contract]
     AppRuntime[application MoonBit runtime<br/>应用 runtime]
     Host[host + protocol templates]
-    Initial[compact initial trees]
+    Initial[empty boot trees]
     Tailwind[Tailwind + bounded adapter]
     Dist[dist directory<br/>可导入目录]
     Reports[generated manifest + reports]

@@ -234,30 +234,27 @@ pub fn PageContext::lifecycle(
 
 ## 5. Page 是工厂，不是单例 / Page Is a Factory, Not a Singleton
 
-`page` 和 `page_with_input` 保存的是创建 `PageProgram` 的闭包。`create_runtime()` 每次执行闭包并建立新 graph，因此页面定义可以是顶层常量式函数，同时页面实例仍然隔离。
+`page` 和 `page_with_input` 仅保存闭包，定义时不执行 builder 或 decoder。`create_runtime(input?)` 复制并解码真实输入，成功后才创建 graph 并返回 `Ok(PageRuntime)`；失败返回 `Err(DecodeError)`。预览使用独立的 `preview_input()`，不执行命令。页面初始化命令等待首次 Ready/mount。
 
 > **English:**
 >
-> `page` and `page_with_input` store a closure that creates a `PageProgram`. Every `create_runtime()` invocation executes the closure and creates a new graph, allowing page definitions to be top-level factory functions while page instances remain isolated.
+> `page` and `page_with_input` only store closures; definition executes neither builder nor decoder. `create_runtime(input?)` copies and decodes real input before creating a graph and returning `Ok(PageRuntime)`, or returns `Err(DecodeError)` without one. Previews use independent `preview_input()` values and execute no commands. Initial page commands wait for the first Ready/mount.
 
 > **源码 / Source:** [`src/authoring_page.mbt`](../../src/authoring_page.mbt) · symbols: `make_page`, `page`, `page_with_input`
 
 ```moonbit
-let make_program = fn() {
+let make_program = fn(input : Input) {
   let graph = @val.Graph::new()
-  let built = graph.build(fn() {
-    let input = graph.create_input(initial_input)
-    let root = build({ marker: () }, Val(input.0))
-    (root, input.1)
-  })
+  let initialized = Ref(false)
+  let root = graph.build(fn() { build({ graph, }, input) })
   // Lifecycle decoders and PageProgram are created for this graph instance.
   @renderer.page_program(
     id~,
     route=route_path,
     title~,
     model=0,
-    update=(message, epoch) => graph_update(graph, message, epoch),
-    view=(events, _) => graph.run(fn() { materialize(built.0.0.read(), events) }),
+    update=(epoch, message) => graph_update(graph, message, epoch, initialized),
+    view=(events, _) => graph.run(fn() { materialize(root.0.read(), events) }),
   )
 }
 ```

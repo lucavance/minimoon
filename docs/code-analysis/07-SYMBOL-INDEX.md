@@ -18,7 +18,8 @@
 | 增量组合 / Incremental composition | `Val`, `map`–`map9`, `assoc`, `switch`, `enumerate`, `enumerate_bounded_by` | root wrapper + `val_runtime` | identity, scope visibility/disposal, cache bounds, perf |
 | 命令 / Commands | `Cmd`, `none`, `batch`, `delay`, `effect`, `perform`, `attempt` | root wrapper + runtime | accepted-projection ordering, disposal, async tests |
 | 订阅 / Subscriptions | `Sub`, `PageContext::every`, lifecycle helpers | root page API + runtime | stable keys, pause/remove/start ordering, unload |
-| 页面 / Pages | `Page`, `PageRuntime`, `page`, `page_with_input` | `authoring_page` | instance isolation, input decoder, lifecycle, ABI |
+| 页面 / Pages | `Page`, `PageRuntime`, `page`, `page_with_input` | `authoring_page` | decode before graph, explicit preview, Result, first-Load Replace, instance isolation |
+| 应用测试 / App testing | `launch`, `TestApp::mount`, `quiesce` | `testing/application` | bounded ready-work drain, shared ownership, independent page disposal |
 | UI / Controls | `Node`, layout functions, input/switch/picker/swiper/navigation controls | `authoring_ui*` + `ui_dsl` | normalization, WXML, event decoder, DevTools |
 | 宿主能力 / Host capabilities | `Capability`, `HostError`, login/storage/request/location/media/payment/navigation | `authoring_commands` | declaration manifest, adapter validation, host smoke |
 | 路由 / Routing | `Route`, `route`, `query`, navigation commands | root navigation API | URL validation, stack fallback, capability list |
@@ -74,12 +75,13 @@ pub fn page(
 | Normalization | `render_candidate`, `checked_normalize_node`, cache commit/prune | renderer normalization files | only validated normalized trees become active |
 | Tree diff | `TreePatchOp`, `diff_miniapp_trees`, `should_use_tree_patch` | renderer tree-diff files | unsafe or expensive changes replace safely |
 | Resident runtime | `RunningComponent::dispatch`, `run_cmd`, `ComponentContext` | `runtime_core` | command/effect work follows accepted projection |
-| Runtime ABI | `PageRuntime::create_runtime`, dispatch/snapshot/dispose closures | renderer runtime-entry files | Model/Msg never cross JSON host boundary |
+| Runtime ABI | `Page::create_runtime`, `PageProgram::create_runtime`, dispatch/flush/snapshot/dispose closures | root page + renderer runtime-entry files | decode before graph; Model/Msg never cross JSON host boundary |
 | Host scheduler | generated `_ed`, `_pu`, `_sw`, `_ar`, `_rt`, `_fc` | `internal_host_js/host_bridge` | ordered entries; one unacknowledged render maximum |
 | Host protocol | generated `validateNode`, `applyPatch`, `copyPath` | `internal_host_js/protocol_bridge` | validate before write; COW from authoritative shadow |
 | Generation | `generate`, `compile_app_runtime`, artifact emitters | `tooling_miniapp` | App Contract deterministically owns `dist/` |
 | Build | `build`, `generate_tailwind`, embedded adapter parity | `tooling_minimoon_build` | one orchestration path for dev/release |
 | Verification | `artifact_fingerprint`, `generated_checks`, evidence checks | `tooling_minimoon_verify` | automated facts and real-host evidence stay separate |
+| Host smoke | `host_smoke_source` with per-page inputs | `internal_host_js/validation_sources` | smokeInput is test data, not a host runtime default |
 | CLI | argparse command routing, init/dev/add/build/verify | `cmd/minimoon` | aliases delegate; CLI does not duplicate framework logic |
 
 ## 4. 高扩散修改点 / High-Propagation Change Points

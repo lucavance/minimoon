@@ -3,6 +3,12 @@ fn embedded_fixture_inventory(entries : Array[EmbeddedInventoryEntry]) -> Unit {
   for
     entry in [
       (
+        "src/cmd/minimoon_check/ui_packaging_wbtest.mbt", "UI packaging isolates inherited ignores and lets moonignore filter source fixtures",
+      ),
+      (
+        "src/tooling_miniapp/application_wbtest.mbt", "initial tree bridge emits one empty boot view per page and never preview content",
+      ),
+      (
         "src/tooling_miniapp/generator_wbtest.mbt", "page bridge uses the application runtime and gates navigation",
       ),
       (
@@ -30,7 +36,7 @@ fn embedded_fixture_inventory(entries : Array[EmbeddedInventoryEntry]) -> Unit {
         "src/cmd/minimoon_check/static_quality_wbtest.mbt", "Moon source boundary rejects the deprecated StringBuilder constructor",
       ),
       (
-        "src/internal_host_js/host_bridge_wbtest.mbt", "ABI v11 host captures, merges, and drains asynchronous runtime wakes",
+        "src/internal_host_js/host_bridge_wbtest.mbt", "ABI v12 host captures, merges, and drains asynchronous runtime wakes",
       ),
       (
         "src/tooling_minimoon_verify/verify_wbtest.mbt", "artifact fingerprints are independent of checkout location",

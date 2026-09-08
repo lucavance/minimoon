@@ -36,7 +36,7 @@ lampclaw/minimoon public API
     -> runtime_core
        resident state, effects, command queue
     -> tooling_miniapp
-       App Contract v9 compilation and artifact writing
+       App Contract v10 compilation and artifact writing
     -> internal_host_js
        ordered scheduler, render acknowledgement, wx.* facade
     -> generated CommonJS + shared WXML/WXSS + page stubs
@@ -50,8 +50,10 @@ renderer, runtime, graph, host templates, and tooling remain internal packages.
 
 ## Graph and local ownership
 
-Each `Page` is a factory. Every `create_runtime()` call creates a distinct
-graph, so two mounted instances of the same route do not share page-local
+Each `Page` is an inert factory. A successful `create_runtime(input?)` call
+decodes the actual input before creating a distinct graph and returns it as
+`Result[PageRuntime, DecodeError]`. Invalid input creates no graph or App page
+registration. Two mounted instances of the same route do not share page-local
 state, branch caches, subscriptions, or disposal state. They may independently
 bind the same application-owned `Shared[T]`.
 
@@ -93,6 +95,9 @@ graph pull while preserving FIFO and cascading branch initialization.
 State builders and their init callbacks still run while the graph is being
 constructed or pulled. Only the command returned by an init callback is
 commit-gated; a rejected candidate discards that command before it can execute.
+At page startup, initial commands (including those created by the initial
+dynamic projection) wait for the first Ready/mount. Load and Show may execute
+their explicit lifecycle commands but do not drain those initial commands.
 
 For page-local subscriptions, the page renderer owns the live host interval
 keys, intervals, and latest messages. A retained key/interval pair keeps one host
@@ -129,12 +134,27 @@ stringify/parse round trip.
 
 ## Runtime entry and batching
 
+`page_with_input` stores an explicit `preview_input: () -> Input`, an actual
+decoder, and a `(PageContext, Input) -> Val[Node]` builder. The definition runs
+none of them. Contract inspection builds and disposes a fresh preview graph,
+does not invoke the actual decoder, and executes no init commands or
+subscriptions. Actual creation copies the input map, decodes once, and passes
+plain input to the builder; route input itself has no `Eq` requirement.
+
+The generated host creates a runtime at Load, not at registration. Load must
+match its retained input snapshot and may run once; pre-Load interactions fail
+explicitly. The first Load forces a full tree replacement from revision 0 to 1,
+even when actual and preview text happen to agree. Show follows, then Ready
+calls idempotent `mount()`. Compilation previews are never host hydration data.
+`flush()` drains currently ready local messages and committed shared changes;
+`has_ready_work()` excludes unresolved requests and future timer ticks.
+
 `PageRuntime` is an opaque root wrapper. A single dispatch decodes one event;
 `dispatch_batch` accepts a JSON array of `{ key, payload }` entries. The batch
 limit is 2048. Its JSON shape and every event payload are decoded before the
 first message is applied, so one malformed entry rejects the whole batch
-without a partial state transition. A successful batch commits once and
-produces at most one render command.
+without a partial state transition from decoding. Each decoded message keeps
+its candidate transaction; the batch collects at most one render command.
 
 ## Host scheduler and render acknowledgement
 
@@ -149,7 +169,7 @@ Each mounted page owns one scheduler:
 5. A batch warns once at 256 entries and fails closed before accepting an entry
    beyond 2048.
 
-Runtime ABI v11 installs an internal, generation-bound wake closure during the
+Runtime ABI v12 installs an internal, generation-bound wake closure during the
 synchronous runtime-creation entry. The created page runtime captures that
 closure, and a suspended local effect requests a sequence-bounded `drain`
 scheduler entry after it emits. Same-turn wakes and adjacent tail drains may
@@ -196,9 +216,9 @@ checklist. The sorted, length-framed app-relative paths make checkout location
 irrelevant while ensuring WXSS, shared WXML, future assets, and manual acceptance
 scope cannot drift behind a still-valid evidence record.
 
-App Contract v9 and renderer protocol v8 retain native form/image/slider/progress
+App Contract v10 and renderer protocol v8 retain native form/image/slider/progress
 controls, precise touch payloads, and build-resource descriptors to the v7
-focus/blur/confirm and dialog/menu baseline. Runtime ABI v11 retains the
+focus/blur/confirm and dialog/menu baseline. Runtime ABI v12 retains the
 page-owned local-effect wake/drain contract
 independently of the source-level authoring API. `minimal-v1` retains its exact
 bytes;
@@ -229,8 +249,8 @@ bytes are never restored merely to retain evidence.
 Rabbita main at `b6cbf52`.
 [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) records both original
 provenance points. No separate MiniApp facade package owns public core types.
-The [Rabbita/RUI audit](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) compares the
-current implementation against Rabbita 0.15.6 and RUI 0.1.1 without changing
+The historical [Rabbita/RUI audit](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) compared the
+implementation at that checkpoint against Rabbita 0.15.6 and RUI 0.1.1 without changing
 those source pins. The independent UI module adapts the pinned RUI capabilities
 with its own MIT notices and
 [native migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md).
@@ -249,7 +269,7 @@ bindings and reactive content remain owned by their original Val scopes.
 Removed branches leave no global registry entries. `UiContext` owns page
 visibility and one toast queue; UI code does not author JavaScript or setData.
 
-App Contract v9 resources name a dependency provider and a canonical feature list.
+App Contract v10 resources name a dependency provider and a canonical feature list.
 A native build probe returns a typed WXSS/static-asset bundle. Validation precedes
 destructive output generation. Resource paths, contents and descriptors join the
 artifact fingerprint; CSS and SVG strings stay out of the application JS graph.

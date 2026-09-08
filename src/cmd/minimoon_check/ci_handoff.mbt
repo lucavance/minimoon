@@ -66,7 +66,7 @@ fn ci_handoff_check_source() -> String {
     #|      checks: [{ name: "synthetic packaging control", status: "passed" }],
     #|    }))
     #|    write(directory, `${fixture}/generated/release_summary.json`, JSON.stringify({
-    #|      name, schemaVersion: 9, runtimeApiVersion: 11, rendererProtocolVersion: 8, mode: "release",
+    #|      name, schemaVersion: 10, runtimeApiVersion: 12, rendererProtocolVersion: 8, mode: "release",
     #|      automated: { status: "passed", pageCount: name === "miniapp_conformance_app" ? 4 : 6, artifactFingerprint: fingerprint },
     #|      devtools: { status: "pending", evidence: null },
     #|    }))
@@ -98,10 +98,14 @@ fn ci_handoff_check_source() -> String {
     #|  mutate(value)
     #|  write(directory, relative, JSON.stringify(value))
     #|}
+    #|function setCandidateFingerprint(directory, fixture, fingerprint) {
+    #|  editJson(directory, fixture + "/generated/verify_report.json", (value) => { value.artifactFingerprint = fingerprint })
+    #|  editJson(directory, fixture + "/generated/release_summary.json", (value) => { value.automated.artifactFingerprint = fingerprint })
+    #|}
     #|function assertTechnicalVersions(handoff, manifest, summary, checklist) {
     #|  for (const [field, sourceField, expected] of [
-    #|    ["appContract", "schemaVersion", 9],
-    #|    ["runtimeAbi", "runtimeApiVersion", 11],
+    #|    ["appContract", "schemaVersion", 10],
+    #|    ["runtimeAbi", "runtimeApiVersion", 12],
     #|    ["rendererProtocol", "rendererProtocolVersion", 8],
     #|  ]) {
     #|    assert.equal(handoff.versions[field], expected, `handoff ${field} must use the current version`)
@@ -113,6 +117,17 @@ fn ci_handoff_check_source() -> String {
     #|  }
     #|}
     #|try {
+    #|  // UInt64.to_string(radix=16) emits 1-16 digits without padding.
+    #|  for (const hex of ["0", "a1a87d729b30dd0", "ffffffffffffffff"]) {
+    #|    const directory = sandbox("fingerprint-" + hex.length)
+    #|    const fingerprint = "fnv1a64-relpath-v2:" + hex
+    #|    for (const [fixture] of fixtures) setCandidateFingerprint(directory, fixture, fingerprint)
+    #|    requirePass(packageResult(directory), "unpadded " + hex.length + "-digit fingerprint")
+    #|    for (const [, , bundle] of fixtures) {
+    #|      const handoff = JSON.parse(fs.readFileSync(path.join(directory, "_build/devtools-handoff", bundle, "HANDOFF.json"), "utf8"))
+    #|      assert.equal(handoff.artifactFingerprint, fingerprint, "handoff must preserve the producer's exact fingerprint")
+    #|    }
+    #|  }
     #|  const positive = sandbox("positive")
     #|  requirePass(packageResult(positive), "dual handoff positive control")
     #|  const commit = git(positive, ["rev-parse", "HEAD"])
@@ -147,6 +162,19 @@ fn ci_handoff_check_source() -> String {
     #|    cases += 2
     #|  }
     #|  for (const [fixture, , bundle] of fixtures) {
+    #|    for (const [label, fingerprint] of [
+    #|      ["empty", ""],
+    #|      ["empty-hex", "fnv1a64-relpath-v2:"],
+    #|      ["oversized", "fnv1a64-relpath-v2:1234567890abcdef0"],
+    #|      ["nonhex", "fnv1a64-relpath-v2:g"],
+    #|      ["upper-hex", "fnv1a64-relpath-v2:ABCDEF"],
+    #|      ["wrong-prefix", "fnv1a64-relpath-v1:0"],
+    #|    ]) {
+    #|      reject(bundle + "-fingerprint-" + label, (dir) => setCandidateFingerprint(dir, fixture, fingerprint))
+    #|    }
+    #|    reject(bundle + "-short-fingerprint-mismatch", (dir) => {
+    #|      editJson(dir, fixture + "/generated/verify_report.json", (value) => { value.artifactFingerprint = "fnv1a64-relpath-v2:0" })
+    #|    }, /fingerprints/)
     #|    const report = `${fixture}/generated/verify_report.json`
     #|    const summary = `${fixture}/generated/release_summary.json`
     #|    reject(`${bundle}-release`, (dir) => editJson(dir, report, (value) => { value.release = true }), /candidate verification reports only/)

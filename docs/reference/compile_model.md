@@ -7,7 +7,7 @@ behavior as metadata.
 
 ```json
 {
-  "schemaVersion": 9,
+  "schemaVersion": 10,
   "name": "miniapp_conformance_app",
   "application": { "package": "src/app" },
   "componentTheme": "minimal-v2",
@@ -26,7 +26,13 @@ select another function. Its parameters depend on the application mode below.
 
 With `application`, the configured application package exports `Deps` and `program() -> App[Deps]`;
 each page factory takes `deps : @application.Deps`. Without it, page factories
-remain no-argument. Schema `8` input is accepted only on that legacy entry path.
+remain no-argument. Both paths require source schema `10`; schema `8` and `9`
+must be explicitly migrated before building.
+
+A page entry may provide `smokeInput`, a string-to-string map used only as the
+synthetic Load input for automated host verification. Required-input pages must
+provide a valid sample there. The manifest records this verification input;
+it is not injected as a real runtime default or into `dist` initial data.
 
 ## Contract extraction and runtime compilation
 
@@ -35,13 +41,16 @@ Native tooling:
 1. resolves the application module from `moon.mod`;
 2. creates an app-local temporary executable importing one page package;
 3. evaluates `app.preview(deps => page.program(deps).contract())` when opted in,
-   or `program().contract()` otherwise, without executing initialization commands;
-4. validates Contract schema `9`, runtime ABI `11`, and renderer protocol `8`;
+   or `program().contract()` otherwise, using explicit `preview_input()` seeds
+   without calling actual input decoders or executing initialization commands;
+4. validates Contract schema `10`, runtime ABI `12`, and renderer protocol `8`;
 5. removes temporary source and target directories on success or failure.
 
 After every contract is valid, one formatted temporary MoonBit executable
-imports all page packages. Its page-aware factory returns an opaque page runtime
-for the requested ID. MoonBit builds it once into application-wide
+imports all page packages. At the first host Load, its page-aware factory
+normalizes and decodes the actual route input before creating a graph. The ABI
+returns a JSON success-ID or input-error envelope, never a fabricated runtime
+for invalid required input. MoonBit builds it once into application-wide
 `minimoon.runtime.js`; release mode strips/minifies the runtime and separately
 minifies the generated host bridge. The build runs in a fresh dedicated target
 directory and recursively locates exactly one output with the requested bundle
@@ -69,7 +78,10 @@ generated/
 
 Page order is preserved. Every bridge requires the shared host, protocol,
 initial-tree, and runtime modules through app-relative paths; no page-local
-runtime or embedded tree is emitted. Every page uses Skyline and custom
+runtime or embedded tree is emitted. The initial module contains only safe
+empty boot trees; compile-preview state is not presented as actual page state.
+The first successful Load sends a complete tree at revision 1, and its render
+must be acknowledged before later entries run. Every page uses Skyline and custom
 navigation. The contract title remains manifest metadata, not an ignored system
 navigation field.
 

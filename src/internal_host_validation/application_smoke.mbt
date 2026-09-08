@@ -27,15 +27,18 @@ pub fn application_host_smoke_source() -> String {
     #|const home = load("pages/home/home.js"), details = load("pages/details/details.js")
     #|const get = (value, tokens) => tokens.reduce((current, token) => current[token], value)
     #|const assign = (value, tokens, next) => { get(value, tokens.slice(0, -1))[tokens.at(-1)] = next }
-    #|const start = definition => {
+    #|const start = (definition, input = {}) => {
     #|  const host = { ...definition, data: structuredClone(definition.data), writes: 0,
     #|    setData(patch, callback) { this.writes++; for (const [key, value] of Object.entries(patch)) assign(this.data, key.replace(/\[(\d+)\]/g, ".$1").split("."), value); if (callback) callback() },
     #|  }
-    #|  host.onLoad({}); host.onShow(); host.onReady(); return host
+    #|  host.onLoad(input); host.onShow(); host.onReady(); return host
     #|}
     #|const tap = (host, key) => host.__mmDispatchTap({ currentTarget: { dataset: { minimoonTap: key } }, target: { dataset: {} }, detail: {} })
     #|const has = (host, text) => JSON.stringify(host.data).includes(text)
-    #|const first = start(home), second = start(details)
+    #|const first = start(home), second = start(details, { from: "application-smoke" })
+    #|const firstId = first.__mmInstanceId, firstWrites = first.writes
+    #|first.onLoad({}); assert.equal(first.__mmInstanceId, firstId); assert.equal(first.writes, firstWrites)
+    #|assert.match(errors.pop(), /duplicate_page_load/)
     #|tap(first, "shared/inc"); await flush()
     #|assert.ok(has(first, "Application shared count: 1")); assert.ok(has(second, "Application shared count: 1"))
     #|second.onHide(); const hiddenWrites = second.writes
@@ -61,10 +64,21 @@ pub fn application_host_smoke_source() -> String {
     #|tap(second, "shared/load"); await flush(); tap(second, "shared/clear"); await flush()
     #|requests[1].success({ statusCode: 201 }); await flush(); assert.ok(has(second, "Application request: idle"))
     #|tap(second, "shared/load"); await flush(); assert.equal(requests.length, 3)
+    #|const viewer = start(home)
+    #|const input = (key, value) => second.__mmDispatchInput({ currentTarget: { dataset: { minimoonInput: key } }, target: { dataset: {} }, detail: { value } })
+    #|input("details/draft-title", ""); tap(second, "details/save-draft"); await flush()
+    #|assert.equal(requests.length, 3); assert.ok(has(second, "Title is required."))
+    #|input("details/draft-title", "Typed host echo"); input("details/draft-note", "shared result")
+    #|tap(second, "details/save-draft"); await flush()
+    #|assert.equal(requests.length, 4); assert.equal(requests[3].url, "https://httpbingo.org/post"); assert.equal(requests[3].method, "POST")
+    #|assert.deepEqual(JSON.parse(requests[3].data), { title: "Typed host echo", note: "shared result" })
+    #|requests[3].success({ statusCode: 200, data: { json: { title: "Typed host echo", note: "shared result" }, origin: "not displayed" } }); await flush()
+    #|assert.ok(has(second, "Draft save: echoed (not persistent)")); assert.ok(has(viewer, "Application echoed draft: Typed host echo / shared result (not persistent)")); assert.ok(!has(viewer, "not displayed"))
+    #|viewer.onUnload()
     #|controller.dispose(); controller.dispose(); assert.equal(aborts, 1); assert.equal(second.__mmInstanceId, null)
     #|const writes = second.writes
     #|requests[2].success({ statusCode: 202 }); await flush(); assert.equal(second.writes, writes)
-    #|assert.equal(globalThis.__minimoonAppWakeV11, undefined); assert.equal(globalThis.__minimoonSharedWakeV11, undefined)
+    #|assert.equal(globalThis.__minimoonAppWakeV12, undefined); assert.equal(globalThis.__minimoonSharedWakeV12, undefined)
     #|assert.deepEqual(errors, [])
     #|
     #|// Exercise the application-only timer scheduler and an independent local-async wake.
@@ -77,7 +91,7 @@ pub fn application_host_smoke_source() -> String {
     #|  minimoon_runtime_version: runtime.minimoon_runtime_version,
     #|  minimoon_runtime_state_abi_version: runtime.minimoon_runtime_state_abi_version,
     #|  minimoon_application_capabilities: () => "[]",
-    #|  minimoon_application_start() { launches++; wake = globalThis.__minimoonAppWakeV11; return "[]" },
+    #|  minimoon_application_start() { launches++; wake = globalThis.__minimoonAppWakeV12; return "[]" },
     #|  minimoon_application_lifecycle(hook) { return command(hook === "onShow" ? { type: "StartSubscription", component_id: "$app", key: "tick", interval_ms: 1000 } : { type: "StopSubscription", component_id: "$app", key: "tick" }) },
     #|  minimoon_application_subscription() { ticks++; return "[]" },
     #|  minimoon_application_flush() { if (localReady) { ticks += 10; localReady = false }; return "[]" },

@@ -75,11 +75,11 @@ pub fn application_host_bridge() -> String {
     #|    onLaunch(options) {
     #|      if (started || actor._cl) return
     #|      started = true
-    #|      const previous = globalThis.__minimoonAppWakeV11
-    #|      globalThis.__minimoonAppWakeV11 = schedule
+    #|      const previous = globalThis.__minimoonAppWakeV12
+    #|      globalThis.__minimoonAppWakeV12 = schedule
     #|      try { consume(runtime.minimoon_application_start(JSON.stringify(options || {}))) }
     #|      catch (error) { dispose(); throw error }
-    #|      finally { if (previous === undefined) delete globalThis.__minimoonAppWakeV11; else globalThis.__minimoonAppWakeV11 = previous }
+    #|      finally { if (previous === undefined) delete globalThis.__minimoonAppWakeV12; else globalThis.__minimoonAppWakeV12 = previous }
     #|    },
     #|    onShow(options) { actor._en({ kind: "lifecycle", hook: "onShow", payload: options || {} }) },
     #|    onHide() { actor._en({ kind: "lifecycle", hook: "onHide", payload: {} }) }

@@ -28,7 +28,9 @@ pub fn by_text(String) -> Selector
 
 pub fn containing_text(String) -> Selector
 
-pub fn mount(@minimoon.Page) -> TestRuntime
+pub fn[Deps] launch(@minimoon.App[Deps]) -> TestApp[Deps] raise
+
+pub fn mount(@minimoon.Page, input? : Map[String, String]) -> TestRuntime raise
 
 // Errors
 
@@ -46,6 +48,11 @@ pub enum Selector {
   Label(String)
   All(Array[Selector])
 }
+
+type TestApp[Deps]
+pub fn[Deps] TestApp::dispose(Self[Deps]) -> Unit
+pub fn[Deps] TestApp::mount(Self[Deps], (Deps) -> @minimoon.Page, input? : Map[String, String]) -> TestRuntime raise
+pub fn[Deps] TestApp::quiesce(Self[Deps], max_steps? : Int) -> Unit raise
 
 type TestNode
 pub fn TestNode::children(Self) -> Array[Self]
@@ -71,6 +78,7 @@ pub fn TestRuntime::lower(Self, Selector) -> String
 pub fn TestRuntime::page_id(Self) -> String
 pub fn TestRuntime::query(Self, Selector) -> TestNode?
 pub fn TestRuntime::query_all(Self, Selector) -> Array[TestNode]
+pub fn TestRuntime::quiesce(Self, max_steps? : Int) -> Unit raise
 pub fn TestRuntime::scroll(Self, Selector, scroll_left~ : Double, scroll_top~ : Double, scroll_height~ : Double, scroll_width~ : Double, delta_x~ : Double, delta_y~ : Double) -> String
 pub fn TestRuntime::snapshot(Self) -> String
 pub fn TestRuntime::tap(Self, Selector) -> String

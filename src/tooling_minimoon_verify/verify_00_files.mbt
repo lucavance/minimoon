@@ -267,6 +267,9 @@ async fn run(
 }
 
 ///|
-fn host_smoke_source(page_files : Array[String]) -> String {
-  @host_js.host_smoke_source(page_files)
+fn host_smoke_source(
+  page_files : Array[String],
+  inputs? : Array[Json] = [],
+) -> String {
+  @host_js.host_smoke_source(page_files, inputs~)
 }

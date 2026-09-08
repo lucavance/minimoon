@@ -13,7 +13,7 @@ priv struct AppDriver {
 ///|
 #cfg(target="js")
 extern "js" fn capture_app_wake() -> () -> Unit =
-  #|() => typeof globalThis.__minimoonAppWakeV11 === "function" ? globalThis.__minimoonAppWakeV11 : () => {}
+  #|() => typeof globalThis.__minimoonAppWakeV12 === "function" ? globalThis.__minimoonAppWakeV12 : () => {}
 
 ///|
 #cfg(not(target="js"))
@@ -125,6 +125,17 @@ fn AppDriver::drain(self : AppDriver) -> Unit {
   if self.owner.pending_count() > 0 {
     (self.owner.wake.val)()
   }
+}
+
+///|
+/// Ready work excludes unresolved host effects and future subscription ticks.
+pub fn[Deps] AppRuntime::has_ready_work(self : AppRuntime[Deps]) -> Bool {
+  self.driver.launched.val &&
+  !self.driver.owner.is_disposed() &&
+  (
+    self.driver.owner.pending_count() > 0 ||
+    self.driver.running.pending_local_message_count() > 0
+  )
 }
 
 ///|

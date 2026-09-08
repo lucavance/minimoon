@@ -1,7 +1,7 @@
 ///|
-// Shared-state budget review, 2026-09-07: expand the repository-owned core
-// archive ceiling while retaining its 8 KiB reserve. UI budgets are unchanged.
-let registry_archive_hard_limit : Int = 280 * 1024
+// Approved authoring budget review, 2026-09-08: measured core archive 288,166 B.
+// Retain the 8 KiB reserve; UI archive and package allowlists are unchanged.
+let registry_archive_hard_limit : Int = 300 * 1024
 
 ///|
 let registry_archive_reserve : Int = 8 * 1024
@@ -11,9 +11,9 @@ let registry_archive_operating_limit : Int = registry_archive_hard_limit -
   registry_archive_reserve
 
 ///|
-// Measured shared-state deltas: runtime +22,881 B; aggregate +28,324 B. Rounded
-// increases preserve roughly the previous absolute headroom, not a multiplier.
-let conformance_runtime_limit : Int = 383000
+// Measured authoring runtime 387,977 B; fixed ceiling leaves 12,023 B headroom.
+// Aggregate JS fell to 418,121 B, so its existing ceiling is not increased.
+let conformance_runtime_limit : Int = 400000
 
 ///|
 let conformance_javascript_limit : Int = 453000

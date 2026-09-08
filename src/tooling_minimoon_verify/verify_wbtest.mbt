@@ -227,7 +227,7 @@ test "custom navigation app config omits ineffective window fields" {
 
 ///|
 async test "DevTools evidence scope follows the current App Contract" {
-  assert_eq(current_evidence_scope(), "current-v9")
+  assert_eq(current_evidence_scope(), "current-v10")
   let root = @fs.tmpdir(prefix="minimoon-evidence-scope")
   {
     errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
@@ -290,7 +290,7 @@ test "host smoke follows the initial page lifecycle order and verifies disposal"
   assert_true(source.contains("globalThis.TextEncoder = undefined"))
   assert_true(
     source.contains(
-      "page.onLoad.call(host, {})\n" +
+      "page.onLoad.call(host, pageInputs[pageIndex] || {})\n" +
       "  page.onShow.call(host)\n" +
       "  page.onReady.call(host)",
     ),

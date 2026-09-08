@@ -2,8 +2,8 @@
 
 ## Versions
 
-- App Contract schema: 9
-- runtime API/state ABI: 11
+- App Contract schema: 10
+- runtime API/state ABI: 12
 - renderer protocol: 8
 - generated runtime module format: CommonJS
 
@@ -15,7 +15,7 @@ lifecycle, effect resolution, subscription, flush, and disposal entries. Its
 independent scheduler does not render a page tree; pages bind shared state into
 their own transactional projections.
 
-The ABI v11 host/runtime convention additionally installs a temporary
+The ABI v12 host/runtime convention additionally installs a temporary
 generation-bound wake callback around synchronous runtime creation. The new
 page runtime captures it for later async local effects, which request a
 sequence-bounded internal command drain. It is not a CommonJS export or an
@@ -61,8 +61,8 @@ bytes and weighted host cost at most 32; set/splice cost one and move costs two.
 
 `dispatch_batch` accepts at most 2048 JSON objects containing `key` and
 `payload`. Parsing, object shape validation, and every event decoder complete
-before applying the first message. A successful batch commits once and returns
-at most one render command.
+before applying the first message. Each message retains its candidate
+transaction; the batch returns at most one collected render command.
 
 The host starts an idle entry immediately, preserves queue order, runs one
 render at a time, and combines adjacent waiting UI events. Async wakes from the
@@ -85,14 +85,23 @@ callbacks cannot acknowledge a new attempt or a new page generation.
 ## Lifecycle
 
 ```text
-onLoad: create -> page input -> optional lifecycle message
-onReady: mount -> start subscriptions
+onLoad: decode actual input -> create graph -> Load -> full Replace revision 0 to 1
+onShow: refresh shared projections -> optional lifecycle message
+onReady: first mount -> initial commands -> start subscriptions
 event/tick/effect: ordered entry -> candidate transaction -> acknowledged render
 onUnload: invalidate generation -> lifecycle/dispose -> clear owned resources
 ```
 
-Verification requires generated App Contract v9, runtime ABI v11, and renderer
-protocol v8 artifacts. Schema `8` input remains accepted only without
-`application`; it does not permit mixing old generated artifacts with the
-current host. Unsafe routes, missing packages/programs, forbidden JavaScript,
+Verification requires generated App Contract v10, runtime ABI v12, and renderer
+protocol v8 artifacts. Both App and no-App configurations require schema `10`;
+schema `8` and `9` are migration errors. Unsafe routes, missing packages/programs, forbidden JavaScript,
 invalid shared artifacts, or host simulation failures are rejected.
+
+Runtime creation returns a JSON success-ID or input-error envelope. Failed
+decoding creates no page graph and runs no initialization. A created page
+retains a copy of its normalized input; Load must match that copy. Repeated
+Load yields `duplicate_page_load`, mismatched input yields
+`page_input_mismatch`, and pre-Load interactions yield `page_not_loaded`.
+Mount is idempotent; disposed entries are harmless no-ops. Preview trees never
+hydrate the host. Its empty boot tree stays at revision 0 until the mandatory
+first full replacement is acknowledged.

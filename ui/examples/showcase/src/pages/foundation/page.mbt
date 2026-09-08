@@ -96,7 +96,7 @@ pub fn program() -> @minimoon.Page {
       @gallery.display("Kbd", @ui.kbd_group([@ui.kbd("⌘"), @ui.kbd("K")])),
       @gallery.sample(
         "Label",
-        @ui.input(
+        @ui.input_stateful(
           id="foundation-label",
           options=@ui.input_options(placeholder="Tap the associated label"),
         ).map(input => {

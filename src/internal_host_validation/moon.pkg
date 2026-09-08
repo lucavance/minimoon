@@ -2,8 +2,4 @@ import {
   "lampclaw/minimoon/internal_host_js" @host_js,
 }
 
-import {
-  "moonbitlang/core/test",
-} for "wbtest"
-
 supported_targets = "native"

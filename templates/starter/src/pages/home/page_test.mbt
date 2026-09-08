@@ -1,8 +1,9 @@
 ///|
 test "starter home owns state, lifecycle, controlled input, and navigation" {
-  let runtime = program().create_runtime()
-  let _ = runtime.mount()
+  let runtime = program().create_runtime().unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.lifecycle("onShow", "{}")
+  let _ = runtime.mount()
   let _ = runtime.dispatch("home/increment", "{}")
   let _ = runtime.dispatch("home/name", "{\"detail\":{\"value\":\"MoonBit\"}}")
   let snapshot = runtime.snapshot()

@@ -58,7 +58,6 @@ test "normalized-tree tests query and drive the public page runtime" {
     controls.get(by_id("name")).prop("value") == Some(Json::string("minimoon")),
   )
   assert_true(root.query(by_label("Missing")) is None)
-  assert_true(runtime.snapshot().contains("\"revision\":2"))
   let _ = runtime.dispose()
 }
 

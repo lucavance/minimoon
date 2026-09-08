@@ -3634,7 +3634,7 @@
           "path": "ui/src/inputs.mbt"
         },
         {
-          "symbol": "@ui.input_controlled",
+          "symbol": "@ui.input_stateful",
           "path": "ui/src/inputs.mbt"
         },
         {
@@ -6554,7 +6554,7 @@
           "path": "ui/src/inputs.mbt"
         },
         {
-          "symbol": "@ui.textarea_controlled",
+          "symbol": "@ui.textarea_stateful",
           "path": "ui/src/inputs.mbt"
         },
         {

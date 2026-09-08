@@ -61,8 +61,9 @@ pub fn[Deps] AppRuntime::deps(self : AppRuntime[Deps]) -> Deps {
 pub fn[Deps] AppRuntime::create_page(
   self : AppRuntime[Deps],
   page : Page,
-) -> PageRuntime {
-  self.driver.owner.with_pages(() => page.create_runtime())
+  input? : Map[String, String] = Map([]),
+) -> Result[PageRuntime, DecodeError] {
+  self.driver.owner.with_pages(() => page.create_runtime(input~))
 }
 
 ///|

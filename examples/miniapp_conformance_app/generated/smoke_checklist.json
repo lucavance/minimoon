@@ -1,5 +1,5 @@
 {
-  "runtimeApiVersion": 11,
+  "runtimeApiVersion": 12,
   "rendererProtocolVersion": 8,
   "pages": [
     "pages/showcase/showcase",
@@ -15,6 +15,8 @@
     "lifecycle dispatch",
     "request-ID effect completion",
     "dispose",
+    "Details requires from route input: valid input initializes immediately without preview flash; invalid input fails closed with page_input_decode_failed and no live instance",
+    "Details draft empty title sends no HTTP; valid title/note POST to public httpbingo.org/post shows typed echo (not persistent storage) in both Details and Home; editing or unloading rejects old replies",
     "Home and Details share application count and public HTTP status while keeping independent page state; leaving the requesting page does not cancel application HTTP",
     "Shared request Clear rejects an older public API response; background and foreground retain shared state and unload stays clean",
     "Showcase state, routes, and rapid lossless taps",

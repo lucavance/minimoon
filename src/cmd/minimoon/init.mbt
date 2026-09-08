@@ -150,7 +150,14 @@ fn render_app_config(plan : InitPlan) -> String {
   let packages = ["src/pages/home", "src/pages/details"]
   let pages = packages
     .map(package_path => {
-      "    { \"package\": " + json_string(package_path) + " }"
+      "    { \"package\": " +
+      json_string(package_path) +
+      (if package_path == "src/pages/details" {
+        ", \"smokeInput\": { \"from\": \"smoke\" }"
+      } else {
+        ""
+      }) +
+      " }"
     })
     .join(",\n")
   "{\n" +

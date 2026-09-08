@@ -53,8 +53,11 @@ async fn flush_probe_microtasks() -> Unit {
 async test "lab perform and attempt probes finish at deterministic boundaries" {
   let clock = probe_clock()
   let runtime = program_with_probe_scheduler((resolve, milliseconds) => {
-    clock.schedule(resolve, milliseconds)
-  }).create_runtime()
+      clock.schedule(resolve, milliseconds)
+    })
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let started = runtime.dispatch("dynamic/start-async", "{}")
   inspect(started.contains("PatchViewTree"), content="true")
@@ -103,8 +106,11 @@ async test "lab perform and attempt probes finish at deterministic boundaries" {
 async test "disposed lab ignores suspended probe completions" {
   let clock = probe_clock()
   let runtime = program_with_probe_scheduler((resolve, milliseconds) => {
-    clock.schedule(resolve, milliseconds)
-  }).create_runtime()
+      clock.schedule(resolve, milliseconds)
+    })
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let _ = runtime.dispatch("dynamic/start-async", "{}")
   assert_eq(clock.timers.val.length(), 2)

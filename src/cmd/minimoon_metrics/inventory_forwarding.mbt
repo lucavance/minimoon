@@ -60,6 +60,13 @@ fn embedded_forwarding_inventory(
         "src/cmd/minimoon_check/static_quality.mbt", "static_suite", "source assertions and adapter parity check",
       ),
       (
+        "src/cmd/minimoon_check/ui_packaging.mbt", "prepare_ui_packaging_stage",
+        "isolated Git and MoonBit workspace configuration",
+      ),
+      (
+        "src/cmd/minimoon_check/ui_packaging.mbt", "package_staged_ui", "MoonBit package process, no embedded JavaScript",
+      ),
+      (
         "src/tooling_miniapp/application_compilation.mbt", "application_runtime_source",
         "MoonBit runtime source template",
       ),
@@ -86,6 +93,9 @@ fn embedded_forwarding_inventory(
       ),
       (
         "src/tooling_miniapp/compilation.mbt", "runtime_package_source", "MoonBit runtime source template",
+      ),
+      (
+        "src/tooling_miniapp/runtime_creation.mbt", "runtime_creation_helpers", "MoonBit runtime input and registration template",
       ),
       (
         "src/tooling_miniapp/compilation.mbt", "runtime_registry_source", "MoonBit runtime registry template",

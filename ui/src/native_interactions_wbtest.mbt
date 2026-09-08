@@ -102,24 +102,28 @@ fn native_prop(
 test "drawer uses four-sided measured drag, pointer identity, and cancellation" {
   for side in [Top, Right, Bottom, Left] {
     let runtime = @minimoon.page(
-      id="drawer_test",
-      route=@minimoon.route("pages/drawer/index"),
-      title="Drawer",
-      capabilities=[@minimoon.MeasureNodes],
-      build=page => {
-        root(page, context => {
-          drawer(
-            context,
-            id="drawer",
-            title="Drawer",
-            trigger_label="Open",
-            content=@minimoon.Val::constant(@minimoon.text("Content")),
-            side~,
-            initially_open=true,
-          )
-        })
-      },
-    ).create_runtime()
+        id="drawer_test",
+        route=@minimoon.route("pages/drawer/index"),
+        title="Drawer",
+        capabilities=[@minimoon.MeasureNodes],
+        build=page => {
+          root(page, context => {
+            drawer(
+              context,
+              id="drawer",
+              title="Drawer",
+              trigger_label="Open",
+              content=@minimoon.Val::constant(@minimoon.text("Content")),
+              side~,
+              initially_open=true,
+            )
+          })
+        },
+      )
+      .create_runtime()
+      .unwrap()
+    let _ = runtime.lifecycle("onLoad", "{}")
+    let _ = runtime.lifecycle("onShow", "{}")
     let _ = runtime.mount()
     let start = runtime.dispatch(
       "drawer/drag/touchstart",
@@ -217,22 +221,26 @@ test "resizable preserves constraints and restores cancelled native gestures" {
   )
   for orientation in [Horizontal, Vertical] {
     let runtime = @minimoon.page(
-      id="resize_test",
-      route=@minimoon.route("pages/resize/index"),
-      title="Resize",
-      capabilities=[@minimoon.MeasureNodes],
-      build=page => {
-        root(page, context => {
-          resizable(
-            context,
-            id="resize",
-            panes=@minimoon.Val::constant(panes),
-            initial_sizes=[40.0, 40.0, 20.0],
-            orientation~,
-          )
-        })
-      },
-    ).create_runtime()
+        id="resize_test",
+        route=@minimoon.route("pages/resize/index"),
+        title="Resize",
+        capabilities=[@minimoon.MeasureNodes],
+        build=page => {
+          root(page, context => {
+            resizable(
+              context,
+              id="resize",
+              panes=@minimoon.Val::constant(panes),
+              initial_sizes=[40.0, 40.0, 20.0],
+              orientation~,
+            )
+          })
+        },
+      )
+      .create_runtime()
+      .unwrap()
+    let _ = runtime.lifecycle("onLoad", "{}")
+    let _ = runtime.lifecycle("onShow", "{}")
     let _ = runtime.mount()
     let start = runtime.dispatch(
       "resize-handle-0/touchstart",
@@ -274,50 +282,54 @@ test "message scroller follows only at end and preserves fractional history offs
   assert_true(messages_prepended(["a", "b"], ["old", "a", "b"]))
   assert_false(messages_prepended(["a", "b"], ["a", "b", "new"]))
   let runtime = @minimoon.page(
-    id="messages_test",
-    route=@minimoon.route("pages/messages/index"),
-    title="Messages",
-    capabilities=[@minimoon.MeasureNodes],
-    build=page => {
-      root(page, context => {
-        let (items, update) = @minimoon.create_variable([
-          message_item(key="a", content=@minimoon.text("A")),
-          message_item(key="b", content=@minimoon.text("B")),
-        ])
-        stack([
-          @minimoon.Val::constant(
-            @minimoon.fragment([
-              @minimoon.button(
-                on_tap=update(items => {
-                  let next = items.copy()
-                  next.push(
-                    message_item(key="new", content=@minimoon.text("New")),
-                  )
-                  next
-                }),
-                event_key="append",
-                "Append",
-              ),
-              @minimoon.button(
-                on_tap=update(items => {
-                  let next = [
-                    message_item(key="old", content=@minimoon.text("Old")),
-                  ]
-                  for item in items {
-                    next.push(item)
-                  }
-                  next
-                }),
-                event_key="prepend",
-                "Prepend",
-              ),
-            ]),
-          ),
-          message_scroller(context, id="messages", items~),
-        ])
-      })
-    },
-  ).create_runtime()
+      id="messages_test",
+      route=@minimoon.route("pages/messages/index"),
+      title="Messages",
+      capabilities=[@minimoon.MeasureNodes],
+      build=page => {
+        root(page, context => {
+          let (items, update) = @minimoon.create_variable([
+            message_item(key="a", content=@minimoon.text("A")),
+            message_item(key="b", content=@minimoon.text("B")),
+          ])
+          stack([
+            @minimoon.Val::constant(
+              @minimoon.fragment([
+                @minimoon.button(
+                  on_tap=update(items => {
+                    let next = items.copy()
+                    next.push(
+                      message_item(key="new", content=@minimoon.text("New")),
+                    )
+                    next
+                  }),
+                  event_key="append",
+                  "Append",
+                ),
+                @minimoon.button(
+                  on_tap=update(items => {
+                    let next = [
+                      message_item(key="old", content=@minimoon.text("Old")),
+                    ]
+                    for item in items {
+                      next.push(item)
+                    }
+                    next
+                  }),
+                  event_key="prepend",
+                  "Prepend",
+                ),
+              ]),
+            ),
+            message_scroller(context, id="messages", items~),
+          ])
+        })
+      },
+    )
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
+  let _ = runtime.lifecycle("onShow", "{}")
   let mount = runtime.mount()
   let _ = native_resolve(runtime, mount, [
     native_rect("messages-viewport", 300.0, 200.0),
@@ -359,25 +371,29 @@ test "message scroller follows only at end and preserves fractional history offs
 ///|
 test "RTL resizable inverts horizontal movement and hide restores the initial pair" {
   let runtime = @minimoon.page(
-    id="resize_rtl",
-    route=@minimoon.route("pages/resize/rtl"),
-    title="Resize RTL",
-    capabilities=[@minimoon.MeasureNodes],
-    build=page => {
-      root(page, context => {
-        resizable(
-          context,
-          id="rtl",
-          direction=@theme.Rtl,
-          panes=@minimoon.Val::constant([
-            resizable_pane(key="a", content=@minimoon.text("A")),
-            resizable_pane(key="a/handle", content=@minimoon.text("B")),
-          ]),
-          initial_sizes=[50.0, 50.0],
-        )
-      })
-    },
-  ).create_runtime()
+      id="resize_rtl",
+      route=@minimoon.route("pages/resize/rtl"),
+      title="Resize RTL",
+      capabilities=[@minimoon.MeasureNodes],
+      build=page => {
+        root(page, context => {
+          resizable(
+            context,
+            id="rtl",
+            direction=@theme.Rtl,
+            panes=@minimoon.Val::constant([
+              resizable_pane(key="a", content=@minimoon.text("A")),
+              resizable_pane(key="a/handle", content=@minimoon.text("B")),
+            ]),
+            initial_sizes=[50.0, 50.0],
+          )
+        })
+      },
+    )
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
+  let _ = runtime.lifecycle("onShow", "{}")
   let _ = runtime.mount()
   let start = runtime.dispatch(
     "rtl-handle-0/touchstart",
@@ -402,19 +418,23 @@ test "RTL resizable inverts horizontal movement and hide restores the initial pa
 ///|
 test "carousel vertical mode reaches native swiper props" {
   let runtime = @minimoon.page(
-    id="vertical_carousel",
-    route=@minimoon.route("pages/carousel/vertical"),
-    title="Carousel",
-    build=_ => {
-      carousel(
-        id="slides",
-        vertical=true,
-        items=@minimoon.Val::constant([
-          panel(key="one", title="One", content=@minimoon.text("One")),
-        ]),
-      )
-    },
-  ).create_runtime()
+      id="vertical_carousel",
+      route=@minimoon.route("pages/carousel/vertical"),
+      title="Carousel",
+      build=_ => {
+        carousel(
+          id="slides",
+          vertical=true,
+          items=@minimoon.Val::constant([
+            panel(key="one", title="One", content=@minimoon.text("One")),
+          ]),
+        )
+      },
+    )
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
+  let _ = runtime.lifecycle("onShow", "{}")
   let _ = runtime.mount()
   assert_eq(
     native_prop(runtime, "slides-swiper", "vertical"),

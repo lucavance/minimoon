@@ -1,5 +1,5 @@
 ///|
-let frozen_api_consumer_series = "0.1"
+let frozen_api_consumer_series = "0.2"
 
 ///|
 let frozen_api_consumer_files : Array[String] = [

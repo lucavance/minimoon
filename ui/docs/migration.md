@@ -14,6 +14,21 @@ RUI is MIT-licensed; the pinned source and its third-party notices were reviewed
 
 Create UI components inside a `Page` builder. Stateful components either own local state or accept `Val` and `Emit` through their `*_controlled` forms. Use `@ui.stack` to combine independently allocated component values; do not allocate local state inside a changing render callback.
 
+Input and textarea deliberately use the simpler RUI-style controlled shape:
+`input(value~, on_input~, ...) -> Node` and `textarea(...) -> Node` are pure
+builders and can run inside `Val.view`. Use `input_stateful` or
+`textarea_stateful` only when the widget should own its value. The former
+`input_controlled`/`textarea_controlled` names are removed in this unpublished
+candidate. `text_field(state, value, on_input, ...) -> Val[Node]` combines
+application-owned text, reactive validation/options, semantic associations and
+one local focus state. Create it once in the page/component builder, not in
+`view`. `focused` controls native theme presentation; `InputOptions.focus` is
+the separate programmatic focus request. No browser `:focus` selector is assumed.
+
+This scoped authoring adjustment references RUI 0.1.2 source at
+`eccae7507360aec8465469bafb7fb4da5b260a2a` (2026-09-08); the complete migration
+inventory above remains pinned to 0.1.1. It does not claim full 0.1.2 parity.
+
 Wrap pages that use floating content or toasts in `@ui.root(page, context => ...)`. The root owns the layer viewport, visibility lifetime, and toast queue. Declare the core `MeasureNodes` page capability when using measured surfaces, custom/multiple sliders, resize handles, or scroll-anchor measurement. Measurement requires rendered host nodes and participates in render-acknowledgement ordering; closing/disposal rejects obsolete replies.
 
 | Upstream mechanism | Native replacement |

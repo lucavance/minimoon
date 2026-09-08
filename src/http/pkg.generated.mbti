@@ -1,0 +1,36 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/http"
+
+import {
+  "lampclaw/minimoon",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn delete(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int) -> Request
+
+pub fn get(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int) -> Request
+
+pub fn post(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int) -> RequestWithBody
+
+pub fn put(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int) -> RequestWithBody
+
+// Errors
+pub(all) suberror HttpError {
+  RequestError(@minimoon.HostError)
+  BadStatus(@minimoon.RequestResult)
+}
+pub impl Show for HttpError
+
+// Types and methods
+type Request
+pub fn[T : @json.FromJson] Request::expect_json(Self, @minimoon.Emit[Result[T, Error]]) -> @minimoon.Cmd
+
+type RequestWithBody
+pub fn[T : @json.FromJson] RequestWithBody::expect_json(Self, @minimoon.Emit[Result[T, Error]]) -> @minimoon.Cmd
+pub fn[T : ToJson] RequestWithBody::with_json(Self, T) -> Request
+pub fn RequestWithBody::with_text(Self, String) -> Request
+
+// Type aliases
+
+// Traits

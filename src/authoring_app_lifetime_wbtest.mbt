@@ -20,13 +20,19 @@ test "application local async completion survives page unload and drops after ap
   })
   let app = definition.create_runtime()
   ignore(app.lifecycle("onLaunch", "{}"))
-  let first = app.create_page(shared_counter_page(app.deps(), "async_one"))
+  let first = app
+    .create_page(shared_counter_page(app.deps(), "async_one"))
+    .unwrap()
+  ignore(first.lifecycle("onLoad", "{}"))
   ignore(first.dispose())
   assert_eq(cancellations.val, 0)
   let send = callback.val.unwrap()
   send((app.deps().1)(3).0)
   ignore(app.flush())
-  let second = app.create_page(shared_counter_page(app.deps(), "async_two"))
+  let second = app
+    .create_page(shared_counter_page(app.deps(), "async_two"))
+    .unwrap()
+  ignore(second.lifecycle("onLoad", "{}"))
   assert_true(second.snapshot().contains("shared:3"))
   ignore(app.dispose())
   assert_eq(cancellations.val, 1)
@@ -74,7 +80,10 @@ test "application HTTP is independent of page capabilities visibility and lifeti
   })
   let app = definition.create_runtime()
   ignore(app.lifecycle("onLaunch", "{}"))
-  let first = app.create_page(shared_counter_page(app.deps(), "http_one"))
+  let first = app
+    .create_page(shared_counter_page(app.deps(), "http_one"))
+    .unwrap()
+  ignore(first.lifecycle("onLoad", "{}"))
   let id = application_request_id(app.dispatch((app.deps().1)(-1)))
   ignore(first.dispose())
   ignore(app.lifecycle("onHide", "{}"))
@@ -85,7 +94,10 @@ test "application HTTP is independent of page capabilities visibility and lifeti
     app.resolve_effect(id, "success", "{\"statusCode\":201,\"data\":null}"),
   )
   ignore(app.resolve_effect(id, "success", "{\"statusCode\":500}"))
-  let second = app.create_page(shared_counter_page(app.deps(), "http_two"))
+  let second = app
+    .create_page(shared_counter_page(app.deps(), "http_two"))
+    .unwrap()
+  ignore(second.lifecycle("onLoad", "{}"))
   assert_true(second.snapshot().contains("shared:201"))
   let pending = application_request_id(app.dispatch((app.deps().1)(-1)))
   assert_true(app.dispose().contains("CancelEffect"))
@@ -119,12 +131,16 @@ test "application commit survives a rejected page projection and the page can re
       })
     },
   )
-  let failing = app.create_page(definition)
+  let failing = app.create_page(definition).unwrap()
+  ignore(failing.lifecycle("onLoad", "{}"))
   ignore(failing.mount())
   ignore(app.dispatch((deps.1)(1)))
   assert_true(failing.refresh().contains("RuntimeError"))
   assert_true(failing.snapshot().contains("shared:0"))
-  let observer = app.create_page(shared_counter_page(deps, "committed"))
+  let observer = app
+    .create_page(shared_counter_page(deps, "committed"))
+    .unwrap()
+  ignore(observer.lifecycle("onLoad", "{}"))
   assert_true(observer.snapshot().contains("shared:1"))
   ignore(app.dispatch((deps.1)(1)))
   ignore(failing.refresh())
@@ -138,7 +154,8 @@ test "shared bindings leave no registered pages after repeated reuse" {
   ignore(app.lifecycle("onLaunch", "{}"))
   let definition = shared_counter_page(app.deps(), "repeated")
   for _index = 0; _index < 200; _index = _index + 1 {
-    let page = app.create_page(definition)
+    let page = app.create_page(definition).unwrap()
+    ignore(page.lifecycle("onLoad", "{}"))
     ignore(page.mount())
     ignore(page.dispose())
     assert_eq(app.driver.owner.page_count(), 0)
@@ -160,15 +177,23 @@ test "application state machines with different models and messages compose inde
   let app = definition.create_runtime()
   ignore(app.lifecycle("onLaunch", "{}"))
   let deps = app.deps()
-  let page = app.create_page(
-    page(id="domains", route=route("pages/domains/domains"), title="domains", build=context => {
-      context
-      .bind(deps.0.0)
-      .view2(context.bind(deps.1.0), (count, label) => {
-        p(count.to_string() + ":" + label)
-      })
-    }),
-  )
+  let page = app
+    .create_page(
+      page(
+        id="domains",
+        route=route("pages/domains/domains"),
+        title="domains",
+        build=context => {
+          context
+          .bind(deps.0.0)
+          .view2(context.bind(deps.1.0), (count, label) => {
+            p(count.to_string() + ":" + label)
+          })
+        },
+      ),
+    )
+    .unwrap()
+  ignore(page.lifecycle("onLoad", "{}"))
   ignore(app.dispatch(batch([(deps.0.1)(2), (deps.1.1)("ready")])))
   ignore(page.refresh())
   assert_true(page.snapshot().contains("2:ready"))

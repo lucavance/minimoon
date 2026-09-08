@@ -308,8 +308,7 @@ async fn load_config_document(config_file : String) -> ConfigDocument {
   match value {
     Object(fields) => {
       match fields.get("schemaVersion") {
-        Some(Number(version, ..)) if version == schema_version.to_double() ||
-          (version == 8.0 && !fields.contains("application")) => ()
+        Some(Number(version, ..)) if version == schema_version.to_double() => ()
         Some(Number(_, ..)) =>
           issues.push(
             issue_at(
@@ -317,7 +316,9 @@ async fn load_config_document(config_file : String) -> ConfigDocument {
               "schemaVersion must be " + schema_version.to_string(),
               config_file,
               "/schemaVersion",
-              "Set schemaVersion to " + schema_version.to_string() + ".",
+              "Migrate page route input to page_with_input, rebuild all host artifacts, and set schemaVersion to " +
+              schema_version.to_string() +
+              ".",
               spans,
             ),
           )
@@ -367,6 +368,26 @@ async fn load_config_document(config_file : String) -> ConfigDocument {
           let packages : Array[String] = []
           for index, page in pages {
             let pointer = "/pages/" + index.to_string()
+            if page is Object(page_fields) &&
+              page_fields.get("smokeInput") is Some(input) {
+              let valid_input = match input {
+                Object(fields) =>
+                  fields.values().all(value => value is String(_))
+                _ => false
+              }
+              if !valid_input {
+                issues.push(
+                  issue_at(
+                    "MMN1004",
+                    "smokeInput must be an object with string values",
+                    config_file,
+                    pointer + "/smokeInput",
+                    "Supply synthetic route parameters for the automated host smoke; they are not runtime defaults.",
+                    spans,
+                  ),
+                )
+              }
+            }
             match page {
               Object(page_fields) =>
                 match page_fields.get("package") {

@@ -4,9 +4,15 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
-## [0.2.0]
+## [0.2.0] - Unreleased
 
 ### Added
+
+- Real route input is decoded before page graph/model creation; preview input
+  is separate and cannot start effects. Creation returns a typed result.
+- App-aware `testing.launch`, page mounting with input and bounded `quiesce`.
+- Optional `lampclaw/minimoon/http` request builders with typed JSON responses,
+  transport/status errors and unchanged root raw-request escape hatch.
 
 - Optional `App[Deps]` with independent typed domain state machines, `Shared[T]`,
   scoped page bindings/selectors, application lifecycle and owned async effects.
@@ -33,21 +39,25 @@ tags.
 
 ### Compatibility
 
-- App Contract advances from 7 to 9, runtime ABI from 10 to 11, and renderer
-  protocol from 7 to 8. Schema `8` input remains valid without `application`.
+- App Contract advances to 10, runtime ABI to 12, and renderer protocol is 8.
+  Schema 8/9 input is rejected. Pages boot empty and first Load renders the real tree.
   Rebuild all generated artifacts together and obtain new real-host evidence.
 - Opted-in page factories take the application's `Deps`; `PageContext` is now
   opaque. See the [shared-state guide](docs/guides/shared_state.md).
-- Existing core call patterns and optional components/minimal themes remain
-  covered by the frozen 0.1 consumer. New public snapshots define the 0.2 line.
+- This unpublished candidate intentionally changes page/testing APIs. The current
+  0.2 consumer and reviewed snapshots define the gate; 0.1 fixtures are historical.
 - RUI remains a provenance reference, not a browser-runtime dependency.
   UI's MIT attribution is separate from core's existing Apache-2.0 notices.
 
 ### Changed
 
-- Reviewed application-state growth budgets: Conformance runtime/aggregate
-  JavaScript ceilings are 383,000/453,000 bytes, with a 16,000-byte App-enabled
-  host ceiling. The core archive hard ceiling is 280 KiB with an 8 KiB reserve.
+- Validated MoonBit floor is 0.1.20260904 / moonc v0.10.12, calibrated against
+  the official prebuilt release `0.10.12+1634b282e` pinned in both CI jobs.
+  Migrated package exclusions to `.moonignore` and removed newly redundant test imports.
+
+- Reviewed authoring growth budgets: Conformance runtime/aggregate
+  JavaScript ceilings are 400,000/453,000 bytes, with a 16,000-byte App-enabled
+  host ceiling. The core archive hard ceiling is 300 KiB with an 8 KiB reserve.
   No-App host, starter, UI archive and other gates remain unchanged.
 - CI handoff technical versions are derived from the validated manifest and
   checked against both fixture summaries and checklists.
@@ -55,7 +65,7 @@ tags.
   with configurable storage, isolated runs and supervisor-owned failure cleanup.
 - The preceding HTTP budget review retained a 250 KiB core archive hard ceiling
   with an 8 KiB reserve and 360,000/424,000-byte runtime/aggregate ceilings;
-  the application-state review above supersedes those core ceilings.
+  subsequent application-state and authoring reviews supersede those core ceilings.
 - Raised the repository and generated-starter Node floor to `>=24.20.0`, with
   CI coverage at 24.20.0 and 26.8.1; pinned Bun to `1.4.2`.
 - Updated PostCSS to `8.5.28`, weapp-tailwindcss to `5.5.1`, and refreshed the

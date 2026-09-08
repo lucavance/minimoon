@@ -5,12 +5,12 @@ pub fn product_version() -> String {
 
 ///|
 pub fn app_contract_version() -> Int {
-  9
+  10
 }
 
 ///|
 pub fn runtime_api_version() -> Int {
-  11
+  12
 }
 
 ///|

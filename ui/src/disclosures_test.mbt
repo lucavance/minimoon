@@ -130,7 +130,7 @@ test "readonly and mixed checkbox states adapt without false change callbacks" {
         checkbox(id="mixed", indeterminate=true),
         checkbox(id="locked", initially_checked=true, read_only=true),
         switch(id="readonly-switch", read_only=true),
-        input(
+        input_stateful(
           id="readonly-input",
           initial_value="fixed",
           options=input_options(read_only=true),
@@ -167,7 +167,9 @@ test "readonly and mixed checkbox states adapt without false change callbacks" {
 
 ///|
 test "focus styles use native focus and blur state" {
-  let runtime = @testing.mount(form_test_page(_ => input(id="focused")))
+  let runtime = @testing.mount(
+    form_test_page(_ => input_stateful(id="focused")),
+  )
   let _ = runtime.focus(@testing.by_id("focused"), "", 200)
   assert_true(
     runtime.get(@testing.by_id("focused")).snapshot().contains("mmui-focused"),

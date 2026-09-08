@@ -22,11 +22,11 @@
 >
 > Every conclusion comes from the current Minimoon source, tests, and generated artifacts. The MIT-licensed bilingual documentation in the reference repository supplied only an organizational and diagram-delivery pattern; this suite copies neither its domain content nor implementation code.
 
-本专题及高清图是维护者资料，保留在源码仓库中，并通过 `moon.mod` 排除在核心 Moon registry archive 之外；核心包硬上限为 280 KiB，另保留 8 KiB 余量。UI 包独立维持 250 KiB 硬上限和 16 KiB 余量。这不会影响应用依赖或生成的小程序字节。
+本专题及高清图是维护者资料，保留在源码仓库中，并通过 `.moonignore` 排除在核心 Moon registry archive 之外；核心包硬上限为 300 KiB，另保留 8 KiB 余量。UI 包独立维持 250 KiB 硬上限和 16 KiB 余量。这不会影响应用依赖或生成的小程序字节。
 
 > **English:**
 >
-> This suite and its high-resolution assets are maintainer material kept in the source repository. `moon.mod` excludes them from the core Moon registry archive, with its 280 KiB hard ceiling and 8 KiB reserve. UI independently retains a 250 KiB hard ceiling and 16 KiB reserve. They do not affect application dependencies or generated MiniApp bytes.
+> This suite and its high-resolution assets are maintainer material kept in the source repository. `.moonignore` excludes them from the core Moon registry archive, with its 300 KiB hard ceiling and 8 KiB reserve. UI independently retains a 250 KiB hard ceiling and 16 KiB reserve. They do not affect application dependencies or generated MiniApp bytes.
 
 ## 2. 当前仓库形态 / Current Repository Shape
 
@@ -52,7 +52,7 @@ flowchart LR
     Graph[Duplix graph<br/>事务与作用域 / transactions and scopes]
     Renderer[MiniApp renderer<br/>规范化与 diff / normalization and diff]
     Runtime[Resident runtime<br/>命令与订阅 / commands and subscriptions]
-    Generator[App Contract v9 generator<br/>构建与验证 / build and verify]
+    Generator[App Contract v10 generator<br/>构建与验证 / build and verify]
     Host[CommonJS host scheduler<br/>队列、ack、COW / queue, ack, COW]
     Skyline[WeChat Skyline<br/>WXML / setData / wx.*]
 

@@ -6,6 +6,20 @@ Tests may import `lampclaw/minimoon/testing` and mount a public `Page`. The
 runtime reads the same normalized snapshot used by the MiniApp renderer; it
 does not maintain a parallel test-only VDOM.
 
+`mount(page, input=...)` can raise a test failure for invalid route input and
+drives Load → Show → Ready (`PageRuntime.mount`). For shared state, use
+`let app = @testing.launch(application.program())`, followed by
+`app.mount(deps => page.program(deps), input=...)`. `defer app.dispose()`
+cleans up all mounted pages and the application. Mounting a second page does
+not hide the first: this harness is not a navigation simulator.
+
+After interactions, `runtime.quiesce()` drains currently ready local work and,
+for application-owned pages, all ready App messages and page projections.
+It stops after at most 1,024 drain rounds and reports pending owners if the
+system does not settle. It does not advance timers or wait for HTTP. Await or
+inject asynchronous completion first, then quiesce. Empty command output is
+not treated as proof of stability.
+
 ```moonbit
 let runtime = @testing.mount(program())
 let save = @testing.all([

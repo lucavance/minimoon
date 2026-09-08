@@ -49,37 +49,40 @@ fn layer_test_event(runtime : PageRuntime, id : String) -> String {
 ///|
 test "layers lift nested surfaces parent first outside clipped containers and preserve event bindings" {
   let runtime = page(
-    id="layer_test",
-    route=route("pages/layers/index"),
-    title="Layers",
-    build=_ => {
-      let (value, emit) = create_variable(0)
-      value.view(value => {
-        layer_root(id="root", [
-          div(id="clipped", style="overflow:hidden;", [
-            text("body"),
-            layer(id="parent", [
-              button(
-                id="parent-action",
-                on_tap=emit(value => value + 1),
-                "parent",
-              ),
-              layer(
-                id="child",
+      id="layer_test",
+      route=route("pages/layers/index"),
+      title="Layers",
+      build=_ => {
+        let (value, emit) = create_variable(0)
+        value.view(value => {
+          layer_root(id="root", [
+            div(id="clipped", style="overflow:hidden;", [
+              text("body"),
+              layer(id="parent", [
                 button(
-                  event_key="child-action",
-                  on_tap=emit(value => value + 10),
-                  "child",
+                  id="parent-action",
+                  on_tap=emit(value => value + 1),
+                  "parent",
                 ),
-              ),
+                layer(
+                  id="child",
+                  button(
+                    event_key="child-action",
+                    on_tap=emit(value => value + 10),
+                    "child",
+                  ),
+                ),
+              ]),
             ]),
-          ]),
-          layer(id="sibling", text("sibling")),
-          text("value:" + value.to_string()),
-        ])
-      })
-    },
-  ).create_runtime()
+            layer(id="sibling", text("sibling")),
+            text("value:" + value.to_string()),
+          ])
+        })
+      },
+    )
+    .create_runtime()
+    .unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   let snapshot = layer_test_json(runtime.snapshot())
   let clipped = layer_test_find(snapshot, "clipped").unwrap()
@@ -111,67 +114,70 @@ test "panic duplicate nested layer IDs are rejected" {
 test "keyed layer reordering preserves local state and disposal cancels saved emits and subscriptions" {
   let saved : Ref[Emit[Unit]?] = Ref(None)
   let runtime = page(
-    id="layer_lifetime",
-    route=route("pages/layer-lifetime/index"),
-    title="Layer lifetime",
-    build=page => {
-      let (keys, set_keys) = create_variable(["a", "b"])
-      let rows = keys
-        .map(keys => @vector.from_array(keys))
-        .assoc_by(
-          (key, _) => {
-            let (count, emit) = create_state_with_init(
-              init=emit => {
-                if key == "a" {
-                  saved.val = Some(emit)
-                }
-                no_cmd(0)
-              },
-              update=(count, _ : Unit, _) => no_cmd(count + 1),
-              subscriptions=(_, emit) => {
-                page.every(
-                  key="layer-clock/" + key,
-                  interval_ms=1000,
-                  command=emit(()),
-                )
-              },
-            )
-            count.view(count => {
-              layer(
-                id="layer-" + key,
-                button(
-                  id="action-" + key,
-                  on_tap=emit(()),
-                  key + ":" + count.to_string(),
-                ),
+      id="layer_lifetime",
+      route=route("pages/layer-lifetime/index"),
+      title="Layer lifetime",
+      build=page => {
+        let (keys, set_keys) = create_variable(["a", "b"])
+        let rows = keys
+          .map(keys => @vector.from_array(keys))
+          .assoc_by(
+            (key, _) => {
+              let (count, emit) = create_state_with_init(
+                init=emit => {
+                  if key == "a" {
+                    saved.val = Some(emit)
+                  }
+                  no_cmd(0)
+                },
+                update=(count, _ : Unit, _) => no_cmd(count + 1),
+                subscriptions=(_, emit) => {
+                  page.every(
+                    key="layer-clock/" + key,
+                    interval_ms=1000,
+                    command=emit(()),
+                  )
+                },
               )
-            })
-          },
-          by=key => key,
-        )
-      Val::view2(keys, rows, (_, rows) => {
-        layer_root([
-          button(
-            event_key="reverse",
-            on_tap=set_keys(_ => ["b", "a"]),
-            "reverse",
-          ),
-          button(event_key="remove", on_tap=set_keys(_ => ["b"]), "remove"),
-          button(
-            event_key="restore",
-            on_tap=set_keys(_ => ["a", "b"]),
-            "restore",
-          ),
-          button(
-            event_key="late",
-            on_tap=saved.val.map(emit => emit(())).unwrap_or(none),
-            "late",
-          ),
-          fragment(rows.to_array()),
-        ])
-      })
-    },
-  ).create_runtime()
+              count.view(count => {
+                layer(
+                  id="layer-" + key,
+                  button(
+                    id="action-" + key,
+                    on_tap=emit(()),
+                    key + ":" + count.to_string(),
+                  ),
+                )
+              })
+            },
+            by=key => key,
+          )
+        Val::view2(keys, rows, (_, rows) => {
+          layer_root([
+            button(
+              event_key="reverse",
+              on_tap=set_keys(_ => ["b", "a"]),
+              "reverse",
+            ),
+            button(event_key="remove", on_tap=set_keys(_ => ["b"]), "remove"),
+            button(
+              event_key="restore",
+              on_tap=set_keys(_ => ["a", "b"]),
+              "restore",
+            ),
+            button(
+              event_key="late",
+              on_tap=saved.val.map(emit => emit(())).unwrap_or(none),
+              "late",
+            ),
+            fragment(rows.to_array()),
+          ])
+        })
+      },
+    )
+    .create_runtime()
+    .unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   let implicit = layer_test_event(runtime, "action-a")
   let _ = runtime.dispatch(implicit, "{}")

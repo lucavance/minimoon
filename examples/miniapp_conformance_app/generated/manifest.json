@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 9,
+  "schemaVersion": 10,
   "adapter": "page_program",
-  "runtimeApiVersion": 11,
+  "runtimeApiVersion": 12,
   "rendererProtocolVersion": 8,
   "rendererUpdateStrategy": "automatic-diff",
   "hostRegistration": "page-definition-api",
@@ -18,7 +18,7 @@
     "package": "src/app"
   },
   "runtimeBytes": {
-    "application": 373090
+    "application": 387977
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -66,8 +66,8 @@
   "name": "miniapp_conformance_app",
   "pages": [
     {
-      "schemaVersion": 9,
-      "runtimeApiVersion": 11,
+      "schemaVersion": 10,
+      "runtimeApiVersion": 12,
       "rendererProtocolVersion": 8,
       "id": "showcase",
       "route": "pages/showcase/showcase",
@@ -172,7 +172,7 @@
                   {
                     "kind": "text",
                     "identity": "i:0",
-                    "text": "Typed state · Transactional Val · Runtime API v11",
+                    "text": "Typed state · Transactional Val · Runtime API v12",
                     "props": {},
                     "events": {},
                     "children": []
@@ -687,11 +687,12 @@
         "onPullDownRefresh",
         "onReachBottom"
       ],
-      "inputs": []
+      "inputs": [],
+      "smokeInput": {}
     },
     {
-      "schemaVersion": 9,
-      "runtimeApiVersion": 11,
+      "schemaVersion": 10,
+      "runtimeApiVersion": 12,
       "rendererProtocolVersion": 8,
       "id": "home",
       "route": "pages/home/home",
@@ -1631,8 +1632,25 @@
                 ]
               },
               {
-                "kind": "button",
+                "kind": "view",
                 "identity": "i:2",
+                "text": "",
+                "props": {},
+                "events": {},
+                "children": [
+                  {
+                    "kind": "text",
+                    "identity": "i:0",
+                    "text": "Application echoed draft: none (not persistent)",
+                    "props": {},
+                    "events": {},
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "kind": "button",
+                "identity": "i:3",
                 "text": "",
                 "props": {
                   "disabled": false
@@ -1653,7 +1671,7 @@
               },
               {
                 "kind": "button",
-                "identity": "i:3",
+                "identity": "i:4",
                 "text": "",
                 "props": {
                   "disabled": false
@@ -1674,7 +1692,7 @@
               },
               {
                 "kind": "button",
-                "identity": "i:4",
+                "identity": "i:5",
                 "text": "",
                 "props": {
                   "disabled": false
@@ -1717,11 +1735,12 @@
         "onPullDownRefresh",
         "onReachBottom"
       ],
-      "inputs": []
+      "inputs": [],
+      "smokeInput": {}
     },
     {
-      "schemaVersion": 9,
-      "runtimeApiVersion": 11,
+      "schemaVersion": 10,
+      "runtimeApiVersion": 12,
       "rendererProtocolVersion": 8,
       "id": "lab",
       "route": "pages/lab/lab",
@@ -4016,11 +4035,12 @@
         "onPullDownRefresh",
         "onReachBottom"
       ],
-      "inputs": []
+      "inputs": [],
+      "smokeInput": {}
     },
     {
-      "schemaVersion": 9,
-      "runtimeApiVersion": 11,
+      "schemaVersion": 10,
+      "runtimeApiVersion": 12,
       "rendererProtocolVersion": 8,
       "id": "details",
       "route": "pages/details/details",
@@ -4134,7 +4154,7 @@
                   {
                     "kind": "text",
                     "identity": "i:0",
-                    "text": "from: direct",
+                    "text": "from: preview",
                     "props": {},
                     "events": {},
                     "children": []
@@ -4161,8 +4181,124 @@
                 ]
               },
               {
-                "kind": "button",
+                "kind": "view",
                 "identity": "i:6",
+                "text": "",
+                "props": {
+                  "section": "draft-editor"
+                },
+                "events": {},
+                "children": [
+                  {
+                    "kind": "view",
+                    "identity": "i:0",
+                    "text": "",
+                    "props": {},
+                    "events": {},
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Public API echo demo — not persistent storage",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "input",
+                    "identity": "i:1",
+                    "text": "",
+                    "props": {
+                      "value": "",
+                      "disabled": false,
+                      "focus": false,
+                      "placeholder": "Draft title (required)",
+                      "className": "mt-_b8rpx_B rounded-_b10rpx_B bg-slate-100 px-_b20rpx_B py-_b12rpx_B"
+                    },
+                    "events": {
+                      "input": "details/draft-title"
+                    },
+                    "children": []
+                  },
+                  {
+                    "kind": "input",
+                    "identity": "i:2",
+                    "text": "",
+                    "props": {
+                      "value": "",
+                      "disabled": false,
+                      "focus": false,
+                      "placeholder": "Draft note",
+                      "className": "mt-_b8rpx_B rounded-_b10rpx_B bg-slate-100 px-_b20rpx_B py-_b12rpx_B"
+                    },
+                    "events": {
+                      "input": "details/draft-note"
+                    },
+                    "children": []
+                  },
+                  {
+                    "kind": "button",
+                    "identity": "i:3",
+                    "text": "",
+                    "props": {
+                      "disabled": false,
+                      "className": "mt-_b16rpx_B rounded-_b10rpx_B bg-blue-700 px-_b20rpx_B py-_b12rpx_B text-white"
+                    },
+                    "events": {
+                      "tap": "details/save-draft"
+                    },
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Send draft to public echo API",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "view",
+                    "identity": "i:4",
+                    "text": "",
+                    "props": {},
+                    "events": {},
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Draft save: idle",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "view",
+                    "identity": "i:5",
+                    "text": "",
+                    "props": {},
+                    "events": {},
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "button",
+                "identity": "i:7",
                 "text": "",
                 "props": {
                   "style": "margin-left: 0; margin-right: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box; line-height: 1; min-height: 0;",
@@ -4185,7 +4321,7 @@
               },
               {
                 "kind": "view",
-                "identity": "i:7",
+                "identity": "i:8",
                 "text": "",
                 "props": {
                   "section": "shared-state",
@@ -4228,8 +4364,25 @@
                     ]
                   },
                   {
-                    "kind": "button",
+                    "kind": "view",
                     "identity": "i:2",
+                    "text": "",
+                    "props": {},
+                    "events": {},
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Application echoed draft: none (not persistent)",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "button",
+                    "identity": "i:3",
                     "text": "",
                     "props": {
                       "disabled": false
@@ -4250,7 +4403,7 @@
                   },
                   {
                     "kind": "button",
-                    "identity": "i:3",
+                    "identity": "i:4",
                     "text": "",
                     "props": {
                       "disabled": false
@@ -4271,7 +4424,7 @@
                   },
                   {
                     "kind": "button",
-                    "identity": "i:4",
+                    "identity": "i:5",
                     "text": "",
                     "props": {
                       "disabled": false
@@ -4298,7 +4451,8 @@
       },
       "capabilities": [
         "wx.navigateBack",
-        "wx.redirectTo"
+        "wx.redirectTo",
+        "wx.request"
       ],
       "lifecycle": [
         "onLoad",
@@ -4308,7 +4462,10 @@
         "onPullDownRefresh",
         "onReachBottom"
       ],
-      "inputs": []
+      "inputs": [],
+      "smokeInput": {
+        "from": "smoke"
+      }
     }
   ]
 }

@@ -1,9 +1,9 @@
 ///|
-test "reviewed shared-state byte budgets retain exact inclusive boundaries" {
-  assert_eq(registry_archive_hard_limit, 286720)
+test "reviewed authoring byte budgets retain exact inclusive boundaries" {
+  assert_eq(registry_archive_hard_limit, 307200)
   assert_eq(registry_archive_reserve, 8192)
-  assert_eq(registry_archive_operating_limit, 278528)
-  assert_eq(conformance_runtime_limit, 383000)
+  assert_eq(registry_archive_operating_limit, 299008)
+  assert_eq(conformance_runtime_limit, 400000)
   assert_eq(conformance_javascript_limit, 453000)
   assert_eq(page_host_limit, 15000)
   assert_eq(application_host_limit, 16000)

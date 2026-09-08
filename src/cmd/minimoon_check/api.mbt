@@ -250,6 +250,9 @@ async fn api_suite(root : String) -> Unit {
   ]
   if product_series == "0.2" {
     package_snapshots.push(
+      ("http", "src/http/pkg.generated.mbti", "http.mbti", "exact", true),
+    )
+    package_snapshots.push(
       (
         "resources", "src/resources/pkg.generated.mbti", "resources.mbti", "exact",
         true,

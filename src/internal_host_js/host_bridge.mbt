@@ -11,6 +11,7 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|  ...eventDispatchers,
     #|  data: { [minimoonPageId]: { tree: minimoonInitialTree, commit: 0 } },
     #|  onLoad(options) {
+    #|    if (this.__mmInstanceId) { console.error("[minimoon] duplicate_page_load"); return }
     #|    this._st = createRendererStats()
     #|    this._rv = 0
     #|    this._sh = JSON.parse(JSON.stringify(this.data[minimoonPageId].tree))
@@ -27,15 +28,22 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|    this._pr = null
     #|    this._cr = null
     #|    this.__mmInstanceId = null
-    #|    const hadRuntimeWake = Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV11")
-    #|    const previousRuntimeWake = globalThis.__minimoonRuntimeWakeV11
-    #|/* application */    const previousSharedWake = globalThis.__minimoonSharedWakeV11
+    #|    const hadRuntimeWake = Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV12")
+    #|    const previousRuntimeWake = globalThis.__minimoonRuntimeWakeV12
+    #|/* application */    const previousSharedWake = globalThis.__minimoonSharedWakeV12
     #|/* application */    let sharedScheduled = false
     #|    const wakeGeneration = this._gn
-    #|    globalThis.__minimoonRuntimeWakeV11 = (through) => this._aw(wakeGeneration, through)
-    #|/* application */    globalThis.__minimoonSharedWakeV11 = () => { if (sharedScheduled) return; sharedScheduled = true; Promise.resolve().then(() => { sharedScheduled = false; if (this._gn === wakeGeneration) this._en({ kind: "shared" }) }) }
-    #|    try { this.__mmInstanceId = runtime.minimoon_runtime_create_app(minimoonPageId) }
-    #|    finally { if (hadRuntimeWake) globalThis.__minimoonRuntimeWakeV11 = previousRuntimeWake; else delete globalThis.__minimoonRuntimeWakeV11; __MM_APP_RESTORE__ }
+    #|    globalThis.__minimoonRuntimeWakeV12 = (through) => this._aw(wakeGeneration, through)
+    #|/* application */    globalThis.__minimoonSharedWakeV12 = () => { if (sharedScheduled) return; sharedScheduled = true; Promise.resolve().then(() => { sharedScheduled = false; if (this._gn === wakeGeneration) this._en({ kind: "shared" }) }) }
+    #|    try {
+    #|      const created = JSON.parse(runtime.minimoon_runtime_create_app(minimoonPageId, JSON.stringify(options || {})))
+    #|      if (!created || created.ok !== true || typeof created.id !== "string" || !created.id) {
+    #|        this._fc("page_input_decode_failed", created && created.error)
+    #|        return
+    #|      }
+    #|      this.__mmInstanceId = created.id
+    #|    }
+    #|    finally { if (hadRuntimeWake) globalThis.__minimoonRuntimeWakeV12 = previousRuntimeWake; else delete globalThis.__minimoonRuntimeWakeV12; __MM_APP_RESTORE__ }
     #|/* application */    if (runtime.minimoon_application_start) applicationPages.set(this, runtime)
     #|    this._en({ kind: "lifecycle", hook: "onLoad", payload: options || {} })
     #|  },
@@ -59,8 +67,7 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|      try { this._ci(runtime.minimoon_runtime_lifecycle(instanceId, "onUnload", "{}")) } catch (error) { console.error("[minimoon] unload lifecycle failed", error) }
     #|      try { this._ci(runtime.minimoon_runtime_dispose(instanceId)) } catch (error) { console.error("[minimoon] runtime dispose failed", error) }
     #|    }
-    #|    if (this._sb) { for (const handle of this._sb.values()) clearInterval(handle); this._sb.clear() }
-    #|    if (this._ef) { for (const cancel of this._ef.values()) { try { cancel() } catch (_) {} }; this._ef.clear() }
+    #|    this._clearTasks()
     #|    this.__mmInstanceId = null
     #|  },
     #|  _dk(event, field, type) {
@@ -322,6 +329,10 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|  },
     #|  _iv(command) { invokeMinimoonEffect.call(this, command, minimoonCapabilities) },
     #|  _ev(result) { return result == null ? null : result },
+    #|  _clearTasks() {
+    #|    if (this._sb) { for (const handle of this._sb.values()) clearInterval(handle); this._sb.clear() }
+    #|    if (this._ef) { for (const cancel of this._ef.values()) { try { cancel() } catch (_) {} }; this._ef.clear() }
+    #|  },
     #|  _fc(reason, error) {
     #|    if (this._cl) return
     #|    this._cl = true
@@ -332,8 +343,7 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|    this._cr = null
     #|    this._pr = null
     #|    if (this._at != null) { clearTimeout(this._at); this._at = null }
-    #|    if (this._sb) { for (const handle of this._sb.values()) clearInterval(handle); this._sb.clear() }
-    #|    if (this._ef) { for (const cancel of this._ef.values()) { try { cancel() } catch (_) {} }; this._ef.clear() }
+    #|    this._clearTasks()
     #|    if (error) console.error(`[minimoon] scheduler failed closed: ${reason}`, error); else console.error(`[minimoon] scheduler failed closed: ${reason}`)
     #|  },
     #|})
@@ -351,7 +361,7 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     .replace_all(
       old="__MM_APP_RESTORE__",
       new=if application {
-        "if (previousSharedWake === undefined) delete globalThis.__minimoonSharedWakeV11; else globalThis.__minimoonSharedWakeV11 = previousSharedWake"
+        "if (previousSharedWake === undefined) delete globalThis.__minimoonSharedWakeV12; else globalThis.__minimoonSharedWakeV12 = previousSharedWake"
       } else {
         ""
       },

@@ -363,9 +363,7 @@ pub fn[C : @minimoon.IsChildren] form_message(id? : String, class? : String, sty
 
 pub fn hover_card(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node]) -> @minimoon.Val[@minimoon.Node]
 
-pub fn input(id~ : String, initial_value? : String, options? : InputOptions, on_confirm? : @minimoon.Emit[String]) -> @minimoon.Val[@minimoon.Node]
-
-pub fn input_controlled(id~ : String, value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], options? : InputOptions, on_confirm? : @minimoon.Emit[String], semantics? : @minimoon.Semantics, on_focus? : @minimoon.Emit[@minimoon.FocusDetail], on_blur? : @minimoon.Emit[@minimoon.InputBlurDetail]) -> @minimoon.Val[@minimoon.Node]
+pub fn input(id~ : String, value~ : String, on_input~ : @minimoon.Emit[String], options? : InputOptions, focused? : Bool, on_confirm? : @minimoon.Emit[String], semantics? : @minimoon.Semantics, on_focus? : @minimoon.Emit[@minimoon.FocusDetail], on_blur? : @minimoon.Emit[@minimoon.InputBlurDetail]) -> @minimoon.Node
 
 pub fn[C : @minimoon.IsChildren] input_group(id? : String, class? : String, style? : String, C) -> @minimoon.Node
 
@@ -392,6 +390,8 @@ pub fn[C : @minimoon.IsChildren] input_otp_group(id? : String, class? : String, 
 pub fn input_otp_separator() -> @minimoon.Node
 
 pub fn input_otp_slot(value? : String, active? : Bool, id? : String) -> @minimoon.Node
+
+pub fn input_stateful(id~ : String, initial_value? : String, options? : InputOptions, on_confirm? : @minimoon.Emit[String], semantics? : @minimoon.Semantics, on_focus? : @minimoon.Emit[@minimoon.FocusDetail], on_blur? : @minimoon.Emit[@minimoon.InputBlurDetail]) -> @minimoon.Val[@minimoon.Node]
 
 pub fn[C : @minimoon.IsChildren] item(variant? : Tone, size? : Size, C) -> @minimoon.Node
 
@@ -737,9 +737,11 @@ pub fn[C : @minimoon.IsChildren] tabs_root(id? : String, vertical? : Bool, C) ->
 
 pub fn[C : @minimoon.IsChildren] tabs_trigger(value~ : String, on_change~ : @minimoon.Emit[String], selected? : Bool, disabled? : Bool, controls? : String, id? : String, C) -> @minimoon.Node
 
-pub fn textarea(id~ : String, initial_value? : String, options? : InputOptions) -> @minimoon.Val[@minimoon.Node]
+pub fn text_field(@minimoon.Val[FieldState], @minimoon.Val[String], @minimoon.Emit[String], options? : @minimoon.Val[InputOptions], orientation? : Orientation, on_confirm? : @minimoon.Emit[String], on_focus? : @minimoon.Emit[@minimoon.FocusDetail], on_blur? : @minimoon.Emit[@minimoon.InputBlurDetail]) -> @minimoon.Val[@minimoon.Node]
 
-pub fn textarea_controlled(id~ : String, value~ : @minimoon.Val[String], on_change~ : @minimoon.Emit[String], options? : InputOptions, on_confirm? : @minimoon.Emit[String], semantics? : @minimoon.Semantics, on_focus? : @minimoon.Emit[@minimoon.FocusDetail], on_blur? : @minimoon.Emit[@minimoon.TextareaBlurDetail]) -> @minimoon.Val[@minimoon.Node]
+pub fn textarea(id~ : String, value~ : String, on_input~ : @minimoon.Emit[String], options? : InputOptions, focused? : Bool, on_confirm? : @minimoon.Emit[String], semantics? : @minimoon.Semantics, on_focus? : @minimoon.Emit[@minimoon.FocusDetail], on_blur? : @minimoon.Emit[@minimoon.TextareaBlurDetail]) -> @minimoon.Node
+
+pub fn textarea_stateful(id~ : String, initial_value? : String, options? : InputOptions, on_confirm? : @minimoon.Emit[String], semantics? : @minimoon.Semantics, on_focus? : @minimoon.Emit[@minimoon.FocusDetail], on_blur? : @minimoon.Emit[@minimoon.TextareaBlurDetail]) -> @minimoon.Val[@minimoon.Node]
 
 pub fn theme(@minimoon.Val[@theme.Theme], @minimoon.Val[@minimoon.Node]) -> @minimoon.Val[@minimoon.Node]
 

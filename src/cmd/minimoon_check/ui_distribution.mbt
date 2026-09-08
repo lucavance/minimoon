@@ -73,17 +73,20 @@ async fn ui_distribution_package_gate(
   executable : String,
 ) -> Unit {
   let version = ui_package_version(root)
-  let (code, stdout, stderr) = @process.collect_output(
-    "moon",
-    ["package", "--frozen", "--list"],
-    cwd=join(root, "ui"),
-  )
-  let listing = stdout.text() + "\n" + stderr.text()
-  guard code == 0 else { abort("UI registry packaging failed:\n" + listing) }
-  let paths = registry_package_paths(listing)
-  guard !paths.is_empty() else {
-    abort("UI registry package path list is empty")
+  let stage = check_temporary("minimoon-ui-package")
+  let staged_ui = prepare_ui_packaging_stage(join(root, "ui"), root, stage)
+  let (archive, paths) = package_staged_ui(stage, staged_ui)
+  let archive_name = "_build/publish/lampclaw-minimoon_ui-" + version + ".zip"
+  guard archive == join(stage, archive_name) else {
+    abort(
+      "UI registry archive name does not match the module version: " + archive,
+    )
   }
+  println(
+    "UI registry package: " +
+    paths.length().to_string() +
+    " isolated source files",
+  )
   for path in paths {
     guard ui_registry_path_allowed(path) else {
       abort("UI registry package contains unapproved path: " + path)
@@ -97,12 +100,6 @@ async fn ui_distribution_package_gate(
     guard paths.contains(required) else {
       abort("UI registry package is missing " + required)
     }
-  }
-  let archive_name = "_build/publish/lampclaw-minimoon_ui-" + version + ".zip"
-  let archive = if @fs.exists(join(root, archive_name)) {
-    join(root, archive_name)
-  } else {
-    join(root, "ui/" + archive_name)
   }
   let size = @fs.read_file(archive).binary().length()
   let limit = (250 - 16) * 1024
@@ -242,4 +239,16 @@ async fn ui_distribution_package_gate(
   guard @verify.artifact_fingerprint(consumer) == first else {
     abort("UI provider generation is not deterministic")
   }
+  // Preserve the established CI artifact path only after all package/consumer
+  // checks pass. Never reuse a prior ZIP from the real workspace.
+  let publish_directory = join(root, "_build/publish")
+  if !@fs.exists(publish_directory) {
+    @fs.mkdir(publish_directory, permission=0o755, recursive=true)
+  }
+  @fs.write_file(
+    join(root, archive_name),
+    @fs.read_file(archive),
+    create_mode=CreateOrTruncate,
+    permission=0o644,
+  )
 }

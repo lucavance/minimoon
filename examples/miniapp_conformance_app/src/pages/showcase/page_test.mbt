@@ -2,7 +2,8 @@
 test "showcase presents bilingual state and lifecycle feedback" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps()))
+  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
   let initial = runtime.snapshot()
   inspect(initial.contains("\"section\":\"showcase-hero\""), content="true")
   inspect(initial.contains("Minimoon Studio"), content="true")
@@ -25,7 +26,8 @@ test "showcase presents bilingual state and lifecycle feedback" {
 test "showcase routes to all technical validation pages" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps()))
+  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let console = runtime.dispatch("showcase/open-console", "{}")
   inspect(console.contains("/pages/home/home?name=Studio"), content="true")

@@ -44,11 +44,11 @@ fn file_role(path : String) -> String {
   if path.has_suffix(".mbti") {
     return "generated_interface"
   }
+  if path.has_suffix("_bench.mbt") || path.has_suffix("_bench_wbtest.mbt") {
+    return "benchmark"
+  }
   if path.has_suffix("_test.mbt") || path.has_suffix("_wbtest.mbt") {
     return "test"
-  }
-  if path.has_suffix("_bench.mbt") {
-    return "benchmark"
   }
   if path.has_suffix(".md") ||
     path.has_suffix(".rst") ||
@@ -65,7 +65,8 @@ fn file_role(path : String) -> String {
     return "maintained_source"
   }
   if [
-      "moon.mod", "moon.pkg", "moon.work", "bun.lock", ".gitignore", ".gitattributes",
+      "moon.mod", "moon.pkg", "moon.work", "bun.lock", ".gitignore", ".moonignore",
+      ".gitattributes",
     ].contains(name) ||
     [".json", ".yaml", ".yml", ".toml", ".lock", ".ini", ".cfg"].any(extension => {
       path.has_suffix(extension)

@@ -108,6 +108,63 @@ pub fn[Input : Eq] field_with_input(
 }
 
 ///|
+/// Bind application-owned text and validation to one native input.
+/// Create this component once in the page/component builder, not inside a view.
+/// Validation and submitted/touched policy remain application-owned; focus is
+/// component-owned and survives value, validation and option updates.
+pub fn text_field(
+  state : @minimoon.Val[FieldState],
+  value : @minimoon.Val[String],
+  on_input : @minimoon.Emit[String],
+  options? : @minimoon.Val[InputOptions] = @minimoon.Val::constant(
+    input_options(),
+  ),
+  orientation? : Orientation = Vertical,
+  on_confirm? : @minimoon.Emit[String],
+  on_focus? : @minimoon.Emit[@minimoon.FocusDetail],
+  on_blur? : @minimoon.Emit[@minimoon.InputBlurDetail],
+) -> @minimoon.Val[@minimoon.Node] {
+  let (focused, update_focus) = @minimoon.create_variable(false)
+  @minimoon.Val::view4(state, value, options, focused, (
+    state,
+    value,
+    options,
+    focused,
+  ) => {
+    let options = {
+      ..options,
+      invalid: options.invalid || state.error != "",
+      disabled: options.disabled || state.disabled,
+    }
+    let semantics = @minimoon.semantics(
+      role=@minimoon.TextboxRole,
+      label=state.label,
+      labelled_by=state.id + "-label",
+      described_by=state.id +
+        (if state.error != "" { "-error" } else { "-description" }),
+      required=state.required,
+      invalid=options.invalid,
+      disabled=options.disabled || options.read_only,
+    )
+    field(
+      state,
+      orientation~,
+      input(
+        id=state.id,
+        value~,
+        on_input~,
+        options~,
+        focused~,
+        semantics~,
+        on_confirm?,
+        on_focus=input_focus_event(true, update_focus, on_focus),
+        on_blur=input_focus_event(false, update_focus, on_blur),
+      ),
+    )
+  })
+}
+
+///|
 pub fn[C : @minimoon.IsChildren] field_label(
   for_id~ : String,
   children : C,

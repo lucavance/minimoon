@@ -48,7 +48,7 @@ pub fn http_probe_source() -> String {
     #|globalThis.wx = { request: options => transport(options) }
     #|const resolvePath = (root, path) => path.reduce((value, key) => value[key], root)
     #|const assign = (root, path, value) => { resolvePath(root, path.slice(0, -1))[path.at(-1)] = value }
-    #|const start = () => {
+    #|const start = (input = {}) => {
     #|  const pending = []
     #|  host = { ...definition, data: structuredClone(definition.data),
     #|    setData(patch, callback) { for (const [key, value] of Object.entries(patch)) assign(this.data, key.replace(/\[(\d+)\]/g, ".$1").split("."), value); if (callback) callback() },
@@ -56,7 +56,7 @@ pub fn http_probe_source() -> String {
     #|    spliceArrayDataOnPath(path, index, del, items) { pending.push([path, index, del, items]) },
     #|    groupUpdates(callback) { callback(); for (const op of pending.splice(0)) { if (op.length === 2) assign(this.data, op[0], op[1]); else resolvePath(this.data, op[0]).splice(op[1], op[2], ...op[3]) } },
     #|  }
-    #|  host.onLoad({}); host.onReady(); host.onShow()
+    #|  host.onLoad(input); host.onShow(); host.onReady()
     #|}
     #|const dispatch = (kind, key, detail = {}) => host[`__mmDispatch${kind}`]({ currentTarget: { dataset: { [`minimoon${kind}`]: key } }, target: { dataset: {} }, detail })
     #|const tree = () => JSON.stringify(host.data)
@@ -103,6 +103,10 @@ pub fn http_probe_source() -> String {
     #|  assert.equal(invoked, 0); assert.equal(host._ef.size, 0)
     #|  host.onUnload()
     #|  require(require("node:path").resolve(require("node:path").dirname(process.argv[2]), "../details/details.js"))
+    #|  start({ from: "http-probe" })
+    #|  assert.ok(host.__mmInstanceId, "Details must accept explicit probe route input")
+    #|  host.onUnload()
+    #|  require(require("node:path").resolve(require("node:path").dirname(process.argv[2]), "../showcase/showcase.js"))
     #|  start()
     #|  let rejected; const enqueue = host._en; host._en = entry => { rejected = entry }
     #|  host._iv({ capability: "wx.request", request_id: "undeclared", payload: { url: "https://example.test", method: "GET", header: {} } })

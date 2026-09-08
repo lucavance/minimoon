@@ -29,6 +29,7 @@ pub fn page(
   id : String,
   title : String,
   build : (@ui.UiContext) -> @minimoon.Val[@minimoon.Node],
+  capabilities? : Array[@minimoon.Capability] = [],
 ) -> @minimoon.Page {
   @minimoon.page(
     id="ui_" + id,
@@ -38,6 +39,7 @@ pub fn page(
       @minimoon.NavigateTo,
       @minimoon.RedirectTo,
       @minimoon.MeasureNodes,
+      ..capabilities,
     ],
     build=page_context => {
       let (dark, toggle_dark) = @minimoon.create_variable(false)

@@ -60,7 +60,7 @@ fn view(
 ///|
 fn app(
   context : @minimoon.PageContext,
-  source : @minimoon.Val[String],
+  source : String,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (model, emit) = @minimoon.create_state(
     { enabled: false, visits: 0, },
@@ -80,14 +80,18 @@ fn app(
     },
     subscriptions=(_, emit) => context.on_show(emit(PageShown)),
   )
-  model.view2(source, (current, value) => view(current, emit, value))
+  model.view(current => view(current, emit, source))
 }
 
 ///|
 fn decode_input(
   fields : Map[String, String],
 ) -> Result[String, @minimoon.DecodeError] {
-  Ok(fields.get("from").unwrap_or("Home"))
+  match fields.get("from") {
+    Some(source) if source != "" => Ok(source)
+    _ =>
+      Err(@minimoon.decode_error("details requires a non-empty from parameter"))
+  }
 }
 
 ///|
@@ -97,6 +101,7 @@ pub fn program() -> @minimoon.Page {
     route=@minimoon.route("pages/details/details"),
     title="Details",
     capabilities=[@minimoon.NavigateBack, @minimoon.RedirectTo],
+    preview_input=() => "Home",
     decode_input~,
     build=app,
   )

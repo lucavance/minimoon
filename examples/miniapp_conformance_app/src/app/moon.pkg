@@ -1,5 +1,6 @@
 import {
   "lampclaw/minimoon",
+  "moonbitlang/core/json",
 }
 
 supported_targets = "js"

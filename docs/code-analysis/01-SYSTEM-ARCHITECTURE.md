@@ -10,11 +10,11 @@ Minimoon 是一个“应用内 MoonBit runtime + 构建期 native 工具 + 生�
 >
 > Minimoon uses an in-application MoonBit runtime, native build-time tooling, and a generated MiniApp host. It is neither a browser DOM framework nor a translator from MoonBit business logic into handwritten JavaScript. Applications depend only on the root `lampclaw/minimoon` package; the graph, renderer, runtime, host templates, and generator remain behind it.
 
-系统的主要一致性边界是页面实例。每次 `Page::create_runtime()` 都创建独立 graph、state slot、事件表、订阅集合、规范化缓存、host revision 和 scheduler；同一路由的两个页面实例不会共享这些可变状态。
+系统的主要一致性边界是页面实例。`Page::create_runtime(input?)` 在真实输入解码成功后才创建独立 graph、state slot、事件表、订阅集合、规范化缓存和 host revision，并返回 Result；生成宿主为成功创建的页面配置 scheduler。同一路由的两个实例不会共享这些可变状态，输入错误则不创建页面图。
 
 > **English:**
 >
-> The primary consistency boundary is a page instance. Every `Page::create_runtime()` creates an independent graph, state slots, event table, subscription set, normalization cache, host revision, and scheduler. Two instances of the same route do not share this mutable state.
+> The primary consistency boundary is a page instance. `Page::create_runtime(input?)` returns a Result and creates an independent graph, state slots, event table, subscriptions, normalization cache and host revision only after actual input decodes successfully. The generated host supplies its scheduler. Two instances of the same route do not share this mutable state; invalid input creates no page graph.
 
 ## 2. 分层与所有权 / Layers and Ownership
 

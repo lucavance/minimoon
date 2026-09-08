@@ -89,14 +89,18 @@ fn view(model : Model, emit : @minimoon.Emit[Msg]) -> @minimoon.Node {
 
 ///|
 pub fn program() -> @minimoon.Page {
-  @minimoon.elmish_page(
+  @minimoon.page(
     id="home",
     route=@minimoon.route("pages/home/home"),
     title="Home",
-    model={ count: 0, name: "Minimoon", visits: 0, },
-    update=(current, message, _) => update(current, message),
-    view~,
     capabilities=[@minimoon.NavigateTo],
-    subscriptions=(context, _, emit) => context.on_show(emit(PageShown)),
+    build=context => {
+      let (model, emit) = @minimoon.create_state(
+        { count: 0, name: "Minimoon", visits: 0, },
+        update=(current, message, _) => update(current, message),
+        subscriptions=(_, emit) => context.on_show(emit(PageShown)),
+      )
+      model.view(current => view(current, emit))
+    },
   )
 }

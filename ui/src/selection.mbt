@@ -294,7 +294,9 @@ pub fn input_group_input(
   on_change~ : @minimoon.Emit[String],
   options? : InputOptions = input_options(),
 ) -> @minimoon.Val[@minimoon.Node] {
-  input_controlled(id~, value~, on_change~, options~).map(input_group_control)
+  input_with_focus(id~, value~, on_input=on_change, options~).map(
+    input_group_control,
+  )
 }
 
 ///|
@@ -304,7 +306,7 @@ pub fn input_group_textarea(
   on_change~ : @minimoon.Emit[String],
   options? : InputOptions = input_options(),
 ) -> @minimoon.Val[@minimoon.Node] {
-  textarea_controlled(id~, value~, on_change~, options~).map(
+  textarea_with_focus(id~, value~, on_input=on_change, options~).map(
     input_group_control,
   )
 }

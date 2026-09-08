@@ -19,7 +19,3 @@ keywords = [ "minimoon", "miniapp", "skyline", "components", "rui" ]
 source = "src"
 
 preferred_target = "js"
-
-options(
-  exclude: [ "examples", "docs", "**/*_test.mbt", "**/*_wbtest.mbt" ],
-)

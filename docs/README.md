@@ -35,7 +35,7 @@ Chinese and English paragraphs are interleaved in one document so architecture,
 source excerpts, and diagrams stay reviewable as a single artifact. This
 maintainer suite and its high-resolution assets are source-repository material;
 they are intentionally excluded from the core registry archive, whose reviewed
-hard ceiling is 280 KiB with an 8 KiB reserve. UI has a separate 250 KiB hard
+hard ceiling is 300 KiB with an 8 KiB reserve. UI has a separate 250 KiB hard
 ceiling and 16 KiB reserve.
 
 - [`code-analysis/README.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md) — current-source reading map and provenance
@@ -55,6 +55,7 @@ ceiling and 16 KiB reserve.
 - [`guides/miniapp_quickstart.md`](guides/miniapp_quickstart.md)
 - [`guides/miniapp_authoring_example.md`](guides/miniapp_authoring_example.md)
 - [`guides/api_ergonomics.md`](guides/api_ergonomics.md)
+- [`guides/http.md`](guides/http.md) — typed HTTP response decoding and status policy
 - [`guides/resource_state_design.md`](guides/resource_state_design.md)
 - [`guides/subscription_scope.md`](guides/subscription_scope.md)
 - [`guides/testing_and_components.md`](guides/testing_and_components.md)

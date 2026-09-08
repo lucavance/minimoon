@@ -26,7 +26,8 @@ test "shared bindings in cached branches resume with latest state" {
       })
     },
   )
-  let page = app.create_page(definition)
+  let page = app.create_page(definition).unwrap()
+  ignore(page.lifecycle("onLoad", "{}"))
   ignore(page.mount())
   ignore(page.dispatch("toggle", "{}"))
   ignore(app.dispatch((deps.1)(4)))
@@ -46,7 +47,9 @@ test "panic shared values cannot bind to another application" {
   let second = shared_counter_app().create_runtime()
   defer ignore(first.dispose())
   defer ignore(second.dispose())
-  ignore(second.create_page(shared_counter_page(first.deps(), "foreign")))
+  ignore(
+    second.create_page(shared_counter_page(first.deps(), "foreign")).unwrap(),
+  )
 }
 
 ///|
@@ -63,5 +66,5 @@ test "panic shared values cannot bind after their application is disposed" {
   ignore(first.dispose())
   let second = shared_counter_app().create_runtime()
   defer ignore(second.dispose())
-  ignore(second.create_page(shared_counter_page(deps, "obsolete")))
+  ignore(second.create_page(shared_counter_page(deps, "obsolete")).unwrap())
 }

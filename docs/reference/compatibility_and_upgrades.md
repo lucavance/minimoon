@@ -22,8 +22,8 @@ Generated applications have three versioned boundaries:
 
 | Boundary | Current version | Rule |
 | --- | ---: | --- |
-| App Contract | 9 | generates schema 9; accepts schema 8 only without `application` |
-| runtime ABI | 11 | runtime and host files must be generated together |
+| App Contract | 10 | requires schema 10 with or without `application`; older source schemas require migration |
+| runtime ABI | 12 | runtime and host files must be generated together |
 | renderer protocol | 8 | renderer commands and host decoder must match |
 
 Generated files from different builds or versions must never be mixed. CommonJS
@@ -49,12 +49,30 @@ every future `0.2.x` / `0.1.x` combination. MoonBit dependency resolution may
 select a higher satisfying version, and a local workspace may override registry
 sources; inspect the resolved graph and rerun consumer gates for another pair.
 
-The supported toolchain floor is `moon 0.1.20260827` with `moonc v0.10.11`.
+The supported toolchain floor is `moon 0.1.20260904` with `moonc v0.10.12`.
+Both CI jobs directly use the official installer pinned to the complete
+prebuilt release `0.10.12+1634b282e`, not latest; Rust is not required.
+Existing local `moon 0.1.20260907` tools remain valid without downgrading.
 Repository and generated-starter JavaScript tooling support Node `>=24.20.0`,
 with CI coverage at the 24.20.0 lower boundary and in the 26.8.1 primary
 environment; Bun is pinned to `1.4.2`. Raising any floor or pin requires
 updating CI, the package consumer gate, starter guidance, and the compatibility
 notes in one change.
+
+The current Moon toolchain can inherit an ancestor Git repository's
+`.moonignore` when packaging a nested module. The root `/ui/` rule therefore
+makes direct `cd ui` publication (including `moon -C ui publish`) unsafe: it can
+produce an empty ZIP despite the UI source being present. The UI archive gate
+packages an isolated source copy under its own Git root and validates the
+actual archive, required files and consumers. The checked ZIP is
+`_build/publish/lampclaw-minimoon_ui-0.1.0.zip`.
+
+After core `0.2.0` is actually published and registry consumers pass, a separately
+authorized UI publication must start from that ZIP extracted outside all Git
+and Moon workspace ancestors. Check `moon.mod`, `src/`, README and LICENSE,
+resolve registry core and rerun consumers before publishing the unchanged
+extracted module. See the [release procedure](../operations/release_candidate_handoff.md#ordered-local-registry-publication).
+This workaround is a packaging boundary, not a publication or real-host pass.
 
 The dependency refresh after 0.1.1 raises the previous Node `>=24.11.0` floor.
 Consumers on Node 24 must upgrade to 24.20.0 or newer before installing the
@@ -90,15 +108,26 @@ artifact set. Restoring only one helper file is unsupported.
 
 The new UI module is independently named `lampclaw/minimoon_ui`; it depends on
 core 0.2.0, not on Rabbita. Existing optional components and both minimal themes
-remain available. The frozen 0.1 consumer compiles against core 0.2; new enum
-variants can require updates to exhaustive matches in application code.
+remain available. The frozen 0.1 consumer is historical source, not a required
+compatibility gate against the current core. The maintained consumer targets
+the current 0.2 API; migrate source calls and exhaustive enum matches before
+rebuilding.
 
-Upgrade an application contract's `schemaVersion` to `9` and regenerate the
-entire output. Schema `8` input remains accepted only without `application`.
+Upgrade an application contract's `schemaVersion` to `10` and regenerate the
+entire output. Both schema `8` and `9` are rejected, including no-App projects.
 The optional application package exports `Deps` and `program() -> App[Deps]`;
 all opted-in page factories receive those dependencies. `PageContext` is opaque.
 See [shared-state migration](../guides/shared_state.md). Do not mix old renderer
-output with current host files; runtime ABI is `11`, renderer protocol stays `8`.
+output with current host files; runtime ABI is `12`, renderer protocol stays `8`.
+
+`page_with_input` now requires `preview_input: () -> Input`; its builder receives
+an ordinary immutable input, not `Val[Input]`. The actual decoder runs before
+building the runtime, so required route values can initialize local state
+directly. `Page.create_runtime(input?)` and `AppRuntime.create_page(page, input?)`
+return `Result[PageRuntime, DecodeError]`. Handle errors instead of supplying
+fake defaults. Repeated Load is rejected, and Load must precede interactions;
+the first Load sends a full revision-1 tree. Initial commands run at the first
+Ready/mount, not during preview or Load. See [API ergonomics](../guides/api_ergonomics.md).
 
 UI applications opt into build resources with
 `resources: [{ "package": "lampclaw/minimoon_ui/resources", "features": [] }]`.

@@ -2,15 +2,11 @@ import {
   "lampclaw/minimoon/internal_versions" @versions,
   "lampclaw/minimoon/runtime_core" @runtime,
   "lampclaw/minimoon/ui_dsl" @ui,
-  "moonbitlang/core/bench",
   "moonbitlang/core/json",
 }
 
 import {
-  "moonbitlang/core/test",
-} for "test"
-
-import {
+  "moonbitlang/core/bench",
   "moonbitlang/core/test",
 } for "wbtest"
 

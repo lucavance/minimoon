@@ -29,7 +29,7 @@ fingerprint and local host evidence are independent of Conformance. Both
 fixtures must pass when the shared core host or UI release is changed; one
 application's evidence cannot authorize the other.
 The UI fixture keeps the no-application entry path and no-argument factories;
-its schema `8` input exercises compatibility while generated artifacts use v9.
+like the core fixture, its source configuration requires schema `10`.
 
 ## Initializer template
 
@@ -37,13 +37,13 @@ its schema `8` input exercises compatibility while generated artifacts use v9.
 and Details pages and demonstrates the normal application model without
 conformance-only capabilities. It is generated and built in a temporary app by
 the generator suite; it is not a second committed release fixture.
-The initializer emits current schema `9` and a core dependency, without an
+The initializer emits current schema `10` and a core dependency, without an
 implicit `application` entry or UI dependency.
 
 The fixture and generated starter must pass:
 
 - warning-free JS-target compilation and tests
-- App Contract v9 / runtime ABI v11 / renderer protocol v8 validation
+- App Contract v10 / runtime ABI v12 / renderer protocol v8 validation
 - one application-wide runtime/shared host pair with page-aware dispatch
 - deterministic release generation and embedded-template drift checks
 - generated JavaScript parsing and Page Definition API registration

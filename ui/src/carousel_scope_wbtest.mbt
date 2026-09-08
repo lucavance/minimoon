@@ -3,78 +3,83 @@ fn carousel_test_runtime(
   circular : Bool,
   orientation : Orientation,
 ) -> @minimoon.PageRuntime {
-  @minimoon.page(
-    id="carousel_test",
-    route=@minimoon.route("pages/carousel/index"),
-    title="Carousel",
-    build=_ => {
-      let (count, change_count) = @minimoon.create_variable(3)
-      let (revision, change_revision) = @minimoon.create_variable(0)
-      carousel_provider_with_input(
-        id="slides",
-        count~,
-        input=revision,
-        circular~,
-        orientation~,
-        render=(scope, revision) => {
-          let items : Array[Panel] = []
-          for index in 0..<carousel_slide_count(scope) {
-            items.push(
-              panel(
-                key=index.to_string(),
-                title="Slide",
-                content=@minimoon.text("Slide " + index.to_string()),
+  let runtime = @minimoon.page(
+      id="carousel_test",
+      route=@minimoon.route("pages/carousel/index"),
+      title="Carousel",
+      build=_ => {
+        let (count, change_count) = @minimoon.create_variable(3)
+        let (revision, change_revision) = @minimoon.create_variable(0)
+        carousel_provider_with_input(
+          id="slides",
+          count~,
+          input=revision,
+          circular~,
+          orientation~,
+          render=(scope, revision) => {
+            let items : Array[Panel] = []
+            for index in 0..<carousel_slide_count(scope) {
+              items.push(
+                panel(
+                  key=index.to_string(),
+                  title="Slide",
+                  content=@minimoon.text("Slide " + index.to_string()),
+                ),
+              )
+            }
+            @minimoon.fragment([
+              @minimoon.text(
+                "state:" +
+                carousel_active_index(scope).to_string() +
+                ":" +
+                carousel_slide_count(scope).to_string() +
+                ":" +
+                revision.to_string(),
               ),
-            )
-          }
-          @minimoon.fragment([
-            @minimoon.text(
-              "state:" +
-              carousel_active_index(scope).to_string() +
-              ":" +
-              carousel_slide_count(scope).to_string() +
-              ":" +
-              revision.to_string(),
-            ),
-            @minimoon.text(
-              "directions:" +
-              carousel_can_previous(scope).to_string() +
-              ":" +
-              carousel_can_next(scope).to_string(),
-            ),
-            @minimoon.text("loop:" + carousel_is_looping(scope).to_string()),
-            @minimoon.text(
-              "vertical:" +
-              (carousel_orientation(scope) == Vertical).to_string(),
-            ),
-            @minimoon.button(
-              event_key="shrink",
-              on_tap=change_count(_ => 1),
-              "Shrink",
-            ),
-            @minimoon.button(
-              event_key="grow",
-              on_tap=change_count(_ => 3),
-              "Grow",
-            ),
-            @minimoon.button(
-              event_key="empty",
-              on_tap=change_count(_ => 0),
-              "Empty",
-            ),
-            @minimoon.button(
-              event_key="revision",
-              on_tap=change_revision(value => value + 1),
-              "Revise",
-            ),
-            carousel_items(scope, items~),
-            carousel_previous(scope, @minimoon.text("Custom previous")),
-            carousel_next(scope, @minimoon.text("Custom next")),
-          ])
-        },
-      )
-    },
-  ).create_runtime()
+              @minimoon.text(
+                "directions:" +
+                carousel_can_previous(scope).to_string() +
+                ":" +
+                carousel_can_next(scope).to_string(),
+              ),
+              @minimoon.text("loop:" + carousel_is_looping(scope).to_string()),
+              @minimoon.text(
+                "vertical:" +
+                (carousel_orientation(scope) == Vertical).to_string(),
+              ),
+              @minimoon.button(
+                event_key="shrink",
+                on_tap=change_count(_ => 1),
+                "Shrink",
+              ),
+              @minimoon.button(
+                event_key="grow",
+                on_tap=change_count(_ => 3),
+                "Grow",
+              ),
+              @minimoon.button(
+                event_key="empty",
+                on_tap=change_count(_ => 0),
+                "Empty",
+              ),
+              @minimoon.button(
+                event_key="revision",
+                on_tap=change_revision(value => value + 1),
+                "Revise",
+              ),
+              carousel_items(scope, items~),
+              carousel_previous(scope, @minimoon.text("Custom previous")),
+              carousel_next(scope, @minimoon.text("Custom next")),
+            ])
+          },
+        )
+      },
+    )
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
+  let _ = runtime.lifecycle("onShow", "{}")
+  runtime
 }
 
 ///|

@@ -37,11 +37,11 @@ Run `moon update` after declaring published dependencies. In this repository,
 include the application and both module directories in its workspace. A
 registry-only consumer must have no such local overrides.
 
-Enable build resources in App Contract v9:
+Enable build resources in App Contract v10:
 
 ```json
 {
-  "schemaVersion": 9,
+  "schemaVersion": 10,
   "name": "ui_app",
   "resources": [
     {"package": "lampclaw/minimoon_ui/resources", "features": []}
@@ -55,8 +55,8 @@ An empty feature list includes the full bundle. A nonempty list, such as
 resource dependencies. Unknown features fail the build. The native provider
 exports WXSS and SVG assets; it is not imported into application JavaScript.
 Core has no dependency on this UI module.
-Existing schema `8` configurations remain accepted without `application`;
-generated artifacts use the current Contract v9/runtime ABI v11. To combine UI
+Schema `8` and `9` configurations must migrate to `10`;
+generated artifacts use Contract v10/runtime ABI v12. To combine UI
 with shared state, opt into the core [App setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/shared_state.md)
 and make page factories take `Deps`; UI roots still belong to individual pages.
 
@@ -176,3 +176,20 @@ focus selectors, browser shortcuts and mouse-only behavior are not recreated.
 MessageScroller observes keyed appends/prepends. Increment its
 `content_revision` value when streaming changes content without changing
 message keys, so layout measurement can preserve the reader's position.
+
+## Maintainer publication boundary
+
+Publication is a separate, explicitly authorized maintainer action. With
+`moon 0.1.20260907`, do not publish directly from this repository's `ui/` directory
+or run `moon -C ui publish`: packaging can inherit the root `.moonignore`
+`/ui/` exclusion and produce an empty archive. The repository gate packages an
+isolated source copy and validates its actual ZIP, required files and consumers.
+
+After core `0.2.0` is available from the registry and publication is explicitly
+authorized, unpack the checked
+`_build/publish/lampclaw-minimoon_ui-0.1.0.zip` outside every Git repository and
+Moon workspace ancestor. Check `moon.mod`, `src/`, README and LICENSE, resolve
+registry core and rerun consumers, then publish the unchanged extracted module.
+Follow the [ordered release procedure](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md#ordered-local-registry-publication).
+The linked guides are repository-hosted because `ui/docs` is not shipped in
+the registry archive.

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 8,
+  "schemaVersion": 10,
   "name": "minimoon_ui_showcase",
   "resources": [{ "package": "lampclaw/minimoon_ui/resources", "features": [] }],
   "pages": [
@@ -11,6 +11,7 @@
     { "package": "src/pages/feedback" }
   ],
   "devtoolsChecks": [
+    "Forms Project name belongs to the real native Form: short text blocks submission, busy disables repeat submits, and public httpbingo.org/post returns typed echo only (not persistent storage); Reset and unload reject late replies",
     "All six category pages open and the 64 component headings are present",
     "Every page switches light/dark themes and LTR/RTL direction without resetting component state",
     "Foundation button disabled state, native label association, avatar fallback and semantic status presentation",

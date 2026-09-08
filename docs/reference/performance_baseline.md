@@ -13,7 +13,7 @@ has a `minimoon.app.js` entry helper.
 
 | Artifact | Ceiling |
 | --- | ---: |
-| Conformance application runtime | 383,000 bytes |
+| Conformance application runtime | 400,000 bytes |
 | generated starter runtime | 220,000 bytes |
 | App-enabled shared host | 16,000 bytes |
 | no-App shared host (including starter) | 15,000 bytes |
@@ -33,14 +33,44 @@ all page bridges, and `minimoon.app.js` when application ownership is enabled:
 | committed Conformance fixture | 453,000 bytes |
 | generated starter | 247,000 bytes |
 
-Release generation minifies the host and runtime syntax. The shared-state
-calibration uses `moon 0.1.20260827`, `moonc v0.10.11`, Node 24.20.0, and
-Bun 1.4.2. Its Conformance release measures 373,090 runtime bytes, 15,499 host
-bytes, 9,492 protocol bytes, 40,204 initial-tree bytes, and 442,997 aggregate
-JavaScript bytes, including the 3,464-byte application helper. Remaining
-headroom is respectively 9,910, 501, 508, 796, and 10,003 bytes.
+Release generation minifies the host and runtime syntax. The 2026-09-08
+authoring calibration uses `moon 0.1.20260907`, `moonc v0.10.12`, Node
+24.20.0, and Bun 1.4.2. Its Conformance release measures 387,977 runtime bytes,
+15,624 host bytes, 9,492 protocol bytes, 303 initial-tree bytes, and 418,121
+aggregate JavaScript bytes, including the 3,464-byte application helper.
+Remaining headroom is respectively 12,023, 376, 508, 40,697, and 34,879 bytes.
+
+## Approved authoring budget review
+
+The comparison baseline is commit `7a57802`: runtime 373,090 bytes, aggregate
+JavaScript 442,997 bytes, and core archive 272,346 bytes. Real-input creation,
+App-aware testing, typed HTTP and the migrated fixtures add 14,887 runtime
+bytes while empty host boot trees reduce aggregate JavaScript by 24,876 bytes.
+The approved fixed runtime ceiling is 400,000 bytes; the aggregate ceiling
+remains 453,000 bytes. Shared cleanup keeps no-App/App host bytes at
+14,976/15,624, within the unchanged 15,000/16,000-byte ceilings.
+
+The pre-review core archive is 288,166 bytes, up 15,820 bytes. The approved
+core hard ceiling is 300 KiB (307,200 bytes), retaining the 8 KiB reserve;
+the operating ceiling is 299,008 bytes. The calibration sample leaves 10,842
+operating bytes, but the archive gate remeasures after documentation changes.
+UI retains its independent 250 KiB hard ceiling, 16 KiB reserve and
+239,616-byte operating ceiling; its isolated package measures 115,296 bytes.
+These are repository budgets, not registry service limits.
+
+No aggregate-JavaScript, starter, host, protocol, UI, coverage, scheduler or
+timing gate is relaxed. Package allowlists and exclusions are unchanged by
+this budget review. The constants and inclusive one-byte boundary tests live
+in [`budgets.mbt`](../../src/cmd/minimoon_check/budgets.mbt) and its white-box
+tests; further increases require another explicit review.
 
 ## Approved application-state budget review
+
+This historical review preceded the current authoring ceilings above. Its
+calibration used `moon 0.1.20260827` / `moonc v0.10.11` and measured 373,090
+runtime bytes, 15,499 App host bytes, 40,204 initial-tree bytes and 442,997
+aggregate JavaScript bytes. The then-current 383,000-byte runtime ceiling
+left 9,910 bytes of runtime headroom.
 
 The comparison baseline is HTTP commit `561641b`: runtime 350,209 bytes,
 host 14,818 bytes, aggregate JavaScript 414,673 bytes, and core archive
@@ -51,9 +81,9 @@ by 23,000/29,000 bytes, retaining roughly the previous absolute headroom.
 Only the App-enabled host receives a 16,000-byte ceiling; no-App output measures
 14,851 bytes and keeps the 15,000-byte ceiling used by the starter.
 
-The pre-review core archive is 268,650 bytes, up 22,114 bytes. The approved
-core hard ceiling is 280 KiB (286,720 bytes), with the existing 8 KiB reserve;
-the operating ceiling is 278,528 bytes. UI retains its independent 250 KiB hard
+The pre-review core archive was 268,650 bytes, up 22,114 bytes. The then-approved
+core hard ceiling was 280 KiB (286,720 bytes), with the existing 8 KiB reserve;
+the operating ceiling was 278,528 bytes. UI retained its independent 250 KiB hard
 ceiling, 16 KiB reserve and 239,616-byte operating ceiling. These are repository
 budgets, not registry service limits. Final archives are measured after all
 documentation changes rather than pinned to these calibration samples.

@@ -1,14 +1,15 @@
 # Minimoon
 
 公共 `request` 支持 HTTP 方法、有序查询参数、请求头、JSON/表单/文本请求体及超时。
-详见 [HTTP 契约](docs/reference/miniapp_host_capabilities.md#http-requests)。
+可选的 [类型化 HTTP 包](docs/guides/http.md) 提供状态码策略与响应解码；
+原始 `request` 保留传输层语义。详见 [HTTP 契约](docs/reference/miniapp_host_capabilities.md#http-requests)。
 仓库内运行 `bun run check:http-live` 可通过公共 API 验证生成的 Home 页面；
 这不是微信真实宿主验收，也不会生成宿主通过证据。
 
 [English](README.md) · [文档索引](docs/README.md) · [双语代码分析](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
-Minimoon 是面向微信小程序 Skyline 的 MoonBit UI 框架。`0.2.0` 以 Elm-style
-编写模型为入口，采用 App Contract v9、runtime ABI v11、renderer protocol v8
+Minimoon 是面向微信小程序 Skyline 的 MoonBit UI 框架。`0.2.0` 以 Rabbita 风格的普通函数组件组合
+与 Elm-style 状态机为入口，采用 App Contract v10、runtime ABI v12、renderer protocol v8
 和 CommonJS 小程序宿主边界。
 
 ```text
@@ -58,39 +59,31 @@ minimoon add component status_badge --page home
 [共享状态配置](docs/guides/shared_state.md)。
 
 ```moonbit
-pub enum Msg { Increment }
-
-fn view(value : Int, emit : @minimoon.Emit[Msg]) -> @minimoon.Node {
-    @minimoon.div([
-      @minimoon.h1(value.to_string()),
-      @minimoon.button(
-        on_tap=emit(Increment),
-        event_key="increment",
-        "+1",
-      ),
-    ])
-}
-
 pub fn program() -> @minimoon.Page {
-  @minimoon.elmish_page(
+  @minimoon.page(
     id="home",
     route=@minimoon.route("pages/home/home"),
     title="Home",
-    model=0,
-    update=(current, message, _emit) => {
-      match message {
-        Increment => @minimoon.no_cmd(current + 1)
-      }
+    build=_ => {
+      let (count, update_count) = @minimoon.create_variable(0)
+      count.view(value => @minimoon.div([
+        @minimoon.h1(value.to_string()),
+        @minimoon.button(
+          on_tap=update_count(current => current + 1),
+          event_key="increment",
+          "+1",
+        ),
+      ]))
     },
-    view~,
   )
 }
 ```
 
-`elmish_page` 覆盖常见的 model-first 页面；局部或带输入的组合使用
+普通 `page` builder 与返回 `Val[Node]` 的组件函数是主写法；
+`elmish_page` 保留为简单单 Model 页面的便利层。局部或带输入的组合使用
 `@minimoon.create_state`、`create_state_with_init` 或
 `create_state_with_input`，每个构造器都返回 `(Val[Model], Emit[Msg])`。
-update 通过 `no_cmd`、`with_cmd` 或 `with_cmds` 返回 `(Model, Cmd)`。
+update 通过 `@minimoon.no_cmd`、`with_cmd` 或 `with_cmds` 返回 `(Model, Cmd)`。
 `create_pure_state` 用于纯更新，`create_variable` 用于函数式更新。
 `create_resource` 在作用域提交后启动一次加载并直接返回 `Val[Status[T]]`；
 第一个成功提交的终态获胜，重试与刷新由应用状态显式建模。
@@ -120,8 +113,16 @@ scope 暂停订阅，而被删除或淘汰的 scope 会释放对应 registry 槽
 状态、事件路由、订阅、分支缓存、标准化子树和渲染树作为同一个事务提交；候选
 被拒绝时会完整恢复上一事务。
 
+必填路由参数使用 `page_with_input(preview_input=..., decode_input=..., build=...)`。
+页面定义不执行 builder；编译预览只使用显式 seed，真实输入解码成功后才创建图。
+builder 接收普通 Input，因此局部状态直接以真实路由值初始化。运行时创建返回
+`Result[PageRuntime, DecodeError]`，首次 Load 全量渲染 revision 1，初始化命令只在
+首次 Ready/mount 执行。详见[输入与生命周期](docs/guides/api_ergonomics.md#page-input-and-first-render)。
+
 可选包保持生产依赖显式。`lampclaw/minimoon/testing` 通过每次重新定位的语义
-scope 和原生形状交互来查询并驱动真实的标准化小程序树；无样式的
+scope 和原生形状交互来查询并驱动真实的标准化小程序树。`testing.launch` 创建
+App 测试所有者，`app.mount` 挂载页面，有界 `quiesce` 排空可运行的共享与局部工作，
+不等待未来定时器或未完成 HTTP；销毁单页不会销毁 App。无样式的
 `lampclaw/minimoon/components` 提供受控与自持状态的
 Disclosure、单选/多选 Accordion、Tabs、Dialog、Sheet 与 Dropdown；
 `lampclaw/minimoon/components/styles` 将它们绑定到可选的 `minimal-v2`
@@ -154,12 +155,12 @@ popup 关联、label 与 description 送入受校验的 renderer protocol；`inp
 
 ## 小程序边界
 
-配置使用 App Contract v9。`componentTheme` 可省略；省略时不会增加内置组件
+配置使用 App Contract v10。`componentTheme` 可省略；省略时不会增加内置组件
 CSS：
 
 ```json
 {
-  "schemaVersion": 9,
+  "schemaVersion": 10,
   "name": "my_app",
   "componentTheme": "minimal-v2",
   "pages": [
@@ -187,7 +188,7 @@ commit sentinel 和 `setData` callback 确认；三秒超时后只执行一次�
 重试，第二次失败则关闭该页面调度器。队列深度、合并数量、确认延迟、重试、超时与
 COW shadow copy 工作量都可通过 renderer stats 观察。
 
-Runtime ABI v11 还为页面所有的局部异步命令提供有序宿主唤醒。挂起的 `perform`
+Runtime ABI v12 还为页面所有的局部异步命令提供有序宿主唤醒。挂起的 `perform`
 和 `attempt` 无需等待下一次点击或生命周期入口即可排空结果；页面销毁会取消结果
 投递，而框架 `delay` 的宿主计时器会被物理清除。
 
@@ -231,9 +232,10 @@ bun run check:candidate
 git diff --check
 ```
 
-`check:api` 精确锁定核心 `0.2` 的根包与 resources 接口，编译冻结的 0.1 consumer，
+`check:api` 精确锁定核心 `0.2` 的根包与 resources 接口，编译当前 0.2 consumer，
 并仅允许 components、styles 与 testing 可选包增加接口。UI `0.1` 为根包、
 headless、theme 与 resources 分别维护可加性接口快照。
+冻结的 0.1 consumer 仅作为历史源码保留，不承诺旧调用在当前候选上无修改编译。
 `check:candidate` 是可在 Linux 执行的自动候选交接门禁；成功完成后，即使本机已有证据，
 它也会把受跟踪报告恢复为 candidate 状态。覆盖率由上方独立的 `check:coverage`
 门禁验证。本地作出 release 决策时，依次
@@ -243,7 +245,7 @@ headless、theme 与 resources 分别维护可加性接口快照。
 [发布操作指南](docs/operations/release_candidate_handoff.md) 定义核心/UI 的发布顺序及
 纯 registry consumer 检查。
 仓库归档门禁先执行 `moon package --frozen --list`，再检查每个模块的 registry 包
-白名单与独立评审的硬上限：核心包 280 KiB、至少预留 8 KiB；UI 包
+白名单与独立评审的硬上限：核心包 300 KiB、至少预留 8 KiB；UI 包
 250 KiB、至少预留 16 KiB。这些是仓库预算，不是注册表服务的限制。
 
 仓库检查默认在旁边的 `../.minimoon-check-tmp/` 创建独立运行目录，使用仓库父目录
@@ -251,8 +253,10 @@ headless、theme 与 resources 分别维护可加性接口快照。
 或相对仓库的路径。父进程在成功、失败或检查子进程崩溃后清理本轮目录，并向工具
 传递该目录作为 `TMPDIR`、`TMP` 和 `TEMP`。详见[临时存储说明](docs/operations/release_candidate_handoff.md#validation-temporary-storage)。
 
-工具链下限已于 2026-09-04 使用 `moon 0.1.20260827` 与 `moonc v0.10.11`
-重新验证。仓库和生成的 starter 支持 Node `>=24.20.0`；CI 验证 24.20.0
+当前工具链下限为 `moon 0.1.20260904` 与 `moonc v0.10.12`。两个 CI job
+直接通过官方安装器固定预构建发行 `0.10.12+1634b282e`，不追随 latest，
+无需 Rust。2026-09-08 验证过的本地 `moon 0.1.20260907` 组合仍然有效，无需降级。
+仓库和生成的 starter 支持 Node `>=24.20.0`；CI 验证 24.20.0
 最低边界与 26.8.1 主环境，Bun 固定为 `1.4.2`。唯一独立维护的
 JavaScript 是 `scripts/bridge/weapp_tailwindcss_adapter.mjs`；生产和验证宿主
 源码由 MoonBit 模板持有，提交的小程序 JavaScript 均为生成产物。

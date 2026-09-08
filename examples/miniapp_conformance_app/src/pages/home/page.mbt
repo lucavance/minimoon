@@ -579,7 +579,7 @@ fn view(
 ///|
 fn app(
   context : @minimoon.PageContext,
-  input_name : @minimoon.Val[String],
+  name : String,
   deps : @application.Deps,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (model, emit) = @minimoon.create_state(
@@ -592,11 +592,9 @@ fn app(
       ])
     },
   )
-  model.view3(input_name, @application.panel(context, deps), (
-    current,
-    name,
-    shared_panel,
-  ) => view(current, emit, name, shared_panel))
+  model.view2(@application.panel(context, deps), (current, shared_panel) => {
+    view(current, emit, name, shared_panel)
+  })
 }
 
 ///|
@@ -612,6 +610,7 @@ pub fn program(deps : @application.Deps) -> @minimoon.Page {
     id="home",
     route=@minimoon.route("pages/home/home"),
     title="Minimoon Home",
+    preview_input=() => "Minimoon",
     capabilities=[
       @minimoon.Login,
       @minimoon.GetStorage,

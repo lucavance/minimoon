@@ -4,7 +4,38 @@ This package-level README is compiled with the root package. It keeps the
 primary authoring examples synchronized with the public API while the module
 README remains the longer user-facing introduction.
 
-## Elm-style pages
+## Page and component composition
+
+Ordinary page builders and functions returning `Val[Node]` are the main
+authoring path. Local state is created inside the builder; render callbacks
+stay pure. `elmish_page` below remains a convenience for simple one-model pages.
+
+```moonbit check
+///|
+#warnings("-unused_value")
+fn readme_composition_page() -> Page {
+  page(
+    id="readme_composition",
+    route=route("pages/readme_composition/readme_composition"),
+    title="Composition",
+    build=_ => {
+      let (count, update_count) = create_variable(0)
+      count.view(value => {
+        div([
+          h1(value.to_string()),
+          button(
+            on_tap=update_count(current => current + 1),
+            event_key="increment",
+            "+1",
+          ),
+        ])
+      })
+    },
+  )
+}
+```
+
+## Elm-style convenience
 
 `Emit[Msg]` is a callable message sink. Mapping it adapts child payloads without
 exposing a mutable signal or a renderer patch.

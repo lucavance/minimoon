@@ -3,7 +3,7 @@ test "native form names and custom controlled values remain explicit" {
   let runtime = @testing.mount(
     form_test_page(_ => {
       stack([
-        textarea(id="notes", options=input_options(name="notes")),
+        textarea_stateful(id="notes", options=input_options(name="notes")),
         checkbox(id="accept", name="accept"),
         switch(id="switch", name="notifications"),
         radio_group(
@@ -40,22 +40,26 @@ test "native form names and custom controlled values remain explicit" {
     )
   }
   let submission = form_test_page(_ => {
-    let (submitted, update) = @minimoon.create_variable("")
-    submitted.map(submitted => {
-      form(
-        id="native-form",
-        submit_key="submit",
-        values={
-          "custom": Json::string("current"),
-          "conflict": Json::string("explicit"),
-        },
-        on_submit=@minimoon.Emit(values => {
-          update(_ => Json::object(values).stringify())
-        }),
-        [@minimoon.text(submitted)],
-      )
+      let (submitted, update) = @minimoon.create_variable("")
+      submitted.map(submitted => {
+        form(
+          id="native-form",
+          submit_key="submit",
+          values={
+            "custom": Json::string("current"),
+            "conflict": Json::string("explicit"),
+          },
+          on_submit=@minimoon.Emit(values => {
+            update(_ => Json::object(values).stringify())
+          }),
+          [@minimoon.text(submitted)],
+        )
+      })
     })
-  }).create_runtime()
+    .create_runtime()
+    .unwrap()
+  let _ = submission.lifecycle("onLoad", "{}")
+  let _ = submission.lifecycle("onShow", "{}")
   let mounted = submission.mount()
   assert_false(mounted.contains("RuntimeError"))
   let submitted = submission.dispatch(
@@ -173,25 +177,29 @@ test "Select externally controlled open retains custom rendering and native sele
 ///|
 test "Select measures initial and programmatic opening and rejects disposed responses" {
   let runtime = form_test_page(page => {
-    root(page, context => {
-      let (open, change) = @minimoon.create_variable(true)
-      select_controlled(
-        context,
-        id="positioned",
-        open~,
-        on_open_change=change.map(open => _ => open),
-        options=@minimoon.Val::constant([choice_option(key="a", label="A")]),
-        value=@minimoon.Val::constant("a"),
-        on_change=@minimoon.Emit(_ => @minimoon.none),
-      ).map(node => {
-        @minimoon.div([
-          button(event_key="close", on_tap=change(_ => false), "Close"),
-          button(event_key="open", on_tap=change(_ => true), "Open"),
-          node,
-        ])
+      root(page, context => {
+        let (open, change) = @minimoon.create_variable(true)
+        select_controlled(
+          context,
+          id="positioned",
+          open~,
+          on_open_change=change.map(open => _ => open),
+          options=@minimoon.Val::constant([choice_option(key="a", label="A")]),
+          value=@minimoon.Val::constant("a"),
+          on_change=@minimoon.Emit(_ => @minimoon.none),
+        ).map(node => {
+          @minimoon.div([
+            button(event_key="close", on_tap=change(_ => false), "Close"),
+            button(event_key="open", on_tap=change(_ => true), "Open"),
+            node,
+          ])
+        })
       })
     })
-  }).create_runtime()
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
+  let _ = runtime.lifecycle("onShow", "{}")
   let mounted = runtime.mount()
   assert_true(mounted.contains("InvokeCapability"))
   assert_true(mounted.contains("positioned-panel"))

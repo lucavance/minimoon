@@ -46,7 +46,7 @@ builder 和初始模型计算必须保持纯函数：初始化副作用以 `init
 
 ```json
 {
-  "schemaVersion": 9,
+  "schemaVersion": 10,
   "application": { "package": "src/app", "program": "program" }
 }
 ```
@@ -90,13 +90,13 @@ writes; it does not deep-freeze arbitrary user-defined models.
 Model 按值使用，update 返回新值；不要原地修改 selector 获得的数组或 Map。封装禁止直接
 写状态，但不会深度冻结任意业务模型。
 
-Without `application`, factories remain `program() -> Page`. Schema `8`
-configurations are accepted only on this no-application path; generated output
-uses App Contract v9, runtime ABI v11 and renderer protocol v8. Rebuild all
+Without `application`, factories remain `program() -> Page`. Both application
+modes require source schema `10`; older configurations must migrate. Output
+uses App Contract v10, runtime ABI v12 and renderer protocol v8. Rebuild all
 artifacts together; do not mix old host/runtime bytes. Product versions are not
 automatically advanced by these technical compatibility numbers.
 
-不启用 `application` 时保留无参数页面工厂，旧 schema `8` 仅在此路径接受。必须整体
+不启用 `application` 时保留无参数页面工厂，但同样要求 schema `10`。旧 schema 必须迁移。必须整体
 重新生成产物，不能混用旧宿主和新 runtime；技术契约版本不等于产品发布版本。
 
 ## Lifetime and effects / 生命周期与副作用
@@ -150,15 +150,27 @@ Dynamic account/workspace scopes are deliberately deferred.
 
 ## Tests and acceptance / 测试与验收
 
-For MoonBit tests, create `application.program().create_runtime()`, send
-`lifecycle("onLaunch", "{}")`, obtain `deps()`, and use
-`app.create_page(page.program(deps))`. After manual page dispatch, call
-`app.flush()` and `page.refresh()` to drive the simulated queues. Finish with
-`app.dispose()`. Generated hosts schedule these flushes automatically.
+For MoonBit tests, import `lampclaw/minimoon/testing` as `@testing` and use
+`@testing.launch(application.program())`. Create a page with
+`app.mount(page.program, input=fields)`. The factory receives this test App's
+real dependencies. The harness drives
+Launch/Show and page Load/Show/Ready in order, exposes the same semantic
+queries as standalone `@testing.mount`, and drains ready application/page work
+with bounded `app.quiesce()`. Disposing a mounted test page leaves App alive;
+`app.dispose()` disposes the application and all remaining pages.
+
+For low-level protocol tests, `AppRuntime.create_page(page, input?)` returns
+`Result[PageRuntime, DecodeError]`. On success send the matching `onLoad`, then
+`onShow`, then call `mount()`. Use `app.flush()` and `page.flush()` while either
+owner reports `has_ready_work()`. Unresolved HTTP and future timer ticks are
+not ready work; `[]` output alone does not prove a bounded queue has drained.
+Generated hosts schedule this work automatically.
 Use `application.program().preview(deps => page.program(deps).contract())`
 for metadata: previews never dispatch init commands or start subscriptions.
 
-MoonBit 测试显式驱动上述队列；生成的宿主自动调度。预览只检查初始值，不启动初始化
+应用测试通过 `@testing.launch`、`app.mount` 和有界 `quiesce` 驱动共同所有者，
+单页 dispose 不销毁 App。低层创建返回 Result，必须先传真实输入并完成 Load，
+再 Show、mount；生成的宿主自动调度。预览只检查初始值，不启动初始化
 命令、定时器或网络。测试结束要 dispose，不能将预览句柄作为运行时依赖长期保存。
 
 The maintained example is [the core app package](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_conformance_app/src/app/app.mbt),

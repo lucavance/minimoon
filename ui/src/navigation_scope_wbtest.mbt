@@ -1,58 +1,63 @@
 ///|
 fn navigation_test_runtime(viewport : Bool) -> @minimoon.PageRuntime {
-  @minimoon.page(
-    id="navigation_test",
-    route=@minimoon.route("pages/navigation/index"),
-    title="Navigation",
-    capabilities=[@minimoon.MeasureNodes],
-    build=page => {
-      root(page, context => {
-        let (revision, change) = @minimoon.create_variable(0)
-        navigation_menu_provider_with_input(
-          context,
-          id="nav",
-          input=revision,
-          viewport~,
-          render=(scope, revision) => {
-            @minimoon.fragment([
-              navigation_menu_viewport(scope, @minimoon.text("shared chrome")),
-              @minimoon.button(
-                event_key="revision",
-                on_tap=change(value => value + 1),
-                "Change input",
-              ),
-              navigation_menu_list(
-                scope,
-                ["a", "b", "disabled"].map(value => {
-                  navigation_menu_item(
-                    scope,
-                    value~,
-                    disabled=value == "disabled",
-                    render=item => {
-                      @minimoon.fragment([
-                        navigation_menu_trigger(item, @minimoon.text(value)),
-                        navigation_menu_indicator(item),
-                        navigation_menu_content(item, [
-                          @minimoon.text(
-                            "panel-" + value + "-" + revision.to_string(),
-                          ),
-                          navigation_menu_link(
-                            scope~,
-                            target=@minimoon.route("pages/next/index"),
-                            @minimoon.text("Visit"),
-                          ),
-                        ]),
-                      ])
-                    },
-                  )
-                }),
-              ),
-            ])
-          },
-        )
-      })
-    },
-  ).create_runtime()
+  let runtime = @minimoon.page(
+      id="navigation_test",
+      route=@minimoon.route("pages/navigation/index"),
+      title="Navigation",
+      capabilities=[@minimoon.MeasureNodes],
+      build=page => {
+        root(page, context => {
+          let (revision, change) = @minimoon.create_variable(0)
+          navigation_menu_provider_with_input(
+            context,
+            id="nav",
+            input=revision,
+            viewport~,
+            render=(scope, revision) => {
+              @minimoon.fragment([
+                navigation_menu_viewport(scope, @minimoon.text("shared chrome")),
+                @minimoon.button(
+                  event_key="revision",
+                  on_tap=change(value => value + 1),
+                  "Change input",
+                ),
+                navigation_menu_list(
+                  scope,
+                  ["a", "b", "disabled"].map(value => {
+                    navigation_menu_item(
+                      scope,
+                      value~,
+                      disabled=value == "disabled",
+                      render=item => {
+                        @minimoon.fragment([
+                          navigation_menu_trigger(item, @minimoon.text(value)),
+                          navigation_menu_indicator(item),
+                          navigation_menu_content(item, [
+                            @minimoon.text(
+                              "panel-" + value + "-" + revision.to_string(),
+                            ),
+                            navigation_menu_link(
+                              scope~,
+                              target=@minimoon.route("pages/next/index"),
+                              @minimoon.text("Visit"),
+                            ),
+                          ]),
+                        ])
+                      },
+                    )
+                  }),
+                ),
+              ])
+            },
+          )
+        })
+      },
+    )
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
+  let _ = runtime.lifecycle("onShow", "{}")
+  runtime
 }
 
 ///|

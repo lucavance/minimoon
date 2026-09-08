@@ -11,6 +11,9 @@ remains an internal implementation detail.
   result types, controls, and navigation types, plus callable `Emit[Msg]`
 - `elmish_page` and the six `create_*` helpers, with model-first callbacks,
   `(Val[Model], Emit[Msg])` ownership, and explicit `(Model, Cmd)` results
+- ordinary page/component functions as the primary authoring path, explicit
+  preview input and fallible real-input creation, first-Load full rendering,
+  and idempotent Ready/mount initialization
 - optional `App[Deps]` domain machines returning `(Shared[Model], Emit[Msg])`,
   page-local bind/select projections, commit-gated App messages and separately
   owned application effects and foreground subscriptions
@@ -30,6 +33,8 @@ remains an internal implementation detail.
   described-by relationships
 - optional normalized-tree testing plus optional headless/styled Disclosure,
   single/multiple Accordion, Tabs, Dialog, Sheet, and Dropdown packages
+- App-aware test launch/mount, bounded ready-work quiescence and independent
+  page/App disposal
 - re-resolving semantic test scopes and input-driven slots for every component
   with an arbitrary `Node` slot while retaining all static component APIs
 - exact `minimal-v1` compatibility plus opt-in, manifest-described
@@ -71,6 +76,6 @@ remains an internal implementation detail.
 - an application backend or real payment workflow
 
 Automated validation must pass before handoff. A release claim additionally
-requires fingerprint-matching real-host evidence for the exact App Contract v9,
-runtime ABI v11, renderer protocol v8 Conformance and UI showcase bytes. That evidence is a
+requires fingerprint-matching real-host evidence for the exact App Contract v10,
+runtime ABI v12, renderer protocol v8 Conformance and UI showcase bytes. That evidence is a
 local release input and is never part of repository or CI state.

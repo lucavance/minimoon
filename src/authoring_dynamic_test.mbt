@@ -84,7 +84,8 @@ test "switch keeps same-tag state reactive and rolls rejected branches back" {
       })
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   assert_eq(runtime.snapshot().contains("a:1:0"), true)
   let _ = runtime.dispatch("switch-local", "{}")
@@ -194,23 +195,24 @@ test "dynamic branch init runs after commit and preserves graph invalidation" {
       })
     },
   )
-  let runtime = definition.create_runtime()
-  assert_true(runtime.snapshot().contains("\"revision\":0"))
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
+  assert_true(runtime.snapshot().contains("\"revision\":1"))
   assert_true(runtime.snapshot().contains("state:a:0"))
 
   let mounted = runtime.mount()
   assert_eq(mounted.split("\"base_revision\":").length(), 2)
-  assert_true(runtime.snapshot().contains("\"revision\":1"))
+  assert_true(runtime.snapshot().contains("\"revision\":2"))
   assert_true(runtime.snapshot().contains("state:a:1"))
 
   let show_b = runtime.dispatch("branch-init/show-b", "{}")
   assert_eq(show_b.split("\"base_revision\":").length(), 2)
-  assert_true(show_b.contains("\"base_revision\":1"))
-  assert_true(show_b.contains("\"revision\":2"))
+  assert_true(show_b.contains("\"base_revision\":2"))
+  assert_true(show_b.contains("\"revision\":3"))
   assert_true(runtime.snapshot().contains("state:b:2"))
 
   let incremented = runtime.dispatch("branch-init/increment-sibling", "{}")
-  assert_true(incremented.contains("\"revision\":3"))
+  assert_true(incremented.contains("\"revision\":4"))
   assert_true(runtime.snapshot().contains("state:b:3"))
 
   let committed = runtime.snapshot()
@@ -221,7 +223,7 @@ test "dynamic branch init runs after commit and preserves graph invalidation" {
 
   let after_rollback = runtime.dispatch("branch-init/increment-sibling", "{}")
   assert_eq(after_rollback.split("\"base_revision\":").length(), 2)
-  assert_true(after_rollback.contains("\"revision\":4"))
+  assert_true(after_rollback.contains("\"revision\":5"))
   assert_true(runtime.snapshot().contains("state:b:4"))
 }
 
@@ -305,7 +307,8 @@ test "enumerate preserves tagged state and pauses inactive subscriptions" {
       })
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let mounted = runtime.mount()
   assert_eq(mounted.contains("enumerate/a"), true)
   let _ = runtime.subscription("enumerate/a", "{}")
@@ -332,11 +335,12 @@ priv enum PageInputMessage {
 }
 
 ///|
-test "state with input initializes once and reads the latest page input" {
+test "state with input initializes from actual page input" {
   let definition = page_with_input(
     id="val_page_input",
     route=route("pages/val_page_input/val_page_input"),
     title="Val Page Input",
+    preview_input=() => 1,
     decode_input=fields => {
       Ok(
         match fields.get("step") {
@@ -348,7 +352,7 @@ test "state with input initializes once and reads the latest page input" {
     },
     build=(context, input) => {
       let (count, _emit_count) = create_state_with_input(
-        input~,
+        input=Val::constant(input),
         init=(_emit, initial_input) => no_cmd(initial_input),
         update=(current, current_input, _message, _) => {
           no_cmd(current + current_input)
@@ -364,13 +368,13 @@ test "state with input initializes once and reads the latest page input" {
       count.view(value => p("input count:" + value.to_string()))
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime(input={ "step": "3" }).unwrap()
   let _ = runtime.lifecycle("onLoad", "{\"step\":\"3\"}")
   let mounted = runtime.mount()
   assert_eq(mounted.contains("\"interval_ms\":3000"), true)
-  assert_eq(runtime.snapshot().contains("input count:1"), true)
+  assert_eq(runtime.snapshot().contains("input count:3"), true)
   let _ = runtime.subscription("page-input-clock", "{}")
-  assert_eq(runtime.snapshot().contains("input count:4"), true)
+  assert_eq(runtime.snapshot().contains("input count:6"), true)
 }
 
 ///|
@@ -397,7 +401,8 @@ test "resource runs one initial command and records success or failure" {
       status.view(status => p(resource_label(status)))
     },
   )
-  let success_runtime = success.create_runtime()
+  let success_runtime = success.create_runtime().unwrap()
+  ignore(success_runtime.lifecycle("onLoad", "{}"))
   assert_eq(success_runtime.snapshot().contains("pending"), true)
   let _ = success_runtime.mount()
   assert_eq(success_runtime.snapshot().contains("loaded:ready"), true)
@@ -415,7 +420,8 @@ test "resource runs one initial command and records success or failure" {
       status.view(status => p(resource_label(status)))
     },
   )
-  let failure_runtime = failure.create_runtime()
+  let failure_runtime = failure.create_runtime().unwrap()
+  ignore(failure_runtime.lifecycle("onLoad", "{}"))
   assert_eq(failure_runtime.snapshot().contains("pending"), true)
   let _ = failure_runtime.mount()
   assert_eq(failure_runtime.snapshot().contains("failed:"), true)
@@ -474,7 +480,8 @@ test "resource completion from a disposed branch is ignored" {
       })
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   assert_eq(runtime.snapshot().contains("pending"), true)
   let _ = runtime.dispatch("resource-dispose", "{}")

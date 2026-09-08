@@ -2,13 +2,18 @@
 fn advanced_native_page(
   build : (UiContext) -> @minimoon.Val[@minimoon.Node],
 ) -> @minimoon.PageRuntime {
-  @minimoon.page(
-    id="advanced",
-    route=@minimoon.route("pages/advanced/index"),
-    title="Advanced",
-    capabilities=[@minimoon.MeasureNodes],
-    build=page => root(page, build),
-  ).create_runtime()
+  let runtime = @minimoon.page(
+      id="advanced",
+      route=@minimoon.route("pages/advanced/index"),
+      title="Advanced",
+      capabilities=[@minimoon.MeasureNodes],
+      build=page => root(page, build),
+    )
+    .create_runtime()
+    .unwrap()
+  let _ = runtime.lifecycle("onLoad", "{}")
+  let _ = runtime.lifecycle("onShow", "{}")
+  runtime
 }
 
 ///|

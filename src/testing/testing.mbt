@@ -79,6 +79,8 @@ struct TestNode {
 ///|
 struct TestRuntime {
   runtime : @minimoon.PageRuntime
+  disposed : Ref[Bool]
+  settle : (Int) -> Unit raise
 }
 
 ///|
@@ -206,13 +208,6 @@ fn parse_snapshot(raw : String) -> Json {
   @json.parse(raw) catch {
     error => abort("invalid normalized MiniApp snapshot: " + error.to_string())
   }
-}
-
-///|
-pub fn mount(page : @minimoon.Page) -> TestRuntime {
-  let runtime = page.create_runtime()
-  let _ = runtime.mount()
-  { runtime, }
 }
 
 ///|
@@ -718,5 +713,9 @@ pub fn TestRuntime::tick(self : TestRuntime, key : String) -> String {
 
 ///|
 pub fn TestRuntime::dispose(self : TestRuntime) -> String {
+  if self.disposed.val {
+    return "[]"
+  }
+  self.disposed.val = true
   self.runtime.dispose()
 }

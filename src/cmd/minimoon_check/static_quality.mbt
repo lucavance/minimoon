@@ -1,8 +1,8 @@
 ///|
-let supported_moon_floor = "0.1.20260827"
+let supported_moon_floor = "0.1.20260904"
 
 ///|
-let supported_moonc_floor = "0.10.11"
+let supported_moonc_floor = "0.10.12"
 
 ///|
 let supported_node_engine = ">=24.20.0"
@@ -151,6 +151,24 @@ async fn static_suite(root : String) -> Unit {
     ".github/workflows/test.yml",
     "supported floor " + supported_moonc_floor,
   )
+  let installers = @fs.read_file(join(root, ".github/workflows/test.yml"))
+    .text()
+    .split("\n")
+    .filter(line => line.contains("cli.moonbitlang.com/install/unix.sh"))
+    .collect()
+  guard installers.length() == 2 &&
+    installers.all(line => {
+      line.trim() ==
+      "curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.12+1634b282e"
+    }) else {
+    abort("both CI jobs must install the reviewed official MoonBit binary")
+  }
+  for
+    token in [
+      "cargo build", "rustup toolchain", "./.github/actions/setup-moonbit",
+    ] {
+    forbid_text(root, ".github/workflows/test.yml", token)
+  }
   require_text(
     root,
     ".github/workflows/test.yml",

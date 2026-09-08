@@ -40,6 +40,21 @@ workspace bindings cannot prove that a version is available in Mooncakes.
 Record the reviewed archive content checksums before publication; ZIP timestamps
 or compression metadata alone are not a source-content change.
 
+As observed with `moon 0.1.20260907`, packaging a nested module can
+inherit its ancestor repository's `.moonignore`. In this repository the root
+`/ui/` exclusion can make a direct UI package/publish operation produce an
+empty 22-byte ZIP. Do not run `moon publish` from the checkout's `ui/` directory
+or use `moon -C ui publish`.
+
+The UI archive gate instead copies source into a temporary independent Git
+root, runs the real `moon package`, checks the archive allowlist and required
+files, and compiles consumers from the extracted package. Its reviewed output
+is `_build/publish/lampclaw-minimoon_ui-0.1.0.zip`. Use that checked archive for
+the later UI publication procedure below, not an archive left by a direct
+nested-module command. A successful archive gate still does not authorize or
+perform publication; both current product versions remain unpublished
+candidates until the operator completes the release prerequisites.
+
 After review, commit and push the complete candidate, then require both the
 primary CI job and Node 24 lower-bound job to pass for that exact commit. Freeze
 the source SHA, toolchain versions, package contents and both artifact
@@ -182,15 +197,36 @@ moon install --bin <temporary-bin> lampclaw/minimoon/cmd/minimoon@0.2.0
    `verify --candidate`. Compare the downloaded module contents with the
    prechecked archive. This proves registry core/CLI/starter usability, not a
    new application's real-host pass.
-4. Unpack the already reviewed UI archive outside the repository. Resolve its
-   dependency through registry core `0.2.0`, without binding local core, and
-   rerun native/JS and build-resource consumer checks. Do not repack edited
-   source under the frozen version.
-5. Only after those checks pass, publish the unchanged UI module from the
-   original clean validation checkout:
+4. Only after registry core `0.2.0` resolves, unpack the gate-checked
+   `_build/publish/lampclaw-minimoon_ui-0.1.0.zip` into a fresh directory
+   **outside every Git repository and every ancestor `moon.work`**, on a volume
+   with sufficient space. Merely choosing another directory within this
+   checkout does not avoid the inherited-ignore bug. Verify the reviewed ZIP
+   checksum, then inspect the extracted module before resolving dependencies:
 
 ```bash
-moon -C ui publish --frozen
+unzip -q /absolute/validation-checkout/_build/publish/lampclaw-minimoon_ui-0.1.0.zip \
+  -d /absolute/outside-git-and-workspaces/ui-publish
+cd /absolute/outside-git-and-workspaces/ui-publish
+test -f moon.mod
+test -d src
+test -f README.mbt.md
+test -f LICENSE
+```
+
+   Stop if any check fails. `moon.mod` must name `lampclaw/minimoon_ui` at
+   `0.1.0` and depend on core `0.2.0`. A read-only `git rev-parse --show-toplevel`
+   must find no ancestor repository; inspect the parent path for `moon.work`
+   as well. Resolve with `moon update` using registry core only, then rerun
+   native/JS and build-resource consumer checks without local core/UI workspace
+   overrides. Confirm packaged content still matches the reviewed archive;
+   do not publish edited source under the frozen version.
+5. Only after those checks and explicit publication authorization, run the
+   publish command **from that verified extracted UI directory**, not from
+   `ui/` in the original checkout:
+
+```bash
+moon publish --frozen
 ```
 
 6. Wait for UI `0.1.0` resolution. Create another registry-only consumer of

@@ -1,5 +1,7 @@
 import {
   "lampclaw/minimoon",
+  "lampclaw/minimoon/http",
+  "moonbitlang/core/json",
   "lampclaw/minimoon_ui" @ui,
   "lampclaw/minimoon_ui/theme",
   "lampclaw/minimoon_ui_showcase/shared" @gallery,

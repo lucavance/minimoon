@@ -12,11 +12,19 @@ pub enum FetchMsg {
 }
 
 ///|
+pub(all) struct Draft {
+  title : String
+  note : String
+} derive(Eq, ToJson, @json.FromJson)
+
+///|
 pub struct Deps {
   count : @minimoon.Shared[Int]
   change_count : @minimoon.Emit[Int]
   fetch : @minimoon.Shared[FetchModel]
   send_fetch : @minimoon.Emit[FetchMsg]
+  echoed_draft : @minimoon.Shared[Draft?]
+  save_echo : @minimoon.Emit[Draft]
 }
 
 ///|
@@ -58,7 +66,11 @@ pub fn program() -> @minimoon.App[Deps] {
         }
       },
     )
-    { count, change_count, fetch, send_fetch, }
+    let (echoed_draft, save_echo) = context.create_pure_state(None, update=(
+      _,
+      draft : Draft,
+    ) => Some(draft))
+    { count, change_count, fetch, send_fetch, echoed_draft, save_echo, }
   })
 }
 
@@ -69,29 +81,41 @@ pub fn panel(
 ) -> @minimoon.Val[@minimoon.Node] {
   context
   .bind(deps.count)
-  .view2(context.select(deps.fetch, model => model.label), (count, status) => {
-    @minimoon.div(
-      class="mt-[16rpx] rounded-[16rpx] bg-white px-[32rpx] py-[28rpx] text-slate-800",
-      data_section="shared-state",
-      [
-        @minimoon.p("Application shared count: " + count.to_string()),
-        @minimoon.p("Application request: " + status),
-        @minimoon.button(
-          on_tap=(deps.change_count)(1),
-          event_key="shared/inc",
-          "Shared +1",
-        ),
-        @minimoon.button(
-          on_tap=(deps.send_fetch)(Load),
-          event_key="shared/load",
-          "Shared public API request",
-        ),
-        @minimoon.button(
-          on_tap=(deps.send_fetch)(Clear),
-          event_key="shared/clear",
-          "Clear and ignore old response",
-        ),
-      ],
-    )
-  })
+  .view3(
+    context.select(deps.fetch, model => model.label),
+    context.bind(deps.echoed_draft),
+    (count, status, draft) => {
+      @minimoon.div(
+        class="mt-[16rpx] rounded-[16rpx] bg-white px-[32rpx] py-[28rpx] text-slate-800",
+        data_section="shared-state",
+        [
+          @minimoon.p("Application shared count: " + count.to_string()),
+          @minimoon.p("Application request: " + status),
+          @minimoon.p(
+            "Application echoed draft: " +
+            (match draft {
+              None => "none (not persistent)"
+              Some(draft) =>
+                draft.title + " / " + draft.note + " (not persistent)"
+            }),
+          ),
+          @minimoon.button(
+            on_tap=(deps.change_count)(1),
+            event_key="shared/inc",
+            "Shared +1",
+          ),
+          @minimoon.button(
+            on_tap=(deps.send_fetch)(Load),
+            event_key="shared/load",
+            "Shared public API request",
+          ),
+          @minimoon.button(
+            on_tap=(deps.send_fetch)(Clear),
+            event_key="shared/clear",
+            "Clear and ignore old response",
+          ),
+        ],
+      )
+    },
+  )
 }

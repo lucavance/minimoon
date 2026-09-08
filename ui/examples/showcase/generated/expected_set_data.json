@@ -5370,116 +5370,19 @@
                                                                     "events": {},
                                                                     "children": [
                                                                       {
-                                                                        "kind": "fragment",
+                                                                        "kind": "empty",
                                                                         "identity": "i:0",
                                                                         "text": "",
                                                                         "props": {},
                                                                         "events": {},
-                                                                        "children": [
-                                                                          {
-                                                                            "kind": "empty",
-                                                                            "identity": "i:0",
-                                                                            "text": "",
-                                                                            "props": {},
-                                                                            "events": {},
-                                                                            "children": []
-                                                                          },
-                                                                          {
-                                                                            "kind": "view",
-                                                                            "identity": "i:1",
-                                                                            "text": "",
-                                                                            "props": {
-                                                                              "section": "Checkbox",
-                                                                              "className": "gallery-sample"
-                                                                            },
-                                                                            "events": {},
-                                                                            "children": [
-                                                                              {
-                                                                                "kind": "view",
-                                                                                "identity": "i:0",
-                                                                                "text": "",
-                                                                                "props": {
-                                                                                  "section": "mmui-typography-h2",
-                                                                                  "role": "heading",
-                                                                                  "className": "mmui-typography-h2 gallery-heading"
-                                                                                },
-                                                                                "events": {},
-                                                                                "children": [
-                                                                                  {
-                                                                                    "kind": "text",
-                                                                                    "identity": "i:0",
-                                                                                    "text": "Checkbox",
-                                                                                    "props": {},
-                                                                                    "events": {},
-                                                                                    "children": []
-                                                                                  }
-                                                                                ]
-                                                                              },
-                                                                              {
-                                                                                "kind": "view",
-                                                                                "identity": "i:1",
-                                                                                "text": "",
-                                                                                "props": {
-                                                                                  "className": "gallery-preview"
-                                                                                },
-                                                                                "events": {},
-                                                                                "children": [
-                                                                                  {
-                                                                                    "kind": "checkbox-group",
-                                                                                    "identity": "i:0",
-                                                                                    "text": "",
-                                                                                    "props": {
-                                                                                      "id": "forms-checkbox",
-                                                                                      "className": "mmui-checkbox"
-                                                                                    },
-                                                                                    "events": {
-                                                                                      "change": "forms-checkbox/change"
-                                                                                    },
-                                                                                    "children": [
-                                                                                      {
-                                                                                        "kind": "checkbox",
-                                                                                        "identity": "i:0",
-                                                                                        "text": "",
-                                                                                        "props": {
-                                                                                          "value": "forms-checkbox",
-                                                                                          "checked": false,
-                                                                                          "disabled": false,
-                                                                                          "id": "forms-checkbox-control"
-                                                                                        },
-                                                                                        "events": {},
-                                                                                        "children": [
-                                                                                          {
-                                                                                            "kind": "text",
-                                                                                            "identity": "i:0",
-                                                                                            "text": "Accept terms",
-                                                                                            "props": {},
-                                                                                            "events": {},
-                                                                                            "children": []
-                                                                                          }
-                                                                                        ]
-                                                                                      },
-                                                                                      {
-                                                                                        "kind": "empty",
-                                                                                        "identity": "i:1",
-                                                                                        "text": "",
-                                                                                        "props": {},
-                                                                                        "events": {},
-                                                                                        "children": []
-                                                                                      }
-                                                                                    ]
-                                                                                  }
-                                                                                ]
-                                                                              }
-                                                                            ]
-                                                                          }
-                                                                        ]
+                                                                        "children": []
                                                                       },
                                                                       {
                                                                         "kind": "view",
                                                                         "identity": "i:1",
                                                                         "text": "",
                                                                         "props": {
-                                                                          "section": "Field",
+                                                                          "section": "Checkbox",
                                                                           "className": "gallery-sample"
                                                                         },
                                                                         "events": {},
@@ -5498,7 +5401,7 @@
                                                                               {
                                                                                 "kind": "text",
                                                                                 "identity": "i:0",
-                                                                                "text": "Field",
+                                                                                "text": "Checkbox",
                                                                                 "props": {},
                                                                                 "events": {},
                                                                                 "children": []
@@ -5515,30 +5418,33 @@
                                                                             "events": {},
                                                                             "children": [
                                                                               {
-                                                                                "kind": "view",
+                                                                                "kind": "checkbox-group",
                                                                                 "identity": "i:0",
                                                                                 "text": "",
                                                                                 "props": {
-                                                                                  "section": "mmui-field",
-                                                                                  "className": "mmui-field mmui-vertical"
+                                                                                  "id": "forms-checkbox",
+                                                                                  "className": "mmui-checkbox"
                                                                                 },
-                                                                                "events": {},
+                                                                                "events": {
+                                                                                  "change": "forms-checkbox/change"
+                                                                                },
                                                                                 "children": [
                                                                                   {
-                                                                                    "kind": "label",
+                                                                                    "kind": "checkbox",
                                                                                     "identity": "i:0",
                                                                                     "text": "",
                                                                                     "props": {
-                                                                                      "for": "forms-field",
-                                                                                      "id": "forms-field-label",
-                                                                                      "className": "mmui-field-label"
+                                                                                      "value": "forms-checkbox",
+                                                                                      "checked": false,
+                                                                                      "disabled": false,
+                                                                                      "id": "forms-checkbox-control"
                                                                                     },
                                                                                     "events": {},
                                                                                     "children": [
                                                                                       {
                                                                                         "kind": "text",
                                                                                         "identity": "i:0",
-                                                                                        "text": "Project name *",
+                                                                                        "text": "Accept terms",
                                                                                         "props": {},
                                                                                         "events": {},
                                                                                         "children": []
@@ -5546,80 +5452,12 @@
                                                                                     ]
                                                                                   },
                                                                                   {
-                                                                                    "kind": "view",
+                                                                                    "kind": "empty",
                                                                                     "identity": "i:1",
                                                                                     "text": "",
-                                                                                    "props": {
-                                                                                      "section": "mmui-field-content",
-                                                                                      "className": "mmui-field-content"
-                                                                                    },
+                                                                                    "props": {},
                                                                                     "events": {},
-                                                                                    "children": [
-                                                                                      {
-                                                                                        "kind": "input",
-                                                                                        "identity": "i:0",
-                                                                                        "text": "",
-                                                                                        "props": {
-                                                                                          "value": "",
-                                                                                          "type": "text",
-                                                                                          "maxlength": 140,
-                                                                                          "password": false,
-                                                                                          "disabled": false,
-                                                                                          "focus": false,
-                                                                                          "id": "forms-field",
-                                                                                          "className": "mmui-input"
-                                                                                        },
-                                                                                        "events": {
-                                                                                          "input": "forms-field/input",
-                                                                                          "focus": "v/root/i:0/i:0/i:3/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:1/i:1/i:0/i:1/i:0/focus",
-                                                                                          "blur": "v/root/i:0/i:0/i:3/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:1/i:1/i:0/i:1/i:0/blur"
-                                                                                        },
-                                                                                        "children": []
-                                                                                      }
-                                                                                    ]
-                                                                                  },
-                                                                                  {
-                                                                                    "kind": "view",
-                                                                                    "identity": "i:2",
-                                                                                    "text": "",
-                                                                                    "props": {
-                                                                                      "section": "mmui-field-description",
-                                                                                      "id": "forms-field-description",
-                                                                                      "className": "mmui-field-description"
-                                                                                    },
-                                                                                    "events": {},
-                                                                                    "children": [
-                                                                                      {
-                                                                                        "kind": "text",
-                                                                                        "identity": "i:0",
-                                                                                        "text": "Application-owned validation",
-                                                                                        "props": {},
-                                                                                        "events": {},
-                                                                                        "children": []
-                                                                                      }
-                                                                                    ]
-                                                                                  },
-                                                                                  {
-                                                                                    "kind": "view",
-                                                                                    "identity": "i:3",
-                                                                                    "text": "",
-                                                                                    "props": {
-                                                                                      "section": "mmui-field-error",
-                                                                                      "role": "alert",
-                                                                                      "id": "forms-field-error",
-                                                                                      "className": "mmui-field-error"
-                                                                                    },
-                                                                                    "events": {},
-                                                                                    "children": [
-                                                                                      {
-                                                                                        "kind": "text",
-                                                                                        "identity": "i:0",
-                                                                                        "text": "Please supply a name",
-                                                                                        "props": {},
-                                                                                        "events": {},
-                                                                                        "children": []
-                                                                                      }
-                                                                                    ]
+                                                                                    "children": []
                                                                                   }
                                                                                 ]
                                                                               }
@@ -5873,11 +5711,7 @@
                                                                     "kind": "view",
                                                                     "identity": "i:0",
                                                                     "text": "",
-                                                                    "props": {
-                                                                      "section": "mmui-input-otp",
-                                                                      "id": "forms-otp",
-                                                                      "className": "mmui-input-otp"
-                                                                    },
+                                                                    "props": {},
                                                                     "events": {},
                                                                     "children": [
                                                                       {
@@ -5885,9 +5719,9 @@
                                                                         "identity": "i:0",
                                                                         "text": "",
                                                                         "props": {
-                                                                          "section": "mmui-input-otp-group",
-                                                                          "role": "group",
-                                                                          "className": "mmui-input-otp-group"
+                                                                          "section": "mmui-input-otp",
+                                                                          "id": "forms-otp",
+                                                                          "className": "mmui-input-otp"
                                                                         },
                                                                         "events": {},
                                                                         "children": [
@@ -5896,144 +5730,177 @@
                                                                             "identity": "i:0",
                                                                             "text": "",
                                                                             "props": {
-                                                                              "section": "mmui-input-otp-slot",
-                                                                              "className": "mmui-input-otp-slot mmui-active"
+                                                                              "section": "mmui-input-otp-group",
+                                                                              "role": "group",
+                                                                              "className": "mmui-input-otp-group"
                                                                             },
                                                                             "events": {},
                                                                             "children": [
                                                                               {
-                                                                                "kind": "text",
+                                                                                "kind": "view",
                                                                                 "identity": "i:0",
                                                                                 "text": "",
-                                                                                "props": {},
+                                                                                "props": {
+                                                                                  "section": "mmui-input-otp-slot",
+                                                                                  "className": "mmui-input-otp-slot mmui-active"
+                                                                                },
                                                                                 "events": {},
-                                                                                "children": []
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "view",
+                                                                                "identity": "i:1",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "section": "mmui-input-otp-slot",
+                                                                                  "className": "mmui-input-otp-slot"
+                                                                                },
+                                                                                "events": {},
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "view",
+                                                                                "identity": "i:2",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "section": "mmui-input-otp-slot",
+                                                                                  "className": "mmui-input-otp-slot"
+                                                                                },
+                                                                                "events": {},
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "view",
+                                                                                "identity": "i:3",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "section": "mmui-input-otp-slot",
+                                                                                  "className": "mmui-input-otp-slot"
+                                                                                },
+                                                                                "events": {},
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "view",
+                                                                                "identity": "i:4",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "section": "mmui-input-otp-slot",
+                                                                                  "className": "mmui-input-otp-slot"
+                                                                                },
+                                                                                "events": {},
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "view",
+                                                                                "identity": "i:5",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "section": "mmui-input-otp-slot",
+                                                                                  "className": "mmui-input-otp-slot"
+                                                                                },
+                                                                                "events": {},
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
                                                                               }
                                                                             ]
                                                                           },
                                                                           {
-                                                                            "kind": "view",
+                                                                            "kind": "input",
                                                                             "identity": "i:1",
                                                                             "text": "",
                                                                             "props": {
-                                                                              "section": "mmui-input-otp-slot",
-                                                                              "className": "mmui-input-otp-slot"
+                                                                              "role": "textbox",
+                                                                              "ariaLabel": "Verification code",
+                                                                              "ariaDisabled": false,
+                                                                              "ariaInvalid": false,
+                                                                              "value": "",
+                                                                              "type": "number",
+                                                                              "maxlength": 6,
+                                                                              "disabled": false,
+                                                                              "focus": false,
+                                                                              "id": "forms-otp-input",
+                                                                              "className": "mmui-input-otp-native"
                                                                             },
-                                                                            "events": {},
-                                                                            "children": [
-                                                                              {
-                                                                                "kind": "text",
-                                                                                "identity": "i:0",
-                                                                                "text": "",
-                                                                                "props": {},
-                                                                                "events": {},
-                                                                                "children": []
-                                                                              }
-                                                                            ]
-                                                                          },
-                                                                          {
-                                                                            "kind": "view",
-                                                                            "identity": "i:2",
-                                                                            "text": "",
-                                                                            "props": {
-                                                                              "section": "mmui-input-otp-slot",
-                                                                              "className": "mmui-input-otp-slot"
+                                                                            "events": {
+                                                                              "input": "forms-otp/input"
                                                                             },
-                                                                            "events": {},
-                                                                            "children": [
-                                                                              {
-                                                                                "kind": "text",
-                                                                                "identity": "i:0",
-                                                                                "text": "",
-                                                                                "props": {},
-                                                                                "events": {},
-                                                                                "children": []
-                                                                              }
-                                                                            ]
-                                                                          },
-                                                                          {
-                                                                            "kind": "view",
-                                                                            "identity": "i:3",
-                                                                            "text": "",
-                                                                            "props": {
-                                                                              "section": "mmui-input-otp-slot",
-                                                                              "className": "mmui-input-otp-slot"
-                                                                            },
-                                                                            "events": {},
-                                                                            "children": [
-                                                                              {
-                                                                                "kind": "text",
-                                                                                "identity": "i:0",
-                                                                                "text": "",
-                                                                                "props": {},
-                                                                                "events": {},
-                                                                                "children": []
-                                                                              }
-                                                                            ]
-                                                                          },
-                                                                          {
-                                                                            "kind": "view",
-                                                                            "identity": "i:4",
-                                                                            "text": "",
-                                                                            "props": {
-                                                                              "section": "mmui-input-otp-slot",
-                                                                              "className": "mmui-input-otp-slot"
-                                                                            },
-                                                                            "events": {},
-                                                                            "children": [
-                                                                              {
-                                                                                "kind": "text",
-                                                                                "identity": "i:0",
-                                                                                "text": "",
-                                                                                "props": {},
-                                                                                "events": {},
-                                                                                "children": []
-                                                                              }
-                                                                            ]
-                                                                          },
-                                                                          {
-                                                                            "kind": "view",
-                                                                            "identity": "i:5",
-                                                                            "text": "",
-                                                                            "props": {
-                                                                              "section": "mmui-input-otp-slot",
-                                                                              "className": "mmui-input-otp-slot"
-                                                                            },
-                                                                            "events": {},
-                                                                            "children": [
-                                                                              {
-                                                                                "kind": "text",
-                                                                                "identity": "i:0",
-                                                                                "text": "",
-                                                                                "props": {},
-                                                                                "events": {},
-                                                                                "children": []
-                                                                              }
-                                                                            ]
+                                                                            "children": []
                                                                           }
                                                                         ]
                                                                       },
                                                                       {
-                                                                        "kind": "input",
+                                                                        "kind": "view",
                                                                         "identity": "i:1",
                                                                         "text": "",
                                                                         "props": {
-                                                                          "role": "textbox",
-                                                                          "ariaLabel": "Verification code",
-                                                                          "ariaDisabled": false,
-                                                                          "ariaInvalid": false,
-                                                                          "value": "",
-                                                                          "type": "number",
-                                                                          "maxlength": 6,
-                                                                          "disabled": false,
-                                                                          "focus": false,
-                                                                          "id": "forms-otp-input",
-                                                                          "className": "mmui-input-otp-native"
+                                                                          "section": "mmui-typography-small",
+                                                                          "className": "mmui-typography-small"
                                                                         },
-                                                                        "events": {
-                                                                          "input": "forms-otp/input"
-                                                                        },
-                                                                        "children": []
+                                                                        "events": {},
+                                                                        "children": [
+                                                                          {
+                                                                            "kind": "text",
+                                                                            "identity": "i:0",
+                                                                            "text": "",
+                                                                            "props": {},
+                                                                            "events": {},
+                                                                            "children": []
+                                                                          }
+                                                                        ]
                                                                       }
                                                                     ]
                                                                   }
@@ -7236,7 +7103,8 @@
                               "className": "mmui-form"
                             },
                             "events": {
-                              "submit": "v/root/i:0/i:0/i:3/i:1/i:1/i:0/submit"
+                              "submit": "forms/submit",
+                              "reset": "forms/reset"
                             },
                             "children": [
                               {
@@ -7252,29 +7120,7 @@
                                   {
                                     "kind": "text",
                                     "identity": "i:0",
-                                    "text": "The app supplies validation and submission state.",
-                                    "props": {},
-                                    "events": {},
-                                    "children": []
-                                  }
-                                ]
-                              },
-                              {
-                                "kind": "button",
-                                "identity": "i:1",
-                                "text": "",
-                                "props": {
-                                  "disabled": false,
-                                  "formType": "submit"
-                                },
-                                "events": {
-                                  "tap": "v/root/i:0/i:0/i:3/i:1/i:1/i:0/i:1/tap"
-                                },
-                                "children": [
-                                  {
-                                    "kind": "text",
-                                    "identity": "i:0",
-                                    "text": "Submit",
+                                    "text": "Typed JSON echo round trip; this is not a persistent save.",
                                     "props": {},
                                     "events": {},
                                     "children": []
@@ -7283,22 +7129,240 @@
                               },
                               {
                                 "kind": "view",
-                                "identity": "i:2",
+                                "identity": "i:1",
                                 "text": "",
                                 "props": {
-                                  "section": "mmui-form-message",
-                                  "role": "alert",
-                                  "className": "mmui-form-message"
+                                  "section": "Field",
+                                  "className": "gallery-sample"
                                 },
                                 "events": {},
                                 "children": [
                                   {
+                                    "kind": "view",
+                                    "identity": "i:0",
+                                    "text": "",
+                                    "props": {
+                                      "section": "mmui-typography-h2",
+                                      "role": "heading",
+                                      "className": "mmui-typography-h2 gallery-heading"
+                                    },
+                                    "events": {},
+                                    "children": [
+                                      {
+                                        "kind": "text",
+                                        "identity": "i:0",
+                                        "text": "Field",
+                                        "props": {},
+                                        "events": {},
+                                        "children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "view",
+                                    "identity": "i:1",
+                                    "text": "",
+                                    "props": {
+                                      "className": "gallery-preview"
+                                    },
+                                    "events": {},
+                                    "children": [
+                                      {
+                                        "kind": "view",
+                                        "identity": "i:0",
+                                        "text": "",
+                                        "props": {
+                                          "section": "mmui-field",
+                                          "className": "mmui-field mmui-vertical"
+                                        },
+                                        "events": {},
+                                        "children": [
+                                          {
+                                            "kind": "label",
+                                            "identity": "i:0",
+                                            "text": "",
+                                            "props": {
+                                              "for": "forms-field",
+                                              "id": "forms-field-label",
+                                              "className": "mmui-field-label"
+                                            },
+                                            "events": {},
+                                            "children": [
+                                              {
+                                                "kind": "text",
+                                                "identity": "i:0",
+                                                "text": "Project name *",
+                                                "props": {},
+                                                "events": {},
+                                                "children": []
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "kind": "view",
+                                            "identity": "i:1",
+                                            "text": "",
+                                            "props": {
+                                              "section": "mmui-field-content",
+                                              "className": "mmui-field-content"
+                                            },
+                                            "events": {},
+                                            "children": [
+                                              {
+                                                "kind": "input",
+                                                "identity": "i:0",
+                                                "text": "",
+                                                "props": {
+                                                  "role": "textbox",
+                                                  "ariaLabel": "Project name",
+                                                  "ariaDisabled": false,
+                                                  "ariaLabelledBy": "forms-field-label",
+                                                  "ariaDescribedBy": "forms-field-error",
+                                                  "ariaRequired": true,
+                                                  "ariaInvalid": true,
+                                                  "value": "",
+                                                  "type": "text",
+                                                  "maxlength": 140,
+                                                  "password": false,
+                                                  "name": "project_name",
+                                                  "disabled": false,
+                                                  "focus": false,
+                                                  "id": "forms-field",
+                                                  "className": "mmui-input mmui-invalid"
+                                                },
+                                                "events": {
+                                                  "input": "forms-field/input",
+                                                  "focus": "v/root/i:0/i:0/i:3/i:1/i:1/i:0/i:1/i:1/i:0/i:1/i:0/focus",
+                                                  "blur": "v/root/i:0/i:0/i:3/i:1/i:1/i:0/i:1/i:1/i:0/i:1/i:0/blur"
+                                                },
+                                                "children": []
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "kind": "view",
+                                            "identity": "i:2",
+                                            "text": "",
+                                            "props": {
+                                              "section": "mmui-field-description",
+                                              "id": "forms-field-description",
+                                              "className": "mmui-field-description"
+                                            },
+                                            "events": {},
+                                            "children": [
+                                              {
+                                                "kind": "text",
+                                                "identity": "i:0",
+                                                "text": "At least three characters; sends only a title to an echo endpoint",
+                                                "props": {},
+                                                "events": {},
+                                                "children": []
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "kind": "view",
+                                            "identity": "i:3",
+                                            "text": "",
+                                            "props": {
+                                              "section": "mmui-field-error",
+                                              "role": "alert",
+                                              "id": "forms-field-error",
+                                              "className": "mmui-field-error"
+                                            },
+                                            "events": {},
+                                            "children": [
+                                              {
+                                                "kind": "text",
+                                                "identity": "i:0",
+                                                "text": "Please enter at least three characters",
+                                                "props": {},
+                                                "events": {},
+                                                "children": []
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "button",
+                                "identity": "i:2",
+                                "text": "",
+                                "props": {
+                                  "disabled": false,
+                                  "formType": "submit",
+                                  "id": "forms-send"
+                                },
+                                "events": {
+                                  "tap": "v/root/i:0/i:0/i:3/i:1/i:1/i:0/i:2/tap"
+                                },
+                                "children": [
+                                  {
                                     "kind": "text",
                                     "identity": "i:0",
-                                    "text": "Not submitted",
+                                    "text": "Send echo",
                                     "props": {},
                                     "events": {},
                                     "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "button",
+                                "identity": "i:3",
+                                "text": "",
+                                "props": {
+                                  "disabled": false,
+                                  "formType": "reset",
+                                  "id": "forms-reset"
+                                },
+                                "events": {
+                                  "tap": "v/root/i:0/i:0/i:3/i:1/i:1/i:0/i:3/tap"
+                                },
+                                "children": [
+                                  {
+                                    "kind": "text",
+                                    "identity": "i:0",
+                                    "text": "Reset",
+                                    "props": {},
+                                    "events": {},
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "view",
+                                "identity": "i:4",
+                                "text": "",
+                                "props": {
+                                  "id": "forms-status"
+                                },
+                                "events": {},
+                                "children": [
+                                  {
+                                    "kind": "view",
+                                    "identity": "i:0",
+                                    "text": "",
+                                    "props": {
+                                      "section": "mmui-form-message",
+                                      "role": "alert",
+                                      "className": "mmui-form-message"
+                                    },
+                                    "events": {},
+                                    "children": [
+                                      {
+                                        "kind": "text",
+                                        "identity": "i:0",
+                                        "text": "Echo demo only — no data is persisted.",
+                                        "props": {},
+                                        "events": {},
+                                        "children": []
+                                      }
+                                    ]
                                   }
                                 ]
                               }

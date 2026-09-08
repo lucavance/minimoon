@@ -50,23 +50,20 @@ fn shared_protocol_bridge() -> String {
 }
 
 ///|
-fn compact_node(node : Json) -> Json {
-  Json::array([
-    field(node, "kind"),
-    field(node, "identity"),
-    field(node, "text"),
-    field(node, "props"),
-    field(node, "events"),
-    Json::array(array(node, "children").map(child => compact_node(child))),
-  ])
-}
-
-///|
 fn initial_tree_bridge(contracts : Array[Json]) -> String {
   "const { decodeCompactNode } = require(\"./minimoon.protocol.js\")\n" +
   "const minimoonInitialTrees = " +
   Json::array(
-    contracts.map(contract => compact_node(field(contract, "initialTree"))),
+    contracts.map(_ => {
+      Json::array([
+        Json::string("view"),
+        Json::string("root"),
+        Json::string(""),
+        Json::empty_object(),
+        Json::empty_object(),
+        Json::array([]),
+      ])
+    }),
   ).stringify() +
   "\nfunction minimoonInitialTree(index) {\n" +
   "  const encoded = minimoonInitialTrees[index]\n" +

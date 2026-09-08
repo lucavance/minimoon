@@ -3,7 +3,7 @@
 [中文文档](README.zh-CN.md) · [Documentation](docs/README.md) · [Bilingual code analysis](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
 Minimoon is MoonBit for WeChat MiniApp Skyline. Version `0.2.0` combines an
-Elm-style authoring API with App Contract v9, runtime ABI v11, renderer protocol
+Rabbita-style component composition and Elm-style state machines with App Contract v10, runtime ABI v12, renderer protocol
 v8, and a CommonJS MiniApp host boundary.
 
 ```text
@@ -53,7 +53,9 @@ minimoon add component status_badge --page home
 ## Authoring model
 
 Typed `request` supports HTTP methods, ordered queries, headers, JSON/form/text
-bodies and timeouts. See the [HTTP contract](docs/reference/miniapp_host_capabilities.md#http-requests).
+bodies and timeouts. Use the optional [typed HTTP package](docs/guides/http.md)
+for status policy and typed response decoding; raw `request` retains transport
+semantics. See the [HTTP contract](docs/reference/miniapp_host_capabilities.md#http-requests).
 Run `bun run check:http-live` from this checkout for opt-in public-API testing
 of the generated Home page; it does not replace WeChat host acceptance.
 
@@ -63,39 +65,31 @@ Without `application` configuration, each page package exports
 [shared-state setup](docs/guides/shared_state.md).
 
 ```moonbit
-pub enum Msg { Increment }
-
-fn view(value : Int, emit : @minimoon.Emit[Msg]) -> @minimoon.Node {
-    @minimoon.div([
-      @minimoon.h1(value.to_string()),
-      @minimoon.button(
-        on_tap=emit(Increment),
-        event_key="increment",
-        "+1",
-      ),
-    ])
-}
-
 pub fn program() -> @minimoon.Page {
-  @minimoon.elmish_page(
+  @minimoon.page(
     id="home",
     route=@minimoon.route("pages/home/home"),
     title="Home",
-    model=0,
-    update=(current, message, _emit) => {
-      match message {
-        Increment => @minimoon.no_cmd(current + 1)
-      }
+    build=_ => {
+      let (count, update_count) = @minimoon.create_variable(0)
+      count.view(value => @minimoon.div([
+        @minimoon.h1(value.to_string()),
+        @minimoon.button(
+          on_tap=update_count(current => current + 1),
+          event_key="increment",
+          "+1",
+        ),
+      ]))
     },
-    view~,
   )
 }
 ```
 
-`elmish_page` covers the common model-first page. Local and input-driven
-components use `@minimoon.create_state`, `create_state_with_init`, or
+Ordinary `page` builders and component functions returning `Val[Node]` are the
+primary style. `elmish_page` remains a convenience for simple one-model pages.
+Local and input-driven components use `@minimoon.create_state`, `create_state_with_init`, or
 `create_state_with_input`; every constructor returns `(Val[Model], Emit[Msg])`.
-Updates return `(Model, Cmd)` through `no_cmd`, `with_cmd`, or `with_cmds`.
+Updates return `(Model, Cmd)` through `@minimoon.no_cmd`, `with_cmd`, or `with_cmds`.
 `create_pure_state` covers pure updates, while `create_variable` covers
 function-valued updates. `create_resource` starts one committed load and returns
 `Val[Status[T]]`; its first committed terminal completion wins, while retry and
@@ -135,9 +129,20 @@ State, event routes, subscriptions, branch caches, normalized subtrees, and the
 rendered tree commit together. A rejected candidate restores the complete
 previous transaction.
 
+For required route input, use `page_with_input(preview_input=..., decode_input=...,
+build=...)`. Definition is inert, previews use only the explicit preview seed,
+and actual input is decoded before any page graph is built. The builder receives
+plain input, so local state starts with the real route value. Runtime creation
+returns `Result[PageRuntime, DecodeError]`; first Load sends a full revision-1
+tree, and initial commands run once at Ready/mount. See
+[input and lifecycle ergonomics](docs/guides/api_ergonomics.md#page-input-and-first-render).
+
 Optional packages keep production imports explicit. `lampclaw/minimoon/testing`
 queries and drives the actual normalized MiniApp tree through re-resolving
-semantic scopes and native-shaped interactions. The headless
+semantic scopes and native-shaped interactions.
+`testing.launch` adds an App-aware owner, `app.mount` creates its pages, and
+bounded `quiesce` drains ready shared/local work without waiting for future
+timers or unresolved HTTP. Page disposal does not dispose App. The headless
 `lampclaw/minimoon/components` package supplies controlled and self-owned
 Disclosure, single/multiple Accordion, Tabs, Dialog, Sheet, and Dropdown;
 `lampclaw/minimoon/components/styles` binds those structures to the opt-in
@@ -177,12 +182,12 @@ See [shared-state setup and acceptance](docs/guides/shared_state.md).
 
 ## MiniApp boundary
 
-Configuration uses App Contract v9. `componentTheme` is optional; omitting it
+Configuration uses App Contract v10. `componentTheme` is optional; omitting it
 adds no built-in component CSS:
 
 ```json
 {
-  "schemaVersion": 9,
+  "schemaVersion": 10,
   "name": "my_app",
   "componentTheme": "minimal-v2",
   "pages": [
@@ -216,7 +221,7 @@ page scheduler instead of accepting uncertain state. Queue depth, coalescing,
 acknowledgement latency, retry, timeout, and COW shadow-copy work are observable
 through renderer stats.
 
-Runtime ABI v11 also gives page-owned local async commands an ordered host wake
+Runtime ABI v12 also gives page-owned local async commands an ordered host wake
 path. Suspended `perform` and `attempt` work can drain their resulting commands
 without waiting for another tap or lifecycle entry. Disposal cancels owned
 delivery, and framework `delay` timers are physically cleared by the host.
@@ -265,9 +270,11 @@ git diff --check
 ```
 
 `check:api` locks the core `0.2` root and resources interfaces exactly, compiles
-the frozen 0.1 consumer, and permits only additive changes in the optional
+the current 0.2 consumer, and permits only additive changes in the optional
 components, styles and testing packages. UI `0.1` has separate additive
 snapshots for its root, headless, theme and resources packages.
+The frozen 0.1 consumer remains historical source, not a promise that old
+application calls compile unchanged against the current candidate.
 `check:candidate` is the Linux-safe automatic handoff gate; a successful run
 leaves tracked reports in candidate state, even when local evidence exists.
 Coverage is the separate `check:coverage` gate shown above. For a
@@ -280,7 +287,7 @@ require unchanged fingerprints and a clean source checkout. The
 ordered core/UI publication and registry-only consumer checks.
 The repository archive gate uses `moon package --frozen --list`, then enforces
 the registry archive allowlist and independently reviewed hard ceilings:
-280 KiB for core with at least 8 KiB reserved, and 250 KiB for UI with at least
+300 KiB for core with at least 8 KiB reserved, and 250 KiB for UI with at least
 16 KiB reserved. These are repository budgets, not registry service limits.
 
 Repository checks use fresh run directories in `../.minimoon-check-tmp/`, on
@@ -290,8 +297,11 @@ process cleans its run after success, failure or worker crash; child tools
 inherit that run's `TMPDIR`, `TMP` and `TEMP`. See the [temporary-storage
 notes](docs/operations/release_candidate_handoff.md#validation-temporary-storage).
 
-The floor was revalidated on 2026-09-04 with `moon 0.1.20260827` and
-`moonc v0.10.11`. Repository and generated-starter tooling support Node
+The supported floor is `moon 0.1.20260904` with `moonc v0.10.12`. Both CI jobs
+use the official installer pinned to prebuilt release `0.10.12+1634b282e`,
+not latest; no Rust is required. The local `moon 0.1.20260907` combination
+revalidated on 2026-09-08 remains valid and does not need downgrading.
+Repository and generated-starter tooling support Node
 `>=24.20.0`; CI validates the Node 24.20.0 lower boundary and the Node 26.8.1
 primary environment, while Bun is pinned to `1.4.2`. The only maintained
 standalone JavaScript is `scripts/bridge/weapp_tailwindcss_adapter.mjs`;
@@ -310,7 +320,7 @@ src/
   internal_host_validation/ repository-only host/docs/perf validation
   testing/                optional normalized-tree test runtime
   components/             optional headless and styled components
-  tooling_miniapp/        App Contract v9 artifact generator
+  tooling_miniapp/        App Contract v10 artifact generator
   tooling_minimoon_*      build and verification pipeline
   cmd/minimoon/           native CLI and embedded starter
 examples/

@@ -1,6 +1,7 @@
 import {
   "lampclaw/minimoon",
   "lampclaw/minimoon/testing",
+  "moonbitlang/core/json",
   "lampclaw/minimoon_ui_showcase/pages/foundation",
   "lampclaw/minimoon_ui_showcase/pages/overlays",
   "lampclaw/minimoon_ui_showcase/pages/forms",

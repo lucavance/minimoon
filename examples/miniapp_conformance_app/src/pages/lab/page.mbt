@@ -692,7 +692,7 @@ fn view(
 ///|
 fn app(
   context : @minimoon.PageContext,
-  instance : @minimoon.Val[String],
+  name : String,
   probe_scheduler : ((Unit) -> Unit, Int) -> Unit,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (model, emit) = @minimoon.create_state(
@@ -894,10 +894,9 @@ fn app(
       ])
     },
   )
-  @minimoon.Val::view4(model, card_nodes, instance, content_navigation, (
+  @minimoon.Val::view3(model, card_nodes, content_navigation, (
     current,
     nodes,
-    name,
     content_navigation,
   ) => view(current, emit, nodes, name, content_navigation))
 }
@@ -922,6 +921,7 @@ fn program_with_probe_scheduler(
     id="lab",
     route=@minimoon.route("pages/lab/lab"),
     title="Runtime Lab",
+    preview_input=() => "primary",
     capabilities=[@minimoon.NavigateBack, @minimoon.RedirectTo],
     decode_input~,
     build=(context, input) => app(context, input, probe_scheduler),

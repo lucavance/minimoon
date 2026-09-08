@@ -3,6 +3,7 @@ package "lampclaw/miniapp_conformance_app/app"
 
 import {
   "lampclaw/minimoon",
+  "moonbitlang/core/json",
 }
 
 // Values
@@ -18,7 +19,14 @@ pub struct Deps {
   change_count : @minimoon.Emit[Int]
   fetch : @minimoon.Shared[FetchModel]
   send_fetch : @minimoon.Emit[FetchMsg]
+  echoed_draft : @minimoon.Shared[Draft?]
+  save_echo : @minimoon.Emit[Draft]
 }
+
+pub(all) struct Draft {
+  title : String
+  note : String
+} derive(Eq, ToJson, @json.FromJson)
 
 pub struct FetchModel {
   epoch : Int

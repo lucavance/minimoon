@@ -11,7 +11,7 @@ pub fn constant(@minimoon.Node) -> @minimoon.Val[@minimoon.Node]
 
 pub fn display(String, @minimoon.Node) -> @minimoon.Val[@minimoon.Node]
 
-pub fn page(String, String, (@minimoon_ui.UiContext) -> @minimoon.Val[@minimoon.Node]) -> @minimoon.Page
+pub fn page(String, String, (@minimoon_ui.UiContext) -> @minimoon.Val[@minimoon.Node], capabilities? : Array[@minimoon.Capability]) -> @minimoon.Page
 
 pub fn sample(String, @minimoon.Val[@minimoon.Node]) -> @minimoon.Val[@minimoon.Node]
 

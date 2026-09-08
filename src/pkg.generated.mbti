@@ -91,7 +91,7 @@ pub fn[C : IsChildren] p(id? : String, class? : String, style? : String, data_se
 
 pub fn page(id~ : String, route~ : Route, title~ : String, capabilities? : Array[Capability], build~ : (PageContext) -> Val[Node]) -> Page
 
-pub fn[Input : Eq] page_with_input(id~ : String, route~ : Route, title~ : String, capabilities? : Array[Capability], decode_input~ : (Map[String, String]) -> Result[Input, DecodeError], build~ : (PageContext, Val[Input]) -> Val[Node]) -> Page
+pub fn[Input] page_with_input(id~ : String, route~ : Route, title~ : String, capabilities? : Array[Capability], preview_input~ : () -> Input, decode_input~ : (Map[String, String]) -> Result[Input, DecodeError], build~ : (PageContext, Input) -> Val[Node]) -> Page
 
 pub fn[A] perform(Emit[A], async () -> A noraise) -> Cmd
 
@@ -176,11 +176,12 @@ pub(all) enum AppLifecycleHook {
 } derive(Eq)
 
 type AppRuntime[Deps]
-pub fn[Deps] AppRuntime::create_page(Self[Deps], Page) -> PageRuntime
+pub fn[Deps] AppRuntime::create_page(Self[Deps], Page, input? : Map[String, String]) -> Result[PageRuntime, DecodeError]
 pub fn[Deps] AppRuntime::deps(Self[Deps]) -> Deps
 pub fn[Deps] AppRuntime::dispatch(Self[Deps], Cmd) -> String
 pub fn[Deps] AppRuntime::dispose(Self[Deps]) -> String
 pub fn[Deps] AppRuntime::flush(Self[Deps]) -> String
+pub fn[Deps] AppRuntime::has_ready_work(Self[Deps]) -> Bool
 pub fn[Deps] AppRuntime::lifecycle(Self[Deps], String, String) -> String
 pub fn[Deps] AppRuntime::resolve_effect(Self[Deps], String, String, String) -> String
 pub fn[Deps] AppRuntime::subscription(Self[Deps], String) -> String
@@ -322,7 +323,7 @@ pub struct NodeRect {
 type Page
 pub fn Page::contract(Self) -> String
 pub fn Page::contract_json(Self) -> Json
-pub fn Page::create_runtime(Self) -> PageRuntime
+pub fn Page::create_runtime(Self, input? : Map[String, String]) -> Result[PageRuntime, DecodeError]
 pub fn Page::id(Self) -> String
 pub fn Page::initial_tree(Self) -> Json
 pub fn Page::route(Self) -> String
@@ -354,6 +355,8 @@ type PageRuntime
 pub fn PageRuntime::dispatch(Self, String, String) -> String
 pub fn PageRuntime::dispatch_batch(Self, String) -> String
 pub fn PageRuntime::dispose(Self) -> String
+pub fn PageRuntime::flush(Self) -> String
+pub fn PageRuntime::has_ready_work(Self) -> Bool
 pub fn PageRuntime::lifecycle(Self, String, String) -> String
 pub fn PageRuntime::mount(Self) -> String
 pub fn PageRuntime::page_id(Self) -> String

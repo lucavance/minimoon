@@ -1,8 +1,7 @@
 import {
   "lampclaw/minimoon/ui_dsl" @ui,
-  "moonbitlang/core/bench",
 }
 
 import {
-  "moonbitlang/core/test",
-} for "test"
+  "moonbitlang/core/bench",
+} for "wbtest"

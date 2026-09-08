@@ -18,7 +18,8 @@ test "Val page commits one typed event transaction" {
       count.view(value => button(on_tap=emit(Increment), value.to_string()))
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   inspect(runtime.snapshot().contains("\"text\":\"0\""), content="true")
   let commands = runtime.dispatch("v/root/tap", "{}")
@@ -143,10 +144,10 @@ test "public page metadata, lifecycle helpers, and control decoders compose" {
   assert_eq(definition.route(), "pages/surface/surface")
   assert_eq(definition.title(), "Surface")
   assert_true(definition.contract_json().stringify().contains("surface"))
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
   assert_eq(runtime.page_id(), "surface")
+  assert_true(runtime.lifecycle("onLoad", "{}").contains("ReplaceViewTree"))
   let _ = runtime.mount()
-  assert_true(runtime.lifecycle("onLoad", "{}").contains("PatchViewTree"))
   assert_true(
     runtime.lifecycle("onPullDownRefresh", "{}").contains("PatchViewTree"),
   )
@@ -277,7 +278,8 @@ test "Val map2 through map9 and view2 through view9 remain available" {
       })
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   let snapshot = runtime.snapshot()
   assert_true(snapshot.contains("view2:3"))
@@ -327,7 +329,7 @@ test "Val assoc and bounded enumeration retain root-owned composition" {
       })
     },
   )
-  let snapshot = definition.create_runtime().snapshot()
+  let snapshot = definition.create_runtime().unwrap().snapshot()
   assert_true(snapshot.contains("a:1"))
   assert_true(snapshot.contains("b:2"))
   assert_true(snapshot.contains("a:a"))
@@ -360,7 +362,8 @@ test "elmish_page keeps view model-first and subscriptions page-aware" {
     },
     subscriptions=(context, _, emit) => context.on_show(emit(ElmishShown)),
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   assert_true(runtime.snapshot().contains("\"text\":\"0\""))
   let _ = runtime.dispatch("elmish/increment", "{}")
@@ -436,7 +439,8 @@ test "input focus boundary, tap views, and extended semantics stay typed" {
       })
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   let snapshot = runtime.snapshot()
   assert_true(snapshot.contains("\"ariaChecked\":true"))
@@ -478,7 +482,8 @@ test "create_state_with_init delivers its initial command through Emit" {
       count.view(value => button(on_tap=emit(Increment), value.to_string()))
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   inspect(runtime.snapshot().contains("\"text\":\"1\""), content="true")
 }
@@ -500,7 +505,8 @@ test "Eq-equal Val input skips graph projection and host writes" {
       })
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   let before = renders.val
   inspect(runtime.dispatch("set-same", "{}"), content="[]")
@@ -566,7 +572,8 @@ test "failed assoc candidate restores removed branch state and handlers" {
       })
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   let _ = runtime.dispatch("a/increment", "{}")
   inspect(runtime.snapshot().contains("\"text\":\"a:1\""), content="true")
@@ -599,7 +606,7 @@ test "semantics stay typed in the normalized tree and shared WXML" {
       )
     },
   )
-  let snapshot = definition.create_runtime().snapshot()
+  let snapshot = definition.create_runtime().unwrap().snapshot()
   assert_true(snapshot.contains("\"role\":\"navigation\""))
   assert_true(snapshot.contains("\"ariaLabel\":\"Primary\""))
   assert_true(snapshot.contains("\"ariaExpanded\":false"))

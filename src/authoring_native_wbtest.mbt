@@ -191,7 +191,8 @@ test "native UI controls normalize and dispatch typed events" {
       })
     },
   )
-  let runtime = definition.create_runtime()
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   let snapshot = runtime.snapshot()
   for

@@ -18,6 +18,12 @@ included in this repository as `LICENSE`.
 
 ## Review-only references
 
+The optional `src/http/` authoring facade follows Rabbita's request-builder API
+as reviewed at `eccae7507360aec8465469bafb7fb4da5b260a2a` (2026-09-08,
+Rabbita 0.15.6 source). It delegates to Minimoon's declared `wx.request`
+capability instead of importing the browser HTTP implementation. The Apache-2.0
+license above applies; this source reference is not a package dependency.
+
 The [Rabbita/RUI audit](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) compares the
 current implementation with Rabbita 0.15.6 and RUI 0.1.1 at commit
 `b1291945fd0201a0b5b39513b88585d6122db7bc`. These are comparison points, not

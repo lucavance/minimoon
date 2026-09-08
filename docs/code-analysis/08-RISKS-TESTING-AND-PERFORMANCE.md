@@ -115,11 +115,11 @@ function createRendererStats() {
 
 ## 5. 体积预算与当前余量 / Byte Budgets and Current Headroom
 
-共享状态预算评审的 Conformance JavaScript 为 442,997 bytes，aggregate ceiling 为 453,000 bytes，保留 10,003 bytes 余量，已包含 3,464-byte `minimoon.app.js`。runtime 为 373,090/383,000 bytes，启用 App 的 host 为 15,499/16,000 bytes，initial trees 为 40,204/41,000 bytes。未启用 App 的 host 保持 15,000-byte 上限。调整依据见[预算评审](../reference/performance_baseline.md#approved-application-state-budget-review)。
+2026-09-08 本轮 authoring 校准的 Conformance JavaScript 为 418,121/453,000 bytes，保留 34,879 bytes 余量；runtime 为 387,977/400,000 bytes，启用 App 的 host 为 15,624/16,000 bytes，initial trees 为 303/41,000 bytes。未启用 App 的 host 为 14,976/15,000 bytes。本轮仅调整 Conformance runtime 和核心发布 ZIP 预算，aggregate、host、starter 与 UI 门槛保持不变。调整依据见[本轮预算评审](../reference/performance_baseline.md#approved-authoring-budget-review)。
 
 > **English:**
 >
-> The shared-state calibration measures 442,997 Conformance JavaScript bytes against a 453,000-byte aggregate ceiling, leaving 10,003 bytes and including the 3,464-byte `minimoon.app.js`. Runtime is 373,090/383,000 bytes, App-enabled host is 15,499/16,000 bytes, and initial trees are 40,204/41,000 bytes. No-App hosts retain the 15,000-byte ceiling. See the [budget review](../reference/performance_baseline.md#approved-application-state-budget-review) for the rationale.
+> The 2026-09-08 authoring calibration measures 418,121/453,000 Conformance JavaScript bytes, leaving 34,879 bytes. Runtime is 387,977/400,000 bytes, App-enabled host is 15,624/16,000 bytes, and initial trees are 303/41,000 bytes. The no-App host is 14,976/15,000 bytes. This review changes only the Conformance runtime and core registry ZIP budgets; aggregate, host, starter, and UI ceilings remain unchanged. See the [current budget review](../reference/performance_baseline.md#approved-authoring-budget-review) for the rationale.
 
 > **源码 / Source:** [`src/cmd/minimoon_check/performance.mbt`](../../src/cmd/minimoon_check/performance.mbt) · symbol: `perf_suite` artifact budgets
 

@@ -92,6 +92,13 @@ pub async fn generate(config_path : String, mode : String) -> Json {
       raise Failure::Failure(message)
     }
     routes.push(route)
+    if contract is Object(fields) {
+      fields["smokeInput"] = match page {
+        Object(source) =>
+          source.get("smokeInput").unwrap_or(Json::empty_object())
+        _ => Json::empty_object()
+      }
+    }
     contracts.push(contract)
   }
   let app_runtime = compile_app_runtime(

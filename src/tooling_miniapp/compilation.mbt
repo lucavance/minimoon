@@ -12,14 +12,11 @@ fn runtime_package_source(
   }
   runtime_registry_source(
     main,
-    "  minimoon_next_instance_id.val = minimoon_next_instance_id.val + 1\n" +
     "  let program = " +
     call +
     "\n" +
     "  guard page_id == program.id() else { abort(\"runtime page id mismatch\") }\n" +
-    "  let id = page_id + \":\" + minimoon_next_instance_id.val.to_string()\n" +
-    "  minimoon_instances[id] = program.create_runtime()\n" +
-    "  id\n",
+    "  minimoon_register_page(page_id, program.create_runtime(input~))\n",
     "page import: " + page_import,
   )
 }
@@ -34,6 +31,7 @@ fn runtime_registry_source(
   "let minimoon_instances : Map[String, @minimoon.PageRuntime] = Map([])\n\n" +
   "///|\n" +
   "let minimoon_next_instance_id : Ref[Int] = Ref(0)\n\n" +
+  runtime_creation_helpers() +
   "///|\n" +
   main +
   "\n\n" +
@@ -44,7 +42,8 @@ fn runtime_registry_source(
   @versions.runtime_api_version().to_string() +
   " }\n\n" +
   "///|\n" +
-  "pub fn minimoon_runtime_create_app(page_id : String) -> String {\n" +
+  "pub fn minimoon_runtime_create_app(page_id : String, input_json : String) -> String {\n" +
+  "  let input = match minimoon_decode_input(input_json) { Ok(input) => input; Err(error) => return minimoon_creation_error(error.message()) }\n" +
   create_body +
   "}\n\n" +
   runtime_proxy_function("mount", "instance.mount()", []) +
@@ -113,20 +112,17 @@ fn app_runtime_package_source(
       index.to_string() +
       "." +
       program +
-      "().create_runtime()\n",
+      "().create_runtime(input~)\n",
     )
     imports.push(string(pages[index], "package"))
   }
   runtime_registry_source(
     "fn main { () }",
-    "  minimoon_next_instance_id.val = minimoon_next_instance_id.val + 1\n" +
     "  let runtime = match page_id {\n" +
     factories.join("") +
     "    _ => abort(\"unknown runtime page id: \" + page_id)\n" +
     "  }\n" +
-    "  let id = page_id + \":\" + minimoon_next_instance_id.val.to_string()\n" +
-    "  minimoon_instances[id] = runtime\n" +
-    "  id\n",
+    "  minimoon_register_page(page_id, runtime)\n",
     "application page imports: " + imports.join(", "),
   )
 }
@@ -162,7 +158,9 @@ fn app_runtime_package_manifest(
   pages : Array[Json],
   application? : Json,
 ) -> String {
-  let imports = ["  \"lampclaw/minimoon\" @minimoon,\n"]
+  let imports = [
+    "  \"lampclaw/minimoon\" @minimoon,\n", "  \"moonbitlang/core/json\",\n",
+  ]
   for index = 0; index < pages.length(); index = index + 1 {
     let page_import = package_import(module_id, string(pages[index], "package"))
     imports.push(
@@ -246,12 +244,16 @@ async fn emit_host_bridge(
 }
 
 ///|
-fn contract_package_manifest(page_import : String) -> String {
+fn contract_package_manifest(
+  page_import : String,
+  input_decoder? : Bool = true,
+) -> String {
   "import {\n" +
   "  \"lampclaw/minimoon\" @minimoon,\n" +
   "  " +
   page_import.escape() +
   " @page,\n" +
+  (if input_decoder { "  \"moonbitlang/core/json\",\n" } else { "" }) +
   "}\n\n" +
   "supported_targets = \"js\"\n\n" +
   "pkgtype(kind: \"executable\")\n"
@@ -307,7 +309,10 @@ async fn compile_page_contract(
   if @fs.exists(target_dir) {
     @fs.rmdir(target_dir, recursive=true)
   }
-  let manifest = contract_package_manifest(page_import)
+  let manifest = contract_package_manifest(
+    page_import,
+    input_decoder=application is None,
+  )
   let manifest = if application is Some(application) {
     manifest.replace_all(
       old="import {\n",

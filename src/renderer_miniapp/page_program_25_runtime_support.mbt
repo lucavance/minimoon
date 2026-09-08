@@ -1,4 +1,38 @@
 ///|
+/// A type-erased resident page instance. The application Model and Msg types
+/// remain captured by these closures and never cross the MiniApp host boundary.
+pub struct PageRuntime {
+  page_id : String
+  mount : () -> String
+  dispatch : (String, String) -> String
+  dispatch_batch : (String) -> String
+  lifecycle : (String, String) -> String
+  resolve_effect : (String, String, String) -> String
+  subscription : (String, String) -> String
+  snapshot : () -> String
+  dispose : () -> String
+  refresh : () -> String
+  flush : () -> String
+  has_ready_work : () -> Bool
+}
+
+///|
+pub fn runtime_api_version() -> Int {
+  @versions.runtime_api_version()
+}
+
+///|
+#cfg(target="js")
+extern "js" fn capture_runtime_wake_v12() -> (Int) -> Unit =
+  #|() => typeof globalThis.__minimoonRuntimeWakeV12 === "function" ? globalThis.__minimoonRuntimeWakeV12 : (_through) => {}
+
+///|
+#cfg(not(target="js"))
+fn capture_runtime_wake_v12() -> (Int) -> Unit {
+  _ => ()
+}
+
+///|
 pub fn PageRuntime::page_id(self : PageRuntime) -> String {
   self.page_id
 }
@@ -61,6 +95,16 @@ pub fn PageRuntime::snapshot(self : PageRuntime) -> String {
 ///|
 pub fn PageRuntime::dispose(self : PageRuntime) -> String {
   (self.dispose)()
+}
+
+///|
+pub fn PageRuntime::flush(self : PageRuntime) -> String {
+  (self.flush)()
+}
+
+///|
+pub fn PageRuntime::has_ready_work(self : PageRuntime) -> Bool {
+  (self.has_ready_work)()
 }
 
 ///|

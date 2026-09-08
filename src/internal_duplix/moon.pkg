@@ -1,8 +1,11 @@
 import {
   "moonbitlang/core/queue",
   "moonbitlang/core/immut/vector",
-  "moonbitlang/core/bench",
   "lampclaw/minimoon/internal_slotmap" @slotmap,
 }
+
+import {
+  "moonbitlang/core/bench",
+} for "wbtest"
 
 supported_targets = "js+native"

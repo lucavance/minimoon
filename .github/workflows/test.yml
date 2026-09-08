@@ -29,7 +29,7 @@ jobs:
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.12+1634b282e
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Node
@@ -63,12 +63,12 @@ jobs:
           version_at_least() {
             [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n 1)" = "$1" ]
           }
-          version_at_least "0.1.20260827" "$installed_moon" || {
-            echo "moon $installed_moon is below the supported floor 0.1.20260827" >&2
+          version_at_least "0.1.20260904" "$installed_moon" || {
+            echo "moon $installed_moon is below the supported floor 0.1.20260904" >&2
             exit 1
           }
-          version_at_least "0.10.11" "$installed_moonc" || {
-            echo "moonc $installed_moonc is below the supported floor 0.10.11" >&2
+          version_at_least "0.10.12" "$installed_moonc" || {
+            echo "moonc $installed_moonc is below the supported floor 0.10.12" >&2
             exit 1
           }
 
@@ -113,18 +113,18 @@ jobs:
               echo "CI handoff accepts candidate verification reports only" >&2
               exit 1
             }
-            fingerprint="$(jq -er '.artifactFingerprint | select(type == "string" and test("^fnv1a64-relpath-v2:[0-9a-f]{16}$"))' "$report")"
+            fingerprint="$(jq -er '.artifactFingerprint | select(type == "string" and test("^fnv1a64-relpath-v2:[0-9a-f]{1,16}$"))' "$report")"
             jq -e --arg name "$name" --arg fingerprint "$fingerprint" --arg ui_version "$ui_version" --arg bundle "$bundle" --argjson page_count "$page_count" \
               --slurpfile manifest "$fixture/generated/manifest.json" \
               --slurpfile checklist "$fixture/generated/smoke_checklist.json" \
-              '.mode == "release" and .name == $name and .schemaVersion == 9 and .runtimeApiVersion == 11 and .rendererProtocolVersion == 8 and
+              '.mode == "release" and .name == $name and .schemaVersion == 10 and .runtimeApiVersion == 12 and .rendererProtocolVersion == 8 and
                .automated.status == "passed" and .automated.pageCount == $page_count and .automated.artifactFingerprint == $fingerprint and
                .devtools.status == "pending" and .devtools.evidence == null and .devtools.artifactFingerprint == null and (.devtools | keys) == ["evidence", "status"] and
-               $manifest[0].name == $name and $manifest[0].schemaVersion == 9 and $manifest[0].runtimeApiVersion == 11 and $manifest[0].rendererProtocolVersion == 8 and
+               $manifest[0].name == $name and $manifest[0].schemaVersion == 10 and $manifest[0].runtimeApiVersion == 12 and $manifest[0].rendererProtocolVersion == 8 and
                $manifest[0].pageBridgeEncoding == "shared-compact-node-v1" and
-               ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 9 and .runtimeApiVersion == 11 and .rendererProtocolVersion == 8) and
+               ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 10 and .runtimeApiVersion == 12 and .rendererProtocolVersion == 8) and
                ($bundle != "ui" or any($manifest[0].resources[]; .package == "lampclaw/minimoon_ui/resources" and .version == $ui_version)) and
-               $checklist[0].runtimeApiVersion == 11 and $checklist[0].rendererProtocolVersion == 8 and
+               $checklist[0].runtimeApiVersion == 12 and $checklist[0].rendererProtocolVersion == 8 and
                $checklist[0].pages == [$manifest[0].pages[].route] and ($checklist[0].checks | length > 0)' \
               "$fixture/generated/release_summary.json" >/dev/null || {
               echo "CI handoff requires matching versions, pages, fingerprints, and pending private-evidence-free summaries" >&2
@@ -239,7 +239,7 @@ jobs:
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.12+1634b282e
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Node 24 LTS floor

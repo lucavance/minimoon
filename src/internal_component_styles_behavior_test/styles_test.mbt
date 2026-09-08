@@ -85,7 +85,8 @@ test "styled input-aware components preserve the minimal v1 class contract" {
       ) => @minimoon.div([a, b, c, d, e]))
     },
   )
-  let runtime = page.create_runtime()
+  let runtime = page.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   let snapshot = runtime.snapshot()
   assert_true(snapshot.contains("mm-disclosure__panel"))
@@ -203,7 +204,8 @@ test "styled controlled and multiple input variants preserve classes" {
       )
     },
   )
-  let runtime = page.create_runtime()
+  let runtime = page.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
   let _ = runtime.mount()
   let snapshot = runtime.snapshot()
   assert_true(snapshot.contains("styled-controlled-disclosure"))

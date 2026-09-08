@@ -45,7 +45,7 @@ fn embedded_inventory(
       ("src/authoring_app_driver.mbt", "capture_app_wake", "production"),
       ("src/authoring_shared_wake.mbt", "capture_shared_wake", "production"),
       (
-        "src/renderer_miniapp/page_program_20_runtime_entry.mbt", "capture_runtime_wake_v11",
+        "src/renderer_miniapp/page_program_25_runtime_support.mbt", "capture_runtime_wake_v12",
         "production",
       ),
       (
@@ -53,11 +53,11 @@ fn embedded_inventory(
         "example",
       ),
       (
-        "src/renderer_miniapp/page_program_test.mbt", "install_runtime_wake_v11_for_test",
+        "src/renderer_miniapp/page_program_test.mbt", "install_runtime_wake_v12_for_test",
         "test",
       ),
       (
-        "src/renderer_miniapp/page_program_test.mbt", "clear_runtime_wake_v11_for_test",
+        "src/renderer_miniapp/page_program_test.mbt", "clear_runtime_wake_v12_for_test",
         "test",
       ),
     ] {
@@ -135,7 +135,7 @@ fn embedded_inventory(
     "src/tooling_miniapp/artifacts.mbt",
     "fn:initial_tree_bridge",
     "production",
-    ExceptLiterals(["initialTree"]),
+    AllLiterals,
   )
   add(
     "src/tooling_miniapp/artifacts.mbt",

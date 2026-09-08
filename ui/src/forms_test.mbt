@@ -16,12 +16,12 @@ test "native text inputs own values and preserve typed options" {
   let runtime = @testing.mount(
     form_test_page(_ => {
       stack([
-        input(
+        input_stateful(
           id="name",
           options=input_options(placeholder="Name", maxlength=12),
         ),
-        textarea(id="notes", initial_value="Initial"),
-        input(
+        textarea_stateful(id="notes", initial_value="Initial"),
+        input_stateful(
           id="disabled",
           initial_value="Locked",
           options=input_options(disabled=true),

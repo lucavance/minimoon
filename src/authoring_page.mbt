@@ -2,7 +2,13 @@
 priv struct GraphMessage(Cmd)
 
 ///|
-struct PageRuntime(@renderer.PageRuntime, @val.Graph)
+struct PageRuntime(
+  @renderer.PageRuntime,
+  @val.Graph,
+  Ref[Bool],
+  Ref[Bool],
+  Map[String, String]
+)
 
 ///|
 struct PageContext {
@@ -211,6 +217,7 @@ fn graph_update(
   graph : @val.Graph,
   message : GraphMessage,
   epoch : Int,
+  initialized : Ref[Bool],
 ) -> (Int, @runtime.Cmd[GraphMessage]) {
   graph.begin()
   let commands : Array[@runtime.Cmd[GraphMessage]] = []
@@ -221,16 +228,18 @@ fn graph_update(
   }
   // A dynamic branch may register state init commands while projection pulls
   // the graph. Drain them only after that candidate commits, in a new update.
-  commands.push(
-    @runtime.local_effect((emit, finish) => {
-      let pending = graph.take_initial_command()
-      if graph_command_has_runtime_work(pending) {
-        emit(GraphMessage(Cmd(pending)))
-      }
-      finish()
-      fn() {  }
-    }),
-  )
+  if initialized.val {
+    commands.push(
+      @runtime.local_effect((emit, finish) => {
+        let pending = graph.take_initial_command()
+        if graph_command_has_runtime_work(pending) {
+          emit(GraphMessage(Cmd(pending)))
+        }
+        finish()
+        fn() {  }
+      }),
+    )
+  }
   (revision, @runtime.cmd_batch(commands))
 }
 
@@ -256,7 +265,11 @@ struct Page {
   id : String
   route : String
   title : String
-  make_program : () -> (@renderer.PageProgram[Int, GraphMessage], @val.Graph)
+  make_preview : () -> (@renderer.PageProgram[Int, GraphMessage], @val.Graph)
+  make_program : (Map[String, String]) -> Result[
+    (@renderer.PageProgram[Int, GraphMessage], @val.Graph),
+    DecodeError,
+  ]
 }
 
 ///|
@@ -276,7 +289,7 @@ pub fn Page::title(self : Page) -> String {
 
 ///|
 pub fn Page::initial_tree(self : Page) -> Json {
-  let (program, graph) = (self.make_program)()
+  let (program, graph) = (self.make_preview)()
   let value = program.initial_tree()
   graph.dispose()
   value
@@ -284,7 +297,7 @@ pub fn Page::initial_tree(self : Page) -> Json {
 
 ///|
 pub fn Page::contract(self : Page) -> String {
-  let (program, graph) = (self.make_program)()
+  let (program, graph) = (self.make_preview)()
   let value = program.contract()
   graph.dispose()
   value
@@ -292,7 +305,7 @@ pub fn Page::contract(self : Page) -> String {
 
 ///|
 pub fn Page::contract_json(self : Page) -> Json {
-  let (program, graph) = (self.make_program)()
+  let (program, graph) = (self.make_preview)()
   let value = program.contract_json()
   graph.dispose()
   value
@@ -300,20 +313,55 @@ pub fn Page::contract_json(self : Page) -> Json {
 
 ///|
 pub fn Page::wxml(self : Page) -> String {
-  let (program, graph) = (self.make_program)()
+  let (program, graph) = (self.make_preview)()
   let value = program.wxml()
   graph.dispose()
   value
 }
 
 ///|
-pub fn Page::create_runtime(self : Page) -> PageRuntime {
-  let (program, graph) = (self.make_program)()
-  let runtime = program.create_runtime()
+pub fn Page::create_runtime(
+  self : Page,
+  input? : Map[String, String] = Map([]),
+) -> Result[PageRuntime, DecodeError] {
+  let snapshot = input.copy()
+  let (program, graph) = match (self.make_program)(snapshot.copy()) {
+    Ok(value) => value
+    Err(error) => return Err(error)
+  }
+  let runtime = program.create_runtime(boot=true)
+  let disposed = Ref(false)
   graph.attach_shared_runtime(capture_shared_wake(), fn() {
+    disposed.val = true
     ignore(runtime.dispose())
   })
-  PageRuntime(runtime, graph)
+  Ok(PageRuntime(runtime, graph, Ref(false), disposed, snapshot))
+}
+
+///|
+fn PageRuntime::entry_error(self : PageRuntime) -> String? {
+  if self.3.val {
+    Some("[]")
+  } else if !self.2.val {
+    Some(
+      self.diagnostic(
+        "page_not_loaded", "page must receive onLoad before interaction",
+      ),
+    )
+  } else {
+    None
+  }
+}
+
+///|
+fn PageRuntime::diagnostic(
+  self : PageRuntime,
+  code : String,
+  message : String,
+) -> String {
+  @runtime.runtime_commands_json([
+    @runtime.runtime_error(self.page_id(), code, message),
+  ])
 }
 
 ///|
@@ -323,6 +371,9 @@ pub fn PageRuntime::page_id(self : PageRuntime) -> String {
 
 ///|
 pub fn PageRuntime::mount(self : PageRuntime) -> String {
+  if self.entry_error() is Some(error) {
+    return error
+  }
   self.0.mount()
 }
 
@@ -332,6 +383,9 @@ pub fn PageRuntime::dispatch(
   event_key : String,
   payload_json : String,
 ) -> String {
+  if self.entry_error() is Some(error) {
+    return error
+  }
   self.0.dispatch(event_key, payload_json)
 }
 
@@ -340,6 +394,9 @@ pub fn PageRuntime::dispatch_batch(
   self : PageRuntime,
   events_json : String,
 ) -> String {
+  if self.entry_error() is Some(error) {
+    return error
+  }
   self.0.dispatch_batch(events_json)
 }
 
@@ -349,6 +406,41 @@ pub fn PageRuntime::lifecycle(
   hook : String,
   payload_json : String,
 ) -> String {
+  if self.3.val {
+    return "[]"
+  }
+  if hook == "onLoad" {
+    if self.2.val {
+      return self.diagnostic(
+        "duplicate_page_load", "page onLoad may only run once",
+      )
+    }
+    let payload = @json.parse(
+      if payload_json.trim() == "" {
+        "{}"
+      } else {
+        payload_json
+      },
+    ) catch {
+      _ =>
+        return self.diagnostic(
+          "invalid_host_payload", "page input must be valid JSON",
+        )
+    }
+    let fields = match input_fields(payload) {
+      Ok(fields) => fields
+      Err(error) =>
+        return self.diagnostic("page_input_decode_failed", error.message())
+    }
+    if fields != self.4 {
+      return self.diagnostic(
+        "page_input_mismatch", "onLoad input differs from the runtime input snapshot",
+      )
+    }
+    self.2.val = true
+  } else if self.entry_error() is Some(error) {
+    return error
+  }
   if hook == "onHide" {
     self.1.set_shared_visible(false)
   }
@@ -368,6 +460,9 @@ pub fn PageRuntime::resolve_effect(
   phase : String,
   payload_json : String,
 ) -> String {
+  if self.entry_error() is Some(error) {
+    return error
+  }
   self.0.resolve_effect(request_id, phase, payload_json)
 }
 
@@ -377,6 +472,9 @@ pub fn PageRuntime::subscription(
   key : String,
   payload_json : String,
 ) -> String {
+  if self.entry_error() is Some(error) {
+    return error
+  }
   self.0.subscription(key, payload_json)
 }
 
@@ -387,7 +485,28 @@ pub fn PageRuntime::snapshot(self : PageRuntime) -> String {
 
 ///|
 pub fn PageRuntime::dispose(self : PageRuntime) -> String {
+  if self.3.val {
+    return "[]"
+  }
+  self.3.val = true
   self.0.dispose()
+}
+
+///|
+/// Drain ready local completions and synchronize committed application values.
+pub fn PageRuntime::flush(self : PageRuntime) -> String {
+  if self.entry_error() is Some(error) {
+    return error
+  }
+  self.0.flush()
+}
+
+///|
+/// Pending host requests and future subscription ticks are not ready work.
+pub fn PageRuntime::has_ready_work(self : PageRuntime) -> Bool {
+  !self.3.val &&
+  self.2.val &&
+  (self.0.has_ready_work() || self.1.has_shared_changes())
 }
 
 ///|
@@ -396,31 +515,23 @@ pub fn runtime_api_version() -> Int {
 }
 
 ///|
-fn[Input : Eq] make_page(
+fn[Input] make_page(
   id : String,
   route : Route,
   title : String,
   capabilities : Array[Capability],
+  preview_input : () -> Input,
   decode_input : (Map[String, String]) -> Result[Input, DecodeError],
-  build : (PageContext, Val[Input]) -> Val[Node],
+  build : (PageContext, Input) -> Val[Node],
 ) -> Page {
   guard !route.has_query() else {
     abort("Page route must not contain query parameters")
   }
   let route_path = route.path()
-  let initial_input = match decode_input(Map([])) {
-    Ok(value) => value
-    Err(error) => abort("default page input failed: " + error.message())
-  }
-  let make_program = fn() {
+  let make_program = fn(input : Input) {
     let graph = @val.Graph::new()
-    let built = graph.build(fn() {
-      let input = graph.create_input(initial_input)
-      let root = build({ graph, }, Val(input.0))
-      (root, input.1)
-    })
-    let root = built.0
-    let set_input = built.1
+    let initialized = Ref(false)
+    let root = graph.build(fn() { build({ graph, }, input) })
     let lifecycle_events = [
       Load,
       Show,
@@ -442,17 +553,7 @@ fn[Input : Eq] make_page(
             Err(_) => none.0
           }
         })
-        let command = if hook == Load {
-          match input_fields(payload) {
-            Ok(fields) =>
-              match decode_input(fields) {
-                Ok(value) => batch([set_input.emit(value), lifecycle_message])
-                Err(error) =>
-                  return Err(@renderer.decode_error(error.message()))
-              }
-            Err(error) => return Err(@renderer.decode_error(error.message()))
-          }
-        } else if hook == Show {
+        let command = if hook == Show {
           batch([
             Cmd(@val.CmdMessage(fn() { graph.refresh_shared() })),
             lifecycle_message,
@@ -463,12 +564,15 @@ fn[Input : Eq] make_page(
         Ok(GraphMessage(command))
       })
     })
+    let initial_command = graph.take_initial_command()
     let program = @renderer.page_program(
       id~,
       route=route_path,
       title~,
       model=0,
-      update=(epoch, message) => graph_update(graph, message, epoch),
+      update=(epoch, message) => {
+        graph_update(graph, message, epoch, initialized)
+      },
       projection_guard=(previous, next) => previous != next,
       view=(events, _) => {
         graph.run(fn() {
@@ -480,7 +584,14 @@ fn[Input : Eq] make_page(
       },
       capabilities=capabilities.map(capability => capability.to_core()),
       lifecycle=lifecycle_events,
-      init=GraphMessage(graph.take_initial_command()),
+      init=GraphMessage(
+        Cmd(
+          @val.CmdMessage(fn() {
+            initialized.val = true
+            @val.batch([initial_command, graph.take_initial_command()])
+          }),
+        ),
+      ),
       subscriptions=_ => graph_subscriptions(graph),
       refresh=GraphMessage(
         Cmd(@val.CmdMessage(fn() { graph.refresh_shared() })),
@@ -488,7 +599,18 @@ fn[Input : Eq] make_page(
     )
     (program, graph)
   }
-  { id, route: route_path, title, make_program, }
+  {
+    id,
+    route: route_path,
+    title,
+    make_preview: fn() { make_program(preview_input()) },
+    make_program: fields => {
+      match decode_input(fields) {
+        Ok(input) => Ok(make_program(input))
+        Err(error) => Err(error)
+      }
+    },
+  }
 }
 
 ///|
@@ -499,7 +621,7 @@ pub fn page(
   capabilities? : Array[Capability] = [],
   build~ : (PageContext) -> Val[Node],
 ) -> Page {
-  make_page(id, route, title, capabilities, _ => Ok(()), (context, _) => {
+  make_page(id, route, title, capabilities, () => (), _ => Ok(()), (context, _) => {
     build(context)
   })
 }
@@ -533,13 +655,14 @@ pub fn[Model : Eq, Msg] elmish_page(
 }
 
 ///|
-pub fn[Input : Eq] page_with_input(
+pub fn[Input] page_with_input(
   id~ : String,
   route~ : Route,
   title~ : String,
   capabilities? : Array[Capability] = [],
+  preview_input~ : () -> Input,
   decode_input~ : (Map[String, String]) -> Result[Input, DecodeError],
-  build~ : (PageContext, Val[Input]) -> Val[Node],
+  build~ : (PageContext, Input) -> Val[Node],
 ) -> Page {
-  make_page(id, route, title, capabilities, decode_input, build)
+  make_page(id, route, title, capabilities, preview_input, decode_input, build)
 }

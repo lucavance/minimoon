@@ -5,6 +5,11 @@ per configured package. Business state follows Elm-style `Model` / `Msg` /
 `update` / `Cmd` semantics; pages and local state machines compose through
 read-only `Val` values.
 
+The primary authoring style is an ordinary `page` builder calling ordinary
+component functions. Create state with `create_*` and compose read-only values
+with `Val`; use `elmish_page` when a simple page naturally has one model. No
+extra component object or mandatory application-global Model is needed.
+
 ## State and emitters
 
 A state constructor returns `(Val[Model], Emit[Msg])`. The first value is
@@ -43,7 +48,7 @@ helpers cover distinct ownership needs:
 mutable state:
 
 ```moonbit
-let name_changed : @minimoon.Emit[String] = emit.map(NameChanged)
+let name_changed : @minimoon.Emit[String] = emit.map(value => NameChanged(value))
 ```
 
 There is no public `State`, `Transition`, mutable `Signal`, setter, or graph
@@ -67,9 +72,56 @@ subscriptions:
 )
 ```
 
-For `page_with_input`, initialization first sees the decoder's default value.
-`onLoad` replaces page input transactionally; later updates and subscription
-builders read the latest value without rerunning initialization.
+## Page input and first render
+
+`page_with_input` separates compile preview from actual input:
+
+```moonbit
+@minimoon.page_with_input(
+  id="details",
+  route=@minimoon.route("pages/details/details"),
+  title="Details",
+  preview_input=() => "preview-id",
+  decode_input=fields => match fields.get("id") {
+    Some(id) if id != "" => Ok(id)
+    _ => Err(@minimoon.decode_error("id is required"))
+  },
+  build=(_context, id) => {
+    let (draft, update_draft) = @minimoon.create_variable(id)
+    draft.view(value => @minimoon.input(value~, on_input=next => {
+      update_draft(_ => next)
+    }))
+  },
+)
+```
+
+Defining the page calls neither builder nor decoder. Contract inspection calls
+`preview_input()` and builds a fresh disposable preview graph; it never decodes
+an empty map or executes commands/subscriptions. Builders and init callbacks
+must still be pure because previews evaluate initial models and views.
+
+`Page.create_runtime(input?: Map[String, String])` and
+`AppRuntime.create_page(page, input?)` return
+`Result[PageRuntime, DecodeError]`. Actual input is copied and decoded before
+any graph is built. The builder receives plain `Input`, without an `Eq`
+constraint; initialize state directly from it. Reactive component inputs are
+still `Val[Input]` and use `create_state_with_input` when they must change during
+the component lifetime. There is no second input-specific Elmish constructor.
+
+The generated host creates a runtime at `onLoad`, sends the matching input
+snapshot once, then orders `onShow` and `onReady`. Load forces a complete tree
+at revision 1 from an empty revision-0 boot tree. Only Ready/mount runs initial
+commands and starts intervals; repeat mount is a no-op. Invalid input creates
+no runtime, mismatched/repeated Load returns diagnostics, and interactions
+before Load are rejected. Applications normally let the generated host own
+this protocol; low-level tests must preserve the same order.
+
+For generated-host verification of a page with required input, declare
+`smokeInput` on that page's configuration entry, for example
+`{ "package": "src/pages/details", "smokeInput": { "id": "test-id" } }`.
+This supplies synthetic input only to automated host smoke. It is neither a
+runtime default nor preview data; real navigation still has to supply valid
+route parameters.
 
 ## View composition
 
@@ -166,6 +218,9 @@ the retention policy in the table.
 `Cmd` is opaque and non-generic. Use `none`, `batch`, `delay`, `effect`,
 `perform`, `attempt`, typed host functions, and callable emitters. Completion
 sinks use `Emit[T]`, so `Emit::map` is the normal way to route results.
+For business HTTP status checks and decoded results, import the optional
+[typed HTTP package](http.md); raw `request` remains available when the
+application needs the complete transport response.
 
 ```moonbit
 subscriptions=(current, emit) => {
@@ -183,6 +238,27 @@ subscriptions=(current, emit) => {
 Emitters belong to their lexical graph scope. After disposal, commands from an
 old emitter are no-ops; host generation checks also reject queued callbacks
 from an unloaded page.
+
+App-owned emitters are the explicit exception to page-local addressing: they
+queue messages to their application only after the sending page transaction
+commits. An effect belongs to the runtime executing its command, not its result
+emitter. See [shared-state ownership](shared_state.md).
+
+## Application-aware tests
+
+Use `@testing.mount(page, input=fields)` for a standalone page. It uses actual
+input and Load/Show/Ready order, turning input/runtime diagnostics into test
+errors. For shared state, `@testing.launch(application.program())` returns an
+App test owner; `app.mount(page.program, input=fields)` supplies that owner's
+actual dependencies to the page factory. Semantic interactions return their
+immediate commands; call `runtime.quiesce()` afterward to settle ready work.
+For an App-owned page this drains the App and all its mounted pages;
+`app.quiesce(max_steps=1024)` is also available explicitly. It fails with
+pending-owner diagnostics on a loop rather
+than waiting forever. Unresolved HTTP and future timer ticks are not ready
+work, so tests resolve or advance them explicitly. Page disposal leaves App
+alive; App disposal releases all remaining pages. Mounting a second page does
+not automatically hide the first: tests specify visibility transitions.
 
 ## Event keys
 

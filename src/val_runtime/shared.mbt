@@ -50,14 +50,21 @@ pub fn Graph::set_shared_visible(self : Graph, visible : Bool) -> Unit {
 
 ///|
 fn Graph::notify_shared(self : Graph) -> Unit {
-  guard !self.disposed.val && self.shared_visible.val else { return }
+  if self.has_shared_changes() {
+    (self.shared_wake.val)()
+  }
+}
+
+///|
+pub fn Graph::has_shared_changes(self : Graph) -> Bool {
+  guard !self.disposed.val && self.shared_visible.val else { return false }
   for id in self.shared_binding_order {
     let binding = self.shared_bindings.val[id]
     if binding.active.val && (binding.changed)() {
-      (self.shared_wake.val)()
-      return
+      return true
     }
   }
+  false
 }
 
 ///|

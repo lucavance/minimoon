@@ -1,3 +1,3 @@
 const { registerMinimoonPage } = require("../../minimoon.host.js")
 const { minimoonInitialTree } = require("../../minimoon.initial.js")
-registerMinimoonPage(require("../../minimoon.runtime.js"), "details", minimoonInitialTree(3), ["wx.navigateBack","wx.redirectTo"])
+registerMinimoonPage(require("../../minimoon.runtime.js"), "details", minimoonInitialTree(3), ["wx.navigateBack","wx.redirectTo","wx.request"])

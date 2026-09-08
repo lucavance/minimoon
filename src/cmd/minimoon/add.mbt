@@ -88,8 +88,7 @@ fn miniapp_package_manifest(application? : String) -> String {
     None => ""
   }) +
   "}\n\n" +
-  "supported_targets = \"js\"\n\n" +
-  "import {\n  \"moonbitlang/core/test\",\n} for \"test\"\n"
+  "supported_targets = \"js\"\n"
 }
 
 ///|
@@ -314,7 +313,9 @@ async fn run_add_component(
       "      )\n" +
       "    },\n" +
       "  )\n" +
-      "  let runtime = definition.create_runtime()\n" +
+      "  let runtime = definition.create_runtime().unwrap()\n" +
+      "  let _ = runtime.lifecycle(\"onLoad\", \"{}\")\n" +
+      "  let _ = runtime.lifecycle(\"onShow\", \"{}\")\n" +
       "  let _ = runtime.mount()\n" +
       "  inspect(runtime.snapshot().contains(\"Status 0\"), content=\"true\")\n" +
       "  let _ = runtime.dispatch(\"status/increment\", \"{}\")\n" +

@@ -54,12 +54,12 @@ pub fn scheduler_host_smoke_source() -> String {
     #|  minimoon_runtime_version: () => runtimeVersion,
     #|  minimoon_runtime_state_abi_version: () => runtimeVersion,
     #|  minimoon_runtime_create_app() {
-    #|    const wake = globalThis.__minimoonRuntimeWakeV11
+    #|    const wake = globalThis.__minimoonRuntimeWakeV12
     #|    if (typeof wake !== "function") throw new Error("runtime wake was not installed during create")
     #|    if (throwDuringCreate) throw new Error("synchronous runtime create throw")
     #|    const id = `scheduler-${nextInstance++}`
     #|    states.set(id, { revision: 0, count: 0, scrollTop: 0, tree: structuredClone(initialTree), wake, nextAsyncSequence: 0, pendingAsync: [], pendingEffect: null })
-    #|    return id
+    #|    return JSON.stringify({ ok: true, id })
     #|  },
     #|  minimoon_runtime_dispatch_batch(id, raw) {
     #|    const events = JSON.parse(raw)
@@ -130,10 +130,10 @@ pub fn scheduler_host_smoke_source() -> String {
     #|}
     #|const makeHost = () => {
     #|  const host = makeUnloadedHost()
-    #|  const hadRuntimeWake = Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV11")
-    #|  const previousRuntimeWake = globalThis.__minimoonRuntimeWakeV11
+    #|  const hadRuntimeWake = Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV12")
+    #|  const previousRuntimeWake = globalThis.__minimoonRuntimeWakeV12
     #|  definition.onLoad.call(host, {})
-    #|  if (Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV11") !== hadRuntimeWake || (hadRuntimeWake && globalThis.__minimoonRuntimeWakeV11 !== previousRuntimeWake)) throw new Error("transient runtime wake was not restored")
+    #|  if (Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV12") !== hadRuntimeWake || (hadRuntimeWake && globalThis.__minimoonRuntimeWakeV12 !== previousRuntimeWake)) throw new Error("transient runtime wake was not restored")
     #|  definition.onReady.call(host)
     #|  return host
     #|}
@@ -154,14 +154,14 @@ pub fn scheduler_host_smoke_source() -> String {
     #|console.warn = (...args) => warnings.push(args.join(" "))
     #|
     #|const createThrowSentinelWake = () => {}
-    #|globalThis.__minimoonRuntimeWakeV11 = createThrowSentinelWake
+    #|globalThis.__minimoonRuntimeWakeV12 = createThrowSentinelWake
     #|const createThrowHost = makeUnloadedHost()
     #|throwDuringCreate = true
     #|let createThrowError = null
     #|try { definition.onLoad.call(createThrowHost, {}) } catch (error) { createThrowError = error } finally { throwDuringCreate = false }
     #|if (!createThrowError || !String(createThrowError.message || createThrowError).includes("synchronous runtime create throw")) throw new Error("synchronous runtime create failure did not propagate")
-    #|if (globalThis.__minimoonRuntimeWakeV11 !== createThrowSentinelWake || createThrowHost.__mmInstanceId !== null) throw new Error("runtime wake was not restored after synchronous runtime create failure")
-    #|delete globalThis.__minimoonRuntimeWakeV11
+    #|if (globalThis.__minimoonRuntimeWakeV12 !== createThrowSentinelWake || createThrowHost.__mmInstanceId !== null) throw new Error("runtime wake was not restored after synchronous runtime create failure")
+    #|delete globalThis.__minimoonRuntimeWakeV12
     #|
     #|const host = makeHost()
     #|const batchStart = dispatchBatches.length
@@ -218,10 +218,10 @@ pub fn scheduler_host_smoke_source() -> String {
     #|definition.onUnload.call(isolatedRight)
     #|
     #|const sentinelWake = () => {}
-    #|globalThis.__minimoonRuntimeWakeV11 = sentinelWake
+    #|globalThis.__minimoonRuntimeWakeV12 = sentinelWake
     #|const reusable = makeHost()
-    #|if (globalThis.__minimoonRuntimeWakeV11 !== sentinelWake) throw new Error("preexisting runtime wake was not restored")
-    #|delete globalThis.__minimoonRuntimeWakeV11
+    #|if (globalThis.__minimoonRuntimeWakeV12 !== sentinelWake) throw new Error("preexisting runtime wake was not restored")
+    #|delete globalThis.__minimoonRuntimeWakeV12
     #|const staleState = states.get(reusable.__mmInstanceId)
     #|const staleWake = staleState.wake
     #|staleWake(1)
@@ -781,6 +781,8 @@ pub fn navigation_host_smoke_source() -> String {
     #|}
     #|const start = (page, options = {}) => {
     #|  const host = makeHost(page)
+    #|  const boot = Object.values(host.data)[0]
+    #|  if (boot.commit !== 0 || boot.tree.kind !== "view" || boot.tree.children.length !== 0) throw new Error("generated page must boot empty, not from preview input")
     #|  page.onLoad.call(host, options)
     #|  page.onReady.call(host)
     #|  page.onShow.call(host)
@@ -822,7 +824,12 @@ pub fn navigation_host_smoke_source() -> String {
     #|homeDefinition.onShow.call(home)
     #|if (home.__mmInstanceId !== homeInstance || !JSON.stringify(home.data).includes('"text":"1"')) throw new Error("navigateBack did not preserve the home instance")
     #|pageStack.length = 0
-    #|const directDetails = start(detailsDefinition)
+    #|const rejectedDetails = makeHost(detailsDefinition)
+    #|const creationErrors = [], savedConsoleError = console.error
+    #|console.error = (...args) => creationErrors.push(args.join(" "))
+    #|try { rejectedDetails.onLoad({}); rejectedDetails.onReady() } finally { console.error = savedConsoleError }
+    #|if (rejectedDetails.__mmInstanceId !== null || !rejectedDetails._cl || rejectedDetails.data.details.commit !== 0 || !creationErrors.some(error => error.includes("page_input_decode_failed"))) throw new Error("invalid required route input must fail closed before registration/render")
+    #|const directDetails = start(detailsDefinition, { from: "direct" })
     #|dispatch(detailsDefinition, directDetails, "Back")
     #|assertLastCall("redirectTo", { url: "/pages/showcase/showcase" })
     #|const beforeInvalid = calls.length
