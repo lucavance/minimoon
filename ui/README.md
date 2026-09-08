@@ -41,7 +41,7 @@ Enable build resources in App Contract v9:
 
 ```json
 {
-  "schemaVersion": 8,
+  "schemaVersion": 9,
   "name": "ui_app",
   "resources": [
     {"package": "lampclaw/minimoon_ui/resources", "features": []}
@@ -55,6 +55,10 @@ An empty feature list includes the full bundle. A nonempty list, such as
 resource dependencies. Unknown features fail the build. The native provider
 exports WXSS and SVG assets; it is not imported into application JavaScript.
 Core has no dependency on this UI module.
+Existing schema `8` configurations remain accepted without `application`;
+generated artifacts use the current Contract v9/runtime ABI v11. To combine UI
+with shared state, opt into the core [App setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/shared_state.md)
+and make page factories take `Deps`; UI roots still belong to individual pages.
 
 Feature selection currently chooses resource groups, not per-component CSS
 tree shaking: base/foundation/compound styles and the six theme icons are shared;

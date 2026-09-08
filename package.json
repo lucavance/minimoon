@@ -9,6 +9,7 @@
     "check:candidate": "moon run src/cmd/minimoon --target native -- check candidate",
     "check:all": "moon run src/cmd/minimoon --target native -- check all",
     "check:docs": "moon run src/cmd/minimoon --target native -- check --suite docs",
+    "check:metrics": "moon run src/cmd/minimoon --target native -- check --suite metrics",
     "check:api": "moon run src/cmd/minimoon --target native -- check --suite api",
     "check:coverage": "moon run src/cmd/minimoon --target native -- check --suite coverage",
     "check:http-live": "moon run src/cmd/minimoon --target native -- check --suite http-live",

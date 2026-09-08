@@ -118,6 +118,15 @@ they are not routed implicitly to whichever page is visible.
 应用 capability 与页面声明互不继承。应用支持请求、登录、读写存储、局部异步任务和
 延迟；导航和节点测量仍必须由页面负责，不能隐式借用当前可见页。
 
+The runtime executing a `Cmd` owns its effect; the result `Emit` does not move
+that ownership. A page that directly returns `request(..., app_emit)` still
+owns the request. To survive page unload, send a business message to App and
+return the request from the App update, as the maintained example does.
+
+副作用归执行 `Cmd` 的 runtime 所有，而不是由结果 `Emit` 决定。页面直接返回
+`request(..., app_emit)` 仍是页面请求。要让请求跨页面卸载存活，应先向 App 发送业务
+消息，再由 App update 返回 request；维护中的示例采用的就是这条路径。
+
 Page messages to App leave an outbox only after page commit. A rejected page
 transaction sends nothing. An App commit is independent: one page failing to
 render does not undo shared state or another page. There is no atomic render

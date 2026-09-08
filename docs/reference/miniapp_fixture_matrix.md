@@ -13,6 +13,10 @@ The four routes share one application-wide runtime, one release build, one
 verification report, and one real-host artifact fingerprint. Real pages are
 the primary navigation structure. Swiper is deliberately kept inside Lab as a
 control test rather than used as a substitute for routing.
+The configured `src/app` owns shared count and request domains. Home and Details
+bind their projections while keeping local state; all four page factories take
+the application's `Deps`. App HTTP survives page unload, and Clear invalidates
+an obsolete response through a business epoch.
 
 ## Independent UI fixture
 
@@ -24,6 +28,8 @@ Its native/JS tests, generated resource checks, candidate report, artifact
 fingerprint and local host evidence are independent of Conformance. Both
 fixtures must pass when the shared core host or UI release is changed; one
 application's evidence cannot authorize the other.
+The UI fixture keeps the no-application entry path and no-argument factories;
+its schema `8` input exercises compatibility while generated artifacts use v9.
 
 ## Initializer template
 
@@ -31,6 +37,8 @@ application's evidence cannot authorize the other.
 and Details pages and demonstrates the normal application model without
 conformance-only capabilities. It is generated and built in a temporary app by
 the generator suite; it is not a second committed release fixture.
+The initializer emits current schema `9` and a core dependency, without an
+implicit `application` entry or UI dependency.
 
 The fixture and generated starter must pass:
 

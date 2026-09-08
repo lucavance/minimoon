@@ -145,11 +145,11 @@ fn[Model : Eq] StateSlot::stage(self : StateSlot[Model], next : Model) -> Unit {
 
 ## 4. Scope、可见性与释放 / Scope, Visibility, and Disposal
 
-scope 形成一棵独立于 UI 节点树的所有权树。scope 保存 cleanup 与 visibility callback；父 scope 的隐藏/释放递归传播到子 scope。`RootScope` 属于页面 graph，页面 dispose 时整棵所有权树只能释放一次。
+scope 形成一棵独立于 UI 节点树的所有权树。scope 保存 cleanup 与 visibility callback；父 scope 的隐藏/释放递归传播到子 scope。这里讨论的页面 `RootScope` 属于页面 graph，页面 dispose 时整棵所有权树只能释放一次。可选 App 拥有独立 graph 与 root scope；页面卸载只释放页面绑定，不释放 App。
 
 > **English:**
 >
-> Scopes form an ownership tree separate from the UI node tree. A scope stores cleanup and visibility callbacks, and parent hiding/disposal propagates recursively. `RootScope` belongs to the page graph, and disposing the page releases the entire ownership tree exactly once.
+> Scopes form an ownership tree separate from the UI node tree. A scope stores cleanup and visibility callbacks, and parent hiding/disposal propagates recursively. The page `RootScope` discussed here belongs to the page graph, and disposing the page releases that ownership tree exactly once. An optional App owns a separate graph and root scope; page unload releases page bindings, not the App.
 
 ```mermaid
 flowchart TB

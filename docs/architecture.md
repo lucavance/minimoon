@@ -28,7 +28,7 @@ composition; it does not import its browser host or require a global mutable sto
 
 ```text
 lampclaw/minimoon public API
-  Emit / Cmd / Sub / Val / Page
+  App / Shared / Emit / Cmd / Sub / Val / Page
     -> val_runtime + internal_duplix
        page-owned graph, local state, keyed scopes, transactions
     -> renderer_miniapp
@@ -51,24 +51,27 @@ renderer, runtime, graph, host templates, and tooling remain internal packages.
 ## Graph and local ownership
 
 Each `Page` is a factory. Every `create_runtime()` call creates a distinct
-graph, so two mounted instances of the same route cannot share state, branch
-caches, subscriptions, or disposal state.
+graph, so two mounted instances of the same route do not share page-local
+state, branch caches, subscriptions, or disposal state. They may independently
+bind the same application-owned `Shared[T]`.
 
-Each state constructor returns a read-only `Val[Model]` plus a stable callable
-`Emit[Msg]`. Calling the emitter builds an opaque command; executing that
+Each page-local state constructor returns a read-only `Val[Model]` plus a stable
+callable `Emit[Msg]`. Calling the emitter builds an opaque command; executing that
 command stages an update in the graph-owned state slot. `Emit::map` adapts a
 child message into a parent message without exposing the slot. Keyed branches
 preserve nested state and subscriptions while their key exists. Removal is
 staged, disposed on commit, and restored on rollback.
 
 Every graph owns a generation token, a generational state-dispatch registry,
-and a generational subscription registry. An emitter captures only its graph
+and a generational subscription registry. A local emitter captures its graph
 and state addresses; its command carries that address plus a privately erased
 message payload. Execution resolves the address only against the current
 ambient graph. A graph mismatch, disposed graph, freed state generation, or
 reused slot therefore becomes a deterministic no-op instead of retaining or
 calling an old state closure. Scope cleanup frees state entries, and graph
 disposal resets both registries before releasing the graph token.
+App emitters add an application address and a commit-gated inbox delivery;
+they are deliberately usable from pages belonging to that application.
 
 Dynamic branch tags identify structure while branch builders receive a
 reactive same-tag input. `switch` retains one scope. `enumerate` retains a
@@ -91,10 +94,12 @@ State builders and their init callbacks still run while the graph is being
 constructed or pulled. Only the command returned by an init callback is
 commit-gated; a rejected candidate discards that command before it can execute.
 
-The page renderer is the sole owner of live host interval keys, intervals, and
-latest messages. A retained key/interval pair keeps one host timer while each
-accepted render refreshes the typed message it will dispatch. Runtime core does
-not maintain a second generic subscription registry.
+For page-local subscriptions, the page renderer owns the live host interval
+keys, intervals, and latest messages. A retained key/interval pair keeps one host
+timer while each accepted render refreshes the typed message it will dispatch. Runtime core does
+not maintain a second generic subscription registry. Application subscriptions
+have a separate AppDriver-owned table and App host timers; Show/Hide pauses or
+resumes those foreground intervals independently of any page render.
 
 The graph-side subscription registry preserves declaration order separately
 from generational identity. Visibility toggles the entry in place for retained
@@ -138,9 +143,9 @@ Each mounted page owns one scheduler:
 1. The first entry starts immediately when idle.
 2. Only one runtime entry and one host render may be in flight.
 3. Lifecycle, subscription, effect, and UI entries retain queue order.
-4. Discrete UI events remain lossless and ordered. Only adjacent same-key
-   scroll entries collapse to the newest payload; every non-scroll entry is a
-   coalescing barrier.
+4. Discrete UI events remain lossless and ordered. Adjacent same-key, same-type
+   scroll/changing entries, and same-key touchmove entries with the same touch identity, may
+   collapse to the newest payload. Other entries are coalescing barriers.
 5. A batch warns once at 256 entries and fails closed before accepting an entry
    beyond 2048.
 
@@ -177,6 +182,8 @@ one shared protocol/COW helper, one compact indexed initial-tree module, one
 recursive `minimoon.templates.wxml`, and one global `app.wxss`. Page WXML files
 import the shared template; page WXSS files stay empty. Page JavaScript contains
 only an indexed registration and `require` calls.
+When `application` is configured, `minimoon.app.js` adds the independent App
+scheduler and lifecycle; otherwise `app.js` keeps the no-application registration.
 
 CommonJS is a generated host-format decision, not an application-logic
 dependency. Generated JavaScript is audited as ECMAScript 2019, checked for

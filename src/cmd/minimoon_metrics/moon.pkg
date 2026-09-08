@@ -1,10 +1,9 @@
 import {
-  "lampclaw/minimoon/internal_host_js" @host_js,
-  "lampclaw/minimoon/internal_host_validation" @host_validation,
   "moonbitlang/async",
   "moonbitlang/async/fs",
   "moonbitlang/async/process",
   "moonbitlang/core/env",
+  "moonbitlang/core/encoding/utf8",
   "moonbitlang/core/json",
   "moonbitlang/x/path",
 }

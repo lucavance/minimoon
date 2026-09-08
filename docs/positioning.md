@@ -31,7 +31,10 @@ is a read-only incremental value; mutable signals are not public.
 - composition: opaque read-only `Val`, `Val::map2` through `map9`,
   `Val::view2` through `view9`, keyed ownership, and dynamic branch operators
 - page definition: `elmish_page`, `page`, and `page_with_input`
-- subscriptions: opaque `Sub` and page-scoped lifecycle/interval helpers
+- optional application ownership: `App[Deps]` and multiple typed domain
+  machines, with `Shared[T]` bound/selected into page-local `Val` projections
+- subscriptions: opaque `Sub` and separately owned App/page lifecycle and
+  interval helpers
 - host work: typed root functions, `Capability`, `HostError`, and `Route`
 - async ownership: ordered no-touch completion, generation-bound delivery, and
   physically cancelable framework delays

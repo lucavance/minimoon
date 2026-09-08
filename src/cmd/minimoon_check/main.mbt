@@ -3,6 +3,7 @@ async fn run_suite(root : String, suite : String) -> Unit {
   match suite {
     "static" => static_suite(root)
     "docs" => docs_suite(root)
+    "metrics" => metrics_suite(root)
     "quality" => quality_suite(root)
     "api" => api_suite(root)
     "codegen" => codegen_suite(root)
@@ -42,7 +43,8 @@ async fn run_checks(root : String, args : Array[String]) -> Unit {
       }
       for
         value in [
-          "static", "docs", "quality", "api", "codegen", "generator", "host",
+          "static", "docs", "metrics", "quality", "api", "codegen", "generator",
+          "host",
         ] {
         run_suite(root, value)
       }

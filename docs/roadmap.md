@@ -5,7 +5,7 @@
 The current HTTP iteration adds typed methods, query/header/body encoding,
 timeouts, deterministic host tests and public-API Home acceptance scenarios.
 It introduces no UI components or privately deployed acceptance server.
-The next source iteration implements an optional `App[Deps]` root containing
+The current 0.2 source implements an optional `App[Deps]` root containing
 multiple typed domain state machines. `Shared[T]` values bind to page-local
 `Val` projections; pages keep their own models and transactional rendering.
 Application effects survive page unload, foreground subscriptions pause on
@@ -81,8 +81,9 @@ The implementation includes core foundations, 20 presentation components,
 components and 3 feedback components.
 
 The independent `lampclaw/minimoon_ui` module has default, headless, theme and
-build-resource packages. Core 0.2 provides missing native controls and measurement;
-Contract 8 / renderer 8 advance together while ABI 10 and CommonJS remain.
+build-resource packages. Core 0.2 provides missing native controls and measurement.
+The current App Contract v9, runtime ABI v11 and renderer protocol v8 include
+application ownership while preserving the CommonJS host boundary.
 Old components and minimal themes remain compatible; the starter does not gain
 an implicit UI dependency.
 

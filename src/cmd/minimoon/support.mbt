@@ -31,6 +31,8 @@ fn usage() -> String {
     #|  minimoon add component <name> --page <page-id>
     #|  minimoon verify [appDir|miniapp.minimoon.json] [--candidate|--release] [--json]
     #|  minimoon devtools record [appDir|miniapp.minimoon.json] --status passed|failed --recorded-at <timestamp> --tool-version <version> [--notes <text>]
+    #|  minimoon metrics [--json] [--include-untracked]
+    #|  minimoon check [mvp|candidate|all] [--suite <suite>]
     #|
     #|Templates:
     #|  starter  Production-friendly two-page MiniApp starter (default)

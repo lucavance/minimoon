@@ -11,3 +11,27 @@ test "package README authoring examples mount through the public runtime" {
   assert_true(local_runtime.snapshot().contains("ready"))
   let _ = local_runtime.dispose()
 }
+
+///|
+test "package README App example shares state across page lifetimes" {
+  let app = readme_app().create_runtime()
+  defer ignore(app.dispose())
+  ignore(app.lifecycle("onLaunch", "{}"))
+  let first = app.create_page(readme_shared_page(app.deps()))
+  let second = app.create_page(readme_shared_page(app.deps()))
+  defer ignore(second.dispose())
+  ignore(first.mount())
+  ignore(second.mount())
+  ignore(first.dispatch("readme/shared/increment", "{}"))
+  assert_true(second.snapshot().contains("Shared count: 0"))
+  ignore(app.flush())
+  ignore(first.refresh())
+  ignore(second.refresh())
+  assert_true(first.snapshot().contains("Shared count: 1"))
+  assert_true(second.snapshot().contains("Shared count: 1"))
+  ignore(first.dispose())
+  ignore(second.dispatch("readme/shared/increment", "{}"))
+  ignore(app.flush())
+  ignore(second.refresh())
+  assert_true(second.snapshot().contains("Shared count: 2"))
+}

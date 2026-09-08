@@ -44,6 +44,9 @@ fn readme_page() -> Page {
 
 HTTP requests use their page or application's declared `Request` capability. Non-2xx status codes
 are transport successes; invalid arguments are deferred `InvalidPayload` errors.
+The runtime executing the command owns the request, not its result emitter.
+For an App-owned request, send a message to App and return `request` from the
+App update; a request executed by a page still ends with that page's lifetime.
 
 ```moonbit check
 ///|
@@ -57,6 +60,58 @@ fn readme_request(resolve : Emit[Result[RequestResult, HostError]]) -> Cmd {
     headers={ "X-Minimoon-Test": "public-smoke" },
     body=JsonBody(Json::object({ "message": Json::string("测试") })),
     timeout_ms=15000,
+  )
+}
+```
+
+## Optional application state
+
+Without `application`, configured page factories take no arguments. With it,
+the application factory returns `App[Deps]` and every page factory receives
+those `Deps`. App constructors return `Shared[Model]`, while page-local
+constructors return `Val[Model]`. Bind/select creates a page-owned projection.
+
+Unlike page-local emitters, the App emitter below delivers across the page/App
+boundary after the page transaction commits. It remains usable after another
+page unloads, until its App is disposed.
+
+```moonbit check
+///|
+priv struct ReadmeAppDeps {
+  count : Shared[Int]
+  change_count : Emit[Int]
+}
+
+///|
+#warnings("-unused_value")
+fn readme_app() -> App[ReadmeAppDeps] {
+  app(build=context => {
+    let (count, change_count) = context.create_pure_state(0, update=(
+      count,
+      delta : Int,
+    ) => count + delta)
+    { count, change_count, }
+  })
+}
+
+///|
+#warnings("-unused_value")
+fn readme_shared_page(deps : ReadmeAppDeps) -> Page {
+  page(
+    id="readme_shared",
+    route=route("pages/readme-shared/readme-shared"),
+    title="Shared state",
+    build=context => {
+      context
+      .bind(deps.count)
+      .view(count => {
+        button(
+          on_tap=(deps.change_count)(1),
+          event_key="readme/shared/increment",
+          "Shared count: " + count.to_string(),
+        )
+      })
+    },
   )
 }
 ```

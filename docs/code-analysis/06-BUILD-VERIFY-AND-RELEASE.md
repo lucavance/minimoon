@@ -4,11 +4,11 @@
 
 ## 1. App Contract 是构建输入 / App Contract Is the Build Input
 
-应用的 `miniapp.minimoon.json` 使用 App Contract v9，列出应用名、页面 package、输出目录和样式输入。generator 不读取手写 page metadata；它逐页编译 `program() -> Page` contract，再生成 application runtime 和共享 host artifacts。
+应用的 `miniapp.minimoon.json` 使用 App Contract v9，列出应用名、页面 package、输出目录和样式输入。generator 不读取手写 page metadata；它逐页编译页面工厂产生的 contract，再生成 application runtime 和共享 host artifacts。未启用 `application` 时，工厂签名是 `program() -> Page`。
 
 > **English:**
 >
-> An application’s `miniapp.minimoon.json` uses App Contract v9 to list the application name, page packages, output directory, and style inputs. The generator does not read handwritten page metadata. It compiles each page’s `program() -> Page` contract, then generates the application runtime and shared host artifacts.
+> An application’s `miniapp.minimoon.json` uses App Contract v9 to list the application name, page packages, output directory, and style inputs. The generator does not read handwritten page metadata. It compiles contracts produced by page factories, then generates the application runtime and shared host artifacts. Without `application`, factories have the signature `program() -> Page`.
 
 启用 `application` 时，页面工厂改为 `program(deps : @application.Deps) -> Page`，
 契约提取在不会启动副作用的 `App.preview` 中执行，另生成 `minimoon.app.js`。
@@ -56,13 +56,14 @@ guard pages.length() > 0 else {
   )
 }
 let module_id = module_name(@fs.read_file(join(app_root, "moon.mod")).text())
+let application = object(raw, "MiniApp config").get("application")
 let release = mode == "release"
 let contracts : Array[Json] = []
 let routes : Array[String] = []
 for index = 0; index < pages.length(); index = index + 1 {
   let page = pages[index]
   let package_path = string(page, "package")
-  let contract = compile_page_contract(app_root, module_id, index, page)
+  let contract = compile_page_contract(app_root, module_id, index, page, application?)
   validate_contract(contract, package_path)
   let route = string(contract, "route")
   guard !routes.contains(route) else {
@@ -72,7 +73,7 @@ for index = 0; index < pages.length(); index = index + 1 {
   contracts.push(contract)
 }
 let app_runtime = compile_app_runtime(
-  app_root, module_id, pages, contracts, release,
+  app_root, module_id, pages, contracts, release, application?,
 )
 ```
 
@@ -84,16 +85,27 @@ let app_runtime = compile_app_runtime(
 
 ## 2. 生成目录的所有权 / Ownership of Generated Layout
 
-一个应用只有一份 `minimoon.runtime.js`、`minimoon.host.js`、`minimoon.protocol.js`、`minimoon.initial.js`、共享递归 WXML 和全局 WXSS。页面 JavaScript 只注册 page index，页面 WXML 只 import shared template，页面 WXSS 必须为空。
+一个应用只有一份 `minimoon.runtime.js`、`minimoon.host.js`、`minimoon.protocol.js`、`minimoon.initial.js`、共享递归 WXML 和全局 WXSS。启用 `application` 时另有一份 `minimoon.app.js`。页面 JavaScript 只注册 page index，页面 WXML 只 import shared template，页面 WXSS 必须为空。
 
 > **English:**
 >
-> An application has one `minimoon.runtime.js`, `minimoon.host.js`, `minimoon.protocol.js`, `minimoon.initial.js`, shared recursive WXML, and global WXSS. Page JavaScript only registers a page index, page WXML only imports the shared template, and page WXSS must remain empty.
+> An application has one `minimoon.runtime.js`, `minimoon.host.js`, `minimoon.protocol.js`, `minimoon.initial.js`, shared recursive WXML, and global WXSS. With `application`, it also has `minimoon.app.js`. Page JavaScript only registers a page index, page WXML only imports the shared template, and page WXSS must remain empty.
 
 > **源码 / Source:** [`src/tooling_miniapp/generator.mbt`](../../src/tooling_miniapp/generator.mbt) · symbol: `generate` (artifact writes)
 
 ```moonbit
-write(join(dist, "app.js"), "App({})\n")
+if application is Some(_) {
+  write(
+    join(dist, "minimoon.app.js"),
+    emit_host_bridge(app_root, @host_js.application_host_bridge(), release),
+  )
+  write(
+    join(dist, "app.js"),
+    "require(\"./minimoon.app.js\").registerMinimoonApp(require(\"./minimoon.runtime.js\"))\n",
+  )
+} else {
+  write(join(dist, "app.js"), "App({})\n")
+}
 write(join(dist, "app.wxss"), "")
 write(
   join(dist, "minimoon.templates.wxml"),

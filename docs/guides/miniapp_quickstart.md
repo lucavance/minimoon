@@ -34,7 +34,9 @@ when running `init` from the framework checkout; it creates a workspace binding.
 
 The default starter imports only `lampclaw/minimoon`, exports
 `program() -> Page`, and lists page packages in App Contract v9
-`miniapp.minimoon.json`. It has no implicit UI dependency. For native UI, add
+`miniapp.minimoon.json`. It is a no-App example with no implicit UI dependency;
+see the [shared-state guide](shared_state.md) to opt into application-owned
+state and dependency-taking page factories. For native UI, add
 `lampclaw/minimoon_ui@0.1.0`, import its root as `@ui`, and declare its build
 resources as shown in the
 [UI guide](https://github.com/lucavance/minimoon/blob/main/ui/README.mbt.md).

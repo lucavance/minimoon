@@ -143,7 +143,7 @@ async fn main {
         options=[
           OptionArg(
             "suite",
-            about="static, docs, quality, api, codegen, generator, host, coverage, candidate, release, or perf.",
+            about="static, docs, metrics, quality, api, codegen, generator, host, coverage, candidate, release, or perf.",
           ),
         ],
         about="Run native Minimoon validation suites.",
@@ -182,8 +182,14 @@ async fn main {
       ),
       Command(
         "metrics",
-        flags=[FlagArg("json", about="Print machine-readable JSON.")],
-        about="Report MoonBit and JavaScript ownership metrics.",
+        flags=[
+          FlagArg("json", about="Print schema-v2 machine-readable JSON."),
+          FlagArg(
+            "include-untracked",
+            about="Include non-ignored untracked files alongside tracked worktree files.",
+          ),
+        ],
+        about="Report file ownership and a separate embedded-script inventory.",
       ),
     ],
     about="Build MoonBit applications for WeChat MiniApp Skyline.",
@@ -332,6 +338,9 @@ async fn main {
       let args : Array[String] = []
       if raw_args.any(value => value == "--json") {
         args.push("--json")
+      }
+      if raw_args.any(value => value == "--include-untracked") {
+        args.push("--include-untracked")
       }
       run_repo_command(root, "src/cmd/minimoon_metrics", args)
     }

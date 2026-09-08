@@ -20,11 +20,15 @@ and one artifact fingerprint cover four page routes:
 - `src/pages/details`: independent page state, query decoding, lifecycle, and
   stack-aware back-or-redirect behavior.
 
-Build and run automated verification with:
+The optional `src/app` package owns shared count and HTTP state. Home and
+Details bind the same App values while keeping their local models; all four
+page factories accept its `Deps`. Starter and UI showcase retain the separate
+no-application entry path.
+
+Build a release-mode candidate and verify it from the repository root:
 
 ```bash
-minimoon build examples/miniapp_conformance_app --mode release
-minimoon verify examples/miniapp_conformance_app
+bun run minimoon verify examples/miniapp_conformance_app --candidate
 ```
 
 Import the unchanged `dist/` directory into WeChat Developer Tools for the
@@ -35,6 +39,11 @@ and selected echo fields; non-2xx is a loaded result, timeout is failed.
 Leave Home during the delayed request to check disposal. No private server is
 needed. From the repository root, `bun run check:http-live` exercises the same
 generated Home with a fetch transport shim; it is not a real WeChat pass.
+Also increment the shared count on Home and Details, then start the separate
+shared public API request and unload its page: another page must receive the
+App-owned result. Start again and Clear before completion; the obsolete response
+must not replace idle. Page-owned HTTP still aborts on unload. See the
+[shared-state guide](../../docs/guides/shared_state.md) for the ownership distinction.
 See the [host checklist](../../docs/operations/miniapp_devtools_validation.md)
 for simulator/device modes and public-domain restrictions.
 

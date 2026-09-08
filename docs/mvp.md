@@ -11,6 +11,9 @@ remains an internal implementation detail.
   result types, controls, and navigation types, plus callable `Emit[Msg]`
 - `elmish_page` and the six `create_*` helpers, with model-first callbacks,
   `(Val[Model], Emit[Msg])` ownership, and explicit `(Model, Cmd)` results
+- optional `App[Deps]` domain machines returning `(Shared[Model], Emit[Msg])`,
+  page-local bind/select projections, commit-gated App messages and separately
+  owned application effects and foreground subscriptions
 - one-shot `create_resource` with visible `Val[Status[T]]` state and
   scope-owned late-completion rejection
 - `Val::map2`/`view2` through `map9`/`view9`, keyed `assoc`/`assoc_by`,
@@ -40,8 +43,9 @@ remains an internal implementation detail.
 - native init/build/dev/add/verify/devtools/metrics workflows
 - deterministic release generation, host simulation, coverage, size, and
   performance gates
-- lossless discrete-event scheduling plus bounded latest-only adjacent scroll
-  coalescing and acknowledgement/queue metrics
+- lossless discrete-event scheduling plus bounded latest-only adjacent,
+  same-key scroll/changing coalescing (touchmove also requires the same touch
+  identity), and acknowledgement/queue metrics
 - archive-validated registry initialization and Linux candidate handoff
 - typed touch, image, form, label, slider and progress controls, native node
   measurement, and declarative page-owned layers
@@ -53,11 +57,11 @@ remains an internal implementation detail.
 | Source | Purpose |
 | --- | --- |
 | Conformance / Showcase | bilingual product narrative, state, lifecycle, routing |
-| Conformance / Home | page input, controlled input, capabilities, navigation |
+| Conformance / Home | page input, controlled input, capabilities, navigation, shared App count/request |
 | Conformance / Lab | set/splice/move/replacement, controlled native reconciliation, reactive slots, scrolling, local components, focus events, overlays, menu semantics, isolation |
-| Conformance / Details | independent input/lifecycle and stack-aware fallback |
-| `templates/starter` | production-oriented Home + Details initializer source |
-| `ui/examples/showcase` | independent UI families, themes, native interactions and lifecycle |
+| Conformance / Details | independent input/lifecycle, shared App count/request and stack-aware fallback |
+| `templates/starter` | Home + Details initializer without App ownership or UI dependency |
+| `ui/examples/showcase` | independent UI families, themes, native interactions and lifecycle, without App ownership |
 
 ## Not included
 

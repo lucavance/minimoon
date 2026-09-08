@@ -53,7 +53,9 @@ minimoon add component status_badge --page home
 
 ## 编写模型
 
-每个配置的页面包导出 `program() -> Page`：
+未配置 `application` 时，页面包导出下例的 `program() -> Page`。
+启用后，页面改为导出 `program(deps : @application.Deps) -> Page`，详见
+[共享状态配置](docs/guides/shared_state.md)。
 
 ```moonbit
 pub enum Msg { Increment }
@@ -98,10 +100,13 @@ update 通过 `no_cmd`、`with_cmd` 或 `with_cmds` 返回 `(Model, Cmd)`。
 `navigate_to` 等根函数。消息和宿主结果 sink 使用可调用的 `Emit[T]`；
 `Emit::map` 可以适配子级 payload，但不会暴露可变状态。
 
-`Emit` 只携带私有的 graph/state 地址；对应 dispatcher 存放在 graph 独占的
+页面局部 `Emit` 携带私有的 graph/state 地址；对应 dispatcher 存放在 graph 独占的
 分代 registry 中。因此命令若在其他页面 graph、所属 scope 被回收后或页面销毁后
 执行，都会确定性地变成 no-op。订阅条目采用同样的可回收所有权：被保留但隐藏的
 scope 暂停订阅，而被删除或淘汰的 scope 会释放对应 registry 槽位。
+
+应用所有的 `Emit` 则指向 App 的领域状态机，允许页面跨页面/App 边界发送消息，
+但只有页面事务提交后才从 outbox 投递。页面卸载不会让 App 地址失效，App 销毁才会。
 
 `Val` 是单个页面图中的增量值，而不是可变 Signal。`Val::map2` 到 `map9`
 组合任意独立输入，`Val::view2` 到 `view9` 专门组合生成 `Node`；
@@ -141,8 +146,10 @@ popup 关联、label 与 description 送入受校验的 renderer protocol；`inp
 
 页面需要共享会话、偏好或请求状态时，可选用 `App[Deps]`。App builder 创建多个
 独立的类型化领域状态机，页面通过 `PageContext.bind/select` 将 `Shared[T]` 绑定为
-页面局部 Val，同时保留自己的 Model。共享请求在页面卸载后继续，前台定时订阅在 Hide
+页面局部 Val，同时保留自己的 Model。App 所有的请求在页面卸载后继续，前台定时订阅在 Hide
 时暂停；显式 App 销毁会取消任务并忽略旧回调。不强制使用一个全局 Model。
+副作用归执行 `Cmd` 的 runtime 所有，而非结果 emitter；要让请求跨页面卸载存活，
+应向 App 发送业务消息，再由 App update 返回请求命令。
 配置、生命周期和验收见 [共享状态指南](docs/guides/shared_state.md)。
 
 ## 小程序边界
@@ -169,10 +176,13 @@ CSS：
 `minimoon.protocol.js`、一份压缩的 `minimoon.initial.js`、一份共享
 `minimoon.templates.wxml` 和一份全局 `app.wxss`。每个页面只保留很小的索引注册
 bridge、模板导入、JSON 与空页面 WXSS。
+启用 `application` 时另生成 `minimoon.app.js`，负责 App 所有的调度器与生命周期；
+未启用时保留 `App({})` 注册。
 
 宿主调度器立即执行第一个入口，同一时间只允许一个渲染在途并保持入口顺序。tap
-等离散事件始终无损、有序；只有等待确认期间相邻且同 key 的 scroll 事件会折叠为
-最新 payload，tap 会阻断合并。整批事件会先全部解码，再修改任何状态。渲染通过
+等离散事件始终无损、有序；等待确认期间相邻、同 key 且同类型的 scroll、changing，
+以及同 key 且同一触点的 touchmove 可以折叠为最新 payload，tap 会阻断合并。整批事件会先全部
+解码，再修改任何状态。渲染通过
 commit sentinel 和 `setData` callback 确认；三秒超时后只执行一次权威 snapshot
 重试，第二次失败则关闭该页面调度器。队列深度、合并数量、确认延迟、重试、超时与
 COW shadow copy 工作量都可通过 renderer stats 观察。

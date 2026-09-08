@@ -2,15 +2,18 @@
 
 ## Versions
 
-- App Contract schema: 7
-- runtime API/state ABI: 10
-- renderer protocol: 7
+- App Contract schema: 9
+- runtime API/state ABI: 11
+- renderer protocol: 8
 - generated runtime module format: CommonJS
 
 The application runtime exports version/state-ABI queries, page-aware create,
 mount, single dispatch, batch dispatch, lifecycle, resolve-effect,
 subscription, snapshot, and dispose. Every mounted page receives an independent
-instance.
+instance. When `application` is configured, the runtime also exports App start,
+lifecycle, effect resolution, subscription, flush, and disposal entries. Its
+independent scheduler does not render a page tree; pages bind shared state into
+their own transactional projections.
 
 The ABI v11 host/runtime convention additionally installs a temporary
 generation-bound wake callback around synchronous runtime creation. The new
@@ -88,6 +91,8 @@ event/tick/effect: ordered entry -> candidate transaction -> acknowledged render
 onUnload: invalidate generation -> lifecycle/dispose -> clear owned resources
 ```
 
-Verification rejects non-v7 configs/contracts, non-v10 runtime APIs, non-v7
-renderer protocols, unsafe routes, missing packages/programs, forbidden
-JavaScript, invalid shared artifacts, or host simulation failures.
+Verification requires generated App Contract v9, runtime ABI v11, and renderer
+protocol v8 artifacts. Schema `8` input remains accepted only without
+`application`; it does not permit mixing old generated artifacts with the
+current host. Unsafe routes, missing packages/programs, forbidden JavaScript,
+invalid shared artifacts, or host simulation failures are rejected.

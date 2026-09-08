@@ -4,11 +4,11 @@
 
 ## 1. 两个运行时层次 / Two Runtime Layers
 
-MoonBit resident runtime 管理 typed Model、update、projection、command、effect 和 subscription；生成的 JavaScript host 管理微信生命周期、宿主事件队列、runtime ABI、tree protocol、`setData` acknowledgement 和 `wx.*` adapter。两层通过 JSON command batch 相连，但职责不同。
+MoonBit resident runtime 管理 typed Model、update、projection、command、effect 和 subscription；生成的 JavaScript host 管理微信生命周期、宿主事件队列、runtime ABI、tree protocol、`setData` acknowledgement 和 `wx.*` adapter。两层通过 JSON command batch 相连，但职责不同。以下图示和 projection 提交规则描述页面路径；可选 App 使用独立的 `AppDriver` 和宿主队列，不投影页面树，也不等待某个页面的 render acknowledgement。
 
 > **English:**
 >
-> The MoonBit resident runtime manages typed models, updates, projection, commands, effects, and subscriptions. The generated JavaScript host manages WeChat lifecycle, the host-event queue, runtime ABI, tree protocol, `setData` acknowledgements, and `wx.*` adapters. JSON command batches connect the two layers, but their responsibilities differ.
+> The MoonBit resident runtime manages typed models, updates, projection, commands, effects, and subscriptions. The generated JavaScript host manages WeChat lifecycle, the host-event queue, runtime ABI, tree protocol, `setData` acknowledgements, and `wx.*` adapters. JSON command batches connect the two layers, but their responsibilities differ. The diagrams and projection commit rules below describe the page path. An optional App uses its own `AppDriver` and host queue: it neither projects a page tree nor waits for an individual page's render acknowledgement.
 
 ```mermaid
 flowchart LR
@@ -96,11 +96,11 @@ pub fn[Model, Msg] RunningComponent::dispatch(
 
 ## 3. Host 队列与 scroll 合并 / Host Queue and Scroll Coalescing
 
-host 对 lifecycle、mount、subscription、effect completion 和 UI event 使用一个 FIFO scheduler。第一个 entry 在 idle 时立即执行；当 render 等待 acknowledgement 时 `_bz` 保持 true，后续 entry 留在队列。这样 runtime 永远不会基于一个微信尚未确认的树继续执行下一 entry。
+每个页面 host 对 lifecycle、mount、subscription、effect completion 和 UI event 使用一个 FIFO scheduler。第一个 entry 在 idle 时立即执行；当 render 等待 acknowledgement 时 `_bz` 保持 true，后续 entry 留在队列。这样页面 runtime 永远不会基于一个微信尚未确认的树继续执行下一 entry。下图仅展示 scroll 与离散事件的分支；完整的连续事件规则和代码见图后。
 
 > **English:**
 >
-> The host uses one FIFO scheduler for lifecycle, mount, subscriptions, effect completions, and UI events. The first entry starts immediately while idle. While a render waits for acknowledgement, `_bz` remains true and later entries stay queued. The runtime therefore never executes the next entry on top of a tree that WeChat has not yet acknowledged.
+> Each page host uses one FIFO scheduler for lifecycle, mount, subscriptions, effect completions, and UI events. The first entry starts immediately while idle. While a render waits for acknowledgement, `_bz` remains true and later entries stay queued. The page runtime therefore never executes the next entry on top of a tree that WeChat has not yet acknowledged. The diagram shows only the scroll and discrete-event branches; the complete continuous-event rules and code follow it.
 
 ```mermaid
 flowchart TB
@@ -132,11 +132,11 @@ flowchart TB
 
 [SVG](assets/diagrams/svg/05-RUNTIME-AND-HOST-SCHEDULER-2.svg) · [PNG 3×](assets/diagrams/png/05-RUNTIME-AND-HOST-SCHEDULER-2.png) · [Mermaid](assets/diagrams/source/05-RUNTIME-AND-HOST-SCHEDULER-2.mmd)
 
-tap、input、change 等离散事件始终无损且有序。只有“同一 dispatch batch 尾部、相邻、同 key、两者均为 scroll”的事件才把旧 payload 替换成最新值；任何 tap 或其他 entry 都是合并屏障。这正是快速滑动时数值可能跳跃、但最终位置正确的设计来源。
+tap、input、change 等离散事件始终无损且有序。在同一 dispatch batch 尾部，相邻、同 key、同类型的 scroll 或 changing 会把旧 payload 替换成最新值；touchmove 还要求 touch identity 相同。离散事件、不同 key/type/touch identity 或其他队列 entry 都阻止跨越合并。这正是快速滑动时数值可能跳跃、但最终位置正确的设计来源。
 
 > **English:**
 >
-> Discrete events such as tap, input, and change remain lossless and ordered. Replacement occurs only when the tail of the same dispatch batch contains an adjacent scroll event with the same key. Any tap or other entry is a coalescing barrier. This is why rapid scrolling may show jumps while still converging to the correct latest position.
+> Discrete events such as tap, input, and change remain lossless and ordered. At the tail of one dispatch batch, adjacent scroll or changing events of the same type and key replace the previous payload with the latest value; touchmove additionally requires the same touch identity. Discrete events, different keys/types/touch identities, and other queue entries prevent coalescing across them. This is why rapid scrolling may show jumps while still converging to the correct latest position.
 
 > **生成产物 / Generated artifact:** [`examples/miniapp_conformance_app/dist/minimoon.host.js`](../../examples/miniapp_conformance_app/dist/minimoon.host.js) · owner: [`src/internal_host_js/host_bridge.mbt`](../../src/internal_host_js/host_bridge.mbt), `shared_host_bridge`
 
@@ -148,6 +148,12 @@ _ed(type, key, payload) {
   if (tail && tail.kind === "dispatch") {
     const last = tail.events.length ? tail.events[tail.events.length - 1] : null
     if (type === "scroll" && last && last.type === "scroll" && last.key === key) {
+      tail.events[tail.events.length - 1] = { type, key, payload }
+      this._st.coalescedEvents += 1
+      return
+    }
+    if (last && last.type === type && last.key === key &&
+        (type === "changing" || (type === "touchmove" && touchIdentity(last.payload) === touchIdentity(payload)))) {
       tail.events[tail.events.length - 1] = { type, key, payload }
       this._st.coalescedEvents += 1
       return

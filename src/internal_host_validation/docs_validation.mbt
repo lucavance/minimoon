@@ -94,21 +94,89 @@ pub fn docs_check_source() -> String {
     #|  return wanted === found ? [] : [`${source}: stale or missing diagram assets`]
     #|}
     #|
-    #|function versionReferenceProblems(source, content, expected) {
+    #|function historicalSections(source, content) {
     #|  const problems = []
+    #|  let historical = false
+    #|  const active = content.split("\n").map((line, index) => {
+    #|    const marker = line.match(/^[ \t]*<!-- minimoon:historical:(start|end) -->[ \t]*$/)
+    #|    if (marker) {
+    #|      if (marker[1] === "start") {
+    #|        if (historical) problems.push(`${source}:${index + 1}: nested historical documentation marker`)
+    #|        historical = true
+    #|      } else {
+    #|        if (!historical) problems.push(`${source}:${index + 1}: unmatched historical documentation end marker`)
+    #|        historical = false
+    #|      }
+    #|      return ""
+    #|    }
+    #|    if (/<!--[ \t]*minimoon:historical:/.test(line)) problems.push(`${source}:${index + 1}: malformed historical documentation marker`)
+    #|    return historical ? "" : line
+    #|  }).join("\n")
+    #|  if (historical) problems.push(`${source}: unclosed historical documentation marker`)
+    #|  return { active, problems }
+    #|}
+    #|
+    #|function currentReferenceProblems(source, content, expected) {
+    #|  const { active, problems } = historicalSections(source, content)
+    #|  return [
+    #|    ...problems,
+    #|    ...versionReferenceProblems(source, active, expected),
+    #|    ...currentConfigProblems(source, active, expected),
+    #|  ]
+    #|}
+    #|
+    #|function versionReferenceProblems(source, content, expected) {
+    #|  // Published history and migration paths are not current-version claims.
+    #|  if (source === "CHANGELOG.md") return []
+    #|  const problems = []
+    #|  const plain = content.replace(/[`*_]/g, "")
     #|  const boundaries = [
-    #|    ["App Contract", /\bApp Contract v(\d+)\b/gi, Number(expected.contractVersion)],
-    #|    ["runtime ABI", /\b(?:runtime )?ABI(?: |-)v(\d+)\b/gi, Number(expected.runtimeVersion)],
-    #|    ["renderer protocol", /\b(?:renderer )?protocol(?: |-)v(\d+)\b/gi, Number(expected.protocolVersion)],
+    #|    ["App Contract", /\b(?:App[ \t]+)?Contract(?:[ \t]+schema)?(?:[ \t]*:[ \t]*|[ \t]+)v?(\d+)\b/gi, Number(expected.contractVersion)],
+    #|    ["runtime ABI", /\b(?:runtime[ \t]+)?ABI(?:[ \t]*:[ \t]*|[ \t-]+)v?(\d+)\b/gi, Number(expected.runtimeVersion)],
+    #|    ["renderer protocol", /\b(?:renderer[ \t]+protocol(?:[ \t]*:[ \t]*|[ \t-]+)v?|protocol[ \t-]+v)(\d+)\b/gi, Number(expected.protocolVersion)],
+    #|    ["App Contract", /^\|[ \t]*(?:App[ \t]+)?Contract[ \t]*\|[ \t]*v?(\d+)[ \t]*\|/gim, Number(expected.contractVersion)],
+    #|    ["runtime ABI", /^\|[ \t]*(?:runtime[ \t]+)?ABI[ \t]*\|[ \t]*v?(\d+)[ \t]*\|/gim, Number(expected.runtimeVersion)],
+    #|    ["renderer protocol", /^\|[ \t]*(?:renderer[ \t]+)?protocol[ \t]*\|[ \t]*v?(\d+)[ \t]*\|/gim, Number(expected.protocolVersion)],
+    #|    ["App Contract", /\bnon-v(\d+)\s+(?:configs\/)?contracts\b/gi, Number(expected.contractVersion)],
+    #|    ["runtime ABI", /\bnon-v(\d+)\s+runtime\s+APIs\b/gi, Number(expected.runtimeVersion)],
+    #|    ["renderer protocol", /\bnon-v(\d+)\s+renderer\s+protocols\b/gi, Number(expected.protocolVersion)],
     #|  ]
     #|  for (const [label, pattern, current] of boundaries) {
-    #|    for (const match of content.matchAll(pattern)) {
+    #|    for (const match of plain.matchAll(pattern)) {
     #|      if (Number(match[1]) !== current) {
     #|        problems.push(`${source}: stale documentation version: ${match[0]}; expected ${label} v${current}`)
     #|      }
     #|    }
     #|  }
     #|  return problems
+    #|}
+    #|
+    #|function currentConfigProblems(source, content, expected) {
+    #|  if (source === "CHANGELOG.md") return []
+    #|  const problems = []
+    #|  for (const match of content.matchAll(/^```json[^\n]*\n([\s\S]*?)^```[ \t]*$/gm)) {
+    #|    let value
+    #|    try { value = JSON.parse(match[1]) } catch { continue }
+    #|    if (!value || typeof value !== "object" || Array.isArray(value)) continue
+    #|    const configuration = Object.hasOwn(value, "application") || (typeof value.name === "string" && Array.isArray(value.pages))
+    #|    if (configuration && value.schemaVersion !== Number(expected.contractVersion)) {
+    #|      problems.push(`${source}: stale current MiniApp configuration schema: ${value.schemaVersion}; expected ${expected.contractVersion}`)
+    #|    }
+    #|  }
+    #|  return problems
+    #|}
+    #|
+    #|function authoringOwnershipProblems(source, content) {
+    #|  const plain = content.replace(/[`*_]/g, "").replace(/\s+/g, " ")
+    #|  const obsolete = [
+    #|    /Each configured page package exports program\(\) -> Page/,
+    #|    /每个配置的页面包导出 program\(\) -> Page/,
+    #|    /An Emit carries only a private graph\/state address/,
+    #|    /Emit 只携带私有的 graph\/state 地址/,
+    #|    /The page renderer is the sole owner of live host interval/,
+    #|    /The renderer owns the only live host-subscription table/,
+    #|  ]
+    #|  return obsolete.filter((pattern) => pattern.test(plain)).map(() => `${source}: unqualified page-only authoring claim must distinguish optional App ownership`)
     #|}
     #|
     #|function fixtureReportProblems(fixture, report, summary, evidence, expected, manifest) {
@@ -204,6 +272,11 @@ pub fn docs_check_source() -> String {
     #|  const mismatchedContract = `App Contract v${Number(contractVersion) + 1}`
     #|  const mismatchedRuntime = `runtime ABI v${Number(runtimeVersion) + 1}`
     #|  const mismatchedProtocol = `renderer protocol v${Number(protocolVersion) + 1}`
+    #|  const historicalStart = "<!-- minimoon:historical:start -->"
+    #|  const historicalEnd = "<!-- minimoon:historical:end -->"
+    #|  const legacyExample = 'App Contract 8; runtime ABI 10\n```json\n{"schemaVersion":8,"name":"legacy","pages":[]}\n```'
+    #|  const markedHistory = `${historicalStart}\n${legacyExample}\n${historicalEnd}`
+    #|  const currentExample = `App Contract ${contractVersion}; runtime ABI ${runtimeVersion}\n\`\`\`json\n{"schemaVersion":${contractVersion},"name":"current","pages":[]}\n\`\`\``
     #|  const cases = [
     #|    ["missing English", bilingualProblems("fixture.md", "# 标题 / Title\n\n## 章节 / Section\n\n只有中文。\n"), "missing its English translation"],
     #|    ["stale symbol", missingSymbolProblems("fixture.md", "fn present() {}", ["missing"]), "stale source symbol"],
@@ -214,11 +287,60 @@ pub fn docs_check_source() -> String {
     #|    ["stale contract version", versionReferenceProblems("fixture.md", mismatchedContract, expected), "stale documentation version"],
     #|    ["stale runtime version", versionReferenceProblems("fixture.md", mismatchedRuntime, expected), "stale documentation version"],
     #|    ["stale protocol version", versionReferenceProblems("fixture.md", mismatchedProtocol, expected), "stale documentation version"],
+    #|    ["contract without v", versionReferenceProblems("fixture.md", "Contract 8", expected), "stale documentation version"],
+    #|    ["ABI without v", versionReferenceProblems("fixture.md", "runtime ABI 10", expected), "stale documentation version"],
+    #|    ["backticked ABI", versionReferenceProblems("fixture.md", "runtime ABI `10`", expected), "stale documentation version"],
+    #|    ["contract table", versionReferenceProblems("fixture.md", "| App Contract | `8` | old |", expected), "stale documentation version"],
+    #|    ["ABI table", versionReferenceProblems("fixture.md", "| runtime ABI | 10 | old |", expected), "stale documentation version"],
+    #|    ["protocol table", versionReferenceProblems("fixture.md", "| renderer protocol | 7 | old |", expected), "stale documentation version"],
+    #|    ["contract schema colon", versionReferenceProblems("fixture.md", "- App Contract schema: 7", expected), "stale documentation version"],
+    #|    ["runtime state ABI colon", versionReferenceProblems("fixture.md", "- runtime API/state ABI: 10", expected), "stale documentation version"],
+    #|    ["renderer protocol colon", versionReferenceProblems("fixture.md", "- renderer protocol: 7", expected), "stale documentation version"],
+    #|    ["inverse contract requirement", versionReferenceProblems("fixture.md", "rejects non-v7 configs/contracts", expected), "stale documentation version"],
+    #|    ["inverse runtime requirement", versionReferenceProblems("fixture.md", "rejects non-v10 runtime APIs", expected), "stale documentation version"],
+    #|    ["inverse protocol requirement", versionReferenceProblems("fixture.md", "rejects non-v7\nrenderer protocols", expected), "stale documentation version"],
+    #|    ["current config schema", currentConfigProblems("fixture.md", '```json\n{"schemaVersion":8,"name":"old","pages":[]}\n```', expected), "stale current MiniApp configuration schema"],
+    #|    ["App config schema", currentConfigProblems("fixture.md", '```json\n{"schemaVersion":8,"application":{"package":"src/app"}}\n```', expected), "stale current MiniApp configuration schema"],
+    #|    ["unmarked legacy version", currentReferenceProblems("fixture.md", legacyExample, expected), "stale documentation version"],
+    #|    ["unmarked legacy config", currentReferenceProblems("fixture.md", legacyExample, expected), "stale current MiniApp configuration schema"],
+    #|    ["history does not hide current drift", currentReferenceProblems("fixture.md", `${markedHistory}\nApp Contract 8`, expected), "stale documentation version"],
+    #|    ["history does not hide current config drift", currentReferenceProblems("fixture.md", `${markedHistory}\n${legacyExample}`, expected), "stale current MiniApp configuration schema"],
+    #|    ["nested history", currentReferenceProblems("fixture.md", `${historicalStart}\n${markedHistory}\n${historicalEnd}`, expected), "nested historical documentation marker"],
+    #|    ["unclosed history", currentReferenceProblems("fixture.md", `${historicalStart}\n${legacyExample}`, expected), "unclosed historical documentation marker"],
+    #|    ["unmatched history end", currentReferenceProblems("fixture.md", historicalEnd, expected), "unmatched historical documentation end marker"],
+    #|    ["inline history marker", currentReferenceProblems("fixture.md", `text ${historicalStart}`, expected), "malformed historical documentation marker"],
+    #|    ["unqualified no-argument factory", authoringOwnershipProblems("fixture.md", "Each configured page package exports `program() -> Page`"), "unqualified page-only authoring claim"],
+    #|    ["unqualified Chinese factory", authoringOwnershipProblems("fixture.md", "每个配置的页面包导出 `program() -> Page`"), "unqualified page-only authoring claim"],
+    #|    ["unqualified local emitter", authoringOwnershipProblems("fixture.md", "An `Emit` carries only a private graph/state address"), "unqualified page-only authoring claim"],
+    #|    ["unqualified Chinese emitter", authoringOwnershipProblems("fixture.md", "`Emit` 只携带私有的 graph/state 地址"), "unqualified page-only authoring claim"],
+    #|    ["unqualified page interval owner", authoringOwnershipProblems("fixture.md", "The page renderer is the sole owner of live host interval keys"), "unqualified page-only authoring claim"],
+    #|    ["unqualified subscription owner", authoringOwnershipProblems("fixture.md", "The renderer owns the only live host-subscription table"), "unqualified page-only authoring claim"],
     #|    ["wrong core module version", moduleVersionProblems("fixture.md", "lampclaw/minimoon@9.9.9", { "lampclaw/minimoon": productVersion }), "stale module version"],
     #|    ["wrong UI module version", moduleVersionProblems("fixture.md", "lampclaw/minimoon_ui 9.9.9", { "lampclaw/minimoon_ui": "0.1.0" }), "stale module version"],
     #|  ]
     #|  for (const [name, problems, expected] of cases) {
     #|    if (!problems.some((problem) => problem.includes(expected))) throw new Error(`documentation self-test did not reject ${name}`)
+    #|  }
+    #|  const accepted = [
+    #|    ["current versions", versionReferenceProblems("fixture.md", `App Contract v${contractVersion}; ABI ${runtimeVersion}; renderer protocol \`${protocolVersion}\``, expected)],
+    #|    ["current version table", versionReferenceProblems("fixture.md", `| App Contract | ${contractVersion} |\n| runtime ABI | \`${runtimeVersion}\` |\n| renderer protocol | ${protocolVersion} |`, expected)],
+    #|    ["current colon versions", versionReferenceProblems("fixture.md", `App Contract schema: ${contractVersion}; runtime API/state ABI: ${runtimeVersion}; renderer protocol: ${protocolVersion}`, expected)],
+    #|    ["current inverse requirements", versionReferenceProblems("fixture.md", `non-v${contractVersion} contracts; non-v${runtimeVersion} runtime APIs; non-v${protocolVersion} renderer protocols`, expected)],
+    #|    ["protocol byte budget", versionReferenceProblems("fixture.md", "| shared protocol | 10,000 bytes |", expected)],
+    #|    ["published history", versionReferenceProblems("CHANGELOG.md", "App Contract v7, runtime ABI v10, renderer protocol v7", expected)],
+    #|    ["migration text", versionReferenceProblems("fixture.md", "App Contract advances from 7 to 9, runtime ABI from 10 to 11, and renderer protocol from 7 to 8.", expected)],
+    #|    ["legacy schema explanation", versionReferenceProblems("fixture.md", "Schema `8` input remains accepted without application.", expected)],
+    #|    ["current config", currentConfigProblems("fixture.md", `\`\`\`json\n{"schemaVersion":${contractVersion},"name":"current","pages":[]}\n\`\`\``, expected)],
+    #|    ["current App config", currentConfigProblems("fixture.md", `\`\`\`json\n{"schemaVersion":${contractVersion},"application":{"package":"src/app"}}\n\`\`\``, expected)],
+    #|    ["unrelated report schema", currentConfigProblems("fixture.md", '```json\n{"schemaVersion":1,"status":"passed"}\n```', expected)],
+    #|    ["historical config", currentConfigProblems("CHANGELOG.md", '```json\n{"schemaVersion":8,"name":"historical","pages":[]}\n```', expected)],
+    #|    ["same-page legacy and current versions", currentReferenceProblems("fixture.md", `${currentExample}\n${markedHistory}\n${currentExample}`, expected)],
+    #|    ["separate historical sections", currentReferenceProblems("fixture.md", `${markedHistory}\n${currentExample}\n${markedHistory}`, expected)],
+    #|    ["no-App factory", authoringOwnershipProblems("fixture.md", "Without application, page factories remain `program() -> Page`. With application, use `program(deps : @application.Deps) -> Page`.")],
+    #|    ["local and App emitters", authoringOwnershipProblems("fixture.md", "A page-local Emit uses graph/state addresses; App Emit delivers after the page transaction commits.")],
+    #|  ]
+    #|  for (const [name, problems] of accepted) {
+    #|    if (problems.length) throw new Error(`documentation self-test rejected ${name}: ${problems.join("; ")}`)
     #|  }
     #|  const report = { schemaVersion: 1, status: "passed", release: true, artifactFingerprint: "fixture-fingerprint", checks: [{ status: "passed" }] }
     #|  const summary = {
@@ -363,11 +485,12 @@ pub fn docs_check_source() -> String {
     #|    if (!legacyReference && content.includes(token)) fail(`${source}: stale documentation token: ${token}`)
     #|  }
     #|  if (!legacyReference) {
-    #|    for (const problem of versionReferenceProblems(source, content, {
+    #|    for (const problem of currentReferenceProblems(source, content, {
     #|      contractVersion,
     #|      runtimeVersion,
     #|      protocolVersion,
     #|    })) fail(problem)
+    #|    for (const problem of authoringOwnershipProblems(source, content)) fail(problem)
     #|  }
     #|}
     #|const analysisRoot = "docs/code-analysis"
@@ -575,6 +698,11 @@ pub fn docs_check_source() -> String {
     #|    "@minimoon.create_state",
     #|    "@minimoon.no_cmd",
     #|    "Emit[Msg]",
+    #|    "App[Deps]",
+    #|    "Shared[T]",
+    #|    "PageContext.bind/select",
+    #|    "program(deps : @application.Deps) -> Page",
+    #|    "minimoon.app.js",
     #|    "minimoon.templates.wxml",
     #|    "app.wxss",
     #|  ]) {

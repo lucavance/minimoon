@@ -57,7 +57,10 @@ bodies and timeouts. See the [HTTP contract](docs/reference/miniapp_host_capabil
 Run `bun run check:http-live` from this checkout for opt-in public-API testing
 of the generated Home page; it does not replace WeChat host acceptance.
 
-Each configured page package exports `program() -> Page`:
+Without `application` configuration, each page package exports
+`program() -> Page`, as below. With `application`, pages instead export
+`program(deps : @application.Deps) -> Page`; see
+[shared-state setup](docs/guides/shared_state.md).
 
 ```moonbit
 pub enum Msg { Increment }
@@ -104,12 +107,17 @@ refresh remain explicit application state.
 sinks use callable `Emit[T]`; `Emit::map` adapts child payloads without exposing
 mutable state.
 
-An `Emit` carries only a private graph/state address. The matching dispatcher
+A page-local `Emit` carries a private graph/state address. The matching dispatcher
 lives in a graph-owned generational registry, so a command executed in another
 page graph, after its scope is reclaimed, or after page disposal is a
 deterministic no-op. Subscription entries use the same reclaimable ownership
 rule; hidden retained scopes pause them, while removed or evicted scopes free
 their registry slots.
+
+An application-owned `Emit` instead addresses its App's domain machine. A page
+may use it across the page/App boundary; delivery leaves the page outbox only
+after the page transaction commits. Page unload does not invalidate that App
+address, while App disposal does.
 
 `Val` is an incremental value inside one page graph, not a mutable signal.
 `Val::map2` through `map9` combine arbitrary independent values, while
@@ -162,6 +170,9 @@ The App builder creates independent typed domain machines; pages bind `Shared[T]
 with `PageContext.bind/select` and retain their own local models. Shared requests
 survive page unload, foreground intervals pause on Hide, and explicit App
 disposal cancels tasks and rejects late delivery. There is no required global Model.
+Effect ownership follows the runtime executing the `Cmd`, not the result
+emitter: to keep a request alive across page unload, send a business message to
+App and return the request from its update.
 See [shared-state setup and acceptance](docs/guides/shared_state.md).
 
 ## MiniApp boundary
@@ -190,11 +201,14 @@ Generated applications contain one `minimoon.runtime.js`, one
 `minimoon.initial.js`, one shared `minimoon.templates.wxml`, and one global
 `app.wxss`. Each page keeps only a small indexed registration bridge, a template
 import, JSON, and an empty page WXSS file.
+Opting into `application` also generates `minimoon.app.js` for the App-owned
+scheduler and lifecycle; the no-application path retains `App({})` registration.
 
 The host scheduler starts the first entry immediately, allows only one render
 in flight, and preserves entry order. Discrete events such as taps are always
-lossless and ordered. Only adjacent same-key scroll events waiting behind an
-acknowledgement collapse to their latest payload; a tap is a coalescing barrier.
+lossless and ordered. Adjacent same-key, same-type scroll or changing events,
+and same-key touchmove events with the same touch identity, may collapse while
+waiting behind an acknowledgement; a tap is a coalescing barrier.
 A whole event batch is decoded before any state changes. Render completion is
 acknowledged through a commit sentinel and the `setData` callback. A three-second
 timeout performs one authoritative snapshot retry; a second failure closes that

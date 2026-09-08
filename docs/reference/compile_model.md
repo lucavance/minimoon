@@ -21,10 +21,10 @@ behavior as metadata.
 }
 ```
 
-Each package exports `program()` by default; an optional `program` field can
-select another function.
+The factory is named `program` by default; an optional `program` field can
+select another function. Its parameters depend on the application mode below.
 
-With `application`, the root package exports `Deps` and `program() -> App[Deps]`;
+With `application`, the configured application package exports `Deps` and `program() -> App[Deps]`;
 each page factory takes `deps : @application.Deps`. Without it, page factories
 remain no-argument. Schema `8` input is accepted only on that legacy entry path.
 
