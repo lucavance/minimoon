@@ -226,7 +226,7 @@ let registry_root_files : Array[String] = [
 ///|
 let registry_documentation_files : Array[String] = [
   "docs/guides/http.md", "docs/README.md", "docs/architecture.md", "docs/guides/api_ergonomics.md",
-  "docs/guides/keyed_children_diff.md", "docs/guides/miniapp_authoring_example.md",
+  "docs/guides/native_navigation.md", "docs/guides/keyed_children_diff.md", "docs/guides/miniapp_authoring_example.md",
   "docs/guides/miniapp_quickstart.md", "docs/guides/resource_state_design.md", "docs/guides/shared_state.md",
   "docs/guides/subscription_scope.md", "docs/guides/testing_and_components.md", "docs/mvp.md",
   "docs/operations/dogfood.md", "docs/operations/miniapp_devtools_validation.md",
@@ -240,8 +240,8 @@ let registry_source_directories : Array[String] = [
   "src/http", "src", "src/cmd/minimoon", "src/components", "src/components/styles",
   "src/internal_any", "src/internal_duplix", "src/internal_host_js", "src/internal_slotmap",
   "src/internal_versions", "src/renderer_miniapp", "src/resources", "src/runtime_core",
-  "src/testing", "src/tooling_miniapp", "src/tooling_minimoon_build", "src/tooling_minimoon_verify",
-  "src/ui_dsl", "src/val_runtime",
+  "src/internal_png", "src/testing", "src/tooling_miniapp", "src/tooling_minimoon_build",
+  "src/tooling_minimoon_verify", "src/ui_dsl", "src/val_runtime",
 ]
 
 ///|
@@ -665,8 +665,14 @@ async fn generator_suite(root : String) -> Unit {
     let starter_initial = @fs.read_file(join(app, "dist/minimoon.initial.js"))
       .binary()
       .length()
-    guard starter_runtime <= 220000 else {
-      abort("starter runtime exceeds 220000-byte budget")
+    guard byte_budget_allows(starter_runtime, starter_runtime_limit) else {
+      abort(
+        "starter runtime exceeds byte budget: actual=" +
+        starter_runtime.to_string() +
+        " bytes, limit=" +
+        starter_runtime_limit.to_string() +
+        " bytes",
+      )
     }
     let starter_host_limit = shared_host_limit(false)
     guard byte_budget_allows(starter_host, starter_host_limit) else {
@@ -726,10 +732,13 @@ async fn generator_suite(root : String) -> Unit {
         }
       _ => abort("starter manifest pages must be an array")
     }
-    guard starter_aggregate.val <= 247000 else {
+    guard byte_budget_allows(starter_aggregate.val, starter_javascript_limit) else {
       abort(
-        "starter aggregate JavaScript exceeds 247000-byte budget: " +
-        starter_aggregate.val.to_string(),
+        "starter aggregate JavaScript exceeds byte budget: actual=" +
+        starter_aggregate.val.to_string() +
+        " bytes, limit=" +
+        starter_javascript_limit.to_string() +
+        " bytes",
       )
     }
     if template == "starter" {

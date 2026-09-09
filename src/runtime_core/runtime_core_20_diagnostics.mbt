@@ -33,6 +33,7 @@ pub fn RuntimeCommand::describe(self : RuntimeCommand) -> String {
       ")"
     NavigateTo(url) => "NavigateTo(" + url + ")"
     RedirectTo(url) => "RedirectTo(" + url + ")"
+    SwitchTab(url) => "SwitchTab(" + url + ")"
     NavigateBack(delta) => "NavigateBack(" + delta.to_string() + ")"
     NavigateBackOrRedirect(delta, fallback) =>
       "NavigateBackOrRedirect(" + delta.to_string() + ", " + fallback + ")"
@@ -128,6 +129,7 @@ fn describe_runtime_command_target(command : RuntimeCommand) -> String {
       payload.length().to_string()
     NavigateTo(url) => "navigate_to#" + url.length().to_string()
     RedirectTo(url) => "redirect_to#" + url.length().to_string()
+    SwitchTab(url) => "switch_tab#" + url.length().to_string()
     NavigateBack(delta) =>
       "navigate_back#" + delta.to_string().length().to_string()
     NavigateBackOrRedirect(delta, fallback) =>

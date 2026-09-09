@@ -7,17 +7,28 @@ behavior as metadata.
 
 ```json
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "name": "miniapp_conformance_app",
   "application": { "package": "src/app" },
   "componentTheme": "minimal-v2",
   "devtoolsChecks": ["Lab native input focus, blur, and confirm"],
   "pages": [
     { "package": "src/pages/showcase" },
+    { "package": "src/pages/interaction" },
+    { "package": "src/pages/capabilities" },
+    { "package": "src/pages/application" },
     { "package": "src/pages/home" },
     { "package": "src/pages/lab" },
-    { "package": "src/pages/details" }
-  ]
+    { "package": "src/pages/details", "smokeInput": { "from": "smoke" } }
+  ],
+  "tabBar": {
+    "list": [
+      { "package": "src/pages/showcase", "text": "首页" },
+      { "package": "src/pages/interaction", "text": "交互" },
+      { "package": "src/pages/capabilities", "text": "能力" },
+      { "package": "src/pages/application", "text": "应用" }
+    ]
+  }
 }
 ```
 
@@ -26,13 +37,19 @@ select another function. Its parameters depend on the application mode below.
 
 With `application`, the configured application package exports `Deps` and `program() -> App[Deps]`;
 each page factory takes `deps : @application.Deps`. Without it, page factories
-remain no-argument. Both paths require source schema `10`; schema `8` and `9`
+remain no-argument. Both paths require source schema `11`; older schemas
 must be explicitly migrated before building.
 
 A page entry may provide `smokeInput`, a string-to-string map used only as the
 synthetic Load input for automated host verification. Required-input pages must
 provide a valid sample there. The manifest records this verification input;
 it is not injected as a real runtime default or into `dist` initial data.
+
+Optional bottom `tabBar` entries reference listed page packages. Extraction
+resolves them into native `pagePath` values shared by manifest, host and
+`app.json`; invalid routes or icon resources fail before replacing `dist`.
+Page entries may opt into `navigationBarTextStyle: "black" | "white"` while
+retaining custom navigation. See [native tabs and layout](../guides/native_navigation.md).
 
 ## Contract extraction and runtime compilation
 
@@ -43,12 +60,14 @@ Native tooling:
 3. evaluates `app.preview(deps => page.program(deps).contract())` when opted in,
    or `program().contract()` otherwise, using explicit `preview_input()` seeds
    without calling actual input decoders or executing initialization commands;
-4. validates Contract schema `10`, runtime ABI `12`, and renderer protocol `8`;
+4. validates Contract schema `11`, runtime ABI `13`, and renderer protocol `8`;
 5. removes temporary source and target directories on success or failure.
 
 After every contract is valid, one formatted temporary MoonBit executable
 imports all page packages. At the first host Load, its page-aware factory
 normalizes and decodes the actual route input before creating a graph. The ABI
+receives a separate synchronous layout snapshot before the builder runs; layout
+never becomes a route parameter. The ABI
 returns a JSON success-ID or input-error envelope, never a fabricated runtime
 for invalid required input. MoonBit builds it once into application-wide
 `minimoon.runtime.js`; release mode strips/minifies the runtime and separately

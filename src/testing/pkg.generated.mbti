@@ -30,7 +30,7 @@ pub fn containing_text(String) -> Selector
 
 pub fn[Deps] launch(@minimoon.App[Deps]) -> TestApp[Deps] raise
 
-pub fn mount(@minimoon.Page, input? : Map[String, String]) -> TestRuntime raise
+pub fn mount(@minimoon.Page, input? : Map[String, String], layout? : @minimoon.PageLayout) -> TestRuntime raise
 
 // Errors
 
@@ -51,7 +51,7 @@ pub enum Selector {
 
 type TestApp[Deps]
 pub fn[Deps] TestApp::dispose(Self[Deps]) -> Unit
-pub fn[Deps] TestApp::mount(Self[Deps], (Deps) -> @minimoon.Page, input? : Map[String, String]) -> TestRuntime raise
+pub fn[Deps] TestApp::mount(Self[Deps], (Deps) -> @minimoon.Page, input? : Map[String, String], layout? : @minimoon.PageLayout) -> TestRuntime raise
 pub fn[Deps] TestApp::quiesce(Self[Deps], max_steps? : Int) -> Unit raise
 
 type TestNode
@@ -84,6 +84,7 @@ pub fn TestRuntime::snapshot(Self) -> String
 pub fn TestRuntime::tap(Self, Selector) -> String
 pub fn TestRuntime::tick(Self, String) -> String
 pub fn TestRuntime::tree(Self) -> TestNode
+pub fn TestRuntime::update_layout(Self, @minimoon.PageLayout) -> String
 pub fn TestRuntime::upper(Self, Selector) -> String
 pub fn TestRuntime::within(Self, Selector) -> TestScope
 

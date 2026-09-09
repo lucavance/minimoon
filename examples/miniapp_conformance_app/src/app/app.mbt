@@ -85,37 +85,37 @@ pub fn panel(
     context.select(deps.fetch, model => model.label),
     context.bind(deps.echoed_draft),
     (count, status, draft) => {
-      @minimoon.div(
-        class="mt-[16rpx] rounded-[16rpx] bg-white px-[32rpx] py-[28rpx] text-slate-800",
-        data_section="shared-state",
-        [
-          @minimoon.p("Application shared count: " + count.to_string()),
-          @minimoon.p("Application request: " + status),
-          @minimoon.p(
-            "Application echoed draft: " +
-            (match draft {
-              None => "none (not persistent)"
-              Some(draft) =>
-                draft.title + " / " + draft.note + " (not persistent)"
-            }),
-          ),
-          @minimoon.button(
-            on_tap=(deps.change_count)(1),
-            event_key="shared/inc",
-            "Shared +1",
-          ),
-          @minimoon.button(
-            on_tap=(deps.send_fetch)(Load),
-            event_key="shared/load",
-            "Shared public API request",
-          ),
-          @minimoon.button(
-            on_tap=(deps.send_fetch)(Clear),
-            event_key="shared/clear",
-            "Clear and ignore old response",
-          ),
-        ],
-      )
+      @minimoon.div(class="demo-card", data_section="shared-state", [
+        @minimoon.p(class="demo-card-title", "应用共享状态"),
+        @minimoon.p("Application shared count: " + count.to_string()),
+        @minimoon.p("Application request: " + status),
+        @minimoon.p(
+          "Application echoed draft: " +
+          (match draft {
+            None => "none (not persistent)"
+            Some(draft) =>
+              draft.title + " / " + draft.note + " (not persistent)"
+          }),
+        ),
+        @minimoon.button(
+          class="demo-action",
+          on_tap=(deps.change_count)(1),
+          event_key="shared/inc",
+          "Shared +1",
+        ),
+        @minimoon.button(
+          class="demo-action",
+          on_tap=(deps.send_fetch)(Load),
+          event_key="shared/load",
+          "Shared public API request",
+        ),
+        @minimoon.button(
+          class="demo-action",
+          on_tap=(deps.send_fetch)(Clear),
+          event_key="shared/clear",
+          "Clear and ignore old response",
+        ),
+      ])
     },
   )
 }

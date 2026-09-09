@@ -80,13 +80,13 @@ Elm-style Model / Msg / update / Cmd / Sub
   version facts; `src/internal_host_js` owns published build/verify host
   JavaScript templates, while `src/internal_host_validation` owns repository-only
   host, documentation, and performance validation sources.
-- `src/tooling_miniapp` owns the current App Contract v10 host-artifact
+- `src/tooling_miniapp` owns the current App Contract v11 host-artifact
   generator.
 - `src/tooling_minimoon_build`, `src/tooling_minimoon_verify`, and
   `src/cmd/minimoon` own generation, verification, and the CLI.
 - `ui/` owns the independent native component module, themes and build resources;
   `ui/examples/showcase` is its separate six-page verification fixture.
-- `examples/miniapp_conformance_app` is the single maintained core four-page
+- `examples/miniapp_conformance_app` is the single maintained core seven-route/four-tab
   release fixture. `templates/starter` is the separate two-page source embedded
   by `minimoon init`.
 - `scripts/bridge/weapp_tailwindcss_adapter.mjs` is the only standalone

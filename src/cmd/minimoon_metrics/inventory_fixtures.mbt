@@ -36,7 +36,10 @@ fn embedded_fixture_inventory(entries : Array[EmbeddedInventoryEntry]) -> Unit {
         "src/cmd/minimoon_check/static_quality_wbtest.mbt", "Moon source boundary rejects the deprecated StringBuilder constructor",
       ),
       (
-        "src/internal_host_js/host_bridge_wbtest.mbt", "ABI v12 host captures, merges, and drains asynchronous runtime wakes",
+        "src/internal_host_js/host_bridge_wbtest.mbt", "ABI v13 host captures, merges, and drains asynchronous runtime wakes",
+      ),
+      (
+        "src/tooling_miniapp/layout_wbtest.mbt", "layout ABI creation and updates keep their decoder separate from route inputs",
       ),
       (
         "src/tooling_minimoon_verify/verify_wbtest.mbt", "artifact fingerprints are independent of checkout location",
@@ -55,6 +58,12 @@ fn embedded_fixture_inventory(entries : Array[EmbeddedInventoryEntry]) -> Unit {
       ),
       (
         "src/tooling_minimoon_verify/verify_wbtest.mbt", "resource SVG bytes and provider manifest descriptors bind the artifact fingerprint",
+      ),
+      (
+        "src/tooling_minimoon_verify/tab_bar_wbtest.mbt", "PNG resource verification and fingerprints both observe raw byte mutations",
+      ),
+      (
+        "src/tooling_minimoon_verify/tab_host_wbtest.mbt", "disk host Tab routing rejects empty missing and extra stale route sets",
       ),
       (
         "src/tooling_minimoon_verify/verify_wbtest.mbt", "resource verification rejects missing or unsafe declared assets",

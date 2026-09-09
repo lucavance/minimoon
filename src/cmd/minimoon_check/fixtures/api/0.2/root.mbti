@@ -139,6 +139,8 @@ pub fn[C : IsChildren] swiper_item(item_id? : String, id? : String, class? : Str
 
 pub fn switch(name? : String, checked~ : Bool, on_change~ : Emit[Bool], event_key? : String, disabled? : Bool, color? : String, id? : String, class? : String, style? : String, data_section? : String, semantics? : Semantics) -> Node
 
+pub fn switch_tab(Route) -> Cmd
+
 pub fn[C : IsChildren] tap_view(on_tap~ : Cmd, event_key? : String, id? : String, class? : String, style? : String, data_section? : String, semantics? : Semantics, C) -> Node
 
 pub fn text(String) -> Node
@@ -176,7 +178,7 @@ pub(all) enum AppLifecycleHook {
 } derive(Eq)
 
 type AppRuntime[Deps]
-pub fn[Deps] AppRuntime::create_page(Self[Deps], Page, input? : Map[String, String]) -> Result[PageRuntime, DecodeError]
+pub fn[Deps] AppRuntime::create_page(Self[Deps], Page, input? : Map[String, String], layout? : PageLayout) -> Result[PageRuntime, DecodeError]
 pub fn[Deps] AppRuntime::deps(Self[Deps]) -> Deps
 pub fn[Deps] AppRuntime::dispatch(Self[Deps], Cmd) -> String
 pub fn[Deps] AppRuntime::dispose(Self[Deps]) -> String
@@ -197,6 +199,7 @@ pub(all) enum Capability {
   RequestPayment
   NavigateTo
   RedirectTo
+  SwitchTab
   NavigateBack
   MeasureNodes
 } derive(Eq, @debug.Debug)
@@ -277,6 +280,13 @@ pub(all) enum InputType {
 
 type KeyedNode
 
+pub(all) struct LayoutRect {
+  left : Double
+  top : Double
+  width : Double
+  height : Double
+} derive(Eq, ToJson, @debug.Debug)
+
 pub struct LocationResult {
   latitude : Double
   longitude : Double
@@ -323,9 +333,9 @@ pub struct NodeRect {
 type Page
 pub fn Page::contract(Self) -> String
 pub fn Page::contract_json(Self) -> Json
-pub fn Page::create_runtime(Self, input? : Map[String, String]) -> Result[PageRuntime, DecodeError]
+pub fn Page::create_runtime(Self, input? : Map[String, String], layout? : PageLayout) -> Result[PageRuntime, DecodeError]
 pub fn Page::id(Self) -> String
-pub fn Page::initial_tree(Self) -> Json
+pub fn Page::initial_tree(Self, layout? : PageLayout) -> Json
 pub fn Page::route(Self) -> String
 pub fn Page::title(Self) -> String
 pub fn Page::wxml(Self) -> String
@@ -333,6 +343,7 @@ pub fn Page::wxml(Self) -> String
 type PageContext
 pub fn[T : Eq] PageContext::bind(Self, Shared[T]) -> Val[T]
 pub fn PageContext::every(Self, key~ : String, interval_ms~ : Int, command~ : Cmd) -> Sub
+pub fn PageContext::layout(Self) -> Val[PageLayout]
 pub fn PageContext::lifecycle(Self, PageLifecycleHook, (Json) -> Result[Cmd, DecodeError]) -> Sub
 pub fn PageContext::on_hide(Self, Cmd) -> Sub
 pub fn PageContext::on_load(Self, Cmd) -> Sub
@@ -341,6 +352,13 @@ pub fn PageContext::on_reach_bottom(Self, Cmd) -> Sub
 pub fn PageContext::on_show(Self, Cmd) -> Sub
 pub fn PageContext::on_unload(Self, Cmd) -> Sub
 pub fn[T : Eq, U : Eq] PageContext::select(Self, Shared[T], (T) -> U) -> Val[U]
+
+pub(all) struct PageLayout {
+  window : WindowMetrics?
+  menu_button : LayoutRect?
+} derive(Eq, ToJson, @debug.Debug)
+pub fn PageLayout::from_json(Json) -> Self
+pub fn PageLayout::unavailable() -> Self
 
 pub(all) enum PageLifecycleHook {
   Load
@@ -364,6 +382,7 @@ pub fn PageRuntime::refresh(Self) -> String
 pub fn PageRuntime::resolve_effect(Self, String, String, String) -> String
 pub fn PageRuntime::snapshot(Self) -> String
 pub fn PageRuntime::subscription(Self, String, String) -> String
+pub fn PageRuntime::update_layout(Self, PageLayout) -> String
 
 pub struct PaymentParams {
   time_stamp : String
@@ -512,6 +531,16 @@ pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq] Val::view6(Self[A], Self[
 pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq] Val::view7(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], (A, B, C, D, E, F, G) -> Node) -> Self[Node]
 pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H : Eq] Val::view8(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], Self[H], (A, B, C, D, E, F, G, H) -> Node) -> Self[Node]
 pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H : Eq, I : Eq] Val::view9(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], Self[H], Self[I], (A, B, C, D, E, F, G, H, I) -> Node) -> Self[Node]
+
+pub(all) struct WindowMetrics {
+  window_width : Double
+  window_height : Double
+  screen_width : Double
+  screen_height : Double
+  screen_top : Double
+  status_bar_height : Double
+  safe_area : LayoutRect?
+} derive(Eq, ToJson, @debug.Debug)
 
 // Type aliases
 

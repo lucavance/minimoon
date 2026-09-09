@@ -9,6 +9,8 @@ import {
 // Values
 pub fn program(@app.Deps) -> @minimoon.Page
 
+pub fn scene(@minimoon.PageContext, String, concise? : Bool) -> @minimoon.Val[@minimoon.Node]
+
 // Errors
 
 // Types and methods

@@ -1,9 +1,27 @@
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "application": { "package": "src/app" },
   "name": "miniapp_conformance_app",
   "componentTheme": "minimal-v2",
+  "resources": [
+    { "package": "lampclaw/miniapp_conformance_app/resources", "features": [] }
+  ],
+  "tabBar": {
+    "color": "#6A778B",
+    "selectedColor": "#356AE6",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      { "package": "src/pages/showcase", "text": "首页", "iconPath": "assets/tab-home.png", "selectedIconPath": "assets/tab-home-selected.png" },
+      { "package": "src/pages/interaction", "text": "交互", "iconPath": "assets/tab-interaction.png", "selectedIconPath": "assets/tab-interaction-selected.png" },
+      { "package": "src/pages/capabilities", "text": "能力", "iconPath": "assets/tab-capabilities.png", "selectedIconPath": "assets/tab-capabilities-selected.png" },
+      { "package": "src/pages/application", "text": "应用", "iconPath": "assets/tab-application.png", "selectedIconPath": "assets/tab-application-selected.png" }
+    ]
+  },
   "devtoolsChecks": [
+    "Four native bottom Tabs stay ordered 首页/交互/能力/应用; switching keeps independent local state, delivers show/hide without an unload, and does not grow the page stack",
+    "Seven routes keep white navigation text on a fixed dark-blue safe band; actual window/menu metrics keep the scrolling hero below the capsule on initial Load and after resize, with no light boot flash",
+    "Tab shortcuts use switchTab without query; Home/Lab/Details remain non-Tab stack probes for required input, push/replace/back, instance isolation and real unload",
     "Details requires from route input: valid input initializes immediately without preview flash; invalid input fails closed with page_input_decode_failed and no live instance",
     "Details draft empty title sends no HTTP; valid title/note POST to public httpbingo.org/post shows typed echo (not persistent storage) in both Details and Home; editing or unloading rejects old replies",
     "Home and Details share application count and public HTTP status while keeping independent page state; leaving the requesting page does not cancel application HTTP",
@@ -28,9 +46,12 @@
     "clean console, clean unload, and no post-dispose update"
   ],
   "pages": [
-    { "package": "src/pages/showcase" },
-    { "package": "src/pages/home" },
-    { "package": "src/pages/lab" },
-    { "package": "src/pages/details", "smokeInput": { "from": "smoke" } }
+    { "package": "src/pages/showcase", "navigationBarTextStyle": "white" },
+    { "package": "src/pages/interaction", "navigationBarTextStyle": "white" },
+    { "package": "src/pages/capabilities", "navigationBarTextStyle": "white" },
+    { "package": "src/pages/application", "navigationBarTextStyle": "white" },
+    { "package": "src/pages/home", "navigationBarTextStyle": "white" },
+    { "package": "src/pages/lab", "navigationBarTextStyle": "white" },
+    { "package": "src/pages/details", "navigationBarTextStyle": "white", "smokeInput": { "from": "smoke" } }
   ]
 }

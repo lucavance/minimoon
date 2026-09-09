@@ -1,0 +1,5 @@
+import {
+  "lampclaw/minimoon",
+}
+
+supported_targets = "js+native"

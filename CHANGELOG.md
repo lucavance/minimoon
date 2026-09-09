@@ -8,6 +8,14 @@ tags.
 
 ### Added
 
+- Native bottom TabBar configuration and typed `switch_tab`, with tab-aware
+  back fallback and capability checks. Conformance has four primary tabs and
+  retains Home, Lab and Details as secondary acceptance routes.
+- Read-only `PageContext.layout()` with synchronous first-business-tree host
+  metrics, transactional resize/Show updates and test layout injection.
+- Typed text/binary build resources, validated PNG Tab icons, and static
+  navigation text color for custom Skyline headers.
+
 - Real route input is decoded before page graph/model creation; preview input
   is separate and cannot start effects. Creation returns a typed result.
 - App-aware `testing.launch`, page mounting with input and bounded `quiesce`.
@@ -39,8 +47,8 @@ tags.
 
 ### Compatibility
 
-- App Contract advances to 10, runtime ABI to 12, and renderer protocol is 8.
-  Schema 8/9 input is rejected. Pages boot empty and first Load renders the real tree.
+- App Contract advances to 11, runtime ABI to 13, and renderer protocol is 8.
+  Older source schemas are rejected. Pages boot empty and first Load renders the real tree.
   Rebuild all generated artifacts together and obtain new real-host evidence.
 - Opted-in page factories take the application's `Deps`; `PageContext` is now
   opaque. See the [shared-state guide](docs/guides/shared_state.md).
@@ -55,17 +63,21 @@ tags.
   the official prebuilt release `0.10.12+1634b282e` pinned in both CI jobs.
   Migrated package exclusions to `.moonignore` and removed newly redundant test imports.
 
-- Reviewed authoring growth budgets: Conformance runtime/aggregate
-  JavaScript ceilings are 400,000/453,000 bytes, with a 16,000-byte App-enabled
-  host ceiling. The core archive hard ceiling is 300 KiB with an 8 KiB reserve.
-  No-App host, starter, UI archive and other gates remain unchanged.
+- Reviewed native navigation/layout growth budgets: no-App/App shared host
+  ceilings are 18,000/19,000 bytes. The core archive hard ceiling is 320 KiB
+  with an 8 KiB reserve. Conformance runtime/aggregate JavaScript retain the
+  authoring review's 400,000/453,000-byte ceilings. An independent starter
+  follow-up sets 230,000/258,000-byte runtime/aggregate ceilings after removing
+  956 bytes of unnecessary layout-state overhead. UI archive and other gates
+  remain unchanged.
 - CI handoff technical versions are derived from the validated manifest and
   checked against both fixture summaries and checklists.
 - Moved repository-check temporary consumers onto the checkout's parent volume,
   with configurable storage, isolated runs and supervisor-owned failure cleanup.
 - The preceding HTTP budget review retained a 250 KiB core archive hard ceiling
   with an 8 KiB reserve and 360,000/424,000-byte runtime/aggregate ceilings;
-  subsequent application-state and authoring reviews supersede those core ceilings.
+  subsequent application-state, authoring and native navigation reviews supersede
+  those core ceilings.
 - Raised the repository and generated-starter Node floor to `>=24.20.0`, with
   CI coverage at 24.20.0 and 26.8.1; pinned Bun to `1.4.2`.
 - Updated PostCSS to `8.5.28`, weapp-tailwindcss to `5.5.1`, and refreshed the

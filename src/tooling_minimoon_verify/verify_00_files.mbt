@@ -171,7 +171,10 @@ fn valid_skyline_page_config(config : Json) -> Bool {
       renderer == "skyline" &&
       navigation_style == "custom" &&
       !fields.contains("navigationBarTitleText") &&
-      !fields.contains("navigationBarTextStyle") &&
+      (match fields.get("navigationBarTextStyle") {
+        None | Some(String("white")) | Some(String("black")) => true
+        _ => false
+      }) &&
       !fields.contains("navigationBarBackgroundColor")
     }
     _ => false

@@ -61,7 +61,10 @@ remains an internal implementation detail.
 
 | Source | Purpose |
 | --- | --- |
-| Conformance / Showcase | bilingual product narrative, state, lifecycle, routing |
+| Conformance / Showcase (首页) | product narrative, state, lifecycle, native tab and secondary-route entrypoints |
+| Conformance / Interaction (交互) | native controls and page-local component scenarios |
+| Conformance / Capabilities (能力) | public HTTP and declared host capabilities |
+| Conformance / Application (应用) | shared count/request/draft projections and ownership |
 | Conformance / Home | page input, controlled input, capabilities, navigation, shared App count/request |
 | Conformance / Lab | set/splice/move/replacement, controlled native reconciliation, reactive slots, scrolling, local components, focus events, overlays, menu semantics, isolation |
 | Conformance / Details | independent input/lifecycle, shared App count/request and stack-aware fallback |
@@ -76,6 +79,6 @@ remains an internal implementation detail.
 - an application backend or real payment workflow
 
 Automated validation must pass before handoff. A release claim additionally
-requires fingerprint-matching real-host evidence for the exact App Contract v10,
-runtime ABI v12, renderer protocol v8 Conformance and UI showcase bytes. That evidence is a
+requires fingerprint-matching real-host evidence for the exact App Contract v11,
+runtime ABI v13, renderer protocol v8 Conformance and UI showcase bytes. That evidence is a
 local release input and is never part of repository or CI state.

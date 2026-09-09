@@ -24,7 +24,7 @@ is recorded in the repository's
 
 ### Compatibility and provenance
 
-- Declares `lampclaw/minimoon@0.2.0`; App Contract v10, runtime ABI v12 and
+- Declares `lampclaw/minimoon@0.2.0`; App Contract v11, runtime ABI v13 and
   renderer protocol v8 artifacts must be rebuilt as one set.
 - References RUI 0.1.1 / Rabbita 0.15.6 at commit
   `b1291945fd0201a0b5b39513b88585d6122db7bc`; MIT and visual-recipe notices are

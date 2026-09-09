@@ -227,7 +227,7 @@ test "custom navigation app config omits ineffective window fields" {
 
 ///|
 async test "DevTools evidence scope follows the current App Contract" {
-  assert_eq(current_evidence_scope(), "current-v10")
+  assert_eq(current_evidence_scope(), "current-v11")
   let root = @fs.tmpdir(prefix="minimoon-evidence-scope")
   {
     errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })

@@ -115,11 +115,11 @@ function createRendererStats() {
 
 ## 5. 体积预算与当前余量 / Byte Budgets and Current Headroom
 
-2026-09-08 本轮 authoring 校准的 Conformance JavaScript 为 418,121/453,000 bytes，保留 34,879 bytes 余量；runtime 为 387,977/400,000 bytes，启用 App 的 host 为 15,624/16,000 bytes，initial trees 为 303/41,000 bytes。未启用 App 的 host 为 14,976/15,000 bytes。本轮仅调整 Conformance runtime 和核心发布 ZIP 预算，aggregate、host、starter 与 UI 门槛保持不变。调整依据见[本轮预算评审](../reference/performance_baseline.md#approved-authoring-budget-review)。
+2026-09-08 先前 authoring 历史校准的 Conformance JavaScript 为 418,121/453,000 bytes，保留 34,879 bytes 余量；runtime 为 387,977/400,000 bytes，启用 App 的 host 为 15,624/16,000 bytes，initial trees 为 303/41,000 bytes。未启用 App 的 host 为 14,976/15,000 bytes。该次评审仅调整 Conformance runtime 和核心发布 ZIP 预算，aggregate、host、starter 与 UI 门槛当时保持不变。依据见[历史 authoring 评审](../reference/performance_baseline.md#approved-authoring-budget-review)；当前原生导航与布局的 host/ZIP 上限见[后续预算评审](../reference/performance_baseline.md#approved-native-navigation-and-layout-budget-review)。
 
 > **English:**
 >
-> The 2026-09-08 authoring calibration measures 418,121/453,000 Conformance JavaScript bytes, leaving 34,879 bytes. Runtime is 387,977/400,000 bytes, App-enabled host is 15,624/16,000 bytes, and initial trees are 303/41,000 bytes. The no-App host is 14,976/15,000 bytes. This review changes only the Conformance runtime and core registry ZIP budgets; aggregate, host, starter, and UI ceilings remain unchanged. See the [current budget review](../reference/performance_baseline.md#approved-authoring-budget-review) for the rationale.
+> The earlier 2026-09-08 authoring calibration measured 418,121/453,000 Conformance JavaScript bytes, leaving 34,879 bytes. Runtime was 387,977/400,000 bytes, App-enabled host was 15,624/16,000 bytes, and initial trees were 303/41,000 bytes. The no-App host was 14,976/15,000 bytes. That review changed only the Conformance runtime and core registry ZIP budgets; aggregate, host, starter, and UI ceilings were unchanged at that time. See the [historical authoring review](../reference/performance_baseline.md#approved-authoring-budget-review); current native navigation/layout host and ZIP ceilings are in the [subsequent budget review](../reference/performance_baseline.md#approved-native-navigation-and-layout-budget-review).
 
 > **源码 / Source:** [`src/cmd/minimoon_check/performance.mbt`](../../src/cmd/minimoon_check/performance.mbt) · symbol: `perf_suite` artifact budgets
 

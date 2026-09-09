@@ -1,5 +1,5 @@
 ///|
-/// Runtime ABI 12 never publishes an instance before route decoding succeeds.
+/// Runtime ABI 13 never publishes an instance before route decoding succeeds.
 fn runtime_creation_helpers() -> String {
   let source =
     #|///|
@@ -17,6 +17,12 @@ fn runtime_creation_helpers() -> String {
     #|    input[key] = text
     #|  }
     #|  Ok(input)
+    #|}
+    #|
+    #|///|
+    #|fn minimoon_decode_layout(raw : String) -> @minimoon.PageLayout {
+    #|  let value = @json.parse(raw) catch { _ => Json::null() }
+    #|  @minimoon.PageLayout::from_json(value)
     #|}
     #|
     #|///|

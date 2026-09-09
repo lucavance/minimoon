@@ -4,12 +4,18 @@ test "resource selection is deterministic and transitive" {
   let second = resources(["date-picker", "form"])
   assert_eq(first, second)
   assert_eq(features().length(), 66)
-  assert_true(first.assets[0].content.contains("field\n"))
-  assert_true(first.assets[0].content.contains("label\n"))
-  assert_true(first.assets[0].content.contains("calendar\n"))
-  assert_true(first.assets[0].content.contains("popover\n"))
+  guard first.assets[0].content is @build_resources.Text(manifest) else {
+    abort("text manifest")
+  }
+  assert_true(manifest.contains("field\n"))
+  assert_true(manifest.contains("label\n"))
+  assert_true(manifest.contains("calendar\n"))
+  assert_true(manifest.contains("popover\n"))
   assert_true(first.wxss.contains(".mmui-input"))
-  assert_eq(resources([]).assets[0].content.split("\n").length(), 67)
+  guard resources([]).assets[0].content is @build_resources.Text(all) else {
+    abort("text manifest")
+  }
+  assert_eq(all.split("\n").length(), 67)
 }
 
 ///|
@@ -19,9 +25,12 @@ test "SVG resources use explicit size and do not introduce browser CSS" {
   for asset in resources.assets {
     assert_true(asset.path.has_prefix("assets/mmui/"))
     if asset.path.has_suffix(".svg") {
-      assert_true(asset.content.contains("width=\"24\" height=\"24\""))
-      assert_false(asset.content.contains("<style"))
-      assert_false(asset.content.contains("%"))
+      guard asset.content is @build_resources.Text(svg) else {
+        abort("text SVG")
+      }
+      assert_true(svg.contains("width=\"24\" height=\"24\""))
+      assert_false(svg.contains("<style"))
+      assert_false(svg.contains("%"))
     }
   }
   assert_false(resources.wxss.contains("oklch("))

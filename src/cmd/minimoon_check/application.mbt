@@ -42,7 +42,7 @@ async fn application_type_gate(root : String) -> Unit {
         "src/types.mbt", "pub struct Deps { count : @minimoon.Shared[Int]; emit : @minimoon.Emit[Int] }\n///|\npub fn start() -> @minimoon.App[Deps] {\n  @minimoon.app(build=context => { let (count, emit) = context.create_pure_state(0, update=(model, delta : Int) => model + delta); { count, emit } })\n}\n",
       ),
       (
-        "miniapp.minimoon.json", "{\"schemaVersion\":10,\"name\":\"shared_types\",\"application\":{\"package\":\"src\",\"program\":\"start\"},\"pages\":[]}\n",
+        "miniapp.minimoon.json", "{\"schemaVersion\":11,\"name\":\"shared_types\",\"application\":{\"package\":\"src\",\"program\":\"start\"},\"pages\":[]}\n",
       ),
     ] {
     let (file, content) = entry

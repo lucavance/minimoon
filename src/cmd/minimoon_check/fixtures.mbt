@@ -139,8 +139,8 @@ async fn verify_examples(root : String, release : Bool) -> Unit {
 }
 
 ///|
-async fn artifact_snapshot(root : String) -> String {
-  let entries : Array[String] = []
+async fn artifact_snapshot(root : String) -> Array[(String, Bytes)] {
+  let entries : Array[(String, Bytes)] = []
   for app in example_apps {
     for directory in ["dist", "generated"] {
       let base = join(root, "examples/" + app + "/" + directory)
@@ -149,8 +149,8 @@ async fn artifact_snapshot(root : String) -> String {
         (path, names) => {
           for name in names {
             let file = join(path, name)
-            if @fs.kind(file) == @fs.Regular {
-              entries.push(file + "\n" + @fs.read_file(file).text())
+            if @fs.kind(file, follow_symlink=false) == @fs.Regular {
+              entries.push((file, @fs.read_file(file).binary()))
             }
           }
         },
@@ -158,8 +158,8 @@ async fn artifact_snapshot(root : String) -> String {
       )
     }
   }
-  entries.sort()
-  entries.join("\n\u{0}\n")
+  entries.sort_by((left, right) => left.0.lexical_compare(right.0))
+  entries
 }
 
 ///|

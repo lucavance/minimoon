@@ -49,7 +49,7 @@ fn application_runtime_source(
     "  let page = match page_id {\n" +
     cases.join("") +
     "    _ => abort(\"unknown runtime page id\")\n  }\n" +
-    "  minimoon_register_page(page_id, application.create_page(page, input~))\n",
+    "  minimoon_register_page(page_id, application.create_page(page, input~, layout~))\n",
     "optional application root",
   ) +
   "\n///|\nlet minimoon_application_definition : @minimoon.App[@application.Deps] = @application." +

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "productSeries": "0.2",
-  "appContractVersion": 10,
-  "runtimeApiVersion": 12,
+  "appContractVersion": 11,
+  "runtimeApiVersion": 13,
   "rendererProtocolVersion": 8,
   "packages": {
     "root": { "source": "src/pkg.generated.mbti", "snapshot": "root.mbti", "policy": "exact" },

@@ -32,6 +32,7 @@ pub(all) enum Cmd {
   CmdHostEffect(String, String, (HostOutcome) -> Cmd)
   CmdNavigateTo(String)
   CmdRedirectTo(String)
+  CmdSwitchTab(String)
   CmdNavigateBack(Int)
   CmdNavigateBackOrRedirect(Int, String)
 }
@@ -74,6 +75,11 @@ pub fn navigate_to(url : String) -> Cmd {
 ///|
 pub fn redirect_to(url : String) -> Cmd {
   CmdRedirectTo(url)
+}
+
+///|
+pub fn switch_tab(url : String) -> Cmd {
+  CmdSwitchTab(url)
 }
 
 ///|

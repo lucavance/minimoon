@@ -12,11 +12,29 @@ pub enum Msg {
   OpenConsole
   OpenLab
   OpenDetails
+  OpenInteraction
+  OpenCapabilities
+  OpenApplication
 }
 
 ///|
 fn update(model : Model, message : Msg) -> (Model, @minimoon.Cmd) {
   match message {
+    OpenInteraction =>
+      @minimoon.with_cmd(
+        model,
+        @minimoon.switch_tab(@minimoon.route("pages/interaction/interaction")),
+      )
+    OpenCapabilities =>
+      @minimoon.with_cmd(
+        model,
+        @minimoon.switch_tab(@minimoon.route("pages/capabilities/capabilities")),
+      )
+    OpenApplication =>
+      @minimoon.with_cmd(
+        model,
+        @minimoon.switch_tab(@minimoon.route("pages/application/application")),
+      )
     Increment => @minimoon.no_cmd({ ..model, updates: model.updates + 1, })
     Reset => @minimoon.no_cmd({ ..model, updates: 0, })
     PageShown => @minimoon.no_cmd({ ..model, visits: model.visits + 1, })
@@ -56,179 +74,96 @@ fn action(
   key : String,
   message : Msg,
   label : String,
-  tone : String,
 ) -> @minimoon.Node {
   @minimoon.button(
     on_tap=emit(message),
     event_key=key,
-    class="rounded-[10rpx] " +
-      tone +
-      " px-[20rpx] py-[12rpx] text-[24rpx] font-semibold text-white",
-    style="margin: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box; line-height: 1.2; min-height: 0;",
+    class="demo-action",
     label,
   )
 }
 
 ///|
-fn route_card(
+fn view(
+  model : Model,
   emit : @minimoon.Emit[Msg],
-  key : String,
-  message : Msg,
-  title : String,
-  detail : String,
-  tone : String,
+  layout : @minimoon.PageLayout,
+  notes : @minimoon.Node,
 ) -> @minimoon.Node {
-  @minimoon.div(
-    class="rounded-[16rpx] bg-white px-[24rpx] py-[20rpx]",
-    style="width: 100%; box-sizing: border-box; box-shadow: 0 12rpx 32rpx rgba(15, 23, 42, 0.10);",
-    [
-      @minimoon.h1(class="text-[30rpx] font-semibold text-slate-800", title),
-      @minimoon.p(
-        class="mt-[8rpx] text-[24rpx] text-slate-600",
-        style="line-height: 1.5;",
-        detail,
-      ),
-      @minimoon.div(class="mt-[16rpx]", [
-        action(emit, key, message, "进入 / Open", tone),
+  @shell.frame(layout, "Minimoon", "showcase-page", [
+    @shell.hero(
+      "Minimoon Studio",
+      "用 MoonBit 构建原生 Skyline 小程序",
+      "showcase-hero",
+      home=true,
+    ),
+    @minimoon.div(class="demo-body", [
+      @shell.card("从一次交互开始", section="showcase-transaction", [
+        @minimoon.p(
+          class="demo-muted",
+          "轻触按钮，看状态与界面同步。",
+        ),
+        @minimoon.h1(class="demo-value", model.updates.to_string()),
+        @minimoon.div(class="demo-actions", [
+          action(emit, "showcase/increment", Increment, "+1"),
+          action(emit, "showcase/reset", Reset, "Reset"),
+        ]),
+        @minimoon.p(
+          class="demo-muted",
+          "state updates: " + model.updates.to_string(),
+        ),
       ]),
-    ],
-  )
-}
-
-///|
-fn view(model : Model, emit : @minimoon.Emit[Msg]) -> @minimoon.Node {
-  @minimoon.scroll_view(
-    class="box-border h-[100vh] bg-slate-700 px-[24rpx] pb-[40rpx] pt-[72rpx] text-white",
-    style="background: linear-gradient(145deg, #020617 0%, #1e1b4b 52%, #0f172a 100%);",
-    scroll_y=true,
-    data_section="showcase-page",
-    [
-      @minimoon.div(
-        class="rounded-[16rpx] border border-sky-200 px-[24rpx] py-[20rpx]",
-        data_section="showcase-hero",
-        style="background: rgba(15, 23, 42, 0.82); box-shadow: 0 20rpx 48rpx rgba(2, 6, 23, 0.35);",
-        [
-          @minimoon.p(
-            class="text-[24rpx] font-semibold text-white",
-            "MOONBIT × WECHAT SKYLINE",
-          ),
-          @minimoon.h1(
-            class="mt-[12rpx] text-[36rpx] font-semibold text-white",
-            style="font-size: 48rpx;",
-            "Minimoon Studio",
-          ),
-          @minimoon.p(
-            class="mt-[12rpx] text-[28rpx] text-white",
-            style="line-height: 1.5;",
-            "用 MoonBit 构建原生 Skyline 小程序",
-          ),
-          @minimoon.p(
-            class="mt-[8rpx] text-[24rpx] text-white",
-            style="line-height: 1.5; opacity: 0.78;",
-            "Typed state · Transactional Val · Runtime API v" +
-            @minimoon.runtime_api_version().to_string(),
-          ),
-        ],
-      ),
-      @minimoon.div(
-        class="mt-[20rpx] rounded-[16rpx] bg-white px-[24rpx] py-[20rpx] text-slate-800",
-        data_section="showcase-transaction",
-        style="width: 100%; box-sizing: border-box;",
-        [
-          @minimoon.p(
-            class="text-[24rpx] font-semibold text-sky-700",
-            "LIVE STATE / 实时状态",
-          ),
-          @minimoon.h1(
-            class="mt-[8rpx] text-[30rpx] font-semibold text-slate-800",
-            "一次事件，一次事务",
-          ),
-          @minimoon.p(
-            class="mt-[8rpx] text-[24rpx] text-slate-500",
-            "One event updates state and the host-visible tree.",
-          ),
-          @minimoon.div(
-            class="mt-[16rpx] flex items-center rounded-[12rpx] bg-slate-100 px-[20rpx] py-[16rpx]",
-            style="justify-content: space-between;",
-            [
-              @minimoon.div([
-                @minimoon.p(
-                  class="text-[24rpx] text-slate-500",
-                  "state updates: " + model.updates.to_string(),
-                ),
-                @minimoon.h1(
-                  class="text-[36rpx] font-semibold text-sky-700",
-                  model.updates.to_string(),
-                ),
-              ]),
-              @minimoon.div(class="flex gap-[10rpx]", [
-                action(
-                  emit,
-                  "showcase/increment",
-                  Increment,
-                  "+1",
-                  "bg-indigo-600",
-                ),
-                action(emit, "showcase/reset", Reset, "Reset", "bg-slate-700"),
-              ]),
-            ],
-          ),
-          @minimoon.p(
-            class="mt-[12rpx] text-[24rpx] text-slate-500",
-            "page visits: " + model.visits.to_string(),
-          ),
-        ],
-      ),
-      @minimoon.div(
-        class="mt-[20rpx] flex flex-col gap-[12rpx]",
-        data_section="showcase-routes",
-        [
-          route_card(
-            emit,
-            "showcase/open-console",
-            OpenConsole,
-            "01 能力控制台 / Capability Console",
-            "状态、查询输入、wx.* 能力与命令式导航。",
-            "bg-sky-600",
-          ),
-          route_card(
-            emit,
-            "showcase/open-lab",
-            OpenLab,
-            "02 增量运行实验室 / Runtime Lab",
-            "结构 diff、局部组件、原生控件与实例隔离。",
-            "bg-violet-600",
-          ),
-          route_card(
-            emit,
-            "showcase/open-details",
-            OpenDetails,
-            "03 页面生命周期 / Lifecycle Details",
-            "独立页面状态、查询参数与栈感知返回。",
-            "bg-emerald-600",
-          ),
-        ],
-      ),
-      @minimoon.div(
-        class="mt-[20rpx] rounded-[16rpx] bg-white px-[24rpx] py-[20rpx] text-[24rpx] text-slate-700",
-        data_section="showcase-architecture",
-        style="line-height: 1.5;",
-        "架构路径 / Architecture\nModel → Val → transactional diff → Skyline host",
-      ),
-    ],
-  )
+      @shell.card("探索原生体验", [
+        @minimoon.p(
+          class="demo-muted",
+          "交互、平台能力与应用状态，按需展开。",
+        ),
+        @minimoon.div(class="demo-actions", [
+          action(emit, "showcase/tab-interaction", OpenInteraction, "交互"),
+          action(emit, "showcase/tab-capabilities", OpenCapabilities, "能力"),
+          action(emit, "showcase/tab-application", OpenApplication, "应用"),
+        ]),
+      ]),
+      @shell.card("页面栈体验", section="showcase-routes", [
+        @minimoon.p(
+          class="demo-muted",
+          "独立页面可以带参进入、返回与卸载。",
+        ),
+        @minimoon.div(class="demo-actions", [
+          action(emit, "showcase/open-console", OpenConsole, "能力探针"),
+          action(emit, "showcase/open-lab", OpenLab, "交互探针"),
+          action(emit, "showcase/open-details", OpenDetails, "编辑详情"),
+        ]),
+        @minimoon.p(
+          class="demo-muted",
+          "page visits: " + model.visits.to_string(),
+        ),
+      ]),
+      notes,
+    ]),
+  ])
 }
 
 ///|
 pub fn program(_deps : @application.Deps) -> @minimoon.Page {
-  @minimoon.elmish_page(
+  @minimoon.page(
     id="showcase",
     route=@minimoon.route("pages/showcase/showcase"),
     title="Minimoon Studio",
-    model={ updates: 0, visits: 0, },
-    update=(current, message, _) => update(current, message),
-    view~,
-    capabilities=[@minimoon.NavigateTo],
-    subscriptions=(context, _, emit) => context.on_show(emit(PageShown)),
+    capabilities=[@minimoon.NavigateTo, @minimoon.SwitchTab],
+    build=context => {
+      let (model, emit) = @minimoon.create_state(
+        { updates: 0, visits: 0, },
+        update=(current, message, _) => update(current, message),
+        subscriptions=(_, emit) => context.on_show(emit(PageShown)),
+      )
+      let notes = @shell.technical_notes("showcase", [
+        "Model → Val → transactional diff → Skyline host", "Rapid taps are lossless; native Tab switches keep page-local state.",
+        "The separate stack probes retain real navigation and unload checks.",
+      ])
+      model.view3(context.layout(), notes, (model, layout, notes) => {
+        view(model, emit, layout, notes)
+      })
+    },
   )
 }

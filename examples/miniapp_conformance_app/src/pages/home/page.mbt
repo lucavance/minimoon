@@ -12,6 +12,7 @@ pub struct Model {
   request_code : String
   request_case : Int
   request_base : String
+  response_open : Bool
   toast_status : String
   location : String
   media : String
@@ -36,6 +37,7 @@ pub enum Msg {
   LoadRequest
   RequestCase(Int)
   RequestBase(String)
+  ToggleResponse
   RequestLoaded(Int, String)
   RequestFailed(String)
   ShowToast
@@ -70,6 +72,7 @@ fn initial_model() -> Model {
     request_code: "",
     request_case: 0,
     request_base: "https://httpbingo.org",
+    response_open: false,
     toast_status: "idle",
     location: "",
     media: "",
@@ -155,6 +158,8 @@ fn update(
       @minimoon.no_cmd({ ..model, storage_status: "failed", error, })
     RequestCase(index) => @minimoon.no_cmd({ ..model, request_case: index, })
     RequestBase(base) => @minimoon.no_cmd({ ..model, request_base: base, })
+    ToggleResponse =>
+      @minimoon.no_cmd({ ..model, response_open: !model.response_open, })
     LoadRequest =>
       @minimoon.with_cmd(
         {
@@ -282,83 +287,23 @@ fn event(emit : @minimoon.Emit[Msg], key : String, msg : Msg) -> @minimoon.Cmd {
 }
 
 ///|
-fn action_row(
-  section : String,
-  wrap : Bool,
-  gap : String,
-  children : Array[@minimoon.Node],
-) -> @minimoon.Node {
-  let class_name = if wrap {
-    "flex flex-wrap items-center justify-center gap-[10rpx]"
-  } else {
-    "flex items-center justify-center gap-[6rpx]"
-  }
-  let wrap_value = if wrap { "wrap" } else { "nowrap" }
-  @minimoon.div(
-    class=class_name,
-    data_section=section,
-    style="display: flex; flex-direction: row; flex-wrap: " +
-      wrap_value +
-      "; align-items: center; justify-content: center; gap: " +
-      gap +
-      "; width: 100%; box-sizing: border-box;",
-    children,
-  )
-}
-
-///|
 fn action(
   emit : @minimoon.Emit[Msg],
   key : String,
   msg : Msg,
   label : String,
-  min_width : String,
-  color : String,
 ) -> @minimoon.Node {
   @minimoon.button(
-    on_tap=event(emit, key, msg),
+    class="demo-action",
     event_key=key,
-    class=min_width +
-      " rounded-[8rpx] " +
-      color +
-      " px-[14rpx] py-[8rpx] text-[24rpx] leading-none text-white",
-    style="margin: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box; line-height: 1; min-height: 0; flex-shrink: 0;",
+    on_tap=event(emit, key, msg),
     label,
   )
 }
 
 ///|
-fn status_panel(
-  section : String,
-  children : Array[@minimoon.Node],
-) -> @minimoon.Node {
-  @minimoon.div(
-    class="flex min-h-[48rpx] min-w-[320rpx] items-center rounded-[10rpx] bg-white px-[18rpx] py-[8rpx] text-[24rpx] text-slate-700 whitespace-normal break-all",
-    data_section=section,
-    style="width: 100%; max-width: calc(100vw - 48rpx); word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",
-    children,
-  )
-}
-
-///|
-fn request_panel(model : Model) -> @minimoon.Node {
-  @minimoon.div(
-    class="flex min-h-[48rpx] min-w-[320rpx] flex-col rounded-[10rpx] bg-white px-[18rpx] py-[8rpx] text-[24rpx] text-slate-700 whitespace-normal break-all",
-    data_section="request-output",
-    style="width: 100%; max-width: calc(100vw - 48rpx); align-items: stretch; gap: 6rpx; word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",
-    [
-      @minimoon.p(class="block font-semibold", [
-        @minimoon.text(
-          "request: " + model.request_status + " · HTTP " + model.request_code,
-        ),
-      ]),
-      @minimoon.p(
-        class="block text-slate-600",
-        style="max-width: calc(100vw - 84rpx); word-break: break-all; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35;",
-        [@minimoon.text(model.request_body)],
-      ),
-    ],
-  )
+fn status_panel(section : String, text : String) -> @minimoon.Node {
+  @minimoon.p(class="demo-output", data_section=section, text)
 }
 
 ///|
@@ -367,220 +312,140 @@ fn view(
   emit : @minimoon.Emit[Msg],
   input_name : String,
   shared_panel : @minimoon.Node,
+  layout : @minimoon.PageLayout,
+  notes : @minimoon.Node,
+  concise : Bool,
 ) -> @minimoon.Node {
   let name = if model.name == "" { input_name } else { model.name }
-  @minimoon.scroll_view(
-    class="box-border h-[100vh] bg-slate-100 px-[24rpx] pb-[32rpx] pt-[72rpx]",
-    style="display: flex; flex-direction: column; align-items: center; gap: 12rpx;",
-    scroll_y=true,
-    data_section="home-page",
-    [
-      @minimoon.div(
-        class="rounded-[16rpx] bg-slate-700 px-[24rpx] py-[20rpx] text-white",
-        data_section="home-intro",
-        style="width: 100%; max-width: calc(100vw - 48rpx); box-sizing: border-box;",
-        [
-          @minimoon.p(
-            class="text-[24rpx] font-semibold text-white",
-            "01 · HOST CAPABILITIES",
-          ),
-          @minimoon.h1(
-            class="mt-[8rpx] text-[36rpx] font-semibold text-white",
-            "能力控制台",
-          ),
-          @minimoon.p(
-            class="mt-[8rpx] text-[24rpx] text-white",
-            style="opacity: 0.78;",
-            "Capability Console · state, wx.* commands, and navigation",
-          ),
-          @minimoon.div(class="mt-[16rpx]", [
-            action(
-              emit,
-              "home/back-studio",
-              BackToStudio,
-              "返回 Studio / Back",
-              "min-w-[200rpx]",
-              "bg-indigo-600",
+  @shell.frame(layout, "能力", "home-page", [
+    @shell.hero("能力控制台", "Typed state · Native wx.*", "home-intro"),
+    @minimoon.div(class="demo-body", [
+      @shell.card("输入与状态", section="home-controls", [
+        @minimoon.input(
+          value=name,
+          on_input=emit.map(value => NameInput(value)),
+          event_key="home/name",
+          placeholder="Name from ?name= query",
+          class="demo-input",
+        ),
+        status_panel("home-controls", "hello: " + name),
+        @minimoon.h1(class="demo-value", model.count.to_string()),
+        @minimoon.div(class="demo-actions", [
+          action(emit, "home/dec", Dec, "−1"),
+          action(emit, "home/inc", Inc, "+1"),
+          action(emit, "home/reset", Reset, "Reset"),
+        ]),
+      ]),
+      @shell.card("原生能力", [
+        @minimoon.div(class="demo-actions", data_section="session-controls", [
+          action(emit, "home/login", Login, "Login"),
+          action(emit, "home/logout", Logout, "Logout"),
+        ]),
+        @minimoon.div(
+          class="demo-actions",
+          data_section="capability-controls",
+          [
+            action(emit, "home/load-storage", LoadStorage, "Storage"),
+            action(emit, "home/save-storage", SaveStorage, "Save"),
+            action(emit, "home/toast", ShowToast, "Toast"),
+            action(emit, "home/location", Locate, "Locate"),
+            action(emit, "home/media", ChooseMedia, "Media"),
+          ],
+        ),
+        status_panel(
+          "session-state",
+          "login: " + model.login_status + " · code: " + model.login_code,
+        ),
+        status_panel(
+          "storage-state",
+          "storage: " +
+          model.storage_status +
+          " · value: " +
+          model.storage_value,
+        ),
+        status_panel("toast-state", "toast: " + model.toast_status),
+        status_panel("location-state", "location: " + model.location),
+        status_panel("media-state", "media: " + model.media),
+      ]),
+      @shell.card("HTTP 请求", [
+        @minimoon.p(
+          class="demo-muted",
+          "使用合成数据访问公开 echo API，不是持久保存。",
+        ),
+        @minimoon.input(
+          class="demo-input",
+          value=model.request_base,
+          on_input=emit.map(value => RequestBase(value)),
+          event_key="home/http-base",
+          placeholder="HTTPS httpbingo-compatible base URL",
+        ),
+        @minimoon.picker_selector(
+          options=http_cases(),
+          selected=model.request_case,
+          on_change=emit.map(value => RequestCase(value)),
+          event_key="home/http-case",
+          "HTTP scenario: " +
+          http_cases().get(model.request_case).unwrap_or("GET"),
+        ),
+        action(emit, "home/request", LoadRequest, "Request"),
+        @minimoon.div(
+          data_section="request-output",
+          class="demo-output",
+          style="overflow-wrap: anywhere;",
+          [
+            @minimoon.p(
+              "request: " +
+              model.request_status +
+              " · HTTP " +
+              model.request_code,
             ),
-          ]),
-        ],
-      ),
-      @minimoon.p(
-        class="text-[24rpx] font-semibold text-slate-500",
-        "STATE INPUT / 状态输入",
-      ),
-      @minimoon.input(
-        value=name,
-        on_input=emit.map(value => NameInput(value)),
-        event_key="home/name",
-        placeholder="Name from ?name= query",
-        class="min-w-[320rpx] rounded-[10rpx] bg-white px-[18rpx] py-[12rpx] text-[26rpx]",
-      ),
-      status_panel("home-controls", [@minimoon.text("hello: " + name)]),
-      @minimoon.h1(
-        class="flex h-[112rpx] min-w-[184rpx] items-center justify-center rounded-[12rpx] border border-sky-200 bg-white px-[32rpx] text-[64rpx] font-semibold leading-none text-sky-700",
-        model.count.to_string(),
-      ),
-      action_row("home-controls", false, "6rpx", [
-        action(emit, "home/dec", Dec, "-1", "min-w-[84rpx]", "bg-sky-600"),
-        action(emit, "home/inc", Inc, "+1", "min-w-[84rpx]", "bg-sky-600"),
-        action(
-          emit,
-          "home/reset",
-          Reset,
-          "Reset",
-          "min-w-[112rpx]",
-          "bg-emerald-600",
+            if concise {
+              action(
+                emit,
+                "home/toggle-response",
+                ToggleResponse,
+                if model.response_open {
+                  "收起响应详情"
+                } else {
+                  "查看响应详情"
+                },
+              )
+            } else {
+              @minimoon.nothing()
+            },
+            if !concise || model.response_open {
+              @minimoon.p(
+                data_section="http-response-detail",
+                model.request_body,
+              )
+            } else {
+              @minimoon.nothing()
+            },
+          ],
         ),
       ]),
-      action_row("session-controls", false, "6rpx", [
-        action(
-          emit,
-          "home/login",
-          Login,
-          "Login",
-          "min-w-[112rpx]",
-          "bg-indigo-600",
-        ),
-        action(
-          emit,
-          "home/logout",
-          Logout,
-          "Logout",
-          "min-w-[120rpx]",
-          "bg-zinc-700",
-        ),
+      @shell.card("真实页面栈", section="navigation-controls", [
+        @minimoon.div(class="demo-actions", [
+          action(emit, "home/open-lab", OpenLab, "Open Lab"),
+          action(emit, "home/open-details", OpenDetails, "Open details"),
+          action(emit, "home/redirect-details", ReplaceDetails, "Redirect"),
+          action(emit, "home/back-studio", BackToStudio, "返回首页 / Back"),
+        ]),
+        status_panel("lifecycle-state", "visible: " + model.visible.to_string()),
+        status_panel("error-state", "error: " + model.error),
       ]),
-      @minimoon.p(
-        class="text-[24rpx] font-semibold text-slate-500",
-        "DECLARED WX.* / 已声明主机能力",
-      ),
-      action_row("capability-controls", true, "10rpx", [
-        action(
-          emit,
-          "home/load-storage",
-          LoadStorage,
-          "Storage",
-          "min-w-[128rpx]",
-          "bg-cyan-600",
-        ),
-        action(
-          emit,
-          "home/save-storage",
-          SaveStorage,
-          "Save",
-          "min-w-[112rpx]",
-          "bg-teal-600",
-        ),
-        action(
-          emit,
-          "home/request",
-          LoadRequest,
-          "Request",
-          "min-w-[128rpx]",
-          "bg-rose-600",
-        ),
-        action(
-          emit,
-          "home/toast",
-          ShowToast,
-          "Toast",
-          "min-w-[112rpx]",
-          "bg-orange-600",
-        ),
-        action(
-          emit,
-          "home/location",
-          Locate,
-          "Locate",
-          "min-w-[120rpx]",
-          "bg-slate-700",
-        ),
-        action(
-          emit,
-          "home/media",
-          ChooseMedia,
-          "Media",
-          "min-w-[112rpx]",
-          "bg-violet-600",
-        ),
-      ]),
-      @minimoon.p(
-        class="text-[24rpx] font-semibold text-slate-500",
-        "ROUTING / 页面导航",
-      ),
-      action_row("navigation-controls", true, "10rpx", [
-        action(
-          emit,
-          "home/open-lab",
-          OpenLab,
-          "Open Lab",
-          "min-w-[160rpx]",
-          "bg-violet-700",
-        ),
-        action(
-          emit,
-          "home/open-details",
-          OpenDetails,
-          "Open details",
-          "min-w-[200rpx]",
-          "bg-blue-700",
-        ),
-        action(
-          emit,
-          "home/redirect-details",
-          ReplaceDetails,
-          "Redirect",
-          "min-w-[132rpx]",
-          "bg-fuchsia-600",
-        ),
-      ]),
-      status_panel("session-state", [
-        @minimoon.text("login: " + model.login_status),
-        @minimoon.text(" · "),
-        @minimoon.text("code: " + model.login_code),
-      ]),
-      status_panel("storage-state", [
-        @minimoon.text("storage: " + model.storage_status),
-        @minimoon.text(" · "),
-        @minimoon.text("value: " + model.storage_value),
-      ]),
-      @minimoon.input(
-        value=model.request_base,
-        on_input=emit.map(value => RequestBase(value)),
-        event_key="home/http-base",
-        placeholder="HTTPS httpbingo-compatible base URL",
-      ),
-      @minimoon.picker_selector(
-        options=http_cases(),
-        selected=model.request_case,
-        on_change=emit.map(value => RequestCase(value)),
-        event_key="home/http-case",
-        "HTTP scenario: " +
-        http_cases().get(model.request_case).unwrap_or("GET"),
-      ),
-      request_panel(model),
-      status_panel("toast-state", [
-        @minimoon.text("toast: " + model.toast_status),
-      ]),
-      status_panel("location-state", [
-        @minimoon.text("location: " + model.location),
-      ]),
-      status_panel("media-state", [@minimoon.text("media: " + model.media)]),
-      status_panel("lifecycle-state", [
-        @minimoon.text("visible: " + model.visible.to_string()),
-      ]),
-      status_panel("error-state", [@minimoon.text("error: " + model.error)]),
       shared_panel,
-    ],
-  )
+      notes,
+    ]),
+  ])
 }
 
 ///|
-fn app(
+pub fn scene(
   context : @minimoon.PageContext,
   name : String,
   deps : @application.Deps,
+  concise? : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (model, emit) = @minimoon.create_state(
     initial_model(),
@@ -592,9 +457,16 @@ fn app(
       ])
     },
   )
-  model.view2(@application.panel(context, deps), (current, shared_panel) => {
-    view(current, emit, name, shared_panel)
-  })
+  let notes = @shell.technical_notes("home", [
+    "HTTP 400/500 remain loaded raw responses; timeout is failed.", "NavigateTo hides this page; RedirectTo unloads it and cancels page-owned HTTP.",
+    "App-owned HTTP survives page unload. Developer domain bypass is not production readiness.",
+  ])
+  model.view4(@application.panel(context, deps), context.layout(), notes, (
+    current,
+    shared_panel,
+    layout,
+    notes,
+  ) => view(current, emit, name, shared_panel, layout, notes, concise))
 }
 
 ///|
@@ -611,19 +483,25 @@ pub fn program(deps : @application.Deps) -> @minimoon.Page {
     route=@minimoon.route("pages/home/home"),
     title="Minimoon Home",
     preview_input=() => "Minimoon",
-    capabilities=[
-      @minimoon.Login,
-      @minimoon.GetStorage,
-      @minimoon.SetStorage,
-      @minimoon.Request,
-      @minimoon.ShowToast,
-      @minimoon.GetLocation,
-      @minimoon.ChooseMedia,
-      @minimoon.NavigateTo,
-      @minimoon.RedirectTo,
-      @minimoon.NavigateBack,
-    ],
+    capabilities=capabilities(),
     decode_input~,
-    build=(context, input) => app(context, input, deps),
+    build=(context, input) => scene(context, input, deps),
   )
+}
+
+///|
+pub fn capabilities() -> Array[@minimoon.Capability] {
+  [
+    @minimoon.Login,
+    @minimoon.GetStorage,
+    @minimoon.SetStorage,
+    @minimoon.Request,
+    @minimoon.ShowToast,
+    @minimoon.GetLocation,
+    @minimoon.ChooseMedia,
+    @minimoon.NavigateTo,
+    @minimoon.RedirectTo,
+    @minimoon.NavigateBack,
+    @minimoon.SwitchTab,
+  ]
 }

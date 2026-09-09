@@ -116,15 +116,20 @@ jobs:
             fingerprint="$(jq -er '.artifactFingerprint | select(type == "string" and test("^fnv1a64-relpath-v2:[0-9a-f]{1,16}$"))' "$report")"
             jq -e --arg name "$name" --arg fingerprint "$fingerprint" --arg ui_version "$ui_version" --arg bundle "$bundle" --argjson page_count "$page_count" \
               --slurpfile manifest "$fixture/generated/manifest.json" \
+              --slurpfile app_config "$fixture/dist/app.json" \
               --slurpfile checklist "$fixture/generated/smoke_checklist.json" \
-              '.mode == "release" and .name == $name and .schemaVersion == 10 and .runtimeApiVersion == 12 and .rendererProtocolVersion == 8 and
+              '.mode == "release" and .name == $name and .schemaVersion == 11 and .runtimeApiVersion == 13 and .rendererProtocolVersion == 8 and
                .automated.status == "passed" and .automated.pageCount == $page_count and .automated.artifactFingerprint == $fingerprint and
                .devtools.status == "pending" and .devtools.evidence == null and .devtools.artifactFingerprint == null and (.devtools | keys) == ["evidence", "status"] and
-               $manifest[0].name == $name and $manifest[0].schemaVersion == 10 and $manifest[0].runtimeApiVersion == 12 and $manifest[0].rendererProtocolVersion == 8 and
+               $manifest[0].name == $name and $manifest[0].schemaVersion == 11 and $manifest[0].runtimeApiVersion == 13 and $manifest[0].rendererProtocolVersion == 8 and
                $manifest[0].pageBridgeEncoding == "shared-compact-node-v1" and
-               ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 10 and .runtimeApiVersion == 12 and .rendererProtocolVersion == 8) and
+               ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 11 and .runtimeApiVersion == 13 and .rendererProtocolVersion == 8) and
+               ($bundle != "core" or (
+                 [$manifest[0].pages[].route] == ["pages/showcase/showcase", "pages/interaction/interaction", "pages/capabilities/capabilities", "pages/application/application", "pages/home/home", "pages/lab/lab", "pages/details/details"] and
+                 [$manifest[0].tabBar.list[].pagePath] == ["pages/showcase/showcase", "pages/interaction/interaction", "pages/capabilities/capabilities", "pages/application/application"] and
+                 $manifest[0].tabBar == $app_config[0].tabBar)) and
                ($bundle != "ui" or any($manifest[0].resources[]; .package == "lampclaw/minimoon_ui/resources" and .version == $ui_version)) and
-               $checklist[0].runtimeApiVersion == 12 and $checklist[0].rendererProtocolVersion == 8 and
+               $checklist[0].runtimeApiVersion == 13 and $checklist[0].rendererProtocolVersion == 8 and
                $checklist[0].pages == [$manifest[0].pages[].route] and ($checklist[0].checks | length > 0)' \
               "$fixture/generated/release_summary.json" >/dev/null || {
               echo "CI handoff requires matching versions, pages, fingerprints, and pending private-evidence-free summaries" >&2
@@ -195,7 +200,7 @@ jobs:
             )
           }
 
-          package_handoff examples/miniapp_conformance_app miniapp_conformance_app core 4
+          package_handoff examples/miniapp_conformance_app miniapp_conformance_app core 7
           package_handoff ui/examples/showcase minimoon_ui_showcase ui 6
 
       - name: Final source cleanliness

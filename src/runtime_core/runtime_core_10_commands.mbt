@@ -84,6 +84,7 @@ pub fn[ChildMsg, ParentMsg] map_cmd(
       CmdHostEffect(request, outcome => map(resolve(outcome)))
     CmdNavigateTo(url) => CmdNavigateTo(url)
     CmdRedirectTo(url) => CmdRedirectTo(url)
+    CmdSwitchTab(url) => CmdSwitchTab(url)
     CmdNavigateBack(delta) => CmdNavigateBack(delta)
     CmdNavigateBackOrRedirect(delta, fallback) =>
       CmdNavigateBackOrRedirect(delta, fallback)
@@ -122,6 +123,11 @@ pub fn[Msg] navigate_to_cmd(url : String) -> Cmd[Msg] {
 ///|
 pub fn[Msg] redirect_to_cmd(url : String) -> Cmd[Msg] {
   CmdRedirectTo(url)
+}
+
+///|
+pub fn[Msg] switch_tab_cmd(url : String) -> Cmd[Msg] {
+  CmdSwitchTab(url)
 }
 
 ///|

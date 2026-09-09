@@ -3,10 +3,19 @@
 This is the core framework's maintained real-host fixture for `0.2.0`.
 The independent UI module has its own
 [six-page showcase](../../ui/examples/showcase/README.md). One core release build
-and one artifact fingerprint cover four page routes:
+and one artifact fingerprint cover seven routes: four native bottom Tabs and
+three independent stack probes. App Contract `11` / runtime ABI `13` retain
+renderer protocol `8`.
 
-- `src/pages/showcase`: bilingual Minimoon Studio narrative, local state,
-  lifecycle feedback, and navigation into every technical validation route.
+| Native Tab | Source | Purpose |
+| --- | --- | --- |
+| 首页 | `src/pages/showcase` | introduction, live state, Tab shortcuts and stack-probe entry points |
+| 交互 | `src/pages/interaction` | the ordinary Lab scene with concise presentation and expandable runtime probes |
+| 能力 | `src/pages/capabilities` | the ordinary Home scene with its own page-local state and effects |
+| 应用 | `src/pages/application` | shared application domains and the draft-detail entry point |
+
+The three non-Tab pages remain real navigation-stack probes:
+
 - `src/pages/home`: query input, controlled input, Elm-style state, lifecycle,
   declared `wx.*` capabilities, and command-driven navigation.
 - `src/pages/lab`: dynamic set/splice/move/replacement diffs, vertical scrolling,
@@ -17,13 +26,24 @@ and one artifact fingerprint cover four page routes:
   native controls and focus events, swiper, Disclosure/single/multiple
   Accordion/Tabs, Dialog/Sheet/Dropdown semantics, the `minimal-v2` theme, and
   same-route instance isolation.
-- `src/pages/details`: independent page state, query decoding, lifecycle, and
-  stack-aware back-or-redirect behavior.
+- `src/pages/details`: required nonempty `from` query, independent lifecycle and
+  draft state, typed JSON echo, and stack-aware Back with a Home Tab fallback.
 
 The optional `src/app` package owns shared count and HTTP state. Home and
-Details bind the same App values while keeping their local models; all four
-page factories accept its `Deps`. Starter and UI showcase retain the separate
+Details and the relevant Tabs bind the same App values while keeping their local
+models; all seven factories accept its `Deps`. Reused scene functions create
+new local state in each builder, not shared page instances. Starter and UI showcase retain the separate
 no-application entry path.
+
+The fixture-local `shared/shell` reads `PageContext.layout()` in logical pixels.
+Its fixed deep-blue navigation band reserves the real capsule rectangle; the
+hero and cards scroll beneath it. Missing metrics use the reviewed 88px band
+and 96px right reservation. Bottom safe padding is the intersection with the
+actual window, so the native Tab bar is not counted twice. Every page requests
+white navigation text. The build-only resource provider owns the dark `page`
+boot background and eight 72px PNG Tab icons derived offline from this fixture's
+original `assets/icons/*.svg`; none is fetched externally or imported into the
+application JavaScript.
 
 Build a release-mode candidate and verify it from the repository root:
 
@@ -32,13 +52,30 @@ bun run minimoon verify examples/miniapp_conformance_app --candidate
 ```
 
 Import the unchanged `dist/` directory into WeChat Developer Tools for the
-release checklist. In Home, select each HTTP scenario and tap Request. The
+release checklist. Check 首页/交互/能力/应用 order, selected icons and restoration
+of each Tab's local state; Tab changes must use `switchTab` without query and
+must not grow the navigation stack. Check initial/resize capsule clearance,
+scrolling hero, white status text on dark blue, keyboard and bottom safe area
+on all seven routes. Tab switching hides a page; it is not unload evidence.
+
+Use 首页's 能力探针/交互探针/编辑详情 buttons to enter the retained stack routes.
+Home → Details → Back must retain Home's instance and state. Home Redirect →
+Details must unload Home. Lab's native navigator opens a second same-route
+instance with independent state. Direct valid Details entry returns to the
+Home Tab on Back; missing/empty `from` must fail closed without a live instance
+or preview flash. The configured `smokeInput` is synthetic test input, not a
+runtime default.
+
+In the non-Tab Home probe, select each HTTP scenario and tap Request. The
 default public API is `https://httpbingo.org`: GET query, JSON/form POST, text
 PUT, DELETE, HEAD, OPTIONS, HTTP 400/500 and timeout. Inspect the status code
 and selected echo fields; non-2xx is a loaded result, timeout is failed.
 Leave Home during the delayed request to check disposal. No private server is
 needed. From the repository root, `bun run check:http-live` exercises the same
 generated Home with a fetch transport shim; it is not a real WeChat pass.
+Details rejects an empty draft without HTTP; a valid title/note is sent to the
+public POST echo endpoint and only the typed echo is shared with Home and 应用.
+It is not persistent storage. Editing or unloading rejects old responses.
 Also increment the shared count on Home and Details, then start the separate
 shared public API request and unload its page: another page must receive the
 App-owned result. Start again and Clear before completion; the obsolete response

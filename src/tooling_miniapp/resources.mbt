@@ -105,7 +105,9 @@ fn resource_features(provider : Json) -> Array[String] {
 ///|
 fn valid_resource_asset_path(value : String) -> Bool {
   if !value.has_prefix("assets/") ||
-    !(value.has_suffix(".svg") || value.has_suffix(".txt")) {
+    !(value.has_suffix(".svg") ||
+    value.has_suffix(".txt") ||
+    value.has_suffix(".png")) {
     return false
   }
   for segment in value.split("/") {
@@ -129,7 +131,7 @@ fn valid_resource_asset_path(value : String) -> Bool {
 ///|
 fn resource_bundle_errors(
   bundle : Json,
-  assets : Map[String, String],
+  assets : Map[String, Json],
 ) -> Array[String] {
   let errors : Array[String] = []
   for name in ["id", "version"] {
@@ -139,16 +141,34 @@ fn resource_bundle_errors(
   }
   for asset in array(bundle, "assets") {
     let path = string(asset, "path")
-    let content = string(asset, "content")
     if !valid_resource_asset_path(path) {
       errors.push(
-        "resource asset must be a safe SVG/text path below assets/: " + path,
+        "resource asset must be a safe SVG/text/PNG path below assets/: " + path,
       )
     } else {
-      match assets.get(path) {
-        Some(existing) if existing != content =>
-          errors.push("conflicting resource asset: " + path)
-        _ => assets[path] = content
+      let validated = try {
+        ignore(resource_asset_bytes(asset))
+        true
+      } catch {
+        error => {
+          errors.push(error.to_string())
+          false
+        }
+      }
+      if validated {
+        if assets
+          .keys()
+          .any(existing => {
+            existing.has_prefix(path + "/") || path.has_prefix(existing + "/")
+          }) {
+          errors.push("resource asset file/directory conflict: " + path)
+          continue
+        }
+        match assets.get(path) {
+          Some(existing) if existing != asset =>
+            errors.push("conflicting resource asset: " + path)
+          _ => assets[path] = asset
+        }
       }
     }
   }
@@ -216,7 +236,7 @@ async fn compile_resource_bundle(
 async fn compile_resources(app_root : String, raw : Json) -> Json {
   let descriptors : Array[Json] = []
   let styles : Array[String] = []
-  let assets : Map[String, String] = Map([])
+  let assets : Map[String, Json] = Map([])
   let bundle_ids : Set[String] = Set([])
   match object(raw, "MiniApp config").get("resources") {
     Some(Array(providers)) =>
@@ -269,13 +289,6 @@ async fn compile_resources(app_root : String, raw : Json) -> Json {
         styles.join("\n") + "\n"
       },
     ),
-    "assets": Json::array(
-      paths.map(path => {
-        Json::object({
-          "path": Json::string(path),
-          "content": Json::string(assets[path]),
-        })
-      }),
-    ),
+    "assets": Json::array(paths.map(path => assets[path])),
   })
 }

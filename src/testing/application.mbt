@@ -100,9 +100,10 @@ fn start_page(
 pub fn mount(
   page : @minimoon.Page,
   input? : Map[String, String] = Map([]),
+  layout? : @minimoon.PageLayout = @minimoon.PageLayout::unavailable(),
 ) -> TestRuntime raise {
   let input = input.copy()
-  let runtime = match page.create_runtime(input~) {
+  let runtime = match page.create_runtime(input~, layout~) {
     Ok(runtime) => runtime
     Err(error) =>
       raise Failure("cannot mount page " + page.id() + ": " + error.message())
@@ -153,13 +154,14 @@ pub fn[Deps] TestApp::mount(
   self : TestApp[Deps],
   factory : (Deps) -> @minimoon.Page,
   input? : Map[String, String] = Map([]),
+  layout? : @minimoon.PageLayout = @minimoon.PageLayout::unavailable(),
 ) -> TestRuntime raise {
   guard !self.disposed.val else {
     raise Failure("cannot mount a page on a disposed TestApp")
   }
   let input = input.copy()
   let page = factory(self.runtime.deps())
-  let runtime = match self.runtime.create_page(page, input~) {
+  let runtime = match self.runtime.create_page(page, input~, layout~) {
     Ok(runtime) => runtime
     Err(error) =>
       raise Failure(

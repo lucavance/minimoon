@@ -10,6 +10,13 @@ async fn host_suite(root : String) -> Unit {
   ])
   run_ui_tests(root, "native")
   run_ui_tests(root, "js")
+  run(root, "Conformance application and four-Tab interaction tests", "moon", [
+    "test", "examples/miniapp_conformance_app/src/app", "examples/miniapp_conformance_app/src/pages/showcase",
+    "examples/miniapp_conformance_app/src/pages/home", "examples/miniapp_conformance_app/src/pages/details",
+    "examples/miniapp_conformance_app/src/pages/lab", "examples/miniapp_conformance_app/src/components/toggle_card",
+    "examples/miniapp_conformance_app/src/shared/shell", "examples/miniapp_conformance_app/src/resources",
+    "examples/miniapp_conformance_app/src/tests", "--target", "js", "--deny-warn",
+  ])
   build_examples(root, "dev")
   verify_examples(root, false)
   audit_generated_javascript(root, "dev")
@@ -37,6 +44,15 @@ async fn host_suite(root : String) -> Unit {
     join(root, "examples/miniapp_conformance_app/dist/pages/home/home.js"),
     join(root, "examples/miniapp_conformance_app/dist/pages/details/details.js"),
     join(root, "examples/miniapp_conformance_app/dist/pages/lab/lab.js"),
+    join(
+      root, "examples/miniapp_conformance_app/dist/pages/interaction/interaction.js",
+    ),
+    join(
+      root, "examples/miniapp_conformance_app/dist/pages/capabilities/capabilities.js",
+    ),
+    join(
+      root, "examples/miniapp_conformance_app/dist/pages/application/application.js",
+    ),
   ])
   http_probe(root, true)
   application_host_smoke(root, join(conformance_root, "dist"))

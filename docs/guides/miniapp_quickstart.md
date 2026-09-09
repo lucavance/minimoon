@@ -35,7 +35,7 @@ Registry mode keeps `lampclaw/minimoon@0.2.0` in `moon.mod` and emits no
 when running `init` from the framework checkout; it creates a workspace binding.
 
 The default starter imports only `lampclaw/minimoon`, exports
-`program() -> Page`, and lists page packages in App Contract v10
+`program() -> Page`, and lists page packages in App Contract v11
 `miniapp.minimoon.json`. It is a no-App example with no implicit UI dependency;
 see the [shared-state guide](shared_state.md) to opt into application-owned
 state and dependency-taking page factories. For native UI, add
@@ -108,6 +108,6 @@ copy another application's evidence. `verify --candidate` ignores that local
 file and restores public candidate reports after a release decision. For
 framework coverage use the core
 [`miniapp_conformance_app`](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_conformance_app/README.md)
-and its four-page checklist, plus the independent six-page
+and its seven-route checklist, plus the independent six-page
 [UI showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
 when evaluating the UI module. Their host evidence is separate.

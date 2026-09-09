@@ -1,4 +1,5 @@
 {
   "navigationStyle": "custom",
-  "renderer": "skyline"
+  "renderer": "skyline",
+  "navigationBarTextStyle": "white"
 }

@@ -7,12 +7,14 @@ struct PageRuntime(
   @val.Graph,
   Ref[Bool],
   Ref[Bool],
-  Map[String, String]
+  Map[String, String],
+  PageLayoutState
 )
 
 ///|
 struct PageContext {
   graph : @val.Graph
+  layout_value : Val[PageLayout]
 }
 
 ///|
@@ -189,6 +191,7 @@ fn collect_runtime_commands(
       )
     @val.CmdNavigateTo(url) => output.push(@runtime.navigate_to_cmd(url))
     @val.CmdRedirectTo(url) => output.push(@runtime.redirect_to_cmd(url))
+    @val.CmdSwitchTab(url) => output.push(@runtime.switch_tab_cmd(url))
     @val.CmdNavigateBack(delta) =>
       output.push(@runtime.navigate_back_cmd(delta))
     @val.CmdNavigateBackOrRedirect(delta, fallback) =>
@@ -265,9 +268,13 @@ struct Page {
   id : String
   route : String
   title : String
-  make_preview : () -> (@renderer.PageProgram[Int, GraphMessage], @val.Graph)
-  make_program : (Map[String, String]) -> Result[
-    (@renderer.PageProgram[Int, GraphMessage], @val.Graph),
+  make_preview : (PageLayout) -> (
+    @renderer.PageProgram[Int, GraphMessage],
+    @val.Graph,
+    PageLayoutState,
+  )
+  make_program : (Map[String, String], PageLayout) -> Result[
+    (@renderer.PageProgram[Int, GraphMessage], @val.Graph, PageLayoutState),
     DecodeError,
   ]
 }
@@ -288,8 +295,11 @@ pub fn Page::title(self : Page) -> String {
 }
 
 ///|
-pub fn Page::initial_tree(self : Page) -> Json {
-  let (program, graph) = (self.make_preview)()
+pub fn Page::initial_tree(
+  self : Page,
+  layout? : PageLayout = PageLayout::unavailable(),
+) -> Json {
+  let (program, graph, _) = (self.make_preview)(layout)
   let value = program.initial_tree()
   graph.dispose()
   value
@@ -297,7 +307,7 @@ pub fn Page::initial_tree(self : Page) -> Json {
 
 ///|
 pub fn Page::contract(self : Page) -> String {
-  let (program, graph) = (self.make_preview)()
+  let (program, graph, _) = (self.make_preview)(PageLayout::unavailable())
   let value = program.contract()
   graph.dispose()
   value
@@ -305,7 +315,7 @@ pub fn Page::contract(self : Page) -> String {
 
 ///|
 pub fn Page::contract_json(self : Page) -> Json {
-  let (program, graph) = (self.make_preview)()
+  let (program, graph, _) = (self.make_preview)(PageLayout::unavailable())
   let value = program.contract_json()
   graph.dispose()
   value
@@ -313,7 +323,7 @@ pub fn Page::contract_json(self : Page) -> Json {
 
 ///|
 pub fn Page::wxml(self : Page) -> String {
-  let (program, graph) = (self.make_preview)()
+  let (program, graph, _) = (self.make_preview)(PageLayout::unavailable())
   let value = program.wxml()
   graph.dispose()
   value
@@ -323,9 +333,11 @@ pub fn Page::wxml(self : Page) -> String {
 pub fn Page::create_runtime(
   self : Page,
   input? : Map[String, String] = Map([]),
+  layout? : PageLayout = PageLayout::unavailable(),
 ) -> Result[PageRuntime, DecodeError] {
   let snapshot = input.copy()
-  let (program, graph) = match (self.make_program)(snapshot.copy()) {
+  let (program, graph, layout_state) = match
+    (self.make_program)(snapshot.copy(), layout) {
     Ok(value) => value
     Err(error) => return Err(error)
   }
@@ -335,7 +347,7 @@ pub fn Page::create_runtime(
     disposed.val = true
     ignore(runtime.dispose())
   })
-  Ok(PageRuntime(runtime, graph, Ref(false), disposed, snapshot))
+  Ok(PageRuntime(runtime, graph, Ref(false), disposed, snapshot, layout_state))
 }
 
 ///|
@@ -409,6 +421,14 @@ pub fn PageRuntime::lifecycle(
   if self.3.val {
     return "[]"
   }
+  if hook == "$minimoon:layout-show" {
+    if self.entry_error() is Some(error) {
+      return error
+    }
+    let payload = @json.parse(payload_json) catch { _ => Json::null() }
+    self.queue_layout(PageLayout::from_json(payload))
+    return self.lifecycle("onShow", "{}")
+  }
   if hook == "onLoad" {
     if self.2.val {
       return self.diagnostic(
@@ -442,9 +462,11 @@ pub fn PageRuntime::lifecycle(
     return error
   }
   if hook == "onHide" {
+    self.5.visible.val = false
     self.1.set_shared_visible(false)
   }
   if hook == "onShow" {
+    self.5.visible.val = true
     self.1.set_shared_visible(true)
   }
   if hook == "$minimoon:shared" {
@@ -528,10 +550,17 @@ fn[Input] make_page(
     abort("Page route must not contain query parameters")
   }
   let route_path = route.path()
-  let make_program = fn(input : Input) {
+  let make_program = fn(input : Input, layout : PageLayout) {
     let graph = @val.Graph::new()
     let initialized = Ref(false)
-    let root = graph.build(fn() { build({ graph, }, input) })
+    let (root, layout_state) = graph.build(fn() {
+      let layout_state = PageLayoutState::new(
+        graph,
+        merge_layout(layout, PageLayout::unavailable()),
+      )
+      let root = build({ graph, layout_value: layout_state.value, }, input)
+      (root, layout_state)
+    })
     let lifecycle_events = [
       Load,
       Show,
@@ -555,6 +584,7 @@ fn[Input] make_page(
         })
         let command = if hook == Show {
           batch([
+            layout_state.command(),
             Cmd(@val.CmdMessage(fn() { graph.refresh_shared() })),
             lifecycle_message,
           ])
@@ -594,19 +624,22 @@ fn[Input] make_page(
       ),
       subscriptions=_ => graph_subscriptions(graph),
       refresh=GraphMessage(
-        Cmd(@val.CmdMessage(fn() { graph.refresh_shared() })),
+        batch([
+          layout_state.command(),
+          Cmd(@val.CmdMessage(fn() { graph.refresh_shared() })),
+        ]),
       ),
     )
-    (program, graph)
+    (program, graph, layout_state)
   }
   {
     id,
     route: route_path,
     title,
-    make_preview: fn() { make_program(preview_input()) },
-    make_program: fields => {
+    make_preview: fn(layout) { make_program(preview_input(), layout) },
+    make_program: (fields, layout) => {
       match decode_input(fields) {
-        Ok(input) => Ok(make_program(input))
+        Ok(input) => Ok(make_program(input, layout))
         Err(error) => Err(error)
       }
     },

@@ -6,7 +6,9 @@ pub fn application_host_bridge() -> String
 
 pub fn host_smoke_source(Array[String], inputs? : Array[Json]) -> String
 
-pub fn shared_host_bridge(application? : Bool) -> String
+pub fn native_tab_host_source(Array[String], Array[String]) -> String
+
+pub fn shared_host_bridge(application? : Bool, tab_routes? : Array[String]) -> String
 
 pub fn shared_protocol_bridge() -> String
 

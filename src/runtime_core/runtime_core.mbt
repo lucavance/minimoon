@@ -63,6 +63,7 @@ pub enum Cmd[Msg] {
   CmdHostEffect(HostEffectRequest, (HostEffectOutcome) -> Msg)
   CmdNavigateTo(String)
   CmdRedirectTo(String)
+  CmdSwitchTab(String)
   CmdNavigateBack(Int)
   CmdNavigateBackOrRedirect(Int, String)
 }
@@ -75,6 +76,7 @@ pub enum RuntimeCommand {
   InvokeCapability(ComponentId, EffectRequestId, EffectCapability, HostPayload)
   NavigateTo(String)
   RedirectTo(String)
+  SwitchTab(String)
   NavigateBack(Int)
   NavigateBackOrRedirect(Int, String)
   StartSubscription(ComponentId, SubscriptionKey, Int)
@@ -154,6 +156,11 @@ pub fn navigate_to_command(url : String) -> RuntimeCommand {
 ///|
 pub fn redirect_to_command(url : String) -> RuntimeCommand {
   RedirectTo(url)
+}
+
+///|
+pub fn switch_tab_command(url : String) -> RuntimeCommand {
+  SwitchTab(url)
 }
 
 ///|
@@ -249,7 +256,7 @@ pub fn runtime_command_diagnostics(
           capability.length() +
           payload.length()
       }
-      NavigateTo(url) | RedirectTo(url) =>
+      NavigateTo(url) | RedirectTo(url) | SwitchTab(url) =>
         payload_size.val = payload_size.val + url.length()
       NavigateBack(delta) =>
         payload_size.val = payload_size.val + delta.to_string().length()
@@ -331,6 +338,7 @@ pub fn RuntimeCommand::schema_json(self : RuntimeCommand) -> String {
       "}"
     NavigateTo(url) => "{\"type\":\"NavigateTo\",\"url\":" + url.escape() + "}"
     RedirectTo(url) => "{\"type\":\"RedirectTo\",\"url\":" + url.escape() + "}"
+    SwitchTab(url) => "{\"type\":\"SwitchTab\",\"url\":" + url.escape() + "}"
     NavigateBack(delta) =>
       "{\"type\":\"NavigateBack\",\"delta\":" + delta.to_string() + "}"
     NavigateBackOrRedirect(delta, fallback) =>

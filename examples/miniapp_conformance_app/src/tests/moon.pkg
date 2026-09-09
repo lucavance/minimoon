@@ -1,0 +1,13 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon/testing",
+  "lampclaw/miniapp_conformance_app/app" @application,
+  "lampclaw/miniapp_conformance_app/pages/showcase",
+  "lampclaw/miniapp_conformance_app/pages/home",
+  "lampclaw/miniapp_conformance_app/pages/lab",
+  "lampclaw/miniapp_conformance_app/pages/interaction",
+  "lampclaw/miniapp_conformance_app/pages/capabilities",
+  "lampclaw/miniapp_conformance_app/pages/application" @application_page,
+} for "test"
+
+supported_targets = "js"

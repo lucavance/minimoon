@@ -1,0 +1,27 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/miniapp_conformance_app/shared/shell"
+
+import {
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn bottom_inset(@minimoon.PageLayout) -> Double
+
+pub fn card(String, Array[@minimoon.Node], section? : String) -> @minimoon.Node
+
+pub fn frame(@minimoon.PageLayout, String, String, Array[@minimoon.Node], scroll_target? : String, on_scroll? : @minimoon.Emit[@minimoon.ScrollDetail], scroll_key? : String) -> @minimoon.Node
+
+pub fn hero(String, String, String, home? : Bool) -> @minimoon.Node
+
+pub fn navigation_height(@minimoon.PageLayout) -> String
+
+pub fn technical_notes(String, Array[String]) -> @minimoon.Val[@minimoon.Node]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

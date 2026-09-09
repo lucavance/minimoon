@@ -223,7 +223,7 @@ async fn static_suite(root : String) -> Unit {
   )
   for
     token in [
-      "package_handoff examples/miniapp_conformance_app miniapp_conformance_app core 4",
+      "package_handoff examples/miniapp_conformance_app miniapp_conformance_app core 7",
       "package_handoff ui/examples/showcase minimoon_ui_showcase ui 6", "name: minimoon-devtools-${{ github.sha }}",
       "name: minimoon-ui-devtools-${{ github.sha }}", "path: _build/devtools-handoff/core/",
       "path: _build/devtools-handoff/ui/", "git status --porcelain --untracked-files=all",
@@ -326,8 +326,9 @@ async fn static_suite(root : String) -> Unit {
     page_package in [
       "examples/miniapp_conformance_app/src/pages/showcase/moon.pkg", "examples/miniapp_conformance_app/src/pages/home/moon.pkg",
       "examples/miniapp_conformance_app/src/pages/lab/moon.pkg", "examples/miniapp_conformance_app/src/pages/details/moon.pkg",
-      "examples/miniapp_conformance_app/src/components/toggle_card/moon.pkg", "templates/starter/src/pages/home/moon.pkg",
-      "templates/starter/src/pages/details/moon.pkg",
+      "examples/miniapp_conformance_app/src/pages/interaction/moon.pkg", "examples/miniapp_conformance_app/src/pages/capabilities/moon.pkg",
+      "examples/miniapp_conformance_app/src/pages/application/moon.pkg", "examples/miniapp_conformance_app/src/components/toggle_card/moon.pkg",
+      "templates/starter/src/pages/home/moon.pkg", "templates/starter/src/pages/details/moon.pkg",
     ] {
     require_text(root, page_package, "\"lampclaw/minimoon\"")
     forbid_text(root, page_package, "lampclaw/minimoon/miniapp")
@@ -351,6 +352,8 @@ async fn static_suite(root : String) -> Unit {
       "templates/starter/src/pages/details/page.mbt", "examples/miniapp_conformance_app/src/pages/showcase/page.mbt",
       "examples/miniapp_conformance_app/src/pages/home/page.mbt", "examples/miniapp_conformance_app/src/pages/lab/page.mbt",
       "examples/miniapp_conformance_app/src/pages/details/page.mbt", "examples/miniapp_conformance_app/src/components/toggle_card/card.mbt",
+      "examples/miniapp_conformance_app/src/pages/interaction/page.mbt", "examples/miniapp_conformance_app/src/pages/capabilities/page.mbt",
+      "examples/miniapp_conformance_app/src/pages/application/page.mbt",
     ] {
     for
       stale_public_name in [

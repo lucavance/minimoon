@@ -9,7 +9,7 @@
 [English](README.md) · [文档索引](docs/README.md) · [双语代码分析](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
 Minimoon 是面向微信小程序 Skyline 的 MoonBit UI 框架。`0.2.0` 以 Rabbita 风格的普通函数组件组合
-与 Elm-style 状态机为入口，采用 App Contract v10、runtime ABI v12、renderer protocol v8
+与 Elm-style 状态机为入口，采用 App Contract v11、runtime ABI v13、renderer protocol v8
 和 CommonJS 小程序宿主边界。
 
 ```text
@@ -155,12 +155,12 @@ popup 关联、label 与 description 送入受校验的 renderer protocol；`inp
 
 ## 小程序边界
 
-配置使用 App Contract v10。`componentTheme` 可省略；省略时不会增加内置组件
+配置使用 App Contract v11。`componentTheme` 可省略；省略时不会增加内置组件
 CSS：
 
 ```json
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "name": "my_app",
   "componentTheme": "minimal-v2",
   "pages": [
@@ -172,6 +172,12 @@ CSS：
 
 可选的 `devtoolsChecks` 用于声明有序的应用专属人工检查项；生成器会将其追加到
 `generated/smoke_checklist.json`，并随 CI 开发者工具交接产物一起交付。
+
+可选原生底部 `tabBar` 通过 package 引用已声明页面；`switch_tab(Route)` 要求
+`SwitchTab` 权限和不带查询参数的 Tab 路由。`PageContext.layout()` 在首个业务树前
+提供只读窗口、安全区与胶囊信息，构建资源支持文本及 PNG 字节。参见
+[原生导航与布局](docs/guides/native_navigation.md)。Conformance 提供首页、交互、能力、
+应用四个 Tab，并保留三个二级验收页面。
 
 生成应用只有一份 `minimoon.runtime.js`、一份 `minimoon.host.js`、一份
 `minimoon.protocol.js`、一份压缩的 `minimoon.initial.js`、一份共享
@@ -188,7 +194,7 @@ commit sentinel 和 `setData` callback 确认；三秒超时后只执行一次�
 重试，第二次失败则关闭该页面调度器。队列深度、合并数量、确认延迟、重试、超时与
 COW shadow copy 工作量都可通过 renderer stats 观察。
 
-Runtime ABI v12 还为页面所有的局部异步命令提供有序宿主唤醒。挂起的 `perform`
+Runtime ABI v13 还为页面所有的局部异步命令提供有序宿主唤醒。挂起的 `perform`
 和 `attempt` 无需等待下一次点击或生命周期入口即可排空结果；页面销毁会取消结果
 投递，而框架 `delay` 的宿主计时器会被物理清除。
 
@@ -240,12 +246,12 @@ headless、theme 与 resources 分别维护可加性接口快照。
 它也会把受跟踪报告恢复为 candidate 状态。覆盖率由上方独立的 `check:coverage`
 门禁验证。本地作出 release 决策时，依次
 运行 `bun run check:all` 与 `bun run check:mvp`，两者都要求与当前指纹匹配的
-开发者工具证据，覆盖核心四页示例与 UI 六页 showcase。发布及暂存前再运行
+开发者工具证据，覆盖核心七路由、四原生 Tab 示例与 UI 六页 showcase。发布及暂存前再运行
 `check:candidate` 恢复公开报告，并要求两套指纹不变、源码 checkout 干净。
 [发布操作指南](docs/operations/release_candidate_handoff.md) 定义核心/UI 的发布顺序及
 纯 registry consumer 检查。
 仓库归档门禁先执行 `moon package --frozen --list`，再检查每个模块的 registry 包
-白名单与独立评审的硬上限：核心包 300 KiB、至少预留 8 KiB；UI 包
+白名单与独立评审的硬上限：核心包 320 KiB、至少预留 8 KiB；UI 包
 250 KiB、至少预留 16 KiB。这些是仓库预算，不是注册表服务的限制。
 
 仓库检查默认在旁边的 `../.minimoon-check-tmp/` 创建独立运行目录，使用仓库父目录

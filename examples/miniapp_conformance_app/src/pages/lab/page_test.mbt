@@ -341,7 +341,7 @@ test "lab delay probe uses a cancellable 600ms host timeout" {
 }
 
 ///|
-test "conformance lab uses ABI v12, shared WXML, and query isolation marker" {
+test "conformance lab uses ABI v13, shared WXML, and query isolation marker" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
   let runtime = runtime_app
@@ -350,7 +350,7 @@ test "conformance lab uses ABI v12, shared WXML, and query isolation marker" {
   let _ = runtime.lifecycle("onLoad", "{\"instance\":\"second\"}")
   inspect(runtime.snapshot().contains("instance: second"), content="true")
   let contract = @application.program().preview(deps => program(deps).contract())
-  inspect(contract.contains("\"runtimeApiVersion\":12"), content="true")
+  inspect(contract.contains("\"runtimeApiVersion\":13"), content="true")
   inspect(contract.contains("\"rendererProtocolVersion\":8"), content="true")
   let wxml = @application.program().preview(deps => program(deps).wxml())
   inspect(wxml.contains("minimoon_dynamic_node"), content="true")

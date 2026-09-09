@@ -4,19 +4,28 @@
 
 | Fixture | Page | Primary contract |
 | --- | --- | --- |
-| `miniapp_conformance_app` | Showcase | bilingual landing UI, state transitions, lifecycle, NavigateTo routing |
+| `miniapp_conformance_app` | Showcase / 首页 | landing UI, state transitions, lifecycle, SwitchTab and secondary-route entrypoints |
+| `miniapp_conformance_app` | Interaction / 交互 | independently mounted native control and local-component scenarios |
+| `miniapp_conformance_app` | Capabilities / 能力 | independently mounted public HTTP and host-capability scenarios |
+| `miniapp_conformance_app` | Application / 应用 | application count, request and draft projections; local versus App ownership |
 | `miniapp_conformance_app` | Home | query and controlled input, state transitions, exact capability payloads/results, request abort/late completion, lifecycle, NavigateTo/RedirectTo |
 | `miniapp_conformance_app` | Lab | set/splice/keyed move/full replacement, keyed focus retention, scalar-only controlled reset, no-touch async completion, vertical scroll, `assoc_by`, local state/subscriptions, controls, focus events, overlays, menus, swiper, same-route isolation |
 | `miniapp_conformance_app` | Details | independent query/lifecycle state and stack-aware back fallback |
 
-The four routes share one application-wide runtime, one release build, one
+The seven routes share one application-wide runtime, one release build, one
 verification report, and one real-host artifact fingerprint. Real pages are
 the primary navigation structure. Swiper is deliberately kept inside Lab as a
 control test rather than used as a substitute for routing.
 The configured `src/app` owns shared count and request domains. Home and Details
-bind their projections while keeping local state; all four page factories take
+bind their projections while keeping local state; all seven page factories take
 the application's `Deps`. App HTTP survives page unload, and Clear invalidates
 an obsolete response through a business epoch.
+
+The first four routes are native bottom tabs; the original Home, Lab and Details
+remain non-tab routes. Tab switching causes Hide/Show and preserves local state;
+it cannot substitute for RedirectTo, true Unload or two instances of Lab. Top
+layout uses synchronous window/safe-area/capsule metrics before the first
+business tree, with resize and Show entering the existing transaction queue.
 
 ## Independent UI fixture
 
@@ -29,7 +38,7 @@ fingerprint and local host evidence are independent of Conformance. Both
 fixtures must pass when the shared core host or UI release is changed; one
 application's evidence cannot authorize the other.
 The UI fixture keeps the no-application entry path and no-argument factories;
-like the core fixture, its source configuration requires schema `10`.
+like the core fixture, its source configuration requires schema `11`.
 
 ## Initializer template
 
@@ -37,13 +46,13 @@ like the core fixture, its source configuration requires schema `10`.
 and Details pages and demonstrates the normal application model without
 conformance-only capabilities. It is generated and built in a temporary app by
 the generator suite; it is not a second committed release fixture.
-The initializer emits current schema `10` and a core dependency, without an
+The initializer emits current schema `11` and a core dependency, without an
 implicit `application` entry or UI dependency.
 
 The fixture and generated starter must pass:
 
 - warning-free JS-target compilation and tests
-- App Contract v10 / runtime ABI v12 / renderer protocol v8 validation
+- App Contract v11 / runtime ABI v13 / renderer protocol v8 validation
 - one application-wide runtime/shared host pair with page-aware dispatch
 - deterministic release generation and embedded-template drift checks
 - generated JavaScript parsing and Page Definition API registration

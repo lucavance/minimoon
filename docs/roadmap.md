@@ -1,5 +1,19 @@
 # Roadmap
 
+## Native navigation and Conformance presentation
+
+The unpublished core `0.2.0` / UI `0.1.0` iteration adds native bottom tabs,
+typed tab navigation, read-only window/safe-area/capsule layout and PNG build
+resources. Conformance presents 首页 / 交互 / 能力 / 应用, retaining Home, Lab
+and Details as real secondary routes for input, unload and instance-isolation
+acceptance. It remains one core fixture, not seven independent applications.
+See [native navigation and layout](guides/native_navigation.md).
+
+The shared host changes require fresh exact-fingerprint acceptance for both
+core and UI. Custom TabBar, badges, dynamic navigation colors and new public UI
+components are outside this iteration. Product versions remain unpublished;
+Contract 11 and runtime ABI 13 do not change renderer protocol 8.
+
 ## HTTP and application state
 
 The current ergonomics revision keeps Rabbita-style ordinary component
@@ -9,7 +23,7 @@ construction, explicit compile previews execute no commands, and the first
 Load renders revision 1 before later host work. App-aware tests cover shared
 queues and independent page disposal. See [API ergonomics](guides/api_ergonomics.md)
 and [typed HTTP](guides/http.md). The current technical boundaries are Contract
-`10`, runtime ABI `12`, and renderer protocol `8`; source schemas from previous
+`11`, runtime ABI `13`, and renderer protocol `8`; source schemas from previous
 iterations require migration rather than compatibility fallbacks.
 
 The current HTTP iteration adds typed methods, query/header/body encoding,
@@ -92,7 +106,7 @@ components and 3 feedback components.
 
 The independent `lampclaw/minimoon_ui` module has default, headless, theme and
 build-resource packages. Core 0.2 provides missing native controls and measurement.
-The current App Contract v10, runtime ABI v12 and renderer protocol v8 include
+The current App Contract v11, runtime ABI v13 and renderer protocol v8 include
 application ownership while preserving the CommonJS host boundary.
 Old components and minimal themes remain compatible; the starter does not gain
 an implicit UI dependency.

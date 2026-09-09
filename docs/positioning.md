@@ -44,7 +44,7 @@ is a read-only incremental value; mutable signals are not public.
 - optional packages: normalized-tree testing, headless interactive components,
   additive input-driven content slots, and versioned `minimal-v1` /
   `minimal-v2` styles
-- host target: WeChat MiniApp Skyline and App Contract v10
+- host target: WeChat MiniApp Skyline and App Contract v11
 - generated module format: CommonJS
 
 The author-facing `(Val, Emit)` shape is influenced by Rabbita, but Minimoon

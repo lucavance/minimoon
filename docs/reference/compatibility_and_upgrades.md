@@ -22,8 +22,8 @@ Generated applications have three versioned boundaries:
 
 | Boundary | Current version | Rule |
 | --- | ---: | --- |
-| App Contract | 10 | requires schema 10 with or without `application`; older source schemas require migration |
-| runtime ABI | 12 | runtime and host files must be generated together |
+| App Contract | 11 | requires schema 11 with or without `application`; older source schemas require migration |
+| runtime ABI | 13 | runtime and host files must be generated together |
 | renderer protocol | 8 | renderer commands and host decoder must match |
 
 Generated files from different builds or versions must never be mixed. CommonJS
@@ -113,12 +113,12 @@ compatibility gate against the current core. The maintained consumer targets
 the current 0.2 API; migrate source calls and exhaustive enum matches before
 rebuilding.
 
-Upgrade an application contract's `schemaVersion` to `10` and regenerate the
+Upgrade an application contract's `schemaVersion` to `11` and regenerate the
 entire output. Both schema `8` and `9` are rejected, including no-App projects.
 The optional application package exports `Deps` and `program() -> App[Deps]`;
 all opted-in page factories receive those dependencies. `PageContext` is opaque.
 See [shared-state migration](../guides/shared_state.md). Do not mix old renderer
-output with current host files; runtime ABI is `12`, renderer protocol stays `8`.
+output with current host files; runtime ABI is `13`, renderer protocol stays `8`.
 
 `page_with_input` now requires `preview_input: () -> Input`; its builder receives
 an ordinary immutable input, not `Val[Input]`. The actual decoder runs before

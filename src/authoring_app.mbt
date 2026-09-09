@@ -62,8 +62,9 @@ pub fn[Deps] AppRuntime::create_page(
   self : AppRuntime[Deps],
   page : Page,
   input? : Map[String, String] = Map([]),
+  layout? : PageLayout = PageLayout::unavailable(),
 ) -> Result[PageRuntime, DecodeError] {
-  self.driver.owner.with_pages(() => page.create_runtime(input~))
+  self.driver.owner.with_pages(() => page.create_runtime(input~, layout~))
 }
 
 ///|

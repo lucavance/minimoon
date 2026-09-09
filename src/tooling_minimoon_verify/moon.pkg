@@ -1,5 +1,6 @@
 import {
   "lampclaw/minimoon/internal_host_js" @host_js,
+  "lampclaw/minimoon/internal_png" @png,
   "lampclaw/minimoon/internal_versions" @versions,
   "moonbitlang/async/fs",
   "moonbitlang/async/process",

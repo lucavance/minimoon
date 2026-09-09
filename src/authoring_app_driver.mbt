@@ -98,6 +98,7 @@ fn collect_app_commands(
       )
     @val.CmdNavigateTo(_)
     | @val.CmdRedirectTo(_)
+    | @val.CmdSwitchTab(_)
     | @val.CmdNavigateBack(_)
     | @val.CmdNavigateBackOrRedirect(_, _) =>
       output.val.push(

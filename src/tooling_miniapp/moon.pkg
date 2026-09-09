@@ -1,10 +1,12 @@
 import {
   "lampclaw/minimoon/internal_host_js" @host_js,
+  "lampclaw/minimoon/internal_png" @png,
   "lampclaw/minimoon/internal_versions" @versions,
   "lampclaw/minimoon/renderer_miniapp" @renderer,
   "moonbitlang/async/fs",
   "moonbitlang/async/process",
   "moonbitlang/core/encoding/utf8",
+  "moonbitlang/core/encoding/base64",
   "moonbitlang/core/json",
   "moonbitlang/x/path",
 }

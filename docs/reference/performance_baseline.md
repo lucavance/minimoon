@@ -14,9 +14,9 @@ has a `minimoon.app.js` entry helper.
 | Artifact | Ceiling |
 | --- | ---: |
 | Conformance application runtime | 400,000 bytes |
-| generated starter runtime | 220,000 bytes |
-| App-enabled shared host | 16,000 bytes |
-| no-App shared host (including starter) | 15,000 bytes |
+| generated starter runtime | 230,000 bytes |
+| App-enabled shared host | 19,000 bytes |
+| no-App shared host (including starter) | 18,000 bytes |
 | shared protocol | 10,000 bytes |
 | compact initial trees | 41,000 bytes |
 | each page JavaScript bridge | 2,048 bytes |
@@ -31,42 +31,132 @@ all page bridges, and `minimoon.app.js` when application ownership is enabled:
 | Application | Ceiling |
 | --- | ---: |
 | committed Conformance fixture | 453,000 bytes |
-| generated starter | 247,000 bytes |
+| generated starter | 258,000 bytes |
 
-Release generation minifies the host and runtime syntax. The 2026-09-08
-authoring calibration uses `moon 0.1.20260907`, `moonc v0.10.12`, Node
+Release generation minifies the host and runtime syntax. For historical
+comparison, the earlier 2026-09-08 authoring calibration used
+`moon 0.1.20260907`, `moonc v0.10.12`, Node
 24.20.0, and Bun 1.4.2. Its Conformance release measures 387,977 runtime bytes,
 15,624 host bytes, 9,492 protocol bytes, 303 initial-tree bytes, and 418,121
 aggregate JavaScript bytes, including the 3,464-byte application helper.
-Remaining headroom is respectively 12,023, 376, 508, 40,697, and 34,879 bytes.
+Against that review's ceilings, headroom was respectively 12,023, 376, 508,
+40,697, and 34,879 bytes.
+
+## Approved native navigation and layout budget review
+
+The 2026-09-08 independent review compares committed `12c0e8a` with the native
+TabBar, page-layout and binary-resource implementation. The committed baseline
+was extracted into an isolated directory and repackaged with local
+`moon 0.1.20260907` and `moonc v0.10.12+1634b282e`, using frozen dependencies.
+This avoids ancestor package exclusions and does not alter the working checkout.
+
+The no-App/App shared hosts grow from 14,976/15,624 to 17,501/18,276 bytes.
+Their approved fixed ceilings are 18,000/19,000 bytes, leaving 499/724 bytes.
+The common 2,525-byte increase covers synchronous layout sampling and
+validation, ordered Load/Show/Resize updates, and Tab route/capability guards.
+The Conformance host adds another 127 bytes for its four Tab route literals.
+No general-purpose JavaScript runtime or application business logic is added
+to the shared host.
+
+The baseline core ZIP measures 288,689 bytes and the reviewed pre-documentation
+candidate measures 304,861 bytes: an increase of 16,172 bytes. The compressed
+entry ledger attributes that increase as follows:
+
+| Source | Compressed-byte increase |
+| --- | ---: |
+| Build/verify tooling and PNG validation | 5,610 |
+| Documentation and metadata | 4,742 |
+| Framework and public API | 2,932 |
+| Host templates | 1,237 |
+| Public testing harness | 257 |
+| ZIP directory overhead | 1,394 |
+| Total | 16,172 |
+
+The archive grows from 154 to 164 entries. Inspection found no fixture, UI,
+PNG/SVG asset, generated application, test/benchmark or repository-validator
+payload. The public testing harness is intentionally packaged; its test files
+are not. The implementation explicitly registers the framework's `internal_png`
+package and native-navigation guide in the allowlist. The budget adjustment
+itself does not expand the allowlist or change package exclusions.
+
+The approved core hard ceiling is 320 KiB (327,680 bytes), with the existing
+8 KiB (8,192-byte) reserve and a 319,488-byte operating ceiling. The reviewed
+sample leaves 14,627 operating bytes. These fixed repository budgets do not
+auto-scale and are not registry service limits. The final archive is measured
+again after documentation changes; the values above record the original audit.
+
+The final local candidate calibration, after the disk-host Tab verifier,
+documentation updates and layout optimization, measures 308,037 core ZIP bytes
+(19,348 above `12c0e8a`), leaving 11,451 bytes below the operating ceiling.
+Conformance measures 396,064 runtime bytes, 429,904 aggregate JavaScript bytes
+and 7,456 WXSS bytes. Its unchanged runtime/aggregate ceilings retain
+3,936/23,096 bytes of headroom. UI's independently packaged archive measures
+115,320 bytes; no UI archive threshold changes.
+
+Conformance runtime/aggregate ceilings remain 400,000/453,000 bytes. Protocol,
+initial-tree, WXML/WXSS, UI archive, coverage, scheduler and timing ceilings
+are unchanged. The no-App host ceiling also applies to the starter; its
+runtime/aggregate ceilings receive the separate follow-up review below.
+One byte over any applicable ceiling still fails.
+Constants and inclusive-boundary tests remain in
+[`budgets.mbt`](../../src/cmd/minimoon_check/budgets.mbt) and its white-box tests.
+
+### Independent starter follow-up review
+
+The native navigation/layout review also checks the generated starter
+independently, without linking PNG tooling or UI into its runtime and without
+adding an opt-in switch. Its measured release sizes are:
+
+| Stage | Runtime bytes | Aggregate JavaScript bytes |
+| --- | ---: | ---: |
+| Committed baseline | 218,755 | 243,991 |
+| Initial native navigation/layout implementation | 227,161 | 254,922 |
+| After minimal graph optimization | 226,205 | 253,966 |
+
+Reusing the graph input and removing unnecessary `Option` boxing recovers
+956 runtime bytes, also reducing aggregate JavaScript by 956 bytes. The net
+increase over the baseline is 7,450 runtime bytes and 9,975 aggregate bytes:
+the additional 2,525 bytes are the shared host increase; other JavaScript
+artifacts are unchanged. This is framework layout/navigation support, not
+accidental PNG or UI linkage.
+
+The independently approved fixed starter runtime/aggregate ceilings are
+230,000/258,000 bytes, replacing 220,000/247,000 and leaving 3,795/4,034 bytes
+of measured headroom. This follow-up supersedes the initial review's intent
+to leave starter runtime/aggregate ceilings unchanged. It does not change any
+other ceiling or auto-scale with future builds. Both constants and their exact
+inclusive-boundary tests are centralized in `budgets.mbt` and its white-box
+tests; generator failures report the measured size and applicable limit.
 
 ## Approved authoring budget review
+
+This historical review preceded the native navigation and layout ceilings above.
 
 The comparison baseline is commit `7a57802`: runtime 373,090 bytes, aggregate
 JavaScript 442,997 bytes, and core archive 272,346 bytes. Real-input creation,
 App-aware testing, typed HTTP and the migrated fixtures add 14,887 runtime
 bytes while empty host boot trees reduce aggregate JavaScript by 24,876 bytes.
-The approved fixed runtime ceiling is 400,000 bytes; the aggregate ceiling
-remains 453,000 bytes. Shared cleanup keeps no-App/App host bytes at
-14,976/15,624, within the unchanged 15,000/16,000-byte ceilings.
+The approved fixed runtime ceiling was 400,000 bytes; the aggregate ceiling
+remained 453,000 bytes. Shared cleanup kept no-App/App host bytes at
+14,976/15,624, within the then-unchanged 15,000/16,000-byte ceilings.
 
-The pre-review core archive is 288,166 bytes, up 15,820 bytes. The approved
-core hard ceiling is 300 KiB (307,200 bytes), retaining the 8 KiB reserve;
-the operating ceiling is 299,008 bytes. The calibration sample leaves 10,842
+The pre-review core archive was 288,166 bytes, up 15,820 bytes. The then-approved
+core hard ceiling was 300 KiB (307,200 bytes), retaining the 8 KiB reserve;
+the operating ceiling was 299,008 bytes. The calibration sample left 10,842
 operating bytes, but the archive gate remeasures after documentation changes.
 UI retains its independent 250 KiB hard ceiling, 16 KiB reserve and
 239,616-byte operating ceiling; its isolated package measures 115,296 bytes.
 These are repository budgets, not registry service limits.
 
 No aggregate-JavaScript, starter, host, protocol, UI, coverage, scheduler or
-timing gate is relaxed. Package allowlists and exclusions are unchanged by
-this budget review. The constants and inclusive one-byte boundary tests live
+timing gate was relaxed by that authoring review. Package allowlists and
+exclusions were unchanged. The constants and inclusive one-byte boundary tests live
 in [`budgets.mbt`](../../src/cmd/minimoon_check/budgets.mbt) and its white-box
 tests; further increases require another explicit review.
 
 ## Approved application-state budget review
 
-This historical review preceded the current authoring ceilings above. Its
+This historical review preceded the authoring ceilings above. Its
 calibration used `moon 0.1.20260827` / `moonc v0.10.11` and measured 373,090
 runtime bytes, 15,499 App host bytes, 40,204 initial-tree bytes and 442,997
 aggregate JavaScript bytes. The then-current 383,000-byte runtime ceiling

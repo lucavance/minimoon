@@ -7,7 +7,11 @@ import {
 }
 
 // Values
+pub fn capabilities() -> Array[@minimoon.Capability]
+
 pub fn program(@app.Deps) -> @minimoon.Page
+
+pub fn scene(@minimoon.PageContext, String, @app.Deps, concise? : Bool) -> @minimoon.Val[@minimoon.Node]
 
 // Errors
 
@@ -25,6 +29,7 @@ pub struct Model {
   request_code : String
   request_case : Int
   request_base : String
+  response_open : Bool
   toast_status : String
   location : String
   media : String
@@ -48,6 +53,7 @@ pub enum Msg {
   LoadRequest
   RequestCase(Int)
   RequestBase(String)
+  ToggleResponse
   RequestLoaded(Int, String)
   RequestFailed(String)
   ShowToast

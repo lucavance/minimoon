@@ -1,7 +1,9 @@
 ///|
 fn safe_resource_asset(path : String) -> Bool {
   if !path.has_prefix("assets/") ||
-    !(path.has_suffix(".svg") || path.has_suffix(".txt")) {
+    !(path.has_suffix(".svg") ||
+    path.has_suffix(".txt") ||
+    path.has_suffix(".png")) {
     return false
   }
   for segment in path.split("/") {
@@ -48,6 +50,11 @@ async fn resource_assets_status(app_root : String, manifest : Json) -> Json {
               errors.push(
                 "declared resource asset must be a regular file: " + path,
               )
+            } else if path.has_suffix(".png") {
+              let bytes = @fs.read_file(file).binary()
+              if @png.dimensions(bytes) is None {
+                errors.push("invalid declared PNG resource: " + path)
+              }
             }
           }
         }

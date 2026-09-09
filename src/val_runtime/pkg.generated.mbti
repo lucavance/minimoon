@@ -53,6 +53,8 @@ pub fn redirect_to(String) -> Cmd
 
 pub fn sub_batch(Array[Sub]) -> Sub
 
+pub fn switch_tab(String) -> Cmd
+
 // Errors
 
 // Types and methods
@@ -89,6 +91,7 @@ pub(all) enum Cmd {
   CmdHostEffect(String, String, (HostOutcome) -> Cmd)
   CmdNavigateTo(String)
   CmdRedirectTo(String)
+  CmdSwitchTab(String)
   CmdNavigateBack(Int)
   CmdNavigateBackOrRedirect(Int, String)
 }

@@ -9,7 +9,7 @@ test "application generation imports typed deps and exports the separate owner l
   let source = app_runtime_package_source(pages, contracts, application~)
   assert_true(source.contains("@application.start()"))
   assert_true(source.contains("@page0.program(application.deps())"))
-  assert_true(source.contains("application.create_page(page, input~)"))
+  assert_true(source.contains("application.create_page(page, input~, layout~)"))
   assert_true(
     source.contains("Ref[@minimoon.AppRuntime[@application.Deps]?] = Ref(None)"),
   )
@@ -33,7 +33,7 @@ async test "optional application config validates paths entry names and the sche
     write(join(root, "src/pages/home/moon.pkg"), "supported_targets = \"js\"\n")
     let config = join(root, "miniapp.minimoon.json")
     let fields : Map[String, Json] = {
-      "schemaVersion": Json::number(10.0),
+      "schemaVersion": Json::number(11.0),
       "name": Json::string("test_app"),
       "pages": Json::array([
         Json::object({ "package": Json::string("src/pages/home") }),
@@ -90,7 +90,7 @@ async test "optional application config validates paths entry names and the sche
       _ => true
     }
     assert_true(failed_old_app_schema)
-    fields["schemaVersion"] = Json::number(10.0)
+    fields["schemaVersion"] = Json::number(11.0)
     write(config, Json::object(fields).stringify(indent=2))
     ignore(load_config_document(config))
   }

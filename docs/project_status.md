@@ -7,6 +7,12 @@ generated reports define candidate readiness.
 
 ## Current implementation
 
+Conformance now has four native primary tabs (首页 / 交互 / 能力 / 应用) and
+three secondary acceptance routes. Native tab commands, read-only page layout
+and PNG build assets support the deep-blue custom header without handwritten
+host JavaScript or a new UI dependency. These changes require fresh real-host
+acceptance; automated candidates do not establish visual or device correctness.
+
 The HTTP work adds methods, query/header/body encoding and timeouts. Home has ten public-API scenarios;
 `bun run check:http-live` is opt-in and is not real-host evidence. Both fixtures
 need matching Skyline revalidation after shared host bytes change.
@@ -15,7 +21,7 @@ The shared-state source iteration adds optional `App[Deps]`, typed domain
 machines, page-local `Shared[T]` projections, and independent application
 effects/lifecycle. Home and Details demonstrate shared count, request ownership
 and epoch-based response invalidation. The UI showcase and starter retain the
-no-application entry path. Contract `10` and runtime ABI `12` replace the earlier
+no-application entry path. Contract `11` and runtime ABI `13` replace the earlier
 technical boundaries; renderer protocol `8` and product versions are unchanged.
 This source iteration is not a publication claim. See
 [shared-state guide](guides/shared_state.md) for acceptance requirements.
@@ -31,11 +37,11 @@ Application code imports `lampclaw/minimoon`, plus `lampclaw/minimoon_ui`
 when opting into native UI components. Elm-style state machines
 compose pages and local components through `Val`; a page-owned transactional
 incremental graph drives normalized MiniApp tree diffs and generated CommonJS
-Skyline artifacts. App Contract v10, runtime ABI v12, and renderer protocol v8
+Skyline artifacts. App Contract v11, runtime ABI v13, and renderer protocol v8
 remain independent technical compatibility numbers.
 
 The maintained release surface consists of one two-page starter and one
-four-page Conformance application covering authoring, native controls,
+seven-route Conformance application covering authoring, native controls,
 components, capabilities, navigation, lifecycle, incremental rendering,
 ordered host scheduling, and disposal.
 

@@ -6,7 +6,7 @@ The repository has two independent real-host fixtures:
 
 | Fixture | Scope | CI artifact |
 | --- | --- | --- |
-| `examples/miniapp_conformance_app` | Core, four pages | `minimoon-devtools-<commit>` |
+| `examples/miniapp_conformance_app` | Core, seven routes / four native tabs | `minimoon-devtools-<commit>` |
 | `ui/examples/showcase` | UI, six pages | `minimoon-ui-devtools-<commit>` |
 
 Each tracked `generated/verify_report.json` records reproducible candidate status.
@@ -68,6 +68,28 @@ runbook before recording evidence.
 
 ## Core interaction checklist
 
+Native navigation and top layout (all seven routes):
+
+- Cold launch opens 首页; the first business tree avoids the capsule and status
+  bar. White status text has a deep-blue background even during empty boot.
+- Bottom native tabs are 首页 / 交互 / 能力 / 应用, in that order, with four
+  distinct line icons and selected states. Switch between them repeatedly;
+  page-local state survives Hide/Show and revisiting does not run Load/init again.
+- 首页 retains entries into the original Home, Lab and Details secondary pages.
+  These routes have real unload/back behavior; tab switching is not a substitute
+  for the HTTP cancellation or same-route multi-instance checks below.
+- On iOS and Android, check normal and notched screens, a short window and an
+  open keyboard: no overlap with capsule/status bar, clipped text, horizontal
+  overflow or doubled bottom safe-area space. The native TabBar owns its height.
+- Resize and background/foreground update header geometry and shared projections
+  without a second stale intermediate business tree. Missing platform metrics
+  use a conservative fallback; a later read failure retains valid prior metrics.
+- 能力 retains the ten public HTTP scenarios. 应用 displays shared count/request
+  and typed draft echo; page-local edits remain independent from secondary Home.
+- Capture the four primary pages plus representative loading/error states in
+  the local acceptance notes. Screenshots and mock-host tests are not a substitute
+  for completing all affected interactions with a clean console.
+
 Application-owned shared state (Home and Details):
 
 - Tap `Shared +1` on Home, open Details and increment again, then return. Both
@@ -85,7 +107,7 @@ Application-owned shared state (Home and Details):
 
 Showcase:
 
-- the application opens on Minimoon Studio with a readable bilingual Hero and
+- the application opens on 首页 with a readable Chinese-first Minimoon Hero and
   no horizontal overflow
 - increment and reset update only the live-state card; returning to Showcase
   increments its page-visit state
@@ -122,7 +144,8 @@ Home:
   domain registration or account readiness. No private AppID belongs in Git.
 - show/hide state follows page navigation
 - NavigateTo opens Lab and Details; RedirectTo replaces Home with Details
-- Back returns to Showcase; direct Home entry redirects to Showcase as fallback
+- Back returns through the stack; direct Home entry switches to the Showcase tab
+  as fallback, never redirects to a tab route
 
 Lab:
 
@@ -234,7 +257,7 @@ minimoon devtools record examples/miniapp_conformance_app \
   --status passed \
   --recorded-at <actual-timestamp> \
   --tool-version "<actual-version>" \
-  --notes "exact four-page release checklist passed"
+  --notes "exact seven-route release checklist passed"
 minimoon verify examples/miniapp_conformance_app --release
 minimoon devtools record ui/examples/showcase \
   --status passed \

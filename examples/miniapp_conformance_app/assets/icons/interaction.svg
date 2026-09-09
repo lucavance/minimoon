@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#6A778B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Original Minimoon fixture icon, Apache-2.0. -->
+  <polyline points="14,24 56,24 45,13"/>
+  <polyline points="58,48 16,48 27,59"/>
+  <circle cx="21" cy="24" r="5" fill="#F4F6FA"/>
+  <circle cx="51" cy="48" r="5" fill="#F4F6FA"/>
+</svg>

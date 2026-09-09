@@ -346,6 +346,18 @@ async fn load_config_document(config_file : String) -> ConfigDocument {
           )
       }
       validate_application_config(fields, config_file, spans, issues)
+      for issue in tab_bar_config_issues(value) {
+        issues.push(
+          issue_at(
+            "MMN1011",
+            issue.1,
+            config_file,
+            issue.0,
+            "Declare 2-5 distinct native Tab pages and safe resource-backed PNG icons.",
+            spans,
+          ),
+        )
+      }
       match fields.get("name") {
         Some(String(name)) if name != "" => ()
         Some(_) =>

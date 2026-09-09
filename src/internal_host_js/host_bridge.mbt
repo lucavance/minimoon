@@ -1,8 +1,12 @@
 ///|
-pub fn shared_host_bridge(application? : Bool = false) -> String {
+pub fn shared_host_bridge(
+  application? : Bool = false,
+  tab_routes? : Array[String] = [],
+) -> String {
   let source =
     #|const { exactKeys, validateNode, applyPatch, createRendererStats, eventDispatchers, eventPayload, touchIdentity, validMeasurementPayload, validRequestPayload, measurementNodes } = require("./minimoon.protocol.js")
     #|/* application */const applicationPages = new Map()
+    #|const minimoonTabRoutes = new Set(__MM_TAB_ROUTES__)
     #|function registerMinimoonPage(runtime, minimoonPageId, minimoonInitialTree, minimoonCapabilityList) {
     #|if (runtime.minimoon_runtime_version() !== __MM_RUNTIME_VERSION__ || runtime.minimoon_runtime_state_abi_version() !== __MM_RUNTIME_VERSION__) throw new Error("Minimoon runtime ABI v__MM_RUNTIME_VERSION__ required")
     #|const minimoonCapabilities = new Set(minimoonCapabilityList)
@@ -27,6 +31,8 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|    this._at = null
     #|    this._pr = null
     #|    this._cr = null
+    #|    this._ly = readMinimoonLayout(null)
+    #|    this._shown = false
     #|    this.__mmInstanceId = null
     #|    const hadRuntimeWake = Object.prototype.hasOwnProperty.call(globalThis, "__minimoonRuntimeWakeV12")
     #|    const previousRuntimeWake = globalThis.__minimoonRuntimeWakeV12
@@ -36,7 +42,7 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|    globalThis.__minimoonRuntimeWakeV12 = (through) => this._aw(wakeGeneration, through)
     #|/* application */    globalThis.__minimoonSharedWakeV12 = () => { if (sharedScheduled) return; sharedScheduled = true; Promise.resolve().then(() => { sharedScheduled = false; if (this._gn === wakeGeneration) this._en({ kind: "shared" }) }) }
     #|    try {
-    #|      const created = JSON.parse(runtime.minimoon_runtime_create_app(minimoonPageId, JSON.stringify(options || {})))
+    #|      const created = JSON.parse(runtime.minimoon_runtime_create_app(minimoonPageId, JSON.stringify(options || {}), JSON.stringify(this._ly)))
     #|      if (!created || created.ok !== true || typeof created.id !== "string" || !created.id) {
     #|        this._fc("page_input_decode_failed", created && created.error)
     #|        return
@@ -48,8 +54,18 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|    this._en({ kind: "lifecycle", hook: "onLoad", payload: options || {} })
     #|  },
     #|  onReady() { this._en({ kind: "mount" }) },
-    #|  onShow() { this._lc("onShow", {}) },
+    #|  onShow() {
+    #|    if (this._cl || !this.__mmInstanceId) return
+    #|    if (this._shown) this._ly = readMinimoonLayout(this._ly)
+    #|    this._shown = true
+    #|    this._en({ kind: "lifecycle", hook: "onShow", layout: this._ly })
+    #|  },
     #|  onHide() { this._lc("onHide", {}) },
+    #|  onResize() {
+    #|    if (this._cl || !this.__mmInstanceId) return
+    #|    this._ly = readMinimoonLayout(this._ly)
+    #|    this._en({ kind: "layout", layout: this._ly })
+    #|  },
     #|  onPullDownRefresh() { this._lc("onPullDownRefresh", {}) },
     #|  onReachBottom() { this._lc("onReachBottom", {}) },
     #|  onUnload() {
@@ -102,6 +118,7 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|  },
     #|  _en(entry) {
     #|    if (this._cl || !this.__mmInstanceId) return
+    #|    if (entry.kind === "layout" && this._q.length && this._q[this._q.length - 1].kind === "layout") { this._q[this._q.length - 1] = entry; return }
     #|/* application */    if (entry.kind === "shared" && this._q.length && this._q[this._q.length - 1].kind === "shared") return
     #|    this._q.push(entry)
     #|    this._mq()
@@ -133,7 +150,8 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|    let raw
     #|    try {
     #|      if (entry.kind === "dispatch") { this._st.eventBatches += 1; raw = runtime.minimoon_runtime_dispatch_batch(this.__mmInstanceId, JSON.stringify(entry.events.map(event => ({ key: event.key, payload: event.payload })))) }
-    #|      else if (entry.kind === "lifecycle") raw = runtime.minimoon_runtime_lifecycle(this.__mmInstanceId, entry.hook, JSON.stringify(entry.payload || {}))
+    #|      else if (entry.kind === "lifecycle") raw = entry.hook === "onShow" ? runtime.minimoon_runtime_lifecycle(this.__mmInstanceId, "$minimoon:layout-show", JSON.stringify(entry.layout)) : runtime.minimoon_runtime_lifecycle(this.__mmInstanceId, entry.hook, JSON.stringify(entry.payload || {}))
+    #|      else if (entry.kind === "layout") raw = runtime.minimoon_runtime_update_layout(this.__mmInstanceId, JSON.stringify(entry.layout))
     #|      else if (entry.kind === "mount") raw = runtime.minimoon_runtime_mount(this.__mmInstanceId)
     #|/* application */      else if (entry.kind === "shared") raw = runtime.minimoon_runtime_lifecycle(this.__mmInstanceId, "$minimoon:shared", "{}")
     #|      else if (entry.kind === "subscription") raw = runtime.minimoon_runtime_subscription(this.__mmInstanceId, entry.key, "{}")
@@ -290,6 +308,7 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|    if (command.type === "InvokeCapability") { this._iv(command); return }
     #|    if (command.type === "NavigateTo") { this._nv("wx.navigateTo", { url: command.url }); return }
     #|    if (command.type === "RedirectTo") { this._nv("wx.redirectTo", { url: command.url }); return }
+    #|    if (command.type === "SwitchTab") { if (!exactKeys(command, ["type", "url"])) { console.error("[minimoon] invalid SwitchTab command"); return }; this._nv("wx.switchTab", { url: command.url }); return }
     #|    if (command.type === "NavigateBack") {
     #|      if (!exactKeys(command, ["type", "delta"]) || !Number.isInteger(command.delta) || command.delta < 1) { console.error("[minimoon] invalid NavigateBack command"); return }
     #|      this._nv("wx.navigateBack", { delta: command.delta }); return
@@ -297,7 +316,7 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|    if (command.type === "NavigateBackOrRedirect") {
     #|      if (!exactKeys(command, ["type", "delta", "fallback"]) || !Number.isInteger(command.delta) || command.delta < 1 || typeof command.fallback !== "string" || !command.fallback) { console.error("[minimoon] invalid NavigateBackOrRedirect command"); return }
     #|      const pages = typeof getCurrentPages === "function" ? getCurrentPages() : []
-    #|      if (pages.length > command.delta) this._nv("wx.navigateBack", { delta: command.delta }); else this._nv("wx.redirectTo", { url: command.fallback }); return
+    #|      if (pages.length > command.delta) this._nv("wx.navigateBack", { delta: command.delta }); else this._nv(minimoonTabRoutes.has(command.fallback.split("?")[0]) ? "wx.switchTab" : "wx.redirectTo", { url: command.fallback }); return
     #|    }
     #|    if (command.type === "StartSubscription") { this._ss(command); return }
     #|    if (command.type === "StopSubscription") { this._xs(command); return }
@@ -322,6 +341,12 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
     #|    const cancel = this._ef.get(command.request_id); if (cancel) { this._ef.delete(command.request_id); try { cancel() } catch (_) {}; this._st.effectCancellations += 1 }
     #|  },
     #|  _nv(capability, options) {
+    #|    if (capability !== "wx.navigateBack") {
+    #|      const url = options.url
+    #|      if (typeof url !== "string" || !/^\/[a-zA-Z0-9_/-]+(?:\?[^#]*)?$/.test(url) || url.includes("//") || url.endsWith("/")) { console.error("[minimoon] invalid navigation route"); return }
+    #|      const tab = minimoonTabRoutes.has(url.split("?")[0])
+    #|      if (capability === "wx.switchTab" ? (!tab || url.includes("?")) : tab) { console.error("[minimoon] navigation route kind mismatch"); return }
+    #|    }
     #|    if (!minimoonCapabilities.has(capability)) { console.error(`[minimoon] undeclared capability: ${capability}`); return }
     #|    const method = capability.slice(3)
     #|    if (typeof wx === "undefined" || typeof wx[method] !== "function") { console.error(`[minimoon] unavailable capability: ${capability}`); return }
@@ -374,7 +399,11 @@ pub fn shared_host_bridge(application? : Bool = false) -> String {
         ""
       },
     )
-  (source + "\n" + host_effect_invoker())
+  (source + "\n" + host_effect_invoker() + "\n" + host_layout_reader())
+  .replace_all(
+    old="__MM_TAB_ROUTES__",
+    new=Json::array(tab_routes.map(Json::string)).stringify(),
+  )
   .replace_all(
     old="__MM_RUNTIME_VERSION__",
     new=@versions.runtime_api_version().to_string(),

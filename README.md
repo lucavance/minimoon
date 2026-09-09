@@ -3,7 +3,7 @@
 [中文文档](README.zh-CN.md) · [Documentation](docs/README.md) · [Bilingual code analysis](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)
 
 Minimoon is MoonBit for WeChat MiniApp Skyline. Version `0.2.0` combines an
-Rabbita-style component composition and Elm-style state machines with App Contract v10, runtime ABI v12, renderer protocol
+Rabbita-style component composition and Elm-style state machines with App Contract v11, runtime ABI v13, renderer protocol
 v8, and a CommonJS MiniApp host boundary.
 
 ```text
@@ -182,12 +182,12 @@ See [shared-state setup and acceptance](docs/guides/shared_state.md).
 
 ## MiniApp boundary
 
-Configuration uses App Contract v10. `componentTheme` is optional; omitting it
+Configuration uses App Contract v11. `componentTheme` is optional; omitting it
 adds no built-in component CSS:
 
 ```json
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "name": "my_app",
   "componentTheme": "minimal-v2",
   "pages": [
@@ -200,6 +200,13 @@ adds no built-in component CSS:
 `devtoolsChecks` may optionally declare ordered, application-specific manual
 checks. They are appended to `generated/smoke_checklist.json` and travel with
 the CI Developer Tools handoff.
+
+Optional native bottom `tabBar` configuration references listed page packages;
+`switch_tab(Route)` requires `SwitchTab` and a query-free tab route.
+`PageContext.layout()` provides read-only window, safe-area and capsule metrics
+before the first business tree. Build resources support text and PNG bytes.
+See [native tabs and layout](docs/guides/native_navigation.md). Conformance uses
+four tabs (首页 / 交互 / 能力 / 应用) and retains three secondary acceptance routes.
 
 Generated applications contain one `minimoon.runtime.js`, one
 `minimoon.host.js`, one `minimoon.protocol.js`, one compact
@@ -221,7 +228,7 @@ page scheduler instead of accepting uncertain state. Queue depth, coalescing,
 acknowledgement latency, retry, timeout, and COW shadow-copy work are observable
 through renderer stats.
 
-Runtime ABI v12 also gives page-owned local async commands an ordered host wake
+Runtime ABI v13 also gives page-owned local async commands an ordered host wake
 path. Suspended `perform` and `attempt` work can drain their resulting commands
 without waiting for another tap or lifecycle entry. Disposal cancels owned
 delivery, and framework `delay` timers are physically cleared by the host.
@@ -280,14 +287,14 @@ leaves tracked reports in candidate state, even when local evidence exists.
 Coverage is the separate `check:coverage` gate shown above. For a
 local release decision, run `bun run check:all` followed by
 `bun run check:mvp`; both require current fingerprint-bound Developer Tools
-evidence for both the four-page core fixture and six-page UI showcase. Rerun
+evidence for both the seven-route core fixture and six-page UI showcase. Rerun
 `check:candidate` before publication and staging to restore public reports;
 require unchanged fingerprints and a clean source checkout. The
 [release runbook](docs/operations/release_candidate_handoff.md) defines the
 ordered core/UI publication and registry-only consumer checks.
 The repository archive gate uses `moon package --frozen --list`, then enforces
 the registry archive allowlist and independently reviewed hard ceilings:
-300 KiB for core with at least 8 KiB reserved, and 250 KiB for UI with at least
+320 KiB for core with at least 8 KiB reserved, and 250 KiB for UI with at least
 16 KiB reserved. These are repository budgets, not registry service limits.
 
 Repository checks use fresh run directories in `../.minimoon-check-tmp/`, on
@@ -320,11 +327,11 @@ src/
   internal_host_validation/ repository-only host/docs/perf validation
   testing/                optional normalized-tree test runtime
   components/             optional headless and styled components
-  tooling_miniapp/        App Contract v10 artifact generator
+  tooling_miniapp/        App Contract v11 artifact generator
   tooling_minimoon_*      build and verification pipeline
   cmd/minimoon/           native CLI and embedded starter
 examples/
-  miniapp_conformance_app/ core four-page real-host fixture
+  miniapp_conformance_app/ core seven-route/four-tab real-host fixture
 ui/                       independent native component module
   examples/showcase/      UI six-page real-host fixture
 ```

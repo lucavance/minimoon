@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "adapter": "page_program",
-  "runtimeApiVersion": 12,
+  "runtimeApiVersion": 13,
   "rendererProtocolVersion": 8,
   "rendererUpdateStrategy": "automatic-diff",
   "hostRegistration": "page-definition-api",
@@ -14,8 +14,9 @@
     "minimoon.initial.js"
   ],
   "application": null,
+  "tabBar": null,
   "runtimeBytes": {
-    "application": 558580
+    "application": 566035
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -75,8 +76,8 @@
   "name": "minimoon_ui_showcase",
   "pages": [
     {
-      "schemaVersion": 10,
-      "runtimeApiVersion": 12,
+      "schemaVersion": 11,
+      "runtimeApiVersion": 13,
       "rendererProtocolVersion": 8,
       "id": "ui_foundation",
       "route": "pages/foundation/foundation",
@@ -2847,8 +2848,8 @@
       "smokeInput": {}
     },
     {
-      "schemaVersion": 10,
-      "runtimeApiVersion": 12,
+      "schemaVersion": 11,
+      "runtimeApiVersion": 13,
       "rendererProtocolVersion": 8,
       "id": "ui_overlays",
       "route": "pages/overlays/overlays",
@@ -5103,8 +5104,8 @@
       "smokeInput": {}
     },
     {
-      "schemaVersion": 10,
-      "runtimeApiVersion": 12,
+      "schemaVersion": 11,
+      "runtimeApiVersion": 13,
       "rendererProtocolVersion": 8,
       "id": "ui_forms",
       "route": "pages/forms/forms",
@@ -7555,8 +7556,8 @@
       "smokeInput": {}
     },
     {
-      "schemaVersion": 10,
-      "runtimeApiVersion": 12,
+      "schemaVersion": 11,
+      "runtimeApiVersion": 13,
       "rendererProtocolVersion": 8,
       "id": "ui_data",
       "route": "pages/data/data",
@@ -14269,8 +14270,8 @@
       "smokeInput": {}
     },
     {
-      "schemaVersion": 10,
-      "runtimeApiVersion": 12,
+      "schemaVersion": 11,
+      "runtimeApiVersion": 13,
       "rendererProtocolVersion": 8,
       "id": "ui_layout",
       "route": "pages/layout/layout",
@@ -17107,8 +17108,8 @@
       "smokeInput": {}
     },
     {
-      "schemaVersion": 10,
-      "runtimeApiVersion": 12,
+      "schemaVersion": 11,
+      "runtimeApiVersion": 13,
       "rendererProtocolVersion": 8,
       "id": "ui_feedback",
       "route": "pages/feedback/feedback",

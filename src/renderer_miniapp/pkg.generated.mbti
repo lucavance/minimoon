@@ -110,6 +110,7 @@ pub enum MiniappCapability {
   RequestPayment
   NavigateTo
   RedirectTo
+  SwitchTab
   NavigateBack
   Custom(String)
 } derive(Eq)

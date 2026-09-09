@@ -40,8 +40,11 @@ fn validate_contract(contract : Json, package_path : String) -> Unit {
 }
 
 ///|
-fn shared_host_bridge(application? : Bool = false) -> String {
-  @host_js.shared_host_bridge(application~)
+fn shared_host_bridge(
+  application? : Bool = false,
+  tab_routes? : Array[String] = [],
+) -> String {
+  @host_js.shared_host_bridge(application~, tab_routes~)
 }
 
 ///|
@@ -101,8 +104,8 @@ fn page_bridge(
 }
 
 ///|
-fn app_json(routes : Array[String]) -> Json {
-  Json::object({
+fn app_json(routes : Array[String], tab_bar? : Json = Json::null()) -> Json {
+  let fields = {
     "pages": Json::array(routes.map(route => Json::string(route))),
     "renderer": Json::string("skyline"),
     "componentFramework": Json::string("glass-easel"),
@@ -110,7 +113,11 @@ fn app_json(routes : Array[String]) -> Json {
     "rendererOptions": Json::object({
       "skyline": Json::object({ "disableABTest": Json::boolean(true) }),
     }),
-  })
+  }
+  if tab_bar is Object(_) {
+    fields["tabBar"] = tab_bar
+  }
+  Json::object(fields)
 }
 
 ///|
@@ -142,11 +149,15 @@ fn private_project_config_example() -> Json {
 
 ///|
 fn page_json(contract : Json) -> Json {
-  let _ = contract
-  Json::object({
+  let fields = {
     "navigationStyle": Json::string("custom"),
     "renderer": Json::string("skyline"),
-  })
+  }
+  if object(contract, "page contract").get("navigationBarTextStyle")
+    is Some(style) {
+    fields["navigationBarTextStyle"] = style
+  }
+  Json::object(fields)
 }
 
 ///|

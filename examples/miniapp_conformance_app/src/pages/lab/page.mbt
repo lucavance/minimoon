@@ -335,7 +335,7 @@ fn action(
   @minimoon.button(
     on_tap=emit(message),
     event_key=key,
-    class="rounded-[10rpx] bg-sky-600 px-[18rpx] py-[12rpx] text-[24rpx] text-white",
+    class="demo-action",
     label,
   )
 }
@@ -359,7 +359,7 @@ fn dynamic_section(emit : @minimoon.Emit[Msg], model : Model) -> @minimoon.Node 
         on_confirm=emit.map(value => InputConfirmed(value)),
         confirm_key="dynamic/name-confirm",
         placeholder="Type a name",
-        class="mt-[12rpx] rounded-[10rpx] bg-slate-100 px-[18rpx] py-[12rpx]",
+        class="demo-input",
       ),
     ),
   ]
@@ -370,7 +370,7 @@ fn dynamic_section(emit : @minimoon.Emit[Msg], model : Model) -> @minimoon.Node 
         @minimoon.button(
           on_tap=emit(Select(item.id)),
           event_key=item.event_key,
-          class="rounded-[10rpx] bg-violet-600 px-[18rpx] py-[12rpx] text-[24rpx] text-white",
+          class="demo-action",
           item.label,
         ),
       ),
@@ -380,18 +380,15 @@ fn dynamic_section(emit : @minimoon.Emit[Msg], model : Model) -> @minimoon.Node 
   @minimoon.div(
     id="dynamic-lab",
     data_section="dynamic-lab",
-    class="mt-[20rpx] rounded-[16rpx] bg-white px-[24rpx] py-[20rpx]",
+    class="demo-card",
     [
-      @minimoon.h1(
-        class="text-[30rpx] font-semibold text-violet-700",
-        "动态渲染 / Dynamic renderer",
-      ),
+      @minimoon.h1(class="demo-card-title", "动态渲染 / Dynamic renderer"),
       @minimoon.p(
-        class="mt-[8rpx] text-[24rpx] text-slate-500",
+        class="demo-muted",
         "Expected: set, splice, keyed move, and full replacement remain interactive.",
       ),
       @minimoon.p("count:" + model.count.to_string()),
-      @minimoon.div(class="mt-[12rpx] flex flex-wrap gap-[12rpx]", [
+      @minimoon.div(class="demo-actions", [
         action(emit, "dynamic/increment", Increment, "Increment"),
         action(emit, "dynamic/toggle", Toggle, "Toggle branch"),
         action(emit, "dynamic/add-note", AddNote, "Add row"),
@@ -440,7 +437,7 @@ fn dynamic_section(emit : @minimoon.Emit[Msg], model : Model) -> @minimoon.Node 
       @minimoon.p("delay probe:" + model.delay_probe_status),
       @minimoon.p("perform probe:" + model.perform_probe_status),
       @minimoon.p("attempt probe:" + model.attempt_probe_status),
-      @minimoon.div(class="mt-[12rpx] flex flex-wrap gap-[12rpx]", [items]),
+      @minimoon.div(class="demo-actions", [items]),
       @minimoon.p("hello:" + model.name),
       @minimoon.p("input event:" + model.focus_status),
       notes,
@@ -464,17 +461,14 @@ fn component_section(
   @minimoon.div(
     id="component-lab",
     data_section="component-lab",
-    class="mt-[20rpx] rounded-[16rpx] bg-white px-[24rpx] py-[20rpx]",
+    class="demo-card",
     [
-      @minimoon.h1(
-        class="text-[30rpx] font-semibold text-amber-700",
-        "局部组件 / Local components",
-      ),
+      @minimoon.h1(class="demo-card-title", "局部组件 / Local components"),
       @minimoon.p(
-        class="mt-[8rpx] text-[24rpx] text-slate-500",
+        class="demo-muted",
         "Expected: reorder preserves state; removal disposes subscriptions.",
       ),
-      @minimoon.div(class="mt-[12rpx] flex flex-wrap gap-[12rpx]", [
+      @minimoon.div(class="demo-actions", [
         action(emit, "controls/reorder-cards", ReorderCards, "Reorder cards"),
         action(
           emit,
@@ -511,14 +505,11 @@ fn control_section(emit : @minimoon.Emit[Msg], model : Model) -> @minimoon.Node 
   @minimoon.div(
     id="control-lab",
     data_section="control-lab",
-    class="mt-[20rpx] rounded-[16rpx] bg-white px-[24rpx] py-[20rpx]",
+    class="demo-card",
     [
-      @minimoon.h1(
-        class="text-[30rpx] font-semibold text-sky-700",
-        "原生控件 / Native controls",
-      ),
+      @minimoon.h1(class="demo-card-title", "原生控件 / Native controls"),
       @minimoon.p(
-        class="mt-[8rpx] text-[24rpx] text-slate-500",
+        class="demo-muted",
         "Expected: every control updates independently without console errors.",
       ),
       @minimoon.checkbox_group(
@@ -587,7 +578,7 @@ fn control_section(emit : @minimoon.Emit[Msg], model : Model) -> @minimoon.Node 
         target=@minimoon.route("pages/lab/lab").with_query([
           @minimoon.query("instance", "secondary"),
         ]),
-        class="mt-[12rpx] block rounded-[12rpx] bg-sky-600 px-[20rpx] py-[16rpx] text-white",
+        class="demo-action",
         "Open isolated Lab instance",
       ),
     ],
@@ -599,14 +590,11 @@ fn content_navigation_section(content : @minimoon.Node) -> @minimoon.Node {
   @minimoon.div(
     id="content-navigation-lab",
     data_section="content-navigation-lab",
-    class="mt-[20rpx] rounded-[16rpx] bg-white px-[24rpx] py-[20rpx]",
+    class="demo-card",
     [
-      @minimoon.h1(
-        class="text-[30rpx] font-semibold text-blue-700",
-        "内容导航 / Content navigation",
-      ),
+      @minimoon.h1(class="demo-card-title", "内容导航 / Content navigation"),
       @minimoon.p(
-        class="mt-[8rpx] text-[24rpx] text-slate-500",
+        class="demo-muted",
         "Expected: minimal-v2 overlays, menus, and semantic state stay aligned after every interaction.",
       ),
       @minimoon.div(class="mt-[12rpx]", [content]),
@@ -621,71 +609,105 @@ fn view(
   card_nodes : @vector.Vector[@minimoon.Node],
   instance : String,
   content_navigation : @minimoon.Node,
+  layout : @minimoon.PageLayout,
+  notes : @minimoon.Node,
+  diagnostics : Bool,
+  toggle_diagnostics : @minimoon.Emit[(Bool) -> Bool],
+  concise : Bool,
 ) -> @minimoon.Node {
-  let scroller = @minimoon.scroll_view(
-    class="box-border h-[100vh] bg-slate-100 px-[24rpx] pb-[40rpx] pt-[72rpx] text-slate-700",
-    scroll_y=true,
-    scroll_into_view=model.scroll_target,
+  let content = @shell.frame(
+    layout,
+    "交互",
+    "lab-page",
+    scroll_target=model.scroll_target,
     on_scroll=emit.map(value => Scrolled(value)),
     scroll_key="controls/scroll",
-    data_section="lab-page",
     [
-      @minimoon.div(
-        class="rounded-[16rpx] bg-slate-700 px-[24rpx] py-[20rpx] text-white",
-        data_section="lab-intro",
-        [
-          @minimoon.p(
-            class="text-[24rpx] font-semibold text-white",
-            "02 · INCREMENTAL RUNTIME",
-          ),
-          @minimoon.h1(
-            class="mt-[8rpx] text-[36rpx] font-semibold text-white",
-            "增量运行实验室",
-          ),
-          @minimoon.p(
-            class="mt-[8rpx] text-[24rpx] text-white",
-            style="opacity: 0.78;",
-            "Runtime Lab · diff, local ownership, controls, and isolation",
-          ),
-          @minimoon.div(class="mt-[16rpx]", [
-            action(
-              emit,
-              "lab/back-studio",
-              BackToStudio,
-              "返回 Studio / Back",
-            ),
-          ]),
-        ],
+      @shell.hero(
+        if concise {
+          "轻触，感受变化"
+        } else {
+          "增量运行实验室"
+        },
+        "Controls · Local state · Native identity",
+        "lab-intro",
       ),
-      @minimoon.p("instance: " + instance),
-      @minimoon.p("page ticks: " + model.ticks.to_string()),
-      @minimoon.p("scroll top: " + model.scroll_top.to_string()),
-      @minimoon.div(class="mt-[12rpx] flex flex-wrap gap-[12rpx]", [
-        action(emit, "controls/jump-dynamic", Jump("dynamic-lab"), "Dynamic"),
-        action(
-          emit,
-          "controls/jump-components",
-          Jump("component-lab"),
-          "Components",
-        ),
-        action(emit, "controls/jump-controls", Jump("control-lab"), "Controls"),
-        action(
-          emit,
-          "controls/jump-content-navigation",
-          Jump("content-navigation-lab"),
-          "Navigation",
-        ),
+      @minimoon.div(class="demo-body", [
+        if !concise {
+          @shell.card("独立页面探针", [
+            @minimoon.p("instance: " + instance),
+            @minimoon.p("page ticks: " + model.ticks.to_string()),
+            @minimoon.p("scroll top: " + model.scroll_top.to_string()),
+            action(emit, "lab/back-studio", BackToStudio, "返回首页 / Back"),
+            @minimoon.div(class="demo-actions", [
+              action(
+                emit,
+                "controls/jump-dynamic",
+                Jump("dynamic-lab"),
+                "Dynamic",
+              ),
+              action(
+                emit,
+                "controls/jump-components",
+                Jump("component-lab"),
+                "Components",
+              ),
+              action(
+                emit,
+                "controls/jump-controls",
+                Jump("control-lab"),
+                "Controls",
+              ),
+              action(
+                emit,
+                "controls/jump-content-navigation",
+                Jump("content-navigation-lab"),
+                "Navigation",
+              ),
+            ]),
+          ])
+        } else {
+          @minimoon.nothing()
+        },
+        if diagnostics {
+          dynamic_section(emit, model)
+        } else {
+          @minimoon.nothing()
+        },
+        control_section(emit, model),
+        component_section(emit, model, card_nodes),
+        content_navigation_section(content_navigation),
+        if concise {
+          @shell.card("继续探索", [
+            @minimoon.button(
+              class="demo-note-toggle",
+              event_key="interaction/toggle-probes",
+              on_tap=toggle_diagnostics(value => !value),
+              if diagnostics {
+                "收起运行探针 −"
+              } else {
+                "展开运行探针 +"
+              },
+            ),
+            @minimoon.navigator(
+              target=@minimoon.route("pages/lab/lab").with_query([
+                @minimoon.query("instance", "interaction"),
+              ]),
+              class="demo-action",
+              "打开独立探针页",
+            ),
+          ])
+        } else {
+          @minimoon.nothing()
+        },
+        notes,
       ]),
-      dynamic_section(emit, model),
-      component_section(emit, model, card_nodes),
-      control_section(emit, model),
-      content_navigation_section(content_navigation),
     ],
   )
   if model.replace_root {
-    @minimoon.fragment([scroller])
+    @minimoon.fragment([content])
   } else {
-    scroller
+    content
   }
 }
 
@@ -694,6 +716,7 @@ fn app(
   context : @minimoon.PageContext,
   name : String,
   probe_scheduler : ((Unit) -> Unit, Int) -> Unit,
+  concise? : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (model, emit) = @minimoon.create_state(
     initial_model(),
@@ -894,11 +917,35 @@ fn app(
       ])
     },
   )
-  @minimoon.Val::view3(model, card_nodes, content_navigation, (
-    current,
-    nodes,
+  let notes = @shell.technical_notes("lab", [
+    "The focused reorder moves only C; the same keyed input retains cursor and selection.",
+    "Controlled reset uses scalar sets only; native reconciliation updates ranges and selected indexes together.",
+    "Run the independent Lab page to verify same-route instances and real unload cancellation.",
+  ])
+  let (diagnostics, toggle_diagnostics) = @minimoon.create_variable(!concise)
+  @minimoon.Val::view6(
+    model,
+    card_nodes,
     content_navigation,
-  ) => view(current, emit, nodes, name, content_navigation))
+    context.layout(),
+    notes,
+    diagnostics,
+    (current, nodes, content_navigation, layout, notes, diagnostics) => {
+      view(
+        current, emit, nodes, name, content_navigation, layout, notes, diagnostics,
+        toggle_diagnostics, concise,
+      )
+    },
+  )
+}
+
+///|
+pub fn scene(
+  context : @minimoon.PageContext,
+  instance : String,
+  concise? : Bool = false,
+) -> @minimoon.Val[@minimoon.Node] {
+  app(context, instance, resume_probe_after, concise~)
 }
 
 ///|
@@ -922,7 +969,7 @@ fn program_with_probe_scheduler(
     route=@minimoon.route("pages/lab/lab"),
     title="Runtime Lab",
     preview_input=() => "primary",
-    capabilities=[@minimoon.NavigateBack, @minimoon.RedirectTo],
+    capabilities=[@minimoon.NavigateBack, @minimoon.SwitchTab],
     decode_input~,
     build=(context, input) => app(context, input, probe_scheduler),
   )

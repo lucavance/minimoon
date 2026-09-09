@@ -137,7 +137,10 @@ pub fn resources(requested : Array[String]) -> @build_resources.ResourceBundle {
   selected["separator"] = true
   let manifest = all.filter(name => selected.contains(name)).join("\n") + "\n"
   let assets : Array[@build_resources.ResourceAsset] = [
-    { path: "assets/mmui/features.txt", content: manifest, },
+    {
+      path: "assets/mmui/features.txt",
+      content: @build_resources.Text(manifest),
+    },
   ]
   for mode in ["light", "dark"] {
     let color = if mode == "light" { "#171717" } else { "#fafafa" }
@@ -149,11 +152,13 @@ pub fn resources(requested : Array[String]) -> @build_resources.ResourceBundle {
       ] {
       assets.push({
         path: "assets/mmui/" + icon.0 + "-" + mode + ".svg",
-        content: "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"" +
-        icon.1 +
-        "\" fill=\"none\" stroke=\"" +
-        color +
-        "\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+        content: @build_resources.Text(
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"" +
+          icon.1 +
+          "\" fill=\"none\" stroke=\"" +
+          color +
+          "\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+        ),
       })
     }
   }

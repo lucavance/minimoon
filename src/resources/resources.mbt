@@ -1,8 +1,15 @@
 ///|
-/// A UTF-8 build asset. Paths are relative to dist and must live below assets/.
+pub(all) enum ResourceContent {
+  Text(String)
+  Binary(Bytes)
+} derive(Eq, Debug)
+
+///|
+/// A build asset. Text uses SVG/txt paths and binary assets use PNG paths.
+/// Paths are relative to dist and must live below assets/.
 pub(all) struct ResourceAsset {
   path : String
-  content : String
+  content : ResourceContent
 } derive(Eq, Debug)
 
 ///|
@@ -23,9 +30,14 @@ pub fn encode(bundle : ResourceBundle) -> String {
     "wxss": Json::string(bundle.wxss),
     "assets": Json::array(
       bundle.assets.map(asset => {
+        let (encoding, content) = match asset.content {
+          Text(text) => ("utf8", text)
+          Binary(bytes) => ("base64", @base64.encode(bytes))
+        }
         Json::object({
           "path": Json::string(asset.path),
-          "content": Json::string(asset.content),
+          "encoding": Json::string(encoding),
+          "content": Json::string(content),
         })
       }),
     ),

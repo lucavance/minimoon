@@ -64,6 +64,10 @@ pub fn start_subscription_command(String, String, Int) -> RuntimeCommand
 
 pub fn stop_subscription_command(String, String) -> RuntimeCommand
 
+pub fn[Msg] switch_tab_cmd(String) -> Cmd[Msg]
+
+pub fn switch_tab_command(String) -> RuntimeCommand
+
 pub fn[Model, Msg] with_cmd(Model, Cmd[Msg]) -> (Model, Cmd[Msg])
 
 pub fn[Model, Msg] with_cmd_update(Cmd[Msg], Model) -> (Model, Cmd[Msg])
@@ -87,6 +91,7 @@ pub enum Cmd[Msg] {
   CmdHostEffect(HostEffectRequest, (HostEffectOutcome) -> Msg)
   CmdNavigateTo(String)
   CmdRedirectTo(String)
+  CmdSwitchTab(String)
   CmdNavigateBack(Int)
   CmdNavigateBackOrRedirect(Int, String)
 }
@@ -193,6 +198,7 @@ pub enum RuntimeCommand {
   InvokeCapability(String, String, String, String)
   NavigateTo(String)
   RedirectTo(String)
+  SwitchTab(String)
   NavigateBack(Int)
   NavigateBackOrRedirect(Int, String)
   StartSubscription(String, String, Int)

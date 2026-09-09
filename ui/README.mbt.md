@@ -37,11 +37,11 @@ Run `moon update` after declaring published dependencies. In this repository,
 include the application and both module directories in its workspace. A
 registry-only consumer must have no such local overrides.
 
-Enable build resources in App Contract v10:
+Enable build resources in App Contract v11:
 
 ```json
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "name": "ui_app",
   "resources": [
     {"package": "lampclaw/minimoon_ui/resources", "features": []}
@@ -56,7 +56,7 @@ resource dependencies. Unknown features fail the build. The native provider
 exports WXSS and SVG assets; it is not imported into application JavaScript.
 Core has no dependency on this UI module.
 Schema `8` and `9` configurations must migrate to `10`;
-generated artifacts use Contract v10/runtime ABI v12. To combine UI
+generated artifacts use Contract v11/runtime ABI v13. To combine UI
 with shared state, opt into the core [App setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/shared_state.md)
 and make page factories take `Deps`; UI roots still belong to individual pages.
 
@@ -138,7 +138,7 @@ or gallery section alone is not proof of every upstream behavior.
 
 The six-page [showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
 covers all 64 component
-families plus Form and Theme. It is independent of core's four-page Conformance
+families plus Form and Theme. It is independent of core's seven-route Conformance
 fixture and does not add a dependency to the default starter.
 
 Run from the repository root:

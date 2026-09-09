@@ -16,7 +16,7 @@ fn runtime_package_source(
     call +
     "\n" +
     "  guard page_id == program.id() else { abort(\"runtime page id mismatch\") }\n" +
-    "  minimoon_register_page(page_id, program.create_runtime(input~))\n",
+    "  minimoon_register_page(page_id, program.create_runtime(input~, layout~))\n",
     "page import: " + page_import,
   )
 }
@@ -42,11 +42,17 @@ fn runtime_registry_source(
   @versions.runtime_api_version().to_string() +
   " }\n\n" +
   "///|\n" +
-  "pub fn minimoon_runtime_create_app(page_id : String, input_json : String) -> String {\n" +
+  "pub fn minimoon_runtime_create_app(page_id : String, input_json : String, layout_json : String) -> String {\n" +
   "  let input = match minimoon_decode_input(input_json) { Ok(input) => input; Err(error) => return minimoon_creation_error(error.message()) }\n" +
+  "  let layout = minimoon_decode_layout(layout_json)\n" +
   create_body +
   "}\n\n" +
   runtime_proxy_function("mount", "instance.mount()", []) +
+  runtime_proxy_function(
+    "update_layout",
+    "instance.update_layout(minimoon_decode_layout(layout_json))",
+    [("layout_json", "String")],
+  ) +
   runtime_proxy_function(
     "dispatch",
     "instance.dispatch(event_key, payload_json)",
@@ -112,7 +118,7 @@ fn app_runtime_package_source(
       index.to_string() +
       "." +
       program +
-      "().create_runtime(input~)\n",
+      "().create_runtime(input~, layout~)\n",
     )
     imports.push(string(pages[index], "package"))
   }
@@ -189,6 +195,7 @@ fn runtime_link_options(application? : Bool = false) -> String {
   "        \"minimoon_runtime_state_abi_version\",\n" +
   "        \"minimoon_runtime_create_app\",\n" +
   "        \"minimoon_runtime_mount\",\n" +
+  "        \"minimoon_runtime_update_layout\",\n" +
   "        \"minimoon_runtime_dispatch\",\n" +
   "        \"minimoon_runtime_dispatch_batch\",\n" +
   "        \"minimoon_runtime_lifecycle\",\n" +

@@ -45,6 +45,9 @@ fn embedded_inventory(
       ("src/authoring_app_driver.mbt", "capture_app_wake", "production"),
       ("src/authoring_shared_wake.mbt", "capture_shared_wake", "production"),
       (
+        "src/internal_host_js/host_layout_wbtest.mbt", "run_layout_host_test", "test",
+      ),
+      (
         "src/renderer_miniapp/page_program_25_runtime_support.mbt", "capture_runtime_wake_v12",
         "production",
       ),
@@ -67,6 +70,7 @@ fn embedded_inventory(
     entry in [
       ("application_bridge.mbt", "application_host_bridge", "production"),
       ("host_effects.mbt", "host_effect_invoker", "production"),
+      ("host_layout.mbt", "host_layout_reader", "production"),
       ("protocol_bridge.mbt", "shared_protocol_bridge", "production"),
       (
         "validation_application.mbt", "validation_application_boot", "validation",
@@ -113,6 +117,25 @@ fn embedded_inventory(
       RawLiterals,
     )
   }
+  add(
+    "src/internal_host_js/validation_tabs.mbt",
+    "fn:native_tab_host_source",
+    "validation",
+    SelectedLiterals(true, [
+      ("const routes = ", 1),
+      ("\nconst tabRoutes = ", 1),
+      ("\nconst abi = ", 1),
+    ]),
+  )
+  add(
+    "src/internal_host_validation/tab_navigation.mbt",
+    "fn:tab_navigation_host_source",
+    "validation",
+    SelectedLiterals(true, [
+      ("const hostSource = ", 1),
+      ("\nconst protocolSource = ", 1),
+    ]),
+  )
   add(
     "src/cmd/minimoon_check/ci_handoff.mbt",
     "fn:ci_handoff_check_source",
@@ -215,6 +238,10 @@ fn embedded_inventory(
       ("ui/src/resources/resources.mbt", "fn:base_rules", "WXSS"),
       ("ui/src/resources/resources.mbt", "fn:foundation_rules", "WXSS"),
       ("ui/src/resources/resources.mbt", "fn:form_rules", "WXSS"),
+      (
+        "examples/miniapp_conformance_app/src/resources/resources.mbt", "fn:stylesheet",
+        "WXSS",
+      ),
     ] {
     exclude(entry.0, entry.1, entry.2)
   }

@@ -40,8 +40,9 @@ dispose results cannot dispatch another message.
 | `request_payment` | `wx.requestPayment` | `RequestPayment` |
 | `navigate_to` | `wx.navigateTo` | `NavigateTo` |
 | `redirect_to` | `wx.redirectTo` | `RedirectTo` |
+| `switch_tab` | `wx.switchTab` | `SwitchTab` |
 | `navigate_back` | `wx.navigateBack` | `NavigateBack` |
-| `navigate_back_or` | back or redirect fallback | `NavigateBack`, `RedirectTo` |
+| `navigate_back_or` | back, tab or ordinary-route fallback | capability of the executing branch: `NavigateBack`, `SwitchTab` or `RedirectTo` |
 
 Example:
 
@@ -115,7 +116,7 @@ integers in `0..2147483647`; fractional, negative, overflowing, or wrongly
 typed fields produce `InvalidPayload`. Numeric values are never truncated or
 coerced to strings.
 
-Runtime ABI v12 carries callback JSON into root-owned MoonBit decoders before
+Runtime ABI v13 carries callback JSON into root-owned MoonBit decoders before
 application state receives a result and gives suspended local effects a
 generation-bound, sequence-watermarked host wake path. Only same-turn or
 adjacent drain watermarks coalesce; intervening scheduler entries remain

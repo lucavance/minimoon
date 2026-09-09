@@ -24,6 +24,9 @@ pub enum Msg {
   OpenConsole
   OpenLab
   OpenDetails
+  OpenInteraction
+  OpenCapabilities
+  OpenApplication
 }
 
 // Type aliases

@@ -1,6 +1,9 @@
 {
   "pages": [
     "pages/showcase/showcase",
+    "pages/interaction/interaction",
+    "pages/capabilities/capabilities",
+    "pages/application/application",
     "pages/home/home",
     "pages/lab/lab",
     "pages/details/details"
@@ -12,5 +15,38 @@
     "skyline": {
       "disableABTest": true
     }
+  },
+  "tabBar": {
+    "color": "#6A778B",
+    "selectedColor": "#356AE6",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "position": "bottom",
+    "list": [
+      {
+        "text": "首页",
+        "iconPath": "assets/tab-home.png",
+        "selectedIconPath": "assets/tab-home-selected.png",
+        "pagePath": "pages/showcase/showcase"
+      },
+      {
+        "text": "交互",
+        "iconPath": "assets/tab-interaction.png",
+        "selectedIconPath": "assets/tab-interaction-selected.png",
+        "pagePath": "pages/interaction/interaction"
+      },
+      {
+        "text": "能力",
+        "iconPath": "assets/tab-capabilities.png",
+        "selectedIconPath": "assets/tab-capabilities-selected.png",
+        "pagePath": "pages/capabilities/capabilities"
+      },
+      {
+        "text": "应用",
+        "iconPath": "assets/tab-application.png",
+        "selectedIconPath": "assets/tab-application-selected.png",
+        "pagePath": "pages/application/application"
+      }
+    ]
   }
 }

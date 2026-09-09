@@ -2,12 +2,22 @@
   "schemaVersion": 1,
   "status": "passed",
   "release": false,
-  "artifactFingerprint": "fnv1a64-relpath-v2:422aabfc94d8f833",
+  "artifactFingerprint": "fnv1a64-relpath-v2:de5942411b98cab2",
   "checks": [
     {
       "name": "build-resources",
       "status": "passed",
       "detail": "declared native provider assets exist below dist/assets and participate in the artifact fingerprint"
+    },
+    {
+      "name": "native-tab-bar",
+      "status": "passed",
+      "detail": "native Tab pages, PNG assets and status-bar foreground match the manifest"
+    },
+    {
+      "name": "native-tab-host",
+      "status": "passed",
+      "detail": "generated host Tab switches, ordinary navigation and back fallbacks match every manifest page"
     },
     {
       "name": "devtools-host-boundary",

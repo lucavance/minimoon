@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "name": "minimoon_ui_showcase",
   "resources": [{ "package": "lampclaw/minimoon_ui/resources", "features": [] }],
   "pages": [

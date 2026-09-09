@@ -36,7 +36,7 @@ lampclaw/minimoon public API
     -> runtime_core
        resident state, effects, command queue
     -> tooling_miniapp
-       App Contract v10 compilation and artifact writing
+       App Contract v11 compilation and artifact writing
     -> internal_host_js
        ordered scheduler, render acknowledgement, wx.* facade
     -> generated CommonJS + shared WXML/WXSS + page stubs
@@ -50,7 +50,7 @@ renderer, runtime, graph, host templates, and tooling remain internal packages.
 
 ## Graph and local ownership
 
-Each `Page` is an inert factory. A successful `create_runtime(input?)` call
+Each `Page` is an inert factory. A successful `create_runtime(input?, layout?)` call
 decodes the actual input before creating a distinct graph and returns it as
 `Result[PageRuntime, DecodeError]`. Invalid input creates no graph or App page
 registration. Two mounted instances of the same route do not share page-local
@@ -134,6 +134,13 @@ stringify/parse round trip.
 
 ## Runtime entry and batching
 
+`PageContext.layout()` exposes read-only window/safe-area/capsule metrics as a
+page-owned `Val`. The host injects them synchronously before the first builder;
+resize and Show updates use the existing graph transaction and ordered ACK
+queue, not route input or a public mutable signal. Hidden pages keep the latest
+layout and apply it with shared refresh on Show. Invalid projections roll back
+the layout along with the candidate tree. See [native navigation and layout](guides/native_navigation.md).
+
 `page_with_input` stores an explicit `preview_input: () -> Input`, an actual
 decoder, and a `(PageContext, Input) -> Val[Node]` builder. The definition runs
 none of them. Contract inspection builds and disposes a fresh preview graph,
@@ -169,7 +176,7 @@ Each mounted page owns one scheduler:
 5. A batch warns once at 256 entries and fails closed before accepting an entry
    beyond 2048.
 
-Runtime ABI v12 installs an internal, generation-bound wake closure during the
+Runtime ABI v13 installs an internal, generation-bound wake closure during the
 synchronous runtime-creation entry. The created page runtime captures that
 closure, and a suspended local effect requests a sequence-bounded `drain`
 scheduler entry after it emits. Same-turn wakes and adjacent tail drains may
@@ -216,9 +223,9 @@ checklist. The sorted, length-framed app-relative paths make checkout location
 irrelevant while ensuring WXSS, shared WXML, future assets, and manual acceptance
 scope cannot drift behind a still-valid evidence record.
 
-App Contract v10 and renderer protocol v8 retain native form/image/slider/progress
+App Contract v11 and renderer protocol v8 retain native form/image/slider/progress
 controls, precise touch payloads, and build-resource descriptors to the v7
-focus/blur/confirm and dialog/menu baseline. Runtime ABI v12 retains the
+focus/blur/confirm and dialog/menu baseline. Runtime ABI v13 retains the
 page-owned local-effect wake/drain contract
 independently of the source-level authoring API. `minimal-v1` retains its exact
 bytes;
@@ -269,7 +276,9 @@ bindings and reactive content remain owned by their original Val scopes.
 Removed branches leave no global registry entries. `UiContext` owns page
 visibility and one toast queue; UI code does not author JavaScript or setData.
 
-App Contract v10 resources name a dependency provider and a canonical feature list.
+App Contract v11 resources name a build provider and a canonical feature list.
 A native build probe returns a typed WXSS/static-asset bundle. Validation precedes
 destructive output generation. Resource paths, contents and descriptors join the
-artifact fingerprint; CSS and SVG strings stay out of the application JS graph.
+artifact fingerprint; CSS, SVG and decoded PNG bytes stay out of the application
+JS graph. Native bottom tabs resolve source package references into one shared
+manifest/app.json route list, while ordinary navigation retains stack semantics.

@@ -1,5 +1,5 @@
 ///|
-test "ABI v12 host captures, merges, and drains asynchronous runtime wakes" {
+test "ABI v13 host captures, merges, and drains asynchronous runtime wakes" {
   let host = shared_host_bridge()
   let protocol = shared_protocol_bridge()
   assert_true(host.contains("__minimoonRuntimeWakeV12"))

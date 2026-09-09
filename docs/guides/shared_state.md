@@ -46,7 +46,7 @@ builder 和初始模型计算必须保持纯函数：初始化副作用以 `init
 
 ```json
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "application": { "package": "src/app", "program": "program" }
 }
 ```
@@ -91,12 +91,12 @@ Model 按值使用，update 返回新值；不要原地修改 selector 获得的
 写状态，但不会深度冻结任意业务模型。
 
 Without `application`, factories remain `program() -> Page`. Both application
-modes require source schema `10`; older configurations must migrate. Output
-uses App Contract v10, runtime ABI v12 and renderer protocol v8. Rebuild all
+modes require source schema `11`; older configurations must migrate. Output
+uses App Contract v11, runtime ABI v13 and renderer protocol v8. Rebuild all
 artifacts together; do not mix old host/runtime bytes. Product versions are not
 automatically advanced by these technical compatibility numbers.
 
-不启用 `application` 时保留无参数页面工厂，但同样要求 schema `10`。旧 schema 必须迁移。必须整体
+不启用 `application` 时保留无参数页面工厂，但同样要求 schema `11`。旧 schema 必须迁移。必须整体
 重新生成产物，不能混用旧宿主和新 runtime；技术契约版本不等于产品发布版本。
 
 ## Lifetime and effects / 生命周期与副作用

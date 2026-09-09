@@ -89,6 +89,7 @@ fn test_resource_bundle(path : String, content : String) -> Json {
       Json::object({
         "path": Json::string(path),
         "content": Json::string(content),
+        "encoding": Json::string("utf8"),
       }),
     ]),
   })
@@ -96,7 +97,7 @@ fn test_resource_bundle(path : String, content : String) -> Json {
 
 ///|
 test "identical resource assets deduplicate but conflicting bytes fail" {
-  let assets : Map[String, String] = Map([])
+  let assets : Map[String, Json] = Map([])
   let bundle = test_resource_bundle("assets/test/icon.svg", "<svg/>")
   assert_true(resource_bundle_errors(bundle, assets).is_empty())
   assert_true(resource_bundle_errors(bundle, assets).is_empty())
@@ -110,7 +111,7 @@ test "identical resource assets deduplicate but conflicting bytes fail" {
   assert_true(
     !resource_bundle_errors(test_resource_bundle("app.js", "unsafe"), assets).is_empty(),
   )
-  assert_eq(assets["assets/test/icon.svg"], "<svg/>")
+  assert_eq(string(assets["assets/test/icon.svg"], "content"), "<svg/>")
 }
 
 ///|
@@ -170,12 +171,17 @@ async test "native resource providers compile from application dependencies and 
     )
     write(
       join(app, "src/provider/moon.pkg"),
-      "import { \"lampclaw/minimoon/resources\" }\nsupported_targets = \"native\"\n",
+      "import { \"lampclaw/minimoon/resources\", \"moonbitlang/core/encoding/base64\" }\nsupported_targets = \"native\"\n",
     )
     write(
       join(app, "src/provider/provider.mbt"),
       "///|\npub fn resources(features : Array[String]) -> @resources.ResourceBundle {\n" +
-      "{ id: \"test-native\", version: \"1.0.0\", wxss: features.join(\",\"), assets: [{path: \"assets/test/icon.svg\", content: \"<svg/>\"}] }\n}\n",
+      "let png = @base64.decode(" +
+      string(test_png_asset(), "content").escape() +
+      ") catch { _ => abort(\"PNG fixture\") }\n" +
+      "let assets : Array[@resources.ResourceAsset] = [{path: \"assets/test/icon.svg\", content: @resources.Text(\"<svg/>\")}, {path: \"assets/test/icon.png\", content: @resources.Binary(png)}]\n" +
+      "if features.contains(\"conflict\") { assets.push({path: \"assets/test/icon.png/child.png\", content: @resources.Binary(png)}) }\n" +
+      "{ id: \"test-native\", version: \"1.0.0\", wxss: features.join(\",\"), assets }\n}\n",
     )
     let _ = run_checked(
       "moon",
@@ -190,10 +196,59 @@ async test "native resource providers compile from application dependencies and 
     assert_eq(string(first, "id"), "test-native")
     assert_eq(string(first, "wxss"), "a,z")
     assert_eq(string(array(first, "assets")[0], "content"), "<svg/>")
+    let binary = array(first, "assets")[1]
+    assert_eq(string(binary, "encoding"), "base64")
+    assert_eq(
+      resource_asset_bytes(binary),
+      resource_asset_bytes(test_png_asset()),
+    )
+    write_resource_asset(join(app, "dist"), binary)
+    assert_eq(
+      @fs.read_file(join(app, "dist/assets/test/icon.png")).binary(),
+      resource_asset_bytes(binary),
+    )
     assert_false(@fs.exists(join(app, "src/minimoon_resources_0")))
     assert_false(@fs.exists(join(app, ".minimoon-tmp/resources-0")))
     let second = compile_resource_bundle(app, provider, 0)
     assert_eq(first, second)
+    write(join(app, "dist/keep.txt"), "preserve before resource validation\n")
+    let config = join(app, "miniapp.minimoon.json")
+    write_json(
+      config,
+      Json::object({
+        "schemaVersion": json_int(@versions.app_contract_version()),
+        "name": Json::string("resource-collision"),
+        "pages": Json::array([
+          Json::object({ "package": Json::string("src/provider") }),
+        ]),
+        "resources": Json::array([
+          test_resource_provider("test/resource_app/provider", ["conflict"]),
+        ]),
+      }),
+    )
+    let failure = try {
+      ignore(generate(config, "debug"))
+      ""
+    } catch {
+      error => error.to_string()
+    }
+    assert_true(
+      failure.contains("resource asset file/directory conflict"),
+      msg=failure,
+    )
+    assert_eq(
+      @fs.read_file(join(app, "dist/keep.txt")).text(),
+      "preserve before resource validation\n",
+    )
+    assert_eq(
+      @fs.read_file(join(app, "dist/assets/test/icon.png")).binary(),
+      resource_asset_bytes(binary),
+    )
+    assert_true(
+      read_json(join(app, "generated/diagnostics.json"))
+      .stringify()
+      .contains("MMN2002"),
+    )
   }
   @fs.rmdir(root, recursive=true)
 }

@@ -2,8 +2,8 @@
 
 ## Versions
 
-- App Contract schema: 10
-- runtime API/state ABI: 12
+- App Contract schema: 11
+- runtime API/state ABI: 13
 - renderer protocol: 8
 - generated runtime module format: CommonJS
 
@@ -15,7 +15,7 @@ lifecycle, effect resolution, subscription, flush, and disposal entries. Its
 independent scheduler does not render a page tree; pages bind shared state into
 their own transactional projections.
 
-The ABI v12 host/runtime convention additionally installs a temporary
+The ABI v13 host/runtime convention additionally installs a temporary
 generation-bound wake callback around synchronous runtime creation. The new
 page runtime captures it for later async local effects, which request a
 sequence-bounded internal command drain. It is not a CommonJS export or an
@@ -92,8 +92,8 @@ event/tick/effect: ordered entry -> candidate transaction -> acknowledged render
 onUnload: invalidate generation -> lifecycle/dispose -> clear owned resources
 ```
 
-Verification requires generated App Contract v10, runtime ABI v12, and renderer
-protocol v8 artifacts. Both App and no-App configurations require schema `10`;
+Verification requires generated App Contract v11, runtime ABI v13, and renderer
+protocol v8 artifacts. Both App and no-App configurations require schema `11`;
 schema `8` and `9` are migration errors. Unsafe routes, missing packages/programs, forbidden JavaScript,
 invalid shared artifacts, or host simulation failures are rejected.
 

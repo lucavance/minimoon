@@ -13,6 +13,7 @@ pub enum MiniappCapability {
   RequestPayment
   NavigateTo
   RedirectTo
+  SwitchTab
   NavigateBack
   Custom(String)
 } derive(Eq)
@@ -30,6 +31,7 @@ pub fn miniapp_capability(name : String) -> MiniappCapability {
     "wx.requestPayment" => RequestPayment
     "wx.navigateTo" => NavigateTo
     "wx.redirectTo" => RedirectTo
+    "wx.switchTab" => SwitchTab
     "wx.navigateBack" => NavigateBack
     name => Custom(name)
   }
@@ -48,6 +50,7 @@ pub fn MiniappCapability::name(self : MiniappCapability) -> String {
     RequestPayment => "wx.requestPayment"
     NavigateTo => "wx.navigateTo"
     RedirectTo => "wx.redirectTo"
+    SwitchTab => "wx.switchTab"
     NavigateBack => "wx.navigateBack"
     Custom(name) => name
   }

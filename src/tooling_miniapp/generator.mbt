@@ -93,6 +93,10 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     }
     routes.push(route)
     if contract is Object(fields) {
+      if page is Object(source) &&
+        source.get("navigationBarTextStyle") is Some(style) {
+        fields["navigationBarTextStyle"] = style
+      }
       fields["smokeInput"] = match page {
         Object(source) =>
           source.get("smokeInput").unwrap_or(Json::empty_object())
@@ -100,6 +104,19 @@ pub async fn generate(config_path : String, mode : String) -> Json {
       }
     }
     contracts.push(contract)
+  }
+  let tab_bar = normalized_tab_bar(raw, pages, contracts, resources) catch {
+    error => {
+      let message = write_config_issue(
+        document,
+        config_file,
+        "MMN1011",
+        error.to_string(),
+        "/tabBar",
+        "Check tabBar page and resource references before building.",
+      )
+      raise Failure(message)
+    }
   }
   let app_runtime = compile_app_runtime(
     app_root,
@@ -111,7 +128,10 @@ pub async fn generate(config_path : String, mode : String) -> Json {
   )
   let host_bridge = emit_host_bridge(
     app_root,
-    shared_host_bridge(application=application is Some(_)),
+    shared_host_bridge(
+      application=application is Some(_),
+      tab_routes=native_tab_routes(tab_bar),
+    ),
     release,
   )
   let protocol_bridge = emit_host_bridge(
@@ -154,13 +174,13 @@ pub async fn generate(config_path : String, mode : String) -> Json {
   }
   write(join(dist, "app.wxss"), "")
   for asset in array(resources, "assets") {
-    write(join(dist, string(asset, "path")), string(asset, "content"))
+    write_resource_asset(dist, asset)
   }
   write(
     join(dist, "minimoon.templates.wxml"),
     @renderer.dynamic_templates_wxml(),
   )
-  write_json(join(dist, "app.json"), app_json(routes))
+  write_json(join(dist, "app.json"), app_json(routes, tab_bar~))
   write_json(
     join(dist, "project.config.json"),
     project_config(name, "touristappid"),
@@ -211,6 +231,7 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     "pageBridgeEncoding": Json::string("shared-compact-node-v1"),
     "sharedModules": Json::array(shared_modules),
     "application": application.unwrap_or(Json::null()),
+    "tabBar": tab_bar,
     "runtimeBytes": Json::object({
       "application": Json::number(
         app_runtime_bytes.to_double(),

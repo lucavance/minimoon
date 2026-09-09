@@ -68,6 +68,7 @@ pub(all) enum Capability {
   RequestPayment
   NavigateTo
   RedirectTo
+  SwitchTab
   NavigateBack
   MeasureNodes
 } derive(Debug, Eq)
@@ -85,6 +86,7 @@ pub fn Capability::name(self : Capability) -> String {
     RequestPayment => "wx.requestPayment"
     NavigateTo => "wx.navigateTo"
     RedirectTo => "wx.redirectTo"
+    SwitchTab => "wx.switchTab"
     NavigateBack => "wx.navigateBack"
     MeasureNodes => "minimoon.measureNodes"
   }
@@ -469,6 +471,15 @@ pub fn navigate_to(target : Route) -> Cmd {
 ///|
 pub fn redirect_to(target : Route) -> Cmd {
   Cmd(@val.redirect_to(target.url()))
+}
+
+///|
+/// Switch to a configured native Tab page. Native Tab routes have no query.
+pub fn switch_tab(target : Route) -> Cmd {
+  guard !target.has_query() else {
+    abort("switchTab route must not contain query parameters")
+  }
+  Cmd(@val.switch_tab(target.url()))
 }
 
 ///|

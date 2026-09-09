@@ -733,6 +733,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|  navigateTo(options) { calls.push(["navigateTo", options]) },
     #|  redirectTo(options) { calls.push(["redirectTo", options]) },
     #|  navigateBack(options) { calls.push(["navigateBack", options]) },
+    #|  switchTab(options) { calls.push(["switchTab", options]) },
     #|  login(options) { const terminal = effectOptions("login", options, {}); if (failingCapability === "login") terminal.fail({ errMsg: "wx.login:fail denied", errCode: 401 }); else terminal.success({ code: "host-login" }) },
     #|  getStorage(options) { const terminal = effectOptions("getStorage", options, { key: "minimoon-conformance-home" }); terminal.success({ data: "stored" }) },
     #|  setStorage(options) { const terminal = effectOptions("setStorage", options, { key: "minimoon-conformance-home", data: "0" }); terminal.success({}) },
@@ -754,6 +755,9 @@ pub fn navigation_host_smoke_source() -> String {
     #|const homeDefinition = load(process.argv[3])
     #|const detailsDefinition = load(process.argv[4])
     #|const labDefinition = load(process.argv[5])
+    #|const interactionDefinition = load(process.argv[6])
+    #|const capabilitiesDefinition = load(process.argv[7])
+    #|const applicationDefinition = load(process.argv[8])
     #|const resolve = (root, path) => { let value = root; for (const token of path) value = value[token]; return value }
     #|const assign = (root, path, value) => { const parent = resolve(root, path.slice(0, -1)); parent[path[path.length - 1]] = value }
     #|const makeHost = (page) => {
@@ -784,8 +788,8 @@ pub fn navigation_host_smoke_source() -> String {
     #|  const boot = Object.values(host.data)[0]
     #|  if (boot.commit !== 0 || boot.tree.kind !== "view" || boot.tree.children.length !== 0) throw new Error("generated page must boot empty, not from preview input")
     #|  page.onLoad.call(host, options)
-    #|  page.onReady.call(host)
     #|  page.onShow.call(host)
+    #|  page.onReady.call(host)
     #|  pageStack.push(host)
     #|  return host
     #|}
@@ -802,6 +806,30 @@ pub fn navigation_host_smoke_source() -> String {
     #|const showcase = start(showcaseDefinition)
     #|dispatch(showcaseDefinition, showcase, "showcase/increment")
     #|if (!JSON.stringify(showcase.data).includes("state updates: 1")) throw new Error("showcase did not update state")
+    #|for (const [name, page, prepare, increment, marker] of [
+    #|  ["interaction", interactionDefinition, "interaction/toggle-probes", "dynamic/increment", "count:1"],
+    #|  ["capabilities", capabilitiesDefinition, null, "home/inc", '"text":"1"'],
+    #|  ["application", applicationDefinition, null, null, null],
+    #|]) {
+    #|  dispatch(showcaseDefinition, showcase, `showcase/tab-${name}`)
+    #|  assertLastCall("switchTab", { url: `/pages/${name}/${name}` })
+    #|  showcaseDefinition.onHide.call(showcase)
+    #|  const tab = start(page)
+    #|  if (!tab.__mmInstanceId || tab._cl) throw new Error(`${name} tab must initialize from empty route input`)
+    #|  if (prepare) dispatch(page, tab, prepare)
+    #|  if (increment) dispatch(page, tab, increment)
+    #|  const instance = tab.__mmInstanceId
+    #|  page.onHide.call(tab)
+    #|  showcaseDefinition.onShow.call(showcase)
+    #|  dispatch(showcaseDefinition, showcase, `showcase/tab-${name}`)
+    #|  assertLastCall("switchTab", { url: `/pages/${name}/${name}` })
+    #|  showcaseDefinition.onHide.call(showcase)
+    #|  page.onShow.call(tab)
+    #|  if (tab.__mmInstanceId !== instance || (marker && !JSON.stringify(tab.data).includes(marker))) throw new Error(`${name} tab lost its instance or local state across Hide/Show`)
+    #|  page.onUnload.call(tab)
+    #|  pageStack.pop()
+    #|  showcaseDefinition.onShow.call(showcase)
+    #|}
     #|dispatch(showcaseDefinition, showcase, "showcase/open-console")
     #|assertLastCall("navigateTo", { url: "/pages/home/home?name=Studio" })
     #|dispatch(showcaseDefinition, showcase, "showcase/open-lab")
@@ -831,7 +859,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|if (rejectedDetails.__mmInstanceId !== null || !rejectedDetails._cl || rejectedDetails.data.details.commit !== 0 || !creationErrors.some(error => error.includes("page_input_decode_failed"))) throw new Error("invalid required route input must fail closed before registration/render")
     #|const directDetails = start(detailsDefinition, { from: "direct" })
     #|dispatch(detailsDefinition, directDetails, "Back")
-    #|assertLastCall("redirectTo", { url: "/pages/showcase/showcase" })
+    #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
     #|const beforeInvalid = calls.length
     #|const errors = []
     #|const originalError = console.error
@@ -841,6 +869,8 @@ pub fn navigation_host_smoke_source() -> String {
     #|console.error = originalError
     #|if (calls.length !== beforeInvalid || !errors.some((value) => value.includes("invalid NavigateBack command")) || !errors.some((value) => value.includes("undeclared capability: wx.navigateBack"))) throw new Error(`NavigateBack validation failed: ${JSON.stringify(errors)}`)
     #|pageStack.length = 0
+    #|dispatch(homeDefinition, home, "home/back-studio")
+    #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
     #|dispatch(homeDefinition, home, "home/open-lab")
     #|assertLastCall("navigateTo", { url: "/pages/lab/lab" })
     #|pageStack.length = 0
@@ -854,6 +884,11 @@ pub fn navigation_host_smoke_source() -> String {
     #|labDefinition.onUnload.call(firstLab)
     #|if (secondLab.__mmInstanceId !== secondInstance) throw new Error("unloading one Lab instance disposed another")
     #|labDefinition.onUnload.call(secondLab)
+    #|pageStack.length = 0
+    #|const directLab = start(labDefinition, { instance: "direct" })
+    #|dispatch(labDefinition, directLab, "lab/back-studio")
+    #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
+    #|labDefinition.onUnload.call(directLab)
     #|pageStack.length = 0
     #|const capabilityHome = start(homeDefinition, { name: "Capabilities" })
     #|dispatch(homeDefinition, capabilityHome, "home/login")

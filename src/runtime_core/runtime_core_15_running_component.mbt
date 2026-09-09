@@ -318,6 +318,11 @@ fn[Model, Msg] RunningComponent::run_cmd(
         ContextDisposed => result.val = ContextDisposed
         ContextWriteOk => ()
       }
+    CmdSwitchTab(url) =>
+      match self.context.emit(SwitchTab(url)) {
+        ContextDisposed => result.val = ContextDisposed
+        ContextWriteOk => ()
+      }
     CmdNavigateBackOrRedirect(delta, fallback) =>
       match self.context.emit(NavigateBackOrRedirect(delta, fallback)) {
         ContextDisposed => result.val = ContextDisposed

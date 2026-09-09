@@ -41,7 +41,7 @@ MoonBit owns:
 
 - CLI argument parsing and path discovery
 - embedded starter templates and drift checks
-- App Contract v10, runtime ABI v12, and renderer protocol v8 compilation
+- App Contract v11, runtime ABI v13, and renderer protocol v8 compilation
 - MoonBit JS process orchestration
 - MiniApp project writing
 - Tailwind process orchestration and cleanup

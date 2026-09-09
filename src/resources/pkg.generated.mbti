@@ -13,7 +13,7 @@ pub fn encode(ResourceBundle) -> String
 // Types and methods
 pub(all) struct ResourceAsset {
   path : String
-  content : String
+  content : ResourceContent
 } derive(Eq, @debug.Debug)
 
 pub(all) struct ResourceBundle {
@@ -21,6 +21,11 @@ pub(all) struct ResourceBundle {
   version : String
   wxss : String
   assets : Array[ResourceAsset]
+} derive(Eq, @debug.Debug)
+
+pub(all) enum ResourceContent {
+  Text(String)
+  Binary(Bytes)
 } derive(Eq, @debug.Debug)
 
 // Type aliases
