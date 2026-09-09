@@ -4,7 +4,7 @@
     "pages/interaction/interaction",
     "pages/capabilities/capabilities",
     "pages/application/application",
-    "pages/home/home",
+    "pages/capability_probe/capability_probe",
     "pages/lab/lab",
     "pages/details/details"
   ],

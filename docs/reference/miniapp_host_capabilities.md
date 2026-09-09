@@ -126,7 +126,7 @@ function. Framework `delay` is physically canceled with `clearTimeout`.
 
 ## Generated-host coverage
 
-The navigation/host smoke mounts the real generated Home page against a mock
+The navigation/host smoke mounts the real generated Capability Probe page against a mock
 `wx` boundary. It asserts exact outbound payloads and successful state delivery
 for login, storage get/set, request, toast, location, and media, in that order.
 It separately covers failed login, unavailable location, and an outstanding
@@ -138,7 +138,7 @@ that the current fingerprint passed WeChat Developer Tools. The real-host
 checklist remains required, and payment remains backend/account-owned rather
 than part of this mock success workflow.
 
-The host suite also runs the generated Home HTTP scenarios offline, including
+The host suite also runs the generated Capability Probe HTTP scenarios offline, including
 timeout, synchronous failure, unavailable API, malformed response, concurrent
 out-of-order completion, duplicate callbacks and unload cancellation.
 `bun run check:http-live` loads the same generated page and uses a Bun-fetch

@@ -82,20 +82,20 @@ pub fn http_probe_source() -> String {
     #|  if (index === 4) assert.deepEqual(data.args, { id: ["synthetic"] })
     #|}
     #|const offlineLifecycle = async () => {
-    #|  dispatch("Change", "home/http-case", { value: 0 })
+    #|  dispatch("Change", "capability_probe/http-case", { value: 0 })
     #|  const pending = []; let aborts = 0
     #|  wx.request = options => { pending.push(options); return { abort() { aborts += 1; options.fail({ errMsg: "aborted" }) } } }
-    #|  dispatch("Tap", "home/request"); dispatch("Tap", "home/request")
+    #|  dispatch("Tap", "capability_probe/request"); dispatch("Tap", "capability_probe/request")
     #|  assert.equal(pending.length, 2)
     #|  pending[1].success({ statusCode: 201, data: "second" }); pending[0].success({ statusCode: 202, data: "first" })
     #|  requireCheck(tree().includes("HTTP 202"), "out-of-order request IDs crossed")
     #|  const before = tree(); pending[0].success({ statusCode: 500 }); pending[1].fail({ errMsg: "duplicate" }); assert.equal(tree(), before)
-    #|  wx.request = () => { throw new Error("sync failure") }; dispatch("Tap", "home/request"); requireCheck(tree().includes("sync failure"), "synchronous failure lost")
-    #|  delete wx.request; dispatch("Tap", "home/request"); requireCheck(tree().includes("wx.request unavailable"), "unavailable failure lost")
-    #|  wx.request = options => options.success({ statusCode: "bad" }); dispatch("Tap", "home/request"); requireCheck(tree().includes("must be an integer"), "malformed success accepted")
-    #|  wx.request = options => transport(options, async () => { throw new Error("offline network failure") }); dispatch("Tap", "home/request"); await waitDone(); requireCheck(tree().includes("request:fail network"), "network failure lost")
+    #|  wx.request = () => { throw new Error("sync failure") }; dispatch("Tap", "capability_probe/request"); requireCheck(tree().includes("sync failure"), "synchronous failure lost")
+    #|  delete wx.request; dispatch("Tap", "capability_probe/request"); requireCheck(tree().includes("wx.request unavailable"), "unavailable failure lost")
+    #|  wx.request = options => options.success({ statusCode: "bad" }); dispatch("Tap", "capability_probe/request"); requireCheck(tree().includes("must be an integer"), "malformed success accepted")
+    #|  wx.request = options => transport(options, async () => { throw new Error("offline network failure") }); dispatch("Tap", "capability_probe/request"); await waitDone(); requireCheck(tree().includes("request:fail network"), "network failure lost")
     #|  wx.request = options => { pending.push(options); return { abort() { aborts += 1; options.fail({ errMsg: "aborted" }) } } }
-    #|  dispatch("Tap", "home/request"); const dead = host; host.onUnload(); host.onUnload(); assert.equal(aborts, 1)
+    #|  dispatch("Tap", "capability_probe/request"); const dead = host; host.onUnload(); host.onUnload(); assert.equal(aborts, 1)
     #|  const unloaded = tree(); pending.at(-1).success({ statusCode: 200, data: "late" }); assert.equal(tree(), unloaded)
     #|  start(); pending.at(-1).success({ statusCode: 200, data: "old instance" }); requireCheck(!tree().includes("old instance"), "old callback reached new instance"); assert.notEqual(host.__mmInstanceId, dead.__mmInstanceId)
     #|  let invoked = 0; wx.request = () => { invoked += 1 }
@@ -117,18 +117,18 @@ pub fn http_probe_source() -> String {
     #|;(async () => {
     #|  bootApplication(process.argv[2])
     #|  require(process.argv[2])
-    #|  requireCheck(definition, "generated Home did not register Page")
+    #|  requireCheck(definition, "generated Capability Probe did not register Page")
     #|  const base = offline ? "https://httpbingo.org" : process.env.MINIMOON_HTTP_BASE_URL || "https://httpbingo.org"
     #|  const parsed = new URL(base)
     #|  requireCheck(parsed.protocol === "https:" && !parsed.username && !parsed.password && !parsed.hash && !parsed.search, "base must be a credential-free HTTPS echo service without query or fragment")
     #|  report.origin = parsed.origin
     #|  start()
-    #|  dispatch("Input", "home/http-base", { value: base.replace(/\/$/, "") })
+    #|  dispatch("Input", "capability_probe/http-base", { value: base.replace(/\/$/, "") })
     #|  const names = ["get-query", "post-json", "post-form", "put-text", "delete", "head", "options", "http-400", "http-500", "timeout"]
     #|  for (let index = 0; index < names.length; index += 1) {
     #|    const item = { name: names[index], status: "failed" }; report.cases.push(item); save()
-    #|    dispatch("Change", "home/http-case", { value: index }); observed = undefined; lastOptions = undefined
-    #|    dispatch("Tap", "home/request"); await waitDone(); requireCheck(observed && lastOptions, "no transport result"); verify(index)
+    #|    dispatch("Change", "capability_probe/http-case", { value: index }); observed = undefined; lastOptions = undefined
+    #|    dispatch("Tap", "capability_probe/request"); await waitDone(); requireCheck(observed && lastOptions, "no transport result"); verify(index)
     #|    item.status = "passed"; if (observed.statusCode) item.statusCode = observed.statusCode; save()
     #|    process.stdout.write(`${names[index]}: passed\n`)
     #|  }

@@ -324,7 +324,7 @@ async fn static_suite(root : String) -> Unit {
   }
   for
     page_package in [
-      "examples/miniapp_conformance_app/src/pages/showcase/moon.pkg", "examples/miniapp_conformance_app/src/pages/home/moon.pkg",
+      "examples/miniapp_conformance_app/src/pages/showcase/moon.pkg", "examples/miniapp_conformance_app/src/pages/capability_probe/moon.pkg",
       "examples/miniapp_conformance_app/src/pages/lab/moon.pkg", "examples/miniapp_conformance_app/src/pages/details/moon.pkg",
       "examples/miniapp_conformance_app/src/pages/interaction/moon.pkg", "examples/miniapp_conformance_app/src/pages/capabilities/moon.pkg",
       "examples/miniapp_conformance_app/src/pages/application/moon.pkg", "examples/miniapp_conformance_app/src/components/toggle_card/moon.pkg",
@@ -350,7 +350,7 @@ async fn static_suite(root : String) -> Unit {
     application_source in [
       "src/cmd/minimoon/templates.generated.mbt", "templates/starter/src/pages/home/page.mbt",
       "templates/starter/src/pages/details/page.mbt", "examples/miniapp_conformance_app/src/pages/showcase/page.mbt",
-      "examples/miniapp_conformance_app/src/pages/home/page.mbt", "examples/miniapp_conformance_app/src/pages/lab/page.mbt",
+      "examples/miniapp_conformance_app/src/pages/capability_probe/page.mbt", "examples/miniapp_conformance_app/src/pages/lab/page.mbt",
       "examples/miniapp_conformance_app/src/pages/details/page.mbt", "examples/miniapp_conformance_app/src/components/toggle_card/card.mbt",
       "examples/miniapp_conformance_app/src/pages/interaction/page.mbt", "examples/miniapp_conformance_app/src/pages/capabilities/page.mbt",
       "examples/miniapp_conformance_app/src/pages/application/page.mbt",

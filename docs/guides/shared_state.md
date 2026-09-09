@@ -174,9 +174,9 @@ for metadata: previews never dispatch init commands or start subscriptions.
 命令、定时器或网络。测试结束要 dispose，不能将预览句柄作为运行时依赖长期保存。
 
 The maintained example is [the core app package](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_conformance_app/src/app/app.mbt),
-with panels in Home and Details. In Developer Tools:
+with panels in Capability Probe and Details. In Developer Tools:
 
-1. Increment on Home, navigate to Details, increment again, return: both share
+1. Increment on Capability Probe, navigate to Details, increment again, return: both share
    one count while local counters stay independent.
 2. Start the public `https://httpbingo.org/delay/2` request and unload its page;
    another page receives the result. Hide/show must preserve shared data.

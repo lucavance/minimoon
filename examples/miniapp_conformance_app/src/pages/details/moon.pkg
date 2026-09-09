@@ -7,7 +7,7 @@ import {
 }
 
 import {
-  "lampclaw/miniapp_conformance_app/pages/home",
+  "lampclaw/miniapp_conformance_app/pages/capability_probe",
 } for "test"
 
 supported_targets = "js"

@@ -13,13 +13,13 @@ and PNG build assets support the deep-blue custom header without handwritten
 host JavaScript or a new UI dependency. These changes require fresh real-host
 acceptance; automated candidates do not establish visual or device correctness.
 
-The HTTP work adds methods, query/header/body encoding and timeouts. Home has ten public-API scenarios;
+The HTTP work adds methods, query/header/body encoding and timeouts. Capability Probe has ten public-API scenarios;
 `bun run check:http-live` is opt-in and is not real-host evidence. Both fixtures
 need matching Skyline revalidation after shared host bytes change.
 
 The shared-state source iteration adds optional `App[Deps]`, typed domain
 machines, page-local `Shared[T]` projections, and independent application
-effects/lifecycle. Home and Details demonstrate shared count, request ownership
+effects/lifecycle. Capability Probe and Details demonstrate shared count, request ownership
 and epoch-based response invalidation. The UI showcase and starter retain the
 no-application entry path. Contract `11` and runtime ABI `13` replace the earlier
 technical boundaries; renderer protocol `8` and product versions are unchanged.

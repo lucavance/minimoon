@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "lampclaw/miniapp_conformance_app/pages/home"
+package "lampclaw/miniapp_conformance_app/pages/capability_probe"
 
 import {
   "lampclaw/miniapp_conformance_app/app",

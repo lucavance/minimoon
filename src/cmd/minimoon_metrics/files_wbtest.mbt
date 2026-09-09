@@ -67,7 +67,7 @@ test "owners separate the UI fixture before the UI module and classify all scope
       ("ui/examples/showcase/src/pages/forms/page.mbt", ("ui_fixture", None)),
       ("ui/src/field.mbt", ("ui", None)),
       (
-        "examples/miniapp_conformance_app/src/pages/home/page.mbt",
+        "examples/miniapp_conformance_app/src/pages/capability_probe/page.mbt",
         ("core_fixture", None),
       ),
       ("templates/starter/src/pages/home/page.mbt", ("starter", None)),

@@ -75,7 +75,7 @@ Native navigation and top layout (all seven routes):
 - Bottom native tabs are 首页 / 交互 / 能力 / 应用, in that order, with four
   distinct line icons and selected states. Switch between them repeatedly;
   page-local state survives Hide/Show and revisiting does not run Load/init again.
-- 首页 retains entries into the original Home, Lab and Details secondary pages.
+- 首页 retains entries into the original Capability Probe, Lab and Details secondary pages.
   These routes have real unload/back behavior; tab switching is not a substitute
   for the HTTP cancellation or same-route multi-instance checks below.
 - On iOS and Android, check normal and notched screens, a short window and an
@@ -85,14 +85,14 @@ Native navigation and top layout (all seven routes):
   without a second stale intermediate business tree. Missing platform metrics
   use a conservative fallback; a later read failure retains valid prior metrics.
 - 能力 retains the ten public HTTP scenarios. 应用 displays shared count/request
-  and typed draft echo; page-local edits remain independent from secondary Home.
+  and typed draft echo; page-local edits remain independent from secondary Capability Probe.
 - Capture the four primary pages plus representative loading/error states in
   the local acceptance notes. Screenshots and mock-host tests are not a substitute
   for completing all affected interactions with a clean console.
 
-Application-owned shared state (Home and Details):
+Application-owned shared state (Capability Probe and Details):
 
-- Tap `Shared +1` on Home, open Details and increment again, then return. Both
+- Tap `Shared +1` on Capability Probe, open Details and increment again, then return. Both
   panels must show the same count while page-local counters remain independent.
 - Start `Shared public API request` against `https://httpbingo.org/delay/2` and
   leave the requesting page, including a redirect that unloads it. The result
@@ -113,10 +113,10 @@ Showcase:
   increments its page-visit state
 - rapid repeated increment taps are all retained; the visible count may advance
   as one acknowledged batch but must never lose or reorder a tap
-- all three route cards open Home, Lab, and Details with their declared query
+- all three route cards open Capability Probe, Lab, and Details with their declared query
   values
 
-Home:
+Capability Probe:
 
 - a `name` query initializes the controlled input; editing remains usable
 - increment, decrement, and reset update only the current page instance
@@ -125,14 +125,14 @@ Home:
 - these paths have generated-host payload/result smoke coverage, but exercise
   them again here against actual `wx.*`; the automated mock is not host evidence
 - HTTP uses the public `https://httpbingo.org` service, not a private acceptance
-  server. Select each Home HTTP scenario, then tap Request: GET Unicode/special
+  server. Select each Capability Probe HTTP scenario, then tap Request: GET Unicode/special
   character/repeated queries; POST JSON; POST repeated-field form; PUT raw text;
   DELETE; HEAD and OPTIONS with empty bodies; HTTP 400 and 500 as loaded results;
   and `/delay/3` with a 500 ms timeout as a failed request. Check status code,
   selected echo fields and errors. Inspect method and request headers in the
   Network panel, especially for empty HEAD/OPTIONS responses. Use only the
   built-in synthetic data.
-- Start the delayed request and leave Home: no late update or console error may
+- Start the delayed request and leave Capability Probe: no late update or console error may
   occur. Repeat the affected checklist in Skyline simulator, device preview and
   device debugging. Public-service or platform restrictions are a blocked case,
   not a pass; do not silently substitute a mock or another provider.
@@ -143,8 +143,8 @@ Home:
   are different results; public API testing does not establish production TLS,
   domain registration or account readiness. No private AppID belongs in Git.
 - show/hide state follows page navigation
-- NavigateTo opens Lab and Details; RedirectTo replaces Home with Details
-- Back returns through the stack; direct Home entry switches to the Showcase tab
+- NavigateTo opens Lab and Details; RedirectTo replaces Capability Probe with Details
+- Back returns through the stack; direct Capability Probe entry switches to the Showcase tab
   as fallback, never redirects to a tab route
 
 Lab:

@@ -51,7 +51,7 @@
     ]
   },
   "runtimeBytes": {
-    "application": 396064
+    "application": 396523
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -591,7 +591,7 @@
                                   {
                                     "kind": "text",
                                     "identity": "i:0",
-                                    "text": "能力探针",
+                                    "text": "能力验证",
                                     "props": {},
                                     "events": {},
                                     "children": []
@@ -2484,7 +2484,7 @@
             "text": "",
             "props": {
               "style": "top:88px;height:calc(100% - 88px);",
-              "section": "home-page",
+              "section": "capability_probe-page",
               "scrollX": false,
               "scrollY": true,
               "scrollTop": 0,
@@ -2509,7 +2509,7 @@
                     "identity": "i:0",
                     "text": "",
                     "props": {
-                      "section": "home-intro",
+                      "section": "capability_probe-intro",
                       "className": "demo-hero"
                     },
                     "events": {},
@@ -2568,7 +2568,7 @@
                         "identity": "i:0",
                         "text": "",
                         "props": {
-                          "section": "home-controls",
+                          "section": "capability_probe-controls",
                           "className": "demo-card"
                         },
                         "events": {},
@@ -2604,7 +2604,7 @@
                               "className": "demo-input"
                             },
                             "events": {
-                              "input": "home/name"
+                              "input": "capability_probe/name"
                             },
                             "children": []
                           },
@@ -2613,7 +2613,7 @@
                             "identity": "i:2",
                             "text": "",
                             "props": {
-                              "section": "home-controls",
+                              "section": "capability_probe-controls",
                               "className": "demo-output"
                             },
                             "events": {},
@@ -2665,7 +2665,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/dec"
+                                  "tap": "capability_probe/dec"
                                 },
                                 "children": [
                                   {
@@ -2687,7 +2687,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/inc"
+                                  "tap": "capability_probe/inc"
                                 },
                                 "children": [
                                   {
@@ -2709,7 +2709,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/reset"
+                                  "tap": "capability_probe/reset"
                                 },
                                 "children": [
                                   {
@@ -2773,7 +2773,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/login"
+                                  "tap": "capability_probe/login"
                                 },
                                 "children": [
                                   {
@@ -2795,7 +2795,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/logout"
+                                  "tap": "capability_probe/logout"
                                 },
                                 "children": [
                                   {
@@ -2829,7 +2829,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/load-storage"
+                                  "tap": "capability_probe/load-storage"
                                 },
                                 "children": [
                                   {
@@ -2851,7 +2851,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/save-storage"
+                                  "tap": "capability_probe/save-storage"
                                 },
                                 "children": [
                                   {
@@ -2873,7 +2873,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/toast"
+                                  "tap": "capability_probe/toast"
                                 },
                                 "children": [
                                   {
@@ -2895,7 +2895,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/location"
+                                  "tap": "capability_probe/location"
                                 },
                                 "children": [
                                   {
@@ -2917,7 +2917,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/media"
+                                  "tap": "capability_probe/media"
                                 },
                                 "children": [
                                   {
@@ -3093,7 +3093,7 @@
                               "className": "demo-input"
                             },
                             "events": {
-                              "input": "home/http-base"
+                              "input": "capability_probe/http-base"
                             },
                             "children": []
                           },
@@ -3119,7 +3119,7 @@
                               "disabled": false
                             },
                             "events": {
-                              "change": "home/http-case"
+                              "change": "capability_probe/http-case"
                             },
                             "children": [
                               {
@@ -3141,7 +3141,7 @@
                               "className": "demo-action"
                             },
                             "events": {
-                              "tap": "home/request"
+                              "tap": "capability_probe/request"
                             },
                             "children": [
                               {
@@ -3191,7 +3191,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/toggle-response"
+                                  "tap": "capability_probe/toggle-response"
                                 },
                                 "children": [
                                   {
@@ -3263,7 +3263,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/open-lab"
+                                  "tap": "capability_probe/open-lab"
                                 },
                                 "children": [
                                   {
@@ -3285,7 +3285,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/open-details"
+                                  "tap": "capability_probe/open-details"
                                 },
                                 "children": [
                                   {
@@ -3307,7 +3307,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/redirect-details"
+                                  "tap": "capability_probe/redirect-details"
                                 },
                                 "children": [
                                   {
@@ -3329,7 +3329,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/back-studio"
+                                  "tap": "capability_probe/back-studio"
                                 },
                                 "children": [
                                   {
@@ -3552,7 +3552,7 @@
                               "className": "demo-note-toggle"
                             },
                             "events": {
-                              "tap": "home/notes"
+                              "tap": "capability_probe/notes"
                             },
                             "children": [
                               {
@@ -4017,13 +4017,13 @@
                               "className": "demo-action"
                             },
                             "events": {
-                              "tap": "application/open-home-probe"
+                              "tap": "application/open-capability-probe"
                             },
                             "children": [
                               {
                                 "kind": "text",
                                 "identity": "i:0",
-                                "text": "打开能力探针",
+                                "text": "打开能力验证",
                                 "props": {},
                                 "events": {},
                                 "children": []
@@ -4100,9 +4100,9 @@
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
       "rendererProtocolVersion": 8,
-      "id": "home",
-      "route": "pages/home/home",
-      "title": "Minimoon Home",
+      "id": "capability_probe",
+      "route": "pages/capability_probe/capability_probe",
+      "title": "能力验证",
       "initialTree": {
         "kind": "view",
         "identity": "root",
@@ -4136,7 +4136,7 @@
                   {
                     "kind": "text",
                     "identity": "i:0",
-                    "text": "能力",
+                    "text": "能力验证",
                     "props": {},
                     "events": {},
                     "children": []
@@ -4151,7 +4151,7 @@
             "text": "",
             "props": {
               "style": "top:88px;height:calc(100% - 88px);",
-              "section": "home-page",
+              "section": "capability_probe-page",
               "scrollX": false,
               "scrollY": true,
               "scrollTop": 0,
@@ -4176,7 +4176,7 @@
                     "identity": "i:0",
                     "text": "",
                     "props": {
-                      "section": "home-intro",
+                      "section": "capability_probe-intro",
                       "className": "demo-hero"
                     },
                     "events": {},
@@ -4193,7 +4193,7 @@
                           {
                             "kind": "text",
                             "identity": "i:0",
-                            "text": "能力控制台",
+                            "text": "能力验证",
                             "props": {},
                             "events": {},
                             "children": []
@@ -4235,7 +4235,7 @@
                         "identity": "i:0",
                         "text": "",
                         "props": {
-                          "section": "home-controls",
+                          "section": "capability_probe-controls",
                           "className": "demo-card"
                         },
                         "events": {},
@@ -4271,7 +4271,7 @@
                               "className": "demo-input"
                             },
                             "events": {
-                              "input": "home/name"
+                              "input": "capability_probe/name"
                             },
                             "children": []
                           },
@@ -4280,7 +4280,7 @@
                             "identity": "i:2",
                             "text": "",
                             "props": {
-                              "section": "home-controls",
+                              "section": "capability_probe-controls",
                               "className": "demo-output"
                             },
                             "events": {},
@@ -4332,7 +4332,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/dec"
+                                  "tap": "capability_probe/dec"
                                 },
                                 "children": [
                                   {
@@ -4354,7 +4354,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/inc"
+                                  "tap": "capability_probe/inc"
                                 },
                                 "children": [
                                   {
@@ -4376,7 +4376,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/reset"
+                                  "tap": "capability_probe/reset"
                                 },
                                 "children": [
                                   {
@@ -4440,7 +4440,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/login"
+                                  "tap": "capability_probe/login"
                                 },
                                 "children": [
                                   {
@@ -4462,7 +4462,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/logout"
+                                  "tap": "capability_probe/logout"
                                 },
                                 "children": [
                                   {
@@ -4496,7 +4496,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/load-storage"
+                                  "tap": "capability_probe/load-storage"
                                 },
                                 "children": [
                                   {
@@ -4518,7 +4518,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/save-storage"
+                                  "tap": "capability_probe/save-storage"
                                 },
                                 "children": [
                                   {
@@ -4540,7 +4540,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/toast"
+                                  "tap": "capability_probe/toast"
                                 },
                                 "children": [
                                   {
@@ -4562,7 +4562,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/location"
+                                  "tap": "capability_probe/location"
                                 },
                                 "children": [
                                   {
@@ -4584,7 +4584,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/media"
+                                  "tap": "capability_probe/media"
                                 },
                                 "children": [
                                   {
@@ -4760,7 +4760,7 @@
                               "className": "demo-input"
                             },
                             "events": {
-                              "input": "home/http-base"
+                              "input": "capability_probe/http-base"
                             },
                             "children": []
                           },
@@ -4786,7 +4786,7 @@
                               "disabled": false
                             },
                             "events": {
-                              "change": "home/http-case"
+                              "change": "capability_probe/http-case"
                             },
                             "children": [
                               {
@@ -4808,7 +4808,7 @@
                               "className": "demo-action"
                             },
                             "events": {
-                              "tap": "home/request"
+                              "tap": "capability_probe/request"
                             },
                             "children": [
                               {
@@ -4927,7 +4927,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/open-lab"
+                                  "tap": "capability_probe/open-lab"
                                 },
                                 "children": [
                                   {
@@ -4949,7 +4949,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/open-details"
+                                  "tap": "capability_probe/open-details"
                                 },
                                 "children": [
                                   {
@@ -4971,7 +4971,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/redirect-details"
+                                  "tap": "capability_probe/redirect-details"
                                 },
                                 "children": [
                                   {
@@ -4993,7 +4993,7 @@
                                   "className": "demo-action"
                                 },
                                 "events": {
-                                  "tap": "home/back-studio"
+                                  "tap": "capability_probe/back-studio"
                                 },
                                 "children": [
                                   {
@@ -5216,7 +5216,7 @@
                               "className": "demo-note-toggle"
                             },
                             "events": {
-                              "tap": "home/notes"
+                              "tap": "capability_probe/notes"
                             },
                             "children": [
                               {

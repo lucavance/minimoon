@@ -125,7 +125,7 @@ jobs:
                $manifest[0].pageBridgeEncoding == "shared-compact-node-v1" and
                ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 11 and .runtimeApiVersion == 13 and .rendererProtocolVersion == 8) and
                ($bundle != "core" or (
-                 [$manifest[0].pages[].route] == ["pages/showcase/showcase", "pages/interaction/interaction", "pages/capabilities/capabilities", "pages/application/application", "pages/home/home", "pages/lab/lab", "pages/details/details"] and
+                 [$manifest[0].pages[].route] == ["pages/showcase/showcase", "pages/interaction/interaction", "pages/capabilities/capabilities", "pages/application/application", "pages/capability_probe/capability_probe", "pages/lab/lab", "pages/details/details"] and
                  [$manifest[0].tabBar.list[].pagePath] == ["pages/showcase/showcase", "pages/interaction/interaction", "pages/capabilities/capabilities", "pages/application/application"] and
                  $manifest[0].tabBar == $app_config[0].tabBar)) and
                ($bundle != "ui" or any($manifest[0].resources[]; .package == "lampclaw/minimoon_ui/resources" and .version == $ui_version)) and

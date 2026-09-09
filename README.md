@@ -57,7 +57,7 @@ bodies and timeouts. Use the optional [typed HTTP package](docs/guides/http.md)
 for status policy and typed response decoding; raw `request` retains transport
 semantics. See the [HTTP contract](docs/reference/miniapp_host_capabilities.md#http-requests).
 Run `bun run check:http-live` from this checkout for opt-in public-API testing
-of the generated Home page; it does not replace WeChat host acceptance.
+of the generated Capability Probe page; it does not replace WeChat host acceptance.
 
 Without `application` configuration, each page package exports
 `program() -> Page`, as below. With `application`, pages instead export

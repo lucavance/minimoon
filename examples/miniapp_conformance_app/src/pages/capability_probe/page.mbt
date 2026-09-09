@@ -118,7 +118,7 @@ fn update(
       @minimoon.with_cmd(
         { ..model, storage_status: "loading", error: "", },
         @minimoon.get_storage(
-          "minimoon-conformance-home",
+          "minimoon-conformance-capability_probe",
           emit.map(result => {
             match result {
               Ok(storage) =>
@@ -137,7 +137,7 @@ fn update(
       @minimoon.with_cmd(
         { ..model, storage_status: "saving", error: "", },
         @minimoon.set_storage(
-          "minimoon-conformance-home",
+          "minimoon-conformance-capability_probe",
           Json::string(model.count.to_string()),
           emit.map(result => {
             match result {
@@ -255,7 +255,7 @@ fn update(
         model,
         @minimoon.navigate_to(
           @minimoon.route("pages/details/details").with_query([
-            @minimoon.query("from", "home"),
+            @minimoon.query("from", "capability_probe"),
           ]),
         ),
       )
@@ -317,127 +317,167 @@ fn view(
   concise : Bool,
 ) -> @minimoon.Node {
   let name = if model.name == "" { input_name } else { model.name }
-  @shell.frame(layout, "能力", "home-page", [
-    @shell.hero("能力控制台", "Typed state · Native wx.*", "home-intro"),
-    @minimoon.div(class="demo-body", [
-      @shell.card("输入与状态", section="home-controls", [
-        @minimoon.input(
-          value=name,
-          on_input=emit.map(value => NameInput(value)),
-          event_key="home/name",
-          placeholder="Name from ?name= query",
-          class="demo-input",
-        ),
-        status_panel("home-controls", "hello: " + name),
-        @minimoon.h1(class="demo-value", model.count.to_string()),
-        @minimoon.div(class="demo-actions", [
-          action(emit, "home/dec", Dec, "−1"),
-          action(emit, "home/inc", Inc, "+1"),
-          action(emit, "home/reset", Reset, "Reset"),
+  @shell.frame(
+    layout,
+    if concise {
+      "能力"
+    } else {
+      "能力验证"
+    },
+    "capability_probe-page",
+    [
+      @shell.hero(
+        if concise {
+          "能力控制台"
+        } else {
+          "能力验证"
+        },
+        "Typed state · Native wx.*",
+        "capability_probe-intro",
+      ),
+      @minimoon.div(class="demo-body", [
+        @shell.card("输入与状态", section="capability_probe-controls", [
+          @minimoon.input(
+            value=name,
+            on_input=emit.map(value => NameInput(value)),
+            event_key="capability_probe/name",
+            placeholder="Name from ?name= query",
+            class="demo-input",
+          ),
+          status_panel("capability_probe-controls", "hello: " + name),
+          @minimoon.h1(class="demo-value", model.count.to_string()),
+          @minimoon.div(class="demo-actions", [
+            action(emit, "capability_probe/dec", Dec, "−1"),
+            action(emit, "capability_probe/inc", Inc, "+1"),
+            action(emit, "capability_probe/reset", Reset, "Reset"),
+          ]),
         ]),
-      ]),
-      @shell.card("原生能力", [
-        @minimoon.div(class="demo-actions", data_section="session-controls", [
-          action(emit, "home/login", Login, "Login"),
-          action(emit, "home/logout", Logout, "Logout"),
-        ]),
-        @minimoon.div(
-          class="demo-actions",
-          data_section="capability-controls",
-          [
-            action(emit, "home/load-storage", LoadStorage, "Storage"),
-            action(emit, "home/save-storage", SaveStorage, "Save"),
-            action(emit, "home/toast", ShowToast, "Toast"),
-            action(emit, "home/location", Locate, "Locate"),
-            action(emit, "home/media", ChooseMedia, "Media"),
-          ],
-        ),
-        status_panel(
-          "session-state",
-          "login: " + model.login_status + " · code: " + model.login_code,
-        ),
-        status_panel(
-          "storage-state",
-          "storage: " +
-          model.storage_status +
-          " · value: " +
-          model.storage_value,
-        ),
-        status_panel("toast-state", "toast: " + model.toast_status),
-        status_panel("location-state", "location: " + model.location),
-        status_panel("media-state", "media: " + model.media),
-      ]),
-      @shell.card("HTTP 请求", [
-        @minimoon.p(
-          class="demo-muted",
-          "使用合成数据访问公开 echo API，不是持久保存。",
-        ),
-        @minimoon.input(
-          class="demo-input",
-          value=model.request_base,
-          on_input=emit.map(value => RequestBase(value)),
-          event_key="home/http-base",
-          placeholder="HTTPS httpbingo-compatible base URL",
-        ),
-        @minimoon.picker_selector(
-          options=http_cases(),
-          selected=model.request_case,
-          on_change=emit.map(value => RequestCase(value)),
-          event_key="home/http-case",
-          "HTTP scenario: " +
-          http_cases().get(model.request_case).unwrap_or("GET"),
-        ),
-        action(emit, "home/request", LoadRequest, "Request"),
-        @minimoon.div(
-          data_section="request-output",
-          class="demo-output",
-          style="overflow-wrap: anywhere;",
-          [
-            @minimoon.p(
-              "request: " +
-              model.request_status +
-              " · HTTP " +
-              model.request_code,
-            ),
-            if concise {
+        @shell.card("原生能力", [
+          @minimoon.div(class="demo-actions", data_section="session-controls", [
+            action(emit, "capability_probe/login", Login, "Login"),
+            action(emit, "capability_probe/logout", Logout, "Logout"),
+          ]),
+          @minimoon.div(
+            class="demo-actions",
+            data_section="capability-controls",
+            [
               action(
                 emit,
-                "home/toggle-response",
-                ToggleResponse,
-                if model.response_open {
-                  "收起响应详情"
-                } else {
-                  "查看响应详情"
-                },
-              )
-            } else {
-              @minimoon.nothing()
-            },
-            if !concise || model.response_open {
-              @minimoon.p(
-                data_section="http-response-detail",
-                model.request_body,
-              )
-            } else {
-              @minimoon.nothing()
-            },
-          ],
-        ),
-      ]),
-      @shell.card("真实页面栈", section="navigation-controls", [
-        @minimoon.div(class="demo-actions", [
-          action(emit, "home/open-lab", OpenLab, "Open Lab"),
-          action(emit, "home/open-details", OpenDetails, "Open details"),
-          action(emit, "home/redirect-details", ReplaceDetails, "Redirect"),
-          action(emit, "home/back-studio", BackToStudio, "返回首页 / Back"),
+                "capability_probe/load-storage",
+                LoadStorage,
+                "Storage",
+              ),
+              action(emit, "capability_probe/save-storage", SaveStorage, "Save"),
+              action(emit, "capability_probe/toast", ShowToast, "Toast"),
+              action(emit, "capability_probe/location", Locate, "Locate"),
+              action(emit, "capability_probe/media", ChooseMedia, "Media"),
+            ],
+          ),
+          status_panel(
+            "session-state",
+            "login: " + model.login_status + " · code: " + model.login_code,
+          ),
+          status_panel(
+            "storage-state",
+            "storage: " +
+            model.storage_status +
+            " · value: " +
+            model.storage_value,
+          ),
+          status_panel("toast-state", "toast: " + model.toast_status),
+          status_panel("location-state", "location: " + model.location),
+          status_panel("media-state", "media: " + model.media),
         ]),
-        status_panel("lifecycle-state", "visible: " + model.visible.to_string()),
-        status_panel("error-state", "error: " + model.error),
+        @shell.card("HTTP 请求", [
+          @minimoon.p(
+            class="demo-muted",
+            "使用合成数据访问公开 echo API，不是持久保存。",
+          ),
+          @minimoon.input(
+            class="demo-input",
+            value=model.request_base,
+            on_input=emit.map(value => RequestBase(value)),
+            event_key="capability_probe/http-base",
+            placeholder="HTTPS httpbingo-compatible base URL",
+          ),
+          @minimoon.picker_selector(
+            options=http_cases(),
+            selected=model.request_case,
+            on_change=emit.map(value => RequestCase(value)),
+            event_key="capability_probe/http-case",
+            "HTTP scenario: " +
+            http_cases().get(model.request_case).unwrap_or("GET"),
+          ),
+          action(emit, "capability_probe/request", LoadRequest, "Request"),
+          @minimoon.div(
+            data_section="request-output",
+            class="demo-output",
+            style="overflow-wrap: anywhere;",
+            [
+              @minimoon.p(
+                "request: " +
+                model.request_status +
+                " · HTTP " +
+                model.request_code,
+              ),
+              if concise {
+                action(
+                  emit,
+                  "capability_probe/toggle-response",
+                  ToggleResponse,
+                  if model.response_open {
+                    "收起响应详情"
+                  } else {
+                    "查看响应详情"
+                  },
+                )
+              } else {
+                @minimoon.nothing()
+              },
+              if !concise || model.response_open {
+                @minimoon.p(
+                  data_section="http-response-detail",
+                  model.request_body,
+                )
+              } else {
+                @minimoon.nothing()
+              },
+            ],
+          ),
+        ]),
+        @shell.card("真实页面栈", section="navigation-controls", [
+          @minimoon.div(class="demo-actions", [
+            action(emit, "capability_probe/open-lab", OpenLab, "Open Lab"),
+            action(
+              emit,
+              "capability_probe/open-details",
+              OpenDetails,
+              "Open details",
+            ),
+            action(
+              emit,
+              "capability_probe/redirect-details",
+              ReplaceDetails,
+              "Redirect",
+            ),
+            action(
+              emit,
+              "capability_probe/back-studio",
+              BackToStudio,
+              "返回首页 / Back",
+            ),
+          ]),
+          status_panel(
+            "lifecycle-state",
+            "visible: " + model.visible.to_string(),
+          ),
+          status_panel("error-state", "error: " + model.error),
+        ]),
+        shared_panel,
+        notes,
       ]),
-      shared_panel,
-      notes,
-    ]),
-  ])
+    ],
+  )
 }
 
 ///|
@@ -457,7 +497,7 @@ pub fn scene(
       ])
     },
   )
-  let notes = @shell.technical_notes("home", [
+  let notes = @shell.technical_notes("capability_probe", [
     "HTTP 400/500 remain loaded raw responses; timeout is failed.", "NavigateTo hides this page; RedirectTo unloads it and cancels page-owned HTTP.",
     "App-owned HTTP survives page unload. Developer domain bypass is not production readiness.",
   ])
@@ -479,9 +519,9 @@ fn decode_input(
 ///|
 pub fn program(deps : @application.Deps) -> @minimoon.Page {
   @minimoon.page_with_input(
-    id="home",
-    route=@minimoon.route("pages/home/home"),
-    title="Minimoon Home",
+    id="capability_probe",
+    route=@minimoon.route("pages/capability_probe/capability_probe"),
+    title="能力验证",
     preview_input=() => "Minimoon",
     capabilities=capabilities(),
     decode_input~,

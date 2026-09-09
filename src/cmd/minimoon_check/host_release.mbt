@@ -12,7 +12,7 @@ async fn host_suite(root : String) -> Unit {
   run_ui_tests(root, "js")
   run(root, "Conformance application and four-Tab interaction tests", "moon", [
     "test", "examples/miniapp_conformance_app/src/app", "examples/miniapp_conformance_app/src/pages/showcase",
-    "examples/miniapp_conformance_app/src/pages/home", "examples/miniapp_conformance_app/src/pages/details",
+    "examples/miniapp_conformance_app/src/pages/capability_probe", "examples/miniapp_conformance_app/src/pages/details",
     "examples/miniapp_conformance_app/src/pages/lab", "examples/miniapp_conformance_app/src/components/toggle_card",
     "examples/miniapp_conformance_app/src/shared/shell", "examples/miniapp_conformance_app/src/resources",
     "examples/miniapp_conformance_app/src/tests", "--target", "js", "--deny-warn",
@@ -41,7 +41,9 @@ async fn host_suite(root : String) -> Unit {
     join(
       root, "examples/miniapp_conformance_app/dist/pages/showcase/showcase.js",
     ),
-    join(root, "examples/miniapp_conformance_app/dist/pages/home/home.js"),
+    join(
+      root, "examples/miniapp_conformance_app/dist/pages/capability_probe/capability_probe.js",
+    ),
     join(root, "examples/miniapp_conformance_app/dist/pages/details/details.js"),
     join(root, "examples/miniapp_conformance_app/dist/pages/lab/lab.js"),
     join(

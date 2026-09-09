@@ -3,7 +3,7 @@
 公共 `request` 支持 HTTP 方法、有序查询参数、请求头、JSON/表单/文本请求体及超时。
 可选的 [类型化 HTTP 包](docs/guides/http.md) 提供状态码策略与响应解码；
 原始 `request` 保留传输层语义。详见 [HTTP 契约](docs/reference/miniapp_host_capabilities.md#http-requests)。
-仓库内运行 `bun run check:http-live` 可通过公共 API 验证生成的 Home 页面；
+仓库内运行 `bun run check:http-live` 可通过公共 API 验证生成的能力验证（Capability Probe）页面；
 这不是微信真实宿主验收，也不会生成宿主通过证据。
 
 [English](README.md) · [文档索引](docs/README.md) · [双语代码分析](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md)

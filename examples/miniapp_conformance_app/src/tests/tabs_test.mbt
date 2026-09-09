@@ -1,12 +1,40 @@
 ///|
-test "capability Tab and stack Home share only App domains, not local models" {
+test "capability probe naming stays distinct from the homepage and capability Tab" {
+  let (probe, tab, homepage) = @application.program().preview(deps => {
+    let probe = @capability_probe.program(deps)
+    let tab = @capabilities.program(deps)
+    let homepage = @showcase.program(deps)
+    (
+      (
+        probe.id(),
+        probe.route(),
+        probe.title(),
+        probe.initial_tree().stringify(),
+      ),
+      (tab.id(), tab.title(), tab.initial_tree().stringify()),
+      homepage.route(),
+    )
+  })
+  assert_eq(probe.0, "capability_probe")
+  assert_eq(probe.1, "pages/capability_probe/capability_probe")
+  assert_eq(probe.2, "能力验证")
+  assert_eq(tab.0, "capabilities")
+  assert_eq(tab.1, "能力")
+  assert_eq(homepage, "pages/showcase/showcase")
+  assert_true(probe.3.contains("能力验证"))
+  assert_true(tab.2.contains("能力控制台"))
+  assert_false(probe.3.contains("Minimoon Home"))
+}
+
+///|
+test "capability Tab and stack Capability Probe share only App domains, not local models" {
   let app = @testing.launch(@application.program())
   defer app.dispose()
   let tab = app.mount(@capabilities.program)
-  let probe = app.mount(@home.program, input={ "name": "Probe" })
+  let probe = app.mount(@capability_probe.program, input={ "name": "Probe" })
   let application = app.mount(@application_page.program)
-  ignore(tab.input(@testing.by_event_key("home/name"), "Tab draft"))
-  ignore(tab.tap(@testing.by_event_key("home/inc")))
+  ignore(tab.input(@testing.by_event_key("capability_probe/name"), "Tab draft"))
+  ignore(tab.tap(@testing.by_event_key("capability_probe/inc")))
   assert_true(tab.snapshot().contains("hello: Tab draft"))
   assert_true(tab.snapshot().contains("\"text\":\"1\""))
   assert_true(probe.snapshot().contains("hello: Probe"))
@@ -24,7 +52,7 @@ test "capability Tab and stack Home share only App domains, not local models" {
   assert_true(tab.snapshot().contains("hello: Tab draft"))
   assert_true(tab.snapshot().contains("Application shared count: 2"))
   ignore(probe.dispose())
-  ignore(tab.tap(@testing.by_event_key("home/inc")))
+  ignore(tab.tap(@testing.by_event_key("capability_probe/inc")))
   assert_true(tab.snapshot().contains("\"text\":\"2\""))
 }
 
@@ -33,17 +61,19 @@ test "capability Tab collapses HTTP detail without changing the full stack probe
   let app = @testing.launch(@application.program())
   defer app.dispose()
   let tab = app.mount(@capabilities.program)
-  let probe = app.mount(@home.program)
+  let probe = app.mount(@capability_probe.program)
   let detail = @testing.by_section("http-response-detail")
   assert_true(tab.query(detail) is None)
   assert_true(probe.query(detail) is Some(_))
-  ignore(tab.input(@testing.by_event_key("home/name"), "Retained draft"))
-  ignore(tab.tap(@testing.by_event_key("home/toggle-response")))
+  ignore(
+    tab.input(@testing.by_event_key("capability_probe/name"), "Retained draft"),
+  )
+  ignore(tab.tap(@testing.by_event_key("capability_probe/toggle-response")))
   assert_true(tab.query(detail) is Some(_))
-  ignore(tab.tap(@testing.by_event_key("home/toggle-response")))
+  ignore(tab.tap(@testing.by_event_key("capability_probe/toggle-response")))
   assert_true(tab.query(detail) is None)
   assert_true(tab.snapshot().contains("hello: Retained draft"))
-  assert_true(@home.capabilities().contains(@minimoon.SwitchTab))
+  assert_true(@capability_probe.capabilities().contains(@minimoon.SwitchTab))
 }
 
 ///|
@@ -81,7 +111,19 @@ test "homepage Tab shortcuts differ from the retained query-bearing stack probes
   }
   let probe = page.tap(@testing.by_event_key("showcase/open-console"))
   assert_true(probe.contains("NavigateTo"))
-  assert_true(probe.contains("/pages/home/home?name=Studio"))
+  assert_true(
+    probe.contains("/pages/capability_probe/capability_probe?name=Studio"),
+  )
+  let application = app.mount(@application_page.program)
+  let from_application = application.tap(
+    @testing.by_event_key("application/open-capability-probe"),
+  )
+  assert_true(from_application.contains("NavigateTo"))
+  assert_true(
+    from_application.contains(
+      "/pages/capability_probe/capability_probe?name=Application",
+    ),
+  )
 }
 
 ///|
@@ -114,7 +156,7 @@ test "actual layout and resize update the shell without resetting native input i
   let app = @testing.launch(@application.program())
   defer app.dispose()
   let page = app.mount(@capabilities.program, layout=layout(390.0, 760.0, 47.0))
-  let input = @testing.by_event_key("home/name")
+  let input = @testing.by_event_key("capability_probe/name")
   ignore(page.input(input, "Retained through resize"))
   let identity = page.get(input).identity()
   assert_true(page.snapshot().contains("height:760px"))

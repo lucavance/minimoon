@@ -65,7 +65,7 @@ remains an internal implementation detail.
 | Conformance / Interaction (交互) | native controls and page-local component scenarios |
 | Conformance / Capabilities (能力) | public HTTP and declared host capabilities |
 | Conformance / Application (应用) | shared count/request/draft projections and ownership |
-| Conformance / Home | page input, controlled input, capabilities, navigation, shared App count/request |
+| Conformance / Capability Probe | page input, controlled input, capabilities, navigation, shared App count/request |
 | Conformance / Lab | set/splice/move/replacement, controlled native reconciliation, reactive slots, scrolling, local components, focus events, overlays, menu semantics, isolation |
 | Conformance / Details | independent input/lifecycle, shared App count/request and stack-aware fallback |
 | `templates/starter` | Home + Details initializer without App ownership or UI dependency |

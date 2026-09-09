@@ -6,11 +6,12 @@ export `program() -> Page` and need no shared application dependencies:
 - `templates/starter/src/pages/home/page.mbt`
 - `templates/starter/src/pages/details/page.mbt`
 
-The maintained real-host Conformance application adds Showcase, Home, Lab, and
-Details pages. Together they exercise page input, local state, keyed components,
+The maintained real-host Conformance application has four native Tabs and the
+Capability Probe, Lab, and Details secondary routes. Together they exercise
+page input, local state, keyed components,
 typed host results, lifecycle, navigation, incremental patches, controls,
 scrolling, and same-route instance isolation. Its `src/app` package also shows
-optional typed application state shared by Home and Details: those pages use
+optional typed application state shared by Capability Probe and Details: those pages use
 `program(deps : @application.Deps) -> Page`. See the
 [shared-state guide](shared_state.md) for the App factory, bindings, and lifetimes.
 

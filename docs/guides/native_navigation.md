@@ -86,6 +86,6 @@ and size are checked before replacing output. Resources join manifests and
 artifact fingerprints but are not implicitly linked into application JavaScript.
 
 Conformance supplies its own four icon pairs and visual shell without importing
-Minimoon UI. It keeps seven routes: four native tabs plus Home, Lab and Details
+Minimoon UI. It keeps seven routes: four native tabs plus Capability Probe, Lab and Details
 for full acceptance. See the [fixture matrix](../reference/miniapp_fixture_matrix.md)
 and [real-host checklist](../operations/miniapp_devtools_validation.md).

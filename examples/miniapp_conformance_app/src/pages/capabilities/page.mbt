@@ -5,7 +5,9 @@ pub fn program(deps : @application.Deps) -> @minimoon.Page {
     id="capabilities",
     route=@minimoon.route("pages/capabilities/capabilities"),
     title="能力",
-    capabilities=@home.capabilities(),
-    build=context => @home.scene(context, "Minimoon", deps, concise=true),
+    capabilities=@capability_probe.capabilities(),
+    build=context => {
+      @capability_probe.scene(context, "Minimoon", deps, concise=true)
+    },
   )
 }

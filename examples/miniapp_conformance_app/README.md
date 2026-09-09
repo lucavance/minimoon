@@ -11,12 +11,12 @@ renderer protocol `8`.
 | --- | --- | --- |
 | 首页 | `src/pages/showcase` | introduction, live state, Tab shortcuts and stack-probe entry points |
 | 交互 | `src/pages/interaction` | the ordinary Lab scene with concise presentation and expandable runtime probes |
-| 能力 | `src/pages/capabilities` | the ordinary Home scene with its own page-local state and effects |
+| 能力 | `src/pages/capabilities` | the ordinary Capability Probe scene with its own page-local state and effects |
 | 应用 | `src/pages/application` | shared application domains and the draft-detail entry point |
 
 The three non-Tab pages remain real navigation-stack probes:
 
-- `src/pages/home`: query input, controlled input, Elm-style state, lifecycle,
+- `src/pages/capability_probe`: query input, controlled input, Elm-style state, lifecycle,
   declared `wx.*` capabilities, and command-driven navigation.
 - `src/pages/lab`: dynamic set/splice/move/replacement diffs, vertical scrolling,
   a controlled keyed-input probe that preserves focus, cursor, selection, and
@@ -27,9 +27,12 @@ The three non-Tab pages remain real navigation-stack probes:
   Accordion/Tabs, Dialog/Sheet/Dropdown semantics, the `minimal-v2` theme, and
   same-route instance isolation.
 - `src/pages/details`: required nonempty `from` query, independent lifecycle and
-  draft state, typed JSON echo, and stack-aware Back with a Home Tab fallback.
+  draft state, typed JSON echo, and stack-aware Back with a Showcase Tab fallback.
 
-The optional `src/app` package owns shared count and HTTP state. Home and
+The secondary `capability_probe` page is titled 能力验证 and replaces the former
+`home` route; it is not the 首页 Tab. The initializer's `home` page is unchanged.
+
+The optional `src/app` package owns shared count and HTTP state. Capability Probe and
 Details and the relevant Tabs bind the same App values while keeping their local
 models; all seven factories accept its `Deps`. Reused scene functions create
 new local state in each builder, not shared page instances. Starter and UI showcase retain the separate
@@ -58,25 +61,25 @@ must not grow the navigation stack. Check initial/resize capsule clearance,
 scrolling hero, white status text on dark blue, keyboard and bottom safe area
 on all seven routes. Tab switching hides a page; it is not unload evidence.
 
-Use 首页's 能力探针/交互探针/编辑详情 buttons to enter the retained stack routes.
-Home → Details → Back must retain Home's instance and state. Home Redirect →
-Details must unload Home. Lab's native navigator opens a second same-route
+Use 首页's 能力验证/交互探针/编辑详情 buttons to enter the retained stack routes.
+Capability Probe → Details → Back must retain Capability Probe's instance and state. Capability Probe Redirect →
+Details must unload Capability Probe. Lab's native navigator opens a second same-route
 instance with independent state. Direct valid Details entry returns to the
-Home Tab on Back; missing/empty `from` must fail closed without a live instance
+Showcase Tab on Back; missing/empty `from` must fail closed without a live instance
 or preview flash. The configured `smokeInput` is synthetic test input, not a
 runtime default.
 
-In the non-Tab Home probe, select each HTTP scenario and tap Request. The
+In the non-Tab Capability Probe probe, select each HTTP scenario and tap Request. The
 default public API is `https://httpbingo.org`: GET query, JSON/form POST, text
 PUT, DELETE, HEAD, OPTIONS, HTTP 400/500 and timeout. Inspect the status code
 and selected echo fields; non-2xx is a loaded result, timeout is failed.
-Leave Home during the delayed request to check disposal. No private server is
+Leave Capability Probe during the delayed request to check disposal. No private server is
 needed. From the repository root, `bun run check:http-live` exercises the same
-generated Home with a fetch transport shim; it is not a real WeChat pass.
+generated Capability Probe with a fetch transport shim; it is not a real WeChat pass.
 Details rejects an empty draft without HTTP; a valid title/note is sent to the
-public POST echo endpoint and only the typed echo is shared with Home and 应用.
+public POST echo endpoint and only the typed echo is shared with Capability Probe and 应用.
 It is not persistent storage. Editing or unloading rejects old responses.
-Also increment the shared count on Home and Details, then start the separate
+Also increment the shared count on Capability Probe and Details, then start the separate
 shared public API request and unload its page: another page must receive the
 App-owned result. Start again and Clear before completion; the obsolete response
 must not replace idle. Page-owned HTTP still aborts on unload. See the

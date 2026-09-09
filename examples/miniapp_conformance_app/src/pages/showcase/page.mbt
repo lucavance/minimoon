@@ -42,9 +42,10 @@ fn update(model : Model, message : Msg) -> (Model, @minimoon.Cmd) {
       @minimoon.with_cmd(
         model,
         @minimoon.navigate_to(
-          @minimoon.route("pages/home/home").with_query([
-            @minimoon.query("name", "Studio"),
-          ]),
+          @minimoon.route("pages/capability_probe/capability_probe").with_query([
+              @minimoon.query("name", "Studio"),
+            ],
+          ),
         ),
       )
     OpenLab =>
@@ -130,7 +131,7 @@ fn view(
           "独立页面可以带参进入、返回与卸载。",
         ),
         @minimoon.div(class="demo-actions", [
-          action(emit, "showcase/open-console", OpenConsole, "能力探针"),
+          action(emit, "showcase/open-console", OpenConsole, "能力验证"),
           action(emit, "showcase/open-lab", OpenLab, "交互探针"),
           action(emit, "showcase/open-details", OpenDetails, "编辑详情"),
         ]),

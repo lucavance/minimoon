@@ -735,8 +735,8 @@ pub fn navigation_host_smoke_source() -> String {
     #|  navigateBack(options) { calls.push(["navigateBack", options]) },
     #|  switchTab(options) { calls.push(["switchTab", options]) },
     #|  login(options) { const terminal = effectOptions("login", options, {}); if (failingCapability === "login") terminal.fail({ errMsg: "wx.login:fail denied", errCode: 401 }); else terminal.success({ code: "host-login" }) },
-    #|  getStorage(options) { const terminal = effectOptions("getStorage", options, { key: "minimoon-conformance-home" }); terminal.success({ data: "stored" }) },
-    #|  setStorage(options) { const terminal = effectOptions("setStorage", options, { key: "minimoon-conformance-home", data: "0" }); terminal.success({}) },
+    #|  getStorage(options) { const terminal = effectOptions("getStorage", options, { key: "minimoon-conformance-capability_probe" }); terminal.success({ data: "stored" }) },
+    #|  setStorage(options) { const terminal = effectOptions("setStorage", options, { key: "minimoon-conformance-capability_probe", data: "0" }); terminal.success({}) },
     #|  request(options) {
     #|    const terminal = effectOptions("request", options, { url: "https://httpbingo.org/get?existing=yes&message=Minimoon%20%E6%B5%8B%E8%AF%95%20%2B%26%3D&tag=one&tag=two", method: "GET", header: { "x-minimoon-test": "public-smoke" }, timeout: 15000 })
     #|    if (requestMode === "deferred") { pendingRequest = terminal; return { abort() { requestAborts += 1 } } }
@@ -752,7 +752,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|const load = (file) => { definition = undefined; require(file); if (!definition) throw new Error(`Page was not registered: ${file}`); return definition }
     #|bootApplication(process.argv[2])
     #|const showcaseDefinition = load(process.argv[2])
-    #|const homeDefinition = load(process.argv[3])
+    #|const probeDefinition = load(process.argv[3])
     #|const detailsDefinition = load(process.argv[4])
     #|const labDefinition = load(process.argv[5])
     #|const interactionDefinition = load(process.argv[6])
@@ -808,7 +808,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|if (!JSON.stringify(showcase.data).includes("state updates: 1")) throw new Error("showcase did not update state")
     #|for (const [name, page, prepare, increment, marker] of [
     #|  ["interaction", interactionDefinition, "interaction/toggle-probes", "dynamic/increment", "count:1"],
-    #|  ["capabilities", capabilitiesDefinition, null, "home/inc", '"text":"1"'],
+    #|  ["capabilities", capabilitiesDefinition, null, "capability_probe/inc", '"text":"1"'],
     #|  ["application", applicationDefinition, null, null, null],
     #|]) {
     #|  dispatch(showcaseDefinition, showcase, `showcase/tab-${name}`)
@@ -831,26 +831,26 @@ pub fn navigation_host_smoke_source() -> String {
     #|  showcaseDefinition.onShow.call(showcase)
     #|}
     #|dispatch(showcaseDefinition, showcase, "showcase/open-console")
-    #|assertLastCall("navigateTo", { url: "/pages/home/home?name=Studio" })
+    #|assertLastCall("navigateTo", { url: "/pages/capability_probe/capability_probe?name=Studio" })
     #|dispatch(showcaseDefinition, showcase, "showcase/open-lab")
     #|assertLastCall("navigateTo", { url: "/pages/lab/lab?instance=showcase" })
     #|dispatch(showcaseDefinition, showcase, "showcase/open-details")
     #|assertLastCall("navigateTo", { url: "/pages/details/details?from=showcase" })
     #|showcaseDefinition.onHide.call(showcase)
-    #|const home = start(homeDefinition, { name: "Host" })
-    #|const homeInstance = home.__mmInstanceId
-    #|dispatch(homeDefinition, home, "home/inc")
-    #|if (!JSON.stringify(home.data).includes('"text":"1"')) throw new Error("home did not increment before navigation")
-    #|dispatch(homeDefinition, home, "home/open-details")
-    #|assertLastCall("navigateTo", { url: "/pages/details/details?from=home" })
-    #|homeDefinition.onHide.call(home)
-    #|const details = start(detailsDefinition, { from: "home" })
+    #|const probe = start(probeDefinition, { name: "Host" })
+    #|const probeInstance = probe.__mmInstanceId
+    #|dispatch(probeDefinition, probe, "capability_probe/inc")
+    #|if (!JSON.stringify(probe.data).includes('"text":"1"')) throw new Error("probe did not increment before navigation")
+    #|dispatch(probeDefinition, probe, "capability_probe/open-details")
+    #|assertLastCall("navigateTo", { url: "/pages/details/details?from=capability_probe" })
+    #|probeDefinition.onHide.call(probe)
+    #|const details = start(detailsDefinition, { from: "capability_probe" })
     #|dispatch(detailsDefinition, details, "Back")
     #|assertLastCall("navigateBack", { delta: 1 })
     #|detailsDefinition.onUnload.call(details)
     #|pageStack.pop()
-    #|homeDefinition.onShow.call(home)
-    #|if (home.__mmInstanceId !== homeInstance || !JSON.stringify(home.data).includes('"text":"1"')) throw new Error("navigateBack did not preserve the home instance")
+    #|probeDefinition.onShow.call(probe)
+    #|if (probe.__mmInstanceId !== probeInstance || !JSON.stringify(probe.data).includes('"text":"1"')) throw new Error("navigateBack did not preserve the probe instance")
     #|pageStack.length = 0
     #|const rejectedDetails = makeHost(detailsDefinition)
     #|const creationErrors = [], savedConsoleError = console.error
@@ -869,9 +869,9 @@ pub fn navigation_host_smoke_source() -> String {
     #|console.error = originalError
     #|if (calls.length !== beforeInvalid || !errors.some((value) => value.includes("invalid NavigateBack command")) || !errors.some((value) => value.includes("undeclared capability: wx.navigateBack"))) throw new Error(`NavigateBack validation failed: ${JSON.stringify(errors)}`)
     #|pageStack.length = 0
-    #|dispatch(homeDefinition, home, "home/back-studio")
+    #|dispatch(probeDefinition, probe, "capability_probe/back-studio")
     #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
-    #|dispatch(homeDefinition, home, "home/open-lab")
+    #|dispatch(probeDefinition, probe, "capability_probe/open-lab")
     #|assertLastCall("navigateTo", { url: "/pages/lab/lab" })
     #|pageStack.length = 0
     #|const firstLab = start(labDefinition, { instance: "first" })
@@ -890,40 +890,40 @@ pub fn navigation_host_smoke_source() -> String {
     #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
     #|labDefinition.onUnload.call(directLab)
     #|pageStack.length = 0
-    #|const capabilityHome = start(homeDefinition, { name: "Capabilities" })
-    #|dispatch(homeDefinition, capabilityHome, "home/login")
-    #|if (!JSON.stringify(capabilityHome.data).includes("login: success") || !JSON.stringify(capabilityHome.data).includes("code: host-login")) throw new Error("wx.login success did not resolve into Home state")
-    #|dispatch(homeDefinition, capabilityHome, "home/load-storage")
-    #|if (!JSON.stringify(capabilityHome.data).includes("storage: loaded") || !JSON.stringify(capabilityHome.data).includes("value: stored")) throw new Error("wx.getStorage success did not resolve into Home state")
-    #|dispatch(homeDefinition, capabilityHome, "home/save-storage")
-    #|if (!JSON.stringify(capabilityHome.data).includes("storage: saved")) throw new Error("wx.setStorage success did not resolve into Home state")
-    #|dispatch(homeDefinition, capabilityHome, "home/request")
-    #|if (!JSON.stringify(capabilityHome.data).includes("request: loaded · HTTP 200") || !JSON.stringify(capabilityHome.data).includes('\\"method\\":\\"GET\\"')) throw new Error("wx.request success did not resolve into Home state")
-    #|dispatch(homeDefinition, capabilityHome, "home/toast")
-    #|if (!JSON.stringify(capabilityHome.data).includes("toast: shown")) throw new Error("wx.showToast success did not resolve into Home state")
-    #|dispatch(homeDefinition, capabilityHome, "home/location")
-    #|if (!JSON.stringify(capabilityHome.data).includes("31.2,121.5")) throw new Error("wx.getLocation success did not resolve into Home state")
-    #|dispatch(homeDefinition, capabilityHome, "home/media")
-    #|if (!JSON.stringify(capabilityHome.data).includes("/tmp/minimoon-host.jpg")) throw new Error("wx.chooseMedia success did not resolve into Home state")
-    #|if (capabilityHome._ef.size !== 0 || effectCalls.slice(0, 7).map((entry) => entry[0]).join(",") !== "login,getStorage,setStorage,request,showToast,getLocation,chooseMedia") throw new Error(`capability success completion leaked effects or changed order: ${JSON.stringify(effectCalls)}`)
+    #|const capabilityProbe = start(probeDefinition, { name: "Capabilities" })
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/login")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("login: success") || !JSON.stringify(capabilityProbe.data).includes("code: host-login")) throw new Error("wx.login success did not resolve into Capability Probe state")
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/load-storage")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("storage: loaded") || !JSON.stringify(capabilityProbe.data).includes("value: stored")) throw new Error("wx.getStorage success did not resolve into Capability Probe state")
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/save-storage")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("storage: saved")) throw new Error("wx.setStorage success did not resolve into Capability Probe state")
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/request")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("request: loaded · HTTP 200") || !JSON.stringify(capabilityProbe.data).includes('\\"method\\":\\"GET\\"')) throw new Error("wx.request success did not resolve into Capability Probe state")
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/toast")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("toast: shown")) throw new Error("wx.showToast success did not resolve into Capability Probe state")
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/location")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("31.2,121.5")) throw new Error("wx.getLocation success did not resolve into Capability Probe state")
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/media")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("/tmp/minimoon-host.jpg")) throw new Error("wx.chooseMedia success did not resolve into Capability Probe state")
+    #|if (capabilityProbe._ef.size !== 0 || effectCalls.slice(0, 7).map((entry) => entry[0]).join(",") !== "login,getStorage,setStorage,request,showToast,getLocation,chooseMedia") throw new Error(`capability success completion leaked effects or changed order: ${JSON.stringify(effectCalls)}`)
     #|failingCapability = "login"
-    #|dispatch(homeDefinition, capabilityHome, "home/login")
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/login")
     #|failingCapability = ""
-    #|if (!JSON.stringify(capabilityHome.data).includes("login: failed") || !JSON.stringify(capabilityHome.data).includes("wx.login:fail denied") || capabilityHome._ef.size !== 0) throw new Error("wx.login failure did not resolve exactly once")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("login: failed") || !JSON.stringify(capabilityProbe.data).includes("wx.login:fail denied") || capabilityProbe._ef.size !== 0) throw new Error("wx.login failure did not resolve exactly once")
     #|const getLocation = wx.getLocation
     #|delete wx.getLocation
-    #|dispatch(homeDefinition, capabilityHome, "home/location")
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/location")
     #|wx.getLocation = getLocation
-    #|if (!JSON.stringify(capabilityHome.data).includes("wx.getLocation unavailable") || capabilityHome._ef.size !== 0) throw new Error("unavailable wx.getLocation did not resolve exactly once")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("wx.getLocation unavailable") || capabilityProbe._ef.size !== 0) throw new Error("unavailable wx.getLocation did not resolve exactly once")
     #|requestMode = "deferred"
-    #|dispatch(homeDefinition, capabilityHome, "home/request")
-    #|if (!pendingRequest || capabilityHome._ef.size !== 1) throw new Error("deferred wx.request was not tracked as one pending effect")
-    #|const beforeLateRequest = JSON.stringify(capabilityHome.data)
-    #|homeDefinition.onUnload.call(capabilityHome)
+    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/request")
+    #|if (!pendingRequest || capabilityProbe._ef.size !== 1) throw new Error("deferred wx.request was not tracked as one pending effect")
+    #|const beforeLateRequest = JSON.stringify(capabilityProbe.data)
+    #|probeDefinition.onUnload.call(capabilityProbe)
     #|pageStack.pop()
-    #|if (requestAborts !== 1 || capabilityHome._ef.size !== 0 || capabilityHome.__mmInstanceId !== null) throw new Error("pending wx.request was not aborted exactly once on unload")
+    #|if (requestAborts !== 1 || capabilityProbe._ef.size !== 0 || capabilityProbe.__mmInstanceId !== null) throw new Error("pending wx.request was not aborted exactly once on unload")
     #|pendingRequest.success({ statusCode: 200, data: { late: true } })
-    #|if (requestAborts !== 1 || JSON.stringify(capabilityHome.data) !== beforeLateRequest || capabilityHome._ef.size !== 0) throw new Error("late wx.request success crossed the disposed page boundary")
+    #|if (requestAborts !== 1 || JSON.stringify(capabilityProbe.data) !== beforeLateRequest || capabilityProbe._ef.size !== 0) throw new Error("late wx.request success crossed the disposed page boundary")
     #|
   )
 }

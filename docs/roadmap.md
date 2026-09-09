@@ -4,7 +4,7 @@
 
 The unpublished core `0.2.0` / UI `0.1.0` iteration adds native bottom tabs,
 typed tab navigation, read-only window/safe-area/capsule layout and PNG build
-resources. Conformance presents 首页 / 交互 / 能力 / 应用, retaining Home, Lab
+resources. Conformance presents 首页 / 交互 / 能力 / 应用, retaining Capability Probe, Lab
 and Details as real secondary routes for input, unload and instance-isolation
 acceptance. It remains one core fixture, not seven independent applications.
 See [native navigation and layout](guides/native_navigation.md).
@@ -27,7 +27,7 @@ and [typed HTTP](guides/http.md). The current technical boundaries are Contract
 iterations require migration rather than compatibility fallbacks.
 
 The current HTTP iteration adds typed methods, query/header/body encoding,
-timeouts, deterministic host tests and public-API Home acceptance scenarios.
+timeouts, deterministic host tests and public-API Capability Probe acceptance scenarios.
 It introduces no UI components or privately deployed acceptance server.
 The current 0.2 source implements an optional `App[Deps]` root containing
 multiple typed domain state machines. `Shared[T]` values bind to page-local

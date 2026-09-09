@@ -1,0 +1,2 @@
+<import src="../../minimoon.templates.wxml" />
+<template is="minimoon_dynamic_node" data="{{node: capability_probe.tree, p: capability_probe.tree.props, e: capability_probe.tree.events}}" />

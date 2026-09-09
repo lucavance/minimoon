@@ -173,8 +173,8 @@ async fn codegen_suite(root : String) -> Unit {
   }
   for
     marker in [
-      "showcase-hero", "home-controls", "request-output", "details-card", "dynamic-lab",
-      "component-lab", "control-lab",
+      "showcase-hero", "capability_probe-controls", "request-output", "details-card",
+      "dynamic-lab", "component-lab", "control-lab",
     ] {
     require_text(
       root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", marker,

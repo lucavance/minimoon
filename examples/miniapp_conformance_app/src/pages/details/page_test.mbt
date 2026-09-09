@@ -119,9 +119,9 @@ test "details validates a typed draft then shares only its public API echo" {
   defer ignore(app.dispose())
   ignore(app.lifecycle("onLaunch", "{}"))
   let details = open_details(app)
-  let home = app.create_page(@home.program(app.deps())).unwrap()
-  ignore(home.lifecycle("onLoad", "{}"))
-  ignore(home.mount())
+  let probe = app.create_page(@capability_probe.program(app.deps())).unwrap()
+  ignore(probe.lifecycle("onLoad", "{}"))
+  ignore(probe.mount())
   edit_draft(details, "   ", "note")
   assert_true(
     !details.dispatch("details/save-draft", "{}").contains("InvokeCapability"),
@@ -158,8 +158,8 @@ test "details validates a typed draft then shares only its public API echo" {
   )
   ignore(app.flush())
   ignore(details.flush())
-  ignore(home.flush())
-  for page in [details, home] {
+  ignore(probe.flush())
+  for page in [details, probe] {
     assert_true(
       page
       .snapshot()

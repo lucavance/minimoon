@@ -42,13 +42,14 @@ pub fn program(deps : @app_state.Deps) -> @minimoon.Page {
               ),
               @minimoon.button(
                 class="demo-action",
-                event_key="application/open-home-probe",
+                event_key="application/open-capability-probe",
                 on_tap=@minimoon.navigate_to(
-                  @minimoon.route("pages/home/home").with_query([
-                    @minimoon.query("name", "Application"),
-                  ]),
+                  @minimoon.route("pages/capability_probe/capability_probe").with_query([
+                      @minimoon.query("name", "Application"),
+                    ],
+                  ),
                 ),
-                "打开能力探针",
+                "打开能力验证",
               ),
             ]),
             notes,

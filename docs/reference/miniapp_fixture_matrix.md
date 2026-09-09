@@ -8,7 +8,7 @@
 | `miniapp_conformance_app` | Interaction / 交互 | independently mounted native control and local-component scenarios |
 | `miniapp_conformance_app` | Capabilities / 能力 | independently mounted public HTTP and host-capability scenarios |
 | `miniapp_conformance_app` | Application / 应用 | application count, request and draft projections; local versus App ownership |
-| `miniapp_conformance_app` | Home | query and controlled input, state transitions, exact capability payloads/results, request abort/late completion, lifecycle, NavigateTo/RedirectTo |
+| `miniapp_conformance_app` | Capability Probe | query and controlled input, state transitions, exact capability payloads/results, request abort/late completion, lifecycle, NavigateTo/RedirectTo |
 | `miniapp_conformance_app` | Lab | set/splice/keyed move/full replacement, keyed focus retention, scalar-only controlled reset, no-touch async completion, vertical scroll, `assoc_by`, local state/subscriptions, controls, focus events, overlays, menus, swiper, same-route isolation |
 | `miniapp_conformance_app` | Details | independent query/lifecycle state and stack-aware back fallback |
 
@@ -16,12 +16,12 @@ The seven routes share one application-wide runtime, one release build, one
 verification report, and one real-host artifact fingerprint. Real pages are
 the primary navigation structure. Swiper is deliberately kept inside Lab as a
 control test rather than used as a substitute for routing.
-The configured `src/app` owns shared count and request domains. Home and Details
+The configured `src/app` owns shared count and request domains. Capability Probe and Details
 bind their projections while keeping local state; all seven page factories take
 the application's `Deps`. App HTTP survives page unload, and Clear invalidates
 an obsolete response through a business epoch.
 
-The first four routes are native bottom tabs; the original Home, Lab and Details
+The first four routes are native bottom tabs; the original Capability Probe, Lab and Details
 remain non-tab routes. Tab switching causes Hide/Show and preserves local state;
 it cannot substitute for RedirectTo, true Unload or two instances of Lab. Top
 layout uses synchronous window/safe-area/capsule metrics before the first
@@ -59,7 +59,7 @@ The fixture and generated starter must pass:
 - hydration, event batching, render acknowledgement/retry, lifecycle,
   capability, subscription, snapshot, disposal, navigation, scroll, and
   instance-isolation host smoke
-- Home generated-host smoke for exact login/storage/request/toast/location/media
+- Capability Probe generated-host smoke for exact login/storage/request/toast/location/media
   payloads and successes, failed login, unavailable location, exactly-once
   request abort on unload, and ignored late success
 - coalesced async drain, timeout cancellation, exact keyed-move focus, and

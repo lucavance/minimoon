@@ -30,7 +30,10 @@ test "showcase routes to all technical validation pages" {
   let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let console = runtime.dispatch("showcase/open-console", "{}")
-  inspect(console.contains("/pages/home/home?name=Studio"), content="true")
+  inspect(
+    console.contains("/pages/capability_probe/capability_probe?name=Studio"),
+    content="true",
+  )
   let lab = runtime.dispatch("showcase/open-lab", "{}")
   inspect(lab.contains("/pages/lab/lab?instance=showcase"), content="true")
   let details = runtime.dispatch("showcase/open-details", "{}")

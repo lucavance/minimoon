@@ -24,7 +24,7 @@ pub fn application_host_smoke_source() -> String {
     #|application.onLaunch({}); application.onLaunch({}); application.onShow({})
     #|await flush()
     #|const load = file => { require(path.join(dist, file)); return definition }
-    #|const home = load("pages/home/home.js"), details = load("pages/details/details.js")
+    #|const probe = load("pages/capability_probe/capability_probe.js"), details = load("pages/details/details.js")
     #|const get = (value, tokens) => tokens.reduce((current, token) => current[token], value)
     #|const assign = (value, tokens, next) => { get(value, tokens.slice(0, -1))[tokens.at(-1)] = next }
     #|const start = (definition, input = {}) => {
@@ -35,7 +35,7 @@ pub fn application_host_smoke_source() -> String {
     #|}
     #|const tap = (host, key) => host.__mmDispatchTap({ currentTarget: { dataset: { minimoonTap: key } }, target: { dataset: {} }, detail: {} })
     #|const has = (host, text) => JSON.stringify(host.data).includes(text)
-    #|const first = start(home), second = start(details, { from: "application-smoke" })
+    #|const first = start(probe), second = start(details, { from: "application-smoke" })
     #|const firstId = first.__mmInstanceId, firstWrites = first.writes
     #|first.onLoad({}); assert.equal(first.__mmInstanceId, firstId); assert.equal(first.writes, firstWrites)
     #|assert.match(errors.pop(), /duplicate_page_load/)
@@ -64,7 +64,7 @@ pub fn application_host_smoke_source() -> String {
     #|tap(second, "shared/load"); await flush(); tap(second, "shared/clear"); await flush()
     #|requests[1].success({ statusCode: 201 }); await flush(); assert.ok(has(second, "Application request: idle"))
     #|tap(second, "shared/load"); await flush(); assert.equal(requests.length, 3)
-    #|const viewer = start(home)
+    #|const viewer = start(probe)
     #|const input = (key, value) => second.__mmDispatchInput({ currentTarget: { dataset: { minimoonInput: key } }, target: { dataset: {} }, detail: { value } })
     #|input("details/draft-title", ""); tap(second, "details/save-draft"); await flush()
     #|assert.equal(requests.length, 3); assert.ok(has(second, "Title is required."))
