@@ -7,9 +7,11 @@ import {
 }
 
 // Values
-pub fn panel(@minimoon.PageContext, Deps) -> @minimoon.Val[@minimoon.Node]
+pub fn initial_fetch() -> FetchModel
 
 pub fn program() -> @minimoon.App[Deps]
+
+pub fn update_fetch(FetchModel, FetchMsg, @minimoon.Emit[FetchMsg]) -> (FetchModel, @minimoon.Cmd)
 
 // Errors
 
@@ -33,7 +35,7 @@ pub struct FetchModel {
   label : String
 } derive(Eq)
 
-pub enum FetchMsg {
+pub(all) enum FetchMsg {
   Load
   Clear
   Finished(Int, Result[@minimoon.RequestResult, @minimoon.HostError])

@@ -1,0 +1,8 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/miniapp_conformance_app/app" @application,
+  "lampclaw/miniapp_conformance_app/shared/shell",
+  "lampclaw/miniapp_conformance_app/components/shared_app",
+}
+
+supported_targets = "js"

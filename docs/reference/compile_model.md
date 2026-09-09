@@ -11,21 +11,21 @@ behavior as metadata.
   "name": "miniapp_conformance_app",
   "application": { "package": "src/app" },
   "componentTheme": "minimal-v2",
-  "devtoolsChecks": ["Lab native input focus, blur, and confirm"],
+  "devtoolsChecks": ["Runtime Lab native input focus, blur, and confirm"],
   "pages": [
     { "package": "src/pages/showcase" },
     { "package": "src/pages/interaction" },
-    { "package": "src/pages/capabilities" },
+    { "package": "src/pages/platform" },
     { "package": "src/pages/application" },
-    { "package": "src/pages/home" },
-    { "package": "src/pages/lab" },
-    { "package": "src/pages/details", "smokeInput": { "from": "smoke" } }
+    { "package": "src/pages/request_lifecycle" },
+    { "package": "src/pages/runtime_lab" },
+    { "package": "src/pages/draft_editor", "smokeInput": { "from": "smoke" } }
   ],
   "tabBar": {
     "list": [
       { "package": "src/pages/showcase", "text": "首页" },
       { "package": "src/pages/interaction", "text": "交互" },
-      { "package": "src/pages/capabilities", "text": "能力" },
+      { "package": "src/pages/platform", "text": "平台" },
       { "package": "src/pages/application", "text": "应用" }
     ]
   }

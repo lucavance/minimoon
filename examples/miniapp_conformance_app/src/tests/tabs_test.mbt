@@ -1,127 +1,165 @@
 ///|
-test "capability probe naming stays distinct from the homepage and capability Tab" {
-  let (probe, tab, homepage) = @application.program().preview(deps => {
-    let probe = @capability_probe.program(deps)
-    let tab = @capabilities.program(deps)
-    let homepage = @showcase.program(deps)
-    (
-      (
-        probe.id(),
-        probe.route(),
-        probe.title(),
-        probe.initial_tree().stringify(),
-      ),
-      (tab.id(), tab.title(), tab.initial_tree().stringify()),
-      homepage.route(),
-    )
-  })
-  assert_eq(probe.0, "capability_probe")
-  assert_eq(probe.1, "pages/capability_probe/capability_probe")
-  assert_eq(probe.2, "能力验证")
-  assert_eq(tab.0, "capabilities")
-  assert_eq(tab.1, "能力")
-  assert_eq(homepage, "pages/showcase/showcase")
-  assert_true(probe.3.contains("能力验证"))
-  assert_true(tab.2.contains("能力控制台"))
-  assert_false(probe.3.contains("Minimoon Home"))
+test "all routes have one clear responsibility and no duplicated control panels" {
+  let app = @testing.launch(@application.program())
+  defer app.dispose()
+  let home = app.mount(@showcase.program)
+  let interaction = app.mount(@interaction.program)
+  let platform = app.mount(@platform.program)
+  let application = app.mount(@application_page.program)
+  let lifecycle = app.mount(@request_lifecycle.program)
+  let lab = app.mount(@runtime_lab.program)
+  let editor = app.mount(@draft_editor.program, input={ "from": "test" })
+  for
+    entry in [
+      (home, "showcase-transaction"),
+      (interaction, "interaction-native"),
+      (platform, "platform-http"),
+      (application, "application-controls"),
+      (lifecycle, "page-request-probe"),
+      (lab, "dynamic-lab"),
+      (editor, "draft-editor"),
+    ] {
+    assert_true(entry.0.query(@testing.by_section(entry.1)) is Some(_))
+  }
+  for page in [home, interaction, platform, lifecycle, lab, editor] {
+    assert_true(page.query(@testing.by_section("application-controls")) is None)
+  }
+  for page in [home, interaction, application, lifecycle, lab, editor] {
+    assert_true(page.query(@testing.by_section("platform-http")) is None)
+  }
+  for page in [home, platform, application, lifecycle, lab, editor] {
+    assert_true(page.query(@testing.by_section("composed-controls")) is None)
+  }
+  assert_true(
+    editor.query(@testing.by_section("application-observer")) is Some(_),
+  )
+  assert_true(
+    lifecycle.query(@testing.by_section("application-request-probe")) is Some(_),
+  )
+  assert_true(lifecycle.query(@testing.by_event_key("shared/inc")) is None)
+  assert_true(editor.query(@testing.by_event_key("shared/load")) is None)
+  assert_true(interaction.query(@testing.by_section("dynamic-lab")) is None)
+  assert_true(
+    interaction.query(@testing.by_event_key("interaction/toggle-probes"))
+    is None,
+  )
 }
 
 ///|
-test "capability Tab and stack Capability Probe share only App domains, not local models" {
+test "App controller and editor observer share values but retain independent local state" {
   let app = @testing.launch(@application.program())
   defer app.dispose()
-  let tab = app.mount(@capabilities.program)
-  let probe = app.mount(@capability_probe.program, input={ "name": "Probe" })
-  let application = app.mount(@application_page.program)
-  ignore(tab.input(@testing.by_event_key("capability_probe/name"), "Tab draft"))
-  ignore(tab.tap(@testing.by_event_key("capability_probe/inc")))
-  assert_true(tab.snapshot().contains("hello: Tab draft"))
-  assert_true(tab.snapshot().contains("\"text\":\"1\""))
-  assert_true(probe.snapshot().contains("hello: Probe"))
-  assert_false(probe.snapshot().contains("Tab draft"))
-  ignore(tab.tap(@testing.by_event_key("shared/inc")))
+  let controller = app.mount(@application_page.program)
+  let editor = app.mount(@draft_editor.program, input={ "from": "application" })
+  let platform = app.mount(@platform.program)
+  let lifecycle = app.mount(@request_lifecycle.program, input={
+    "name": "Probe",
+  })
+  ignore(
+    platform.input(
+      @testing.by_event_key("platform/storage-input"),
+      "Stored text",
+    ),
+  )
+  ignore(
+    editor.input(
+      @testing.by_event_key("draft_editor/draft-title"),
+      "Local draft",
+    ),
+  )
+  ignore(controller.tap(@testing.by_event_key("shared/inc")))
   app.quiesce()
-  for page in [tab, probe, application] {
+  for page in [controller, editor] {
     assert_true(page.snapshot().contains("Application shared count: 1"))
   }
-  ignore(tab.lifecycle("onHide"))
-  ignore(probe.tap(@testing.by_event_key("shared/inc")))
+  ignore(editor.lifecycle("onHide"))
+  ignore(controller.tap(@testing.by_event_key("shared/inc")))
   app.quiesce()
-  ignore(tab.lifecycle("onShow"))
+  ignore(editor.lifecycle("onShow"))
   app.quiesce()
-  assert_true(tab.snapshot().contains("hello: Tab draft"))
-  assert_true(tab.snapshot().contains("Application shared count: 2"))
-  ignore(probe.dispose())
-  ignore(tab.tap(@testing.by_event_key("capability_probe/inc")))
-  assert_true(tab.snapshot().contains("\"text\":\"2\""))
+  assert_true(editor.snapshot().contains("Application shared count: 2"))
+  assert_true(editor.snapshot().contains("Local draft"))
+  assert_false(controller.snapshot().contains("Local draft"))
+  assert_true(platform.snapshot().contains("Stored text"))
+  assert_true(lifecycle.snapshot().contains("页内标记：Probe"))
+  assert_false(lifecycle.snapshot().contains("Stored text"))
+  ignore(controller.dispose())
+  ignore(editor.tap(@testing.by_event_key("shared/inc")))
+  app.quiesce()
+  assert_true(editor.snapshot().contains("Application shared count: 3"))
 }
 
 ///|
-test "capability Tab collapses HTTP detail without changing the full stack probe" {
+test "only platform toggles HTTP details while retaining its storage input" {
   let app = @testing.launch(@application.program())
   defer app.dispose()
-  let tab = app.mount(@capabilities.program)
-  let probe = app.mount(@capability_probe.program)
+  let platform = app.mount(@platform.program)
   let detail = @testing.by_section("http-response-detail")
-  assert_true(tab.query(detail) is None)
-  assert_true(probe.query(detail) is Some(_))
+  assert_true(platform.query(detail) is None)
   ignore(
-    tab.input(@testing.by_event_key("capability_probe/name"), "Retained draft"),
+    platform.input(
+      @testing.by_event_key("platform/storage-input"),
+      "Retained draft",
+    ),
   )
-  ignore(tab.tap(@testing.by_event_key("capability_probe/toggle-response")))
-  assert_true(tab.query(detail) is Some(_))
-  ignore(tab.tap(@testing.by_event_key("capability_probe/toggle-response")))
-  assert_true(tab.query(detail) is None)
-  assert_true(tab.snapshot().contains("hello: Retained draft"))
-  assert_true(@capability_probe.capabilities().contains(@minimoon.SwitchTab))
+  ignore(platform.tap(@testing.by_event_key("platform/toggle-response")))
+  assert_true(platform.query(detail) is Some(_))
+  ignore(platform.tap(@testing.by_event_key("platform/toggle-response")))
+  assert_true(platform.query(detail) is None)
+  assert_true(platform.snapshot().contains("Retained draft"))
 }
 
 ///|
-test "interaction Tab reuses Lab functions but owns independent component scopes" {
+test "interaction owns native controls and independent local component scopes" {
   let app = @testing.launch(@application.program())
   defer app.dispose()
   let tab = app.mount(@interaction.program)
-  let probe = app.mount(@lab.program, input={ "instance": "isolated" })
+  let probe = app.mount(@runtime_lab.program, input={ "instance": "isolated" })
   let note = @testing.by_event_key("$component:toggle-card:cards:primary/note")
   ignore(tab.input(note, "Tab component draft"))
   assert_true(tab.snapshot().contains("Tab component draft"))
   assert_false(probe.snapshot().contains("Tab component draft"))
-  assert_true(tab.query(@testing.by_section("dynamic-lab")) is None)
-  assert_true(probe.query(@testing.by_section("dynamic-lab")) is Some(_))
-  ignore(tab.tap(@testing.by_event_key("interaction/toggle-probes")))
-  ignore(tab.tap(@testing.by_event_key("dynamic/increment")))
-  assert_true(tab.snapshot().contains("count:1"))
-  assert_true(probe.snapshot().contains("count:0"))
-  ignore(tab.tap(@testing.by_event_key("interaction/toggle-probes")))
+  ignore(tab.input(@testing.by_event_key("interaction/name"), "Native text"))
+  ignore(
+    tab.change(
+      @testing.by_event_key("controls/checked"),
+      ["typed", "scoped"].to_json(),
+    ),
+  )
+  ignore(
+    tab.change(@testing.by_event_key("controls/radio"), Json::string("miniapp")),
+  )
+  assert_true(tab.snapshot().contains("选择：typed, scoped · miniapp"))
+  ignore(tab.lifecycle("onHide"))
+  ignore(tab.lifecycle("onShow"))
+  assert_true(tab.snapshot().contains("Native text"))
   assert_true(tab.snapshot().contains("Tab component draft"))
   ignore(probe.dispose())
   assert_true(tab.snapshot().contains("Tab component draft"))
 }
 
 ///|
-test "homepage Tab shortcuts differ from the retained query-bearing stack probes" {
+test "homepage uses Tab shortcuts and only feature pages link to their deeper workflow" {
   let app = @testing.launch(@application.program())
   defer app.dispose()
   let page = app.mount(@showcase.program)
-  for name in ["interaction", "capabilities", "application"] {
+  for name in ["interaction", "platform", "application"] {
     let command = page.tap(@testing.by_event_key("showcase/tab-" + name))
     assert_true(command.contains("SwitchTab"))
     assert_true(command.contains("/pages/" + name + "/" + name))
     assert_false(command.contains("?"))
   }
-  let probe = page.tap(@testing.by_event_key("showcase/open-console"))
-  assert_true(probe.contains("NavigateTo"))
-  assert_true(
-    probe.contains("/pages/capability_probe/capability_probe?name=Studio"),
-  )
   let application = app.mount(@application_page.program)
-  let from_application = application.tap(
-    @testing.by_event_key("application/open-capability-probe"),
-  )
-  assert_true(from_application.contains("NavigateTo"))
+  let editor = application.tap(@testing.by_event_key("application/open-editor"))
   assert_true(
-    from_application.contains(
-      "/pages/capability_probe/capability_probe?name=Application",
+    editor.contains("/pages/draft_editor/draft_editor?from=application"),
+  )
+  let lifecycle = application.tap(
+    @testing.by_event_key("application/open-request-lifecycle"),
+  )
+  assert_true(
+    lifecycle.contains(
+      "/pages/request_lifecycle/request_lifecycle?name=Application",
     ),
   )
 }
@@ -155,8 +193,8 @@ fn layout(
 test "actual layout and resize update the shell without resetting native input identity" {
   let app = @testing.launch(@application.program())
   defer app.dispose()
-  let page = app.mount(@capabilities.program, layout=layout(390.0, 760.0, 47.0))
-  let input = @testing.by_event_key("capability_probe/name")
+  let page = app.mount(@platform.program, layout=layout(390.0, 760.0, 47.0))
+  let input = @testing.by_event_key("platform/storage-input")
   ignore(page.input(input, "Retained through resize"))
   let identity = page.get(input).identity()
   assert_true(page.snapshot().contains("height:760px"))

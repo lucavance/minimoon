@@ -1,0 +1,2 @@
+<import src="../../minimoon.templates.wxml" />
+<template is="minimoon_dynamic_node" data="{{node: draft_editor.tree, p: draft_editor.tree.props, e: draft_editor.tree.events}}" />

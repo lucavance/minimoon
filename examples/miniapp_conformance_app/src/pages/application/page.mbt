@@ -6,10 +6,10 @@ pub fn program(deps : @app_state.Deps) -> @minimoon.Page {
     title="应用",
     capabilities=[@minimoon.NavigateTo],
     build=context => {
-      let shared = @app_state.panel(context, deps)
+      let shared = @shared_app.panel(context, deps)
       let notes = @shell.technical_notes("application", [
-        "Shared and Emit belong to this App; each page retains its own local model.",
-        "App-owned requests survive page unload; Clear rejects old replies.", "The echo is held in memory only, not persisted to a server or storage.",
+        "Shared/Emit 属于 App，页面各自持有局部状态。", "页面卸载不取消 App 请求，清除忽略旧回复。",
+        "echo 仅在内存中保留。",
       ])
       shared.view3(context.layout(), notes, (shared, layout, notes) => {
         @shell.frame(layout, "应用", "application-page", [
@@ -19,37 +19,38 @@ pub fn program(deps : @app_state.Deps) -> @minimoon.Page {
           ),
           @minimoon.div(class="demo-body", [
             shared,
-            @shell.card("编辑一份草稿", [
+            @shell.card("草稿与结果", [
               @minimoon.p(
                 class="demo-muted",
                 "在独立页面完成校验与 echo，返回后查看共享结果。",
               ),
               @minimoon.button(
                 class="demo-action",
-                event_key="application/open-details",
+                event_key="application/open-editor",
                 on_tap=@minimoon.navigate_to(
-                  @minimoon.route("pages/details/details").with_query([
-                    @minimoon.query("from", "application"),
-                  ]),
+                  @minimoon.route("pages/draft_editor/draft_editor").with_query([
+                      @minimoon.query("from", "application"),
+                    ],
+                  ),
                 ),
-                "打开编辑详情",
+                "编辑草稿",
               ),
             ]),
-            @shell.card("验证页面所有权", [
+            @shell.card("请求生命周期对照", [
               @minimoon.p(
                 class="demo-muted",
                 "Tab 切换保留页面；探针页返回和替换会真正卸载。",
               ),
               @minimoon.button(
                 class="demo-action",
-                event_key="application/open-capability-probe",
+                event_key="application/open-request-lifecycle",
                 on_tap=@minimoon.navigate_to(
-                  @minimoon.route("pages/capability_probe/capability_probe").with_query([
+                  @minimoon.route("pages/request_lifecycle/request_lifecycle").with_query([
                       @minimoon.query("name", "Application"),
                     ],
                   ),
                 ),
-                "打开能力验证",
+                "请求生命周期实验",
               ),
             ]),
             notes,

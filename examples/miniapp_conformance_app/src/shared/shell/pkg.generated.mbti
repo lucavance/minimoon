@@ -16,7 +16,7 @@ pub fn hero(String, String, String, home? : Bool) -> @minimoon.Node
 
 pub fn navigation_height(@minimoon.PageLayout) -> String
 
-pub fn technical_notes(String, Array[String]) -> @minimoon.Val[@minimoon.Node]
+pub fn technical_notes(String, Array[String], extra? : @minimoon.Val[@minimoon.Node]) -> @minimoon.Val[@minimoon.Node]
 
 // Errors
 

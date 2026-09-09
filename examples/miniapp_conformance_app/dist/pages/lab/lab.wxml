@@ -1,2 +1,0 @@
-<import src="../../minimoon.templates.wxml" />
-<template is="minimoon_dynamic_node" data="{{node: lab.tree, p: lab.tree.props, e: lab.tree.events}}" />

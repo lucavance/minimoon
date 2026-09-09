@@ -324,16 +324,39 @@ async fn static_suite(root : String) -> Unit {
   }
   for
     page_package in [
-      "examples/miniapp_conformance_app/src/pages/showcase/moon.pkg", "examples/miniapp_conformance_app/src/pages/capability_probe/moon.pkg",
-      "examples/miniapp_conformance_app/src/pages/lab/moon.pkg", "examples/miniapp_conformance_app/src/pages/details/moon.pkg",
-      "examples/miniapp_conformance_app/src/pages/interaction/moon.pkg", "examples/miniapp_conformance_app/src/pages/capabilities/moon.pkg",
+      "examples/miniapp_conformance_app/src/pages/showcase/moon.pkg", "examples/miniapp_conformance_app/src/pages/request_lifecycle/moon.pkg",
+      "examples/miniapp_conformance_app/src/pages/runtime_lab/moon.pkg", "examples/miniapp_conformance_app/src/pages/draft_editor/moon.pkg",
+      "examples/miniapp_conformance_app/src/pages/interaction/moon.pkg", "examples/miniapp_conformance_app/src/pages/platform/moon.pkg",
       "examples/miniapp_conformance_app/src/pages/application/moon.pkg", "examples/miniapp_conformance_app/src/components/toggle_card/moon.pkg",
-      "templates/starter/src/pages/home/moon.pkg", "templates/starter/src/pages/details/moon.pkg",
+      "examples/miniapp_conformance_app/src/components/shared_app/moon.pkg", "examples/miniapp_conformance_app/src/scenes/interaction/moon.pkg",
+      "examples/miniapp_conformance_app/src/scenes/composition/moon.pkg", "templates/starter/src/pages/home/moon.pkg",
+      "templates/starter/src/pages/details/moon.pkg",
     ] {
     require_text(root, page_package, "\"lampclaw/minimoon\"")
     forbid_text(root, page_package, "lampclaw/minimoon/miniapp")
     for internal_package in ["renderer_miniapp", "runtime_core", "ui_dsl"] {
       forbid_text(root, page_package, internal_package)
+    }
+  }
+  // In these fixed fixture packages the first import block is production-only;
+  // subsequent `for "test"` imports may reference another page for integration tests.
+  for
+    page in [
+      "showcase", "interaction", "platform", "application", "request_lifecycle",
+      "runtime_lab", "draft_editor",
+    ] {
+    let package_path = "examples/miniapp_conformance_app/src/pages/" +
+      page +
+      "/moon.pkg"
+    let production = @fs.read_file(join(root, package_path))
+      .text()
+      .split("}")
+      .collect()[0]
+    guard !production.contains("miniapp_conformance_app/pages/") else {
+      abort(
+        "Conformance production pages must compose scenes, not other pages: " +
+        page,
+      )
     }
   }
   for internal_package in ["renderer_miniapp", "runtime_core", "ui_dsl"] {
@@ -350,10 +373,11 @@ async fn static_suite(root : String) -> Unit {
     application_source in [
       "src/cmd/minimoon/templates.generated.mbt", "templates/starter/src/pages/home/page.mbt",
       "templates/starter/src/pages/details/page.mbt", "examples/miniapp_conformance_app/src/pages/showcase/page.mbt",
-      "examples/miniapp_conformance_app/src/pages/capability_probe/page.mbt", "examples/miniapp_conformance_app/src/pages/lab/page.mbt",
-      "examples/miniapp_conformance_app/src/pages/details/page.mbt", "examples/miniapp_conformance_app/src/components/toggle_card/card.mbt",
-      "examples/miniapp_conformance_app/src/pages/interaction/page.mbt", "examples/miniapp_conformance_app/src/pages/capabilities/page.mbt",
-      "examples/miniapp_conformance_app/src/pages/application/page.mbt",
+      "examples/miniapp_conformance_app/src/pages/request_lifecycle/page.mbt", "examples/miniapp_conformance_app/src/pages/runtime_lab/page.mbt",
+      "examples/miniapp_conformance_app/src/pages/draft_editor/page.mbt", "examples/miniapp_conformance_app/src/components/toggle_card/card.mbt",
+      "examples/miniapp_conformance_app/src/pages/interaction/page.mbt", "examples/miniapp_conformance_app/src/pages/platform/page.mbt",
+      "examples/miniapp_conformance_app/src/pages/application/page.mbt", "examples/miniapp_conformance_app/src/components/shared_app/panels.mbt",
+      "examples/miniapp_conformance_app/src/scenes/interaction/scene.mbt", "examples/miniapp_conformance_app/src/scenes/composition/scene.mbt",
     ] {
     for
       stale_public_name in [

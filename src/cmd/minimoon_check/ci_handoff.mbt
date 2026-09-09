@@ -209,7 +209,7 @@ fn ci_handoff_check_source() -> String {
     #|  const coreManifest = "examples/miniapp_conformance_app/generated/manifest.json"
     #|  reject("core-missing-tab", (dir) => editJson(dir, coreManifest, (value) => { value.tabBar.list.pop() }), /matching versions/)
     #|  reject("core-tab-order", (dir) => editJson(dir, coreManifest, (value) => { value.tabBar.list.reverse() }), /matching versions/)
-    #|  reject("core-missing-secondary", (dir) => editJson(dir, coreManifest, (value) => { value.pages = value.pages.filter((page) => page.route !== "pages/lab/lab") }), /matching versions/)
+    #|  reject("core-missing-secondary", (dir) => editJson(dir, coreManifest, (value) => { value.pages = value.pages.filter((page) => page.route !== "pages/runtime_lab/runtime_lab") }), /matching versions/)
     #|  reject("core-replaced-secondary", (dir) => editJson(dir, coreManifest, (value) => { value.pages[5].route = "pages/unreviewed/unreviewed" }), /matching versions/)
     #|  reject("core-tab-host-drift", (dir) => editJson(dir, "examples/miniapp_conformance_app/dist/app.json", (value) => { value.tabBar.list[0].text = "unreviewed" }), /matching versions/)
     #|  for (const [index, script] of cleanChecks.entries()) {

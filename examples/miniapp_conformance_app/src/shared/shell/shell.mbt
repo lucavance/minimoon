@@ -140,9 +140,13 @@ pub fn card(
 pub fn technical_notes(
   id : String,
   notes : Array[String],
+  extra? : @minimoon.Val[@minimoon.Node],
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, toggle) = @minimoon.create_variable(false)
-  open.view(open => {
+  open.view2(extra.unwrap_or(@minimoon.Val::constant(@minimoon.nothing())), (
+    open,
+    extra,
+  ) => {
     @minimoon.div(class="demo-notes", [
       @minimoon.button(
         class="demo-note-toggle",
@@ -157,7 +161,7 @@ pub fn technical_notes(
       if open {
         @minimoon.div(
           class="demo-note-content",
-          notes.map(note => @minimoon.p(note)),
+          [..notes.map(note => @minimoon.p(note)), extra],
         )
       } else {
         @minimoon.nothing()

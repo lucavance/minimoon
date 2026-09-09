@@ -1,0 +1,14 @@
+import {
+  "lampclaw/miniapp_conformance_app/components/shared_app",
+  "lampclaw/miniapp_conformance_app/shared/shell",
+  "lampclaw/miniapp_conformance_app/app" @application,
+  "lampclaw/minimoon",
+  "lampclaw/minimoon/http",
+  "moonbitlang/core/json",
+}
+
+import {
+  "lampclaw/miniapp_conformance_app/pages/application" @application_page,
+} for "test"
+
+supported_targets = "js"

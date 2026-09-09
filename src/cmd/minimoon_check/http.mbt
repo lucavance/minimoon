@@ -32,7 +32,7 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
     [
       script,
       join(
-        root, "examples/miniapp_conformance_app/dist/pages/capability_probe/capability_probe.js",
+        root, "examples/miniapp_conformance_app/dist/pages/platform/platform.js",
       ),
       report,
       if offline {
@@ -52,7 +52,7 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
         [
           script,
           join(
-            root, "examples/miniapp_conformance_app/dist/pages/capability_probe/capability_probe.js",
+            root, "examples/miniapp_conformance_app/dist/pages/platform/platform.js",
           ),
           failed_report,
           "--offline",

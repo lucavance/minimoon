@@ -173,7 +173,8 @@ async fn codegen_suite(root : String) -> Unit {
   }
   for
     marker in [
-      "showcase-hero", "capability_probe-controls", "request-output", "details-card",
+      "showcase-hero", "request-lifecycle-state", "request-output", "draft-editor",
+      "interaction-native", "composed-controls", "platform-http", "application-controls",
       "dynamic-lab", "component-lab", "control-lab",
     ] {
     require_text(
@@ -190,10 +191,10 @@ async fn codegen_suite(root : String) -> Unit {
     root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", "https://example.com/api/profile",
   )
   require_text(
-    root, "examples/miniapp_conformance_app/generated/smoke_checklist.json", "Lab native input focus, blur, and confirm",
+    root, "examples/miniapp_conformance_app/generated/smoke_checklist.json", "Runtime Lab native input focus, blur, and confirm",
   )
   require_text(
-    root, "examples/miniapp_conformance_app/generated/smoke_checklist.json", "Lab Dropdown checkbox, radio, submenu action, and dismiss",
+    root, "examples/miniapp_conformance_app/generated/smoke_checklist.json", "Interaction Dropdown checkbox, radio, submenu action, and dismiss",
   )
   require_text(
     root, "examples/miniapp_conformance_app/styles/tailwind.css", "@source not \"../src/**/*_test.mbt\"",

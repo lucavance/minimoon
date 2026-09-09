@@ -5,7 +5,7 @@ pub struct FetchModel {
 } derive(Eq)
 
 ///|
-pub enum FetchMsg {
+pub(all) enum FetchMsg {
   Load
   Clear
   Finished(Int, Result[@minimoon.RequestResult, @minimoon.HostError])
@@ -35,36 +35,8 @@ pub fn program() -> @minimoon.App[Deps] {
       delta : Int,
     ) => count + delta)
     let (fetch, send_fetch) = context.create_state(
-      { epoch: 0, label: "idle", },
-      update=(current, message, emit) => {
-        match message {
-          Load => {
-            let epoch = current.epoch + 1
-            @minimoon.with_cmd(
-              { epoch, label: "loading", },
-              @minimoon.request(
-                "https://httpbingo.org/delay/2",
-                emit.map(result => Finished(epoch, result)),
-              ),
-            )
-          }
-          Clear =>
-            @minimoon.no_cmd({ epoch: current.epoch + 1, label: "idle", })
-          Finished(epoch, result) =>
-            if epoch != current.epoch {
-              @minimoon.no_cmd(current)
-            } else {
-              @minimoon.no_cmd({
-                ..current,
-                label: match result {
-                  Ok(response) =>
-                    "loaded HTTP " + response.status_code.to_string()
-                  Err(error) => "failed: " + error.message
-                },
-              })
-            }
-        }
-      },
+      initial_fetch(),
+      update=update_fetch,
     )
     let (echoed_draft, save_echo) = context.create_pure_state(None, update=(
       _,
@@ -75,47 +47,40 @@ pub fn program() -> @minimoon.App[Deps] {
 }
 
 ///|
-pub fn panel(
-  context : @minimoon.PageContext,
-  deps : Deps,
-) -> @minimoon.Val[@minimoon.Node] {
-  context
-  .bind(deps.count)
-  .view3(
-    context.select(deps.fetch, model => model.label),
-    context.bind(deps.echoed_draft),
-    (count, status, draft) => {
-      @minimoon.div(class="demo-card", data_section="shared-state", [
-        @minimoon.p(class="demo-card-title", "应用共享状态"),
-        @minimoon.p("Application shared count: " + count.to_string()),
-        @minimoon.p("Application request: " + status),
-        @minimoon.p(
-          "Application echoed draft: " +
-          (match draft {
-            None => "none (not persistent)"
-            Some(draft) =>
-              draft.title + " / " + draft.note + " (not persistent)"
-          }),
+/// The same domain update runs under either an App or a page owner.
+pub fn initial_fetch() -> FetchModel {
+  { epoch: 0, label: "idle", }
+}
+
+///|
+pub fn update_fetch(
+  current : FetchModel,
+  message : FetchMsg,
+  emit : @minimoon.Emit[FetchMsg],
+) -> (FetchModel, @minimoon.Cmd) {
+  match message {
+    Load => {
+      let epoch = current.epoch + 1
+      @minimoon.with_cmd(
+        { epoch, label: "loading", },
+        @minimoon.request(
+          "https://httpbingo.org/delay/2",
+          emit.map(result => Finished(epoch, result)),
         ),
-        @minimoon.button(
-          class="demo-action",
-          on_tap=(deps.change_count)(1),
-          event_key="shared/inc",
-          "Shared +1",
-        ),
-        @minimoon.button(
-          class="demo-action",
-          on_tap=(deps.send_fetch)(Load),
-          event_key="shared/load",
-          "Shared public API request",
-        ),
-        @minimoon.button(
-          class="demo-action",
-          on_tap=(deps.send_fetch)(Clear),
-          event_key="shared/clear",
-          "Clear and ignore old response",
-        ),
-      ])
-    },
-  )
+      )
+    }
+    Clear => @minimoon.no_cmd({ epoch: current.epoch + 1, label: "idle", })
+    Finished(epoch, result) =>
+      if epoch != current.epoch {
+        @minimoon.no_cmd(current)
+      } else {
+        @minimoon.no_cmd({
+          ..current,
+          label: match result {
+            Ok(response) => "loaded HTTP " + response.status_code.to_string()
+            Err(error) => "failed: " + error.message
+          },
+        })
+      }
+  }
 }

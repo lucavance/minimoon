@@ -614,7 +614,7 @@ pub fn dynamic_app_host_smoke_source() -> String {
     #|  for (const child of node.children || []) { const found = findFocusProbeGroup(child); if (found) return found }
     #|  return null
     #|}
-    #|const beforeKeyedGroup = findFocusProbeGroup(host.data.lab.tree)
+    #|const beforeKeyedGroup = findFocusProbeGroup(host.data.runtime_lab.tree)
     #|const beforeOrder = beforeKeyedGroup?.children.map((node) => node.identity).join(",") || ""
     #|if (beforeOrder !== "k:focus-probe,k:a,k:b,k:c") throw new Error(`wrong initial keyed order: ${beforeOrder}`)
     #|const focusedProbe = beforeKeyedGroup.children[0]
@@ -624,7 +624,7 @@ pub fn dynamic_app_host_smoke_source() -> String {
     #|if (afterArm.hostWriteOps !== beforeArm.hostWriteOps || afterArm.renderCommits !== beforeArm.renderCommits || afterArm.subscriptionStops - beforeArm.subscriptionStops !== 1 || afterArm.subscriptionStarts - beforeArm.subscriptionStarts !== 1 || Array.from(host._sb.keys()).join(",") !== "lab/focused-keyed-reorder") throw new Error(`focused reorder arm did not isolate its subscription without a tree write: ${JSON.stringify({ beforeArm, afterArm, subscriptions: Array.from(host._sb.keys()) })}`)
     #|const beforeMove = host.__minimoonRendererStats()
     #|host._en({ kind: "subscription", key: "lab/focused-keyed-reorder" })
-    #|const keyedGroup = findFocusProbeGroup(host.data.lab.tree)
+    #|const keyedGroup = findFocusProbeGroup(host.data.runtime_lab.tree)
     #|const order = keyedGroup?.children.map((node) => node.identity).join(",") || ""
     #|if (order !== "k:focus-probe,k:c,k:a,k:b") throw new Error(`wrong keyed order: ${order}`)
     #|if (keyedGroup.children[0] !== focusedProbe || keyedGroup.children[0].props.value !== "Minimoon cursor probe" || !JSON.stringify(host.data).includes("hello:Minimoon cursor probe")) throw new Error("focused keyed input identity or controlled value changed")
@@ -632,7 +632,7 @@ pub fn dynamic_app_host_smoke_source() -> String {
     #|if (afterMove.moveOps - beforeMove.moveOps !== 1 || afterMove.hostWriteOps - beforeMove.hostWriteOps !== 2 || afterMove.spliceOps !== beforeMove.spliceOps || afterMove.replaceCommands !== beforeMove.replaceCommands || afterMove.patchFallbacks !== beforeMove.patchFallbacks || afterMove.subscriptionStops - beforeMove.subscriptionStops !== 1 || afterMove.subscriptionStarts - beforeMove.subscriptionStarts !== 1 || Array.from(host._sb.keys()).join(",") !== "lab/page-tick") throw new Error(`focused subscription tick did not use exactly one nonfocused move before restoring page tick: ${JSON.stringify({ beforeMove, afterMove, subscriptions: Array.from(host._sb.keys()) })}`)
     #|const beforeControlledReset = host.__minimoonRendererStats()
     #|dispatch("dynamic/reset-controlled-input")
-    #|const resetGroup = findFocusProbeGroup(host.data.lab.tree)
+    #|const resetGroup = findFocusProbeGroup(host.data.runtime_lab.tree)
     #|const afterControlledReset = host.__minimoonRendererStats()
     #|if (resetGroup?.children[0] !== focusedProbe || resetGroup.children[0].props.value !== "Minimoon" || JSON.stringify(host.data).includes("Minimoon cursor probe")) throw new Error("controlled input reset replaced its keyed native identity or retained the stale value")
     #|if (afterControlledReset.renderCommits - beforeControlledReset.renderCommits !== 1 || afterControlledReset.setOps <= beforeControlledReset.setOps || afterControlledReset.moveOps !== beforeControlledReset.moveOps || afterControlledReset.spliceOps !== beforeControlledReset.spliceOps || afterControlledReset.replaceCommands !== beforeControlledReset.replaceCommands) throw new Error(`controlled input reset did not use only scalar patches: ${JSON.stringify({ beforeControlledReset, afterControlledReset })}`)
@@ -643,16 +643,16 @@ pub fn dynamic_app_host_smoke_source() -> String {
     #|  for (const child of node.children || []) { const found = findNode(child, predicate); if (found) return found }
     #|  return null
     #|}
-    #|const nativeInput = findNode(host.data.lab.tree, (node) => node.identity === "k:focus-probe")
-    #|const nativePicker = findNode(host.data.lab.tree, (node) => node.kind === "picker" && node.props?.id === "control-picker")
-    #|const nativeSwiper = findNode(host.data.lab.tree, (node) => node.kind === "swiper")
+    #|const nativeInput = findNode(host.data.runtime_lab.tree, (node) => node.identity === "k:focus-probe")
+    #|const nativePicker = findNode(host.data.runtime_lab.tree, (node) => node.kind === "picker" && node.props?.id === "control-picker")
+    #|const nativeSwiper = findNode(host.data.runtime_lab.tree, (node) => node.kind === "swiper")
     #|const selectedSwiperItem = findNode(nativeSwiper, (node) => node.kind === "swiper-item" && node.props?.itemId === "first")
     #|if (!nativeInput || !nativePicker || !nativeSwiper || !selectedSwiperItem) throw new Error("controlled native reconciliation fixtures were not found")
     #|const beforeNativeReconcile = host.__minimoonRendererStats()
     #|dispatch("controls/reconcile-native")
-    #|const reconciledInput = findNode(host.data.lab.tree, (node) => node.identity === "k:focus-probe")
-    #|const reconciledPicker = findNode(host.data.lab.tree, (node) => node.kind === "picker" && node.props?.id === "control-picker")
-    #|const reconciledSwiper = findNode(host.data.lab.tree, (node) => node.kind === "swiper")
+    #|const reconciledInput = findNode(host.data.runtime_lab.tree, (node) => node.identity === "k:focus-probe")
+    #|const reconciledPicker = findNode(host.data.runtime_lab.tree, (node) => node.kind === "picker" && node.props?.id === "control-picker")
+    #|const reconciledSwiper = findNode(host.data.runtime_lab.tree, (node) => node.kind === "swiper")
     #|const reconciledSwiperItems = findNode(reconciledSwiper, (node) => node.kind === "fragment" && node.children?.some((child) => child.kind === "swiper-item"))
     #|const afterNativeReconcile = host.__minimoonRendererStats()
     #|if (reconciledInput !== nativeInput || reconciledPicker !== nativePicker || reconciledSwiper !== nativeSwiper || reconciledInput.props.value !== "Minimoon") throw new Error("controlled native reconciliation replaced a retained control or kept stale input state")
@@ -668,15 +668,15 @@ pub fn dynamic_app_host_smoke_source() -> String {
     #|await advance(1)
     #|if (!JSON.stringify(host.data).includes("delay probe:completed:600ms")) throw new Error(`delay probe did not complete at 600ms: ${JSON.stringify(host.data)}`)
     #|dispatch("dynamic/replace-root")
-    #|if (host.data.lab.tree.kind !== "fragment") throw new Error("root replacement did not update")
+    #|if (host.data.runtime_lab.tree.kind !== "fragment") throw new Error("root replacement did not update")
     #|const stats = host.__minimoonRendererStats()
     #|if (stats.replaceCommands < 1 || stats.patchCommands < 5) throw new Error(`unexpected renderer stats: ${JSON.stringify(stats)}`)
     #|if (stats.patchFallbacks !== 0 || stats.rejectedPatches !== 0) throw new Error(`valid patches fell back: ${JSON.stringify(stats)}`)
-    #|const beforeFallback = JSON.stringify(host.data.lab.tree)
-    #|definition._ap.call(host, { type: "PatchViewTree", component_id: "lab", base_revision: host._rv, revision: host._rv + 1, ops: [{ op: "set", path: ["__proto__"], value: "bad" }] }, host._gn, () => {})
+    #|const beforeFallback = JSON.stringify(host.data.runtime_lab.tree)
+    #|definition._ap.call(host, { type: "PatchViewTree", component_id: "runtime_lab", base_revision: host._rv, revision: host._rv + 1, ops: [{ op: "set", path: ["__proto__"], value: "bad" }] }, host._gn, () => {})
     #|const fallbackStats = host.__minimoonRendererStats()
     #|if (fallbackStats.patchFallbacks !== 1 || fallbackStats.rejectedPatches !== 1) throw new Error(`invalid patch did not fall back atomically: ${JSON.stringify(fallbackStats)}`)
-    #|if (JSON.stringify(host.data.lab.tree) !== beforeFallback) throw new Error("invalid patch changed the rendered tree")
+    #|if (JSON.stringify(host.data.runtime_lab.tree) !== beforeFallback) throw new Error("invalid patch changed the rendered tree")
     #|const beforeAsync = host.__minimoonRendererStats()
     #|dispatch("dynamic/start-async")
     #|const startedAsync = JSON.stringify(host.data)
@@ -691,9 +691,9 @@ pub fn dynamic_app_host_smoke_source() -> String {
     #|if (!JSON.stringify(host.data).includes("attempt probe:failed:400ms:planned")) throw new Error(`attempt probe did not complete at 400ms: ${JSON.stringify(host.data)}`)
     #|const afterAsync = host.__minimoonRendererStats()
     #|if (afterAsync.asyncDrains - beforeAsync.asyncDrains !== 2) throw new Error(`suspended probes did not use exactly two async drains: ${JSON.stringify({ beforeAsync, afterAsync })}`)
-    #|const beforeMalformed = JSON.stringify(host.data.lab.tree)
+    #|const beforeMalformed = JSON.stringify(host.data.runtime_lab.tree)
     #|definition._hr.call(host, "{}", host._gn)
-    #|if (JSON.stringify(host.data.lab.tree) !== beforeMalformed) throw new Error("malformed command batch changed the rendered tree")
+    #|if (JSON.stringify(host.data.runtime_lab.tree) !== beforeMalformed) throw new Error("malformed command batch changed the rendered tree")
     #|definition.onUnload.call(host)
     #|await flushMicrotasks()
     #|if (timers.size !== 0 || intervals.size !== 0) throw new Error(`dynamic host smoke leaked timers: ${JSON.stringify({ timers: timers.size, intervals: intervals.size })}`)
@@ -735,15 +735,15 @@ pub fn navigation_host_smoke_source() -> String {
     #|  navigateBack(options) { calls.push(["navigateBack", options]) },
     #|  switchTab(options) { calls.push(["switchTab", options]) },
     #|  login(options) { const terminal = effectOptions("login", options, {}); if (failingCapability === "login") terminal.fail({ errMsg: "wx.login:fail denied", errCode: 401 }); else terminal.success({ code: "host-login" }) },
-    #|  getStorage(options) { const terminal = effectOptions("getStorage", options, { key: "minimoon-conformance-capability_probe" }); terminal.success({ data: "stored" }) },
-    #|  setStorage(options) { const terminal = effectOptions("setStorage", options, { key: "minimoon-conformance-capability_probe", data: "0" }); terminal.success({}) },
+    #|  getStorage(options) { const terminal = effectOptions("getStorage", options, { key: "minimoon-conformance-platform" }); terminal.success({ data: "stored" }) },
+    #|  setStorage(options) { const terminal = effectOptions("setStorage", options, { key: "minimoon-conformance-platform", data: "Minimoon" }); terminal.success({}) },
     #|  request(options) {
     #|    const terminal = effectOptions("request", options, { url: "https://httpbingo.org/get?existing=yes&message=Minimoon%20%E6%B5%8B%E8%AF%95%20%2B%26%3D&tag=one&tag=two", method: "GET", header: { "x-minimoon-test": "public-smoke" }, timeout: 15000 })
     #|    if (requestMode === "deferred") { pendingRequest = terminal; return { abort() { requestAborts += 1 } } }
     #|    terminal.success({ statusCode: 200, data: { method: "GET" }, header: { "content-type": "application/json" }, cookies: ["session=host"] })
     #|    return { abort() { requestAborts += 1 } }
     #|  },
-    #|  showToast(options) { const terminal = effectOptions("showToast", options, { title: "Count: 0" }); terminal.success({}) },
+    #|  showToast(options) { const terminal = effectOptions("showToast", options, { title: "Minimoon 提示" }); terminal.success({}) },
     #|  getLocation(options) { const terminal = effectOptions("getLocation", options, {}); terminal.success({ latitude: 31.2, longitude: 121.5, accuracy: 4.5 }) },
     #|  chooseMedia(options) { const terminal = effectOptions("chooseMedia", options, {}); terminal.success({ type: "image", tempFiles: [{ tempFilePath: "/tmp/minimoon-host.jpg", size: 123, width: 20, height: 10 }] }) },
     #|}
@@ -756,7 +756,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|const detailsDefinition = load(process.argv[4])
     #|const labDefinition = load(process.argv[5])
     #|const interactionDefinition = load(process.argv[6])
-    #|const capabilitiesDefinition = load(process.argv[7])
+    #|const platformDefinition = load(process.argv[7])
     #|const applicationDefinition = load(process.argv[8])
     #|const resolve = (root, path) => { let value = root; for (const token of path) value = value[token]; return value }
     #|const assign = (root, path, value) => { const parent = resolve(root, path.slice(0, -1)); parent[path[path.length - 1]] = value }
@@ -794,7 +794,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|  return host
     #|}
     #|const dispatch = (page, host, key, detail = {}) => {
-    #|  const input = key.endsWith("/name")
+    #|  const input = key.endsWith("/name") || key.endsWith("/storage-input")
     #|  const handler = input ? page.__mmDispatchInput : page.__mmDispatchTap
     #|  const field = input ? "minimoonInput" : "minimoonTap"
     #|  handler.call(host, { currentTarget: { dataset: { [field]: key } }, target: { dataset: {} }, detail })
@@ -806,18 +806,17 @@ pub fn navigation_host_smoke_source() -> String {
     #|const showcase = start(showcaseDefinition)
     #|dispatch(showcaseDefinition, showcase, "showcase/increment")
     #|if (!JSON.stringify(showcase.data).includes("state updates: 1")) throw new Error("showcase did not update state")
-    #|for (const [name, page, prepare, increment, marker] of [
-    #|  ["interaction", interactionDefinition, "interaction/toggle-probes", "dynamic/increment", "count:1"],
-    #|  ["capabilities", capabilitiesDefinition, null, "capability_probe/inc", '"text":"1"'],
-    #|  ["application", applicationDefinition, null, null, null],
+    #|for (const [name, page, inputKey, marker] of [
+    #|  ["interaction", interactionDefinition, "interaction/name", "Retained Tab input"],
+    #|  ["platform", platformDefinition, "platform/storage-input", "Retained Tab input"],
+    #|  ["application", applicationDefinition, null, null],
     #|]) {
     #|  dispatch(showcaseDefinition, showcase, `showcase/tab-${name}`)
     #|  assertLastCall("switchTab", { url: `/pages/${name}/${name}` })
     #|  showcaseDefinition.onHide.call(showcase)
     #|  const tab = start(page)
     #|  if (!tab.__mmInstanceId || tab._cl) throw new Error(`${name} tab must initialize from empty route input`)
-    #|  if (prepare) dispatch(page, tab, prepare)
-    #|  if (increment) dispatch(page, tab, increment)
+    #|  if (inputKey) dispatch(page, tab, inputKey, { value: "Retained Tab input" })
     #|  const instance = tab.__mmInstanceId
     #|  page.onHide.call(tab)
     #|  showcaseDefinition.onShow.call(showcase)
@@ -830,33 +829,33 @@ pub fn navigation_host_smoke_source() -> String {
     #|  pageStack.pop()
     #|  showcaseDefinition.onShow.call(showcase)
     #|}
-    #|dispatch(showcaseDefinition, showcase, "showcase/open-console")
-    #|assertLastCall("navigateTo", { url: "/pages/capability_probe/capability_probe?name=Studio" })
-    #|dispatch(showcaseDefinition, showcase, "showcase/open-lab")
-    #|assertLastCall("navigateTo", { url: "/pages/lab/lab?instance=showcase" })
-    #|dispatch(showcaseDefinition, showcase, "showcase/open-details")
-    #|assertLastCall("navigateTo", { url: "/pages/details/details?from=showcase" })
+    #|const appTab = start(applicationDefinition)
+    #|dispatch(applicationDefinition, appTab, "application/open-editor")
+    #|assertLastCall("navigateTo", { url: "/pages/draft_editor/draft_editor?from=application" })
+    #|dispatch(applicationDefinition, appTab, "application/open-request-lifecycle")
+    #|assertLastCall("navigateTo", { url: "/pages/request_lifecycle/request_lifecycle?name=Application" })
+    #|applicationDefinition.onHide.call(appTab)
     #|showcaseDefinition.onHide.call(showcase)
     #|const probe = start(probeDefinition, { name: "Host" })
     #|const probeInstance = probe.__mmInstanceId
-    #|dispatch(probeDefinition, probe, "capability_probe/inc")
-    #|if (!JSON.stringify(probe.data).includes('"text":"1"')) throw new Error("probe did not increment before navigation")
-    #|dispatch(probeDefinition, probe, "capability_probe/open-details")
-    #|assertLastCall("navigateTo", { url: "/pages/details/details?from=capability_probe" })
+    #|dispatch(probeDefinition, probe, "request_lifecycle/name", { value: "Retained lifecycle marker" })
+    #|if (!JSON.stringify(probe.data).includes("Retained lifecycle marker")) throw new Error("probe did not increment before navigation")
+    #|dispatch(probeDefinition, probe, "request_lifecycle/open-editor")
+    #|assertLastCall("navigateTo", { url: "/pages/draft_editor/draft_editor?from=request_lifecycle" })
     #|probeDefinition.onHide.call(probe)
-    #|const details = start(detailsDefinition, { from: "capability_probe" })
+    #|const details = start(detailsDefinition, { from: "request_lifecycle" })
     #|dispatch(detailsDefinition, details, "Back")
     #|assertLastCall("navigateBack", { delta: 1 })
     #|detailsDefinition.onUnload.call(details)
     #|pageStack.pop()
     #|probeDefinition.onShow.call(probe)
-    #|if (probe.__mmInstanceId !== probeInstance || !JSON.stringify(probe.data).includes('"text":"1"')) throw new Error("navigateBack did not preserve the probe instance")
+    #|if (probe.__mmInstanceId !== probeInstance || !JSON.stringify(probe.data).includes("Retained lifecycle marker")) throw new Error("navigateBack did not preserve the probe instance")
     #|pageStack.length = 0
     #|const rejectedDetails = makeHost(detailsDefinition)
     #|const creationErrors = [], savedConsoleError = console.error
     #|console.error = (...args) => creationErrors.push(args.join(" "))
     #|try { rejectedDetails.onLoad({}); rejectedDetails.onReady() } finally { console.error = savedConsoleError }
-    #|if (rejectedDetails.__mmInstanceId !== null || !rejectedDetails._cl || rejectedDetails.data.details.commit !== 0 || !creationErrors.some(error => error.includes("page_input_decode_failed"))) throw new Error("invalid required route input must fail closed before registration/render")
+    #|if (rejectedDetails.__mmInstanceId !== null || !rejectedDetails._cl || rejectedDetails.data.draft_editor.commit !== 0 || !creationErrors.some(error => error.includes("page_input_decode_failed"))) throw new Error("invalid required route input must fail closed before registration/render")
     #|const directDetails = start(detailsDefinition, { from: "direct" })
     #|dispatch(detailsDefinition, directDetails, "Back")
     #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
@@ -869,10 +868,11 @@ pub fn navigation_host_smoke_source() -> String {
     #|console.error = originalError
     #|if (calls.length !== beforeInvalid || !errors.some((value) => value.includes("invalid NavigateBack command")) || !errors.some((value) => value.includes("undeclared capability: wx.navigateBack"))) throw new Error(`NavigateBack validation failed: ${JSON.stringify(errors)}`)
     #|pageStack.length = 0
-    #|dispatch(probeDefinition, probe, "capability_probe/back-studio")
+    #|dispatch(probeDefinition, probe, "request_lifecycle/back")
     #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
-    #|dispatch(probeDefinition, probe, "capability_probe/open-lab")
-    #|assertLastCall("navigateTo", { url: "/pages/lab/lab" })
+    #|dispatch(probeDefinition, probe, "request_lifecycle/replace-editor")
+    #|assertLastCall("redirectTo", { url: "/pages/draft_editor/draft_editor?from=redirect" })
+    #|probeDefinition.onUnload.call(probe)
     #|pageStack.length = 0
     #|const firstLab = start(labDefinition, { instance: "first" })
     #|const secondLab = start(labDefinition, { instance: "second" })
@@ -886,44 +886,48 @@ pub fn navigation_host_smoke_source() -> String {
     #|labDefinition.onUnload.call(secondLab)
     #|pageStack.length = 0
     #|const directLab = start(labDefinition, { instance: "direct" })
-    #|dispatch(labDefinition, directLab, "lab/back-studio")
+    #|dispatch(labDefinition, directLab, "runtime_lab/back")
     #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
     #|labDefinition.onUnload.call(directLab)
     #|pageStack.length = 0
-    #|const capabilityProbe = start(probeDefinition, { name: "Capabilities" })
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/login")
-    #|if (!JSON.stringify(capabilityProbe.data).includes("login: success") || !JSON.stringify(capabilityProbe.data).includes("code: host-login")) throw new Error("wx.login success did not resolve into Capability Probe state")
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/load-storage")
-    #|if (!JSON.stringify(capabilityProbe.data).includes("storage: loaded") || !JSON.stringify(capabilityProbe.data).includes("value: stored")) throw new Error("wx.getStorage success did not resolve into Capability Probe state")
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/save-storage")
-    #|if (!JSON.stringify(capabilityProbe.data).includes("storage: saved")) throw new Error("wx.setStorage success did not resolve into Capability Probe state")
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/request")
-    #|if (!JSON.stringify(capabilityProbe.data).includes("request: loaded · HTTP 200") || !JSON.stringify(capabilityProbe.data).includes('\\"method\\":\\"GET\\"')) throw new Error("wx.request success did not resolve into Capability Probe state")
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/toast")
-    #|if (!JSON.stringify(capabilityProbe.data).includes("toast: shown")) throw new Error("wx.showToast success did not resolve into Capability Probe state")
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/location")
-    #|if (!JSON.stringify(capabilityProbe.data).includes("31.2,121.5")) throw new Error("wx.getLocation success did not resolve into Capability Probe state")
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/media")
-    #|if (!JSON.stringify(capabilityProbe.data).includes("/tmp/minimoon-host.jpg")) throw new Error("wx.chooseMedia success did not resolve into Capability Probe state")
+    #|const capabilityProbe = start(platformDefinition)
+    #|dispatch(platformDefinition, capabilityProbe, "platform/login")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("login: success") || !JSON.stringify(capabilityProbe.data).includes("code: host-login")) throw new Error("wx.login success did not resolve into Platform state")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/load-storage")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("storage: loaded") || !JSON.stringify(capabilityProbe.data).includes("value: stored")) throw new Error("wx.getStorage success did not resolve into Platform state")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/save-storage")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("storage: saved")) throw new Error("wx.setStorage success did not resolve into Platform state")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/toggle-response")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/request")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("request: loaded · HTTP 200") || !JSON.stringify(capabilityProbe.data).includes('\\"method\\":\\"GET\\"')) throw new Error("wx.request success did not resolve into Platform state")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/toast")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("toast: shown")) throw new Error("wx.showToast success did not resolve into Platform state")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/location")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("31.2,121.5")) throw new Error("wx.getLocation success did not resolve into Platform state")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/media")
+    #|if (!JSON.stringify(capabilityProbe.data).includes("/tmp/minimoon-host.jpg")) throw new Error("wx.chooseMedia success did not resolve into Platform state")
     #|if (capabilityProbe._ef.size !== 0 || effectCalls.slice(0, 7).map((entry) => entry[0]).join(",") !== "login,getStorage,setStorage,request,showToast,getLocation,chooseMedia") throw new Error(`capability success completion leaked effects or changed order: ${JSON.stringify(effectCalls)}`)
     #|failingCapability = "login"
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/login")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/login")
     #|failingCapability = ""
     #|if (!JSON.stringify(capabilityProbe.data).includes("login: failed") || !JSON.stringify(capabilityProbe.data).includes("wx.login:fail denied") || capabilityProbe._ef.size !== 0) throw new Error("wx.login failure did not resolve exactly once")
     #|const getLocation = wx.getLocation
     #|delete wx.getLocation
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/location")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/location")
     #|wx.getLocation = getLocation
     #|if (!JSON.stringify(capabilityProbe.data).includes("wx.getLocation unavailable") || capabilityProbe._ef.size !== 0) throw new Error("unavailable wx.getLocation did not resolve exactly once")
     #|requestMode = "deferred"
-    #|dispatch(probeDefinition, capabilityProbe, "capability_probe/request")
+    #|dispatch(platformDefinition, capabilityProbe, "platform/request")
     #|if (!pendingRequest || capabilityProbe._ef.size !== 1) throw new Error("deferred wx.request was not tracked as one pending effect")
     #|const beforeLateRequest = JSON.stringify(capabilityProbe.data)
-    #|probeDefinition.onUnload.call(capabilityProbe)
+    #|platformDefinition.onUnload.call(capabilityProbe)
     #|pageStack.pop()
     #|if (requestAborts !== 1 || capabilityProbe._ef.size !== 0 || capabilityProbe.__mmInstanceId !== null) throw new Error("pending wx.request was not aborted exactly once on unload")
     #|pendingRequest.success({ statusCode: 200, data: { late: true } })
     #|if (requestAborts !== 1 || JSON.stringify(capabilityProbe.data) !== beforeLateRequest || capabilityProbe._ef.size !== 0) throw new Error("late wx.request success crossed the disposed page boundary")
+    #|detailsDefinition.onUnload.call(directDetails)
+    #|applicationDefinition.onUnload.call(appTab)
+    #|showcaseDefinition.onUnload.call(showcase)
     #|
   )
 }
@@ -951,7 +955,7 @@ pub fn bridge_benchmark_source() -> String {
     #|const hostFor = (count) => {
     #|  const initial = tree(count)
     #|  return Object.assign({}, definition, {
-    #|    data: { lab: { tree: structuredClone(initial), commit: 0 } },
+    #|    data: { runtime_lab: { tree: structuredClone(initial), commit: 0 } },
     #|    _rv: 0,
     #|    _sh: structuredClone(initial),
     #|    _st: stats(),
@@ -965,7 +969,7 @@ pub fn bridge_benchmark_source() -> String {
     #|    groupUpdates(callback) { callback() },
     #|    replaceDataOnPath(tokens, value) { const parent = resolve(this.data, tokens.slice(0, -1)); parent[tokens.at(-1)] = value },
     #|    spliceArrayDataOnPath(tokens, index, remove, items) { resolve(this.data, tokens).splice(index, remove, ...items) },
-    #|    setData(patch, callback) { for (const [key, value] of Object.entries(patch)) { if (key === "lab.tree") this.data.lab.tree = value; else if (key === "lab.commit") this.data.lab.commit = value; else { const tokens = key.replace(/\[(\d+)\]/g, ".$1").split(".").map((token) => /^\d+$/.test(token) ? Number(token) : token); const parent = resolve(this.data, tokens.slice(0, -1)); parent[tokens.at(-1)] = value } } if (callback) callback() },
+    #|    setData(patch, callback) { for (const [key, value] of Object.entries(patch)) { if (key === "runtime_lab.tree") this.data.runtime_lab.tree = value; else if (key === "runtime_lab.commit") this.data.runtime_lab.commit = value; else { const tokens = key.replace(/\[(\d+)\]/g, ".$1").split(".").map((token) => /^\d+$/.test(token) ? Number(token) : token); const parent = resolve(this.data, tokens.slice(0, -1)); parent[tokens.at(-1)] = value } } if (callback) callback() },
     #|  })
     #|}
     #|const medianNs = (operation, iterations, samples = 25) => {
@@ -987,7 +991,7 @@ pub fn bridge_benchmark_source() -> String {
     #|  const iterations = count === 2000 ? 100 : count === 500 ? 400 : 1000
     #|  const patchNs = medianNs(() => {
     #|    value += 1
-    #|    definition._ap.call(host, { type: "PatchViewTree", component_id: "lab", base_revision: host._rv, revision: host._rv + 1, ops: [{ op: "set", path: ["children", target, "text"], value: String(value) }] }, 1, () => {})
+    #|    definition._ap.call(host, { type: "PatchViewTree", component_id: "runtime_lab", base_revision: host._rv, revision: host._rv + 1, ops: [{ op: "set", path: ["children", target, "text"], value: String(value) }] }, 1, () => {})
     #|  }, iterations)
     #|  let reference = tree(count)
     #|  const cloneNs = medianNs(() => {

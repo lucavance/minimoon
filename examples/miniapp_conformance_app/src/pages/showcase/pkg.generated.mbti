@@ -12,22 +12,6 @@ pub fn program(@app.Deps) -> @minimoon.Page
 // Errors
 
 // Types and methods
-pub struct Model {
-  updates : Int
-  visits : Int
-} derive(Eq)
-
-pub enum Msg {
-  Increment
-  Reset
-  PageShown
-  OpenConsole
-  OpenLab
-  OpenDetails
-  OpenInteraction
-  OpenCapabilities
-  OpenApplication
-}
 
 // Type aliases
 

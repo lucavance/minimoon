@@ -1,118 +1,97 @@
-# MiniApp conformance application
+# Conformance：核心框架验收示例
 
-This is the core framework's maintained real-host fixture for `0.2.0`.
-The independent UI module has its own
-[six-page showcase](../../ui/examples/showcase/README.md). One core release build
-and one artifact fingerprint cover seven routes: four native bottom Tabs and
-three independent stack probes. App Contract `11` / runtime ABI `13` retain
-renderer protocol `8`.
+这是 Minimoon `0.2.0` 的核心框架示例：**四个原生 Tab，三个有明确任务的二级页面**。
+使用 App Contract `11`、runtime ABI `13`、renderer protocol `8`；
+独立 UI 模块的[六页 Showcase](../../ui/examples/showcase/README.md)不在本轮整合范围内。
 
-| Native Tab | Source | Purpose |
-| --- | --- | --- |
-| 首页 | `src/pages/showcase` | introduction, live state, Tab shortcuts and stack-probe entry points |
-| 交互 | `src/pages/interaction` | the ordinary Lab scene with concise presentation and expandable runtime probes |
-| 能力 | `src/pages/capabilities` | the ordinary Capability Probe scene with its own page-local state and effects |
-| 应用 | `src/pages/application` | shared application domains and the draft-detail entry point |
+## 页面归属
 
-The three non-Tab pages remain real navigation-stack probes:
+| 页面 | 源码目录（相对本示例） | 主任务 | 深入入口 |
+| --- | --- | --- | --- |
+| 首页 | `src/pages/showcase` | 产品介绍、本地计数与重置、三个 Tab 快捷入口 | 交互／平台／应用 |
+| 交互 | `src/pages/interaction` | 原生控件、局部组件、Disclosure／Accordion／Tabs、弹层和菜单 | 状态与渲染实验 |
+| 平台 | `src/pages/platform` | 登录、存储、提示、位置、媒体、十种 HTTP 场景 | 请求生命周期 |
+| 应用 | `src/pages/application` | 唯一完整的共享计数／请求／草稿结果面板 | 草稿编辑、请求生命周期 |
+| 请求生命周期 | `src/pages/request_lifecycle` | 隐藏、卸载与 App 请求寿命的对照 | 打开或替换为草稿编辑 |
+| 状态与渲染实验 | `src/pages/runtime_lab` | 增量更新、keyed 身份、受控同步、异步、释放、实例隔离 | 第二个独立实验实例 |
+| 草稿编辑 | `src/pages/draft_editor` | 校验、类型化 HTTP echo、返回 | 返回原页面；直接进入时回首页 |
 
-- `src/pages/capability_probe`: query input, controlled input, Elm-style state, lifecycle,
-  declared `wx.*` capabilities, and command-driven navigation.
-- `src/pages/lab`: dynamic set/splice/move/replacement diffs, vertical scrolling,
-  a controlled keyed-input probe that preserves focus, cursor, selection, and
-  value while moving only another keyed identity, a same-identity controlled
-  value reset probe, `Val.assoc_by` local
-  components, disposable subscriptions, explicit delay/perform/attempt probes,
-  native controls and focus events, swiper, Disclosure/single/multiple
-  Accordion/Tabs, Dialog/Sheet/Dropdown semantics, the `minimal-v2` theme, and
-  same-route instance isolation.
-- `src/pages/details`: required nonempty `from` query, independent lifecycle and
-  draft state, typed JSON echo, and stack-aware Back with a Showcase Tab fallback.
+路由均为 `pages/<目录名>/<目录名>`。旧的 `capabilities`、
+`capability_probe`、`lab`、`details` 路由已迁移，不提供别名。
+这不改变 Starter 的 `home`／`details`。
 
-The secondary `capability_probe` page is titled 能力验证 and replaces the former
-`home` route; it is not the 首页 Tab. The initializer's `home` page is unchanged.
+页面不导入另一个页面的生产实现：
+`scenes/interaction` 与 `scenes/composition` 组合交互场景，
+`components/shared_app` 提供按角色裁剪的共享状态视图，
+`src/app` 只定义类型化领域状态和命令。所有页面工厂接收 `Deps`，
+但首页、交互、平台和运行实验不显示共享控制台。
+草稿编辑只观察共享计数／请求并提供一次计数操作；
+请求生命周期只显示 App 请求的启动／清除对照，不复制 HTTP 场景目录。
 
-The optional `src/app` package owns shared count and HTTP state. Capability Probe and
-Details and the relevant Tabs bind the same App values while keeping their local
-models; all seven factories accept its `Deps`. Reused scene functions create
-new local state in each builder, not shared page instances. Starter and UI showcase retain the separate
-no-application entry path.
+## 构建与查看
 
-The fixture-local `shared/shell` reads `PageContext.layout()` in logical pixels.
-Its fixed deep-blue navigation band reserves the real capsule rectangle; the
-hero and cards scroll beneath it. Missing metrics use the reviewed 88px band
-and 96px right reservation. Bottom safe padding is the intersection with the
-actual window, so the native Tab bar is not counted twice. Every page requests
-white navigation text. The build-only resource provider owns the dark `page`
-boot background and eight 72px PNG Tab icons derived offline from this fixture's
-original `assets/icons/*.svg`; none is fetched externally or imported into the
-application JavaScript.
-
-Build a release-mode candidate and verify it from the repository root:
+在仓库根目录执行：
 
 ```bash
 bun run minimoon verify examples/miniapp_conformance_app --candidate
 ```
 
-Import the unchanged `dist/` directory into WeChat Developer Tools for the
-release checklist. Check 首页/交互/能力/应用 order, selected icons and restoration
-of each Tab's local state; Tab changes must use `switchTab` without query and
-must not grow the navigation stack. Check initial/resize capsule clearance,
-scrolling hero, white status text on dark blue, keyboard and bottom safe area
-on all seven routes. Tab switching hides a page; it is not unload evidence.
+将原样生成的 `dist/` 导入微信开发者工具，按[宿主验收清单](../../docs/operations/miniapp_devtools_validation.md)验证。
+当前候选产物的自动化状态在 `generated/verify_report.json`，它不是微信宿主通过证明。
+CI 交付包仍为 `minimoon-devtools-<commit>`，UI 交付包仍为
+`minimoon-ui-devtools-<commit>`；见[交付手册](../../docs/operations/release_candidate_handoff.md)。
 
-Use 首页's 能力验证/交互探针/编辑详情 buttons to enter the retained stack routes.
-Capability Probe → Details → Back must retain Capability Probe's instance and state. Capability Probe Redirect →
-Details must unload Capability Probe. Lab's native navigator opens a second same-route
-instance with independent state. Direct valid Details entry returns to the
-Showcase Tab on Back; missing/empty `from` must fail closed without a live instance
-or preview flash. The configured `smokeInput` is synthetic test input, not a
-runtime default.
+所有页面共用 `shared/shell`：顶部深蓝固定导航为胶囊和状态栏预留真实像素空间；
+下方蓝色 Hero 随内容滚动，以浅弧形底边收尾，文字底部保留留白。
+它不改变已使用的导航高度计算、缺失指标时的 88px 回退或底部安全区计算。
+资源由 MoonBit 的 `src/resources` 提供；不新增图片依赖、手写 JavaScript 或运行时网络素材。
+弧形、长标题、键盘、短窗口和横竖屏均须在 Skyline 中重新检查。
 
-In the non-Tab Capability Probe probe, select each HTTP scenario and tap Request. The
-default public API is `https://httpbingo.org`: GET query, JSON/form POST, text
-PUT, DELETE, HEAD, OPTIONS, HTTP 400/500 and timeout. Inspect the status code
-and selected echo fields; non-2xx is a loaded result, timeout is failed.
-Leave Capability Probe during the delayed request to check disposal. No private server is
-needed. From the repository root, `bun run check:http-live` exercises the same
-generated Capability Probe with a fetch transport shim; it is not a real WeChat pass.
-Details rejects an empty draft without HTTP; a valid title/note is sent to the
-public POST echo endpoint and only the typed echo is shared with Capability Probe and 应用.
-It is not persistent storage. Editing or unloading rejects old responses.
-Also increment the shared count on Capability Probe and Details, then start the separate
-shared public API request and unload its page: another page must receive the
-App-owned result. Start again and Clear before completion; the obsolete response
-must not replace idle. Page-owned HTTP still aborts on unload. See the
-[shared-state guide](../../docs/guides/shared_state.md) for the ownership distinction.
-See the [host checklist](../../docs/operations/miniapp_devtools_validation.md)
-for simulator/device modes and public-domain restrictions.
+## 三条验收路径
 
-In Lab, exercise these probes explicitly:
+1. **交互 → 状态与渲染实验**
+   先体验控件与基础组件，再进入身份／释放实验。交互页不再提供“展开完整 Lab”。
+   在 reactive Accordion 中计数后，点击“更新父层”，折叠并重开，计数仍保留。
+   实验页的同类控件只用于重排、移除恢复和结构同步，不重复完整组件目录。
+2. **平台 → 请求生命周期 → 草稿编辑 → 返回**
+   平台的十种 HTTP 场景使用公开 `https://httpbingo.org`：GET 重复／特殊字符查询、
+   JSON／form POST、text PUT、DELETE、HEAD、OPTIONS、400、500、超时。
+   展开响应详情查看筛选后的合成 echo；非 2xx 为 loaded，超时为 failed。
+   生命周期页的约 2 秒页面请求在 NavigateTo 隐藏后仍可完成，返回保留页内标记；
+   RedirectTo 卸载页面后请求必须取消，旧响应不得写入。**切 Tab 不是卸载验收。**
+3. **应用 → 草稿编辑 → 应用**
+   在两个页面对照共享计数。空标题不得发送 HTTP；有效草稿 POST 到公开
+   `https://httpbingo.org/post`，编辑页显示提交状态，应用页显示类型化回显。
+   这不是持久保存；编辑或卸载会拒绝旧回复。技术区默认折叠，
+   可展开查看来源和访问次数。缺失或空 `from` 必须在创建前失败，不能闪现预览数据。
+   从应用进入生命周期页，启动 App 请求并替换为编辑页：请求应继续，
+   无需再次触摸即可在编辑页或应用页看到结果。清除后旧响应不能覆盖 idle。
 
-1. Enter a unique value in the keyed input. Tap `Arm focused reorder (10s)`,
-   refocus the input, place the cursor or select a range, and then do not touch
-   the page for 10 seconds. Item C must be the only moved identity; the same
-   input must retain focus, cursor/selection, and the controlled value. The
-   renderer-stat delta for the timed reorder must be exactly one move and two
-   host writes, with no set, splice, replacement, or fallback.
-2. Tap `Start delay probe` and make no further input. Its running state must
-   become completed after the 600 ms host timeout. Tap `Start async probes` and
-   again make no further input; the 250 ms perform must succeed and the 400 ms
-   attempt must report its planned failure.
-3. Repeat each start action and immediately unload the Lab page. No delayed
-   render, state update, warning, or error may appear after disposal.
-4. Enter a non-default keyed-input value, then tap `Reset controlled input`.
-   The same focused native input identity must remain mounted while its value
-   and greeting return to `Minimoon`; renderer stats must show scalar sets only.
+平台中的存储值、每项能力的错误和 HTTP 详情互不覆盖。
+`bun run check:http-live` 会对生成的**平台页**执行公共 API 测试；
+离线回归另外加载生命周期页检查取消、重复回调和旧实例响应。
+传输适配模拟不等于真宿主验收；`urlCheck=false` 不证明生产域名或完整 HTTPS 条件。
 
-Also include rapid repeated taps, focus/blur/confirm, overlay and menu
-dismissal/selection, shared-template rendering, and a clean
-scheduler/retry/timeout counter check. Automated status lives in
-`generated/verify_report.json`; real-host evidence is valid only for the exact
-artifact fingerprint recorded in the local, Git-ignored
-`generated/devtools.evidence.json`. Never commit or push that file.
+## 必须保留的回归覆盖
 
-CI publishes this candidate as `minimoon-devtools-<commit>`; the UI bundle is
-`minimoon-ui-devtools-<commit>`. Both need their own Skyline acceptance before
-the paired release. Follow the
-[handoff runbook](../../docs/operations/release_candidate_handoff.md).
+| 行为 | 主要自动化位置 |
+| --- | --- |
+| 页面内容归属、无重复控制台、Tab 状态保持和 resize 身份 | `src/tests/tabs_test.mbt` |
+| 基础组件语义、reactive 子状态 | `src/pages/interaction/page_test.mbt` |
+| 请求标记、导航、取消与页面寿命 | `src/pages/request_lifecycle/page_test.mbt`；仓库 `http_probe.mbt` |
+| 草稿校验、类型化 echo、编辑／重发／卸载拒绝旧回复 | `src/pages/draft_editor/page_test.mbt` |
+| keyed 重排、输入身份、局部组件释放、异步时序和隔离 | `src/pages/runtime_lab/page_test.mbt`、`page_wbtest.mbt` |
+| 共享 3000 次更新、隐藏追平、App 请求寿命和旧回复 | 仓库 `src/internal_host_validation/application_smoke.mbt` |
+| 实际生成桥接的载荷、导航、set／splice／move／fallback 和异步 | 仓库 `src/internal_host_validation/validation_sources.mbt` |
+
+运行实验还须人工检查原生焦点、光标和选区：点击 `Arm focused reorder (10s)`，
+重新聚焦并等待，只有 Item C 移动，输入身份与选区不变；统计增量为一次 move、
+两次 host write，无 set／splice／replacement／fallback。
+受控重置只有 scalar set；结构同步后 picker 和 swiper 保持同一个逻辑选项。
+delay 600ms、perform 250ms、attempt 400ms 无需再次操作即可完成；
+启动后立即退出不得产生迟到 UI、错误或警告。
+
+本轮改变核心产物和清单，旧核心指纹的宿主记录不能复用。
+按新指纹分别记录模拟器、真机预览和真机调试的真实结果；
+未实际执行的模式明确标记未验证。不要手工修改或提交
+`generated/devtools.evidence.json`。未改变指纹的 UI 记录仍只对该 UI 产物有效。

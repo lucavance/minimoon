@@ -39,48 +39,52 @@ flowchart LR
 
 [SVG](assets/diagrams/svg/02-AUTHORING-MODEL-1.svg) · [PNG 3×](assets/diagrams/png/02-AUTHORING-MODEL-1.png) · [Mermaid](assets/diagrams/source/02-AUTHORING-MODEL-1.mmd)
 
-> **源码 / Source:** [`examples/miniapp_conformance_app/src/pages/showcase/page.mbt`](../../examples/miniapp_conformance_app/src/pages/showcase/page.mbt) · symbols: `Model`, `Msg`, `update`
+> **源码 / Source:** [`examples/miniapp_conformance_app/src/app/app.mbt`](../../examples/miniapp_conformance_app/src/app/app.mbt) · symbols: `FetchModel`, `FetchMsg`, `initial_fetch`, `update_fetch`
 
 ```moonbit
-pub struct Model {
-  updates : Int
-  visits : Int
+pub struct FetchModel {
+  epoch : Int
+  label : String
 } derive(Eq)
 
-pub enum Msg {
-  Increment
-  Reset
-  PageShown
-  OpenConsole
-  OpenLab
-  OpenDetails
+pub(all) enum FetchMsg {
+  Load
+  Clear
+  Finished(Int, Result[@minimoon.RequestResult, @minimoon.HostError])
 }
 
-fn update(model : Model, message : Msg) -> (Model, @minimoon.Cmd) {
+pub fn update_fetch(
+  current : FetchModel,
+  message : FetchMsg,
+  emit : @minimoon.Emit[FetchMsg],
+) -> (FetchModel, @minimoon.Cmd) {
   match message {
-    Increment => @minimoon.no_cmd({ ..model, updates: model.updates + 1 })
-    Reset => @minimoon.no_cmd({ ..model, updates: 0 })
-    PageShown => @minimoon.no_cmd({ ..model, visits: model.visits + 1 })
-    OpenLab =>
+    Load => {
+      let epoch = current.epoch + 1
       @minimoon.with_cmd(
-        model,
-        @minimoon.navigate_to(
-          @minimoon.route("pages/lab/lab").with_query([
-            @minimoon.query("instance", "showcase"),
-          ]),
+        { epoch, label: "loading" },
+        @minimoon.request(
+          "https://httpbingo.org/delay/2",
+          emit.map(result => Finished(epoch, result)),
         ),
       )
-    // OpenConsole and OpenDetails follow the same command pattern.
-    _ => @minimoon.no_cmd(model)
+    }
+    Clear => @minimoon.no_cmd({ epoch: current.epoch + 1, label: "idle" })
+    // Finished first checks the epoch, then derives the displayed result.
+    _ => @minimoon.no_cmd(current)
   }
 }
 ```
 
-片段中的最后一个通配分支是文档为缩短摘录而标出的省略，不是源码原样分支；真实函数穷举了六个 `Msg`。关键点是导航不会在 `update` 中直接调用 `wx.navigateTo`，而是作为 opaque `Cmd` 随新 Model 返回，等候候选状态和 UI projection 被接受。
+最后的通配分支是明确省略的回调处理，不是源码原样分支；真实函数先校验 epoch，再接受成功或失败结果。
+同一个领域更新函数分别由 AppContext 和生命周期页创建状态：前者在页面卸载后继续，后者随页面释放。
+首页计数等简单独立状态直接使用 `create_variable`，导航按钮直接持有 opaque `Cmd`，不需要额外的消息枚举。
 
 > **English:**
 >
-> The final wildcard is an explicitly shortened documentation excerpt rather than the literal source; the real function exhaustively handles all six messages. The key point is that navigation does not call `wx.navigateTo` inside `update`. It returns as an opaque `Cmd` with the new model and waits for candidate state and UI projection to be accepted.
+> The wildcard explicitly abbreviates completion handling; the real function validates the epoch before accepting success or failure.
+> AppContext and the lifecycle page create separate state using the same domain update: one survives page unload, the other is disposed with the page.
+> Simple independent values such as the homepage counter use `create_variable`; navigation buttons hold opaque commands without an extra message enum.
 
 ## 2. 根 API 如何封装内部状态 / How the Root API Wraps Internal State
 

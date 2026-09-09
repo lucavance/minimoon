@@ -61,13 +61,13 @@ remains an internal implementation detail.
 
 | Source | Purpose |
 | --- | --- |
-| Conformance / Showcase (首页) | product narrative, state, lifecycle, native tab and secondary-route entrypoints |
-| Conformance / Interaction (交互) | native controls and page-local component scenarios |
-| Conformance / Capabilities (能力) | public HTTP and declared host capabilities |
+| Conformance / Showcase (首页) | product narrative, local count/reset and three query-free Tab shortcuts |
+| Conformance / Interaction (交互) | native controls, page-local components and the single core component catalogue |
+| Conformance / Platform (平台) | public HTTP and declared host capabilities |
 | Conformance / Application (应用) | shared count/request/draft projections and ownership |
-| Conformance / Capability Probe | page input, controlled input, capabilities, navigation, shared App count/request |
-| Conformance / Lab | set/splice/move/replacement, controlled native reconciliation, reactive slots, scrolling, local components, focus events, overlays, menu semantics, isolation |
-| Conformance / Details | independent input/lifecycle, shared App count/request and stack-aware fallback |
+| Conformance / Request Lifecycle | optional page marker, page/App delayed requests, hide/push/replace/unload comparison |
+| Conformance / Runtime Lab | set/splice/move/replacement, controlled reconciliation, scrolling, local component lifetime, focus, no-touch async and instance isolation |
+| Conformance / Draft Editor | required input, draft validation/typed echo, minimal shared observer and stack-aware fallback |
 | `templates/starter` | Home + Details initializer without App ownership or UI dependency |
 | `ui/examples/showcase` | independent UI families, themes, native interactions and lifecycle, without App ownership |
 

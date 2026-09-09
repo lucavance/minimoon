@@ -4,13 +4,17 @@
 
 The unpublished core `0.2.0` / UI `0.1.0` iteration adds native bottom tabs,
 typed tab navigation, read-only window/safe-area/capsule layout and PNG build
-resources. Conformance presents 首页 / 交互 / 能力 / 应用, retaining Capability Probe, Lab
-and Details as real secondary routes for input, unload and instance-isolation
-acceptance. It remains one core fixture, not seven independent applications.
+resources. Conformance presents 首页 / 交互 / 平台 / 应用, with Request Lifecycle,
+Runtime Lab and Draft Editor as task-specific secondary routes. Platform owns
+HTTP/wx capabilities, Interaction owns the core component catalogue, and
+Application is the only complete shared-state controller. Shared scene functions
+replace page-to-page implementation reuse; the header has a shallow curved hero
+edge without changing fixed navigation geometry. It remains one core fixture, not seven independent applications.
 See [native navigation and layout](guides/native_navigation.md).
 
-The shared host changes require fresh exact-fingerprint acceptance for both
-core and UI. Custom TabBar, badges, dynamic navigation colors and new public UI
+The earlier shared-host changes require exact-fingerprint acceptance for both
+core and UI. The presentation consolidation changes only the core fixture: it
+requires a fresh core pass; unchanged UI/Starter bytes are not a new UI migration. Custom TabBar, badges, dynamic navigation colors and new public UI
 components are outside this iteration. Product versions remain unpublished;
 Contract 11 and runtime ABI 13 do not change renderer protocol 8.
 
@@ -27,7 +31,7 @@ and [typed HTTP](guides/http.md). The current technical boundaries are Contract
 iterations require migration rather than compatibility fallbacks.
 
 The current HTTP iteration adds typed methods, query/header/body encoding,
-timeouts, deterministic host tests and public-API Capability Probe acceptance scenarios.
+timeouts, deterministic host tests and public-API Platform acceptance scenarios.
 It introduces no UI components or privately deployed acceptance server.
 The current 0.2 source implements an optional `App[Deps]` root containing
 multiple typed domain state machines. `Shared[T]` values bind to page-local

@@ -7,20 +7,21 @@ generated reports define candidate readiness.
 
 ## Current implementation
 
-Conformance now has four native primary tabs (首页 / 交互 / 能力 / 应用) and
-three secondary acceptance routes. Native tab commands, read-only page layout
-and PNG build assets support the deep-blue custom header without handwritten
+Conformance now has four native primary tabs (首页 / 交互 / 平台 / 应用) and
+three task-specific secondary routes: Request Lifecycle, Runtime Lab and Draft Editor. Native tab commands, read-only page layout
+and PNG build assets support the deep-blue custom header and shallow curved hero edge without handwritten
 host JavaScript or a new UI dependency. These changes require fresh real-host
 acceptance; automated candidates do not establish visual or device correctness.
 
-The HTTP work adds methods, query/header/body encoding and timeouts. Capability Probe has ten public-API scenarios;
+The HTTP work adds methods, query/header/body encoding and timeouts. Platform owns the ten public-API scenarios;
 `bun run check:http-live` is opt-in and is not real-host evidence. Both fixtures
 need matching Skyline revalidation after shared host bytes change.
 
 The shared-state source iteration adds optional `App[Deps]`, typed domain
 machines, page-local `Shared[T]` projections, and independent application
-effects/lifecycle. Capability Probe and Details demonstrate shared count, request ownership
-and epoch-based response invalidation. The UI showcase and starter retain the
+effects/lifecycle. Application provides the sole complete shared-state panel; Draft Editor demonstrates
+shared observation and typed echo, while Request Lifecycle compares page/App
+request ownership and epoch-based response invalidation. The UI showcase and starter retain the
 no-application entry path. Contract `11` and runtime ABI `13` replace the earlier
 technical boundaries; renderer protocol `8` and product versions are unchanged.
 This source iteration is not a publication claim. See

@@ -57,7 +57,7 @@ bodies and timeouts. Use the optional [typed HTTP package](docs/guides/http.md)
 for status policy and typed response decoding; raw `request` retains transport
 semantics. See the [HTTP contract](docs/reference/miniapp_host_capabilities.md#http-requests).
 Run `bun run check:http-live` from this checkout for opt-in public-API testing
-of the generated Capability Probe page; it does not replace WeChat host acceptance.
+of the generated Platform page; it does not replace WeChat host acceptance.
 
 Without `application` configuration, each page package exports
 `program() -> Page`, as below. With `application`, pages instead export
@@ -206,7 +206,7 @@ Optional native bottom `tabBar` configuration references listed page packages;
 `PageContext.layout()` provides read-only window, safe-area and capsule metrics
 before the first business tree. Build resources support text and PNG bytes.
 See [native tabs and layout](docs/guides/native_navigation.md). Conformance uses
-four tabs (首页 / 交互 / 能力 / 应用) and retains three secondary acceptance routes.
+four tabs (首页 / 交互 / 平台 / 应用) and retains three secondary acceptance routes.
 
 Generated applications contain one `minimoon.runtime.js`, one
 `minimoon.host.js`, one `minimoon.protocol.js`, one compact

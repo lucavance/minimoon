@@ -52,7 +52,7 @@ fn embedded_inventory(
         "production",
       ),
       (
-        "examples/miniapp_conformance_app/src/pages/lab/page.mbt", "resume_probe_after",
+        "examples/miniapp_conformance_app/src/pages/runtime_lab/page.mbt", "resume_probe_after",
         "example",
       ),
       (

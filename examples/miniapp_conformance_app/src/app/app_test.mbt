@@ -9,7 +9,29 @@ test "application echoes are typed app state and independent of shared count" {
         id="app_panel",
         route=@minimoon.route("pages/app/panel"),
         title="App panel",
-        build=context => panel(context, app.deps()),
+        build=context => {
+          let deps = app.deps()
+          context
+          .bind(deps.count)
+          .view3(
+            context.select(deps.fetch, model => model.label),
+            context.bind(deps.echoed_draft),
+            (count, status, draft) => {
+              @minimoon.div([
+                @minimoon.p("Application shared count: " + count.to_string()),
+                @minimoon.p("Application request: " + status),
+                @minimoon.p(
+                  "Application echoed draft: " +
+                  (match draft {
+                    None => "none (not persistent)"
+                    Some(draft) =>
+                      draft.title + " / " + draft.note + " (not persistent)"
+                  }),
+                ),
+              ])
+            },
+          )
+        },
       ),
     )
     .unwrap()

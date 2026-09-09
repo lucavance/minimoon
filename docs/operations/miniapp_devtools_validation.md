@@ -68,88 +68,105 @@ runbook before recording evidence.
 
 ## Core interaction checklist
 
-Native navigation and top layout (all seven routes):
+All seven routes use the same core artifact fingerprint. The [fixture guide](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_conformance_app/README.md)
+maps source ownership and the three user workflows. Do not enter the removed
+Capability Probe/Lab/Details routes or treat a Tab hide as an unload.
 
-- Cold launch opens 首页; the first business tree avoids the capsule and status
-  bar. White status text has a deep-blue background even during empty boot.
-- Bottom native tabs are 首页 / 交互 / 能力 / 应用, in that order, with four
-  distinct line icons and selected states. Switch between them repeatedly;
-  page-local state survives Hide/Show and revisiting does not run Load/init again.
-- 首页 retains entries into the original Capability Probe, Lab and Details secondary pages.
-  These routes have real unload/back behavior; tab switching is not a substitute
-  for the HTTP cancellation or same-route multi-instance checks below.
-- On iOS and Android, check normal and notched screens, a short window and an
-  open keyboard: no overlap with capsule/status bar, clipped text, horizontal
-  overflow or doubled bottom safe-area space. The native TabBar owns its height.
-- Resize and background/foreground update header geometry and shared projections
-  without a second stale intermediate business tree. Missing platform metrics
-  use a conservative fallback; a later read failure retains valid prior metrics.
-- 能力 retains the ten public HTTP scenarios. 应用 displays shared count/request
-  and typed draft echo; page-local edits remain independent from secondary Capability Probe.
-- Capture the four primary pages plus representative loading/error states in
-  the local acceptance notes. Screenshots and mock-host tests are not a substitute
-  for completing all affected interactions with a clean console.
+Native navigation and top layout:
 
-Application-owned shared state (Capability Probe and Details):
+- Cold launch opens 首页; white status text stays on deep blue even during empty
+  boot. The first business tree reserves capsule/status-bar space.
+- Native Tabs are 首页 / 交互 / 平台 / 应用 with distinct selected icon states.
+  Switch repeatedly: local edits survive Hide/Show, Load/init does not repeat,
+  and the page stack does not grow.
+- 首页 contains local count/reset and only three query-free Tab shortcuts.
+  交互 links to Runtime Lab; 平台 links to Request Lifecycle; 应用 links to
+  Draft Editor and Request Lifecycle. No Tab expands into an entire second page.
+- The fixed navigation band stays rectangular. Only the scrolling blue hero
+  has a shallow curved bottom edge. Check the arc in actual Skyline: no text
+  clipping, horizontal overflow, unexpected seams or blank strips.
+- On iOS/Android, check normal/notched screens, short windows, keyboard and
+  resize. Header text must clear the capsule, long titles must remain readable,
+  and bottom padding must not double-count the native TabBar.
+- Resize/foreground update layout without a stale intermediate business tree.
+  Missing metrics use the conservative fallback; later read failure retains
+  valid prior metrics. Capture four primary pages and representative error states.
 
-- Tap `Shared +1` on Capability Probe, open Details and increment again, then return. Both
-  panels must show the same count while page-local counters remain independent.
-- Start `Shared public API request` against `https://httpbingo.org/delay/2` and
-  leave the requesting page, including a redirect that unloads it. The result
-  must reach the other page without another tap; hiding and returning to the
-  application must preserve shared state. Public-service failure is not a pass.
-- Start the shared request and immediately tap `Clear and ignore old response`.
-  After the old response arrives, the shared status must remain idle on both
-  pages. Repeat navigation and unload with a clean console.
-- Validate these interactions separately in the Skyline simulator, device
-  preview and device debugging. The UI fixture retains its no-application entry
-  path and still requires its own complete checklist after shared host changes.
+Showcase / 首页:
 
-Showcase:
+- Increment/reset affect the local card; rapid taps are lossless.
+- Technical notes are folded initially; expanding shows the visit count.
+  Returning to the Tab updates visits without resetting its local count.
+- The three shortcuts use switchTab without query. There are no direct secondary links.
 
-- the application opens on 首页 with a readable Chinese-first Minimoon Hero and
-  no horizontal overflow
-- increment and reset update only the live-state card; returning to Showcase
-  increments its page-visit state
-- rapid repeated increment taps are all retained; the visible count may advance
-  as one acknowledged batch but must never lose or reorder a tap
-- all three route cards open Capability Probe, Lab, and Details with their declared query
-  values
+Interaction / 交互:
 
-Capability Probe:
+- Input, checkbox, radio, picker and swiper update their own adjacent results.
+  Tab hide/show retains input and each local component's switch/textarea/timer state.
+- Disclosure, non-collapsible single Accordion, multiple Accordion and Tabs
+  expose the expected panels. These are the sole core component catalogue.
+- Expand the reactive child counter, increment to 1, tap 更新父层, collapse and
+  reopen: the child is still 1. A parent render must not recreate component scopes.
+- Dialog closes through its content button and overlay. Sheet closes through
+  its close button and overlay; no stale layer remains.
+- Dropdown checkbox/radio changes stay visible while open; submenu action and
+  the dismiss layer close the menu.
+- Open Runtime Lab for identity, structural reconciliation and disposal; no
+  “expand full Lab” duplicate exists in this Tab.
 
-- a `name` query initializes the controlled input; editing remains usable
-- increment, decrement, and reset update only the current page instance
-- login, storage get/set, request, toast, location, and media outcomes update
-  their status panels without console errors
-- these paths have generated-host payload/result smoke coverage, but exercise
-  them again here against actual `wx.*`; the automated mock is not host evidence
-- HTTP uses the public `https://httpbingo.org` service, not a private acceptance
-  server. Select each Capability Probe HTTP scenario, then tap Request: GET Unicode/special
-  character/repeated queries; POST JSON; POST repeated-field form; PUT raw text;
-  DELETE; HEAD and OPTIONS with empty bodies; HTTP 400 and 500 as loaded results;
-  and `/delay/3` with a 500 ms timeout as a failed request. Check status code,
-  selected echo fields and errors. Inspect method and request headers in the
-  Network panel, especially for empty HEAD/OPTIONS responses. Use only the
-  built-in synthetic data.
-- Start the delayed request and leave Capability Probe: no late update or console error may
-  occur. Repeat the affected checklist in Skyline simulator, device preview and
-  device debugging. Public-service or platform restrictions are a blocked case,
-  not a pass; do not silently substitute a mock or another provider.
-- The base URL input can use a public HTTPS service implementing the same echo
-  protocol. Record which public service was actually used in local notes.
-  The fixture's `urlCheck=false` developer setting does not prove production
-  request-domain eligibility. Debug bypass success and configured-domain success
-  are different results; public API testing does not establish production TLS,
-  domain registration or account readiness. No private AppID belongs in Git.
-- show/hide state follows page navigation
-- NavigateTo opens Lab and Details; RedirectTo replaces Capability Probe with Details
-- Back returns through the stack; direct Capability Probe entry switches to the Showcase tab
-  as fallback, never redirects to a tab route
+Platform / 平台:
 
-Lab:
+- Login, editable storage get/set, toast, location and media show results beside
+  their own controls. Clearing a login code only clears its display.
+- Trigger failures and retry where feasible: another capability must not erase
+  an HTTP error or replace the editable storage value.
+- Select each public HTTP scenario, send, and expand response details:
+  GET Unicode/special-character/repeated queries; JSON POST; repeated-field form
+  POST; raw-text PUT; DELETE; HEAD/OPTIONS empty bodies; HTTP 400/500 as loaded
+  results; /delay/3 with a 500 ms timeout as failed. Check status and selected echo
+  fields, method and request headers in Network. Use only built-in synthetic data.
+- Folding response details preserves the selected scenario, base URL and storage input.
+  This page does not show a shared App controller.
+- Default service is public https://httpbingo.org; an alternative must implement
+  the same public HTTPS echo protocol and be recorded. No private test server is needed.
+  Public-service or platform failure is a blocked case, never a silent mock pass.
+- urlCheck bypass does not establish production request-domain eligibility,
+  complete HTTPS/TLS acceptance, account readiness or domain registration.
+  Do not commit AppIDs or private configuration.
 
-- the page scrolls vertically and all four section-jump buttons work
+Application and Draft Editor / 应用与草稿编辑:
+
+- Application is the only complete shared controller. Increment there, enter
+  Draft Editor, increment its shared counter and return: both show the same
+  count while the local draft remains independent. A hidden observer catches up on Show.
+- Empty/whitespace-only title sends no HTTP. Valid title/note posts to public
+  https://httpbingo.org/post: editor shows submission status, Application shows
+  only the typed echo, not origin/private headers. This is not persistent saving.
+- Editing, resubmitting or unloading while saving rejects obsolete replies.
+  HTTP/schema/mismatched echo failures do not publish a draft to shared state.
+- Editor source/visit diagnostics remain folded until opened. Missing or empty
+  from input fails closed before graph creation, with no preview flash or live instance.
+- Normal Back preserves the previous page. Direct valid editor input falls back
+  with switchTab to 首页, never redirectTo a native Tab.
+
+Request Lifecycle / 请求生命周期:
+
+- The optional name query seeds a local marker. Edit it, open Draft Editor and
+  return: the marker and page instance survive Hide/Show.
+- Start the roughly two-second page-owned request, immediately open the editor,
+  and return: hiding retains ownership and a completion can be observed on return.
+- Start again and immediately replace the page with the editor: RedirectTo
+  truly unloads it, aborts the request exactly once and rejects late callbacks.
+- Start the separate App-owned request, then replace/unload this page: the result
+  still reaches Application or the editor observer without another tap.
+- Start the App request and immediately clear it: the old response must not
+  overwrite idle. Background/foreground retains shared data.
+- This page contains only marker/request/navigation comparisons, not the
+  Platform catalogue or a shared counter panel. Direct Back falls back to 首页.
+
+Runtime Lab / 状态与渲染实验:
+
+- the page scrolls vertically and all four section-jump buttons (state/structure, native identity, component lifetime, async/disposal) work
 - each section-jump target is consumed once: after the jump, ordinary manual
   scrolling must not snap back to the old target
 - toggle branch and add/remove note exercise structural splice updates
@@ -177,22 +194,12 @@ Lab:
   consistently, and remains interactive
 - focus, blur, and confirm each update the input-event status; input blur must
   work with the native payload that has no cursor field
-- full root replacement keeps the vertical Lab usable
+- full root replacement keeps the vertical Runtime Lab usable
 - both local cards have independent switch, textarea, and interval state
 - card reorder preserves local state; removal stops its subscription; restore
   creates fresh state
-- checkbox, radio, picker, swiper, and native navigator work
-- Disclosure, non-collapsible single Accordion, multiple Accordion, and Tabs
-  expose the expected panel state after every tap
-- expand the reactive Accordion counter, increment it to 1, then trigger a
-  parent update by tapping `Increment` once (or observing a page-tick update);
-  collapse and reopen the item and confirm the child value is still 1
-- Dialog closes from content and overlay; bottom Sheet closes from its close
-  button and overlay, with neither leaving a stale surface
-- Dropdown checkbox and radio state remain visible while open; submenu action
-  closes the menu, and the transparent dismiss layer also closes it
-- swiper changes only the tested control; page navigation remains route-based
-- opening a second `pages/lab/lab?instance=secondary` instance does not share
+- picker, swiper and the second-instance native navigator remain usable after reconciliation
+- opening a second `pages/runtime_lab/runtime_lab?instance=secondary` instance does not share
   page or component state with the first
 - start the async probe and do not touch the page; `perform` success and
   `attempt` failure must both update visibly
@@ -200,13 +207,8 @@ Lab:
   update visibly
 - start each delayed probe and immediately leave the page; unload must cancel
   ownership with no later UI update or console error
-- Back returns one stack entry; direct Lab entry redirects to Showcase
+- Back returns one stack entry; direct Runtime Lab entry uses switchTab to Showcase
 
-Details:
-
-- the `from` query renders and show events increment independent visit state
-- normal Back preserves the previous page instance
-- direct Details entry uses the redirect fallback to Showcase
 
 Across all routes, require a clean console, clean unload, and no delayed update
 after a page or component is disposed.

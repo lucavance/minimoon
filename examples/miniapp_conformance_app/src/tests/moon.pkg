@@ -3,10 +3,11 @@ import {
   "lampclaw/minimoon/testing",
   "lampclaw/miniapp_conformance_app/app" @application,
   "lampclaw/miniapp_conformance_app/pages/showcase",
-  "lampclaw/miniapp_conformance_app/pages/capability_probe",
-  "lampclaw/miniapp_conformance_app/pages/lab",
+  "lampclaw/miniapp_conformance_app/pages/request_lifecycle",
+  "lampclaw/miniapp_conformance_app/pages/runtime_lab",
   "lampclaw/miniapp_conformance_app/pages/interaction",
-  "lampclaw/miniapp_conformance_app/pages/capabilities",
+  "lampclaw/miniapp_conformance_app/pages/platform",
+  "lampclaw/miniapp_conformance_app/pages/draft_editor",
   "lampclaw/miniapp_conformance_app/pages/application" @application_page,
 } for "test"
 

@@ -14,6 +14,7 @@ test "showcase presents bilingual state and lifecycle feedback" {
   inspect(initial.contains("state updates: 0"), content="true")
   let _ = runtime.mount()
   let _ = runtime.lifecycle("onShow", "{}")
+  let _ = runtime.dispatch("showcase/notes", "{}")
   inspect(runtime.snapshot().contains("page visits: 1"), content="true")
   let increment = runtime.dispatch("showcase/increment", "{}")
   inspect(increment.contains("PatchViewTree"), content="true")
@@ -23,22 +24,20 @@ test "showcase presents bilingual state and lifecycle feedback" {
 }
 
 ///|
-test "showcase routes to all technical validation pages" {
-  let runtime_app = @application.program().create_runtime()
-  defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
-  let _ = runtime.lifecycle("onLoad", "{}")
-  let _ = runtime.mount()
-  let console = runtime.dispatch("showcase/open-console", "{}")
-  inspect(
-    console.contains("/pages/capability_probe/capability_probe?name=Studio"),
-    content="true",
-  )
-  let lab = runtime.dispatch("showcase/open-lab", "{}")
-  inspect(lab.contains("/pages/lab/lab?instance=showcase"), content="true")
-  let details = runtime.dispatch("showcase/open-details", "{}")
-  inspect(
-    details.contains("/pages/details/details?from=showcase"),
-    content="true",
-  )
+test "showcase has only three query-free Tab shortcuts" {
+  let app = @application.program().create_runtime()
+  defer ignore(app.dispose())
+  let page = app.create_page(program(app.deps())).unwrap()
+  ignore(page.lifecycle("onLoad", "{}"))
+  ignore(page.mount())
+  for name in ["interaction", "platform", "application"] {
+    let command = page.dispatch("showcase/tab-" + name, "{}")
+    assert_true(command.contains("SwitchTab"))
+    assert_true(command.contains("/pages/" + name + "/" + name))
+    assert_false(command.contains("?"))
+  }
+  assert_false(page.snapshot().contains("showcase-routes"))
+  assert_false(page.snapshot().contains("request_lifecycle"))
+  assert_false(page.snapshot().contains("runtime_lab"))
+  assert_false(page.snapshot().contains("draft_editor"))
 }

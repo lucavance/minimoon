@@ -64,7 +64,7 @@ async fn performance_reports(root : String) -> Unit {
   let fingerprint = @verify.artifact_fingerprint(conformance_root)
   let bridge_args = [
     bridge_script,
-    join(conformance_root, "dist/pages/lab/lab.js"),
+    join(conformance_root, "dist/pages/runtime_lab/runtime_lab.js"),
     fingerprint,
   ]
   let (bridge_code, bridge_stdout, bridge_stderr) = @process.collect_output(

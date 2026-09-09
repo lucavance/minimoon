@@ -7,6 +7,10 @@ test "fixture provider owns eight paired binary PNGs and the dark boot backgroun
   assert_true(bundle.wxss.contains(".demo-hero-home{min-height:192rpx}"))
   assert_true(bundle.wxss.contains("min-height:44px;"))
   assert_false(bundle.wxss.contains(".demo-hero{height:"))
+  assert_true(
+    bundle.wxss.contains("border-radius:0 0 50% 50% / 0 0 32rpx 32rpx;"),
+  )
+  assert_true(bundle.wxss.contains("padding:16rpx 40rpx 40rpx;"))
   let paths : Map[String, Bool] = Map([])
   for asset in bundle.assets {
     assert_false(paths.contains(asset.path))
@@ -20,7 +24,7 @@ test "fixture provider owns eight paired binary PNGs and the dark boot backgroun
     assert_eq(bytes[19].to_int(), 72)
     assert_eq(bytes[23].to_int(), 72)
   }
-  for name in ["home", "interaction", "capabilities", "application"] {
+  for name in ["home", "interaction", "platform", "application"] {
     assert_true(paths.contains("assets/tab-" + name + ".png"))
     assert_true(paths.contains("assets/tab-" + name + "-selected.png"))
   }

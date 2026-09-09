@@ -174,15 +174,19 @@ for metadata: previews never dispatch init commands or start subscriptions.
 命令、定时器或网络。测试结束要 dispose，不能将预览句柄作为运行时依赖长期保存。
 
 The maintained example is [the core app package](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_conformance_app/src/app/app.mbt),
-with panels in Capability Probe and Details. In Developer Tools:
+with a complete controller in Application and a minimal observer in Draft Editor.
+Request Lifecycle only adds the controls needed to compare request owners. In Developer Tools:
 
-1. Increment on Capability Probe, navigate to Details, increment again, return: both share
-   one count while local counters stay independent.
-2. Start the public `https://httpbingo.org/delay/2` request and unload its page;
-   another page receives the result. Hide/show must preserve shared data.
+1. Increment on Application, open Draft Editor, increment again, return: both show
+   one shared count while the draft remains page-local.
+2. Open Request Lifecycle, start its App-owned public `https://httpbingo.org/delay/2`
+   request, and replace that page with Draft Editor. The observer receives the result
+   after the originating page is unloaded. The separate page-owned request cancels
+   on unload; Hide/show must preserve shared data.
 3. Start a request then Clear: the old completion must not overwrite idle.
-4. Repeat navigation/unload and check a clean console. Revalidate the unchanged
-   no-application UI showcase too, because the shared host bytes changed.
+4. Repeat navigation/unload and check a clean console. Shared-host changes require
+   both fixtures to be revalidated; a core-only presentation change does not invalidate
+   the unchanged no-application UI showcase fingerprint.
 
 验收使用公共 API；不需自建 HTTPS 服务。自动化宿主脚本用可控 wx 替身验证乱序、重复
 回调、页面卸载、应用销毁、后台暂停订阅和资源回收，它不是微信真实宿主证据。真实验证

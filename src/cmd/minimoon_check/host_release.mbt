@@ -12,8 +12,9 @@ async fn host_suite(root : String) -> Unit {
   run_ui_tests(root, "js")
   run(root, "Conformance application and four-Tab interaction tests", "moon", [
     "test", "examples/miniapp_conformance_app/src/app", "examples/miniapp_conformance_app/src/pages/showcase",
-    "examples/miniapp_conformance_app/src/pages/capability_probe", "examples/miniapp_conformance_app/src/pages/details",
-    "examples/miniapp_conformance_app/src/pages/lab", "examples/miniapp_conformance_app/src/components/toggle_card",
+    "examples/miniapp_conformance_app/src/pages/interaction", "examples/miniapp_conformance_app/src/pages/platform",
+    "examples/miniapp_conformance_app/src/pages/request_lifecycle", "examples/miniapp_conformance_app/src/pages/draft_editor",
+    "examples/miniapp_conformance_app/src/pages/runtime_lab", "examples/miniapp_conformance_app/src/components/toggle_card",
     "examples/miniapp_conformance_app/src/shared/shell", "examples/miniapp_conformance_app/src/resources",
     "examples/miniapp_conformance_app/src/tests", "--target", "js", "--deny-warn",
   ])
@@ -33,24 +34,32 @@ async fn host_suite(root : String) -> Unit {
     root, "examples/miniapp_conformance_app/dist/minimoon.templates.wxml", "wx:key=\"identity\"",
   )
   require_text(
-    root, "examples/miniapp_conformance_app/dist/pages/lab/lab.wxml", "<import src=\"../../minimoon.templates.wxml\" />",
+    root, "examples/miniapp_conformance_app/dist/pages/runtime_lab/runtime_lab.wxml",
+    "<import src=\"../../minimoon.templates.wxml\" />",
   )
-  dynamic_app_host_smoke(root, join(conformance_root, "dist/pages/lab/lab.js"))
+  dynamic_app_host_smoke(
+    root,
+    join(conformance_root, "dist/pages/runtime_lab/runtime_lab.js"),
+  )
   scheduler_host_smoke(root, join(conformance_root, "dist/minimoon.host.js"))
   navigation_host_smoke(root, [
     join(
       root, "examples/miniapp_conformance_app/dist/pages/showcase/showcase.js",
     ),
     join(
-      root, "examples/miniapp_conformance_app/dist/pages/capability_probe/capability_probe.js",
+      root, "examples/miniapp_conformance_app/dist/pages/request_lifecycle/request_lifecycle.js",
     ),
-    join(root, "examples/miniapp_conformance_app/dist/pages/details/details.js"),
-    join(root, "examples/miniapp_conformance_app/dist/pages/lab/lab.js"),
+    join(
+      root, "examples/miniapp_conformance_app/dist/pages/draft_editor/draft_editor.js",
+    ),
+    join(
+      root, "examples/miniapp_conformance_app/dist/pages/runtime_lab/runtime_lab.js",
+    ),
     join(
       root, "examples/miniapp_conformance_app/dist/pages/interaction/interaction.js",
     ),
     join(
-      root, "examples/miniapp_conformance_app/dist/pages/capabilities/capabilities.js",
+      root, "examples/miniapp_conformance_app/dist/pages/platform/platform.js",
     ),
     join(
       root, "examples/miniapp_conformance_app/dist/pages/application/application.js",

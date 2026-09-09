@@ -1,4 +1,5 @@
 import {
+  "lampclaw/miniapp_conformance_app/components/shared_app",
   "lampclaw/minimoon",
   "lampclaw/miniapp_conformance_app/app" @app_state,
   "lampclaw/miniapp_conformance_app/shared/shell",

@@ -1,8 +1,0 @@
-import {
-  "lampclaw/miniapp_conformance_app/shared/shell",
-  "lampclaw/miniapp_conformance_app/app" @application,
-  "lampclaw/minimoon",
-  "moonbitlang/core/json",
-}
-
-supported_targets = "js"
