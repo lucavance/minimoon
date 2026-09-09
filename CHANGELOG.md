@@ -10,7 +10,7 @@ tags.
 
 - Native bottom TabBar configuration and typed `switch_tab`, with tab-aware
   back fallback and capability checks. Conformance has four primary tabs and
-  retains Capability Probe, Lab and Details as secondary acceptance routes.
+  retains Request Lifecycle, Runtime Lab and Draft Editor as secondary acceptance routes.
 - Read-only `PageContext.layout()` with synchronous first-business-tree host
   metrics, transactional resize/Show updates and test layout injection.
 - Typed text/binary build resources, validated PNG Tab icons, and static
@@ -24,12 +24,12 @@ tags.
 
 - Optional `App[Deps]` with independent typed domain state machines, `Shared[T]`,
   scoped page bindings/selectors, application lifecycle and owned async effects.
-- Commit-only page outboxes, cross-page shared-state acceptance in Capability Probe/Details,
+- Commit-only page outboxes, cross-page shared-state acceptance in Application/Draft Editor,
   pure contract previews and application-aware `minimoon add page`.
 
 - Typed HTTP methods, ordered queries, headers, JSON/form/text request bodies
   and per-request timeouts; invalid arguments resolve locally as `InvalidPayload`.
-- Ten public-API Capability Probe scenarios and opt-in `bun run check:http-live`, with
+- Ten public-API Platform scenarios and opt-in `bun run check:http-live`, with
   deterministic generated-page HTTP coverage in the offline host suite.
 - Independent `lampclaw/minimoon_ui 0.1.0` module with Skyline-native RUI
   component adaptations, headless algorithms, typed themes and build resources.
@@ -59,9 +59,16 @@ tags.
 
 ### Changed
 
-- Rename the Conformance secondary `home` route/package to `capability_probe`
-  (能力验证), including navigation, event keys, tests and acceptance tooling.
-  The Showcase home Tab and Starter's `home` page remain unchanged.
+- Consolidate Conformance into 首页 / 交互 / 平台 / 应用 plus Request Lifecycle,
+  Runtime Lab and Draft Editor. Platform owns HTTP/host capabilities, Interaction
+  owns the core component catalogue, and Application is the only full shared controller.
+  Migrate the old `capabilities`, `capability_probe`, `lab` and `details` routes
+  without aliases; Starter's `home` and `details` remain unchanged.
+- Give the core scrolling blue hero a shallow curved bottom edge while preserving
+  fixed navigation geometry, safe-area handling and existing artifact budgets.
+- Reorganize English/Chinese READMEs around source-based Starter onboarding,
+  first-edit verification and concise project status; correct UI schema migration
+  guidance and add documentation fact and onboarding regression checks.
 - Validated MoonBit floor is 0.1.20260904 / moonc v0.10.12, calibrated against
   the official prebuilt release `0.10.12+1634b282e` pinned in both CI jobs.
   Migrated package exclusions to `.moonignore` and removed newly redundant test imports.

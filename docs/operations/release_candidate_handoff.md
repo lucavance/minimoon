@@ -61,6 +61,26 @@ the source SHA, toolchain versions, package contents and both artifact
 fingerprints. A newer commit is a new candidate, not an implicit continuation
 of the same acceptance.
 
+## Repository validation reference
+
+These are framework-maintainer gates, separate from a user's application build.
+`check:docs` validates links, mirrored READMEs, current facts, onboarding examples
+and generated reports; `check:api` locks the core 0.2 root/resources surface and
+compiles the current consumer. Optional core components/styles/testing and the
+independent UI root/headless/theme/resources packages have additive snapshots.
+The frozen 0.1 consumer is historical, not a source-compatibility promise.
+
+`check:coverage` is independent of `check:candidate`. The latter also checks
+warning-free compilation, generated stability, host simulation, performance and
+package consumers. All these automated checks are distinct from `check:all` and
+`check:mvp`, which additionally require the two fixtures' local host evidence.
+
+Archive checks use `moon package --frozen --list` and inspect the actual ZIPs.
+Core has a 320 KiB hard ceiling with an 8 KiB reserve; UI has a separate 250 KiB
+ceiling with a 16 KiB reserve. These are repository budgets, not registry limits.
+Only `scripts/bridge/weapp_tailwindcss_adapter.mjs` is maintained standalone
+JavaScript; host code is MoonBit-owned and committed MiniApp JavaScript is generated.
+
 ## Validation temporary storage
 
 `minimoon check` supervises a separate worker. Each invocation exclusively

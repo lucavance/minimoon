@@ -744,6 +744,7 @@ async fn generator_suite(root : String) -> Unit {
     }
     if template == "starter" {
       let page_file = join(app, "src/pages/home/page.mbt")
+      onboarding_gate(root, app, executable)
       let page_source = @fs.read_file(page_file).text()
       let dist_app = @fs.read_file(join(app, "dist/app.json")).text()
       @fs.write_file(

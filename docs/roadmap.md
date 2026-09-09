@@ -1,5 +1,13 @@
 # Roadmap
 
+## Near-term priorities
+
+Keep the source-based Starter onboarding and English/Chinese documentation
+consistent, finish the exact-artifact release prerequisites, and validate fresh
+registry consumers when publication is authorized. Implemented capabilities are
+described below; release readiness is separate from implementation completion.
+Deferred directions are not dated feature commitments.
+
 ## Native navigation and Conformance presentation
 
 The unpublished core `0.2.0` / UI `0.1.0` iteration adds native bottom tabs,

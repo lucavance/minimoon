@@ -7,6 +7,11 @@ generated reports define candidate readiness.
 
 ## Current implementation
 
+For application authors, the README and quickstart use source-based Starter
+creation until the matching registry versions are available. Near-term work
+focuses on onboarding consistency and release preparation; the detailed
+[Roadmap](roadmap.md) separates implemented capabilities from deferred directions.
+
 Conformance now has four native primary tabs (首页 / 交互 / 平台 / 应用) and
 three task-specific secondary routes: Request Lifecycle, Runtime Lab and Draft Editor. Native tab commands, read-only page layout
 and PNG build assets support the deep-blue custom header and shallow curved hero edge without handwritten

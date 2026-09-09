@@ -128,11 +128,12 @@ route parameters.
 ```moonbit
 model.view(current => profile_view(current, emit))
 
-@minimoon.Val::view2(model, route_input, (current, input) => {
+@minimoon.Val::view2(model, component_input, (current, input) => {
   profile_view(current, emit, input)
 })
 ```
 
+Here `component_input` is a reactive `Val[Input]`, not plain decoded route input.
 `Val::map`/`view` handle one value. `Val::map2` through `map9` produce any
 derived `Val`; `Val::view2` through `view9` are the corresponding
 `Val[Node]` conveniences.

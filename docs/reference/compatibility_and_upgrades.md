@@ -114,7 +114,7 @@ the current 0.2 API; migrate source calls and exhaustive enum matches before
 rebuilding.
 
 Upgrade an application contract's `schemaVersion` to `11` and regenerate the
-entire output. Both schema `8` and `9` are rejected, including no-App projects.
+entire output. Old schema `8`, `9` and `10` are rejected, including no-App projects.
 The optional application package exports `Deps` and `program() -> App[Deps]`;
 all opted-in page factories receive those dependencies. `PageContext` is opaque.
 See [shared-state migration](../guides/shared_state.md). Do not mix old renderer

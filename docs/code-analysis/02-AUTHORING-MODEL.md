@@ -132,7 +132,7 @@ pub fn[Model : Eq, Msg] create_state(
 ```mermaid
 flowchart TB
     Page[Page graph / 页面图]
-    Input[page input Val]
+    Input[reactive component input Val]
     StateA[local Val A]
     StateB[local Val B]
     Map[Val::map2..map9]
@@ -153,6 +153,12 @@ flowchart TB
 ```
 
 [SVG](assets/diagrams/svg/02-AUTHORING-MODEL-2.svg) · [PNG 3×](assets/diagrams/png/02-AUTHORING-MODEL-2.png) · [Mermaid](assets/diagrams/source/02-AUTHORING-MODEL-2.mmd)
+
+图中的输入是响应式组件输入 `Val[Input]`，不是路由参数。真实路由输入在创建图之前解码，页面 builder 接收普通 `Input`；需要持续更新的组件输入才参与这里的 Val 组合。
+
+> **English:**
+>
+> The diagram shows reactive component input `Val[Input]`, not route parameters. Actual route input is decoded before graph creation and reaches the page builder as plain `Input`; only live component inputs participate in this Val composition.
 
 > **源码 / Source:** [`src/authoring_core.mbt`](../../src/authoring_core.mbt) · symbols: `Val::map2`, `Val::assoc`, `Val::enumerate_bounded_by`
 

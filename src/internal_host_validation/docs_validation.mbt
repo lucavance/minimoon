@@ -38,6 +38,119 @@ pub fn docs_check_source() -> String {
     #|  return problems
     #|}
     #|
+    #|function mirroredTextProblems(source, expected, actual) {
+    #|  return expected === actual ? [] : [source + ": README mirror drift"]
+    #|}
+    #|
+    #|function markedCode(source, content, name, language) {
+    #|  const start = "<!-- minimoon:" + name + ":start -->"
+    #|  const end = "<!-- minimoon:" + name + ":end -->"
+    #|  if (content.split(start).length !== 2 || content.split(end).length !== 2) {
+    #|    return { code: "", problems: [source + ": missing or duplicate " + name + " block"] }
+    #|  }
+    #|  const begin = content.indexOf(start) + start.length
+    #|  const finish = content.indexOf(end)
+    #|  const lines = content.slice(begin, finish).trim().split("\n")
+    #|  const fence = String.fromCharCode(96).repeat(3)
+    #|  if (finish < begin || lines[0] !== fence + language || lines.at(-1) !== fence) {
+    #|    return { code: "", problems: [source + ": malformed " + name + " block"] }
+    #|  }
+    #|  return { code: lines.slice(1, -1).join("\n"), problems: [] }
+    #|}
+    #|
+    #|function schemaMigrationProblems(source, content, expected) {
+    #|  const { active, problems } = historicalSections(source, content)
+    #|  const plain = active.replace(/[\x60*_]/g, "").replace(/\s+/g, " ")
+    #|  const patterns = [
+    #|    /\bschema(?:Version)?\b[^.;]*?\bmigrate\s+to\s+(?:schema(?:Version)?\s+)?(\d+)\b/gi,
+    #|    /\bupgrade\b[^.;]*?\bschemaVersion\s+to\s+(\d+)\b/gi,
+    #|  ]
+    #|  for (const pattern of patterns) {
+    #|    for (const match of plain.matchAll(pattern)) {
+    #|      if (Number(match[1]) !== Number(expected.contractVersion)) {
+    #|        problems.push(source + ": stale schema migration target: " + match[1])
+    #|      }
+    #|    }
+    #|  }
+    #|  return problems
+    #|}
+    #|
+    #|function fixtureIndexProblems(source, content, inventory) {
+    #|  const rows = content.split("\n").filter(line => line.startsWith("|"))
+    #|  const problems = []
+    #|  for (const fixture of inventory) {
+    #|    const found = rows.filter(row => row.includes(fixture.link))
+    #|    if (found.length !== 1) {
+    #|      problems.push(source + ": missing or duplicate fixture row: " + fixture.link)
+    #|      continue
+    #|    }
+    #|    const cells = found[0].split("|").map(cell => cell.trim())
+    #|    if (Number(cells[2]) !== fixture.pages || Number(cells[3]) !== fixture.tabs.length) {
+    #|      problems.push(source + ": stale fixture page/Tab count: " + fixture.link)
+    #|    }
+    #|    const documentedTabs = cells[4]?.split(";")[0].trim()
+    #|    if (fixture.tabs.length && documentedTabs !== fixture.tabs.join(" / ")) {
+    #|      problems.push(source + ": stale fixture Tab labels: " + fixture.link)
+    #|    }
+    #|  }
+    #|  return problems
+    #|}
+    #|
+    #|function fixtureReadmeProblems(source, content, inventory) {
+    #|  const problems = []
+    #|  for (const fixture of inventory) {
+    #|    const row = content.split("\n").find(line => line.startsWith("|") && line.includes(fixture.directory + "/README.md"))
+    #|    if (!row) {
+    #|      problems.push(source + ": missing fixture overview: " + fixture.directory)
+    #|      continue
+    #|    }
+    #|    const description = row.split("|")[2] || ""
+    #|    const counts = (description.match(/\d+/g) || []).map(Number)
+    #|    if (counts[0] !== fixture.pages || (fixture.tabs.length && counts[1] !== fixture.tabs.length)) {
+    #|      problems.push(source + ": stale fixture overview count: " + fixture.directory)
+    #|    }
+    #|    if (fixture.tabs.length && !description.includes(fixture.tabs.join(" / "))) {
+    #|      problems.push(source + ": stale fixture overview Tab labels: " + fixture.directory)
+    #|    }
+    #|  }
+    #|  return problems
+    #|}
+    #|
+    #|function currentFixtureProseProblems(source, content) {
+    #|  let current = content
+    #|  if (source === "CHANGELOG.md") {
+    #|    // Only the unreleased section describes current fixture ownership.
+    #|    const sections = content.split(/(?=^## )/m)
+    #|    current = sections.find(section => /^## \[[^\]]+\] - Unreleased/m.test(section)) || ""
+    #|  }
+    #|  const { active, problems } = historicalSections(source, current)
+    #|  for (const sentence of active.split(/[.!?。](?:\s+|$)/)) {
+    #|    if (/\b(?:migrate|migration|removed|formerly|historical)\b|旧.{0,30}迁移|已迁移/i.test(sentence)) continue
+    #|    if (/Capability Probe|capability_probe|能力验证(?:页面|[（(])|retains Lab and Details/.test(sentence)) {
+    #|      problems.push(source + ": stale active Conformance page ownership")
+    #|    }
+    #|  }
+    #|  return problems
+    #|}
+    #|
+    #|function normalizedMoonSnippet(code) {
+    #|  return code.replace(/@minimoon\./g, "").replace(/\s+/g, "").replace(/,(?=[}\])])/g, "")
+    #|}
+    #|
+    #|function onboardingParityProblems(source, reference, content) {
+    #|  const problems = []
+    #|  for (const [name, language] of [["onboarding", "bash"], ["counter", "moonbit"]]) {
+    #|    if (name === "counter" && source.endsWith("miniapp_quickstart.md")) continue
+    #|    const expected = markedCode("README.mbt.md", reference, name, language)
+    #|    const actual = markedCode(source, content, name, language)
+    #|    problems.push(...expected.problems, ...actual.problems)
+    #|    const normalize = name === "counter" ? normalizedMoonSnippet : text => text.trim()
+    #|    if (normalize(expected.code) !== normalize(actual.code)) problems.push(source + ": onboarding example drift: " + name)
+    #|  }
+    #|  return problems
+    #|}
+    #|
+    #|
     #|function bilingualProblems(source, content) {
     #|  const problems = []
     #|  const headings = content.match(/^#{1,6} .+$/gm) || []
@@ -122,6 +235,7 @@ pub fn docs_check_source() -> String {
     #|    ...problems,
     #|    ...versionReferenceProblems(source, active, expected),
     #|    ...currentConfigProblems(source, active, expected),
+    #|    ...schemaMigrationProblems(source, active, expected),
     #|  ]
     #|}
     #|
@@ -267,7 +381,57 @@ pub fn docs_check_source() -> String {
     #|  return [data.readUInt32BE(16), data.readUInt32BE(20)]
     #|}
     #|
+    #|function runOnboardingSelfTest() {
+    #|  const expected = { contractVersion }
+    #|  const inventory = [{ directory: "examples/core", link: "core/README.md", pages: 7, tabs: ["首页", "交互", "平台", "应用"] }]
+    #|  const index = "| [core](core/README.md) | 7 | 4 | 首页 / 交互 / 平台 / 应用; Runtime Lab |"
+    #|  const overview = "| [core](https://github.com/lucavance/minimoon/blob/main/examples/core/README.md) | 7 pages, 4 native Tabs — 首页 / 交互 / 平台 / 应用 |"
+    #|  const fence = String.fromCharCode(96).repeat(3)
+    #|  const marked = "<!-- minimoon:onboarding:start -->\n" + fence + "bash\nminimoon init ../my-app --minimoon-root \"$PWD\"\n" + fence + "\n<!-- minimoon:onboarding:end -->"
+    #|  const counter = "<!-- minimoon:counter:start -->\n" + fence + "moonbit\nfn demo() { () }\n" + fence + "\n<!-- minimoon:counter:end -->"
+    #|  const doc = marked + "\n" + counter
+    #|  const oldSchema = Number(contractVersion) - 1
+    #|  const migration = "Schema 8 and 9 configurations must migrate to " + contractVersion + ";"
+    #|  const badMigration = "Schema 8 and 9 configurations must migrate to " + oldSchema + ";"
+    #|  const cases = [
+    #|    ["mirror drift", mirroredTextProblems("readme", "current", "old"), "mirror drift"],
+    #|    ["page count", fixtureIndexProblems("index", index.replace("| 7 |", "| 4 |"), inventory), "page/Tab count"],
+    #|    ["Tab count", fixtureIndexProblems("index", index.replace("| 4 |", "| 3 |"), inventory), "page/Tab count"],
+    #|    ["Tab label", fixtureIndexProblems("index", index.replace("平台", "能力"), inventory), "Tab labels"],
+    #|    ["overview count", fixtureReadmeProblems("readme", overview.replace("7 pages", "4 pages"), inventory), "overview count"],
+    #|    ["overview label", fixtureReadmeProblems("readme", overview.replace("平台", "能力"), inventory), "overview Tab labels"],
+    #|    ["schema migration", schemaMigrationProblems("ui", badMigration, expected), "schema migration target"],
+    #|    ["source workflow", onboardingParityProblems("translation", doc, doc.replace("--minimoon-root", "--wrong")), "example drift"],
+    #|    ["missing source block", onboardingParityProblems("translation", doc, counter), "missing or duplicate"],
+    #|    ["missing counter", onboardingParityProblems("translation", doc, marked), "missing or duplicate"],
+    #|    ["duplicate block", markedCode("readme", marked + marked, "onboarding", "bash").problems, "missing or duplicate"],
+    #|    ["active old HTTP owner", currentFixtureProseProblems("README.md", "Ten public-API Capability Probe scenarios."), "page ownership"],
+    #|    ["migration cannot hide stale owner", currentFixtureProseProblems("CHANGELOG.md", "## [0.2.0] - Unreleased\n\nCapability Probe owns HTTP. Migrate the old capability_probe route without aliases."), "page ownership"],
+    #|    ["Chinese old HTTP owner", currentFixtureProseProblems("README.zh-CN.md", "公共 API 验证能力验证页面。"), "page ownership"],
+    #|    ["unreleased old route", currentFixtureProseProblems("CHANGELOG.md", "## [0.2.0] - Unreleased\n\n- Retains Capability Probe and Details.\n\n## [0.1.0] - historical\nOld text."), "page ownership"],
+    #|  ]
+    #|  for (const [name, problems, diagnostic] of cases) {
+    #|    if (!problems.some(problem => problem.includes(diagnostic))) throw new Error("onboarding self-test did not reject " + name)
+    #|  }
+    #|  const history = "<!-- minimoon:historical:start -->\n" + badMigration + "\nCapability Probe\n<!-- minimoon:historical:end -->"
+    #|  const accepted = [
+    #|    mirroredTextProblems("readme", "same", "same"),
+    #|    fixtureIndexProblems("index", index, inventory),
+    #|    fixtureReadmeProblems("readme", overview, inventory),
+    #|    schemaMigrationProblems("ui", migration, expected),
+    #|    schemaMigrationProblems("history", history, expected),
+    #|    currentFixtureProseProblems("history", history),
+    #|    currentFixtureProseProblems("CHANGELOG.md", "## [0.2.0] - Unreleased\n\n- Platform HTTP scenarios.\n\n## [0.1.0] - 2026-09-04\nCapability Probe"),
+    #|    currentFixtureProseProblems("migration", "Migrate the old capability_probe route to request_lifecycle without aliases."),
+    #|    currentFixtureProseProblems("README.zh-CN.md", "核心能力验证：7 个页面、4 个原生 Tab"),
+    #|    onboardingParityProblems("translation", doc, doc),
+    #|  ]
+    #|  if (accepted.some(problems => problems.length)) throw new Error("onboarding self-test rejected current facts or explicit history")
+    #|}
+    #|
+    #|
     #|function runSelfTest() {
+    #|  runOnboardingSelfTest()
     #|  const expected = { contractVersion, runtimeVersion, protocolVersion }
     #|  const mismatchedContract = `App Contract v${Number(contractVersion) + 1}`
     #|  const mismatchedRuntime = `runtime ABI v${Number(runtimeVersion) + 1}`
@@ -678,40 +842,52 @@ pub fn docs_check_source() -> String {
     #|  for (const problem of moduleVersionProblems(source, read(source), moduleVersions)) fail(problem)
     #|}
     #|for (const [source, mirror] of [["README.mbt.md", "README.md"], ["README.zh-CN.mbt.md", "README.zh-CN.md"], ["ui/README.mbt.md", "ui/README.md"]]) {
-    #|  if (!fs.existsSync(absolute(mirror)) || read(source) !== read(mirror)) fail(`${mirror}: must mirror ${source}`)
+    #|  for (const problem of mirroredTextProblems(mirror, read(source), fs.existsSync(absolute(mirror)) ? read(mirror) : "")) fail(problem)
     #|}
+    #|const fixtureInventory = fixtures.map(fixture => {
+    #|  const config = JSON.parse(read(fixture.directory + "/miniapp.minimoon.json"))
+    #|  return { ...fixture, link: fixture.directory.startsWith("examples/") ? fixture.name + "/README.md" : "../" + fixture.directory + "/README.md",
+    #|    pages: config.pages.length, tabs: (config.tabBar?.list || []).map(tab => tab.text) }
+    #|})
+    #|for (const problem of fixtureIndexProblems("examples/README.md", read("examples/README.md"), fixtureInventory)) fail(problem)
+    #|const primaryReadme = read("README.mbt.md")
     #|for (const readme of ["README.mbt.md", "README.zh-CN.mbt.md"]) {
     #|  const content = normalized(readme)
     #|  for (const token of [
-    #|    productVersion,
-    #|    `App Contract v${contractVersion}`,
-    #|    `runtime ABI v${runtimeVersion}`,
-    #|    `renderer protocol v${protocolVersion}`,
-    #|    "3.17.0",
-    #|    "setting.es6=true",
-    #|    "setting.enhance=true",
-    #|    "setting.minified=true",
-    #|    "check:coverage",
-    #|    "check:all",
-    #|    "check:mvp",
-    #|    "docs/README.md",
-    #|    "@minimoon.create_state",
-    #|    "@minimoon.no_cmd",
-    #|    "Emit[Msg]",
-    #|    "App[Deps]",
-    #|    "Shared[T]",
-    #|    "PageContext.bind/select",
-    #|    "program(deps : @application.Deps) -> Page",
-    #|    "minimoon.app.js",
-    #|    "minimoon.templates.wxml",
-    #|    "app.wxss",
+    #|    productVersion, "3.17.0", "setting.es6=true", "setting.enhance=true", "setting.minified=true",
+    #|    "docs/README.md", "docs/guides/miniapp_quickstart.md", "docs/project_status.md", "docs/roadmap.md",
+    #|    "docs/architecture.md", "docs/operations/release_candidate_handoff.md", "docs/guides/http.md",
+    #|    "docs/guides/shared_state.md", "docs/guides/native_navigation.md",
+    #|    "minimoon init ../my-app --minimoon-root", "minimoon verify . --candidate", "my-app/dist/",
+    #|    "src/pages/home/page.mbt", 'name: "My App"', "Hello My App", "create_variable", "count.view",
     #|  ]) {
-    #|    if (!content.includes(token)) fail(`${readme}: missing canonical fact: ${token}`)
+    #|    if (!content.includes(token)) fail(readme + ": missing onboarding fact: " + token)
     #|  }
+    #|  for (const problem of onboardingParityProblems(readme, primaryReadme, read(readme))) fail(problem)
+    #|  for (const problem of fixtureReadmeProblems(readme, read(readme), fixtureInventory)) fail(problem)
+    #|  for (const problem of currentFixtureProseProblems(readme, read(readme))) fail(problem)
     #|  for (const stale of ["setting.es6=false", "setting.enhance=false", "setting.minified=false"]) {
-    #|    if (content.includes(stale)) fail(`${readme}: stale Developer Tools setting: ${stale}`)
+    #|    if (content.includes(stale)) fail(readme + ": stale Developer Tools setting: " + stale)
     #|  }
     #|}
+    #|for (const problem of onboardingParityProblems("docs/guides/miniapp_quickstart.md", primaryReadme, read("docs/guides/miniapp_quickstart.md"))) fail(problem)
+    #|for (const problem of currentFixtureProseProblems("CHANGELOG.md", read("CHANGELOG.md"))) fail(problem)
+    #|// Advanced facts belong in their subject guides, not in the first-app landing page.
+    #|const authoritativeFacts = {
+    #|  "docs/architecture.md": [
+    #|    "App Contract v" + contractVersion, "Runtime ABI v" + runtimeVersion, "renderer protocol v" + protocolVersion,
+    #|    "App[Deps]", "Shared[T]", "PageContext.bind/select", "minimoon.app.js", "minimoon.templates.wxml", "app.wxss",
+    #|    "generational", "transaction", "snapshot", "acknowledgement",
+    #|  ],
+    #|  "docs/guides/api_ergonomics.md": ["@minimoon.create_state", "@minimoon.no_cmd", "Emit[Msg]", "Val::map2", "create_state_with_input", "create_resource"],
+    #|  "docs/guides/shared_state.md": ["program(deps : @application.Deps) -> @minimoon.Page", "App[Deps]", "Shared"],
+    #|  "docs/operations/release_candidate_handoff.md": ["check:coverage", "check:candidate", "check:all", "check:mvp", "check:api", "moon package --frozen --list", "MINIMOON_CHECK_TMPDIR"],
+    #|}
+    #|for (const [document, tokens] of Object.entries(authoritativeFacts)) {
+    #|  const content = normalized(document)
+    #|  for (const token of tokens) if (!content.includes(token)) fail(document + ": missing canonical fact: " + token)
+    #|}
+    #|
     #|
     #|for (const active of [
     #|  "README.mbt.md",

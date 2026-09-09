@@ -3,6 +3,16 @@
 This directory contains the active maintainer documentation for Minimoon.
 The canonical source is the current `lucavance/minimoon` repository.
 
+## Start here
+
+New application authors should begin with the [quickstart](guides/miniapp_quickstart.md):
+create a Starter, preview it, then change its initial name and rebuild. Continue
+with [page authoring](guides/miniapp_authoring_example.md), [HTTP](guides/http.md),
+[navigation](guides/native_navigation.md), [shared state](guides/shared_state.md)
+and the optional [UI guide](https://github.com/lucavance/minimoon/blob/main/ui/README.md).
+Framework contributors can use the architecture and operations sections below;
+the full release workflow is not a first-app prerequisite.
+
 ## Sources of truth
 
 | Fact | Canonical source |

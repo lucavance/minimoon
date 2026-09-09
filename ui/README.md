@@ -55,7 +55,7 @@ An empty feature list includes the full bundle. A nonempty list, such as
 resource dependencies. Unknown features fail the build. The native provider
 exports WXSS and SVG assets; it is not imported into application JavaScript.
 Core has no dependency on this UI module.
-Schema `8` and `9` configurations must migrate to `10`;
+Schema `8`, `9` and `10` configurations must migrate to `11`;
 generated artifacts use Contract v11/runtime ABI v13. To combine UI
 with shared state, opt into the core [App setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/shared_state.md)
 and make page factories take `Deps`; UI roots still belong to individual pages.

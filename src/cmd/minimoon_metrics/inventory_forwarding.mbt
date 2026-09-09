@@ -54,6 +54,9 @@ fn embedded_forwarding_inventory(
         "src/cmd/minimoon_check/http.mbt", "http_probe", "forwards http_probe_source",
       ),
       (
+        "src/cmd/minimoon_check/onboarding.mbt", "onboarding_gate", "MoonBit onboarding tests and package manifest, no executable JavaScript",
+      ),
+      (
         "src/cmd/minimoon_check/performance.mbt", "performance_reports", "forwards bridge_benchmark_source",
       ),
       (
