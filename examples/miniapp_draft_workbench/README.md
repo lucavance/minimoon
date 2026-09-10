@@ -1,6 +1,6 @@
 # Minimoon 草稿工作台
 
-Minimoon Draft Workbench 是基于已发布核心 `lampclaw/minimoon 0.2.0` 的轻量示例：
+Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.0` 公共 API 的轻量示例：
 **四个原生 Tab、一个编辑器、四个能力实验室，共九条路由**。
 它同时承担核心框架 conformance 验收，不是账号系统或云笔记服务。
 
@@ -15,6 +15,10 @@ Minimoon Draft Workbench 是基于已发布核心 `lampclaw/minimoon 0.2.0` 的�
 ```bash
 bun run minimoon verify examples/miniapp_draft_workbench --candidate
 ```
+
+当前仓库另含尚未发布的输入框宿主修复：连续输入时只更新变化的属性，
+不反复写入未变化的焦点／选区属性。请使用上述仓库 CLI 或本次生成物；
+已发布的 Registry `0.2.0` CLI 不包含此修复。版本号和公共 API 不变。
 
 导入 **`examples/miniapp_draft_workbench/dist/`**，不要导入源码目录。
 沿用 Skyline、基础库至少 3.17.0，以及
@@ -82,10 +86,13 @@ MoonBit 自有资源，不依赖 UI 模块、远程素材或手写 JavaScript。
 
 自动化覆盖存储损坏／失败／重复操作、跨页缓冲、请求乱序／重复回调／解码失败、
 Page 与 App 所有权，以及原有控件和渲染实验。
+新增回归检查标题和正文逐次输入、中文内容及删除时的实际宿主写入路径。
+仍需在模拟器和真机检查连续英文输入、中文输入法组词、粘贴、删除、
+中间插入及两框切换，确认光标不跳走，标题文字和占位文字上下均不遮挡。
 `bun run check:http-live` 验证十种平台 HTTP 场景，以及编辑器卸载后的 App 草稿回显；
 使用真实公共 API，但传输适配仍是脚本，不等于真实微信宿主。
 
 `generated/verify_report.json` 与 `release_summary.json` 是公开 candidate 记录；
 `devtools.evidence.json` 私人且被 Git 忽略。新名称、九路由和新产物必须重新验收，
-不能沿用旧核心证据；UI 的未变指纹仍只对应 UI。
+不能沿用旧核心证据。本轮共享宿主修复也改变了 UI 产物，UI Showcase 必须另行复验。
 不宣称生产请求域名或完整 HTTPS/TLS 验证，也不会自动发布包。

@@ -48,6 +48,9 @@ fn embedded_inventory(
         "src/internal_host_js/host_layout_wbtest.mbt", "run_layout_host_test", "test",
       ),
       (
+        "src/internal_host_js/host_input_wbtest.mbt", "run_input_patch_test", "test",
+      ),
+      (
         "src/renderer_miniapp/page_program_25_runtime_support.mbt", "capture_runtime_wake_v12",
         "production",
       ),

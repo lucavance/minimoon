@@ -73,15 +73,22 @@ pub fn shared_protocol_bridge() -> String {
     #|  let cost = 0
     #|  let copies = 0
     #|  let setOnly = true
+    #|  const writes = []
     #|  for (const op of command.ops) {
     #|    if (!op || typeof op !== "object") return null
     #|    if (op.op === "set") {
-    #|      cost += 1
     #|      if (!exactKeys(op, ["op", "path", "value"]) || !validatePath(op.path, false)) return null
     #|      const parentPath = op.path.slice(0, -1)
     #|      const parent = resolvePath(shadow, parentPath)
     #|      const key = op.path[op.path.length - 1]
     #|      if (!parent || typeof parent !== "object" || !(key in parent) || (key === "text" ? typeof op.value !== "string" : key === "props" ? !validateProps(op.value) : !validateEvents(op.value))) return null
+    #|      const before = writes.length
+    #|      // Native focus/selection are imperative: do not reapply unchanged fields on each keystroke.
+    #|      // Keep complete replacement when keys disappear; null/undefined cannot encode removal here.
+    #|      if (key === "props" && ["input", "textarea"].includes(parent.kind) && Object.keys(parent.props).every(field => Object.prototype.hasOwnProperty.call(op.value, field))) {
+    #|        for (const [field, value] of Object.entries(op.value)) if (parent.props[field] !== value) writes.push({ op: "set", path: [...op.path, field], value })
+    #|      } else writes.push(op)
+    #|      cost += Math.max(1, writes.length - before)
     #|      const candidate = copyPath(shadow, parentPath)
     #|      if (!candidate) return null
     #|      candidate.value[key] = op.value
@@ -109,9 +116,10 @@ pub fn shared_protocol_bridge() -> String {
     #|      shadow = candidate.root
     #|      copies += candidate.copies
     #|    } else return null
+    #|    if (op.op !== "set") writes.push(op)
     #|    if (cost > 32) return null
     #|  }
-    #|  return { shadow, setOnly, cost, copies }
+    #|  return { shadow, setOnly, cost, copies, writes }
     #|}
     #|function createRendererStats() {
     #|  return { patchCommands: 0, replaceCommands: 0, patchOps: 0, setOps: 0, spliceOps: 0, moveOps: 0, hostWriteOps: 0, groupUpdateCalls: 0, setDataCalls: 0, renderCommits: 0, patchFallbacks: 0, rejectedPatches: 0, subscriptionStarts: 0, subscriptionStops: 0, effectCancellations: 0, asyncDrains: 0, receivedUiEvents: 0, coalescedEvents: 0, eventBatches: 0, maxEventBatch: 0, maxQueueDepth: 0, schedulerWarnings: 0, schedulerFailures: 0, renderRetries: 0, renderTimeouts: 0, renderAckSamples: 0, renderAckTotalMs: 0, renderAckMaxMs: 0, renderAckLastMs: 0, shadowCopies: 0 }

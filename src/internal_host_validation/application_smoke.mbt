@@ -69,6 +69,29 @@ pub fn application_host_smoke_source() -> String {
     #|const editor = start(details, { from: "application-smoke" })
     #|const online = load("pages/online/online.js"), viewer = start(online)
     #|const input = (key, value) => editor.__mmDispatchInput({ currentTarget: { dataset: { minimoonInput: key } }, target: { dataset: {} }, detail: { value } })
+    #|// Verify the generated host's actual writes, not only the final model: replaying
+    #|// an unchanged focus:false or selection property can interrupt native typing.
+    #|const controlPath = (node, event, path = "draft_editor.tree") => {
+    #|  if (node.events.input === event) return path
+    #|  for (let index = 0; index < node.children.length; index++) { const found = controlPath(node.children[index], event, path + ".children[" + index + "]"); if (found) return found }
+    #|}
+    #|const typingWrites = [], setEditorData = editor.setData
+    #|editor.setData = function(patch, callback) { typingWrites.push(structuredClone(patch)); return setEditorData.call(this, patch, callback) }
+    #|for (const event of ["draft_editor/draft-title", "draft_editor/draft-note"]) {
+    #|  const prefix = controlPath(editor.data.draft_editor.tree, event)
+    #|  assert.ok(prefix, "draft input is missing")
+    #|  const tokens = prefix.replace(/\[(\d+)\]/g, ".$1").split("."), identity = get(editor.data, tokens).identity
+    #|  for (const value of ["a", "ab", "abc", "a中bc", "a中", ""]) {
+    #|    typingWrites.length = 0; input(event, value); await flush()
+    #|    assert.equal(get(editor.data, tokens).identity, identity, "typing replaced its native input identity")
+    #|    assert.equal(get(editor.data, tokens).props.value, value)
+    #|    const fields = typingWrites.flatMap(patch => Object.keys(patch))
+    #|    assert.ok(fields.includes(prefix + ".props.value"), "typing must reach the native value field")
+    #|    assert.deepEqual(fields.filter(key => key.startsWith(prefix + ".")), [prefix + ".props.value"], "typing replayed focus/selection or the whole props object")
+    #|    assert.ok(!fields.some(key => prefix === key || prefix.startsWith(key + ".") || prefix.startsWith(key + "[")), "typing replaced an input ancestor")
+    #|  }
+    #|}
+    #|editor.setData = setEditorData
     #|input("draft_editor/draft-title", ""); await flush(); tap(editor, "work/send"); await flush()
     #|assert.equal(requests.length, 3); assert.ok(has(editor, "标题不能为空"))
     #|input("draft_editor/draft-title", "Typed host echo"); input("draft_editor/draft-note", "shared result"); await flush()

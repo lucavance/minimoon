@@ -136,6 +136,13 @@ Platform / 平台:
 
 Draft business workflows / 草稿业务闭环:
 
+- In both the title input and body textarea, type continuously in English and
+  compose Chinese with the native IME; paste, delete and insert in the middle.
+  Focus, cursor and selection must not jump after each character. Switch between
+  the fields and verify explicit focus/blur still work. Check that the taller
+  title field clips neither its value nor its placeholder with the keyboard open.
+- The shared-host input-property fix changes both fixture fingerprints. Repeat
+  the UI Forms typing/IME checks too; simulated host-write tests are not a native pass.
 - Start offline with an empty workbench. New, validate, save, view, edit and delete;
   cold-restart after both saving and deletion. Only acknowledged writes affect the list.
 - Whitespace titles and title/body overflow show validation, not success.

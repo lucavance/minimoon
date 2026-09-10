@@ -64,6 +64,7 @@ test "editor folds lifecycle trial and routes back with a native Tab fallback" {
   defer ignore(app.dispose())
   let page = open_editor(app)
   assert_false(page.snapshot().contains("来源：test"))
+  assert_true(page.snapshot().contains("demo-input demo-title-input"))
   ignore(page.dispatch("draft_editor/notes", "{}"))
   assert_true(page.snapshot().contains("来源：test"))
   assert_true(page.snapshot().contains("本页试发"))

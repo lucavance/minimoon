@@ -55,8 +55,9 @@ versioned persistence, one App-owned editing buffer, typed public HTTP echo,
 and page/App request-lifecycle demonstrations. The obsolete shared echo domain
 and duplicate panels were removed; the capability laboratories retain their
 technical regression coverage. No framework runtime or public API change is
-required. An isolated consumer of Registry core `0.2.0` produces the same
-artifact fingerprint as the workspace build.
+required at that checkpoint. An isolated consumer of Registry core `0.2.0`
+produced the same artifact fingerprint as that workspace build. The later
+unpublished shared-host input fix is not part of this historical parity claim.
 
 Calibration uses `moon 0.1.20260907`, `moonc v0.10.12+1634b282e`, Node 24.21.0,
 and Bun 1.4.2:

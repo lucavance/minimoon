@@ -45,7 +45,7 @@
   "automated": {
     "status": "passed",
     "pageCount": 6,
-    "artifactFingerprint": "fnv1a64-relpath-v2:de5942411b98cab2"
+    "artifactFingerprint": "fnv1a64-relpath-v2:602c166813e5972c"
   },
   "devtools": {
     "status": "pending",

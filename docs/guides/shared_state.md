@@ -184,8 +184,8 @@ The four business Tabs bind the same App-owned records, editing buffer and echo.
 3. Edit during a request, delete or clear: the old reply cannot overwrite the new
    buffer or persisted records. The lifecycle laboratory also covers shared count
    bursts, hidden observers and public delayed requests.
-4. Shared-host changes require both fixtures to be revalidated; this example-only
-   change does not invalidate an unchanged UI fingerprint.
+4. Example-only changes do not invalidate an unchanged UI fingerprint. Shared-host
+   changes, including the current input-property fix, require both fixtures to be revalidated.
 
 验收使用公共 API；不需自建 HTTPS 服务。自动化宿主脚本用可控 wx 替身验证乱序、重复
 回调、页面卸载、应用销毁、后台暂停订阅和资源回收，它不是微信真实宿主证据。真实验证

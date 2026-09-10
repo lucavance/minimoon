@@ -51,7 +51,7 @@
     ]
   },
   "runtimeBytes": {
-    "application": 427143
+    "application": 427160
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -101,7 +101,7 @@
       "features": [],
       "id": "minimoon-draft-workbench",
       "version": "0.2.0",
-      "wxssBytes": 2275,
+      "wxssBytes": 2381,
       "assets": [
         "assets/tab-home.png",
         "assets/tab-platform.png",
@@ -6887,7 +6887,7 @@
                               "disabled": false,
                               "focus": false,
                               "placeholder": "标题（必填，最多 80 字）",
-                              "className": "demo-input"
+                              "className": "demo-input demo-title-input"
                             },
                             "events": {
                               "input": "draft_editor/draft-title"

@@ -154,7 +154,7 @@ pub fn program(deps : @application.Deps) -> @minimoon.Page {
                   on_input=deps.send.map(value => @application.Title(value)),
                   event_key="draft_editor/draft-title",
                   placeholder="标题（必填，最多 80 字）",
-                  class="demo-input",
+                  class="demo-input demo-title-input",
                 ),
                 @minimoon.textarea(
                   value=model.buffer.draft.note,

@@ -57,6 +57,13 @@ Each command advances exactly one revision. Paths contain only allowlisted
 fields and non-negative indices. Patch bytes must be at most 75% of replacement
 bytes and weighted host cost at most 32; set/splice cost one and move costs two.
 
+The generated host may lower an input/textarea `props` replacement into writes
+to only changed property fields, avoiding replay of unchanged native focus or
+selection. Removed keys retain whole-object replacement. This is internal write
+planning: wire paths still end in `props`, not `props.value`, and the shadow keeps
+the complete next props object. The host also enforces the 32-cost ceiling after
+expansion, counting each original set at least once even when it produces no write.
+
 ## Batch and scheduler protocol
 
 `dispatch_batch` accepts at most 2048 JSON objects containing `key` and

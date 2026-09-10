@@ -11,6 +11,11 @@ test "fixture provider owns eight paired binary PNGs and the dark boot backgroun
     bundle.wxss.contains("border-radius:0 0 50% 50% / 0 0 32rpx 32rpx;"),
   )
   assert_true(bundle.wxss.contains("padding:16rpx 40rpx 40rpx;"))
+  assert_true(
+    bundle.wxss.contains(
+      ".demo-title-input{width:100%;height:96rpx;min-height:48px;line-height:44rpx;padding:0 24rpx;flex-shrink:0}",
+    ),
+  )
   let paths : Map[String, Bool] = Map([])
   for asset in bundle.assets {
     assert_false(paths.contains(asset.path))

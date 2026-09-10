@@ -30,6 +30,13 @@ not real-host evidence. Product versions, Contract `11`, runtime ABI `13` and
 renderer protocol `8` do not change. New workbench bytes need fresh host acceptance;
 the publication checkpoint below remains the earlier immutable release.
 
+The workspace also contains an unpublished shared-host input fix: value edits
+do not replay unchanged native focus/selection properties. The draft title input
+has a taller layout intended to avoid clipping. Use the repository CLI or its generated artifacts;
+the published Registry CLI does not include this fix. Both core and UI artifact
+fingerprints change and need fresh real-host acceptance. Automated host-write
+checks do not establish native cursor or IME correctness.
+
 The current authoring revision makes ordinary `page` builders, typed state
 constructors and `Val` composition the primary style, retaining `elmish_page`
 for simple pages. Required route inputs are decoded before graph creation;

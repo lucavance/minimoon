@@ -10,6 +10,12 @@ tags.
   with four business Tabs, a Draft Editor and four capability laboratories.
 - Add acknowledged local draft CRUD, restart restoration, an App-owned editing
   buffer, typed public echo, and explicit page/App request lifetime checks.
+- Narrow generated input/textarea property writes so typing does not replay
+  unchanged native focus or selection fields; increase the draft title input's
+  height and remove its vertical padding to avoid clipped text.
+- This unpublished shared-host fix requires the repository CLI (or its generated
+  artifacts), and fresh acceptance of both core and UI fixtures. Registry core
+  `0.2.0` is unchanged; public APIs and technical compatibility numbers stay fixed.
 - Apply the reviewed example-only runtime/aggregate JavaScript ceilings of
   440,000/480,000 bytes; framework, Starter, UI and other performance gates stay unchanged.
 - Keep core/UI product APIs and versions unchanged. Updated example artifacts

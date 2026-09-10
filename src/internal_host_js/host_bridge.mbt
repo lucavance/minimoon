@@ -272,9 +272,14 @@ pub fn shared_host_bridge(
     #|    if (checked.setOnly) {
     #|      this._sw(candidate, generation, done, false, (commit, acknowledge) => {
     #|        const data = { [`${minimoonPageId}.commit`]: commit }
-    #|        for (const op of command.ops) data[this._dp(op.path)] = op.value
-    #|        this._st.setOps += command.ops.length
-    #|        this._st.hostWriteOps += command.ops.length
+    #|        for (const op of checked.writes) {
+    #|          const path = this._dp(op.path), parent = path.slice(0, path.lastIndexOf("."))
+    #|          // Coalesce whole-props and lowered leaf writes without overlapping setData paths.
+    #|          if (Object.prototype.hasOwnProperty.call(data, parent)) data[parent] = { ...data[parent], [op.path[op.path.length - 1]]: op.value }
+    #|          else { for (const key of Object.keys(data)) if (key.startsWith(path + ".")) delete data[key]; data[path] = op.value }
+    #|        }
+    #|        this._st.setOps += checked.writes.length
+    #|        this._st.hostWriteOps += checked.writes.length
     #|        this._st.setDataCalls += 1
     #|        this.setData(data, acknowledge)
     #|      })
@@ -283,7 +288,7 @@ pub fn shared_host_bridge(
     #|    if (typeof this.groupUpdates !== "function" || typeof this.replaceDataOnPath !== "function" || typeof this.spliceArrayDataOnPath !== "function") { this._fb("glass-easel advanced updates unavailable", generation, done, false); return }
     #|    this._sw(candidate, generation, done, false, (commit, acknowledge) => {
     #|      this.groupUpdates(() => {
-    #|        for (const op of command.ops) {
+    #|        for (const op of checked.writes) {
     #|          const path = [minimoonPageId, "tree", ...op.path]
     #|          if (op.op === "set") { this.replaceDataOnPath(path, op.value); this._st.setOps += 1; this._st.hostWriteOps += 1 }
     #|          else if (op.op === "splice") { this.spliceArrayDataOnPath(path, op.index, op.delete_count, op.items); this._st.spliceOps += 1; this._st.hostWriteOps += 1 }
