@@ -75,7 +75,7 @@ pub fn update_fetch(
       @minimoon.with_cmd(
         { epoch, label: "loading", },
         @minimoon.request(
-          "https://httpbingo.org/delay/2",
+          echo_base_url() + "/delay/2",
           emit.map(result => Finished(epoch, result)),
         ),
       )

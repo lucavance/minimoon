@@ -78,7 +78,7 @@ fn update(
           request_epoch: epoch,
           status: "Sending echo request…",
         },
-        @http.post("https://httpbingo.org/post")
+        @http.post("https://echo.apifox.com/post", timeout_ms=10000)
         .with_json(Draft::{ title: model.title.trim().to_owned(), })
         .expect_json(emit.map(result => Saved(epoch, result))),
       )
@@ -108,7 +108,7 @@ fn editor() -> @minimoon.Val[@minimoon.Node] {
     @ui.field_state(
       id="forms-field",
       label="Project name",
-      description="At least three characters; sends only a title to an echo endpoint",
+      description="At least three characters; sends a non-sensitive title to public echo.apifox.com",
       error=validation_error(model.title),
       required=true,
       disabled=model.busy,

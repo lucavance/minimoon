@@ -58,7 +58,7 @@ fn initial_model() -> Model {
     request_body: "",
     request_code: "",
     request_case: 0,
-    request_base: "https://httpbingo.org",
+    request_base: @application.echo_base_url(),
     response_open: false,
     toast_status: "idle",
     location: "",

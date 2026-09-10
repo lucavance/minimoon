@@ -84,7 +84,7 @@ App update; a request executed by a page still ends with that page's lifetime.
 #warnings("-unused_value")
 fn readme_request(resolve : Emit[Result[RequestResult, HostError]]) -> Cmd {
   request(
-    "https://httpbingo.org/post",
+    "https://echo.apifox.com/post",
     resolve,
     http_method=Post,
     query=[query("tag", "one"), query("tag", "two")],

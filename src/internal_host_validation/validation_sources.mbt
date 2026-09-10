@@ -738,7 +738,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|  getStorage(options) { if (options.key === "minimoon-draft-workbench-v1") { options.fail({ errMsg: "getStorage:fail data not found" }); return }; const terminal = effectOptions("getStorage", options, { key: "minimoon-conformance-platform" }); terminal.success({ data: "stored" }) },
     #|  setStorage(options) { const terminal = effectOptions("setStorage", options, { key: "minimoon-conformance-platform", data: "Minimoon" }); terminal.success({}) },
     #|  request(options) {
-    #|    const terminal = effectOptions("request", options, { url: "https://httpbingo.org/get?existing=yes&message=Minimoon%20%E6%B5%8B%E8%AF%95%20%2B%26%3D&tag=one&tag=two", method: "GET", header: { "x-minimoon-test": "public-smoke" }, timeout: 15000 })
+    #|    const terminal = effectOptions("request", options, { url: "https://echo.apifox.com/get?existing=yes&message=Minimoon%20%E6%B5%8B%E8%AF%95%20%2B%26%3D&tag=one&tag=two", method: "GET", header: { "x-minimoon-test": "public-smoke" }, timeout: 15000 })
     #|    if (requestMode === "deferred") { pendingRequest = terminal; return { abort() { requestAborts += 1 } } }
     #|    terminal.success({ statusCode: 200, data: { method: "GET" }, header: { "content-type": "application/json" }, cookies: ["session=host"] })
     #|    return { abort() { requestAborts += 1 } }

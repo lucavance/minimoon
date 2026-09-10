@@ -12,7 +12,7 @@ test "request lifecycle owns an optional marker and a page-owned delayed request
   assert_false(page.snapshot().contains("platform-http"))
   assert_true(page.snapshot().contains("shared/inc"))
   let request = page.dispatch("request_lifecycle/request", "{}")
-  assert_true(request.contains("https://httpbingo.org/delay/2"))
+  assert_true(request.contains("https://echo.apifox.com/delay/2"))
   assert_true(request.contains("\"request_id\":\"request_lifecycle:0\""))
   ignore(page.lifecycle("onShow", "{}"))
   assert_true(page.snapshot().contains("visible: true"))

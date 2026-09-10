@@ -128,8 +128,9 @@ components are ordinary functions, not a mandatory object hierarchy.
 | [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md) | Exploring native UI components across 6 pages |
 
 Draft Workbench's Platform laboratory owns the HTTP scenarios. From the framework
-checkout, `bun run check:http-live` checks those scenarios plus a typed draft echo
-after editor unload against public APIs; it is not a WeChat host test.
+checkout, `bun run check:http-live` checks those scenarios, a typed draft echo
+after editor unload, and the UI Form echo against public Apifox Echo (12 cases);
+it is not a WeChat host test.
 
 ## Boundaries and next steps
 

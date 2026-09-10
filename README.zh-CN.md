@@ -120,8 +120,8 @@ Starter 已在页面的 `moon.pkg` 导入 `lampclaw/minimoon`。
 | [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md) | 通过 6 个页面体验原生 UI 组件 |
 
 草稿工作台的平台实验室集中演示 HTTP 场景。在框架仓库运行
-`bun run check:http-live` 可验证这些场景及编辑器卸载后的 App 草稿回显；
-使用真实公共 API，但不是微信宿主测试。
+`bun run check:http-live` 可验证这些场景、编辑器卸载后的 App 草稿回显及
+UI 表单回显，共 12 项；使用真实公共 Apifox Echo API，但不是微信宿主测试。
 
 ## 当前边界与下一步
 

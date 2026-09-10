@@ -6,6 +6,12 @@ tags.
 
 ## [Example maintenance] - Unreleased
 
+- Switch both maintained examples to public Apifox Echo, including draft and UI
+  form POSTs, Platform scenarios and delayed lifecycle requests. Keep product
+  versions unchanged; this is not a new registry publication.
+- Extend the opt-in public HTTP probe to the UI form (12 cases in total), retain
+  strict request/echo checks across scalar and array-valued service formats, and
+  test malformed echoes offline. Revalidate both changed fixture fingerprints.
 - Rename the core example to Minimoon Draft Workbench (`miniapp_draft_workbench`),
   with four business Tabs, a Draft Editor and four capability laboratories.
 - Add acknowledged local draft CRUD, restart restoration, an App-owned editing

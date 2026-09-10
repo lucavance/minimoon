@@ -186,7 +186,10 @@ async fn codegen_suite(root : String) -> Unit {
     )
   }
   require_text(
-    root, "examples/miniapp_draft_workbench/dist/minimoon.runtime.js", "https://httpbingo.org",
+    root, "examples/miniapp_draft_workbench/dist/minimoon.runtime.js", "https://echo.apifox.com",
+  )
+  forbid_text(
+    root, "examples/miniapp_draft_workbench/dist/minimoon.runtime.js", "httpbingo.org",
   )
   forbid_text(
     root, "examples/miniapp_draft_workbench/dist/minimoon.runtime.js", "https://example.com/api/profile",

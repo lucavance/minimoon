@@ -127,8 +127,9 @@ Platform / 平台:
   fields, method and request headers in Network. Use only built-in synthetic data.
 - Folding response details preserves the selected scenario, base URL and storage input.
   This page does not show a shared App controller.
-- Default service is public https://httpbingo.org; an alternative must implement
-  the same public HTTPS echo protocol and be recorded. No private test server is needed.
+- Default service is public https://echo.apifox.com; a manually selected Platform
+  alternative must provide compatible public HTTPS echoes and be recorded. This
+  field changes Platform only, not the draft or UI Form endpoint. No private test server is needed.
   Public-service or platform failure is a blocked case, never a silent mock pass.
 - urlCheck bypass does not establish production request-domain eligibility,
   complete HTTPS/TLS acceptance, account readiness or domain registration.
@@ -152,7 +153,7 @@ Draft business workflows / 草稿业务闭环:
   Fault injection belongs in automated mocks; do not claim an untested device failure case passed.
 - Returning from the editor preserves the unsaved buffer during this App run;
   switching to another draft confirms discard. Restart restores saved data only.
-- Send a non-sensitive draft to public https://httpbingo.org/post. Loading, typed echo,
+- Send a non-sensitive draft to public https://echo.apifox.com/post. Loading, typed echo,
   network/HTTP/schema failures and retry remain separate from local storage.
   Edit while sending: old replies never overwrite inputs or become current typed results.
 - Background send belongs to App. Leave the editor and open Online: completion appears
@@ -252,6 +253,9 @@ scope, including its ordered `devtoolsChecks`. Exercise all six pages:
 - Forms: native IME/paste/confirm, errors, OTP completion, submit/reset,
   disabled choices, single and multiple selection, native/custom sliders,
   minimum gap, vertical/RTL measurement and touch cancellation.
+  Submit a non-sensitive Project name to public https://echo.apifox.com/post:
+  check typed echo, ten-second timeout/failure and retry, plus reset/unload rejection
+  of late replies. This is not persistent storage; require a clean console.
 - Data: calendar modes and month boundaries, disabled dates, date presets,
   Command/Combobox filtering, numeric table sort, column visibility, keyed row
   selection/pagination, native cell spans and chart presentation primitives.

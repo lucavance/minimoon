@@ -871,7 +871,7 @@
                           {
                             "kind": "text",
                             "identity": "i:0",
-                            "text": "将发送至公开 httpbingo.org；请勿输入隐私或敏感信息。",
+                            "text": "将发送至公开 https://echo.apifox.com；请勿输入隐私或敏感信息。",
                             "props": {},
                             "events": {},
                             "children": []
@@ -3917,7 +3917,7 @@
                             "identity": "i:2",
                             "text": "",
                             "props": {
-                              "value": "https://httpbingo.org",
+                              "value": "https://echo.apifox.com",
                               "disabled": false,
                               "focus": false,
                               "placeholder": "公共 HTTPS echo API 地址",
@@ -6734,7 +6734,7 @@
                           {
                             "kind": "text",
                             "identity": "i:0",
-                            "text": "发送至公开 httpbingo.org，请勿输入隐私或敏感信息。回显不等于云端保存。",
+                            "text": "发送至公开 https://echo.apifox.com，请勿输入隐私或敏感信息。回显不等于云端保存。",
                             "props": {},
                             "events": {},
                             "children": []

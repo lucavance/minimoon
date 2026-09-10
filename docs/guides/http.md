@@ -17,8 +17,8 @@ fn save(profile : Profile, receive : @minimoon.Emit[Result[Profile, Error]]) -> 
 }
 ```
 
-The URL above is illustrative. The maintained public-API fixture uses
-`https://httpbingo.org`; a successful echo proves request transport and decoding,
+The URL above is illustrative. Both maintained public-API fixtures use
+[Apifox Echo](https://echo.apifox.com/); a successful echo proves request transport and decoding,
 not server-side persistence. Real business applications must use their own
 authenticated service and configure its domain in WeChat.
 
@@ -54,6 +54,10 @@ work with `has_ready_work` and `flush`, using a bounded loop. The higher-level
 harnesses instead provide `quiesce()` for ready local/shared work; they do not
 inject HTTP replies or wait for a network request. `bun run check:http-live`
 remains an explicit public-API smoke, not WeChat Developer Tools evidence.
+It checks ten Platform cases, the App-owned draft echo and the UI Form echo.
+The probe accepts scalar/array-valued query, form and header echoes without losing
+repeated values. It always checks the outbound method, and checks the echoed
+method as well when supplied; Apifox does not include that field on `/post`.
 
 The builder API follows Rabbita source at
 [`eccae750`](https://github.com/moonbit-community/rabbita/tree/eccae7507360aec8465469bafb7fb4da5b260a2a/rabbita/http),

@@ -1,4 +1,9 @@
 ///|
+pub fn echo_base_url() -> String {
+  "https://echo.apifox.com"
+}
+
+///|
 pub fn initial_echo() -> EchoModel {
   { token: 0, revision: -1, submitted: empty_draft(), status: EchoIdle, }
 }
@@ -54,7 +59,7 @@ pub fn echo_request(
   draft : Draft,
   resolve : @minimoon.Emit[Result[DraftEcho, Error]],
 ) -> @minimoon.Cmd {
-  @http.post("https://httpbingo.org/post", timeout_ms=10000)
+  @http.post(echo_base_url() + "/post", timeout_ms=10000)
   .with_json(draft)
   .expect_json(resolve)
 }

@@ -26,7 +26,11 @@ to persisted records. There is no backend, account or cloud synchronization.
 
 Platform retains ten public HTTP cases; the lifecycle laboratory retains shared
 counter and delayed-request regressions. `bun run check:http-live` is opt-in and
-not real-host evidence. Product versions, Contract `11`, runtime ABI `13` and
+not real-host evidence. Both examples now default to public Apifox Echo; the live
+probe covers Platform's ten cases, App draft echo after editor unload and the UI
+Form's typed echo. The service switch changes both fingerprints and requires new
+host acceptance; public echo remains a testing service, not cloud persistence.
+Product versions, Contract `11`, runtime ABI `13` and
 renderer protocol `8` do not change. New workbench bytes need fresh host acceptance;
 the publication checkpoint below remains the earlier immutable release.
 

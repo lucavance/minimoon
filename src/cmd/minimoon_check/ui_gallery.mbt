@@ -125,6 +125,12 @@ async fn build_verify_ui_gallery(
     abort("UI showcase verification failed")
   }
   ui_gallery_manifest_check(root)
+  require_text(
+    root,
+    ui_gallery + "/dist/minimoon.runtime.js",
+    "https://echo.apifox.com/post",
+  )
+  forbid_text(root, ui_gallery + "/dist/minimoon.runtime.js", "httpbingo.org")
   audit_ui_gallery_javascript(root, mode)
   if !release {
     let summary = read_json(

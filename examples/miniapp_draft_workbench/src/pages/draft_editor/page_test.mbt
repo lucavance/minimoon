@@ -65,6 +65,7 @@ test "editor folds lifecycle trial and routes back with a native Tab fallback" {
   let page = open_editor(app)
   assert_false(page.snapshot().contains("来源：test"))
   assert_true(page.snapshot().contains("demo-input demo-title-input"))
+  assert_true(page.snapshot().contains("https://echo.apifox.com"))
   ignore(page.dispatch("draft_editor/notes", "{}"))
   assert_true(page.snapshot().contains("来源：test"))
   assert_true(page.snapshot().contains("本页试发"))
@@ -92,7 +93,7 @@ test "page trial validates without HTTP, ignores newer edits and cancels on unlo
   edit(app, page, "first")
   let request = page.dispatch("draft_editor/page-send", "{}")
   let id = request_id(request)
-  assert_true(request.contains("https://httpbingo.org/post"))
+  assert_true(request.contains("https://echo.apifox.com/post"))
   assert_false(
     page.dispatch("draft_editor/page-send", "{}").contains("wx.request"),
   )
@@ -121,6 +122,7 @@ test "App send survives editor disposal and completes in another observer" {
   edit(app, page, "App draft")
   assert_false(page.dispatch("work/send", "{}").contains("wx.request"))
   let commands = app.flush()
+  assert_true(commands.contains("https://echo.apifox.com/post"))
   let id = request_id(commands)
   assert_false(page.dispose().contains("CancelEffect"))
   ignore(

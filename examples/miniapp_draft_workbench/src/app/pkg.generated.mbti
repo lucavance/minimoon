@@ -9,6 +9,8 @@ import {
 // Values
 pub fn dirty(Buffer) -> Bool
 
+pub fn echo_base_url() -> String
+
 pub fn echo_label(EchoModel, Int) -> String
 
 pub fn echo_request(Draft, @minimoon.Emit[Result[DraftEcho, Error]]) -> @minimoon.Cmd

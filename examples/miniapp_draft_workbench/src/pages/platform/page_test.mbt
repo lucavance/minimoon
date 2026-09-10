@@ -6,7 +6,7 @@ test "platform reports failures beside each capability without overwriting HTTP 
   ignore(page.lifecycle("onLoad", "{}"))
   ignore(page.mount())
   let request = page.dispatch("platform/request", "{}")
-  assert_true(request.contains("https://httpbingo.org/get?existing=yes"))
+  assert_true(request.contains("https://echo.apifox.com/get?existing=yes"))
   ignore(
     page.resolve_effect(
       "platform:0", "failure", "{\"error\":\"HTTP probe failed\"}",

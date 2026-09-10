@@ -21,6 +21,10 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
   let fingerprint = @verify.artifact_fingerprint(
     join(root, "examples/miniapp_draft_workbench"),
   )
+  let ui_page = join(root, "ui/examples/showcase/dist/pages/forms/forms.js")
+  let ui_fingerprint = @verify.artifact_fingerprint(
+    join(root, "ui/examples/showcase"),
+  )
   run(
     root,
     if offline {
@@ -42,10 +46,28 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
       },
       "",
       fingerprint,
+      ui_page,
+      ui_fingerprint,
     ],
   )
   if offline {
-    for fault in ["--fault-echo", "--fault-network"] {
+    run(root, "offline legacy array-valued echo compatibility", "bun", [
+      script,
+      join(
+        root, "examples/miniapp_draft_workbench/dist/pages/platform/platform.js",
+      ),
+      join(directory, "offline-legacy-report.json"),
+      "--offline",
+      "--legacy-echo",
+      fingerprint,
+      ui_page,
+      ui_fingerprint,
+    ])
+    for
+      fault in [
+        "--fault-echo", "--fault-network", "--fault-header", "--fault-method", "--fault-json",
+        "--fault-form", "--fault-body",
+      ] {
       let failed_report = join(directory, fault + ".json")
       let (code, _, _) = @process.collect_output(
         "bun",
@@ -58,6 +80,8 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
           "--offline",
           fault,
           fingerprint,
+          ui_page,
+          ui_fingerprint,
         ],
         cwd=root,
       )
@@ -75,5 +99,6 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
 async fn http_live_suite(root : String) -> Unit {
   build_examples(root, "release")
   verify_examples(root, false)
+  build_verify_ui_gallery(root, "release", false)
   http_probe(root, false)
 }

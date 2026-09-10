@@ -176,7 +176,9 @@ pub fn program(deps : @application.Deps) -> @minimoon.Page {
               @workbench.status(model, deps.send),
               @shell.card("联机回显", [
                 @minimoon.p(
-                  "发送至公开 httpbingo.org，请勿输入隐私或敏感信息。回显不等于云端保存。",
+                  "发送至公开 " +
+                  @application.echo_base_url() +
+                  "，请勿输入隐私或敏感信息。回显不等于云端保存。",
                 ),
                 @workbench.action(
                   "work/send",

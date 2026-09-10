@@ -16,7 +16,7 @@
   "application": null,
   "tabBar": null,
   "runtimeBytes": {
-    "application": 566035
+    "application": 566057
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -7382,7 +7382,7 @@
                                                   {
                                                     "kind": "text",
                                                     "identity": "i:0",
-                                                    "text": "At least three characters; sends only a title to an echo endpoint",
+                                                    "text": "At least three characters; sends a non-sensitive title to public echo.apifox.com",
                                                     "props": {},
                                                     "events": {},
                                                     "children": []

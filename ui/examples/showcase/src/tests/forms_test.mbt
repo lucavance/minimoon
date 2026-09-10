@@ -1,6 +1,7 @@
 ///|
 test "forms showcase validation responds to continuous input without losing focus" {
   let runtime = @testing.mount(@forms.program())
+  assert_true(runtime.snapshot().contains("echo.apifox.com"))
   let form = runtime.within(@testing.by_id("forms-submit"))
   assert_eq(
     form.get(@testing.by_id("forms-field")).prop("name"),
@@ -117,9 +118,10 @@ test "Forms invalid draft sends nothing and same-frame input submit uses the lat
     echo_submit_batch(runtime, "  MoonBit title  "),
   )
   assert_eq(payload.get("method"), Some(Json::string("POST")))
+  assert_eq(payload.get("timeout"), Some(Json::number(10000)))
   assert_eq(
     payload.get("url"),
-    Some(Json::string("https://httpbingo.org/post")),
+    Some(Json::string("https://echo.apifox.com/post")),
   )
   guard payload.get("data") is Some(String(body)) else {
     fail("expected typed JSON body")

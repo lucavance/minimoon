@@ -21,7 +21,9 @@ pub fn program(deps : @application.Deps) -> @minimoon.Page {
                 model.buffer.draft.title + " / " + model.buffer.draft.note,
               ),
               @minimoon.p(
-                "将发送至公开 httpbingo.org；请勿输入隐私或敏感信息。",
+                "将发送至公开 " +
+                @application.echo_base_url() +
+                "；请勿输入隐私或敏感信息。",
               ),
               @minimoon.div(class="demo-actions", [
                 @workbench.action(

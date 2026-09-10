@@ -67,7 +67,7 @@ Declare `Request` in the page's capabilities. For example:
 
 ```moonbit
 @minimoon.request(
-  "https://httpbingo.org/post",
+  "https://echo.apifox.com/post",
   emit.map(result => RequestFinished(result)),
   http_method=Post,
   query=[@minimoon.query("tag", "one"), @minimoon.query("tag", "two")],
@@ -142,11 +142,20 @@ The host suite also runs the generated Platform HTTP scenarios offline, includin
 timeout, synchronous failure, unavailable API, malformed response, concurrent
 out-of-order completion and duplicate callbacks. It separately loads Request Lifecycle
 for true secondary-page unload cancellation and stale-instance checks.
-`bun run check:http-live` loads the same generated page and uses a Bun-fetch
-`wx.request` transport shim against [httpbingo](https://httpbingo.org/).
+`bun run check:http-live` builds both fixtures and uses a Bun-fetch
+`wx.request` transport shim against [Apifox Echo](https://echo.apifox.com/).
+Its 12 cases cover the ten generated Platform scenarios, App draft echo after
+editor unload and UI Form echo. The report binds each fixture's fingerprint and
+records each case's actual origin.
 It sends fixed synthetic data, serially, without retries; report output is
-`_build/http-live/report.json`. `MINIMOON_HTTP_BASE_URL` can point to an HTTPS
-service implementing the same httpbingo echo protocol. This opt-in network
+`_build/http-live/report.json`. `MINIMOON_HTTP_BASE_URL` overrides only the Platform
+cases; draft and UI Form requests keep their compiled Apifox endpoint. It can
+point to a compatible public HTTPS echo service, including `https://httpbingo.org`,
+without automatic fallback. Query/form singleton strings and arrays are normalized
+while repeated values and header contents remain strictly checked. The outbound
+HTTP method is always asserted; the reply method is also asserted when present.
+Offline checks exercise both formats and reject corrupted query, header, method,
+JSON, form and text echoes as well as transport failures. This opt-in network
 check is excluded from CI/candidate/release gates. It neither uses credentials
 nor creates real-host evidence, and does not replace the
 [WeChat checklist](../operations/miniapp_devtools_validation.md).
