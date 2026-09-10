@@ -8,8 +8,8 @@ _build/
 # Frontend examples
 node_modules/
 dist/
-!examples/miniapp_conformance_app/dist/
-!examples/miniapp_conformance_app/dist/**
+!examples/miniapp_draft_workbench/dist/
+!examples/miniapp_draft_workbench/dist/**
 !ui/examples/showcase/dist/
 !ui/examples/showcase/dist/**
 

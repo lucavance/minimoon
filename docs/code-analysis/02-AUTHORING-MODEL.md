@@ -39,7 +39,7 @@ flowchart LR
 
 [SVG](assets/diagrams/svg/02-AUTHORING-MODEL-1.svg) · [PNG 3×](assets/diagrams/png/02-AUTHORING-MODEL-1.png) · [Mermaid](assets/diagrams/source/02-AUTHORING-MODEL-1.mmd)
 
-> **源码 / Source:** [`examples/miniapp_conformance_app/src/app/app.mbt`](../../examples/miniapp_conformance_app/src/app/app.mbt) · symbols: `FetchModel`, `FetchMsg`, `initial_fetch`, `update_fetch`
+> **源码 / Source:** [`examples/miniapp_draft_workbench/src/app/app.mbt`](../../examples/miniapp_draft_workbench/src/app/app.mbt) · symbols: `FetchModel`, `FetchMsg`, `initial_fetch`, `update_fetch`
 
 ```moonbit
 pub struct FetchModel {

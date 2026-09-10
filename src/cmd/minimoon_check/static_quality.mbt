@@ -197,7 +197,7 @@ async fn static_suite(root : String) -> Unit {
     "\"node\": \"" + supported_node_engine + "\"",
   )
   require_text(root, ".gitignore", "**/generated/devtools.evidence.json")
-  for fixture in ["examples/miniapp_conformance_app", "ui/examples/showcase"] {
+  for fixture in ["examples/miniapp_draft_workbench", "ui/examples/showcase"] {
     for
       private_file in [
         "/generated/devtools.evidence.json", "/dist/project.private.config.json",
@@ -223,7 +223,7 @@ async fn static_suite(root : String) -> Unit {
   )
   for
     token in [
-      "package_handoff examples/miniapp_conformance_app miniapp_conformance_app core 7",
+      "package_handoff examples/miniapp_draft_workbench miniapp_draft_workbench core 9",
       "package_handoff ui/examples/showcase minimoon_ui_showcase ui 6", "name: minimoon-devtools-${{ github.sha }}",
       "name: minimoon-ui-devtools-${{ github.sha }}", "path: _build/devtools-handoff/core/",
       "path: _build/devtools-handoff/ui/", "git status --porcelain --untracked-files=all",
@@ -324,12 +324,12 @@ async fn static_suite(root : String) -> Unit {
   }
   for
     page_package in [
-      "examples/miniapp_conformance_app/src/pages/showcase/moon.pkg", "examples/miniapp_conformance_app/src/pages/request_lifecycle/moon.pkg",
-      "examples/miniapp_conformance_app/src/pages/runtime_lab/moon.pkg", "examples/miniapp_conformance_app/src/pages/draft_editor/moon.pkg",
-      "examples/miniapp_conformance_app/src/pages/interaction/moon.pkg", "examples/miniapp_conformance_app/src/pages/platform/moon.pkg",
-      "examples/miniapp_conformance_app/src/pages/application/moon.pkg", "examples/miniapp_conformance_app/src/components/toggle_card/moon.pkg",
-      "examples/miniapp_conformance_app/src/components/shared_app/moon.pkg", "examples/miniapp_conformance_app/src/scenes/interaction/moon.pkg",
-      "examples/miniapp_conformance_app/src/scenes/composition/moon.pkg", "templates/starter/src/pages/home/moon.pkg",
+      "examples/miniapp_draft_workbench/src/pages/workbench/moon.pkg", "examples/miniapp_draft_workbench/src/pages/request_lifecycle/moon.pkg",
+      "examples/miniapp_draft_workbench/src/pages/runtime_lab/moon.pkg", "examples/miniapp_draft_workbench/src/pages/draft_editor/moon.pkg",
+      "examples/miniapp_draft_workbench/src/pages/interaction/moon.pkg", "examples/miniapp_draft_workbench/src/pages/platform/moon.pkg",
+      "examples/miniapp_draft_workbench/src/pages/drafts/moon.pkg", "examples/miniapp_draft_workbench/src/components/toggle_card/moon.pkg",
+      "examples/miniapp_draft_workbench/src/components/shared_app/moon.pkg", "examples/miniapp_draft_workbench/src/scenes/interaction/moon.pkg",
+      "examples/miniapp_draft_workbench/src/scenes/composition/moon.pkg", "templates/starter/src/pages/home/moon.pkg",
       "templates/starter/src/pages/details/moon.pkg",
     ] {
     require_text(root, page_package, "\"lampclaw/minimoon\"")
@@ -342,17 +342,17 @@ async fn static_suite(root : String) -> Unit {
   // subsequent `for "test"` imports may reference another page for integration tests.
   for
     page in [
-      "showcase", "interaction", "platform", "application", "request_lifecycle",
+      "workbench", "drafts", "online", "more", "interaction", "platform", "request_lifecycle",
       "runtime_lab", "draft_editor",
     ] {
-    let package_path = "examples/miniapp_conformance_app/src/pages/" +
+    let package_path = "examples/miniapp_draft_workbench/src/pages/" +
       page +
       "/moon.pkg"
     let production = @fs.read_file(join(root, package_path))
       .text()
       .split("}")
       .collect()[0]
-    guard !production.contains("miniapp_conformance_app/pages/") else {
+    guard !production.contains("miniapp_draft_workbench/pages/") else {
       abort(
         "Conformance production pages must compose scenes, not other pages: " +
         page,
@@ -372,12 +372,12 @@ async fn static_suite(root : String) -> Unit {
   for
     application_source in [
       "src/cmd/minimoon/templates.generated.mbt", "templates/starter/src/pages/home/page.mbt",
-      "templates/starter/src/pages/details/page.mbt", "examples/miniapp_conformance_app/src/pages/showcase/page.mbt",
-      "examples/miniapp_conformance_app/src/pages/request_lifecycle/page.mbt", "examples/miniapp_conformance_app/src/pages/runtime_lab/page.mbt",
-      "examples/miniapp_conformance_app/src/pages/draft_editor/page.mbt", "examples/miniapp_conformance_app/src/components/toggle_card/card.mbt",
-      "examples/miniapp_conformance_app/src/pages/interaction/page.mbt", "examples/miniapp_conformance_app/src/pages/platform/page.mbt",
-      "examples/miniapp_conformance_app/src/pages/application/page.mbt", "examples/miniapp_conformance_app/src/components/shared_app/panels.mbt",
-      "examples/miniapp_conformance_app/src/scenes/interaction/scene.mbt", "examples/miniapp_conformance_app/src/scenes/composition/scene.mbt",
+      "templates/starter/src/pages/details/page.mbt", "examples/miniapp_draft_workbench/src/pages/workbench/page.mbt",
+      "examples/miniapp_draft_workbench/src/pages/request_lifecycle/page.mbt", "examples/miniapp_draft_workbench/src/pages/runtime_lab/page.mbt",
+      "examples/miniapp_draft_workbench/src/pages/draft_editor/page.mbt", "examples/miniapp_draft_workbench/src/components/toggle_card/card.mbt",
+      "examples/miniapp_draft_workbench/src/pages/interaction/page.mbt", "examples/miniapp_draft_workbench/src/pages/platform/page.mbt",
+      "examples/miniapp_draft_workbench/src/pages/drafts/page.mbt", "examples/miniapp_draft_workbench/src/components/shared_app/panels.mbt",
+      "examples/miniapp_draft_workbench/src/scenes/interaction/scene.mbt", "examples/miniapp_draft_workbench/src/scenes/composition/scene.mbt",
     ] {
     for
       stale_public_name in [

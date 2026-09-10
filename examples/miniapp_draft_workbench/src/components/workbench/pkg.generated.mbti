@@ -1,0 +1,26 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/miniapp_draft_workbench/components/workbench"
+
+import {
+  "lampclaw/miniapp_draft_workbench/app",
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn action(String, String, @minimoon.Cmd, disabled? : Bool) -> @minimoon.Node
+
+pub fn confirmation(@app.Workbench, @minimoon.Emit[@app.WorkMsg]) -> @minimoon.Node
+
+pub fn echo_panel(@app.EchoModel, Int) -> @minimoon.Node
+
+pub fn editor(String, mode? : String, id? : Int) -> @minimoon.Cmd
+
+pub fn status(@app.Workbench, @minimoon.Emit[@app.WorkMsg]) -> @minimoon.Node
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

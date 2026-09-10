@@ -61,15 +61,16 @@ remains an internal implementation detail.
 
 | Source | Purpose |
 | --- | --- |
-| Conformance / Showcase (首页) | product narrative, local count/reset and three query-free Tab shortcuts |
-| Conformance / Interaction (交互) | native controls, page-local components and the single core component catalogue |
-| Conformance / Platform (平台) | public HTTP and declared host capabilities |
-| Conformance / Application (应用) | shared count/request/draft projections and ownership |
-| Conformance / Request Lifecycle | optional page marker, page/App delayed requests, hide/push/replace/unload comparison |
-| Conformance / Runtime Lab | set/splice/move/replacement, controlled reconciliation, scrolling, local component lifetime, focus, no-touch async and instance isolation |
-| Conformance / Draft Editor | required input, draft validation/typed echo, minimal shared observer and stack-aware fallback |
-| `templates/starter` | Home + Details initializer without App ownership or UI dependency |
-| `ui/examples/showcase` | independent UI families, themes, native interactions and lifecycle, without App ownership |
+| Draft Workbench / four business Tabs | local CRUD, typed HTTP echo, shared editing and data management |
+| Draft Workbench / Draft Editor | explicit input, validation, manual save and page-owned HTTP trial |
+| Draft Workbench / four laboratories | native controls, wx capabilities, request lifetime, shared counter, keyed rendering and disposal |
+| `templates/starter` | two-page initializer without App ownership or UI dependency |
+| `ui/examples/showcase` | independent six-page UI fixture without App ownership |
+
+The workbench is one nine-route/four-tab core fixture. App owns saved records,
+the in-memory editing buffer and background echo; successful storage commits the
+saved collection. Public echo is not cloud persistence. The former Conformance
+name is retained only as historical terminology for the core acceptance role.
 
 ## Not included
 

@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/workbench/workbench",
+    "pages/drafts/drafts",
+    "pages/online/online",
+    "pages/more/more",
+    "pages/interaction/interaction",
+    "pages/platform/platform",
+    "pages/request_lifecycle/request_lifecycle",
+    "pages/runtime_lab/runtime_lab",
+    "pages/draft_editor/draft_editor"
+  ],
+  "renderer": "skyline",
+  "componentFramework": "glass-easel",
+  "lazyCodeLoading": "requiredComponents",
+  "rendererOptions": {
+    "skyline": {
+      "disableABTest": true
+    }
+  },
+  "tabBar": {
+    "color": "#6A778B",
+    "selectedColor": "#356AE6",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "position": "bottom",
+    "list": [
+      {
+        "text": "工作台",
+        "iconPath": "assets/tab-home.png",
+        "selectedIconPath": "assets/tab-home-selected.png",
+        "pagePath": "pages/workbench/workbench"
+      },
+      {
+        "text": "草稿",
+        "iconPath": "assets/tab-interaction.png",
+        "selectedIconPath": "assets/tab-interaction-selected.png",
+        "pagePath": "pages/drafts/drafts"
+      },
+      {
+        "text": "联机",
+        "iconPath": "assets/tab-platform.png",
+        "selectedIconPath": "assets/tab-platform-selected.png",
+        "pagePath": "pages/online/online"
+      },
+      {
+        "text": "更多",
+        "iconPath": "assets/tab-application.png",
+        "selectedIconPath": "assets/tab-application-selected.png",
+        "pagePath": "pages/more/more"
+      }
+    ]
+  }
+}

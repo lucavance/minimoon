@@ -190,8 +190,8 @@ and `minimoon verify . --release`. Evidence stays local and Git-ignored; never
 copy another application's record. These release steps are not required to
 make your first edit.
 
-The framework's [Conformance](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_conformance_app/README.md)
-has seven routes and four native Tabs; the independent
+The framework's [Draft Workbench](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_draft_workbench/README.md)
+has nine routes and four native Tabs; the independent
 [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
 has six pages. They demonstrate and verify framework capabilities, not the
 recommended starting contents for a business application.

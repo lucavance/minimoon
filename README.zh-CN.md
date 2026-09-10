@@ -116,11 +116,12 @@ Starter 已在页面的 `moon.pkg` 导入 `lampclaw/minimoon`。
 | 示例 | 用途 |
 | --- | --- |
 | `minimoon init` 创建的 Starter | 开始自己的双页应用 |
-| [Conformance](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_conformance_app/README.md) | 核心能力验证：7 个页面、4 个原生 Tab — 首页 / 交互 / 平台 / 应用 |
+| [草稿工作台](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_draft_workbench/README.md) | 本地草稿、联机回显与生命周期：9 个页面、4 个原生 Tab — 工作台 / 草稿 / 联机 / 更多 |
 | [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md) | 通过 6 个页面体验原生 UI 组件 |
 
-Conformance 的平台页集中演示公共 HTTP 场景。在框架仓库运行
-`bun run check:http-live` 可执行可选的公共 API 测试，但它不是微信宿主测试。
+草稿工作台的平台实验室集中演示 HTTP 场景。在框架仓库运行
+`bun run check:http-live` 可验证这些场景及编辑器卸载后的 App 草稿回显；
+使用真实公共 API，但不是微信宿主测试。
 
 ## 当前边界与下一步
 

@@ -125,8 +125,8 @@ jobs:
                $manifest[0].pageBridgeEncoding == "shared-compact-node-v1" and
                ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 11 and .runtimeApiVersion == 13 and .rendererProtocolVersion == 8) and
                ($bundle != "core" or (
-                 [$manifest[0].pages[].route] == ["pages/showcase/showcase", "pages/interaction/interaction", "pages/platform/platform", "pages/application/application", "pages/request_lifecycle/request_lifecycle", "pages/runtime_lab/runtime_lab", "pages/draft_editor/draft_editor"] and
-                 [$manifest[0].tabBar.list[].pagePath] == ["pages/showcase/showcase", "pages/interaction/interaction", "pages/platform/platform", "pages/application/application"] and
+                 [$manifest[0].pages[].route] == ["pages/workbench/workbench", "pages/drafts/drafts", "pages/online/online", "pages/more/more", "pages/interaction/interaction", "pages/platform/platform", "pages/request_lifecycle/request_lifecycle", "pages/runtime_lab/runtime_lab", "pages/draft_editor/draft_editor"] and
+                 [$manifest[0].tabBar.list[].pagePath] == ["pages/workbench/workbench", "pages/drafts/drafts", "pages/online/online", "pages/more/more"] and
                  $manifest[0].tabBar == $app_config[0].tabBar)) and
                ($bundle != "ui" or any($manifest[0].resources[]; .package == "lampclaw/minimoon_ui/resources" and .version == $ui_version)) and
                $checklist[0].runtimeApiVersion == 13 and $checklist[0].rendererProtocolVersion == 8 and
@@ -200,7 +200,7 @@ jobs:
             )
           }
 
-          package_handoff examples/miniapp_conformance_app miniapp_conformance_app core 7
+          package_handoff examples/miniapp_draft_workbench miniapp_draft_workbench core 9
           package_handoff ui/examples/showcase minimoon_ui_showcase ui 6
 
       - name: Final source cleanliness

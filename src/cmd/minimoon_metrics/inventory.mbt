@@ -52,7 +52,7 @@ fn embedded_inventory(
         "production",
       ),
       (
-        "examples/miniapp_conformance_app/src/pages/runtime_lab/page.mbt", "resume_probe_after",
+        "examples/miniapp_draft_workbench/src/pages/runtime_lab/page.mbt", "resume_probe_after",
         "example",
       ),
       (
@@ -239,7 +239,7 @@ fn embedded_inventory(
       ("ui/src/resources/resources.mbt", "fn:foundation_rules", "WXSS"),
       ("ui/src/resources/resources.mbt", "fn:form_rules", "WXSS"),
       (
-        "examples/miniapp_conformance_app/src/resources/resources.mbt", "fn:stylesheet",
+        "examples/miniapp_draft_workbench/src/resources/resources.mbt", "fn:stylesheet",
         "WXSS",
       ),
     ] {

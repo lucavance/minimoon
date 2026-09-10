@@ -735,7 +735,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|  navigateBack(options) { calls.push(["navigateBack", options]) },
     #|  switchTab(options) { calls.push(["switchTab", options]) },
     #|  login(options) { const terminal = effectOptions("login", options, {}); if (failingCapability === "login") terminal.fail({ errMsg: "wx.login:fail denied", errCode: 401 }); else terminal.success({ code: "host-login" }) },
-    #|  getStorage(options) { const terminal = effectOptions("getStorage", options, { key: "minimoon-conformance-platform" }); terminal.success({ data: "stored" }) },
+    #|  getStorage(options) { if (options.key === "minimoon-draft-workbench-v1") { options.fail({ errMsg: "getStorage:fail data not found" }); return }; const terminal = effectOptions("getStorage", options, { key: "minimoon-conformance-platform" }); terminal.success({ data: "stored" }) },
     #|  setStorage(options) { const terminal = effectOptions("setStorage", options, { key: "minimoon-conformance-platform", data: "Minimoon" }); terminal.success({}) },
     #|  request(options) {
     #|    const terminal = effectOptions("request", options, { url: "https://httpbingo.org/get?existing=yes&message=Minimoon%20%E6%B5%8B%E8%AF%95%20%2B%26%3D&tag=one&tag=two", method: "GET", header: { "x-minimoon-test": "public-smoke" }, timeout: 15000 })
@@ -804,36 +804,31 @@ pub fn navigation_host_smoke_source() -> String {
     #|  if (!call || call[0] !== method || JSON.stringify(call[1]) !== JSON.stringify(expected)) throw new Error(`unexpected navigation call: ${JSON.stringify(call)}`)
     #|}
     #|const showcase = start(showcaseDefinition)
-    #|dispatch(showcaseDefinition, showcase, "showcase/increment")
-    #|if (!JSON.stringify(showcase.data).includes("state updates: 1")) throw new Error("showcase did not update state")
-    #|for (const [name, page, inputKey, marker] of [
-    #|  ["interaction", interactionDefinition, "interaction/name", "Retained Tab input"],
-    #|  ["platform", platformDefinition, "platform/storage-input", "Retained Tab input"],
-    #|  ["application", applicationDefinition, null, null],
+    #|if (!JSON.stringify(showcase.data).includes("workbench-overview")) throw new Error("workbench overview missing")
+    #|dispatch(showcaseDefinition, showcase, "workbench/drafts")
+    #|assertLastCall("switchTab", { url: "/pages/drafts/drafts" })
+    #|const sibling = name => load(require("node:path").resolve(require("node:path").dirname(process.argv[2]), "../" + name + "/" + name + ".js"))
+    #|const onlineDefinition = sibling("online"), moreDefinition = sibling("more")
+    #|for (const [name, page, inputKey] of [
+    #|  ["interaction", interactionDefinition, "interaction/name"],
+    #|  ["platform", platformDefinition, "platform/storage-input"],
+    #|  ["drafts", applicationDefinition, null], ["online", onlineDefinition, null], ["more", moreDefinition, null],
     #|]) {
-    #|  dispatch(showcaseDefinition, showcase, `showcase/tab-${name}`)
-    #|  assertLastCall("switchTab", { url: `/pages/${name}/${name}` })
     #|  showcaseDefinition.onHide.call(showcase)
-    #|  const tab = start(page)
-    #|  if (!tab.__mmInstanceId || tab._cl) throw new Error(`${name} tab must initialize from empty route input`)
-    #|  if (inputKey) dispatch(page, tab, inputKey, { value: "Retained Tab input" })
-    #|  const instance = tab.__mmInstanceId
-    #|  page.onHide.call(tab)
-    #|  showcaseDefinition.onShow.call(showcase)
-    #|  dispatch(showcaseDefinition, showcase, `showcase/tab-${name}`)
-    #|  assertLastCall("switchTab", { url: `/pages/${name}/${name}` })
-    #|  showcaseDefinition.onHide.call(showcase)
-    #|  page.onShow.call(tab)
-    #|  if (tab.__mmInstanceId !== instance || (marker && !JSON.stringify(tab.data).includes(marker))) throw new Error(`${name} tab lost its instance or local state across Hide/Show`)
-    #|  page.onUnload.call(tab)
-    #|  pageStack.pop()
-    #|  showcaseDefinition.onShow.call(showcase)
+    #|  const tab = start(page), instance = tab.__mmInstanceId
+    #|  if (!instance || tab._cl) throw new Error(name + " must initialize without query")
+    #|  if (inputKey) dispatch(page, tab, inputKey, { value: "Retained input" })
+    #|  page.onHide.call(tab); showcaseDefinition.onShow.call(showcase); showcaseDefinition.onHide.call(showcase); page.onShow.call(tab)
+    #|  if (tab.__mmInstanceId !== instance || (inputKey && !JSON.stringify(tab.data).includes("Retained input"))) throw new Error(name + " lost retained state")
+    #|  page.onUnload.call(tab); pageStack.pop(); showcaseDefinition.onShow.call(showcase)
     #|}
     #|const appTab = start(applicationDefinition)
-    #|dispatch(applicationDefinition, appTab, "application/open-editor")
-    #|assertLastCall("navigateTo", { url: "/pages/draft_editor/draft_editor?from=application" })
-    #|dispatch(applicationDefinition, appTab, "application/open-request-lifecycle")
-    #|assertLastCall("navigateTo", { url: "/pages/request_lifecycle/request_lifecycle?name=Application" })
+    #|dispatch(showcaseDefinition, showcase, "workbench/resume")
+    #|assertLastCall("navigateTo", { url: "/pages/draft_editor/draft_editor?from=workbench&mode=resume" })
+    #|const more = start(moreDefinition)
+    #|dispatch(moreDefinition, more, "more/request_lifecycle")
+    #|assertLastCall("navigateTo", { url: "/pages/request_lifecycle/request_lifecycle" })
+    #|moreDefinition.onUnload.call(more); pageStack.pop()
     #|applicationDefinition.onHide.call(appTab)
     #|showcaseDefinition.onHide.call(showcase)
     #|const probe = start(probeDefinition, { name: "Host" })
@@ -858,7 +853,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|if (rejectedDetails.__mmInstanceId !== null || !rejectedDetails._cl || rejectedDetails.data.draft_editor.commit !== 0 || !creationErrors.some(error => error.includes("page_input_decode_failed"))) throw new Error("invalid required route input must fail closed before registration/render")
     #|const directDetails = start(detailsDefinition, { from: "direct" })
     #|dispatch(detailsDefinition, directDetails, "Back")
-    #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
+    #|assertLastCall("switchTab", { url: "/pages/workbench/workbench" })
     #|const beforeInvalid = calls.length
     #|const errors = []
     #|const originalError = console.error
@@ -869,7 +864,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|if (calls.length !== beforeInvalid || !errors.some((value) => value.includes("invalid NavigateBack command")) || !errors.some((value) => value.includes("undeclared capability: wx.navigateBack"))) throw new Error(`NavigateBack validation failed: ${JSON.stringify(errors)}`)
     #|pageStack.length = 0
     #|dispatch(probeDefinition, probe, "request_lifecycle/back")
-    #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
+    #|assertLastCall("switchTab", { url: "/pages/workbench/workbench" })
     #|dispatch(probeDefinition, probe, "request_lifecycle/replace-editor")
     #|assertLastCall("redirectTo", { url: "/pages/draft_editor/draft_editor?from=redirect" })
     #|probeDefinition.onUnload.call(probe)
@@ -887,7 +882,7 @@ pub fn navigation_host_smoke_source() -> String {
     #|pageStack.length = 0
     #|const directLab = start(labDefinition, { instance: "direct" })
     #|dispatch(labDefinition, directLab, "runtime_lab/back")
-    #|assertLastCall("switchTab", { url: "/pages/showcase/showcase" })
+    #|assertLastCall("switchTab", { url: "/pages/workbench/workbench" })
     #|labDefinition.onUnload.call(directLab)
     #|pageStack.length = 0
     #|const capabilityProbe = start(platformDefinition)
@@ -1008,7 +1003,7 @@ pub fn bridge_benchmark_source() -> String {
     #|  scenario: "generated-host-small-patch",
     #|  target: "bun-js-release-artifact",
     #|  toolchain: { bun: Bun.version, node: process.version, platform: process.platform, arch: process.arch },
-    #|  fixture: "miniapp_conformance_app",
+    #|  fixture: "miniapp_draft_workbench",
     #|  artifactFingerprint: fingerprint,
     #|  sampleMethod: "median of 25 samples after warmup; per-sample iterations are reported",
     #|  results,

@@ -6,7 +6,7 @@ The repository has two independent real-host fixtures:
 
 | Fixture | Scope | CI artifact |
 | --- | --- | --- |
-| `examples/miniapp_conformance_app` | Core, seven routes / four native tabs | `minimoon-devtools-<commit>` |
+| `examples/miniapp_draft_workbench` | Core, nine routes / four native tabs | `minimoon-devtools-<commit>` |
 | `ui/examples/showcase` | UI, six pages | `minimoon-ui-devtools-<commit>` |
 
 Each tracked `generated/verify_report.json` records reproducible candidate status.
@@ -28,7 +28,7 @@ unchanged.
 
 ```bash
 moon run src/cmd/minimoon --target native -- \
-  build examples/miniapp_conformance_app --mode release
+  build examples/miniapp_draft_workbench --mode release
 moon run src/cmd/minimoon --target native -- \
   build ui/examples/showcase --mode release
 ```
@@ -40,7 +40,7 @@ simulator, physical-device preview and device debugging with a clean console.
 For CI candidates, download both artifacts from the same frozen commit. In
 each bundle, run `sha256sum --check --strict SHA256SUMS` and
 `sha256sum --check --strict ARCHIVE_SHA256`. The core ZIP is
-`miniapp_conformance_app-dist.zip`; the UI ZIP is
+`miniapp_draft_workbench-dist.zip`; the UI ZIP is
 `minimoon_ui_showcase-dist.zip`. Import each unchanged `dist/`. Confirm that
 each `HANDOFF.json` names the expected commit, app directory, core/UI versions,
 toolchain and the same framework artifact fingerprint as its report. Keep
@@ -68,20 +68,20 @@ runbook before recording evidence.
 
 ## Core interaction checklist
 
-All seven routes use the same core artifact fingerprint. The [fixture guide](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_conformance_app/README.md)
+All nine routes use the same core artifact fingerprint. The [fixture guide](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_draft_workbench/README.md)
 maps source ownership and the three user workflows. Do not enter the removed
 Capability Probe/Lab/Details routes or treat a Tab hide as an unload.
 
 Native navigation and top layout:
 
-- Cold launch opens 首页; white status text stays on deep blue even during empty
+- Cold launch opens 工作台; white status text stays on deep blue even during empty
   boot. The first business tree reserves capsule/status-bar space.
-- Native Tabs are 首页 / 交互 / 平台 / 应用 with distinct selected icon states.
+- Native Tabs are 工作台 / 草稿 / 联机 / 更多 with distinct selected icon states.
   Switch repeatedly: local edits survive Hide/Show, Load/init does not repeat,
   and the page stack does not grow.
-- 首页 contains local count/reset and only three query-free Tab shortcuts.
-  交互 links to Runtime Lab; 平台 links to Request Lifecycle; 应用 links to
-  Draft Editor and Request Lifecycle. No Tab expands into an entire second page.
+- 工作台 owns the overview, 草稿 the saved list, 联机 App echo, 更多 data management
+  and four laboratory entries. Draft Editor is secondary, not a Tab.
+  Business pages contain no shared counter or full control catalogue.
 - The fixed navigation band stays rectangular. Only the scrolling blue hero
   has a shallow curved bottom edge. Check the arc in actual Skyline: no text
   clipping, horizontal overflow, unexpected seams or blank strips.
@@ -112,7 +112,7 @@ Interaction / 交互:
 - Dropdown checkbox/radio changes stay visible while open; submenu action and
   the dismiss layer close the menu.
 - Open Runtime Lab for identity, structural reconciliation and disposal; no
-  “expand full Lab” duplicate exists in this Tab.
+  “expand full Lab” duplicate exists in this laboratory.
 
 Platform / 平台:
 
@@ -134,20 +134,27 @@ Platform / 平台:
   complete HTTPS/TLS acceptance, account readiness or domain registration.
   Do not commit AppIDs or private configuration.
 
-Application and Draft Editor / 应用与草稿编辑:
+Draft business workflows / 草稿业务闭环:
 
-- Application is the only complete shared controller. Increment there, enter
-  Draft Editor, increment its shared counter and return: both show the same
-  count while the local draft remains independent. A hidden observer catches up on Show.
-- Empty/whitespace-only title sends no HTTP. Valid title/note posts to public
-  https://httpbingo.org/post: editor shows submission status, Application shows
-  only the typed echo, not origin/private headers. This is not persistent saving.
-- Editing, resubmitting or unloading while saving rejects obsolete replies.
-  HTTP/schema/mismatched echo failures do not publish a draft to shared state.
-- Editor source/visit diagnostics remain folded until opened. Missing or empty
-  from input fails closed before graph creation, with no preview flash or live instance.
-- Normal Back preserves the previous page. Direct valid editor input falls back
-  with switchTab to 首页, never redirectTo a native Tab.
+- Start offline with an empty workbench. New, validate, save, view, edit and delete;
+  cold-restart after both saving and deletion. Only acknowledged writes affect the list.
+- Whitespace titles and title/body overflow show validation, not success.
+  Double-tapping save issues one write; editing during an in-flight save stays dirty.
+- Failed writes preserve records and inputs. Failed reads, unknown versions and malformed
+  data must not silently initialize. Check retry and the explicit destructive initialization warning.
+  Fault injection belongs in automated mocks; do not claim an untested device failure case passed.
+- Returning from the editor preserves the unsaved buffer during this App run;
+  switching to another draft confirms discard. Restart restores saved data only.
+- Send a non-sensitive draft to public https://httpbingo.org/post. Loading, typed echo,
+  network/HTTP/schema failures and retry remain separate from local storage.
+  Edit while sending: old replies never overwrite inputs or become current typed results.
+- Background send belongs to App. Leave the editor and open Online: completion appears
+  without another tap. The folded page-owned trial aborts on actual unload, not on Hide.
+  If the public service completes too quickly to observe, use the lifecycle laboratory's
+  public delayed request for the ownership comparison; do not fabricate a slow result.
+- Missing/empty from, unknown mode and invalid edit id fail before graph creation.
+  Direct editor Back falls back with switchTab to 工作台; normal Back preserves the stack.
+- More's reset needs confirmation and only affects the workbench storage key.
 
 Request Lifecycle / 请求生命周期:
 
@@ -158,11 +165,12 @@ Request Lifecycle / 请求生命周期:
 - Start again and immediately replace the page with the editor: RedirectTo
   truly unloads it, aborts the request exactly once and rejects late callbacks.
 - Start the separate App-owned request, then replace/unload this page: the result
-  still reaches Application or the editor observer without another tap.
+  still reaches another lifecycle-laboratory observer without another tap.
+  Business App echo is independently checked in Online.
 - Start the App request and immediately clear it: the old response must not
   overwrite idle. Background/foreground retains shared data.
-- This page contains only marker/request/navigation comparisons, not the
-  Platform catalogue or a shared counter panel. Direct Back falls back to 首页.
+- This laboratory owns the technical shared counter and request controller; test
+  rapid increments and hidden observer catch-up here. Direct Back falls back to 工作台.
 
 Runtime Lab / 状态与渲染实验:
 
@@ -255,12 +263,12 @@ define the supported behavior; they are not missing browser tests.
 Only after the exact release directory passes:
 
 ```bash
-minimoon devtools record examples/miniapp_conformance_app \
+minimoon devtools record examples/miniapp_draft_workbench \
   --status passed \
   --recorded-at <actual-timestamp> \
   --tool-version "<actual-version>" \
-  --notes "exact seven-route release checklist passed"
-minimoon verify examples/miniapp_conformance_app --release
+  --notes "exact nine-route release checklist passed"
+minimoon verify examples/miniapp_draft_workbench --release
 minimoon devtools record ui/examples/showcase \
   --status passed \
   --recorded-at <actual-timestamp> \

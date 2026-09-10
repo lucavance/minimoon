@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/miniapp_draft_workbench/pages/drafts"
+
+import {
+  "lampclaw/miniapp_draft_workbench/app",
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn program(@app.Deps) -> @minimoon.Page
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

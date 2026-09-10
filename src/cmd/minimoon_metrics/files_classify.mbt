@@ -3,7 +3,7 @@ fn file_ownership(path : String) -> (String, String?) {
   if path.has_prefix("ui/examples/showcase/") {
     return ("ui_fixture", None)
   }
-  if path.has_prefix("examples/miniapp_conformance_app/") {
+  if path.has_prefix("examples/miniapp_draft_workbench/") {
     return ("core_fixture", None)
   }
   if path.has_prefix("templates/starter/") {
@@ -78,7 +78,7 @@ fn file_role(path : String) -> String {
 
 ///|
 fn file_is_fixture_output(path : String) -> Bool {
-  for fixture in ["examples/miniapp_conformance_app/", "ui/examples/showcase/"] {
+  for fixture in ["examples/miniapp_draft_workbench/", "ui/examples/showcase/"] {
     if path.has_prefix(fixture + "dist/") ||
       path.has_prefix(fixture + "generated/") ||
       (path.has_prefix(fixture + "styles/") && path.has_suffix(".wxss")) {

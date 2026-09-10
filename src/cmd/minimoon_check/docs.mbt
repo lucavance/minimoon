@@ -86,7 +86,7 @@ async fn docs_suite(root : String) -> Unit {
     @fs.rmdir(temp, recursive=true)
     abort("documentation validator negative cases did not pass")
   }
-  for fixture in ["examples/miniapp_conformance_app", "ui/examples/showcase"] {
+  for fixture in ["examples/miniapp_draft_workbench", "ui/examples/showcase"] {
     let report = read_json(root, fixture + "/generated/verify_report.json")
     let actual = @verify.artifact_fingerprint(join(root, fixture))
     guard json_string(report, "artifactFingerprint") == actual else {

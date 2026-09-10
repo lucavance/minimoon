@@ -2,5 +2,5 @@ members = [
   ".",
   "ui",
   "ui/examples/showcase",
-  "examples/miniapp_conformance_app",
+  "examples/miniapp_draft_workbench",
 ]

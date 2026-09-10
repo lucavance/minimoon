@@ -138,7 +138,7 @@ tap、input、change 等离散事件始终无损且有序。在同一 dispatch b
 >
 > Discrete events such as tap, input, and change remain lossless and ordered. At the tail of one dispatch batch, adjacent scroll or changing events of the same type and key replace the previous payload with the latest value; touchmove additionally requires the same touch identity. Discrete events, different keys/types/touch identities, and other queue entries prevent coalescing across them. This is why rapid scrolling may show jumps while still converging to the correct latest position.
 
-> **生成产物 / Generated artifact:** [`examples/miniapp_conformance_app/dist/minimoon.host.js`](../../examples/miniapp_conformance_app/dist/minimoon.host.js) · owner: [`src/internal_host_js/host_bridge.mbt`](../../src/internal_host_js/host_bridge.mbt), `shared_host_bridge`
+> **生成产物 / Generated artifact:** [`examples/miniapp_draft_workbench/dist/minimoon.host.js`](../../examples/miniapp_draft_workbench/dist/minimoon.host.js) · owner: [`src/internal_host_js/host_bridge.mbt`](../../src/internal_host_js/host_bridge.mbt), `shared_host_bridge`
 
 ```javascript
 _ed(type, key, payload) {
@@ -211,7 +211,7 @@ stateDiagram-v2
 >
 > A first timeout or write exception obtains an authoritative `{revision, tree}` snapshot from the runtime and performs one full-tree write. An invalid snapshot, retry write failure, or second timeout closes the scheduler and clears queues, timers, subscriptions, and effects, preventing execution on an uncertain base.
 
-> **生成产物 / Generated artifact:** [`examples/miniapp_conformance_app/dist/minimoon.host.js`](../../examples/miniapp_conformance_app/dist/minimoon.host.js) · owner: [`src/internal_host_js/host_bridge.mbt`](../../src/internal_host_js/host_bridge.mbt), methods `_sw`, `_ar`, `_to`, `_rt`
+> **生成产物 / Generated artifact:** [`examples/miniapp_draft_workbench/dist/minimoon.host.js`](../../examples/miniapp_draft_workbench/dist/minimoon.host.js) · owner: [`src/internal_host_js/host_bridge.mbt`](../../src/internal_host_js/host_bridge.mbt), methods `_sw`, `_ar`, `_to`, `_rt`
 
 ```javascript
 _sw(candidate, generation, done, retried, writer) {

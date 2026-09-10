@@ -4,7 +4,7 @@ The repository keeps separate core and UI real-host fixtures:
 
 | Example | Pages | Native Tabs | Coverage |
 | --- | ---: | ---: | --- |
-| [`miniapp_conformance_app`](miniapp_conformance_app/README.md) | 7 | 4 | 首页 / 交互 / 平台 / 应用; Request Lifecycle, Runtime Lab and Draft Editor cover request ownership, rendering/lifetime experiments and typed draft echo |
+| [`miniapp_draft_workbench`](miniapp_draft_workbench/README.md) | 9 | 4 | 工作台 / 草稿 / 联机 / 更多; local draft CRUD, typed echo, App/Page lifetime and four capability laboratories |
 | [UI showcase](../ui/examples/showcase/README.md) | 6 | 0 | all 64 RUI families plus Form/Theme, native controls, layers, touch measurement, resources and ownership |
 
 Each fixture has its own Developer Tools import and artifact fingerprint.
@@ -14,7 +14,7 @@ page uses a vertical `scroll-view` for long-form interaction testing.
 
 The production-oriented source embedded by `minimoon init` is separate and
 lives in [`templates/starter`](../templates/starter/). Start your own application
-with the [quickstart](../docs/guides/miniapp_quickstart.md); use Conformance and
+with the [quickstart](../docs/guides/miniapp_quickstart.md); use Draft Workbench and
 UI Showcase to explore framework behavior rather than copying their full contents.
 
 Build and verify from the repository root:

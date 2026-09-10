@@ -87,7 +87,7 @@ fn candidate_test_artifacts(name : String) -> (Json, Json, Json) {
 
 ///|
 test "core and UI candidates enforce the same report and artifact boundary" {
-  for name in ["miniapp_conformance_app", "minimoon_ui_showcase"] {
+  for name in ["miniapp_draft_workbench", "minimoon_ui_showcase"] {
     let (report, manifest, summary) = candidate_test_artifacts(name)
     assert_true(
       candidate_artifact_problems(

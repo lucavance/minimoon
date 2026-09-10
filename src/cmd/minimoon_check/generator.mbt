@@ -173,34 +173,35 @@ async fn codegen_suite(root : String) -> Unit {
   }
   for
     marker in [
-      "showcase-hero", "request-lifecycle-state", "request-output", "draft-editor",
-      "interaction-native", "composed-controls", "platform-http", "application-controls",
-      "dynamic-lab", "component-lab", "control-lab",
+      "workbench-hero", "saved-drafts", "work-laboratory", "work-echo", "storage-status",
+      "request-lifecycle-state", "request-output", "draft-editor", "interaction-native",
+      "composed-controls", "platform-http", "application-controls", "dynamic-lab",
+      "component-lab", "control-lab",
     ] {
     require_text(
-      root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", marker,
+      root, "examples/miniapp_draft_workbench/dist/minimoon.runtime.js", marker,
     )
     forbid_text(
-      root, "examples/miniapp_conformance_app/dist/minimoon.initial.js", marker,
+      root, "examples/miniapp_draft_workbench/dist/minimoon.initial.js", marker,
     )
   }
   require_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", "https://httpbingo.org",
+    root, "examples/miniapp_draft_workbench/dist/minimoon.runtime.js", "https://httpbingo.org",
   )
   forbid_text(
-    root, "examples/miniapp_conformance_app/dist/minimoon.runtime.js", "https://example.com/api/profile",
+    root, "examples/miniapp_draft_workbench/dist/minimoon.runtime.js", "https://example.com/api/profile",
   )
   require_text(
-    root, "examples/miniapp_conformance_app/generated/smoke_checklist.json", "Runtime Lab native input focus, blur, and confirm",
+    root, "examples/miniapp_draft_workbench/generated/smoke_checklist.json", "Runtime Lab native input focus, blur, and confirm",
   )
   require_text(
-    root, "examples/miniapp_conformance_app/generated/smoke_checklist.json", "Interaction Dropdown checkbox, radio, submenu action, and dismiss",
+    root, "examples/miniapp_draft_workbench/generated/smoke_checklist.json", "Interaction Dropdown checkbox, radio, submenu action, and dismiss",
   )
   require_text(
-    root, "examples/miniapp_conformance_app/styles/tailwind.css", "@source not \"../src/**/*_test.mbt\"",
+    root, "examples/miniapp_draft_workbench/styles/tailwind.css", "@source not \"../src/**/*_test.mbt\"",
   )
   forbid_text(
-    root, "examples/miniapp_conformance_app/dist/app.wxss", ".transition {",
+    root, "examples/miniapp_draft_workbench/dist/app.wxss", ".transition {",
   )
   run(root, "Embedded template drift", "moon", [
     "run", "src/cmd/minimoon_template_generate", "--target", "native",

@@ -1,0 +1,17 @@
+import {
+  "moonbitlang/core/json",
+  "lampclaw/minimoon",
+  "lampclaw/minimoon/testing",
+  "lampclaw/miniapp_draft_workbench/app" @application,
+  "lampclaw/miniapp_draft_workbench/pages/workbench" @showcase,
+  "lampclaw/miniapp_draft_workbench/pages/online",
+  "lampclaw/miniapp_draft_workbench/pages/more",
+  "lampclaw/miniapp_draft_workbench/pages/request_lifecycle",
+  "lampclaw/miniapp_draft_workbench/pages/runtime_lab",
+  "lampclaw/miniapp_draft_workbench/pages/interaction",
+  "lampclaw/miniapp_draft_workbench/pages/platform",
+  "lampclaw/miniapp_draft_workbench/pages/draft_editor",
+  "lampclaw/miniapp_draft_workbench/pages/drafts" @application_page,
+} for "test"
+
+supported_targets = "js"

@@ -1,0 +1,150 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/miniapp_draft_workbench/app"
+
+import {
+  "lampclaw/minimoon",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn dirty(Buffer) -> Bool
+
+pub fn echo_label(EchoModel, Int) -> String
+
+pub fn echo_request(Draft, @minimoon.Emit[Result[DraftEcho, Error]]) -> @minimoon.Cmd
+
+pub fn finish_echo(EchoModel, Int, Int, Result[DraftEcho, Error]) -> EchoModel
+
+pub fn initial_echo() -> EchoModel
+
+pub fn initial_fetch() -> FetchModel
+
+pub fn initial_workbench() -> Workbench
+
+pub fn program() -> @minimoon.App[Deps]
+
+pub let storage_key : String
+
+pub fn update_fetch(FetchModel, FetchMsg, @minimoon.Emit[FetchMsg]) -> (FetchModel, @minimoon.Cmd)
+
+pub fn update_workbench(Workbench, WorkMsg, @minimoon.Emit[WorkMsg]) -> (Workbench, @minimoon.Cmd)
+
+pub fn validate(Draft) -> Result[Draft, String]
+
+// Errors
+
+// Types and methods
+pub(all) struct Buffer {
+  id : Int?
+  draft : Draft
+  saved : Draft
+  revision : Int
+} derive(Eq)
+
+pub struct Deps {
+  work : @minimoon.Shared[Workbench]
+  send : @minimoon.Emit[WorkMsg]
+  count : @minimoon.Shared[Int]
+  change_count : @minimoon.Emit[Int]
+  fetch : @minimoon.Shared[FetchModel]
+  send_fetch : @minimoon.Emit[FetchMsg]
+}
+
+pub(all) struct Draft {
+  title : String
+  note : String
+} derive(Eq, ToJson, @json.FromJson)
+
+pub(all) struct DraftEcho {
+  json : Draft
+} derive(@json.FromJson)
+
+pub(all) struct EchoModel {
+  token : Int
+  revision : Int
+  submitted : Draft
+  status : EchoStatus
+} derive(Eq)
+
+pub(all) enum EchoStatus {
+  EchoIdle
+  EchoLoading
+  EchoOk(Draft)
+  EchoFailed(String)
+  EchoOutdated
+} derive(Eq)
+
+pub struct FetchModel {
+  epoch : Int
+  label : String
+} derive(Eq)
+
+pub(all) enum FetchMsg {
+  Load
+  Clear
+  Finished(Int, Result[@minimoon.RequestResult, @minimoon.HostError])
+}
+
+pub(all) enum Intent {
+  New
+  Open(Int)
+  Delete(Int)
+  ClearAll
+  Initialize
+} derive(Eq)
+
+pub(all) struct PendingWrite {
+  token : Int
+  store : Store
+  intent : Intent?
+  buffer : Buffer
+  saved_id : Int?
+} derive(Eq)
+
+pub(all) struct Record {
+  id : Int
+  draft : Draft
+} derive(Eq, ToJson, @json.FromJson)
+
+pub(all) enum StorageState {
+  Loading
+  Ready
+  Writing
+  ReadFailed
+} derive(Eq)
+
+pub(all) struct Store {
+  version : Int
+  next_id : Int
+  records : Array[Record]
+} derive(Eq, ToJson, @json.FromJson)
+
+pub(all) enum WorkMsg {
+  Reload
+  Restored(Int, Result[@minimoon.StorageResult, @minimoon.HostError])
+  Title(String)
+  Note(String)
+  Choose(Intent)
+  Confirm
+  Cancel
+  Save
+  Written(Int, Result[Unit, @minimoon.HostError])
+  Send
+  EchoFinished(Int, Result[DraftEcho, Error])
+}
+
+pub(all) struct Workbench {
+  store : Store
+  buffer : Buffer
+  storage : StorageState
+  epoch : Int
+  pending : PendingWrite?
+  confirm : Intent?
+  opening : Intent?
+  notice : String
+  echo : EchoModel
+} derive(Eq)
+
+// Type aliases
+
+// Traits

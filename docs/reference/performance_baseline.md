@@ -13,7 +13,7 @@ has a `minimoon.app.js` entry helper.
 
 | Artifact | Ceiling |
 | --- | ---: |
-| Conformance application runtime | 400,000 bytes |
+| Draft Workbench application runtime | 440,000 bytes |
 | generated starter runtime | 230,000 bytes |
 | App-enabled shared host | 19,000 bytes |
 | no-App shared host (including starter) | 18,000 bytes |
@@ -30,7 +30,7 @@ all page bridges, and `minimoon.app.js` when application ownership is enabled:
 
 | Application | Ceiling |
 | --- | ---: |
-| committed Conformance fixture | 453,000 bytes |
+| committed Draft Workbench fixture | 480,000 bytes |
 | generated starter | 258,000 bytes |
 
 Release generation minifies the host and runtime syntax. For historical
@@ -42,7 +42,42 @@ aggregate JavaScript bytes, including the 3,464-byte application helper.
 Against that review's ceilings, headroom was respectively 12,023, 376, 508,
 40,697, and 34,879 bytes.
 
+## Approved Draft Workbench example budget review
+
+The 2026-09-10 review changes only the maintained core example's fixed runtime
+and aggregate JavaScript ceilings. The comparison baseline is commit `bf02050`,
+whose former Conformance example contains 399,716 runtime bytes and 433,364
+aggregate JavaScript bytes. It leaves just 284 runtime bytes below the former
+400,000-byte ceiling.
+
+The renamed nine-route Draft Workbench adds local draft CRUD, validated and
+versioned persistence, one App-owned editing buffer, typed public HTTP echo,
+and page/App request-lifecycle demonstrations. The obsolete shared echo domain
+and duplicate panels were removed; the capability laboratories retain their
+technical regression coverage. No framework runtime or public API change is
+required. An isolated consumer of Registry core `0.2.0` produces the same
+artifact fingerprint as the workspace build.
+
+Calibration uses `moon 0.1.20260907`, `moonc v0.10.12+1634b282e`, Node 24.21.0,
+and Bun 1.4.2:
+
+| Measure | Baseline bytes | Reviewed bytes | Increase | Fixed ceiling | Headroom |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Example runtime | 399,716 | 427,143 | 27,427 | 440,000 | 12,857 |
+| Aggregate JavaScript | 433,364 | 461,392 | 28,028 | 480,000 | 18,608 |
+
+The user explicitly approved these two ceilings after the old budget rejected
+the implementation. This is an example-scope adjustment, not a framework
+release or automatic budget scaling. Core/UI archive limits and allowlists,
+Starter limits, shared-host/protocol/initial-tree/WXML/WXSS limits, coverage,
+scheduler and timing gates remain unchanged. Core/UI versions remain
+`0.2.0`/`0.1.0`. Exactly one byte above either ceiling still fails through the
+inclusive-boundary tests in `budgets_wbtest.mbt`. New example artifacts require
+fresh WeChat host acceptance; automated checks do not provide that evidence.
+
 ## Approved native navigation and layout budget review
+
+This historical review preceded the example-only ceilings above.
 
 The 2026-09-08 independent review compares committed `12c0e8a` with the native
 TabBar, page-layout and binary-resource implementation. The committed baseline
@@ -93,8 +128,8 @@ and 7,456 WXSS bytes. Its unchanged runtime/aggregate ceilings retain
 3,936/23,096 bytes of headroom. UI's independently packaged archive measures
 115,320 bytes; no UI archive threshold changes.
 
-Conformance runtime/aggregate ceilings remain 400,000/453,000 bytes. Protocol,
-initial-tree, WXML/WXSS, UI archive, coverage, scheduler and timing ceilings
+At that review, Conformance runtime/aggregate ceilings remained
+400,000/453,000 bytes. Protocol, initial-tree, WXML/WXSS, UI archive, coverage, scheduler and timing ceilings
 are unchanged. The no-App host ceiling also applies to the starter; its
 runtime/aggregate ceilings receive the separate follow-up review below.
 One byte over any applicable ceiling still fails.

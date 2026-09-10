@@ -4,29 +4,22 @@
 
 | Fixture | Page | Primary contract |
 | --- | --- | --- |
-| `miniapp_conformance_app` | Showcase / 首页 | landing UI, local count/reset, lifecycle and three SwitchTab shortcuts |
-| `miniapp_conformance_app` | Interaction / 交互 | native controls, local components, Disclosure/Accordion/Tabs and overlays/menu semantics |
-| `miniapp_conformance_app` | Platform / 平台 | independently mounted public HTTP and host-capability scenarios |
-| `miniapp_conformance_app` | Application / 应用 | application count, request and draft projections; local versus App ownership |
-| `miniapp_conformance_app` | Request Lifecycle | optional marker, page/App delayed request ownership, hide versus unload, NavigateTo/RedirectTo and Back |
-| `miniapp_conformance_app` | Runtime Lab | set/splice/keyed move/full replacement, keyed focus, scalar-only reset, controlled reconciliation, no-touch async, scrolling, local component disposal and same-route isolation |
-| `miniapp_conformance_app` | Draft Editor | required input, validation/typed echo, minimal shared observer, folded lifecycle notes and stack-aware Back |
+| `miniapp_draft_workbench` | Workbench / 工作台 | draft count, current buffer, new/resume and saved-list navigation |
+| `miniapp_draft_workbench` | Drafts / 草稿 | persisted records, edit/delete and storage feedback |
+| `miniapp_draft_workbench` | Online / 联机 | App-owned typed echo, errors, retry and stale-response isolation |
+| `miniapp_draft_workbench` | More / 更多 | scoped data reset, instructions and laboratory entries |
+| `miniapp_draft_workbench` | Draft Editor | required mode/id input, manual save, shared buffer and page-owned trial |
+| `miniapp_draft_workbench` | Interaction | native controls, local components and core component catalogue |
+| `miniapp_draft_workbench` | Platform | ten public HTTP cases and independent wx capabilities |
+| `miniapp_draft_workbench` | Request Lifecycle | technical shared counter, App/page delayed requests and navigation |
+| `miniapp_draft_workbench` | Runtime Lab | keyed focus, reconciliation, async, disposal and instance isolation |
 
-The seven routes share one application-wide runtime, one release build, one
-verification report, and one real-host artifact fingerprint. Real pages are
-the primary navigation structure. Swiper is deliberately kept inside Lab as a
-control test rather than used as a substitute for routing; its ordinary usage lives in Interaction.
-The configured `src/app` owns typed domains, not presentation. Application alone
-provides the complete controller; Draft Editor observes count/request and Request
-Lifecycle has minimal App-request controls. All seven page factories take
-the application's `Deps`. App HTTP survives page unload, and Clear invalidates
-an obsolete response through a business epoch.
-
-The first four routes are native bottom tabs; Request Lifecycle, Runtime Lab and Draft Editor
-are non-tab routes. Tab switching causes Hide/Show and preserves local state;
-it cannot substitute for RedirectTo, true Unload or two instances of Runtime Lab. Top
-layout uses synchronous window/safe-area/capsule metrics before the first
-business tree, with resize and Show entering the existing transaction queue.
+The nine routes share one App runtime, release build and artifact fingerprint.
+Only the first four are native Tabs. All page factories take `Deps`; App owns
+business data and the editor buffer, while pages own their local request effects.
+Hide/Show retains state; actual unload disposes page-owned work.
+The example was formerly named `miniapp_conformance_app`; there is no duplicate fixture.
+See the [workbench guide](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_draft_workbench/README.md) for the three complete workflows.
 
 ## Independent UI fixture
 
@@ -35,7 +28,7 @@ is the separate six-page release fixture for `lampclaw/minimoon_ui 0.1.0`
 with core `0.2.0`. It covers 64 RUI families plus Form and Theme: foundation,
 overlay/disclosure, forms, data/date, layout/navigation and feedback behavior.
 Its native/JS tests, generated resource checks, candidate report, artifact
-fingerprint and local host evidence are independent of Conformance. Both
+fingerprint and local host evidence are independent of Draft Workbench. Both
 fixtures must pass when the shared core host or UI release is changed; one
 application's evidence cannot authorize the other.
 The UI fixture keeps the no-application entry path and no-argument factories;

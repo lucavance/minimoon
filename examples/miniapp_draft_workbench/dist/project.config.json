@@ -1,0 +1,15 @@
+{
+  "appid": "touristappid",
+  "projectname": "minimoon-miniapp_draft_workbench",
+  "compileType": "miniprogram",
+  "miniprogramRoot": "./",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "skylineRenderEnable": true
+  },
+  "condition": {}
+}

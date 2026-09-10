@@ -20,7 +20,7 @@ pub fn docs_check_source() -> String {
     #|const sha256 = (data) => crypto.createHash("sha256").update(data).digest("hex")
     #|const posix = (value) => value.split(path.sep).join("/")
     #|const fixtures = [
-    #|  { name: "miniapp_conformance_app", directory: "examples/miniapp_conformance_app" },
+    #|  { name: "miniapp_draft_workbench", directory: "examples/miniapp_draft_workbench" },
     #|  { name: "minimoon_ui_showcase", directory: "ui/examples/showcase" },
     #|]
     #|

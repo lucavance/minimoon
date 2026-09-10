@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 11,
+  "application": {
+    "package": "src/app"
+  },
+  "name": "miniapp_draft_workbench",
+  "componentTheme": "minimal-v2",
+  "resources": [
+    {
+      "package": "lampclaw/miniapp_draft_workbench/resources",
+      "features": []
+    }
+  ],
+  "tabBar": {
+    "color": "#6A778B",
+    "selectedColor": "#356AE6",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "package": "src/pages/workbench",
+        "text": "工作台",
+        "iconPath": "assets/tab-home.png",
+        "selectedIconPath": "assets/tab-home-selected.png"
+      },
+      {
+        "package": "src/pages/drafts",
+        "text": "草稿",
+        "iconPath": "assets/tab-interaction.png",
+        "selectedIconPath": "assets/tab-interaction-selected.png"
+      },
+      {
+        "package": "src/pages/online",
+        "text": "联机",
+        "iconPath": "assets/tab-platform.png",
+        "selectedIconPath": "assets/tab-platform-selected.png"
+      },
+      {
+        "package": "src/pages/more",
+        "text": "更多",
+        "iconPath": "assets/tab-application.png",
+        "selectedIconPath": "assets/tab-application-selected.png"
+      }
+    ]
+  },
+  "devtoolsChecks": [
+    "Four native bottom Tabs stay ordered 工作台/草稿/联机/更多; switching retains state without stack growth",
+    "All nine routes keep the fixed dark-blue safe navigation band and shallow curved hero; no clipping, horizontal overflow or capsule overlap on load and resize",
+    "Draft Workbench local CRUD: new, title/note validation, save, saved list, edit/delete, cold restart restore; failed reads/writes never claim success or overwrite unknown data",
+    "Manual save only: unsaved App buffer survives page unload within this run; switching drafts confirms discard; restart restores saved records only",
+    "Storage operations serialize; duplicate taps do not write twice; editing during save remains dirty; failed delete/clear preserves records",
+    "Draft Editor requires nonempty from and valid mode/id before graph creation; new/edit/resume have explicit inputs without preview flash",
+    "Public httpbingo.org POST typed echo is not cloud storage; network/HTTP/schema failures can retry; old replies never overwrite newer edits or deleted drafts",
+    "App-owned background send survives editor unload and completes in Online without another touch; Page-owned trial cancels on unload; hiding is not unloading",
+    "More owns data reset and the four laboratory entries; business Tabs do not duplicate technical controllers",
+    "Interaction native input, checkbox, radio, picker, swiper and two independent local components retain state across Tab changes",
+    "Interaction Disclosure, single and multiple Accordion plus Tabs",
+    "Interaction reactive Accordion child counter survives the explicit parent update and a collapse-reopen cycle",
+    "Interaction Dialog content and overlay close plus Sheet close and dismiss",
+    "Interaction Dropdown checkbox, radio, submenu action, and dismiss",
+    "Platform login, editable storage get/set, toast, location and media each display their own success/error without altering unrelated results",
+    "Platform public httpbingo API: GET encoded and repeated query, JSON/form POST, text PUT, DELETE, HEAD/OPTIONS empty response, HTTP 400/500 loaded status, and timeout failure; response details expand without resetting inputs",
+    "Request Lifecycle optional marker survives NavigateTo and Back; RedirectTo unloads it and cancels page-owned delayed HTTP with no late writes, while App-owned HTTP continues",
+    "Runtime Lab native input focus, blur, and confirm",
+    "Runtime Lab focused keyed input retains value, focus, cursor and selection while only another identity moves; controlled reset uses scalar sets only",
+    "Runtime Lab structural reconciliation retains the keyed input while siblings move; picker range/selection and swiper children/current change together without changing the visible logical item",
+    "Runtime Lab delay, perform success and attempt failure complete without another touch and remain silent after immediate unload",
+    "Runtime Lab keyed local-state isolation, reorder, removal and fresh restore; a second same-route instance is independent",
+    "Repeat affected public API scenarios in Skyline simulator, device preview and debugging; urlCheck bypass is not production-domain or full HTTPS validation; require a clean console and no post-dispose updates",
+    "Request Lifecycle owns the complete shared counter/request laboratory; 3000 updates remain lossless, hidden observers catch up, Clear invalidates old App replies",
+    "Secondary Back preserves the prior stack entry; direct secondary entry falls back to the Workbench Tab"
+  ],
+  "pages": [
+    {
+      "package": "src/pages/workbench",
+      "navigationBarTextStyle": "white"
+    },
+    {
+      "package": "src/pages/drafts",
+      "navigationBarTextStyle": "white"
+    },
+    {
+      "package": "src/pages/online",
+      "navigationBarTextStyle": "white"
+    },
+    {
+      "package": "src/pages/more",
+      "navigationBarTextStyle": "white"
+    },
+    {
+      "package": "src/pages/interaction",
+      "navigationBarTextStyle": "white"
+    },
+    {
+      "package": "src/pages/platform",
+      "navigationBarTextStyle": "white"
+    },
+    {
+      "package": "src/pages/request_lifecycle",
+      "navigationBarTextStyle": "white"
+    },
+    {
+      "package": "src/pages/runtime_lab",
+      "navigationBarTextStyle": "white"
+    },
+    {
+      "package": "src/pages/draft_editor",
+      "navigationBarTextStyle": "white",
+      "smokeInput": {
+        "from": "smoke"
+      }
+    }
+  ]
+}

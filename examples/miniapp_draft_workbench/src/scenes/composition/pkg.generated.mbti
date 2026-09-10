@@ -1,0 +1,17 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/miniapp_draft_workbench/scenes/composition"
+
+import {
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn scene() -> @minimoon.Val[@minimoon.Node]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

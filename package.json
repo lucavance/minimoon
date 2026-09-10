@@ -4,7 +4,7 @@
   "scripts": {
     "minimoon": "moon run src/cmd/minimoon --target native --",
     "metrics": "moon run src/cmd/minimoon --target native -- metrics",
-    "verify:example": "moon run src/cmd/minimoon --target native -- verify examples/miniapp_conformance_app",
+    "verify:example": "moon run src/cmd/minimoon --target native -- verify examples/miniapp_draft_workbench",
     "check:mvp": "moon run src/cmd/minimoon --target native -- check mvp",
     "check:candidate": "moon run src/cmd/minimoon --target native -- check candidate",
     "check:all": "moon run src/cmd/minimoon --target native -- check all",
@@ -17,7 +17,7 @@
     "docs:diagrams": "moon run src/cmd/minimoon_docs --target native -- render",
     "docs:diagrams:check": "moon run src/cmd/minimoon_docs --target native -- check",
     "coverage": "moon clean --target-dir _build/coverage && moon test --enable-coverage --target-dir _build/coverage && (cd _build/coverage && moon_cove_report -f summary --source-paths ../.. --ignore-missing-files)",
-    "miniapp:generate": "moon run src/cmd/minimoon --target native -- build examples/miniapp_conformance_app"
+    "miniapp:generate": "moon run src/cmd/minimoon --target native -- build examples/miniapp_draft_workbench"
   },
   "engines": {
     "node": ">=24.20.0"

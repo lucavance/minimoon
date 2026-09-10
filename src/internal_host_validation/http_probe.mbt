@@ -109,13 +109,34 @@ pub fn http_probe_source() -> String {
     #|  start({ from: "http-probe" })
     #|  assert.ok(host.__mmInstanceId, "Details must accept explicit probe route input")
     #|  host.onUnload()
-    #|  require(require("node:path").resolve(require("node:path").dirname(process.argv[2]), "../showcase/showcase.js"))
+    #|  require(require("node:path").resolve(require("node:path").dirname(process.argv[2]), "../workbench/workbench.js"))
     #|  start()
     #|  let rejected; const enqueue = host._en; host._en = entry => { rejected = entry }
     #|  host._iv({ capability: "wx.request", request_id: "undeclared", payload: { url: "https://example.test", method: "GET", header: {} } })
     #|  host._en = enqueue
     #|  assert.equal(invoked, 0); assert.equal(rejected.phase, "failure"); assert.equal(rejected.payload.error, "undeclared capability: wx.request")
     #|  report.cases.push({ name: "lifecycle-and-failures", status: "passed" })
+    #|}
+    #|const draftEcho = async () => {
+    #|  host.onUnload()
+    #|  const loadSibling = name => { const file = require("node:path").resolve(require("node:path").dirname(process.argv[2]), "../" + name + "/" + name + ".js"); delete require.cache[file]; require(file) }
+    #|  const flush = async () => { for (let index = 0; index < 24; index++) await Promise.resolve() }
+    #|  wx.request = options => transport(options)
+    #|  loadSibling("draft_editor"); start({ from: "public-draft-probe" })
+    #|  dispatch("Input", "draft_editor/draft-title", { value: "Minimoon draft probe" })
+    #|  dispatch("Input", "draft_editor/draft-note", { value: "Synthetic public echo" })
+    #|  await flush(); observed = undefined; lastOptions = undefined
+    #|  const item = { name: "draft-app-echo", status: "failed" }; report.cases.push(item); save()
+    #|  dispatch("Tap", "work/send"); await flush()
+    #|  requireCheck(lastOptions && lastOptions.method === "POST", "draft App did not send")
+    #|  assert.deepEqual(JSON.parse(lastOptions.data), { title: "Minimoon draft probe", note: "Synthetic public echo" })
+    #|  host.onUnload(); loadSibling("online"); start()
+    #|  const until = Date.now() + 12000
+    #|  while (!observed && Date.now() < until) await new Promise(resolve => setTimeout(resolve, 10))
+    #|  await flush()
+    #|  requireCheck(observed && observed.statusCode === 200 && tree().includes("typed-echo") && tree().includes("回显成功"), "typed App echo did not complete after editor unload")
+    #|  item.status = "passed"; item.statusCode = 200; save()
+    #|  process.stdout.write("draft-app-echo: passed\n")
     #|}
     #|;(async () => {
     #|  bootApplication(process.argv[2])
@@ -137,6 +158,7 @@ pub fn http_probe_source() -> String {
     #|    process.stdout.write(`${names[index]}: passed\n`)
     #|  }
     #|  if (offline) await offlineLifecycle()
+    #|  await draftEcho()
     #|  report.status = "passed"
     #|})().catch(error => { report.error = "HTTP probe failed; see last case (transport/assertion/setup)"; process.stderr.write(report.error + "\n" + String(error.stack || "").split("\n").filter(line => /^\s+at /.test(line)).join("\n") + "\n"); process.exitCode = 1 }).finally(() => { if (host && host.__mmInstanceId) host.onUnload(); clearTimeout(deadline); save() })
   )

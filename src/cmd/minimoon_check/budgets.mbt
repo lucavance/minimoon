@@ -11,11 +11,12 @@ let registry_archive_operating_limit : Int = registry_archive_hard_limit -
   registry_archive_reserve
 
 ///|
-// Retain the prior authoring review's fixed runtime and aggregate ceilings.
-let conformance_runtime_limit : Int = 400000
+// Approved Draft Workbench review, 2026-09-10: runtime/aggregate 427,143/461,392 B.
+// Only the core example's fixed ceilings change; framework/Starter/UI gates do not.
+let conformance_runtime_limit : Int = 440000
 
 ///|
-let conformance_javascript_limit : Int = 453000
+let conformance_javascript_limit : Int = 480000
 
 ///|
 // Independent starter follow-up: optimized runtime/aggregate 226,205/253,966 B.

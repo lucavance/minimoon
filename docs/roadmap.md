@@ -8,23 +8,23 @@ registry consumers when publication is authorized. Implemented capabilities are
 described below; release readiness is separate from implementation completion.
 Deferred directions are not dated feature commitments.
 
-## Native navigation and Conformance presentation
+## Draft Workbench demonstration
 
-The unpublished core `0.2.0` / UI `0.1.0` iteration adds native bottom tabs,
-typed tab navigation, read-only window/safe-area/capsule layout and PNG build
-resources. Conformance presents 首页 / 交互 / 平台 / 应用, with Request Lifecycle,
-Runtime Lab and Draft Editor as task-specific secondary routes. Platform owns
-HTTP/wx capabilities, Interaction owns the core component catalogue, and
-Application is the only complete shared-state controller. Shared scene functions
-replace page-to-page implementation reuse; the header has a shallow curved hero
-edge without changing fixed navigation geometry. It remains one core fixture, not seven independent applications.
-See [native navigation and layout](guides/native_navigation.md).
+Core `0.2.0` and UI `0.1.0` are published; product APIs and dependencies remain
+frozen for this example iteration. The former Conformance engineering name is
+migrated to `miniapp_draft_workbench`, keeping its core verification responsibility.
 
-The earlier shared-host changes require exact-fingerprint acceptance for both
-core and UI. The presentation consolidation changes only the core fixture: it
-requires a fresh core pass; unchanged UI/Starter bytes are not a new UI migration. Custom TabBar, badges, dynamic navigation colors and new public UI
-components are outside this iteration. Product versions remain unpublished;
-Contract 11 and runtime ABI 13 do not change renderer protocol 8.
+Four business Tabs — 工作台 / 草稿 / 联机 / 更多 — connect local CRUD with
+typed public HTTP echo and App/Page lifetime. Draft Editor and four secondary
+laboratories keep the total at nine routes. Unsaved input is App-owned for this
+run; successful storage is required before reporting saved records.
+
+The shallow curved hero and fixed safe navigation geometry are retained.
+No backend, account, cloud sync, autosave or UI component expansion is planned.
+The renamed core artifact needs new host acceptance; unchanged UI/Starter bytes
+are not a new UI migration. Before the user's contest deadline, prioritize
+regression, device validation and a reproducible three-minute demonstration.
+See the [workbench guide](../examples/miniapp_draft_workbench/README.md).
 
 ## HTTP and application state
 
@@ -66,11 +66,11 @@ The original `0.1.0` public baseline established:
   gates.
 
 The public repository keeps only reproducible candidate state in
-[`verify_report.json`](../examples/miniapp_conformance_app/generated/verify_report.json)
+[`verify_report.json`](../examples/miniapp_draft_workbench/generated/verify_report.json)
 and
-[`release_summary.json`](../examples/miniapp_conformance_app/generated/release_summary.json),
+[`release_summary.json`](../examples/miniapp_draft_workbench/generated/release_summary.json),
 while fingerprint-bound
-[`devtools.evidence.json`](../examples/miniapp_conformance_app/generated/devtools.evidence.json)
+[`devtools.evidence.json`](../examples/miniapp_draft_workbench/generated/devtools.evidence.json)
 is local and Git-ignored. Local release verification does not publish its
 timestamp, tool version, notes, or outcome in the repository.
 

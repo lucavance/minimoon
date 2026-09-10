@@ -67,7 +67,7 @@ test "owners separate the UI fixture before the UI module and classify all scope
       ("ui/examples/showcase/src/pages/forms/page.mbt", ("ui_fixture", None)),
       ("ui/src/field.mbt", ("ui", None)),
       (
-        "examples/miniapp_conformance_app/src/pages/capability_probe/page.mbt",
+        "examples/miniapp_draft_workbench/src/pages/capability_probe/page.mbt",
         ("core_fixture", None),
       ),
       ("templates/starter/src/pages/home/page.mbt", ("starter", None)),
@@ -90,7 +90,7 @@ test "generated roles precede source and frozen API snapshots precede interfaces
     pair in [
       ("ui/examples/showcase/dist/app.js", "generated_artifact"),
       (
-        "examples/miniapp_conformance_app/generated/manifest.json", "generated_artifact",
+        "examples/miniapp_draft_workbench/generated/manifest.json", "generated_artifact",
       ),
       ("ui/examples/showcase/styles/tailwind.wxss", "generated_artifact"),
       ("src/cmd/minimoon/templates.generated.mbt", "generated_artifact"),
@@ -109,7 +109,7 @@ test "generated roles precede source and frozen API snapshots precede interfaces
       ("ui/src/styles/custom.wxss", "maintained_source"),
       ("ui/examples/showcase/src/dist/maintained.mbt", "maintained_source"),
       (
-        "examples/miniapp_conformance_app/src/styles/custom.wxss", "maintained_source",
+        "examples/miniapp_draft_workbench/src/styles/custom.wxss", "maintained_source",
       ),
       ("ui/README.md", "docs"),
       ("ui/moon.mod", "config"),

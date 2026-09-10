@@ -1,0 +1,7 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/miniapp_draft_workbench/components/toggle_card" @card,
+  "lampclaw/miniapp_draft_workbench/shared/shell",
+}
+
+supported_targets = "js"

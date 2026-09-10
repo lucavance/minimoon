@@ -8,25 +8,25 @@ behavior as metadata.
 ```json
 {
   "schemaVersion": 11,
-  "name": "miniapp_conformance_app",
+  "name": "miniapp_draft_workbench",
   "application": { "package": "src/app" },
   "componentTheme": "minimal-v2",
   "devtoolsChecks": ["Runtime Lab native input focus, blur, and confirm"],
   "pages": [
-    { "package": "src/pages/showcase" },
+    { "package": "src/pages/workbench" },
     { "package": "src/pages/interaction" },
     { "package": "src/pages/platform" },
-    { "package": "src/pages/application" },
+    { "package": "src/pages/drafts" },
     { "package": "src/pages/request_lifecycle" },
     { "package": "src/pages/runtime_lab" },
     { "package": "src/pages/draft_editor", "smokeInput": { "from": "smoke" } }
   ],
   "tabBar": {
     "list": [
-      { "package": "src/pages/showcase", "text": "首页" },
+      { "package": "src/pages/workbench", "text": "首页" },
       { "package": "src/pages/interaction", "text": "交互" },
       { "package": "src/pages/platform", "text": "平台" },
-      { "package": "src/pages/application", "text": "应用" }
+      { "package": "src/pages/drafts", "text": "应用" }
     ]
   }
 }

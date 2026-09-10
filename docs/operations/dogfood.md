@@ -42,7 +42,7 @@ three host paths:
 3. Device debugging for lifecycle, navigation, input, overlay, and failure
    recovery paths affected since the previous candidate.
 
-The canonical seven-route Conformance fixture owns core release evidence; the
+The canonical nine-route Draft Workbench fixture owns core release evidence; the
 independent six-page `ui/examples/showcase` owns UI release evidence. A paired
 core/UI release requires both. Dogfood results are application feedback, not
 evidence for either fixture, and must never be copied into or used to edit

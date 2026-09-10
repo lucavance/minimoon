@@ -176,7 +176,7 @@ async fn repository_moonbit_sources(root : String) -> Array[String] {
 ///|
 fn generated_script(path : String) -> Bool {
   (
-    path.has_prefix("examples/miniapp_conformance_app/dist/") ||
+    path.has_prefix("examples/miniapp_draft_workbench/dist/") ||
     path.has_prefix("ui/examples/showcase/dist/")
   ) &&
   (path.has_suffix(".js") || path.has_suffix(".mjs"))

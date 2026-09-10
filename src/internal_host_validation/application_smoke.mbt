@@ -18,13 +18,14 @@ pub fn application_host_smoke_source() -> String {
     #|globalThis.App = value => { application = value }
     #|globalThis.Page = value => { definition = value }
     #|globalThis.Component = () => { throw new Error("unexpected Component") }
-    #|globalThis.wx = { request(options) { requests.push(options); return { abort() { aborts++; options.fail({ errMsg: "request:fail abort" }) } } } }
+    #|const stored = new Map(), storageWrites = []
+    #|globalThis.wx = { getStorage(options) { if (stored.has(options.key)) options.success({ data: structuredClone(stored.get(options.key)) }); else options.fail({ errMsg: "getStorage:fail data not found" }) }, setStorage(options) { storageWrites.push(options) }, request(options) { requests.push(options); return { abort() { aborts++; options.fail({ errMsg: "request:fail abort" }) } } } }
     #|const controller = registerMinimoonApp(runtime)
     #|assert.equal(requests.length, 0)
     #|application.onLaunch({}); application.onLaunch({}); application.onShow({})
     #|await flush()
     #|const load = file => { require(path.join(dist, file)); return definition }
-    #|const appPage = load("pages/application/application.js"), lifecycle = load("pages/request_lifecycle/request_lifecycle.js"), details = load("pages/draft_editor/draft_editor.js")
+    #|const appPage = load("pages/drafts/drafts.js"), lifecycle = load("pages/request_lifecycle/request_lifecycle.js"), details = load("pages/draft_editor/draft_editor.js")
     #|const get = (value, tokens) => tokens.reduce((current, token) => current[token], value)
     #|const assign = (value, tokens, next) => { get(value, tokens.slice(0, -1))[tokens.at(-1)] = next }
     #|const start = (definition, input = {}) => {
@@ -35,7 +36,7 @@ pub fn application_host_smoke_source() -> String {
     #|}
     #|const tap = (host, key) => host.__mmDispatchTap({ currentTarget: { dataset: { minimoonTap: key } }, target: { dataset: {} }, detail: {} })
     #|const has = (host, text) => JSON.stringify(host.data).includes(text)
-    #|const first = start(appPage), second = start(details, { from: "application-smoke" })
+    #|const first = start(lifecycle), second = start(lifecycle)
     #|const firstId = first.__mmInstanceId, firstWrites = first.writes
     #|first.onLoad({}); assert.equal(first.__mmInstanceId, firstId); assert.equal(first.writes, firstWrites)
     #|assert.match(errors.pop(), /duplicate_page_load/)
@@ -65,16 +66,25 @@ pub fn application_host_smoke_source() -> String {
     #|tap(first, "shared/load"); await flush(); tap(first, "shared/clear"); await flush()
     #|requests[1].success({ statusCode: 201 }); await flush(); assert.ok(has(second, "Application request: idle"))
     #|tap(first, "shared/load"); await flush(); assert.equal(requests.length, 3)
-    #|const viewer = first
-    #|const input = (key, value) => second.__mmDispatchInput({ currentTarget: { dataset: { minimoonInput: key } }, target: { dataset: {} }, detail: { value } })
-    #|input("draft_editor/draft-title", ""); tap(second, "draft_editor/save-draft"); await flush()
-    #|assert.equal(requests.length, 3); assert.ok(has(second, "Title is required."))
-    #|input("draft_editor/draft-title", "Typed host echo"); input("draft_editor/draft-note", "shared result")
-    #|tap(second, "draft_editor/save-draft"); await flush()
+    #|const editor = start(details, { from: "application-smoke" })
+    #|const online = load("pages/online/online.js"), viewer = start(online)
+    #|const input = (key, value) => editor.__mmDispatchInput({ currentTarget: { dataset: { minimoonInput: key } }, target: { dataset: {} }, detail: { value } })
+    #|input("draft_editor/draft-title", ""); await flush(); tap(editor, "work/send"); await flush()
+    #|assert.equal(requests.length, 3); assert.ok(has(editor, "标题不能为空"))
+    #|input("draft_editor/draft-title", "Typed host echo"); input("draft_editor/draft-note", "shared result"); await flush()
+    #|tap(editor, "draft_editor/save-draft"); await flush()
+    #|assert.equal(storageWrites.length, 1); assert.ok(!has(first, "本地写入成功"))
+    #|storageWrites[0].fail({ errMsg: "quota" }); await flush(); assert.ok(has(editor, "本地写入失败"))
+    #|tap(editor, "draft_editor/save-draft"); await flush()
+    #|const write = storageWrites[1]; stored.set(write.key, structuredClone(write.data)); write.success({}); await flush()
+    #|const list = start(appPage); assert.ok(has(list, "Typed host echo")); assert.ok(has(editor, "当前内容已保存到本地"))
+    #|tap(editor, "work/send"); await flush()
     #|assert.equal(requests.length, 4); assert.equal(requests[3].url, "https://httpbingo.org/post"); assert.equal(requests[3].method, "POST")
     #|assert.deepEqual(JSON.parse(requests[3].data), { title: "Typed host echo", note: "shared result" })
+    #|editor.onUnload(); assert.equal(aborts, 0)
     #|requests[3].success({ statusCode: 200, data: { json: { title: "Typed host echo", note: "shared result" }, origin: "not displayed" } }); await flush()
-    #|assert.ok(has(second, "Draft save: echoed (not persistent)")); assert.ok(has(viewer, "Application echoed draft: Typed host echo / shared result (not persistent)")); assert.ok(!has(viewer, "not displayed"))
+    #|assert.ok(has(viewer, "回显成功")); assert.ok(has(viewer, "typed-echo")); assert.ok(!has(viewer, "not displayed"))
+    #|list.onUnload()
     #|viewer.onUnload()
     #|controller.dispose(); controller.dispose(); assert.equal(aborts, 1); assert.equal(second.__mmInstanceId, null)
     #|const writes = second.writes

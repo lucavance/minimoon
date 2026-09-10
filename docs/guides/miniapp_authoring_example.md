@@ -6,13 +6,11 @@ export `program() -> Page` and need no shared application dependencies:
 - `templates/starter/src/pages/home/page.mbt`
 - `templates/starter/src/pages/details/page.mbt`
 
-The maintained real-host Conformance application has four native Tabs and the
-Request Lifecycle, Runtime Lab, and Draft Editor secondary routes. Together they exercise
-page input, local state, keyed components,
-typed host results, lifecycle, navigation, incremental patches, controls,
-scrolling, and same-route instance isolation. Its `src/app` package also shows
-optional typed application domains; Application owns the complete controller,
-Draft Editor observes cross-page state, and Request Lifecycle compares request ownership. All seven pages use
+The maintained Draft Workbench has four business Tabs, a Draft Editor and four
+capability laboratories. The App owns persisted records, an unsaved editing buffer
+and typed background echo; the editor owns its optional page-scoped request.
+The laboratories preserve native controls, keyed state, host effects, navigation,
+rendering and disposal coverage. All nine pages use
 `program(deps : @application.Deps) -> Page`. See the
 [shared-state guide](shared_state.md) for the App factory, bindings, and lifetimes.
 

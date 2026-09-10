@@ -19,7 +19,7 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
     },
   )
   let fingerprint = @verify.artifact_fingerprint(
-    join(root, "examples/miniapp_conformance_app"),
+    join(root, "examples/miniapp_draft_workbench"),
   )
   run(
     root,
@@ -32,7 +32,7 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
     [
       script,
       join(
-        root, "examples/miniapp_conformance_app/dist/pages/platform/platform.js",
+        root, "examples/miniapp_draft_workbench/dist/pages/platform/platform.js",
       ),
       report,
       if offline {
@@ -52,7 +52,7 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
         [
           script,
           join(
-            root, "examples/miniapp_conformance_app/dist/pages/platform/platform.js",
+            root, "examples/miniapp_draft_workbench/dist/pages/platform/platform.js",
           ),
           failed_report,
           "--offline",

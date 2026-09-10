@@ -1,7 +1,0 @@
-import {
-  "lampclaw/minimoon",
-  "lampclaw/miniapp_conformance_app/components/toggle_card" @card,
-  "lampclaw/miniapp_conformance_app/shared/shell",
-}
-
-supported_targets = "js"

@@ -138,7 +138,7 @@ or gallery section alone is not proof of every upstream behavior.
 
 The six-page [showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
 covers all 64 component
-families plus Form and Theme. It is independent of core's seven-route Conformance
+families plus Form and Theme. It is independent of core's nine-route Draft Workbench
 fixture and does not add a dependency to the default starter.
 
 Run from the repository root:

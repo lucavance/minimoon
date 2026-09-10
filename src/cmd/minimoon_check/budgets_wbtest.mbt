@@ -1,10 +1,10 @@
 ///|
-test "reviewed native navigation byte budgets retain exact inclusive boundaries" {
+test "reviewed example and framework byte budgets retain exact inclusive boundaries" {
   assert_eq(registry_archive_hard_limit, 327680)
   assert_eq(registry_archive_reserve, 8192)
   assert_eq(registry_archive_operating_limit, 319488)
-  assert_eq(conformance_runtime_limit, 400000)
-  assert_eq(conformance_javascript_limit, 453000)
+  assert_eq(conformance_runtime_limit, 440000)
+  assert_eq(conformance_javascript_limit, 480000)
   assert_eq(starter_runtime_limit, 230000)
   assert_eq(starter_javascript_limit, 258000)
   assert_eq(page_host_limit, 18000)

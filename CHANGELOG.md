@@ -4,7 +4,18 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
-## [0.2.0] - Unreleased
+## [Example maintenance] - Unreleased
+
+- Rename the core example to Minimoon Draft Workbench (`miniapp_draft_workbench`),
+  with four business Tabs, a Draft Editor and four capability laboratories.
+- Add acknowledged local draft CRUD, restart restoration, an App-owned editing
+  buffer, typed public echo, and explicit page/App request lifetime checks.
+- Apply the reviewed example-only runtime/aggregate JavaScript ceilings of
+  440,000/480,000 bytes; framework, Starter, UI and other performance gates stay unchanged.
+- Keep core/UI product APIs and versions unchanged. Updated example artifacts
+  require new real-host acceptance; this maintenance is not a new package release.
+
+## [0.2.0] - 2026-09-09
 
 ### Added
 
@@ -52,7 +63,7 @@ tags.
   Rebuild all generated artifacts together and obtain new real-host evidence.
 - Opted-in page factories take the application's `Deps`; `PageContext` is now
   opaque. See the [shared-state guide](docs/guides/shared_state.md).
-- This unpublished candidate intentionally changes page/testing APIs. The current
+- This release intentionally changed page/testing APIs. The current
   0.2 consumer and reviewed snapshots define the gate; 0.1 fixtures are historical.
 - RUI remains a provenance reference, not a browser-runtime dependency.
   UI's MIT attribution is separate from core's existing Apache-2.0 notices.

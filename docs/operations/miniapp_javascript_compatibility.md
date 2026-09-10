@@ -101,8 +101,8 @@ be reflected in order.
 5. Search generated output and its maintained owner:
 
    ```bash
-   git grep -n -E '\?\.|\?\?' -- examples/miniapp_conformance_app/dist src
-   git grep -n -E 'TextEncoder|TextDecoder' -- examples/miniapp_conformance_app/dist src
+   git grep -n -E '\?\.|\?\?' -- examples/miniapp_draft_workbench/dist src
+   git grep -n -E 'TextEncoder|TextDecoder' -- examples/miniapp_draft_workbench/dist src
    ```
 
 6. Fix the maintained owner, not only the generated fixture.

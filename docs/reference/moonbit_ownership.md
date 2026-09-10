@@ -24,7 +24,7 @@ generated or temporary scripts.
 All other tracked JavaScript must be generated output below:
 
 ```text
-examples/miniapp_conformance_app/dist/
+examples/miniapp_draft_workbench/dist/
 ui/examples/showcase/dist/
 ```
 

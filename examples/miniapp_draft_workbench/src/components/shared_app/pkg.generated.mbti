@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/miniapp_draft_workbench/components/shared_app"
+
+import {
+  "lampclaw/miniapp_draft_workbench/app",
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn panel(@minimoon.PageContext, @app.Deps) -> @minimoon.Val[@minimoon.Node]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

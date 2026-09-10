@@ -40,8 +40,8 @@ fn usage() -> String {
     #|Examples:
     #|  minimoon init /tmp/minimoon-starter
     #|  minimoon build /tmp/minimoon-starter
-    #|  minimoon build examples/miniapp_conformance_app --mode dev
-    #|  minimoon verify examples/miniapp_conformance_app
+    #|  minimoon build examples/miniapp_draft_workbench --mode dev
+    #|  minimoon verify examples/miniapp_draft_workbench
   )
 }
 

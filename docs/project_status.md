@@ -13,26 +13,22 @@ creation; their separate registry installation path is now available for these
 published versions. Near-term work focuses on onboarding consistency; the detailed
 [Roadmap](roadmap.md) separates implemented capabilities from deferred directions.
 
-Conformance now has four native primary tabs (首页 / 交互 / 平台 / 应用) and
-three task-specific secondary routes: Request Lifecycle, Runtime Lab and Draft Editor. Native tab commands, read-only page layout
-and PNG build assets support the deep-blue custom header and shallow curved hero edge without handwritten
-host JavaScript or a new UI dependency. Further changes to these artifact bytes
-require fresh real-host acceptance; automated candidates do not establish visual
-or device correctness.
+The maintained core example is now **Minimoon Draft Workbench**:
+`examples/miniapp_draft_workbench`, module `lampclaw/miniapp_draft_workbench`.
+The former engineering name `miniapp_conformance_app` is historical; it is not
+a second fixture. Four business Tabs (工作台 / 草稿 / 联机 / 更多), a Draft Editor
+and four capability laboratories provide nine routes.
 
-The HTTP work adds methods, query/header/body encoding and timeouts. Platform owns the ten public-API scenarios;
-`bun run check:http-live` is opt-in and is not real-host evidence. Both fixtures
-need matching Skyline revalidation after shared host bytes change.
+The example adds manual local CRUD, restart restoration, typed public HTTP echo
+and an App-owned unsaved buffer. App sends survive editor unload; page trials
+cancel on unload. Storage failure never confirms a save. Echo never writes back
+to persisted records. There is no backend, account or cloud synchronization.
 
-The shared-state source iteration adds optional `App[Deps]`, typed domain
-machines, page-local `Shared[T]` projections, and independent application
-effects/lifecycle. Application provides the sole complete shared-state panel; Draft Editor demonstrates
-shared observation and typed echo, while Request Lifecycle compares page/App
-request ownership and epoch-based response invalidation. The UI showcase and starter retain the
-no-application entry path. Contract `11` and runtime ABI `13` replace the earlier
-technical boundaries; renderer protocol `8` and product versions are unchanged.
-Publication is recorded separately below. See
-[shared-state guide](guides/shared_state.md) for acceptance requirements.
+Platform retains ten public HTTP cases; the lifecycle laboratory retains shared
+counter and delayed-request regressions. `bun run check:http-live` is opt-in and
+not real-host evidence. Product versions, Contract `11`, runtime ABI `13` and
+renderer protocol `8` do not change. New workbench bytes need fresh host acceptance;
+the publication checkpoint below remains the earlier immutable release.
 
 The current authoring revision makes ordinary `page` builders, typed state
 constructors and `Val` composition the primary style, retaining `elmish_page`
@@ -49,7 +45,7 @@ Skyline artifacts. App Contract v11, runtime ABI v13, and renderer protocol v8
 remain independent technical compatibility numbers.
 
 The maintained release surface consists of one two-page starter and one
-seven-route Conformance application covering authoring, native controls,
+nine-route Draft Workbench application covering authoring, native controls,
 components, capabilities, navigation, lifecycle, incremental rendering,
 ordered host scheduling, and disposal.
 
@@ -79,12 +75,12 @@ Skyline validation remains a separate, fingerprint-bound release prerequisite.
 ## Evidence state
 
 The public repository deliberately records only reproducible candidate state.
-Core tracked status is owned by the Conformance fixture's
-[`verify_report.json`](../examples/miniapp_conformance_app/generated/verify_report.json)
+Core tracked status is owned by the Draft Workbench fixture's
+[`verify_report.json`](../examples/miniapp_draft_workbench/generated/verify_report.json)
 and
-[`release_summary.json`](../examples/miniapp_conformance_app/generated/release_summary.json).
+[`release_summary.json`](../examples/miniapp_draft_workbench/generated/release_summary.json).
 Fingerprint-bound
-[`devtools.evidence.json`](../examples/miniapp_conformance_app/generated/devtools.evidence.json)
+[`devtools.evidence.json`](../examples/miniapp_draft_workbench/generated/devtools.evidence.json)
 is local and Git-ignored. UI status is independently owned by its
 [`verify_report.json`](../ui/examples/showcase/generated/verify_report.json),
 [`release_summary.json`](../ui/examples/showcase/generated/release_summary.json)

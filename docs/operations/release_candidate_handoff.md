@@ -115,7 +115,7 @@ temporary-storage changes do not waive any gate or create real-host evidence.
 
 | Artifact | Application | ZIP |
 | --- | --- | --- |
-| `minimoon-devtools-<commit>` | `examples/miniapp_conformance_app` (seven routes / four native tabs) | `miniapp_conformance_app-dist.zip` |
+| `minimoon-devtools-<commit>` | `examples/miniapp_draft_workbench` (nine routes / four native tabs) | `miniapp_draft_workbench-dist.zip` |
 | `minimoon-ui-devtools-<commit>` | `ui/examples/showcase` (six pages) | `minimoon_ui_showcase-dist.zip` |
 
 Each bundle contains its own:
@@ -164,7 +164,7 @@ application-specific `devtoolsChecks`.
 5. In that checkout, run the two release verifications and aggregate gates:
 
 ```bash
-minimoon verify examples/miniapp_conformance_app --release
+minimoon verify examples/miniapp_draft_workbench --release
 minimoon verify ui/examples/showcase --release
 bun run check:all
 bun run check:mvp

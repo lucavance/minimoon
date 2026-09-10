@@ -86,7 +86,7 @@ Elm-style Model / Msg / update / Cmd / Sub
   `src/cmd/minimoon` own generation, verification, and the CLI.
 - `ui/` owns the independent native component module, themes and build resources;
   `ui/examples/showcase` is its separate six-page verification fixture.
-- `examples/miniapp_conformance_app` is the single maintained core seven-route/four-tab
+- `examples/miniapp_draft_workbench` is the single maintained core nine-route/four-tab
   release fixture. `templates/starter` is the separate two-page source embedded
   by `minimoon init`.
 - `scripts/bridge/weapp_tailwindcss_adapter.mjs` is the only standalone

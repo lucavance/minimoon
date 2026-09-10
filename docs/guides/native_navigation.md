@@ -85,7 +85,7 @@ validates and writes the decoded bytes. Paths, conflicts, format, dimensions
 and size are checked before replacing output. Resources join manifests and
 artifact fingerprints but are not implicitly linked into application JavaScript.
 
-Conformance supplies its own four icon pairs and visual shell without importing
-Minimoon UI. It keeps seven routes: four native tabs plus Request Lifecycle, Runtime Lab and Draft Editor
-for full acceptance. See the [fixture matrix](../reference/miniapp_fixture_matrix.md)
+Draft Workbench supplies its own four icon pairs and visual shell without importing
+Minimoon UI. Its nine routes consist of Workbench, Drafts, Online and More tabs,
+a Draft Editor and four capability laboratories. See the [fixture matrix](../reference/miniapp_fixture_matrix.md)
 and [real-host checklist](../operations/miniapp_devtools_validation.md).

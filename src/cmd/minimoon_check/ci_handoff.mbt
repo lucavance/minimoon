@@ -24,7 +24,7 @@ fn ci_handoff_check_source() -> String {
     #|assert.match(workflow, /name: minimoon-ui-devtools-\$\{\{ github.sha \}\}\n\s+path: _build\/devtools-handoff\/ui\//)
     #|const temporary = fs.mkdtempSync(path.join(os.tmpdir(), "minimoon-ci-handoff-"))
     #|const fixtures = [
-    #|  ["examples/miniapp_conformance_app", "miniapp_conformance_app", "core"],
+    #|  ["examples/miniapp_draft_workbench", "miniapp_draft_workbench", "core"],
     #|  ["ui/examples/showcase", "minimoon_ui_showcase", "ui"],
     #|]
     #|const write = (base, relative, contents) => {
@@ -67,7 +67,7 @@ fn ci_handoff_check_source() -> String {
     #|    }))
     #|    write(directory, `${fixture}/generated/release_summary.json`, JSON.stringify({
     #|      name, schemaVersion: 11, runtimeApiVersion: 13, rendererProtocolVersion: 8, mode: "release",
-    #|      automated: { status: "passed", pageCount: name === "miniapp_conformance_app" ? 7 : 6, artifactFingerprint: fingerprint },
+    #|      automated: { status: "passed", pageCount: name === "miniapp_draft_workbench" ? 9 : 6, artifactFingerprint: fingerprint },
     #|      devtools: { status: "pending", evidence: null },
     #|    }))
     #|    editJson(directory, `${fixture}/generated/manifest.json`, (value) => {
@@ -206,12 +206,12 @@ fn ci_handoff_check_source() -> String {
     #|  reject("wrong-pair", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.0"\nimport { "lampclaw/minimoon@0.1.1" }\n'), /reviewed core/)
     #|  reject("wrong-ui-resource-version", (dir) => editJson(dir, "ui/examples/showcase/generated/manifest.json", (value) => { value.resources[0].version = "0.0.0" }), /matching versions/)
     #|  reject("missing-ui", (dir) => fs.unlinkSync(path.join(dir, "ui/examples/showcase/generated/manifest.json")))
-    #|  const coreManifest = "examples/miniapp_conformance_app/generated/manifest.json"
+    #|  const coreManifest = "examples/miniapp_draft_workbench/generated/manifest.json"
     #|  reject("core-missing-tab", (dir) => editJson(dir, coreManifest, (value) => { value.tabBar.list.pop() }), /matching versions/)
     #|  reject("core-tab-order", (dir) => editJson(dir, coreManifest, (value) => { value.tabBar.list.reverse() }), /matching versions/)
     #|  reject("core-missing-secondary", (dir) => editJson(dir, coreManifest, (value) => { value.pages = value.pages.filter((page) => page.route !== "pages/runtime_lab/runtime_lab") }), /matching versions/)
     #|  reject("core-replaced-secondary", (dir) => editJson(dir, coreManifest, (value) => { value.pages[5].route = "pages/unreviewed/unreviewed" }), /matching versions/)
-    #|  reject("core-tab-host-drift", (dir) => editJson(dir, "examples/miniapp_conformance_app/dist/app.json", (value) => { value.tabBar.list[0].text = "unreviewed" }), /matching versions/)
+    #|  reject("core-tab-host-drift", (dir) => editJson(dir, "examples/miniapp_draft_workbench/dist/app.json", (value) => { value.tabBar.list[0].text = "unreviewed" }), /matching versions/)
     #|  for (const [index, script] of cleanChecks.entries()) {
     #|    const directory = sandbox(`clean-${index}`)
     #|    const check = () => execute(directory, "bash", ["-euo", "pipefail", "-c", script])

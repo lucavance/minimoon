@@ -1,8 +1,8 @@
 ///|
-let example_apps : Array[String] = ["miniapp_conformance_app"]
+let example_apps : Array[String] = ["miniapp_draft_workbench"]
 
 ///|
-let conformance_fixture = "miniapp_conformance_app"
+let conformance_fixture = "miniapp_draft_workbench"
 
 ///|
 fn dynamic_app_host_smoke_source() -> String {
