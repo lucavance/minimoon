@@ -6,6 +6,11 @@ The native package is `lampclaw/minimoon_ui` (import as `@ui`), with `headless`,
 
 The baseline is Rabbita **0.15.6**, RUI **0.1.1**, commit `b1291945fd0201a0b5b39513b88585d6122db7bc`. The audit includes every declaration in upstream `rui/pkg.generated.mbti`: **428 public functions (including methods), 89 public types, 517 symbols**. The 64 component-family inventory is only a navigation aid, not proof of capability parity.
 
+The [2026-09-12 upstream follow-up](../../docs/reference/rabbita_and_rui_audit.md#2026-09-12-follow-up)
+reviewed `0a5836a3` (RUI 0.1.2): only its module manifest changed since this
+baseline, and the generated interface remains byte-identical. The original
+source pin and 517-symbol inventory remain unchanged.
+
 [The machine-readable API map](rui_api_map.json) records each symbol, original interface line, local implementation path, migration classification, and any unresolved capability. `adapted` means a native equivalent, `consolidated` means shared builders/types or explicit state replace several upstream parts, `native_substitution` means a deliberately different host mechanism, and `partial` means a known substantive gap. Classification never promises identical signatures, pixels, or browser behavior.
 
 RUI is MIT-licensed; the pinned source and its third-party notices were reviewed before implementation. The repository’s [third-party notice](../THIRD_PARTY_NOTICES.md) records the retained Rabbita/RUI, shadcn/ui, and React DayPicker attribution. Vega-v1 is a locally owned native theme adaptation, not runtime-loaded upstream CSS.

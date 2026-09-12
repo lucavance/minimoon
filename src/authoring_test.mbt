@@ -584,6 +584,272 @@ test "failed assoc candidate restores removed branch state and handlers" {
 }
 
 ///|
+priv enum KeyedLifetimeShape {
+  Empty
+  EmptyFragment
+  Fragment
+  View
+} derive(Eq)
+
+///|
+priv struct KeyedLifetimeRowSpec {
+  shape : KeyedLifetimeShape
+  version : Int
+} derive(Eq)
+
+///|
+fn keyed_lifetime_find(value : Json, id : String) -> Json? {
+  if value is Object(fields) {
+    if fields.get("props") is Some(Object(props)) &&
+      props.get("id") == Some(Json::string(id)) {
+      return Some(value)
+    }
+    if fields.get("tree") is Some(tree) {
+      return keyed_lifetime_find(tree, id)
+    }
+    if fields.get("children") is Some(Array(children)) {
+      for child in children {
+        if keyed_lifetime_find(child, id) is Some(found) {
+          return Some(found)
+        }
+      }
+    }
+  }
+  None
+}
+
+///|
+fn keyed_lifetime_texts(value : Json) -> Array[String] {
+  let result = []
+  if value is Object(fields) {
+    for field in ["text", "value"] {
+      if fields.get(field) is Some(String(value)) && value != "" {
+        result.push(value)
+      }
+    }
+    if fields.get("children") is Some(Array(children)) {
+      for child in children {
+        result.append(keyed_lifetime_texts(child))
+      }
+    }
+  }
+  result
+}
+
+///|
+fn keyed_lifetime_snapshot_texts(
+  runtime : PageRuntime,
+  id : String,
+) -> Array[String] {
+  let snapshot = @json.parse(runtime.snapshot()) catch {
+    _ => abort("invalid runtime snapshot")
+  }
+  keyed_lifetime_texts(keyed_lifetime_find(snapshot, id).unwrap())
+}
+
+///|
+test "keyed empty rows preserve local state on moves and refresh or dispose event handlers" {
+  let scopes : Map[String, Int] = Map([])
+  let renders : Map[String, Int] = Map([])
+  let definition = page(
+    id="keyed_lifetime",
+    route=route("pages/keyed-lifetime/index"),
+    title="Keyed lifetime",
+    build=_ => {
+      let a : KeyedLifetimeRowSpec = { shape: Fragment, version: 1, }
+      let b : KeyedLifetimeRowSpec = { shape: View, version: 1, }
+      let (entries, set_entries) = create_variable(
+        @vector.from_array([("a", a), ("b", b)]),
+      )
+      let (selected, set_selected) = create_variable("none")
+      let rows = entries.assoc((key, input) => {
+        scopes[key] = scopes.get(key).unwrap_or(0) + 1
+        let (count, set_count) = create_variable(0)
+        Val::map2(input, count, (spec, count) => {
+          renders[key] = renders.get(key).unwrap_or(0) + 1
+          let node = match spec.shape {
+            Empty => nothing()
+            EmptyFragment => fragment([])
+            Fragment | View => {
+              let pick = button(
+                on_tap=batch([
+                  set_count(current => current + 1),
+                  set_selected(_ => key + ":v" + spec.version.to_string()),
+                ]),
+                event_key="row-" + key + "-pick",
+                key +
+                ":v" +
+                spec.version.to_string() +
+                ":count" +
+                count.to_string(),
+              )
+              if spec.shape == Fragment {
+                fragment([pick])
+              } else {
+                div([pick])
+              }
+            }
+          }
+          (key, node)
+        })
+      })
+      let controls = div([
+        button(
+          event_key="rows-reverse",
+          on_tap=set_entries(_ => @vector.from_array([("b", b), ("a", a)])),
+          "reverse",
+        ),
+        button(
+          event_key="rows-evolve",
+          on_tap=set_entries(_ => {
+            @vector.from_array([("a", { shape: View, version: 2, }), ("b", b)])
+          }),
+          "evolve and move",
+        ),
+        button(
+          event_key="rows-empty-fragment",
+          on_tap=set_entries(_ => {
+            @vector.from_array([
+              ("b", b),
+              ("a", { shape: EmptyFragment, version: 3, }),
+            ])
+          }),
+          "empty fragment and move",
+        ),
+        button(
+          event_key="rows-show",
+          on_tap=set_entries(_ => {
+            @vector.from_array([
+              ("a", { shape: Fragment, version: 4, }),
+              ("b", b),
+            ])
+          }),
+          "show and move",
+        ),
+        button(
+          event_key="rows-empty",
+          on_tap=set_entries(_ => {
+            @vector.from_array([("b", b), ("a", { shape: Empty, version: 5, })])
+          }),
+          "empty and move",
+        ),
+        button(
+          event_key="rows-remove",
+          on_tap=set_entries(_ => @vector.from_array([("b", b)])),
+          "remove",
+        ),
+        button(
+          event_key="rows-restore",
+          on_tap=set_entries(_ => {
+            @vector.from_array([("a", { shape: View, version: 6, }), ("b", b)])
+          }),
+          "restore",
+        ),
+      ])
+      Val::view2(rows, selected, (rows, selected) => {
+        div([
+          controls,
+          p(id="selected-row", selected),
+          div(
+            id="keyed-rows",
+            keyed_fragment(
+              rows.to_array().map(entry => keyed(entry.0, entry.1)),
+            ),
+          ),
+        ])
+      })
+    },
+  )
+  let runtime = definition.create_runtime().unwrap()
+  ignore(runtime.lifecycle("onLoad", "{}"))
+  let _ = runtime.mount()
+  // Contract previews may also build scopes; measure only the mounted runtime.
+  let mounted_scopes = (scopes["a"], scopes["b"])
+  let mounted_renders = (renders["a"], renders["b"])
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "a:v1:count0", "b:v1:count0",
+  ])
+  let _ = runtime.dispatch("row-a-pick", "{}")
+  let _ = runtime.dispatch("row-b-pick", "{}")
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "a:v1:count1", "b:v1:count1",
+  ])
+  assert_eq(
+    (renders["a"], renders["b"]),
+    (mounted_renders.0 + 1, mounted_renders.1 + 1),
+  )
+  let before_reorder = (renders["a"], renders["b"])
+  let _ = runtime.dispatch("rows-reverse", "{}")
+  assert_eq((scopes["a"], scopes["b"]), mounted_scopes)
+  assert_eq((renders["a"], renders["b"]), before_reorder)
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "b:v1:count1", "a:v1:count1",
+  ])
+  let _ = runtime.dispatch("row-a-pick", "{}")
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "selected-row"), ["a:v1"])
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "b:v1:count1", "a:v1:count2",
+  ])
+  let before_evolve = renders["a"]
+  let _ = runtime.dispatch("rows-evolve", "{}")
+  assert_eq((scopes["a"], scopes["b"]), mounted_scopes)
+  assert_eq((renders["a"], renders["b"]), (before_evolve + 1, before_reorder.1))
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "a:v2:count2", "b:v1:count1",
+  ])
+  let _ = runtime.dispatch("row-a-pick", "{}")
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "selected-row"), ["a:v2"])
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "a:v2:count3", "b:v1:count1",
+  ])
+  let _ = runtime.dispatch("rows-empty-fragment", "{}")
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "b:v1:count1",
+  ])
+  let empty_fragment_snapshot = runtime.snapshot()
+  assert_true(runtime.dispatch("row-a-pick", "{}").contains("unknown_event"))
+  assert_eq(runtime.snapshot(), empty_fragment_snapshot)
+  let _ = runtime.dispatch("rows-show", "{}")
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "a:v4:count3", "b:v1:count1",
+  ])
+  let _ = runtime.dispatch("row-a-pick", "{}")
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "selected-row"), ["a:v4"])
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "a:v4:count4", "b:v1:count1",
+  ])
+  let _ = runtime.dispatch("rows-empty", "{}")
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "b:v1:count1",
+  ])
+  let empty_snapshot = runtime.snapshot()
+  assert_true(runtime.dispatch("row-a-pick", "{}").contains("unknown_event"))
+  assert_eq(runtime.snapshot(), empty_snapshot)
+  assert_eq((scopes["a"], scopes["b"]), mounted_scopes)
+  let _ = runtime.dispatch("rows-remove", "{}")
+  let removed_snapshot = runtime.snapshot()
+  assert_true(runtime.dispatch("row-a-pick", "{}").contains("unknown_event"))
+  assert_eq(runtime.snapshot(), removed_snapshot)
+  let before_restore = renders["a"]
+  let _ = runtime.dispatch("rows-restore", "{}")
+  assert_eq(
+    (scopes["a"], scopes["b"]),
+    (mounted_scopes.0 + 1, mounted_scopes.1),
+  )
+  assert_eq(renders["a"], before_restore + 1)
+  assert_eq(renders["b"], before_reorder.1)
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "a:v6:count0", "b:v1:count1",
+  ])
+  let _ = runtime.dispatch("row-a-pick", "{}")
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "selected-row"), ["a:v6"])
+  assert_eq(keyed_lifetime_snapshot_texts(runtime, "keyed-rows"), [
+    "a:v6:count1", "b:v1:count1",
+  ])
+  let _ = runtime.dispose()
+}
+
+///|
 test "semantics stay typed in the normalized tree and shared WXML" {
   let definition = page(
     id="semantic_surface",

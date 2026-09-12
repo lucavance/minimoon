@@ -82,7 +82,7 @@ ceiling and 16 KiB reserve.
 - [`reference/moonbit_ownership.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/moonbit_ownership.md)
 - [`reference/performance_baseline.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/performance_baseline.md)
 - [`reference/compatibility_and_upgrades.md`](reference/compatibility_and_upgrades.md)
-- [`reference/rabbita_and_rui_audit.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) — historical pre-migration comparison of all 64 RUI entries
+- [`reference/rabbita_and_rui_audit.md`](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) — historical RUI comparison and 2026-09-12 upstream follow-up with provenance, interface checks and regression scope
 - [UI guide](https://github.com/lucavance/minimoon/blob/main/ui/README.mbt.md), [changelog](https://github.com/lucavance/minimoon/blob/main/ui/CHANGELOG.md), [migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md), and [six-page showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
 
 ## Operations

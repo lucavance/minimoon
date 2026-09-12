@@ -204,6 +204,75 @@ test "renderer v6 keyed diff composes remove insert move and nested set" {
 }
 
 ///|
+fn patch_test_keyed_shapes(value : String) -> Array[Json] {
+  [
+    patch_test_node("empty", "k:a", "", []),
+    patch_test_node("fragment", "k:a", "", []),
+    patch_test_node("fragment", "k:a", "", [
+      patch_test_node("text", "i:0", value, []),
+    ]),
+    patch_test_node("text", "k:a", value, []),
+    patch_test_node("view", "k:a", "", [
+      patch_test_node("text", "i:0", value, []),
+    ]),
+  ]
+}
+
+///|
+test "keyed shape transitions reconstruct exact trees during moves and remounts" {
+  let b = patch_test_node("text", "k:b", "B", [])
+  let c = patch_test_node("text", "k:c", "C", [])
+  for old_a in patch_test_keyed_shapes("before") {
+    for next_a in patch_test_keyed_shapes("after") {
+      for positions in [(0, 0), (0, 2), (2, 0)] {
+        let (from, to) = positions
+        let old_children = [b, c]
+        old_children.insert(from, old_a)
+        let next_children = [b, c]
+        next_children.insert(to, next_a)
+        let old_tree = patch_test_node("fragment", "root", "", old_children)
+        let next_tree = patch_test_node("fragment", "root", "", next_children)
+        let ops = patch_test_diff(old_tree, next_tree)
+        assert_eq(patch_test_apply(old_tree, ops), next_tree)
+        if from != to {
+          assert_eq(ops.length(), 1)
+          match ops[0] {
+            MoveTreeChild(_, moved_from, moved_to, identity, item) => {
+              assert_eq(moved_from, from)
+              assert_eq(moved_to, to)
+              assert_eq(identity, "k:a")
+              assert_eq(item, next_a)
+            }
+            _ => fail("expected the changed keyed node to move once")
+          }
+        } else {
+          assert_eq(ops.any(op => op is MoveTreeChild(_, _, _, _, _)), false)
+          if tree_node_field(old_a, "kind") != tree_node_field(next_a, "kind") {
+            assert_eq(ops.length(), 1)
+            assert_true(ops[0] is SpliceTreeChildren(_, 0, 1, _))
+          }
+        }
+      }
+    }
+  }
+
+  let removed_tree = patch_test_node("fragment", "root", "", [b, c])
+  for a in patch_test_keyed_shapes("remounted") {
+    for position in [0, 2] {
+      let children = [b, c]
+      children.insert(position, a)
+      let mounted_tree = patch_test_node("fragment", "root", "", children)
+      let remove_ops = patch_test_diff(mounted_tree, removed_tree)
+      assert_eq(remove_ops.length(), 1)
+      assert_eq(patch_test_apply(mounted_tree, remove_ops), removed_tree)
+      let insert_ops = patch_test_diff(removed_tree, mounted_tree)
+      assert_eq(insert_ops.length(), 1)
+      assert_eq(patch_test_apply(removed_tree, insert_ops), mounted_tree)
+    }
+  }
+}
+
+///|
 test "renderer v6 unkeyed length change replaces only the changed tail" {
   let old_tree = patch_test_node("fragment", "root", "", [
     patch_test_node("text", "i:0", "A", []),

@@ -78,6 +78,156 @@ test "retained normalization visits only changed nodes and commits cache transac
 }
 
 ///|
+fn retained_shape_tree(
+  root_id : Int,
+  a : @ui.Node?,
+  last? : Bool = false,
+) -> @ui.Node {
+  let children = [
+    @ui.keyed("b", @ui.retained(2, @ui.text("B"))),
+    @ui.keyed("c", @ui.retained(3, @ui.text("C"))),
+  ]
+  if a is Some(a) {
+    children.insert(if last { 2 } else { 0 }, @ui.keyed("a", a))
+  }
+  @ui.retained(root_id, @ui.keyed_fragment(children))
+}
+
+///|
+test "retained keyed shape changes reuse siblings and prune removed descendants" {
+  let events : Map[String, PageEvent[Unit]] = Map([])
+  let event_list : Array[PageEvent[Unit]] = []
+  let entries : Ref[Map[String, NormalizedCacheEntry]] = Ref(Map([]))
+  let roots : Ref[Array[String]] = Ref([])
+  let a_path = keyed_normalization_path("root", "a")
+  let a_child_path = indexed_normalization_path(a_path, 0)
+  let b_key = retained_cache_key(2, keyed_normalization_path("root", "b"))
+  let c_key = retained_cache_key(3, keyed_normalization_path("root", "c"))
+  let shapes = [
+    @ui.retained(10, @ui.nothing()),
+    @ui.retained(20, @ui.fragment([])),
+    @ui.retained(
+      30,
+      @ui.fragment([@ui.retained(31, @ui.text("fragment child"))]),
+    ),
+    @ui.retained(40, @ui.text("plain text")),
+    @ui.retained(
+      50,
+      @ui.element("view", children=[@ui.retained(51, @ui.text("view child"))]),
+    ),
+  ]
+  for index = 0; index < shapes.length(); index = index + 1 {
+    let a_id = (index + 1) * 10
+    let nested_count = if index == 2 || index == 4 { 1 } else { 0 }
+    let source = retained_shape_tree(100 + index * 3, Some(shapes[index]))
+    let candidate = normalize_miniapp_tree_cached_checked(
+      source,
+      events,
+      entries.val,
+    ).unwrap()
+    assert_eq(
+      candidate.tree,
+      normalize_miniapp_tree_checked(source, event_list).unwrap(),
+    )
+    assert_eq(candidate.work.cache_hits, if index == 0 { 0 } else { 2 })
+    assert_eq(
+      candidate.work.node_visits,
+      (if index == 0 { 4 } else { 2 }) + nested_count,
+    )
+    commit_normalized_candidate(candidate, entries, roots)
+    assert_eq(entries.val.length(), 4 + nested_count)
+    assert_true(entries.val.contains(retained_cache_key(a_id, a_path)))
+    assert_true(entries.val.contains(b_key))
+    assert_true(entries.val.contains(c_key))
+    if index > 0 {
+      assert_eq(
+        entries.val.contains(retained_cache_key(a_id - 10, a_path)),
+        false,
+      )
+    }
+    if index == 3 {
+      assert_eq(
+        entries.val.contains(retained_cache_key(31, a_child_path)),
+        false,
+      )
+    }
+
+    for offset in [1, 2] {
+      let reordered = retained_shape_tree(
+        100 + index * 3 + offset,
+        Some(shapes[index]),
+        last=offset == 1,
+      )
+      let candidate = normalize_miniapp_tree_cached_checked(
+        reordered,
+        events,
+        entries.val,
+      ).unwrap()
+      assert_eq(
+        candidate.tree,
+        normalize_miniapp_tree_checked(reordered, event_list).unwrap(),
+      )
+      assert_eq(candidate.work.node_visits, 1)
+      assert_eq(candidate.work.cache_hits, 3)
+      commit_normalized_candidate(candidate, entries, roots)
+      assert_eq(entries.val.length(), 4 + nested_count)
+      if nested_count == 1 {
+        assert_true(
+          entries.val.contains(retained_cache_key(a_id + 1, a_child_path)),
+        )
+      }
+    }
+  }
+
+  let removed = retained_shape_tree(200, None)
+  let candidate = normalize_miniapp_tree_cached_checked(
+    removed,
+    events,
+    entries.val,
+  ).unwrap()
+  assert_eq(
+    candidate.tree,
+    normalize_miniapp_tree_checked(removed, event_list).unwrap(),
+  )
+  assert_eq(candidate.work.node_visits, 1)
+  assert_eq(candidate.work.cache_hits, 2)
+  commit_normalized_candidate(candidate, entries, roots)
+  assert_eq(entries.val.length(), 3)
+  assert_eq(entries.val.contains(retained_cache_key(50, a_path)), false)
+  assert_eq(entries.val.contains(retained_cache_key(51, a_child_path)), false)
+  assert_true(entries.val.contains(b_key))
+  assert_true(entries.val.contains(c_key))
+
+  let remounted = retained_shape_tree(
+    201,
+    Some(
+      @ui.retained(
+        60,
+        @ui.fragment([@ui.retained(61, @ui.text("remounted child"))]),
+      ),
+    ),
+    last=true,
+  )
+  let candidate = normalize_miniapp_tree_cached_checked(
+    remounted,
+    events,
+    entries.val,
+  ).unwrap()
+  assert_eq(
+    candidate.tree,
+    normalize_miniapp_tree_checked(remounted, event_list).unwrap(),
+  )
+  assert_eq(candidate.work.node_visits, 3)
+  assert_eq(candidate.work.cache_hits, 2)
+  commit_normalized_candidate(candidate, entries, roots)
+  assert_eq(entries.val.length(), 5)
+  assert_true(entries.val.contains(retained_cache_key(60, a_path)))
+  assert_true(entries.val.contains(retained_cache_key(61, a_child_path)))
+  assert_true(entries.val.contains(b_key))
+  assert_true(entries.val.contains(c_key))
+}
+
+///|
 test "rejected retained normalization leaves the committed cache authoritative" {
   let events : Map[String, PageEvent[Unit]] = Map([])
   let entries : Ref[Map[String, NormalizedCacheEntry]] = Ref(Map([]))

@@ -24,15 +24,20 @@ Rabbita 0.15.6 source). It delegates to Minimoon's declared `wx.request`
 capability instead of importing the browser HTTP implementation. The Apache-2.0
 license above applies; this source reference is not a package dependency.
 
-The [Rabbita/RUI audit](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md) compares the
-current implementation with Rabbita 0.15.6 and RUI 0.1.1 at commit
-`b1291945fd0201a0b5b39513b88585d6122db7bc`. These are comparison points, not
-new source attribution pins or package dependencies.
+The historical [Rabbita/RUI audit](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md)
+compared Minimoon 0.1.1 with Rabbita 0.15.6 and RUI 0.1.1 at commit
+`b1291945fd0201a0b5b39513b88585d6122db7bc`. Its
+[2026-09-12 follow-up](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md#2026-09-12-follow-up)
+reviews upstream `0a5836a3d303b7390d7067894ba8471cbd4ffcdf` against Minimoon
+`052d7af`. These review points do not replace the original source attribution
+pins or introduce package dependencies.
 
 RUI is separately MIT-licensed. Its notices also credit shadcn/ui Vega and
-React DayPicker. This audit and dependency update copy no RUI implementation
-or upstream visual recipes; any future adaptation must preserve the applicable
-notices and record its exact source revision.
+React DayPicker. The original audit and this follow-up copy no upstream
+implementation or visual recipes. The independent UI adaptation records its
+source pins and retained notices in [UI provenance](https://github.com/lucavance/minimoon/blob/main/ui/THIRD_PARTY_NOTICES.md).
+Future adaptations must preserve the applicable notices and record their exact
+source revisions.
 
 ## Development tooling
 
