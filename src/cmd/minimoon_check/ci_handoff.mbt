@@ -51,6 +51,7 @@ fn ci_handoff_check_source() -> String {
     #|    write(directory, file, fs.readFileSync(path.join(root, file)))
     #|  }
     #|  for (const [fixture, name] of fixtures) {
+    #|    write(directory, `${fixture}/moon.mod`, fs.readFileSync(path.join(root, fixture, "moon.mod")))
     #|    fs.cpSync(path.join(root, fixture, "dist"), path.join(directory, fixture, "dist"), {
     #|      recursive: true,
     #|      filter: (source) => !/(?:^project\.private\.config\.json$|evidence|\.pem$|\.key$|\.log$)/.test(path.basename(source)),
@@ -137,7 +138,7 @@ fn ci_handoff_check_source() -> String {
     #|    assert.equal(handoff.appDirectory, fixture)
     #|    assert.equal(handoff.fixture, name)
     #|    assert.equal(handoff.commit, commit)
-    #|    assert.equal(handoff.versions.minimoon, "0.2.0")
+    #|    assert.equal(handoff.versions.minimoon, "0.2.1")
     #|    assert.equal(handoff.versions.minimoonUi, "0.1.0")
     #|    const manifest = JSON.parse(fs.readFileSync(path.join(base, "manifest.json"), "utf8"))
     #|    const summary = JSON.parse(fs.readFileSync(path.join(base, "release_summary.json"), "utf8"))
@@ -204,6 +205,11 @@ fn ci_handoff_check_source() -> String {
     #|    reject(`${bundle}-symlink`, (dir) => fs.symlinkSync("app.js", path.join(dir, fixture, "dist/linked.js")), /symlinks/)
     #|  }
     #|  reject("wrong-pair", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.0"\nimport { "lampclaw/minimoon@0.1.1" }\n'), /reviewed core/)
+    #|  reject("changed-published-ui-dependency", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.0"\nimport { "lampclaw/minimoon@0.2.1" }\n'), /unchanged UI/)
+    #|  reject("wrong-core-version", (dir) => write(dir, "moon.mod", 'version = "0.2.0"\n'), /reviewed core/)
+    #|  for (const [fixture, , bundle] of fixtures) {
+    #|    reject(`${bundle}-old-core-dependency`, (dir) => write(dir, `${fixture}/moon.mod`, 'import { "lampclaw/minimoon@0.2.0" }\n'), /reviewed core dependency/)
+    #|  }
     #|  reject("wrong-ui-resource-version", (dir) => editJson(dir, "ui/examples/showcase/generated/manifest.json", (value) => { value.resources[0].version = "0.0.0" }), /matching versions/)
     #|  reject("missing-ui", (dir) => fs.unlinkSync(path.join(dir, "ui/examples/showcase/generated/manifest.json")))
     #|  const coreManifest = "examples/miniapp_draft_workbench/generated/manifest.json"

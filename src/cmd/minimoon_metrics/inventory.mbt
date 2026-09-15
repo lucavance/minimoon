@@ -190,7 +190,7 @@ fn embedded_inventory(
   )
   add(
     "src/tooling_miniapp/generator.mbt",
-    "fn:generate",
+    "fn:generate_prepared",
     "production",
     SelectedLiterals(false, [
       ("require(\"./minimoon.app.js\")", 1),

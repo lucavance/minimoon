@@ -6,16 +6,35 @@ Keep registry-based Starter onboarding and English/Chinese documentation
 consistent: application authors begin with
 `moon install lampclaw/minimoon/cmd/minimoon` and `minimoon init my-app`.
 Source installation remains available for framework development and unpublished
-changes. For future releases, complete the exact-artifact release prerequisites
-and validate fresh registry consumers when publication is authorized.
+changes. The current release candidate is core `0.2.1`; UI stays at its published
+`0.1.0`. Complete exact-artifact release prerequisites and fresh registry consumers
+before recording publication.
 Implemented capabilities are described below; release readiness is separate
 from implementation completion. Deferred directions are not dated feature
 commitments.
 
+## 0.2.1 patch candidate
+
+- Ship the shared-host input/textarea fix so value changes preserve unchanged
+  native focus and selection properties.
+- Preserve the previous distributable, build metadata and configured stylesheet
+  when an ordinary build fails; retain private project settings. Diagnostics may
+  update, and a later verification failure keeps the newly built output.
+- Make registry onboarding lead directly to importing `dist/` into Developer
+  Tools, and document upgrading both the CLI and application dependency.
+- Preserve the checked 0.2 public API, Contract `11`, ABI `13` and protocol `8`.
+  Validate core `0.2.1` with the already published UI `0.1.0`, whose manifest still
+  declares core `0.2.0`; do not republish UI under an occupied version.
+
+Acceptance requires the repository gates, both frozen CI handoff bundles, the
+user's exact-fingerprint Skyline checks, local release verification and fresh
+registry-only Starter/UI consumers. Candidate generation does not establish a
+host pass or registry availability. See the [release runbook](operations/release_candidate_handoff.md).
+
 ## Draft Workbench demonstration
 
-Core `0.2.0` and UI `0.1.0` are published; product APIs and dependencies remain
-frozen for this example iteration. The former Conformance engineering name is
+The published baseline is core `0.2.0` with UI `0.1.0`; the `0.2.1` candidate
+keeps its public APIs. The former Conformance engineering name is
 migrated to `miniapp_draft_workbench`, keeping its core verification responsibility.
 
 Four business Tabs — 工作台 / 草稿 / 联机 / 更多 — connect local CRUD with
@@ -25,8 +44,8 @@ run; successful storage is required before reporting saved records.
 
 The shallow curved hero and fixed safe navigation geometry are retained.
 No backend, account, cloud sync, autosave or UI component expansion is planned.
-The renamed core artifact needs new host acceptance; unchanged UI/Starter bytes
-are not a new UI migration. Before the user's contest deadline, prioritize
+Both changed fixture artifacts need new host acceptance; the UI package itself
+is unchanged. Before the user's contest deadline, prioritize
 regression, device validation and a reproducible three-minute demonstration.
 See the [workbench guide](../examples/miniapp_draft_workbench/README.md).
 
@@ -141,13 +160,14 @@ is local and Git-ignored, just like the core fixture's evidence above.
 
 ## Release preparation
 
-Core `0.2.0` and UI `0.1.0` were published on 2026-09-09. Future package changes
-require new, unoccupied versions and the full release validation cycle.
-Freeze the synchronized documentation, core/UI archives, source commit and
+Core `0.2.0` and UI `0.1.0` were published on 2026-09-09. Core `0.2.1` is the
+next patch candidate and requires the full release validation cycle.
+Freeze the synchronized documentation, reviewed packages, source commit and
 two CI handoff bundles before manual acceptance. Follow the
 [release runbook](operations/release_candidate_handoff.md): both fixtures need
 real Skyline acceptance, then local release gates, candidate report restoration,
-and unchanged fingerprints before core-first/UI-second registry publication.
+and unchanged fingerprints before publishing core `0.2.1` only. UI `0.1.0`
+remains the existing registry dependency.
 Fresh consumers outside all workspaces verify actual registry resolution.
 Current publication availability belongs in
 [project status](project_status.md), not in immutable package contents.

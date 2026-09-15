@@ -154,6 +154,7 @@ pub async fn generate_tailwind(loaded : Json) -> Unit {
   let node_root = find_node_root(app_dir)
   let temp_dir = join(temp_root, "tailwind")
   @fs.mkdir(temp_dir, permission=0o700, recursive=true)
+  defer (if @fs.exists(temp_root) { @fs.rmdir(temp_root, recursive=true) })
   let input = string(loaded, "tailwindInputAbs")
   let resolved_input = join(
     Path::dirname(input).to_string(),
@@ -173,7 +174,13 @@ pub async fn generate_tailwind(loaded : Json) -> Unit {
     .split("@import 'tailwindcss'")
     .collect()
     .join("@import '" + tailwind_package + "'")
-  write(resolved_input, source)
+  @fs.write_file(
+    resolved_input,
+    source,
+    create_mode=CreateNew,
+    permission=0o600,
+  )
+  defer (if @fs.exists(resolved_input) { @fs.remove(resolved_input) })
   write(adapter, adapter_source())
   let routes = array(field(loaded, "appMetadata"), "pages").map(page => {
     field(page, "route")
@@ -217,10 +224,6 @@ pub async fn generate_tailwind(loaded : Json) -> Unit {
   } catch {
     err => Some("\{err}")
   }
-  if @fs.exists(resolved_input) {
-    @fs.remove(resolved_input)
-  }
-  @fs.rmdir(temp_root, recursive=true)
   match result {
     Some(message) => raise Failure::Failure(message)
     None => ()
@@ -238,10 +241,77 @@ pub async fn build(
   } else {
     Path::join(root, config_path).normalize().to_string()
   }
-  let generated = @miniapp_tooling.generate(config_file, mode)
-  generate_tailwind(generated)
-  @miniapp_tooling.write_release_summary(generated, mode)
-  let dist = string(generated, "distDirAbs")
+  let prepared = @miniapp_tooling.prepare_build(config_file)
+  let app_root = prepared.app_root()
+  let base = join(app_root, "_build/minimoon-build")
+  @fs.mkdir(base, permission=0o700, recursive=true) catch {
+    error =>
+      if !@fs.exists(base) || @fs.kind(base) != @fs.Directory {
+        raise error
+      }
+  }
+  let lock = @fs.open(
+    join(base, "build.lock"),
+    mode=ReadWrite,
+    create_mode=OpenOrCreate,
+    permission=0o600,
+  )
+  defer lock.close()
+  guard lock.try_lock(Exclusive) else {
+    raise Failure("another Minimoon build is already running for " + app_root)
+  }
+  let transaction = new_build_transaction(base)
+  let preserve_backup = Ref(false)
+  errdefer (if !preserve_backup.val { cleanup_build_transaction(transaction) })
+  let diagnostics_file = join(app_root, "generated/diagnostics.json")
+  // Diagnostics describe this attempt independently of committed artifacts.
+  // Clearing under the lock avoids stale errors and preserves repeated precise
+  // compiler errors even when their serialized bytes are identical.
+  if @fs.exists(diagnostics_file) {
+    @fs.remove(diagnostics_file)
+  }
+  let outcome = try {
+    let generated = @miniapp_tooling.generate_staged(
+      prepared,
+      mode,
+      join(transaction, "next"),
+    )
+    generate_tailwind(generated)
+    @miniapp_tooling.write_release_summary(generated, mode)
+    // Recheck destination kinds after subprocesses finish, before any promotion.
+    for entry in build_replacements(generated) {
+      @miniapp_tooling.validate_output_path(
+        app_root,
+        Path::relative(entry.target, base=app_root).to_string(),
+        entry.target == string(generated, "distDirFinalAbs"),
+      )
+    }
+    promote_build_outputs(
+      build_replacements(generated),
+      join(transaction, "backup"),
+    )
+    Ok(generated)
+  } catch {
+    error => Err(error)
+  }
+  let generated = match outcome {
+    Ok(generated) => generated
+    Err(error) => {
+      match error {
+        BuildRecoveryError(_) => preserve_backup.val = true
+        _ => ()
+      }
+      @miniapp_tooling.write_build_failure(config_file, "\{error}") catch {
+        diagnostic_error =>
+          println(
+            "minimoon: could not write build diagnostic: \{diagnostic_error}",
+          )
+      }
+      raise error
+    }
+  }
+  cleanup_build_transaction(transaction)
+  let dist = string(generated, "distDirFinalAbs")
   println(
     "MiniApp " +
     string(generated, "name", fallback="app") +

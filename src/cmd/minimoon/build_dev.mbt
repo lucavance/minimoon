@@ -75,8 +75,7 @@ async fn run_dev(cwd : String, target : String?, debounce_ms : Int) -> Unit {
       error => Some("\{error}")
     }
     match result {
-      Some(error) =>
-        println(label + " failed; keeping the last valid dist\n" + error)
+      Some(error) => println(label + " failed\n" + error)
       None => println(label + " ready")
     }
   }

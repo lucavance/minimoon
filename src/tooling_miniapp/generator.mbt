@@ -15,9 +15,27 @@ fn devtools_checks(raw : Json) -> Array[String] {
 
 ///|
 pub async fn generate(config_path : String, mode : String) -> Json {
-  let config_file = Path::normalize(config_path).to_string()
-  let app_root = dirname(config_file)
-  let document = load_config_document(config_file)
+  generate_prepared(prepare_build(config_path), mode, None)
+}
+
+///|
+pub async fn generate_staged(
+  prepared : PreparedBuild,
+  mode : String,
+  staging_root : String,
+) -> Json {
+  generate_prepared(prepared, mode, Some(staging_root))
+}
+
+///|
+async fn generate_prepared(
+  prepared : PreparedBuild,
+  mode : String,
+  staging_root : String?,
+) -> Json {
+  let config_file = prepared.config_file
+  let app_root = prepared.app_root
+  let document = prepared.document
   let raw = document.value
   let application = object(raw, "MiniApp config").get("application")
   let name = string(raw, "name")
@@ -146,14 +164,15 @@ pub async fn generate(config_path : String, mode : String) -> Json {
   )
   let app_runtime_bytes = @utf8.encode(app_runtime).length()
   let component_theme = string(raw, "componentTheme")
-  let dist_relative = app_relative_path(
-    string(raw, "distDir", fallback="dist"),
-    "distDir",
-  )
-  let dist = join(app_root, dist_relative)
+  let final_dist = join(app_root, prepared.dist)
+  let dist = match staging_root {
+    Some(root) => join(root, "dist")
+    None => final_dist
+  }
+  let original_private_config = join(final_dist, "project.private.config.json")
   let private_config_file = join(dist, "project.private.config.json")
-  let private_config = if @fs.exists(private_config_file) {
-    Some(@fs.read_file(private_config_file).binary())
+  let private_config = if @fs.exists(original_private_config) {
+    Some(@fs.read_file(original_private_config).binary())
   } else {
     None
   }
@@ -195,7 +214,7 @@ pub async fn generate(config_path : String, mode : String) -> Json {
         private_config_file,
         content,
         create_mode=CreateOrTruncate,
-        permission=0o644,
+        permission=0o600,
       )
     None => ()
   }
@@ -210,7 +229,7 @@ pub async fn generate(config_path : String, mode : String) -> Json {
   for index = 0; index < contracts.length(); index = index + 1 {
     write_page(dist, contracts[index], index)
   }
-  let generated = join(app_root, "generated")
+  let generated = join(staging_root.unwrap_or(app_root), "generated")
   let shared_modules = [
     Json::string("minimoon.runtime.js"),
     Json::string("minimoon.host.js"),
@@ -249,7 +268,7 @@ pub async fn generate(config_path : String, mode : String) -> Json {
     "pages": Json::array(contracts),
   })
   write_json(join(generated, "manifest.json"), manifest)
-  write_config_diagnostics(config_file, [])
+  write_config_diagnostics(config_file, [], output_dir=generated)
   write_json(
     join(generated, "expected_set_data.json"),
     Json::array(contracts.map(contract => field(contract, "initialTree"))),
@@ -279,22 +298,30 @@ pub async fn generate(config_path : String, mode : String) -> Json {
       "checks": Json::array(smoke_checks),
     }),
   )
-  let tailwind_input_relative = app_relative_path(
-    string(raw, "tailwindInput", fallback="styles/tailwind.css"),
-    "tailwindInput",
-  )
-  let source_wxss_relative = app_relative_path(
-    string(raw, "sourceWxss", fallback="styles/app.wxss"),
-    "sourceWxss",
-  )
+  let final_source_wxss = join(app_root, prepared.source_wxss)
+  let source_wxss = match staging_root {
+    None => final_source_wxss
+    Some(root) =>
+      if contains_path(prepared.dist, prepared.source_wxss) {
+        join(
+          dist,
+          Path::relative(final_source_wxss, base=final_dist).to_string(),
+        )
+      } else {
+        join(root, "source.wxss")
+      }
+  }
   Json::object({
     "schemaVersion": json_int(@versions.app_contract_version()),
     "name": Json::string(name),
     "configPath": Json::string(config_file),
     "fixtureDirAbs": Json::string(app_root),
     "distDirAbs": Json::string(dist),
-    "tailwindInputAbs": Json::string(join(app_root, tailwind_input_relative)),
-    "sourceWxssAbs": Json::string(join(app_root, source_wxss_relative)),
+    "distDirFinalAbs": Json::string(final_dist),
+    "generatedDirAbs": Json::string(generated),
+    "tailwindInputAbs": Json::string(join(app_root, prepared.tailwind_input)),
+    "sourceWxssAbs": Json::string(source_wxss),
+    "sourceWxssFinalAbs": Json::string(final_source_wxss),
     "componentTheme": Json::string(component_theme),
     "resourcesWxss": field(resources, "wxss"),
     "appMetadata": Json::object({
@@ -313,7 +340,10 @@ pub async fn generate(config_path : String, mode : String) -> Json {
 pub async fn write_release_summary(build : Json, mode : String) -> Unit {
   let app_root = string(build, "fixtureDirAbs")
   write_json(
-    join(app_root, "generated/release_summary.json"),
+    join(
+      string(build, "generatedDirAbs", fallback=join(app_root, "generated")),
+      "release_summary.json",
+    ),
     Json::object({
       "schemaVersion": json_int(@versions.app_contract_version()),
       "runtimeApiVersion": json_int(@versions.runtime_api_version()),

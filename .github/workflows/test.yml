@@ -91,9 +91,10 @@ jobs:
           set -euo pipefail
           core_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' moon.mod)"
           ui_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' ui/moon.mod)"
-          if [ "$core_version" != "0.2.0" ] || [ "$ui_version" != "0.1.0" ] ||
-             ! grep -Fq "\"lampclaw/minimoon@$core_version\"" ui/moon.mod; then
-            echo "CI handoff requires the reviewed core 0.2.0 / UI 0.1.0 release pair" >&2
+          # UI 0.1.0 retains its published core dependency declaration.
+          if [ "$core_version" != "0.2.1" ] || [ "$ui_version" != "0.1.0" ] ||
+             ! grep -Fq '"lampclaw/minimoon@0.2.0"' ui/moon.mod; then
+            echo "CI handoff requires the reviewed core 0.2.1 / UI 0.1.0 pair and unchanged UI core 0.2.0 declaration" >&2
             exit 1
           fi
           moon_version="$(moon version --all)"
@@ -102,6 +103,10 @@ jobs:
 
           package_handoff() {
             local fixture="$1" name="$2" bundle="$3" page_count="$4"
+            if ! grep -Fq "\"lampclaw/minimoon@$core_version\"" "$fixture/moon.mod"; then
+              echo "$fixture: handoff requires the reviewed core dependency" >&2
+              exit 1
+            fi
             local handoff_dir="_build/devtools-handoff/$bundle"
             local report="$fixture/generated/verify_report.json"
             local fingerprint file

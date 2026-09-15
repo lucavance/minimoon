@@ -212,9 +212,18 @@ fn issue_json(issue : ConfigIssue) -> Json {
 async fn write_config_diagnostics(
   config_file : String,
   issues : Array[ConfigIssue],
+  output_dir? : String,
 ) -> Unit {
+  let directory = output_dir.unwrap_or(join(dirname(config_file), "generated"))
+  if output_dir is None {
+    validate_output_path(
+      dirname(config_file),
+      "generated/diagnostics.json",
+      false,
+    )
+  }
   write_json(
-    join(dirname(config_file), "generated/diagnostics.json"),
+    join(directory, "diagnostics.json"),
     Json::object({
       "schemaVersion": Json::number(1.0, repr="1"),
       "status": Json::string(

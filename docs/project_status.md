@@ -6,6 +6,21 @@ for the exact source commit and registry archives. The 0.1 API consumer remains
 a frozen historical record; current API gates compile the 0.2 consumer.
 Public generated reports intentionally retain reproducible candidate state.
 
+## 0.2.1 candidate: not published
+
+The current source prepares core `0.2.1`, with the shared-host input/selection
+fix, staged build-output preservation and clearer registry onboarding. Public
+core APIs, App Contract `11`, runtime ABI `13` and renderer protocol `8` stay
+unchanged. UI remains the published `0.1.0`, whose manifest declares core
+`0.2.0`; the candidate must also validate that published UI with resolved core
+`0.2.1` before release.
+
+Core `0.2.1` has not been published. Its two exact candidate bundles still need
+the user's WeChat Developer Tools acceptance and the release runbook's local
+gates. This section records no new real-host pass. Until publication, obtain
+the patch through the source workflow; the default unversioned registry install
+continues to select the latest available published CLI.
+
 ## Current implementation
 
 For application authors, the README and [quickstart](guides/miniapp_quickstart.md)
@@ -33,17 +48,24 @@ not real-host evidence. Both examples now default to public Apifox Echo; the liv
 probe covers Platform's ten cases, App draft echo after editor unload and the UI
 Form's typed echo. The service switch changes both fingerprints and requires new
 host acceptance; public echo remains a testing service, not cloud persistence.
-Product versions, Contract `11`, runtime ABI `13` and
-renderer protocol `8` do not change. New workbench bytes need fresh host acceptance;
+The patch changes only the core product version to `0.2.1`; Contract `11`,
+runtime ABI `13` and renderer protocol `8` do not change. New workbench bytes
+need fresh host acceptance;
 the publication checkpoint below remains the earlier immutable release.
 
-The workspace also contains an unpublished shared-host input fix: value edits
+The `0.2.1` candidate includes the shared-host input fix: value edits
 do not replay unchanged native focus/selection properties. The draft title input
 has a taller layout intended to avoid clipping. Use the repository CLI or its
 generated artifacts; the published `0.2.0` registry CLI does not include this
 fix. Both core and UI artifact fingerprints change and need fresh real-host
 acceptance. Automated host-write checks do not establish native cursor or IME
 correctness.
+
+The candidate also stages build output before replacing the previous files.
+Ordinary build failures retain the previous `dist/`, build metadata and configured
+stylesheet while allowing current diagnostics to update. Private project settings
+are preserved. A subsequent verification failure keeps the new output and failed
+report for diagnosis; this does not promise crash or power-loss recovery.
 
 The current authoring revision makes ordinary `page` builders, typed state
 constructors and `Val` composition the primary style, retaining `elmish_page`

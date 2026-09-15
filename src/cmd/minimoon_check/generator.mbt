@@ -616,9 +616,7 @@ async fn generator_suite(root : String) -> Unit {
         app,
         "Run `bun install` in the Minimoon app directory",
       )
-      guard !@fs.exists(join(app, ".minimoon-tmp")) else {
-        abort("dependency lookup failure left .minimoon-tmp behind")
-      }
+      require_no_initial_build_outputs(app)
     }
     let tailwind = @fs.read_file(join(app, "styles/tailwind.css")).text()
     guard !tailwind.contains("tooling_miniapp") &&
@@ -645,10 +643,7 @@ async fn generator_suite(root : String) -> Unit {
         app,
         "Tailwind generation failed",
       )
-      guard !@fs.exists(join(app, ".minimoon-tmp")) &&
-        !@fs.exists(join(app, "styles/.minimoon-tailwind-input.css")) else {
-        abort("Tailwind failure left temporary files behind")
-      }
+      require_no_initial_build_outputs(app)
       @fs.write_file(
         input,
         tailwind,
@@ -750,7 +745,7 @@ async fn generator_suite(root : String) -> Unit {
       let page_file = join(app, "src/pages/home/page.mbt")
       onboarding_gate(root, app, executable)
       let page_source = @fs.read_file(page_file).text()
-      let dist_app = @fs.read_file(join(app, "dist/app.json")).text()
+      let previous_outputs = build_output_snapshot(app)
       @fs.write_file(
         page_file,
         page_source + "\nthis is not valid MoonBit\n",
@@ -765,8 +760,22 @@ async fn generator_suite(root : String) -> Unit {
         "MMN2001",
       )
       require_text(app, "generated/diagnostics.json", "MMN2001")
-      guard @fs.read_file(join(app, "dist/app.json")).text() == dist_app else {
-        abort("page compile failure changed the last valid dist")
+      let first_diagnostic = @fs.read_file(
+        join(app, "generated/diagnostics.json"),
+      ).text()
+      require_command_failure(
+        "Repeated page compile failure retains its precise diagnostic",
+        executable,
+        ["build", app],
+        app,
+        "MMN2001",
+      )
+      guard @fs.read_file(join(app, "generated/diagnostics.json")).text() ==
+        first_diagnostic else {
+        abort("repeated compile failure changed its structured diagnostic")
+      }
+      guard build_output_snapshot(app) == previous_outputs else {
+        abort("page compile failure changed the last valid build outputs")
       }
       @fs.write_file(
         page_file,
@@ -774,6 +783,27 @@ async fn generator_suite(root : String) -> Unit {
         create_mode=CreateOrTruncate,
         permission=0o644,
       )
+      let tailwind_file = join(app, "styles/tailwind.css")
+      @fs.write_file(
+        tailwind_file,
+        "@import \"definitely-missing-minimoon-test.css\";\n" + tailwind,
+        create_mode=CreateOrTruncate,
+      )
+      require_command_failure(
+        "A new failure replaces the previous build diagnostic",
+        executable,
+        ["build", app],
+        app,
+        "Tailwind generation failed",
+      )
+      require_text(
+        app, "generated/diagnostics.json", "Tailwind generation failed",
+      )
+      forbid_text(app, "generated/diagnostics.json", "MMN2001")
+      guard build_output_snapshot(app) == previous_outputs else {
+        abort("consecutive build failures changed the last valid outputs")
+      }
+      @fs.write_file(tailwind_file, tailwind, create_mode=CreateOrTruncate)
       run(
         root,
         "Starter template rebuild after diagnostic",
@@ -950,6 +980,7 @@ async fn generator_suite(root : String) -> Unit {
         ["verify", app, "--release"],
         cwd=app,
       )
+      transactional_build_gate(root, app, executable)
       let page_file = join(app, "src/pages/home/page.mbt")
       let source = @fs.read_file(page_file).text()
       @fs.write_file(

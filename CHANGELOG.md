@@ -4,11 +4,31 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
-## [Example maintenance] - Unreleased
+## [0.2.1] - Unreleased
+
+### Fixed
+
+- Narrow generated input/textarea property writes so typing does not replay
+  unchanged native focus or selection fields. Rebuild applications with the
+  `0.2.1` CLI; upgrading only the MoonBit dependency does not update the host.
+- Stage build output before replacement and restore the previous distributable,
+  generated build metadata and configured stylesheet on ordinary build failure.
+  Preserve private project configuration byte-for-byte. Failure diagnostics may
+  update; a later verification failure keeps the newly built output for diagnosis.
+
+### Changed
+
+- Default English/Chinese onboarding to unversioned registry CLI installation
+  and place the WeChat Developer Tools `dist/` import immediately after candidate
+  verification. Document CLI upgrades and core-only patch publication.
+- Keep the checked core 0.2 API, App Contract `11`, runtime ABI `13` and renderer
+  protocol `8`. Optional UI remains the separately published `0.1.0`; this patch
+  does not republish it. Both affected fixture fingerprints require host acceptance.
+
+### Example maintenance
 
 - Switch both maintained examples to public Apifox Echo, including draft and UI
-  form POSTs, Platform scenarios and delayed lifecycle requests. Keep product
-  versions unchanged; this is not a new registry publication.
+  form POSTs, Platform scenarios and delayed lifecycle requests.
 - Extend the opt-in public HTTP probe to the UI form (12 cases in total), retain
   strict request/echo checks across scalar and array-valued service formats, and
   test malformed echoes offline. Revalidate both changed fixture fingerprints.
@@ -16,16 +36,12 @@ tags.
   with four business Tabs, a Draft Editor and four capability laboratories.
 - Add acknowledged local draft CRUD, restart restoration, an App-owned editing
   buffer, typed public echo, and explicit page/App request lifetime checks.
-- Narrow generated input/textarea property writes so typing does not replay
-  unchanged native focus or selection fields; increase the draft title input's
-  height and remove its vertical padding to avoid clipped text.
-- This unpublished shared-host fix requires the repository CLI (or its generated
-  artifacts), and fresh acceptance of both core and UI fixtures. Registry core
-  `0.2.0` is unchanged; public APIs and technical compatibility numbers stay fixed.
+- Increase the draft title input's height and remove its vertical padding to
+  avoid clipped text.
 - Apply the reviewed example-only runtime/aggregate JavaScript ceilings of
   440,000/480,000 bytes; framework, Starter, UI and other performance gates stay unchanged.
-- Keep core/UI product APIs and versions unchanged. Updated example artifacts
-  require new real-host acceptance; this maintenance is not a new package release.
+- Keep the independently versioned UI package unchanged. Example updates remain
+  repository fixtures; registry availability is recorded in project status.
 
 ## [0.2.0] - 2026-09-09
 

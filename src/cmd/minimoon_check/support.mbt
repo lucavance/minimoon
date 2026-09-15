@@ -41,7 +41,7 @@ async fn require_command_failure(
   guard code != 0 else { abort(label + " unexpectedly succeeded") }
   let output = stdout.text() + "\n" + stderr.text()
   guard output.contains(needle) else {
-    abort(label + " did not report expected error: " + needle)
+    abort(label + " did not report expected error: " + needle + "\n" + output)
   }
 }
 

@@ -8,9 +8,9 @@ or `setData` is needed.
 
 ## Project status
 
-Core `lampclaw/minimoon 0.2.0` and optional `lampclaw/minimoon_ui 0.1.0`
-are published pre-1.0 releases. Install the CLI from Mooncakes to create an
-independent application. The source checkout also contains unpublished changes;
+This source documents core `lampclaw/minimoon 0.2.1` and optional
+`lampclaw/minimoon_ui 0.1.0`, both pre-1.0. Install the latest published CLI
+from Mooncakes to create an independent application;
 see [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
 for the publication checkpoint and differences from the published packages.
 
@@ -48,6 +48,10 @@ minimoon verify . --candidate
 ```
 <!-- minimoon:onboarding:end -->
 
+After candidate verification passes, open WeChat Developer Tools and import
+**`my-app/dist/`**. Apply the [host settings](docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools)
+before running the MiniApp.
+
 Use a new or empty `my-app/`. The app's `moon.mod` declares its core dependency,
 resolved from Mooncakes; no `moon.work` or framework checkout is needed.
 Do not pass `--minimoon-root` for this setup. `bun install` installs the app's
@@ -58,7 +62,6 @@ repeatable installation, see [fixed-version installation](docs/guides/miniapp_qu
 To develop the framework or use unpublished changes, follow the separate
 [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
 
-Import **`my-app/dist/`**, not the repository root, into WeChat Developer Tools.
 Enable Skyline, ES6-to-ES5 transformation, enhanced compilation and minification
 (`setting.es6=true`, `setting.enhance=true`, `setting.minified=true`);
 use an online minimum base library of **3.17.0**.

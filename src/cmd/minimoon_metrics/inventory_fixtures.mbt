@@ -42,6 +42,15 @@ fn embedded_fixture_inventory(entries : Array[EmbeddedInventoryEntry]) -> Unit {
         "src/tooling_miniapp/layout_wbtest.mbt", "layout ABI creation and updates keep their decoder separate from route inputs",
       ),
       (
+        "src/tooling_minimoon_build/transaction_wbtest.mbt", "every promotion failure restores the complete previous output",
+      ),
+      (
+        "src/tooling_minimoon_build/transaction_wbtest.mbt", "failed first promotion removes installed outputs and newly created parents",
+      ),
+      (
+        "src/tooling_minimoon_build/transaction_wbtest.mbt", "successful promotion removes obsolete dist files and leaves unowned metadata alone",
+      ),
+      (
         "src/tooling_minimoon_verify/verify_wbtest.mbt", "artifact fingerprints are independent of checkout location",
       ),
       (

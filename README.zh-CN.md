@@ -7,9 +7,9 @@
 
 ## 项目状态
 
-核心 `lampclaw/minimoon 0.2.0` 与可选的 `lampclaw/minimoon_ui 0.1.0`
-已发布，仍处于 1.0 之前的阶段。默认从 Mooncakes 安装 CLI，创建独立应用。
-源码仓库还包含尚未发布的改动；发布记录及其与已发布包的差异见
+当前源码对应核心 `lampclaw/minimoon 0.2.1` 与可选的
+`lampclaw/minimoon_ui 0.1.0`，仍处于 1.0 之前的阶段。
+默认从 Mooncakes 安装最新已发布的 CLI，创建独立应用。发布状态及源码与已发布包的差异见
 [项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)。
 
 ## 已实现的主要能力
@@ -44,6 +44,10 @@ minimoon verify . --candidate
 ```
 <!-- minimoon:onboarding:end -->
 
+候选验证通过后，打开微信开发者工具，导入 **`my-app/dist/`**。
+按[开发者工具设置](docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools)
+配置后运行小程序。
+
 `my-app/` 必须不存在或为空。应用的 `moon.mod` 声明核心依赖，由 Mooncakes
 解析；无需 `moon.work` 或框架源码目录。此流程不传 `--minimoon-root`。
 `bun install` 安装应用的样式构建工具。
@@ -53,7 +57,6 @@ minimoon verify . --candidate
 开发框架或使用尚未发布的改动时，使用单独的
 [源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
 
-向微信开发者工具导入 **`my-app/dist/`**，不是仓库根目录。
 启用 Skyline、ES6 转 ES5、增强编译与压缩（`setting.es6=true`、
 `setting.enhance=true`、`setting.minified=true`），线上最低基础库为 **3.17.0**。
 自己的 AppID 只写入 Git 忽略的私有配置，见
