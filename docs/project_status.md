@@ -1,25 +1,54 @@
 # Project status
 
-Minimoon core `0.2.0` and the independent `lampclaw/minimoon_ui 0.1.0` were
-published to Mooncakes on **2026-09-09**. See the [publication checkpoint](#publication-checkpoint)
-for the exact source commit and registry archives. The 0.1 API consumer remains
+Minimoon core `0.2.1` was published to Mooncakes on **2026-09-15**. The independent
+`lampclaw/minimoon_ui 0.1.0` remains the package published on **2026-09-09**.
+See the [current checkpoint](#core-021-publication) and the
+[0.2.0 publication history](#publication-checkpoint) for source commits and archives.
+The 0.1 API consumer remains
 a frozen historical record; current API gates compile the 0.2 consumer.
 Public generated reports intentionally retain reproducible candidate state.
 
-## 0.2.1 candidate: not published
+## Core 0.2.1 publication
 
-The current source prepares core `0.2.1`, with the shared-host input/selection
-fix, staged build-output preservation and clearer registry onboarding. Public
-core APIs, App Contract `11`, runtime ABI `13` and renderer protocol `8` stay
-unchanged. UI remains the published `0.1.0`, whose manifest declares core
-`0.2.0`; the candidate must also validate that published UI with resolved core
-`0.2.1` before release.
+Core `0.2.1` was published on **2026-09-15** from
+[`bc098bec14be66bcb06c2090ae725c30d72538d3`](https://github.com/lucavance/minimoon/commit/bc098bec14be66bcb06c2090ae725c30d72538d3).
+Both [primary and Node 24 CI jobs](https://github.com/lucavance/minimoon/actions/runs/34937245727)
+passed for that commit before publication.
+The [downloaded core archive](https://download.mooncakes.io/user/lampclaw/minimoon/0.2.1.zip)
+is **308,075 bytes / 168 files** and matches the frozen archive byte-for-byte:
+SHA-256 `b4de4a5db713ab8959c123b6a77d67ea9a722b57ea6d7a3cbbbe8274c6e37403`.
+UI `0.1.0` was not republished; its 75 archived files remain unchanged and its
+manifest still declares core `0.2.0`.
 
-Core `0.2.1` has not been published. Its two exact candidate bundles still need
-the user's WeChat Developer Tools acceptance and the release runbook's local
-gates. This section records no new real-host pass. Until publication, obtain
-the patch through the source workflow; the default unversioned registry install
-continues to select the latest available published CLI.
+Fresh consumers outside all Moon workspaces resolved their dependencies from
+the registry and passed:
+
+- Registry CLI `0.2.1` and a new Starter: warning-free JS checks, both JS tests,
+  build and candidate verification.
+- A Starter created with registry CLI `0.2.0`, upgraded to registry CLI/core
+  `0.2.1`: the same JS checks, two tests, build and candidate verification.
+  Only the direct core dependency changed; business source, configuration,
+  styles, JavaScript package manifest and lockfile stayed byte-identical.
+- Core `0.2.1` with existing UI `0.1.0`: warning-free Native/JS root, headless
+  and theme tests, native build-resource tests, build and candidate verification.
+
+The Starter's application packages support JS only. The independent UI consumer
+covers both Native and JS targets.
+
+On `moon 0.1.20260904`, `moon publish --frozen` stopped before upload because
+the freshly extracted self-check needed dependency installation. With the
+reviewed dependency versions unchanged, ordinary `moon publish` completed the
+full self-check and returned HTTP `200 OK`. The downloaded archive comparison
+confirmed the published contents.
+
+An initial auxiliary UI consumer passed functional tests, build and candidate
+verification but reported a mismatch in its build-to-verification byte comparison.
+The first build bytes were not retained, so the changed file and cause remain
+unknown. Two fresh reproductions with the original configuration passed. The
+final fresh consumer restricted Tailwind scanning with `source(none)` and an
+explicit `src/` source, excluded outputs, and passed its first byte comparison.
+That external fixture change does not establish the initial mismatch's cause;
+no published package was changed in response.
 
 ## Current implementation
 
@@ -46,22 +75,21 @@ Platform retains ten public HTTP cases; the lifecycle laboratory retains shared
 counter and delayed-request regressions. `bun run check:http-live` is opt-in and
 not real-host evidence. Both examples now default to public Apifox Echo; the live
 probe covers Platform's ten cases, App draft echo after editor unload and the UI
-Form's typed echo. The service switch changes both fingerprints and requires new
-host acceptance; public echo remains a testing service, not cloud persistence.
-The patch changes only the core product version to `0.2.1`; Contract `11`,
-runtime ABI `13` and renderer protocol `8` do not change. New workbench bytes
-need fresh host acceptance;
-the publication checkpoint below remains the earlier immutable release.
+Form's typed echo. Changes to either fixture fingerprint require new host
+acceptance; public echo remains a testing service, not cloud persistence.
+Core's product version is `0.2.1`; Contract `11`,
+runtime ABI `13` and renderer protocol `8` do not change. The original `0.2.0`
+publication checkpoint below remains an immutable historical release.
 
-The `0.2.1` candidate includes the shared-host input fix: value edits
+Core `0.2.1` includes the shared-host input fix: value edits
 do not replay unchanged native focus/selection properties. The draft title input
-has a taller layout intended to avoid clipping. Use the repository CLI or its
-generated artifacts; the published `0.2.0` registry CLI does not include this
-fix. Both core and UI artifact fingerprints change and need fresh real-host
-acceptance. Automated host-write checks do not establish native cursor or IME
-correctness.
+has a taller layout intended to avoid clipping. Upgrade both the CLI and the
+application's core dependency to `0.2.1`, then regenerate all artifacts; the
+`0.2.0` CLI does not include this fix. Changed artifact fingerprints require
+fresh real-host acceptance. Automated host-write checks do not establish native
+cursor or IME correctness.
 
-The candidate also stages build output before replacing the previous files.
+The builder also stages output before replacing the previous files.
 Ordinary build failures retain the previous `dist/`, build metadata and configured
 stylesheet while allowing current diagnostics to update. Private project settings
 are preserved. A subsequent verification failure keeps the new output and failed
