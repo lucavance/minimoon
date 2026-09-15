@@ -8,9 +8,9 @@
 ## 项目状态
 
 核心 `lampclaw/minimoon 0.2.0` 与可选的 `lampclaw/minimoon_ui 0.1.0`
-是 pre-1.0 候选版本。本页默认通过源码体验；**只有对应版本发布后**才使用
-registry 安装。发布可用性见[项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)。
-功能已实现、自动化检查、真实宿主验收与正式发布是不同阶段。
+已发布，仍处于 1.0 之前的阶段。默认从 Mooncakes 安装 CLI，创建独立应用。
+源码仓库还包含尚未发布的改动；发布记录及其与已发布包的差异见
+[项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)。
 
 ## 已实现的主要能力
 
@@ -21,35 +21,37 @@ registry 安装。发布可用性见[项目状态](https://github.com/lucavance/
 ## 开始之前
 
 准备 `moon 0.1.20260904`／`moonc v0.10.12` 或更新版本、Node `>=24.20.0`、
-Bun `1.4.2`、Git，以及支持 Skyline 的微信开发者工具。
+Bun `1.4.2`，以及支持 Skyline 的微信开发者工具。
+可选的源码开发流程还需要 Git。
 已有 `moon 0.1.20260907` 无需降级。
 [环境说明](docs/guides/miniapp_quickstart.md#prerequisites)包含版本检查与 CI 固定工具链。
 
 ## 创建第一个应用
 
-选择空间充足的开发目录，将框架 `minimoon/` 和应用 `my-app/` 放在同一级。
+选择空间充足、位于已有 Moon 工作区之外的开发目录。
 在已能使用 MoonBit、Node 和 Bun 的终端中执行：
 
 <!-- minimoon:onboarding:start -->
 ```bash
-git clone https://github.com/lucavance/minimoon.git minimoon
-cd minimoon
-bun install --frozen-lockfile
-moon update
-moon install --path src/cmd/minimoon
+moon install lampclaw/minimoon/cmd/minimoon
 minimoon --version
-minimoon init ../my-app --minimoon-root "$PWD"
-cd ../my-app
+minimoon init my-app
+cd my-app
+moon update
 bun install
 minimoon build .
 minimoon verify . --candidate
 ```
 <!-- minimoon:onboarding:end -->
 
-`my-app/` 必须不存在或为空。生成的 `moon.work` 将应用绑定到同级源码，
-不需要下载尚未发布的核心 registry 包；开发期间保留该源码目录。
-独立的 [registry 安装流程](docs/guides/miniapp_quickstart.md#registry-installation-after-publication)
-见快速开始。
+`my-app/` 必须不存在或为空。应用的 `moon.mod` 声明核心依赖，由 Mooncakes
+解析；无需 `moon.work` 或框架源码目录。此流程不传 `--minimoon-root`。
+`bun install` 安装应用的样式构建工具。
+
+省略 CLI 版本号会选择注册表中的最新版本。需要可重复的安装时，参见
+[固定版本安装](docs/guides/miniapp_quickstart.md#install-a-specific-version)。
+开发框架或使用尚未发布的改动时，使用单独的
+[源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
 
 向微信开发者工具导入 **`my-app/dist/`**，不是仓库根目录。
 启用 Skyline、ES6 转 ES5、增强编译与压缩（`setting.es6=true`、

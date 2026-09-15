@@ -2,11 +2,15 @@
 
 ## Near-term priorities
 
-Keep the source-based Starter onboarding and English/Chinese documentation
-consistent, finish the exact-artifact release prerequisites, and validate fresh
-registry consumers when publication is authorized. Implemented capabilities are
-described below; release readiness is separate from implementation completion.
-Deferred directions are not dated feature commitments.
+Keep registry-based Starter onboarding and English/Chinese documentation
+consistent: application authors begin with
+`moon install lampclaw/minimoon/cmd/minimoon` and `minimoon init my-app`.
+Source installation remains available for framework development and unpublished
+changes. For future releases, complete the exact-artifact release prerequisites
+and validate fresh registry consumers when publication is authorized.
+Implemented capabilities are described below; release readiness is separate
+from implementation completion. Deferred directions are not dated feature
+commitments.
 
 ## Draft Workbench demonstration
 
@@ -137,6 +141,8 @@ is local and Git-ignored, just like the core fixture's evidence above.
 
 ## Release preparation
 
+Core `0.2.0` and UI `0.1.0` were published on 2026-09-09. Future package changes
+require new, unoccupied versions and the full release validation cycle.
 Freeze the synchronized documentation, core/UI archives, source commit and
 two CI handoff bundles before manual acceptance. Follow the
 [release runbook](operations/release_candidate_handoff.md): both fixtures need

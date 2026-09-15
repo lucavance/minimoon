@@ -8,10 +8,13 @@ Public generated reports intentionally retain reproducible candidate state.
 
 ## Current implementation
 
-For application authors, the README and quickstart retain source-based Starter
-creation; their separate registry installation path is now available for these
-published versions. Near-term work focuses on onboarding consistency; the detailed
-[Roadmap](roadmap.md) separates implemented capabilities from deferred directions.
+For application authors, the README and [quickstart](guides/miniapp_quickstart.md)
+start with `moon install lampclaw/minimoon/cmd/minimoon` and
+`minimoon init my-app`. This installs the latest registry CLI and creates an
+independent application; create it outside existing Moon workspaces. The
+quickstart also covers source installation for framework development and
+unpublished changes. The detailed [Roadmap](roadmap.md) separates implemented
+capabilities from deferred directions.
 
 The maintained core example is now **Minimoon Draft Workbench**:
 `examples/miniapp_draft_workbench`, module `lampclaw/miniapp_draft_workbench`.
@@ -36,10 +39,11 @@ the publication checkpoint below remains the earlier immutable release.
 
 The workspace also contains an unpublished shared-host input fix: value edits
 do not replay unchanged native focus/selection properties. The draft title input
-has a taller layout intended to avoid clipping. Use the repository CLI or its generated artifacts;
-the published Registry CLI does not include this fix. Both core and UI artifact
-fingerprints change and need fresh real-host acceptance. Automated host-write
-checks do not establish native cursor or IME correctness.
+has a taller layout intended to avoid clipping. Use the repository CLI or its
+generated artifacts; the published `0.2.0` registry CLI does not include this
+fix. Both core and UI artifact fingerprints change and need fresh real-host
+acceptance. Automated host-write checks do not establish native cursor or IME
+correctness.
 
 The current authoring revision makes ordinary `page` builders, typed state
 constructors and `Val` composition the primary style, retaining `elmish_page`

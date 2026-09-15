@@ -387,7 +387,7 @@ pub fn docs_check_source() -> String {
     #|  const index = "| [core](core/README.md) | 7 | 4 | 首页 / 交互 / 平台 / 应用; Runtime Lab |"
     #|  const overview = "| [core](https://github.com/lucavance/minimoon/blob/main/examples/core/README.md) | 7 pages, 4 native Tabs — 首页 / 交互 / 平台 / 应用 |"
     #|  const fence = String.fromCharCode(96).repeat(3)
-    #|  const marked = "<!-- minimoon:onboarding:start -->\n" + fence + "bash\nminimoon init ../my-app --minimoon-root \"$PWD\"\n" + fence + "\n<!-- minimoon:onboarding:end -->"
+    #|  const marked = "<!-- minimoon:onboarding:start -->\n" + fence + "bash\nmoon install lampclaw/minimoon/cmd/minimoon\nminimoon init my-app\n" + fence + "\n<!-- minimoon:onboarding:end -->"
     #|  const counter = "<!-- minimoon:counter:start -->\n" + fence + "moonbit\nfn demo() { () }\n" + fence + "\n<!-- minimoon:counter:end -->"
     #|  const doc = marked + "\n" + counter
     #|  const oldSchema = Number(contractVersion) - 1
@@ -401,8 +401,8 @@ pub fn docs_check_source() -> String {
     #|    ["overview count", fixtureReadmeProblems("readme", overview.replace("7 pages", "4 pages"), inventory), "overview count"],
     #|    ["overview label", fixtureReadmeProblems("readme", overview.replace("平台", "能力"), inventory), "overview Tab labels"],
     #|    ["schema migration", schemaMigrationProblems("ui", badMigration, expected), "schema migration target"],
-    #|    ["source workflow", onboardingParityProblems("translation", doc, doc.replace("--minimoon-root", "--wrong")), "example drift"],
-    #|    ["missing source block", onboardingParityProblems("translation", doc, counter), "missing or duplicate"],
+    #|    ["registry workflow", onboardingParityProblems("translation", doc, doc.replace("lampclaw/minimoon/cmd/minimoon", "lampclaw/minimoon/cmd/wrong")), "example drift"],
+    #|    ["missing registry block", onboardingParityProblems("translation", doc, counter), "missing or duplicate"],
     #|    ["missing counter", onboardingParityProblems("translation", doc, marked), "missing or duplicate"],
     #|    ["duplicate block", markedCode("readme", marked + marked, "onboarding", "bash").problems, "missing or duplicate"],
     #|    ["active old HTTP owner", currentFixtureProseProblems("README.md", "Ten public-API Capability Probe scenarios."), "page ownership"],
@@ -858,7 +858,7 @@ pub fn docs_check_source() -> String {
     #|    "docs/README.md", "docs/guides/miniapp_quickstart.md", "docs/project_status.md", "docs/roadmap.md",
     #|    "docs/architecture.md", "docs/operations/release_candidate_handoff.md", "docs/guides/http.md",
     #|    "docs/guides/shared_state.md", "docs/guides/native_navigation.md",
-    #|    "minimoon init ../my-app --minimoon-root", "minimoon verify . --candidate", "my-app/dist/",
+    #|    "moon install lampclaw/minimoon/cmd/minimoon", "minimoon init my-app", "minimoon verify . --candidate", "my-app/dist/",
     #|    "src/pages/home/page.mbt", 'name: "My App"', "Hello My App", "create_variable", "count.view",
     #|  ]) {
     #|    if (!content.includes(token)) fail(readme + ": missing onboarding fact: " + token)

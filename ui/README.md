@@ -185,11 +185,15 @@ or run `moon -C ui publish`: packaging can inherit the root `.moonignore`
 `/ui/` exclusion and produce an empty archive. The repository gate packages an
 isolated source copy and validates its actual ZIP, required files and consumers.
 
-After core `0.2.0` is available from the registry and publication is explicitly
-authorized, unpack the checked
-`_build/publish/lampclaw-minimoon_ui-0.1.0.zip` outside every Git repository and
-Moon workspace ancestor. Check `moon.mod`, `src/`, README and LICENSE, resolve
-registry core and rerun consumers, then publish the unchanged extracted module.
+Core `0.2.0` and UI `0.1.0` are already published; see the
+[publication checkpoint](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md#publication-checkpoint).
+The checked `_build/publish/lampclaw-minimoon_ui-0.1.0.zip` is the archive example
+for that completed release. Future package changes require a new, unoccupied
+version and validation of its archive. After the matching core resolves and
+publication is explicitly authorized, unpack the reviewed UI archive outside
+every Git repository and Moon workspace ancestor. Check `moon.mod`, `src/`,
+README and LICENSE, resolve registry core and rerun consumers, then publish the
+unchanged extracted module under the new version.
 Follow the [ordered release procedure](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md#ordered-local-registry-publication).
 The linked guides are repository-hosted because `ui/docs` is not shipped in
 the registry archive.

@@ -9,11 +9,10 @@ or `setData` is needed.
 ## Project status
 
 Core `lampclaw/minimoon 0.2.0` and optional `lampclaw/minimoon_ui 0.1.0`
-are pre-1.0 candidates. This checkout's default setup below uses source;
-registry installation is an alternative **only after the matching version is
-published**. See [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
-for publication availability. Implemented capabilities, automated checks,
-real-host acceptance and publication are separate milestones.
+are published pre-1.0 releases. Install the CLI from Mooncakes to create an
+independent application. The source checkout also contains unpublished changes;
+see [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
+for the publication checkpoint and differences from the published packages.
 
 ## What you can build
 
@@ -24,37 +23,40 @@ real-host acceptance and publication are separate milestones.
 ## Before you start
 
 Use `moon 0.1.20260904` / `moonc v0.10.12` or newer, Node `>=24.20.0`,
-Bun `1.4.2`, Git and WeChat Developer Tools with Skyline support.
+Bun `1.4.2` and WeChat Developer Tools with Skyline support.
+Git is needed for the optional source development workflow.
 Existing `moon 0.1.20260907` installations need no downgrade.
 See [environment setup](docs/guides/miniapp_quickstart.md#prerequisites) for
 version checks and the pinned CI toolchain.
 
 ## Create your first app
 
-In a development directory with enough free space, use two sibling directories:
-`minimoon/` for the framework and `my-app/` for your application. Run these
-commands in a terminal with MoonBit, Node and Bun available:
+Start in a development directory outside any existing Moon workspace, with
+enough free space. Run these commands in a terminal with MoonBit, Node and Bun
+available:
 
 <!-- minimoon:onboarding:start -->
 ```bash
-git clone https://github.com/lucavance/minimoon.git minimoon
-cd minimoon
-bun install --frozen-lockfile
-moon update
-moon install --path src/cmd/minimoon
+moon install lampclaw/minimoon/cmd/minimoon
 minimoon --version
-minimoon init ../my-app --minimoon-root "$PWD"
-cd ../my-app
+minimoon init my-app
+cd my-app
+moon update
 bun install
 minimoon build .
 minimoon verify . --candidate
 ```
 <!-- minimoon:onboarding:end -->
 
-Use a new or empty `my-app/`. The generated `moon.work` binds this app to the
-sibling source checkout, so no unpublished core registry package is required.
-Keep that checkout while developing; the quickstart explains the separate
-[registry setup](docs/guides/miniapp_quickstart.md#registry-installation-after-publication).
+Use a new or empty `my-app/`. The app's `moon.mod` declares its core dependency,
+resolved from Mooncakes; no `moon.work` or framework checkout is needed.
+Do not pass `--minimoon-root` for this setup. `bun install` installs the app's
+style build tools.
+
+Omitting the CLI version selects the latest version in the registry. For a
+repeatable installation, see [fixed-version installation](docs/guides/miniapp_quickstart.md#install-a-specific-version).
+To develop the framework or use unpublished changes, follow the separate
+[source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
 
 Import **`my-app/dist/`**, not the repository root, into WeChat Developer Tools.
 Enable Skyline, ES6-to-ES5 transformation, enhanced compilation and minification

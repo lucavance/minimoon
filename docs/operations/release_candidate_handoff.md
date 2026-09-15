@@ -1,9 +1,14 @@
 # Release candidate handoff
 
 This workflow separates deterministic Linux validation, real Skyline acceptance
-and explicit local registry publication. The current compatibility target is
-core `lampclaw/minimoon@0.2.0` and UI `lampclaw/minimoon_ui@0.1.0`; the version
-pair alone does not imply registry availability or a real-host pass.
+and explicit local registry publication. Core `lampclaw/minimoon@0.2.0` and UI
+`lampclaw/minimoon_ui@0.1.0` were published on **2026-09-09**; see the
+[publication checkpoint](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md#publication-checkpoint).
+The version-pinned commands and archive paths below retain that completed
+publication as an example. For a future release, select new, unoccupied versions,
+update the corresponding module metadata, dependencies, commands and archive
+paths, and complete validation for those exact contents. Do not republish the
+archived versions or use their publication as evidence for changed source.
 
 ## Freeze documentation and produce candidates
 
@@ -51,9 +56,9 @@ root, runs the real `moon package`, checks the archive allowlist and required
 files, and compiles consumers from the extracted package. Its reviewed output
 is `_build/publish/lampclaw-minimoon_ui-0.1.0.zip`. Use that checked archive for
 the later UI publication procedure below, not an archive left by a direct
-nested-module command. A successful archive gate still does not authorize or
-perform publication; both current product versions remain unpublished
-candidates until the operator completes the release prerequisites.
+nested-module command. A successful archive gate does not authorize or perform
+publication. Future versions remain candidates until the operator completes
+the release prerequisites and explicitly publishes them.
 
 After review, commit and push the complete candidate, then require both the
 primary CI job and Node 24 lower-bound job to pass for that exact commit. Freeze
@@ -193,6 +198,9 @@ repository-only changes as well.
 
 Publication is an explicit operator action, not a CI step. Authenticate locally
 as the module owner; do not add CI credentials or create version tags.
+The `0.2.0` / `0.1.0` versions below are historical examples of the completed
+publication. Substitute the reviewed, unoccupied versions for a new release;
+retain explicit version pins so consumer checks exercise the intended release.
 
 1. Recheck registry availability and confirm the frozen core/UI versions are
    not already occupied. An occupied version must not be overwritten.
