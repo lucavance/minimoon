@@ -26,6 +26,8 @@ Use `moon 0.1.20260904` / `moonc v0.10.12` or newer, Node `>=24.20.0`,
 Bun `1.4.2` and WeChat Developer Tools with Skyline support.
 Git is needed for the optional source development workflow.
 Existing `moon 0.1.20260907` installations need no downgrade.
+Both CI jobs pin `0.10.13+cbb11c36f` (`moon 0.1.20260915`);
+the supported minimum remains unchanged.
 See [environment setup](docs/guides/miniapp_quickstart.md#prerequisites) for
 version checks and the pinned CI toolchain.
 
@@ -61,6 +63,10 @@ Omitting the CLI version selects the latest version in the registry. For a
 repeatable installation, see [fixed-version installation](docs/guides/miniapp_quickstart.md#install-a-specific-version).
 To develop the framework or use unpublished changes, follow the separate
 [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
+
+With `moonc v0.10.13`, the published `0.2.1` CLI supports the Starter above.
+Apps that enable `application` need the current source CLI for an unpublished
+build compatibility fix; see [toolchain compatibility](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility).
 
 Enable Skyline, ES6-to-ES5 transformation, enhanced compilation and minification
 (`setting.es6=true`, `setting.enhance=true`, `setting.minified=true`);

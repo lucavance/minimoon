@@ -29,7 +29,7 @@ jobs:
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.12+1634b282e
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.13+cbb11c36f
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Node
@@ -249,7 +249,7 @@ jobs:
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.12+1634b282e
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.13+cbb11c36f
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Node 24 LTS floor

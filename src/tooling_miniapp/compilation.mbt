@@ -332,11 +332,11 @@ async fn compile_page_contract(
   write(
     join(temp_dir, "main.mbt"),
     if application is Some(application) {
-      "///|\nfn main { println(@application." +
+      "///|\nfn main { println(@minimoon.App::preview(@application." +
       application_program(application) +
-      "().preview(deps => @page." +
+      "(), deps => @minimoon.Page::contract(@page." +
       program +
-      "(deps).contract())) }\n"
+      "(deps)))) }\n"
     } else {
       runtime_package_source(page_import, program, true)
     },

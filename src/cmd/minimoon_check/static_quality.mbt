@@ -159,7 +159,7 @@ async fn static_suite(root : String) -> Unit {
   guard installers.length() == 2 &&
     installers.all(line => {
       line.trim() ==
-      "curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.12+1634b282e"
+      "curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.13+cbb11c36f"
     }) else {
     abort("both CI jobs must install the reviewed official MoonBit binary")
   }

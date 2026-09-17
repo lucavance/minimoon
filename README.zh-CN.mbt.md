@@ -24,6 +24,8 @@
 Bun `1.4.2`，以及支持 Skyline 的微信开发者工具。
 可选的源码开发流程还需要 Git。
 已有 `moon 0.1.20260907` 无需降级。
+两个 CI 任务固定使用 `0.10.13+cbb11c36f`（`moon 0.1.20260915`）；
+最低支持版本保持不变。
 [环境说明](docs/guides/miniapp_quickstart.md#prerequisites)包含版本检查与 CI 固定工具链。
 
 ## 创建第一个应用
@@ -56,6 +58,10 @@ minimoon verify . --candidate
 [固定版本安装](docs/guides/miniapp_quickstart.md#install-a-specific-version)。
 开发框架或使用尚未发布的改动时，使用单独的
 [源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
+
+在 `moonc v0.10.13` 下，已发布的 `0.2.1` CLI 支持上述 Starter。
+启用 `application` 的应用需要使用当前源码 CLI，其中包含尚未发布的构建兼容修正；
+详见[工具链兼容说明](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)。
 
 启用 Skyline、ES6 转 ES5、增强编译与压缩（`setting.es6=true`、
 `setting.enhance=true`、`setting.minified=true`），线上最低基础库为 **3.17.0**。

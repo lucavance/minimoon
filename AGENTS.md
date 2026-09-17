@@ -155,7 +155,7 @@ the user explicitly authorizes that action.
 
 - The supported toolchain floor is `moon 0.1.20260904` with `moonc v0.10.12`.
   Both CI jobs use the official installer pinned to the complete prebuilt
-  release `0.10.12+1634b282e`, not latest; Rust is not required.
+  release `0.10.13+cbb11c36f` (`moon 0.1.20260915`), not latest; Rust is not required.
   Existing local `moon 0.1.20260907` tools remain valid without downgrading.
   JavaScript tooling
   supports Node `>=24.20.0`; CI validates the 24.20.0 lower boundary and the

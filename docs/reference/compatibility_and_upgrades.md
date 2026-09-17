@@ -45,25 +45,48 @@ is the verified MiniApp host format; ESM is not an implied upgrade.
 | Core resolved by consumer | UI | Status |
 | --- | --- | --- |
 | `0.2.0` | `0.1.0` | Published baseline; UI declares core `0.2.0` |
-| `0.2.1` | `0.1.0` | Current patch candidate; requires archive and fresh registry consumer checks |
+| `0.2.1` | `0.1.0` | Published pair; archive and fresh registry consumer checks recorded in the publication checkpoint |
 
 The published UI `0.1.0` package and its declared core `0.2.0` dependency remain
 unchanged. An application using the patch declares core `0.2.1` directly and
-checks that the graph resolves it alongside UI `0.1.0`. This matrix does not
-establish registry availability or real-host acceptance, or certify every future
-`0.2.x` / `0.1.x` combination. MoonBit dependency resolution may
+checks that the graph resolves it alongside UI `0.1.0`. See the
+[publication checkpoint](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md#core-021-publication) for the verified
+registry pair. This matrix does not establish real-host acceptance or certify
+every future `0.2.x` / `0.1.x` combination. MoonBit dependency resolution may
 select a higher satisfying version, and a local workspace may override registry
 sources; inspect the resolved graph and rerun consumer gates for another pair.
 
+## Toolchain compatibility
+
 The supported toolchain floor is `moon 0.1.20260904` with `moonc v0.10.12`.
 Both CI jobs directly use the official installer pinned to the complete
-prebuilt release `0.10.12+1634b282e`, not latest; Rust is not required.
+prebuilt release `0.10.13+cbb11c36f` (`moon 0.1.20260915`), not latest;
+Rust is not required. This updates the CI baseline without raising the floor.
 Existing local `moon 0.1.20260907` tools remain valid without downgrading.
 Repository and generated-starter JavaScript tooling support Node `>=24.20.0`,
 with CI coverage at the 24.20.0 lower boundary and in the 26.8.1 primary
 environment; Bun is pinned to `1.4.2`. Raising any floor or pin requires
 updating CI, the package consumer gate, starter guidance, and the compatibility
 notes in one change.
+
+On `moonc v0.10.13`, registry CLI `0.2.1` can build and verify the ordinary
+Starter, which has no `application` entry. Apps with `application` configured
+need the [current source CLI](../guides/miniapp_quickstart.md#create-from-the-current-source):
+the new compiler reports the published App-aware contract helper's root import
+as unused, causing compilation with `--deny-warn` to fail. The source helper
+explicitly references the root package's `App::preview` and `Page::contract`
+methods, retaining the import needed by the older compiler.
+This fix and three package import cleanups are not yet published.
+Both CLIs still report product version `0.2.1`; use the source installation
+path and check PATH to select the fixed CLI.
+
+These changes preserve the public API and Contract `11` / ABI `13` / renderer
+protocol `8`. Compiler upgrades can still change generated JavaScript bytes.
+Regenerate with the selected toolchain and validate each changed fixture
+fingerprint in Developer Tools before claiming a new host pass; old evidence
+does not cover changed output.
+
+## Packaging and JavaScript dependencies
 
 The current Moon toolchain can inherit an ancestor Git repository's
 `.moonignore` when packaging a nested module. The root `/ui/` rule therefore
@@ -93,10 +116,12 @@ an application's package manifest.
 1. Read the [core changelog](../../CHANGELOG.md), the
    [UI changelog](https://github.com/lucavance/minimoon/blob/main/ui/CHANGELOG.md)
    when applicable, and the [publication status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
-2. Upgrade the CLI as well as the library. After `0.2.1` is published, run
+2. Upgrade the CLI as well as the library. For the published release, run
    `moon install lampclaw/minimoon/cmd/minimoon@0.2.1` and confirm
-   `minimoon --version` reports `0.2.1`; check PATH for older binaries. Before
-   publication, use the [source workflow](../guides/miniapp_quickstart.md#create-from-the-current-source).
+   `minimoon --version` reports `0.2.1`; check PATH for older binaries.
+   On `moonc v0.10.13`, apps with `application` configured instead need the
+   [source workflow](../guides/miniapp_quickstart.md#create-from-the-current-source)
+   for the unpublished compatibility fix described above.
    The CLI owns host templates, so changing only `moon.mod` does not deliver the
    input focus/selection fix.
 3. Update the application's direct `lampclaw/minimoon` dependency to `0.2.1`,

@@ -50,6 +50,31 @@ explicit `src/` source, excluded outputs, and passed its first byte comparison.
 That external fixture change does not establish the initial mismatch's cause;
 no published package was changed in response.
 
+## Unpublished repository changes
+
+The repository contains four compatibility fixes for `moon 0.1.20260915` /
+`moonc v0.10.13+cbb11c36f` that are absent from published core `0.2.1`:
+
+- Remove unused `moonbitlang/core/json` imports from the documentation command,
+  component behavior tests and build-tool package manifests.
+- Generate the App-aware contract helper with explicit `@minimoon.App::preview`
+  and `@minimoon.Page::contract` calls, retaining the root import required by the
+  older compiler while making its use explicit for the newer compiler.
+
+The new compiler reports those unused imports as warning `0029`; builds using
+`--deny-warn` reject them. Registry CLI `0.2.1` can still build and verify the
+ordinary Starter on this compiler. Apps with `application` configured need the
+[current source CLI](guides/miniapp_quickstart.md#create-from-the-current-source)
+for the helper fix. Its version output remains `0.2.1`, so the version number
+alone does not identify the fixed source build.
+
+Core `0.2.1`, UI `0.1.0`, the public API and Contract `11` / ABI `13` /
+renderer protocol `8` remain unchanged. Both CI jobs now pin the new toolchain
+listed below. Regenerated JavaScript can have different bytes and fingerprints;
+the publication checkpoint above does not establish CI or real-host acceptance
+for these repository changes. Changed fingerprints require fresh host validation.
+The published archive and its recorded SHA-256 remain unchanged.
+
 ## Current implementation
 
 For application authors, the README and [quickstart](guides/miniapp_quickstart.md)
@@ -122,8 +147,9 @@ consumer and generated-host checks are separate from core's starter contract.
 
 The supported toolchain floor is `moon 0.1.20260904` with `moonc v0.10.12`;
 Bun is pinned to `1.4.2`. Both CI jobs directly use the official installer for
-prebuilt release `0.10.12+1634b282e`, not latest, without Rust. Existing local
-`moon 0.1.20260907` tools remain valid and do not require downgrading.
+prebuilt release `0.10.13+cbb11c36f` (`moon 0.1.20260915`), not latest, without
+Rust. The supported minimum is unchanged; existing local `moon 0.1.20260907`
+tools remain valid and do not require downgrading.
 JavaScript tooling supports Node
 `>=24.20.0`; CI validates the Node 24.20.0 lower boundary and the Node 26.8.1
 primary environment, and installs the JavaScript dependency graph from the
