@@ -229,11 +229,11 @@ async fn emit_host_bridge(
   write(source_file, source)
   let result = {
     let _ = run_checked(
-      "bun",
-      [
+      "vp",
+      @toolchain.bun_args([
         "build", source_file, "--target", "browser", "--format", "cjs", "--minify-whitespace",
         "--minify-identifiers", "--minify-syntax", "--external=*", "--outfile", output_file,
-      ],
+      ]),
       app_root,
       "release host bridge minification",
     )
@@ -273,8 +273,15 @@ async fn run_checked(
   cwd : String,
   label : String,
 ) -> String {
-  let (code, stdout, stderr) = @process.collect_output(command, args, cwd~) catch {
-    err => raise Failure::Failure("failed to start " + label + ": \{err}")
+  let (code, stdout, stderr) = @toolchain.collect_output(command, args, cwd~) catch {
+    err => {
+      let hint = if command == "vp" {
+        ". Install Vite+ CLI 0.3.3 and make sure `vp` is available on PATH."
+      } else {
+        ""
+      }
+      raise Failure::Failure("failed to start " + label + ": \{err}" + hint)
+    }
   }
   let output = stdout.text() catch { _ => "" }
   guard code == 0 else {
@@ -524,11 +531,11 @@ async fn compile_app_runtime(
     let emitted_bundle = if release {
       let minified_file = join(target_dir, temp_name + ".min.js")
       let _ = run_checked(
-        "bun",
-        [
+        "vp",
+        @toolchain.bun_args([
           "build", bundle_file, "--target", "browser", "--format", "cjs", "--minify-whitespace",
           "--minify-identifiers", "--minify-syntax", "--outfile", minified_file,
-        ],
+        ]),
         app_root,
         "release application runtime minification",
       )

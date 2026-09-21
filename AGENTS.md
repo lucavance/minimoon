@@ -115,13 +115,16 @@ Before starting a task:
 4. Inspect the relevant source, tests, generated artifacts, and documentation
    before proposing or implementing a change.
 
-For a fresh checkout, prepare the pinned environment with:
+Install global `vp 0.3.3` and initialize its managed environment as documented
+in `docs/guides/miniapp_quickstart.md`. For a fresh checkout, prepare the pinned
+environment with:
 
 ```bash
-bun install --frozen-lockfile
+vp install --frozen-lockfile
 moon update
-node --version
-bun --version
+vp --version
+vp node --version
+vp env current
 moon version --all
 ```
 
@@ -135,8 +138,11 @@ the user explicitly authorizes that action.
 - This project uses the current TOML-style `moon.mod` and `moon.pkg` files; do
   not add or restore legacy `moon.mod.json` or `moon.pkg.json` files.
 
-- Use `bun run ...` for repository task aliases. They dispatch native `minimoon`
-  commands and do not own framework implementation.
+- Use `vp run ...` for repository task aliases and `vp run --no-cache ...`
+  for acceptance gates. They dispatch native `minimoon` commands and do not
+  own framework implementation. Do not substitute Vite+ built-in `build`,
+  `test` or `check` for Minimoon tasks. Internal Bun commands must launch through
+  the shared vp toolchain helper; preserve Bun as the pinned backend.
 
 - Generated MoonBit source files must be stable under MoonBit's formatter. Any
   MoonBit command that writes generated `.mbt` files, especially
@@ -156,10 +162,12 @@ the user explicitly authorizes that action.
 - The supported toolchain floor is `moon 0.1.20260920` with `moonc v0.10.14`.
   Both CI jobs use the official installer pinned to the complete prebuilt
   release `0.10.14+7d59c7ec9` (`moon 0.1.20260920`), not latest; Rust is not required.
-  Older MoonBit toolchains must be upgraded for core `0.2.2` / UI `0.1.1`.
+  Older MoonBit toolchains must be upgraded for core `0.2.2` and later / UI `0.1.1`.
   JavaScript tooling
   supports Node `>=24.20.0`; CI validates the 24.20.0 lower boundary and the
-  26.9.0 primary environment, while Bun is pinned to `1.4.2`. No `.node-version`
+  26.9.0 primary environment, while global `vp 0.3.3` manages Bun `1.4.2`.
+  The repository and new Starter pin Node `26.9.0` through `devEngines.runtime`; CI overrides it for
+  lower-bound checks. No `.node-version`
   is committed or generated. Updating the toolchain pin requires review and
   regeneration/validation of affected artifacts.
   Empty `{}` expressions are ambiguous: use `Map([])` for empty maps,
@@ -185,8 +193,8 @@ moon info
 moon fmt --check
 moon test --target native
 moon test --target js
-bun run check:coverage
-bun run check:candidate
+vp run --no-cache check:coverage
+vp run --no-cache check:candidate
 git diff --check
 git status --short --branch
 ```
@@ -207,16 +215,17 @@ The final repository review must confirm:
 - no developer-local AppID, private configuration, real-host evidence,
   credential, log, cache, or environment file is staged.
 
-After real-host validation, run `bun run check:all` followed by
-`bun run check:mvp` locally. Both release gates require the ignored,
+After real-host validation, run `vp run --no-cache check:all` followed by
+`vp run --no-cache check:mvp` locally. Both release gates require the ignored,
 fingerprint-bound Developer Tools evidence for both maintained fixtures.
-Before publication or release handoff, rerun `bun run check:candidate` so
+Before publication or release handoff, rerun `vp run --no-cache check:candidate` so
 tracked reports return to the public candidate state. Require unchanged
 source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
 
-For core `0.2.2` / UI `0.1.1` only, the user explicitly authorizes publication
+For the published core `0.2.2` / UI `0.1.1` pair and the core `0.2.3` vp
+migration, the user explicitly authorizes publication
 after the complete local candidate checks and both CI jobs pass for the frozen
 commit, without waiting for new WeChat host validation. Notify the user when
 CI passes, then continue the authorized publication. Keep tracked reports at
@@ -224,6 +233,8 @@ CI passes, then continue the authorized publication. Keep tracked reports at
 host pass or weaken `verify --release`, `check:all`, or `check:mvp`. This scoped
 exception is documented in `docs/operations/release_candidate_handoff.md` and
 does not waive package, consumer, source-cleanliness, or version checks.
+Core `0.2.3` is a core-only publication: UI remains the published `0.1.1`,
+including its unchanged core `0.2.2` dependency declaration.
 
 ## WeChat Developer Tools Validation
 

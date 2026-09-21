@@ -50,7 +50,7 @@ MoonBit owns:
 - repository validation suites and ownership metrics
 
 There is no independently maintained shell or JavaScript task runner or fixture
-implementation. Embedded validation scripts and generated fixture JavaScript
+implementation. Embedded tooling and validation scripts and generated fixture JavaScript
 remain explicit parts of the repository. `package.json` declares external
 JavaScript tooling dependencies and aliases native commands; CI also contains
 shell orchestration, not a separate framework implementation.
@@ -61,10 +61,10 @@ shell orchestration, not a separate framework implementation.
 minimoon metrics
 minimoon metrics --json
 minimoon metrics --include-untracked --json
-bun run check:metrics
+vp run check:metrics
 ```
 
-The repository-local command is also available through `bun run metrics`. It
+The repository-local command is also available through `vp run metrics`. It
 does not invoke generators, write a report, or require an external line-counting
 tool. JSON output uses `schemaVersion: 2`; the old flat line-count fields are
 replaced, not retained as a second ambiguous baseline.
@@ -105,8 +105,10 @@ is better assessed by bytes than by its very small physical-line count.
 
 `embeddedScripts` is a separate inventory of script literals within selected
 MoonBit files, excluding generated artifacts and frozen API snapshots. Entries
-identify their source file, declaration and category: `production`, `validation`,
-`test`, `example`, or `excluded`. Synthetic fixture data belongs to `excluded`,
+identify their source file, declaration and category: `production`, `tooling`,
+`validation`, `test`, `example`, or `excluded`. The Mermaid process supervisor is
+counted as `tooling`; its executable regression fixtures are counted as `test`.
+Synthetic fixture data belongs to `excluded`,
 with a reason, rather than to a maintained-script total. The registry uses declaration names and stable literal or
 binding selectors, never source line numbers as selectors.
 

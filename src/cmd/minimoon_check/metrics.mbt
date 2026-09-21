@@ -214,7 +214,11 @@ async fn metrics_suite(root : String) -> Unit {
   ]
   let mut previous : String? = None
   for _ in 0..<2 {
-    let (code, stdout, stderr) = @process.collect_output("moon", args, cwd=root)
+    let (code, stdout, stderr) = @toolchain.collect_output(
+      "moon",
+      args,
+      cwd=root,
+    )
     guard code == 0 else {
       abort("metrics command failed: " + stdout.text() + stderr.text())
     }

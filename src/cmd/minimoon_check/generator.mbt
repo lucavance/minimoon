@@ -142,9 +142,9 @@ async fn audit_generated_javascript(root : String, mode : String) -> Unit {
     run(
       root,
       "MiniApp JavaScript compatibility (" + mode + "): " + app,
-      "bun",
-      args,
-      display_args~,
+      "vp",
+      @toolchain.bun_args(args),
+      display_args=@toolchain.bun_args(display_args),
     )
   }
 }
@@ -244,8 +244,8 @@ let registry_documentation_files : Array[String] = [
 let registry_source_directories : Array[String] = [
   "src/http", "src", "src/cmd/minimoon", "src/components", "src/components/styles",
   "src/internal_any", "src/internal_duplix", "src/internal_host_js", "src/internal_slotmap",
-  "src/internal_versions", "src/renderer_miniapp", "src/resources", "src/runtime_core",
-  "src/internal_png", "src/testing", "src/tooling_miniapp", "src/tooling_minimoon_build",
+  "src/internal_versions", "src/internal_toolchain", "src/renderer_miniapp", "src/resources",
+  "src/runtime_core", "src/internal_png", "src/testing", "src/tooling_miniapp", "src/tooling_minimoon_build",
   "src/tooling_minimoon_verify", "src/ui_dsl", "src/val_runtime",
 ]
 
@@ -310,7 +310,7 @@ fn registry_package_paths(listing : String) -> Array[String] {
 async fn distribution_package_gate(root : String, temp : String) -> Unit {
   println("\n==> Registry package allowlist")
   println("$ moon package --frozen --list")
-  let (code, stdout, stderr) = @process.collect_output(
+  let (code, stdout, stderr) = @toolchain.collect_output(
     "moon",
     ["package", "--frozen", "--list"],
     cwd=root,
@@ -465,6 +465,10 @@ async fn generator_suite(root : String) -> Unit {
     json_field(repository_package, "devEngines"),
     "packageManager",
   )
+  let repository_runtime = json_field(
+    json_field(repository_package, "devEngines"),
+    "runtime",
+  )
   let repository_overrides = json_field(repository_package, "overrides")
   guard json_string(repository_engines, "node") == supported_node_engine else {
     abort("repository engines.node must be " + supported_node_engine)
@@ -600,6 +604,18 @@ async fn generator_suite(root : String) -> Unit {
         abort(template + " template has stale package manager " + field)
       }
     }
+    let generated_runtime = json_field(
+      json_field(generated_package, "devEngines"),
+      "runtime",
+    )
+    for field in ["name", "version", "onFail"] {
+      guard json_string(generated_runtime, field) ==
+        json_string(repository_runtime, field) else {
+        abort(template + " template has stale vp-managed runtime " + field)
+      }
+    }
+    require_text(app, "README.md", "vp install")
+    forbid_text(app, "README.md", "bun install")
     guard json_string(json_field(generated_package, "overrides"), "postcss") ==
       json_string(repository_overrides, "postcss") else {
       abort(template + " template has stale PostCSS override")
@@ -614,7 +630,7 @@ async fn generator_suite(root : String) -> Unit {
         executable,
         ["build", app],
         app,
-        "Run `bun install` in the Minimoon app directory",
+        "Run `vp install` in the Minimoon app directory",
       )
       require_no_initial_build_outputs(app)
     }

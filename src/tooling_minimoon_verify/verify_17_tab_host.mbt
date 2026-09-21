@@ -27,8 +27,11 @@ async fn native_tab_host_status(app_root : String, manifest : Json) -> Json {
       )
   }
   let (passed, detail) = run(
-    "bun",
-    ["--eval", @host_js.native_tab_host_source(routes, tabs)],
+    "vp",
+    @toolchain.bun_args([
+      "--eval",
+      @host_js.native_tab_host_source(routes, tabs),
+    ]),
     app_root,
   )
   status(

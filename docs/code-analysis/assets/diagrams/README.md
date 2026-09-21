@@ -9,8 +9,8 @@
 ## 重新生成 / Regeneration
 
 ```bash
-bun run docs:diagrams
-bun run docs:diagrams:check
+vp run docs:diagrams
+vp run docs:diagrams:check
 ```
 
 默认使用固定的 Mermaid CLI 11.17.0 和仓库内受控的无沙箱渲染配置；也可以通过 `MMDC_BIN` 和 `PUPPETEER_EXECUTABLE_PATH` 指定本地工具。

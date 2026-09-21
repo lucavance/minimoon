@@ -20,9 +20,9 @@ async fn dynamic_app_host_smoke(root : String, page_file : String) -> Unit {
     create_mode=CreateOrTruncate,
     permission=0o600,
   )
-  let (code, stdout, stderr) = @process.collect_output(
-    "bun",
-    [script, page_file],
+  let (code, stdout, stderr) = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args([script, page_file]),
     cwd=root,
   ) catch {
     err => {
@@ -48,14 +48,14 @@ async fn scheduler_host_smoke(root : String, host_file : String) -> Unit {
     create_mode=CreateOrTruncate,
     permission=0o600,
   )
-  let (code, stdout, stderr) = @process.collect_output(
-    "bun",
-    [
+  let (code, stdout, stderr) = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args([
       "--expose-gc",
       script,
       host_file,
       @versions.runtime_api_version().to_string(),
-    ],
+    ]),
     cwd=root,
   ) catch {
     err => {
@@ -99,9 +99,9 @@ async fn navigation_host_smoke(
     create_mode=CreateOrTruncate,
     permission=0o600,
   )
-  let (code, stdout, stderr) = @process.collect_output(
-    "bun",
-    [script, ..page_files],
+  let (code, stdout, stderr) = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args([script, ..page_files]),
     cwd=root,
   ) catch {
     err => {

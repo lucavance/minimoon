@@ -279,3 +279,36 @@ forced GC. `_build/perf/scheduler_heap.json` reports heap delta and retained
 runtime states, timers, and intervals; all resource counts must be zero and the
 heap delta has a 16 MiB safety ceiling. This catches deterministic retention but
 does not prove physical-device heap stability or real-host correctness.
+
+## Approved vp tooling archive budget review
+
+The **2026-09-21** core `0.2.3` review covers the vp command migration only.
+The published core `0.2.2` archive is 319,333 bytes. The initial vp candidate
+measures 323,623 bytes, an increase of 4,290 bytes. This is a preliminary
+measurement before the final cancellation-supervisor and documentation changes,
+not the final published archive size.
+
+The increase accompanies the shared native tool launcher, managed Bun version
+and environment checks, process cancellation handling, generated Starter setup
+instructions, and current installation/upgrade documentation. These are required
+CLI and onboarding contents; excluding them to meet the old budget would remove
+supported behavior or its instructions. No application runtime, UI component or
+fixture payload is added to the core package by this tooling migration.
+
+The previous 320 KiB hard ceiling retained an 8 KiB reserve, yielding a
+319,488-byte operating ceiling. The initial candidate exceeds that operating
+ceiling by 4,135 bytes while remaining below the old 327,680-byte hard limit.
+The reviewed fixed core hard ceiling is now **328 KiB (335,872 bytes)**, retaining
+the **8 KiB (8,192-byte) reserve** and setting the operating ceiling to
+**327,680 bytes**. The initial sample leaves 4,057 bytes of operating headroom.
+This is an explicit 8 KiB budget adjustment, not automatic scaling or a registry
+service limit.
+
+The archive gate must measure the final package again after all source and
+documentation changes; the final bytes and downloaded-content comparison belong
+in [project status](../project_status.md) after publication. Allowlist and required
+file checks remain mandatory, and a one-byte operating-ceiling overrun still
+fails. UI retains its 250 KiB hard ceiling and 16 KiB reserve. Generated runtime,
+aggregate JavaScript, host, starter, protocol, coverage, scheduler and timing
+ceilings are unchanged. Earlier measurements and budget decisions above remain
+historical records; this review supersedes only their core archive ceiling.

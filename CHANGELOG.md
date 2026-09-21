@@ -4,7 +4,42 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
-## [0.2.2] - Unreleased
+## [0.2.3]
+
+### Changed
+
+- Require global `vp 0.3.3` for JavaScript tooling and use it for dependency
+  installation, repository tasks, internal processes, CI and generated Starter
+  instructions. Bun `1.4.2` remains the managed backend and `bun.lock` stays
+  authoritative; no local `vite-plus`, Vite or Vitest dependency is added.
+- Declare Node `26.9.0` through `devEngines.runtime`, retaining Node
+  `>=24.20.0` support and an explicit lower-bound CI job without `.node-version`.
+- Preserve internal Bun build/check options and the Node stylesheet adapter,
+  process arguments, environment, working directory, errors and cancellation.
+  Acceptance tasks run through `vp run --no-cache`.
+- Synchronize English/Chinese onboarding, existing-app migration guidance,
+  issue environment fields and CI handoff toolchain reporting.
+- Keep the public API, Contract `11`, runtime ABI `13` and renderer protocol `8`.
+  UI remains the published `0.1.1`, with its unchanged core `0.2.2` declaration.
+
+### Fixed
+
+- Keep the managed Bun backend cancellable and clean Mermaid renderer process
+  groups, including signal-resistant descendants and a package runner that
+  exits before its children.
+- Make generated Starter next-step commands use one consistent app directory
+  and link to the pinned Vite+ installation instructions.
+
+### Validation and publication
+
+- This core-only patch is authorized for publication after full local candidate
+  checks and both CI jobs pass for the frozen commit, without waiting for new
+  WeChat host validation. Public reports retain `release: false` and Developer
+  Tools `pending`; actual evidence gates are unchanged.
+- Verify vp-managed new and upgraded registry consumers and the existing UI
+  pair. Publication results belong in repository-only project status.
+
+## [0.2.2] - 2026-09-21
 
 ### Changed
 

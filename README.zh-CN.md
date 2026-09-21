@@ -7,7 +7,7 @@
 
 ## 项目状态
 
-当前源码对应核心 `lampclaw/minimoon 0.2.2` 与可选的
+当前源码对应核心 `lampclaw/minimoon 0.2.3` 与可选的
 `lampclaw/minimoon_ui 0.1.1`，仍处于 1.0 之前的阶段。
 执行下面的固定版本安装前，先在
 [项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)确认版本已在 Mooncakes 可用；
@@ -22,7 +22,8 @@
 ## 开始之前
 
 准备 `moon 0.1.20260920`／`moonc v0.10.14` 或更新版本、Node `>=24.20.0`、
-Bun `1.4.2`，以及支持 Skyline 的微信开发者工具。
+全局 `vp 0.3.3`，以及支持 Skyline 的微信开发者工具。
+`vp` 管理 Node 和内部使用的 Bun `1.4.2`，无需单独安装 Bun。
 可选的源码开发流程还需要 Git。
 两个 CI 任务固定使用 `0.10.14+7d59c7ec9`（`moon 0.1.20260920`）。
 使用本次源码和包之前，请升级更早的 MoonBit 工具链。
@@ -32,16 +33,16 @@ CI 覆盖 Node 24.20.0 与 26.9.0。
 ## 创建第一个应用
 
 选择空间充足、位于已有 Moon 工作区之外的开发目录。
-在已能使用 MoonBit、Node 和 Bun 的终端中执行：
+先完成上述环境设置，再在已能使用 MoonBit 和 `vp` 的终端中执行：
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon@0.2.2
+moon install lampclaw/minimoon/cmd/minimoon@0.2.3
 minimoon --version
 minimoon init my-app
 cd my-app
 moon update
-bun install
+vp install
 minimoon build .
 minimoon verify . --candidate
 ```
@@ -53,15 +54,16 @@ minimoon verify . --candidate
 
 `my-app/` 必须不存在或为空。应用的 `moon.mod` 声明核心依赖，由 Mooncakes
 解析；无需 `moon.work` 或框架源码目录。此流程不传 `--minimoon-root`。
-`bun install` 安装应用的样式构建工具。
+`vp install` 安装应用的样式构建工具。
 
-确认 `minimoon --version` 输出 `0.2.2`；如有其他版本，检查 PATH 中的旧 CLI。
+确认 `minimoon --version` 输出 `0.2.3`；如有其他版本，检查 PATH 中的旧 CLI。
 参见[固定版本安装](docs/guides/miniapp_quickstart.md#install-a-specific-version)及
 [已有应用升级步骤](docs/reference/compatibility_and_upgrades.md#upgrade-procedure)。
 开发框架或使用尚未发布的改动时，使用单独的
 [源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
 
-`0.2.2` CLI 包含 App-aware 合约辅助代码的兼容修正，并使用显式包限定 API。
+`0.2.3` CLI 统一通过 `vp` 调用 JavaScript 工具，内部继续使用 Bun `1.4.2`，
+样式处理使用 Node；同时保留此前的 App-aware 合约辅助代码与 MoonBit 编译器兼容修正。
 默认 Starter 仍不启用 `application`；需要时按[共享状态指南](docs/guides/shared_state.md)添加。
 迁移已有应用时同时升级 CLI 和应用的核心依赖。
 
@@ -73,8 +75,8 @@ minimoon verify . --candidate
 你应看到 **Hello Minimoon**、初始值为 **0** 的计数器、名称输入框与 **Open details**。
 点击 **+1** 后变为 **1**，进入 Details 后可以返回。
 CLI 检查通过只代表自动化验证，不代表这些宿主交互已经通过。
-本次核心 `0.2.2`／UI `0.1.1` 已获授权在两个 CI 任务通过后发布，
-不等待新的微信宿主验证；宿主状态仍为 pending。
+本次核心 `0.2.3` 已获授权在两个 CI 任务通过后发布，
+不等待新的微信宿主验证；宿主状态仍为 pending。UI 保持已发布的 `0.1.1`，无需重新发布。
 详见[本次发布例外](docs/operations/release_candidate_handoff.md#scoped-publication-exception)。
 
 ### 第一次修改
@@ -136,7 +138,7 @@ Starter 已在页面的 `moon.pkg` 导入 `lampclaw/minimoon`。
 | [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md) | 通过 6 个页面体验原生 UI 组件 |
 
 草稿工作台的平台实验室集中演示 HTTP 场景。在框架仓库运行
-`bun run check:http-live` 可验证这些场景、编辑器卸载后的 App 草稿回显及
+`vp run check:http-live` 可验证这些场景、编辑器卸载后的 App 草稿回显及
 UI 表单回显，共 12 项；使用真实公共 Apifox Echo API，但不是微信宿主测试。
 
 ## 当前边界与下一步

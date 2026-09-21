@@ -131,7 +131,7 @@ async fn coverage_suite(root : String) -> Unit {
   let coverage_root = join(root, target_dir)
   let args = ["-f", "summary", "--source-paths", root, "--ignore-missing-files"]
   println("$ moon_cove_report " + args.join(" "))
-  let (code, stdout, stderr) = @process.collect_output(
+  let (code, stdout, stderr) = @toolchain.collect_output(
     "moon_cove_report",
     args,
     cwd=coverage_root,

@@ -25,7 +25,7 @@ See the [workbench guide](https://github.com/lucavance/minimoon/blob/main/exampl
 
 [`ui/examples/showcase`](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
 is the separate six-page release fixture for `lampclaw/minimoon_ui 0.1.1`
-with core `0.2.2`. It covers 64 RUI families plus Form and Theme: foundation,
+with core `0.2.3`. It covers 64 RUI families plus Form and Theme: foundation,
 overlay/disclosure, forms, data/date, layout/navigation and feedback behavior.
 Its native/JS tests, generated resource checks, candidate report, artifact
 fingerprint and local host evidence are independent of Draft Workbench. Both

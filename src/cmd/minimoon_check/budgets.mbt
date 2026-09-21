@@ -1,7 +1,8 @@
 ///|
-// Approved native navigation/layout review, 2026-09-08: core archive 304,861 B.
-// Retain the 8 KiB reserve; UI archive and package allowlists are unchanged.
-let registry_archive_hard_limit : Int = 320 * 1024
+// vp migration review, 2026-09-21: initial core archive 323,623 B.
+// The managed-process launcher and setup docs need one additional 8 KiB step.
+// Retain the 8 KiB reserve; runtime, Starter and UI byte budgets are unchanged.
+let registry_archive_hard_limit : Int = 328 * 1024
 
 ///|
 let registry_archive_reserve : Int = 8 * 1024

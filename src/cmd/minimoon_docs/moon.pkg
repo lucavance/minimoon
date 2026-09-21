@@ -1,7 +1,8 @@
 import {
+  "lampclaw/minimoon/internal_toolchain" @toolchain,
   "moonbitlang/async",
   "moonbitlang/async/fs",
-  "moonbitlang/async/process",
+  "moonbitlang/async/io",
   "moonbitlang/core/env",
   "moonbitlang/x/crypto",
   "moonbitlang/x/path",

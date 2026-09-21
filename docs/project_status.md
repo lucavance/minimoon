@@ -1,19 +1,36 @@
 # Project status
 
-Minimoon core `0.2.2` and the independent `lampclaw/minimoon_ui 0.1.1` were
-published to Mooncakes on **2026-09-21**. UI `0.1.1` declares core `0.2.2`.
-See the [current checkpoint](#core-022-and-ui-011-publication),
-[core 0.2.1 history](#core-021-publication) and
-[0.2.0 publication history](#publication-checkpoint) for source commits and archives.
-The 0.1 API consumer remains a frozen historical record; current API gates
-compile the 0.2 consumer. Public generated reports intentionally retain
-reproducible candidate state.
+Current source targets core `0.2.3`, the vp command migration. Publication and
+its final CI/registry checks are **pending** until recorded below. The latest
+confirmed published versions remain core `0.2.2` and independent
+`lampclaw/minimoon_ui 0.1.1`, published on **2026-09-21**. UI keeps its core
+`0.2.2` declaration and will not be republished for this patch.
 
-This pair used the explicitly authorized
-[publication exception](operations/release_candidate_handoff.md#scoped-publication-exception):
-complete local candidate checks and both CI jobs passed before publication,
-without waiting for new WeChat host validation. Host status remains `pending`,
-tracked reports retain `release: false`, and the actual evidence gates are unchanged.
+See the [0.2.2 publication checkpoint](#core-022-and-ui-011-publication),
+[core 0.2.1 history](#core-021-publication) and
+[0.2.0 publication history](#publication-checkpoint) for completed releases.
+The 0.1 API consumer remains a frozen historical record; current API gates
+compile the 0.2 consumer. Public generated reports retain candidate state.
+
+## Core 0.2.3 candidate
+
+Current source requires global `vp 0.3.3` for JavaScript tooling. It manages
+Bun `1.4.2` internally and Node `26.9.0` through `devEngines.runtime`, retaining
+Node `>=24.20.0` support and `bun.lock`. Repository tasks, CI, internal tools,
+new Starter guidance and current documentation use vp. Application API and
+Contract `11` / ABI `13` / renderer protocol `8` stay unchanged.
+
+The user explicitly authorized this core-only publication after complete local
+candidate checks and both CI jobs pass for the frozen commit, without waiting
+for new WeChat host validation. Notify the user when CI passes and continue
+publication; the [scoped exception](operations/release_candidate_handoff.md#scoped-publication-exception)
+does not weaken source, package or consumer checks. Host status remains
+`pending` and tracked reports retain `release: false`.
+
+Until core `0.2.3` publication is confirmed here, use the quickstart's
+[source workflow](guides/miniapp_quickstart.md#create-from-the-current-source).
+Installing published CLI `0.2.2` still gives its original direct Bun launches;
+updating this repository does not change that immutable archive.
 
 ## Core 0.2.2 and UI 0.1.1 publication
 
@@ -134,7 +151,7 @@ no published package was changed in response.
 ## Current implementation
 
 For application authors, the README and [quickstart](guides/miniapp_quickstart.md)
-start with `moon install lampclaw/minimoon/cmd/minimoon@0.2.2` and
+start with `moon install lampclaw/minimoon/cmd/minimoon@0.2.3` and
 `minimoon init my-app` after confirming registry availability here. This selects
 the documented CLI and creates an independent application; create it outside
 existing Moon workspaces. The
@@ -154,19 +171,19 @@ cancel on unload. Storage failure never confirms a save. Echo never writes back
 to persisted records. There is no backend, account or cloud synchronization.
 
 Platform retains ten public HTTP cases; the lifecycle laboratory retains shared
-counter and delayed-request regressions. `bun run check:http-live` is opt-in and
+counter and delayed-request regressions. `vp run check:http-live` is opt-in and
 not real-host evidence. Both examples now default to public Apifox Echo; the live
 probe covers Platform's ten cases, App draft echo after editor unload and the UI
 Form's typed echo. Changes to either fixture fingerprint require new host
 acceptance; public echo remains a testing service, not cloud persistence.
-Core's product version is `0.2.2`; Contract `11`,
+Core's product version is `0.2.3`; Contract `11`,
 runtime ABI `13` and renderer protocol `8` do not change. The original `0.2.0`
 publication checkpoint below remains an immutable historical release.
 
 Core `0.2.1` includes the shared-host input fix: value edits
 do not replay unchanged native focus/selection properties. The draft title input
 has a taller layout intended to avoid clipping. Upgrade both the CLI and the
-application's core dependency to the current `0.2.2`, then regenerate all artifacts; the
+application's core dependency to the current `0.2.3`, then regenerate all artifacts; the
 `0.2.0` CLI does not include this fix. Changed artifact fingerprints require
 fresh real-host acceptance. Automated host-write checks do not establish native
 cursor or IME correctness.
@@ -207,12 +224,16 @@ consumer and generated-host checks are separate from core's starter contract.
 ## Toolchain validation
 
 The supported toolchain floor is `moon 0.1.20260920` with `moonc v0.10.14`;
-Bun is pinned to `1.4.2`. Both CI jobs use the official installer for prebuilt
+global `vp 0.3.3` manages Bun `1.4.2` and the Node runtime. Both CI jobs use the
+official installer for prebuilt
 release `0.10.14+7d59c7ec9` (`moon 0.1.20260920`), not latest, without Rust.
 Older MoonBit installations must be upgraded for these releases.
 JavaScript tooling supports Node `>=24.20.0`; CI validates the Node 24.20.0
 lower boundary and Node 26.9.0 primary environment, installing the committed
-JavaScript lockfile. Toolchain configuration is not itself a passing CI result;
+JavaScript lockfile. The repository and new Starters select Node `26.9.0`
+through `devEngines.runtime`; CI explicitly overrides the lower-bound job.
+Acceptance tasks use `vp run --no-cache`. Toolchain configuration is not itself
+a passing CI result;
 the release checkpoint must identify the successful run for the frozen SHA.
 
 ## RUI native migration
@@ -243,12 +264,12 @@ the validation timestamp, tool version, notes, or outcome in source history.
 
 ## Verification policy
 
-`bun run check:coverage` and `bun run check:candidate` together check coverage,
+`vp run --no-cache check:coverage` and `vp run --no-cache check:candidate` together check coverage,
 formatting, interfaces, native and JavaScript behavior, generation stability,
 host simulation, performance and registry archive compatibility. Coverage is
 an explicit separate gate, not a substep of `check:candidate`.
-`bun run check:all` followed by
-`bun run check:mvp` is a local release decision requiring evidence recorded
+`vp run --no-cache check:all` followed by
+`vp run --no-cache check:mvp` is a local release decision requiring evidence recorded
 from the exact release bytes in WeChat Developer Tools. Running
 `check:candidate` before publication restores the tracked reports to candidate
 state; require unchanged source, archive contents and both artifact fingerprints.

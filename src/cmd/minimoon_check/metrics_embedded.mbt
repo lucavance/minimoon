@@ -42,7 +42,7 @@ fn metrics_embedded_problems(
         "embedded metrics file is outside the selected source ledger: " + file,
       )
     }
-    if !["production", "validation", "test", "example", "excluded"].contains(
+    if !["production", "tooling", "validation", "test", "example", "excluded"].contains(
         category,
       ) {
       errors.push("unknown embedded metrics category: " + category)

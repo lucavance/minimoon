@@ -50,8 +50,8 @@ async fn generated_checks(app_root : String, manifest : Json) -> Array[Json] {
       syntax_detail.push("missing " + file)
     } else if file.has_suffix(".js") {
       let (passed, detail) = run(
-        "bun",
-        ["--preload", preload, "--check", file],
+        "vp",
+        @toolchain.bun_args(["--preload", preload, "--check", file]),
         app_root,
       )
       if !passed {
@@ -109,8 +109,8 @@ async fn generated_checks(app_root : String, manifest : Json) -> Array[Json] {
     for file in [page_file] {
       if @fs.exists(file) {
         let (passed, detail) = run(
-          "bun",
-          ["--preload", preload, "--check", file],
+          "vp",
+          @toolchain.bun_args(["--preload", preload, "--check", file]),
           app_root,
         )
         if !passed {
@@ -172,7 +172,7 @@ async fn generated_checks(app_root : String, manifest : Json) -> Array[Json] {
       inputs=array(manifest, "pages").map(page => field(page, "smokeInput")),
     ),
   )
-  let (host_ok, host_detail) = run("bun", [smoke], app_root)
+  let (host_ok, host_detail) = run("vp", @toolchain.bun_args([smoke]), app_root)
   checks.push(
     status(
       "host-smoke",

@@ -19,7 +19,7 @@ Run the following automated cycle after every Minimoon change consumed by the
 dogfood application:
 
 ```bash
-bun install --frozen-lockfile
+vp install --frozen-lockfile
 moon info
 moon fmt --check
 moon check --deny-warn
@@ -45,11 +45,11 @@ three host paths:
 The canonical nine-route Draft Workbench fixture owns core release evidence; the
 independent six-page `ui/examples/showcase` owns UI release evidence. A paired
 core/UI host-acceptance claim requires both. The
-[core 0.2.2 / UI 0.1.1 publication exception](release_candidate_handoff.md#scoped-publication-exception)
+[core 0.2.3 publication exception](release_candidate_handoff.md#scoped-publication-exception)
 does not mark either fixture as host-validated. Dogfood results are application feedback, not
 evidence for either fixture, and must never be copied into or used to edit
 their evidence JSON manually. Record whether the dogfood consumer resolves
-core `0.2.2` alone or the core `0.2.2` / UI `0.1.1` pair, including
+core `0.2.3` alone or the core `0.2.3` / UI `0.1.1` pair, including
 any development workspace override.
 
 ## Observation record
@@ -59,7 +59,7 @@ runs without exposing application data:
 
 - exact Minimoon version and Git commit;
 - generated artifact fingerprint when a build reached verification;
-- MoonBit, Node, Bun, Developer Tools, base-library, operating-system, device,
+- MoonBit, vp, Node, managed Bun, Developer Tools, base-library, operating-system, device,
   and renderer environment relevant to the observation;
 - renderer work statistics or lifecycle counters when available;
 - smallest reproducible application shape and numbered reproduction steps;

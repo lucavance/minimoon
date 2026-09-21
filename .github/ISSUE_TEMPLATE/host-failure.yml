@@ -31,11 +31,12 @@ body:
     id: environment
     attributes:
       label: Host environment
-      description: Include MoonBit, Node, Bun, OS, Developer Tools, online base library, renderer, device model, and device OS as applicable.
+      description: Include MoonBit, vp, Node, managed Bun, OS, Developer Tools, online base library, renderer, device model, and device OS as applicable.
       placeholder: |-
         MoonBit:
+        vp:
         Node:
-        Bun:
+        Managed Bun:
         Host OS:
         Developer Tools:
         Online base library:

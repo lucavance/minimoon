@@ -1,21 +1,21 @@
 # Minimoon UI showcase
 
 This six-page verification application exercises `lampclaw/minimoon_ui 0.1.1`
-with core `lampclaw/minimoon 0.2.2`. It covers all 64 pinned RUI families plus
+with core `lampclaw/minimoon 0.2.3`. It covers all 64 pinned RUI families plus
 Form and Theme, with native substitutions described in the
 [migration map](../../docs/migration.md).
 
 The Forms page sends only a non-sensitive title to public
 `https://echo.apifox.com/post`, with a ten-second timeout. Typed echo is not
-persistent storage. `bun run check:http-live` includes this form alongside the
+persistent storage. `vp run check:http-live` includes this form alongside the
 core example's HTTP scenarios; it is a transport-shim check, not WeChat evidence.
 This endpoint change requires fresh acceptance of the UI fixture's new fingerprint.
 
 From the repository root:
 
 ```bash
-bun run minimoon build ui/examples/showcase --mode release
-bun run minimoon verify ui/examples/showcase --candidate
+vp run minimoon build ui/examples/showcase --mode release
+vp run minimoon verify ui/examples/showcase --candidate
 ```
 
 Import the unchanged `dist/` into WeChat Developer Tools. The generated

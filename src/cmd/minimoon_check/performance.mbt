@@ -9,7 +9,7 @@ async fn performance_reports(root : String) -> Unit {
   if !@fs.exists(report_dir) {
     @fs.mkdir(report_dir, permission=0o755, recursive=true)
   }
-  let (version_code, version_stdout, version_stderr) = @process.collect_output(
+  let (version_code, version_stdout, version_stderr) = @toolchain.collect_output(
     "moon",
     ["version", "--all"],
     cwd=root,
@@ -23,7 +23,7 @@ async fn performance_reports(root : String) -> Unit {
     "bench", "src/renderer_miniapp", "src/internal_duplix", "--target", "js", "--release",
     "--deny-warn", "--no-parallelize",
   ]
-  let (bench_code, bench_stdout, bench_stderr) = @process.collect_output(
+  let (bench_code, bench_stdout, bench_stderr) = @toolchain.collect_output(
     "moon",
     bench_args,
     cwd=root,
@@ -67,9 +67,9 @@ async fn performance_reports(root : String) -> Unit {
     join(conformance_root, "dist/pages/runtime_lab/runtime_lab.js"),
     fingerprint,
   ]
-  let (bridge_code, bridge_stdout, bridge_stderr) = @process.collect_output(
-    "bun",
-    bridge_args,
+  let (bridge_code, bridge_stdout, bridge_stderr) = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args(bridge_args),
     cwd=root,
   ) catch {
     err => abort("failed to start generated bridge benchmark: \{err}")

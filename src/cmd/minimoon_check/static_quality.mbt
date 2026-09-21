@@ -183,7 +183,7 @@ async fn static_suite(root : String) -> Unit {
   require_text(root, ".github/workflows/test.yml", "Node 24 LTS compatibility")
   require_text(root, ".github/workflows/test.yml", "moon test --target js")
   require_text(
-    root, ".github/workflows/test.yml", "moon run src/cmd/minimoon --target native -- check --suite generator",
+    root, ".github/workflows/test.yml", "vp run --no-cache minimoon check --suite generator",
   )
   forbid_text(root, ".github/workflows/test.yml", "node-version-file")
   guard !@fs.exists(join(root, ".node-version")) else {
@@ -204,7 +204,7 @@ async fn static_suite(root : String) -> Unit {
       ] {
       let path = fixture + private_file
       require_untracked_path(root, path)
-      let (code, _, _) = @process.collect_output(
+      let (code, _, _) = @toolchain.collect_output(
         "git",
         ["check-ignore", "--no-index", "--quiet", "--", path],
         cwd=root,
@@ -231,6 +231,7 @@ async fn static_suite(root : String) -> Unit {
     ] {
     require_text(root, ".github/workflows/test.yml", token)
   }
+  vp_toolchain_policy(root)
   ci_handoff_gate(root)
   forbid_text(
     root, ".github/workflows/test.yml", "version_at_least \"0.10.6\" \"$installed_moonc\"",
@@ -293,9 +294,9 @@ async fn static_suite(root : String) -> Unit {
   require_same_text(root, "README.zh-CN.mbt.md", "README.zh-CN.md")
   require_same_text(root, "ui/README.mbt.md", "ui/README.md")
   for path in repository_moonbit_sources(root) {
-    let violations = moon_source_boundary_violations(
-      @fs.read_file(join(root, path)).text(),
-    )
+    let source = @fs.read_file(join(root, path)).text()
+    let violations = moon_source_boundary_violations(source)
+    violations.append(bare_bun_process_violations(source))
     guard violations.is_empty() else {
       abort(path + ": " + violations.join("; "))
     }

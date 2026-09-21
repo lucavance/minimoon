@@ -261,8 +261,15 @@ async fn run(
   args : Array[String],
   cwd : String,
 ) -> (Bool, String) {
-  let (code, stdout, stderr) = @process.collect_output(command, args, cwd~) catch {
-    err => return (false, "failed to start " + command + ": \{err}")
+  let (code, stdout, stderr) = @toolchain.collect_output(command, args, cwd~) catch {
+    err => {
+      let hint = if command == "vp" {
+        ". Install Vite+ CLI 0.3.3 and make sure `vp` is available on PATH."
+      } else {
+        ""
+      }
+      return (false, "failed to start " + command + ": \{err}" + hint)
+    }
   }
   let output = stdout.text() catch { _ => "" }
   let error = stderr.text() catch { _ => "" }

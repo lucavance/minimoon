@@ -157,6 +157,74 @@ fn embedded_inventory(
     "test",
     RawLiterals,
   )
+  let toolchain_tests = "src/internal_toolchain/toolchain_wbtest.mbt"
+  let renderer_supervisor = "src/cmd/minimoon_docs/renderer_supervisor.mbt"
+  if sources.any(source => source.0 == renderer_supervisor) {
+    add(
+      renderer_supervisor,
+      "fn:renderer_supervisor_source",
+      "tooling",
+      RawLiterals,
+    )
+    exclude(
+      renderer_supervisor, "fn:collect_renderer_output", "forwards renderer_supervisor_source without additional JavaScript literals",
+    )
+  }
+  let renderer_tests = "src/cmd/minimoon_docs/renderer_supervisor_wbtest.mbt"
+  if sources.any(source => source.0 == renderer_tests) {
+    for name in ["resident_renderer_source", "assert_renderer_tree_stopped"] {
+      add(renderer_tests, "fn:" + name, "test", RawLiterals)
+    }
+    add(
+      renderer_tests,
+      "test:renderer launch preserves literal arguments stdout stderr and exit status",
+      "test",
+      SelectedLiterals(false, [("process.stdout.write", 1)]),
+    )
+    for
+      name in [
+        "cancelling renderer launch terminates signal-resistant descendants", "renderer launch cleans descendants after the package runner exits first",
+      ] {
+      exclude(
+        renderer_tests,
+        "test:" + name,
+        "forwards inventoried renderer test sources and checks process cleanup",
+      )
+    }
+  }
+  if sources.any(source => source.0 == toolchain_tests) {
+    for
+      entry in [
+        (
+          "vp preserves Bun version cwd environment and literal arguments without a package manifest",
+          RawLiterals,
+        ),
+        (
+          "vp preserves backend stdout stderr and nonzero exit status",
+          SelectedLiterals(false, [("process.stdout.write", 1)]),
+        ),
+        (
+          "unmanaged Bun is rejected before the backend command starts",
+          SelectedLiterals(false, [("require('node:fs')", 1)]),
+        ),
+        (
+          "cancelling vp execution terminates the resident Bun backend",
+          SelectedLiterals(true, [
+            ("try { process.kill(", 1),
+            (", 0); process.stdout.write", 1),
+          ]),
+        ),
+      ] {
+      add(toolchain_tests, "test:" + entry.0, "test", entry.1)
+    }
+  }
+  let toolchain_policy_tests = "src/cmd/minimoon_check/toolchain_policy_wbtest.mbt"
+  if sources.any(source => source.0 == toolchain_policy_tests) {
+    exclude(
+      toolchain_policy_tests, "test:vp policy allows backend arguments metadata and source fixtures",
+      "MoonBit invocation and metadata source fixtures, not executable JavaScript",
+    )
+  }
   add(
     "src/tooling_miniapp/artifacts.mbt",
     "fn:initial_tree_bridge",

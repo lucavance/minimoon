@@ -185,7 +185,12 @@ async test "MiniApp TextEncoder fallback emits standard UTF-8 bytes" {
         ),
       ),
     )
-    let _ = run_checked("bun", [script], root, "MiniApp TextEncoder fallback")
+    let _ = run_checked(
+      "vp",
+      @toolchain.bun_args([script]),
+      root,
+      "MiniApp TextEncoder fallback",
+    )
   }
   @fs.rmdir(root, recursive=true)
 }

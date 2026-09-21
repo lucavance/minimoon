@@ -32,8 +32,8 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
     } else {
       "public API generated-page HTTP probe"
     },
-    "bun",
-    [
+    "vp",
+    @toolchain.bun_args([
       script,
       join(
         root, "examples/miniapp_draft_workbench/dist/pages/platform/platform.js",
@@ -48,30 +48,35 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
       fingerprint,
       ui_page,
       ui_fingerprint,
-    ],
+    ]),
   )
   if offline {
-    run(root, "offline legacy array-valued echo compatibility", "bun", [
-      script,
-      join(
-        root, "examples/miniapp_draft_workbench/dist/pages/platform/platform.js",
-      ),
-      join(directory, "offline-legacy-report.json"),
-      "--offline",
-      "--legacy-echo",
-      fingerprint,
-      ui_page,
-      ui_fingerprint,
-    ])
+    run(
+      root,
+      "offline legacy array-valued echo compatibility",
+      "vp",
+      @toolchain.bun_args([
+        script,
+        join(
+          root, "examples/miniapp_draft_workbench/dist/pages/platform/platform.js",
+        ),
+        join(directory, "offline-legacy-report.json"),
+        "--offline",
+        "--legacy-echo",
+        fingerprint,
+        ui_page,
+        ui_fingerprint,
+      ]),
+    )
     for
       fault in [
         "--fault-echo", "--fault-network", "--fault-header", "--fault-method", "--fault-json",
         "--fault-form", "--fault-body",
       ] {
       let failed_report = join(directory, fault + ".json")
-      let (code, _, _) = @process.collect_output(
-        "bun",
-        [
+      let (code, _, _) = @toolchain.collect_output(
+        "vp",
+        @toolchain.bun_args([
           script,
           join(
             root, "examples/miniapp_draft_workbench/dist/pages/platform/platform.js",
@@ -82,7 +87,7 @@ async fn http_probe(root : String, offline : Bool) -> Unit {
           fingerprint,
           ui_page,
           ui_fingerprint,
-        ],
+        ]),
         cwd=root,
       )
       guard code != 0 else { abort("HTTP probe accepted injected failure") }

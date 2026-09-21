@@ -115,11 +115,11 @@ function createRendererStats() {
 
 ## 5. 体积预算与当前余量 / Byte Budgets and Current Headroom
 
-2026-09-08 先前 authoring 历史校准的 Conformance JavaScript 为 418,121/453,000 bytes，保留 34,879 bytes 余量；runtime 为 387,977/400,000 bytes，启用 App 的 host 为 15,624/16,000 bytes，initial trees 为 303/41,000 bytes。未启用 App 的 host 为 14,976/15,000 bytes。该次评审仅调整 Conformance runtime 和核心发布 ZIP 预算，aggregate、host、starter 与 UI 门槛当时保持不变。依据见[历史 authoring 评审](../reference/performance_baseline.md#approved-authoring-budget-review)；当前原生导航与布局的 host/ZIP 上限见[后续预算评审](../reference/performance_baseline.md#approved-native-navigation-and-layout-budget-review)。
+2026-09-08 先前 authoring 历史校准的 Conformance JavaScript 为 418,121/453,000 bytes，保留 34,879 bytes 余量；runtime 为 387,977/400,000 bytes，启用 App 的 host 为 15,624/16,000 bytes，initial trees 为 303/41,000 bytes。未启用 App 的 host 为 14,976/15,000 bytes。该次评审仅调整 Conformance runtime 和核心发布 ZIP 预算，aggregate、host、starter 与 UI 门槛当时保持不变。依据见[历史 authoring 评审](../reference/performance_baseline.md#approved-authoring-budget-review)；原生导航与布局的 host 上限见[后续预算评审](../reference/performance_baseline.md#approved-native-navigation-and-layout-budget-review)；当前核心 ZIP 上限为 328 KiB，保留 8 KiB 余量，依据见 [2026-09-21 vp 工具预算评审](../reference/performance_baseline.md#approved-vp-tooling-archive-budget-review)。
 
 > **English:**
 >
-> The earlier 2026-09-08 authoring calibration measured 418,121/453,000 Conformance JavaScript bytes, leaving 34,879 bytes. Runtime was 387,977/400,000 bytes, App-enabled host was 15,624/16,000 bytes, and initial trees were 303/41,000 bytes. The no-App host was 14,976/15,000 bytes. That review changed only the Conformance runtime and core registry ZIP budgets; aggregate, host, starter, and UI ceilings were unchanged at that time. See the [historical authoring review](../reference/performance_baseline.md#approved-authoring-budget-review); current native navigation/layout host and ZIP ceilings are in the [subsequent budget review](../reference/performance_baseline.md#approved-native-navigation-and-layout-budget-review).
+> The earlier 2026-09-08 authoring calibration measured 418,121/453,000 Conformance JavaScript bytes, leaving 34,879 bytes. Runtime was 387,977/400,000 bytes, App-enabled host was 15,624/16,000 bytes, and initial trees were 303/41,000 bytes. The no-App host was 14,976/15,000 bytes. That review changed only the Conformance runtime and core registry ZIP budgets; aggregate, host, starter, and UI ceilings were unchanged at that time. See the [historical authoring review](../reference/performance_baseline.md#approved-authoring-budget-review); native navigation/layout host ceilings are in the [subsequent budget review](../reference/performance_baseline.md#approved-native-navigation-and-layout-budget-review). The [2026-09-21 vp tooling review](../reference/performance_baseline.md#approved-vp-tooling-archive-budget-review) sets the current core ZIP hard ceiling to 328 KiB with an unchanged 8 KiB reserve.
 
 > **源码 / Source:** [`src/cmd/minimoon_check/performance.mbt`](../../src/cmd/minimoon_check/performance.mbt) · symbol: `perf_suite` artifact budgets
 
@@ -159,6 +159,12 @@ guard byte_budget_allows(aggregate.val, aggregate_limit) else {
 > **English:**
 >
 > A small public API addition can cause an entire generic implementation to enter the application runtime. Review must inspect release-bundle delta, symbol ownership, and both starter and Conformance ceilings. Raising the ceiling directly would hide linkage-boundary degradation.
+
+当前 vp 工具迁移只调整核心发布 ZIP 上限；UI、生成 runtime 与其他性能门槛保持不变，最终发布字节以打包门禁重新测量为准。
+
+> **English:**
+>
+> The [2026-09-21 vp tooling review](../reference/performance_baseline.md#approved-vp-tooling-archive-budget-review) sets the current core ZIP hard ceiling to 328 KiB with an unchanged 8 KiB reserve. UI, generated runtime and other performance thresholds remain unchanged; the package gate remeasures the final archive.
 
 ## 6. 性能 gate 的边界 / Boundaries of Performance Gates
 

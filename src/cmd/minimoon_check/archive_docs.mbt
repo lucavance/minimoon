@@ -31,8 +31,8 @@ async fn archive_documentation_gate(
   run(
     root,
     "Unpacked " + label + " registry documentation links",
-    "bun",
-    archive_documentation_args(distribution, package_root),
+    "vp",
+    @toolchain.bun_args(archive_documentation_args(distribution, package_root)),
     cwd=package_root,
   )
 }
@@ -54,11 +54,19 @@ async fn archive_documentation_self_test(
     probe, "README.md", "[excluded UI guide](docs/migration.md)\n",
   )
   require_command_failure(
-    "Reject documentation absent from registry archive", "bun", args, probe, "broken local Markdown link",
+    "Reject documentation absent from registry archive",
+    "vp",
+    @toolchain.bun_args(args),
+    probe,
+    "broken local Markdown link",
   )
   write_ui_consumer_file(distribution, "outside.md", "# Outside the archive\n")
   write_ui_consumer_file(probe, "README.md", "[escape](../outside.md)\n")
   require_command_failure(
-    "Reject documentation links escaping registry archive", "bun", args, probe, "escapes archive",
+    "Reject documentation links escaping registry archive",
+    "vp",
+    @toolchain.bun_args(args),
+    probe,
+    "escapes archive",
   )
 }

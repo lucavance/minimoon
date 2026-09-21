@@ -2,7 +2,7 @@
 
 This workflow keeps deterministic Linux validation, real Skyline acceptance
 and explicit local registry publication distinct. The current source pair is
-core `lampclaw/minimoon@0.2.2` and UI `lampclaw/minimoon_ui@0.1.1`;
+core `lampclaw/minimoon@0.2.3` and UI `lampclaw/minimoon_ui@0.1.1`;
 UI declares core `0.2.2`. Actual published versions and historical checkpoints
 are recorded in [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 Never overwrite an occupied registry version or treat an old host result as
@@ -10,10 +10,13 @@ acceptance of changed artifacts.
 
 ## Scoped publication exception
 
-For core `0.2.2` / UI `0.1.1` only, the user explicitly authorizes this sequence:
+For the published core `0.2.2` / UI `0.1.1` pair and the requested core `0.2.3`
+vp migration, the user explicitly authorizes this sequence:
 complete local candidate checks, push the frozen candidate to `main`, wait for
 both CI jobs on that exact commit, notify the user of their success, then
-publish the two packages without waiting for new WeChat host validation.
+publish the authorized package versions without waiting for new WeChat host
+validation. This iteration publishes core `0.2.3` only; UI remains the existing
+`0.1.1`, including its core `0.2.2` declaration.
 The notification does not require another approval before the already
 authorized publication.
 
@@ -38,8 +41,8 @@ moon info
 moon fmt --check
 moon test --target native
 moon test --target js
-bun run check:coverage
-bun run check:candidate
+vp run --no-cache check:coverage
+vp run --no-cache check:candidate
 git diff --check
 git status --short --branch
 ```
@@ -71,10 +74,11 @@ The UI archive gate instead copies source into a temporary independent Git
 root, runs the real `moon package`, checks the archive allowlist and required
 files, and compiles consumers from the extracted package. Its reviewed output
 is `_build/publish/lampclaw-minimoon_ui-0.1.1.zip`. The core candidate archive is
-`_build/publish/lampclaw-minimoon-0.2.2.zip`. UI publication must use that checked
+`_build/publish/lampclaw-minimoon-0.2.3.zip`. UI publication must use that checked
 archive extracted outside all Git and Moon workspace ancestors, after registry
 core is available and consumers pass. A successful archive gate does not itself
-publish either module.
+publish either module. UI `0.1.1` is occupied; the current source archive is
+only a source-validation fixture, not an archive to republish.
 
 After review, commit and push the complete candidate to `main`, then require
 both the primary `Test` job and `Node 24 LTS compatibility` job to pass for that
@@ -99,7 +103,7 @@ package consumers. All these automated checks are distinct from `check:all` and
 `check:mvp`, which additionally require the two fixtures' local host evidence.
 
 Archive checks use `moon package --frozen --list` and inspect the actual ZIPs.
-Core has a 320 KiB hard ceiling with an 8 KiB reserve; UI has a separate 250 KiB
+Core has a 328 KiB hard ceiling with an 8 KiB reserve; UI has a separate 250 KiB
 ceiling with a 16 KiB reserve. These are repository budgets, not registry limits.
 Only `scripts/bridge/weapp_tailwindcss_adapter.mjs` is maintained standalone
 JavaScript; host code is MoonBit-owned and committed MiniApp JavaScript is generated.
@@ -146,7 +150,8 @@ Each bundle contains its own:
 - exact `dist/`, generated manifest, verify report, release summary and smoke
   checklist;
 - `HANDOFF.json` with commit, application directory, artifact fingerprint,
-  core/UI and Contract/ABI/protocol versions, toolchain and required settings;
+  core/UI and Contract/ABI/protocol versions, toolchain (including global
+  `vp` and its managed Bun backend) and required settings;
 - `VALIDATION.md`, `SHA256SUMS`, the convenience ZIP and `ARCHIVE_SHA256`.
 
 Run these commands in each downloaded bundle:
@@ -193,8 +198,8 @@ skipping it never produces a release-verification pass.
 ```bash
 minimoon verify examples/miniapp_draft_workbench --release
 minimoon verify ui/examples/showcase --release
-bun run check:all
-bun run check:mvp
+vp run --no-cache check:all
+vp run --no-cache check:mvp
 ```
 
 These commands rebuild. Require both local reports to pass release verification
@@ -206,7 +211,7 @@ After a real-host validation run, restore public reports before staging or
 publication:
 
 ```bash
-bun run check:candidate
+vp run --no-cache check:candidate
 git diff --exit-code
 git status --porcelain --untracked-files=all
 ```
@@ -221,80 +226,72 @@ repository-only changes as well.
 
 Publication is an explicitly authorized local operator action, not a CI step.
 Authenticate as the module owner; do not add registry credentials to CI.
-Keep core `0.2.2` and UI `0.1.1` fixed throughout these checks. The user-approved
-exception above allows both host results to remain pending for this pair.
+Keep core `0.2.3` and the already published UI `0.1.1` fixed throughout these
+checks. The user-approved exception above permits both host results to remain
+pending. Do not publish or modify the occupied UI version.
 
-1. Confirm both versions are unoccupied immediately before publication. Recheck
-   the frozen commit, successful CI jobs, reviewed archive contents, toolchain
-   versions and both fingerprints. Run `bun run check:candidate`, then
-   `git diff --exit-code` and `git status --porcelain --untracked-files=all`;
-   require a clean worktree and unchanged package contents. An occupied version
-   must not be overwritten. A source change requires a new candidate and CI run.
+1. Confirm core `0.2.3` is unoccupied immediately before publication. Recheck
+   the frozen commit, successful CI jobs, reviewed core archive contents,
+   toolchain versions and both fingerprints. Run `vp run --no-cache check:candidate`,
+   then `git diff --exit-code` and `git status --porcelain --untracked-files=all`;
+   require a clean worktree and unchanged package contents. A source change
+   requires a new candidate and CI run. Notify the user when both jobs pass.
 2. Publish core from the clean validation checkout:
 
 ```bash
 moon publish --frozen
 ```
 
-   On older toolchains, this command has stopped before upload because its
-   fresh extracted self-check needed dependency installation. If the current
-   toolchain reports that exact failure, first confirm no upload occurred and
-   the reviewed source/package contents and dependency versions are unchanged.
-   Ordinary `moon publish` from the same checkout may then complete the normal
-   self-check. Never use this fallback for a source-check failure or dependency
-   drift. If an upload result is ambiguous, query the registry before retrying.
-3. Wait until Mooncakes resolves core `0.2.2`. In a fresh temporary directory
-   outside this repository and every ancestor `moon.work`, install its registry
+   This command has previously stopped before upload because its freshly
+   extracted self-check needed dependency installation. If the current toolchain
+   reports that exact failure, confirm no upload occurred and the reviewed
+   source/package contents and dependency versions are unchanged. Ordinary
+   `moon publish` from the same checkout may then complete the normal self-check.
+   Never use this fallback for a source-check failure or dependency drift.
+   If an upload result is ambiguous, query the registry before retrying.
+3. Wait until Mooncakes resolves core `0.2.3`. In a fresh temporary directory
+   outside this repository and every ancestor `moon.work`, install the registry
    CLI into a temporary binary directory:
 
 ```bash
-moon install --bin <temporary-bin> lampclaw/minimoon/cmd/minimoon@0.2.2
+moon install --bin <temporary-bin> lampclaw/minimoon/cmd/minimoon@0.2.3
 <temporary-bin>/minimoon --version
 <temporary-bin>/minimoon init <temporary-app>
 ```
 
-   Do not pass `--minimoon-root`. Confirm the CLI version and absence of local
-   overrides; run `moon update`, inspect the resolved graph, install the
-   generated JavaScript dependencies, and check/test the JS-only Starter.
-   Build and run `verify --candidate`. Also validate an application-enabled
-   consumer for the helper compatibility fix and an independent core consumer
-   on native and JS targets. Compare the downloaded module's full file inventory
-   and content hashes against the reviewed core archive. ZIP metadata alone is
-   not a source-content difference. These checks do not establish a host pass.
-4. Extract the reviewed `_build/publish/lampclaw-minimoon_ui-0.1.1.zip` outside
-   all Git and Moon workspace ancestors. Check its complete inventory, README,
-   LICENSE, module version and core `0.2.2` declaration. Resolve registry core,
-   check the extracted module and its consumer without local core overrides,
-   and confirm its file content hashes remain identical to the reviewed ZIP.
-   Publish from this extracted module, never the repository's `ui/` directory:
+   Do not pass `--minimoon-root`. Confirm the exact CLI version and absence of
+   local overrides. Run `moon update`, inspect the resolved graph, execute
+   `vp install`, and check/test the JS-only Starter. Build and run
+   `verify --candidate`, exercise the README first edit, and validate an
+   application-enabled consumer and an independent native/JS core consumer.
+   Test with vp-managed tools and no independently installed Bun. Compare the
+   downloaded core inventory and file hashes against the reviewed archive;
+   ZIP metadata alone is not a source-content difference.
+4. Upgrade a Starter created by registry CLI `0.2.2` to CLI/core `0.2.3`.
+   Update its runtime declaration and commands as documented in the upgrade
+   guide. Preserve application logic, configuration, styles and private settings.
+   Check/test, build, verify and repeat the build to establish deterministic
+   output. Old CLI archives remain unchanged.
+5. Create a registry-only consumer declaring core `0.2.3` and UI `0.1.1`.
+   Confirm those resolved versions and UI's unchanged core `0.2.2` declaration.
+   Import root, headless and theme for native/JS behavior checks; exercise
+   resources through the native build provider, not application JavaScript.
+   Build and verify a candidate, reject unknown resources without corrupting
+   prior artifacts, and test deterministic rebuilding. Compare downloaded core
+   contents to the reviewed core ZIP and validate the existing published UI
+   archive against its publication checkpoint. Do not compare immutable UI
+   contents to the newly edited repository documentation or republish it.
+6. Only after core and all fresh consumers pass, record the actual source SHA,
+   publication date, CI result, registry links and package content checks in
+   repository-only `docs/project_status.md`. Keep host acceptance pending and
+   explicitly record that UI was not republished. Commit and push the status
+   update and require its CI to pass. Do not modify already published contents.
 
-```bash
-moon publish --frozen
-```
-
-   The narrowly defined dependency-self-check fallback from step 2 also applies
-   here, with the same no-upload and unchanged-content checks. Do not change
-   the UI's dependency to repair a failed publish under the occupied version.
-5. After UI `0.1.1` is available, create another registry-only consumer declaring
-   core `0.2.2` and UI `0.1.1`. Confirm those exact resolved versions and the UI
-   package's core declaration. Import root, headless and theme for native/JS
-   behavior checks, and exercise resources through the native build-provider
-   path. Do not import build resources into application JavaScript. Run
-   generation and candidate verification, test deterministic rebuilding, then
-   compare downloaded core/UI inventories and content hashes with both reviewed
-   archives. No local workspace binding may satisfy these checks.
-6. Only after both packages resolve and all fresh consumers pass, record the
-   actual source SHA, publication date, CI result, registry links and package
-   content checks in repository-only `docs/project_status.md`. Record host
-   acceptance as pending for this exception. Commit and push that status update
-   and require its CI to pass; do not modify already published package contents.
-
-If core publication succeeds but a consumer or UI publication check fails,
-report the exact partial state and stop publishing dependent packages. Do not
-automatically yank core, overwrite a version, or publish UI as a repair. Fixes
-to published contents require a new version and validation cycle. Real-host
-timestamps, tool versions, notes and outcomes remain local; no evidence file
-belongs in a commit or CI attachment.
+If core publication succeeds but a consumer check fails, report that exact
+partial state. Do not automatically yank core, overwrite its version, or
+publish UI as a repair. Fixes to published contents require a new version and
+validation cycle. Real-host timestamps, tool versions, notes and outcomes remain
+local; no evidence file belongs in a commit or CI attachment.
 
 ## Source-only drift
 

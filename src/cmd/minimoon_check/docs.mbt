@@ -32,7 +32,7 @@ async fn docs_suite(root : String) -> Unit {
     @versions.runtime_api_version().to_string(),
     @versions.renderer_protocol_version().to_string(),
   ]
-  let init_code = @process.run("git", ["init", "-q"], cwd=bad_links) catch {
+  let init_code = @toolchain.run("git", ["init", "-q"], cwd=bad_links) catch {
     err => {
       cleanup_check_temporary(temp)
       abort("failed to initialize documentation check fixture: \{err}")
@@ -42,9 +42,9 @@ async fn docs_suite(root : String) -> Unit {
     cleanup_check_temporary(temp)
     abort("failed to initialize documentation check fixture")
   }
-  let (bad_code, bad_stdout, bad_stderr) = @process.collect_output(
-    "bun",
-    [
+  let (bad_code, bad_stdout, bad_stderr) = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args([
       script,
       bad_links,
       @versions.product_version(),
@@ -52,7 +52,7 @@ async fn docs_suite(root : String) -> Unit {
       @versions.runtime_api_version().to_string(),
       @versions.renderer_protocol_version().to_string(),
       "--links-only",
-    ],
+    ]),
     cwd=bad_links,
   ) catch {
     err => {
@@ -70,9 +70,9 @@ async fn docs_suite(root : String) -> Unit {
     cleanup_check_temporary(temp)
     abort("documentation check did not reject its broken-link fixture")
   }
-  let (self_code, self_stdout, self_stderr) = @process.collect_output(
-    "bun",
-    [..args, "--self-test"],
+  let (self_code, self_stdout, self_stderr) = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args([..args, "--self-test"]),
     cwd=root,
   ) catch {
     err => {
@@ -100,8 +100,12 @@ async fn docs_suite(root : String) -> Unit {
   println(
     "\n==> Documentation links, bilingual sources, diagrams, facts, and fixture reports",
   )
-  println("$ bun " + args.join(" "))
-  let (code, stdout, stderr) = @process.collect_output("bun", args, cwd=root) catch {
+  println("$ vp " + @toolchain.bun_args(args).join(" "))
+  let (code, stdout, stderr) = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args(args),
+    cwd=root,
+  ) catch {
     err => {
       cleanup_check_temporary(temp)
       abort("failed to start documentation check: \{err}")

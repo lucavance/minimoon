@@ -7,7 +7,7 @@ The canonical source is the current `lucavance/minimoon` repository.
 
 New application authors should begin with the [quickstart](guides/miniapp_quickstart.md):
 confirm availability in [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md), install the registry
-CLI with `moon install lampclaw/minimoon/cmd/minimoon@0.2.2`,
+CLI with `moon install lampclaw/minimoon/cmd/minimoon@0.2.3`,
 create an independent Starter, preview it, then change its initial name and
 rebuild. Continue with [page authoring](guides/miniapp_authoring_example.md),
 [HTTP](guides/http.md), [navigation](guides/native_navigation.md),
@@ -48,7 +48,7 @@ Chinese and English paragraphs are interleaved in one document so architecture,
 source excerpts, and diagrams stay reviewable as a single artifact. This
 maintainer suite and its high-resolution assets are source-repository material;
 they are intentionally excluded from the core registry archive, whose reviewed
-hard ceiling is 320 KiB with an 8 KiB reserve. UI has a separate 250 KiB hard
+hard ceiling is 328 KiB with an 8 KiB reserve. UI has a separate 250 KiB hard
 ceiling and 16 KiB reserve.
 
 - [`code-analysis/README.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md) — current-source reading map and provenance

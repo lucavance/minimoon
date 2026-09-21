@@ -58,7 +58,7 @@ async fn find_node_root(start : String) -> String {
       raise Failure::Failure(
         "Tailwind dependencies were not found from " +
         start +
-        ". Run `bun install` in the Minimoon app directory.",
+        ". Run `vp install` in the Minimoon app directory.",
       )
     }
     current = parent
@@ -131,8 +131,15 @@ async fn run_checked(
   cwd : String,
   label : String,
 ) -> Unit {
-  let (code, stdout, stderr) = @process.collect_output(command, args, cwd~) catch {
-    err => raise Failure::Failure("failed to start \{label}: \{err}")
+  let (code, stdout, stderr) = @toolchain.collect_output(command, args, cwd~) catch {
+    err => {
+      let hint = if command == "vp" {
+        ". Install Vite+ CLI 0.3.3 and make sure `vp` is available on PATH."
+      } else {
+        ""
+      }
+      raise Failure::Failure("failed to start " + label + ": \{err}" + hint)
+    }
   }
   guard code == 0 else {
     let out = stdout.text().trim().to_owned()
@@ -197,8 +204,9 @@ pub async fn generate_tailwind(loaded : Json) -> Unit {
       "Tailwind generation",
     )
     run_checked(
-      "node",
+      "vp",
       [
+        "node",
         adapter,
         raw_css,
         input,

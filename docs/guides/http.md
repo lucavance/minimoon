@@ -1,7 +1,7 @@
 # Typed HTTP requests
 
 Import the optional `lampclaw/minimoon/http` package as `@http`, alongside the
-root `lampclaw/minimoon` package. It is part of core 0.2.2, not a separate
+root `lampclaw/minimoon` package. It is part of core 0.2.3, not a separate
 module or a dependency on Rabbita's browser runtime. Pages or applications
 executing requests must declare the root `Request` capability.
 
@@ -52,7 +52,7 @@ For HTTP command tests, inject host replies with the owning low-level public
 work with `has_ready_work` and `flush`, using a bounded loop. The higher-level
 `TestRuntime` and `TestApp`
 harnesses instead provide `quiesce()` for ready local/shared work; they do not
-inject HTTP replies or wait for a network request. `bun run check:http-live`
+inject HTTP replies or wait for a network request. `vp run check:http-live`
 remains an explicit public-API smoke, not WeChat Developer Tools evidence.
 It checks ten Platform cases, the App-owned draft echo and the UI Form echo.
 The probe accepts scalar/array-valued query, form and header echoes without losing

@@ -50,7 +50,7 @@ async test "UI packaging isolates inherited ignores and lets moonignore filter s
     "test",
   )
   errdefer @fs.rmdir(base, recursive=true)
-  let (code, _, _) = @process.collect_output("git", ["init", "--quiet", base])
+  let (code, _, _) = @toolchain.collect_output("git", ["init", "--quiet", base])
   assert_eq(code, 0)
   write_ui_consumer_file(base, ".moonignore", "/staging/\n")
   let core = join(base, "core")

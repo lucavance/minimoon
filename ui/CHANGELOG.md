@@ -5,7 +5,7 @@ defined by `moon.mod`; it does not use Git version tags. Registry availability
 is recorded in the repository's
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 
-## [0.1.1] - Unreleased
+## [0.1.1] - 2026-09-21
 
 ### Changed
 

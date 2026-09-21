@@ -16,6 +16,9 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      VP_NODE_VERSION: 26.9.0
+      VP_PACKAGE_MANAGER: bun@1.4.2
 
     defaults:
       run:
@@ -32,26 +35,24 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+      - name: Setup Vite+ (26.9.0)
+        uses: voidzero-dev/setup-vp@49c3e4e92c52e7f8392712a9267bbe71c5ab30e5 # v1.19.0
         with:
+          version: 0.3.3
           node-version: 26.9.0
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version: 1.4.2
+          run-install: false
+          cache: true
 
       - name: Install JS tooling
         run: |
-          node --version
-          bun --version
-          bun install --frozen-lockfile
+          vp --version
+          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.2"'
+          vp install --frozen-lockfile
 
       - name: Dependency advisory scan
         continue-on-error: true
         timeout-minutes: 3
-        run: bun audit --audit-level=high
+        run: vp pm audit --level high
 
       - name: MoonBit environment
         run: |
@@ -78,8 +79,8 @@ jobs:
           moon fmt --check
           moon test --target native
           moon test --target js
-          bun run check:coverage
-          bun run check:candidate
+          vp run --no-cache check:coverage
+          vp run --no-cache check:candidate
           git diff --check
 
       - name: Generated and interface drift
@@ -91,15 +92,17 @@ jobs:
           set -euo pipefail
           core_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' moon.mod)"
           ui_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' ui/moon.mod)"
-          # The reviewed UI patch requires the matching core compatibility release.
-          if [ "$core_version" != "0.2.2" ] || [ "$ui_version" != "0.1.1" ] ||
+          # Published UI 0.1.1 retains its compatible core 0.2.2 dependency.
+          if [ "$core_version" != "0.2.3" ] || [ "$ui_version" != "0.1.1" ] ||
              ! grep -Fq '"lampclaw/minimoon@0.2.2"' ui/moon.mod; then
-            echo "CI handoff requires the reviewed core 0.2.2 / UI 0.1.1 pair and UI core 0.2.2 dependency" >&2
+            echo "CI handoff requires the reviewed core 0.2.3 / UI 0.1.1 pair and UI core 0.2.2 dependency" >&2
             exit 1
           fi
           moon_version="$(moon version --all)"
-          node_version="$(node --version)"
-          bun_version="$(bun --version)"
+          vp_version="$(vp --version | sed -n '1p')"
+          js_environment="$(vp env current --json)"
+          node_version="$(jq -er '"v" + .node.version' <<< "$js_environment")"
+          bun_version="$(jq -er '.package_manager | select(.name == "bun") | .version' <<< "$js_environment")"
 
           package_handoff() {
             local fixture="$1" name="$2" bundle="$3" page_count="$4"
@@ -182,12 +185,12 @@ jobs:
               --arg fixture "$name" --arg appDirectory "$fixture" \
               --arg commit "$GITHUB_SHA" --arg fingerprint "$fingerprint" --arg runner "$RUNNER_OS" \
               --arg coreVersion "$core_version" --arg uiVersion "$ui_version" \
-              --arg moon "$moon_version" --arg node "$node_version" --arg bun "$bun_version" \
+              --arg moon "$moon_version" --arg node "$node_version" --arg bun "$bun_version" --arg vp "$vp_version" \
               --slurpfile manifest "$handoff_dir/manifest.json" \
               '{schemaVersion: 2, fixture: $fixture, appDirectory: $appDirectory, commit: $commit, artifactFingerprint: $fingerprint,
                 versions: {minimoon: $coreVersion, minimoonUi: $uiVersion,
                   appContract: $manifest[0].schemaVersion, runtimeAbi: $manifest[0].runtimeApiVersion, rendererProtocol: $manifest[0].rendererProtocolVersion},
-                toolchain: {moon: $moon, node: $node, bun: $bun}, runner: $runner, importDirectory: "dist/",
+                toolchain: {moon: $moon, node: $node, bun: $bun, vp: $vp}, runner: $runner, importDirectory: "dist/",
                 projectSettings: {renderer: "skyline", es6: true, enhance: true, minified: true, minimumBaseLibrary: "3.17.0"},
                 evidenceStatus: "pending-manual-devtools-validation"}' > "$handoff_dir/HANDOFF.json"
             if grep -ERq 'wx[[:xdigit:]]{16}|BEGIN ([A-Z ]+ )?PRIVATE KEY' "$handoff_dir"; then
@@ -238,6 +241,9 @@ jobs:
     name: Node 24 LTS compatibility
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      VP_NODE_VERSION: 24.20.0
+      VP_PACKAGE_MANAGER: bun@1.4.2
 
     defaults:
       run:
@@ -252,27 +258,25 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: Setup Node 24 LTS floor
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+      - name: Setup Vite+ (24.20.0)
+        uses: voidzero-dev/setup-vp@49c3e4e92c52e7f8392712a9267bbe71c5ab30e5 # v1.19.0
         with:
+          version: 0.3.3
           node-version: 24.20.0
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version: 1.4.2
+          run-install: false
+          cache: true
 
       - name: Install toolchains and dependencies
         run: |
-          node --version
-          bun --version
-          bun install --frozen-lockfile
+          vp --version
+          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.2"'
+          vp install --frozen-lockfile
           moon update
 
       - name: Validate Node 24 compatibility surface
         run: |
           moon test --target js
-          moon run src/cmd/minimoon --target native -- check --suite generator
+          vp run --no-cache minimoon check --suite generator
           git diff --check
 
       - name: Final source cleanliness

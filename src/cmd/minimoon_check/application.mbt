@@ -9,7 +9,11 @@ async fn application_host_smoke(root : String, dist : String) -> Unit {
     create_mode=CreateOrTruncate,
     permission=0o600,
   )
-  let result = @process.collect_output("bun", [script, dist], cwd=root) catch {
+  let result = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args([script, dist]),
+    cwd=root,
+  ) catch {
     error => {
       cleanup_check_temporary(temp)
       abort("application smoke could not start: \{error}")

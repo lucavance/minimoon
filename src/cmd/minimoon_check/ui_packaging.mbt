@@ -48,7 +48,7 @@ async fn prepare_ui_packaging_stage(
   // Moon's package walker inherits ignore rules up to the nearest Git root.
   // A new temporary Git root also isolates an explicitly repository-local
   // MINIMOON_CHECK_TMPDIR; never create .git in the real UI module.
-  let (code, stdout, stderr) = @process.collect_output("git", [
+  let (code, stdout, stderr) = @toolchain.collect_output("git", [
     "init", "--quiet", stage,
   ])
   guard code == 0 else {
@@ -100,7 +100,7 @@ async fn package_staged_ui(
   stage : String,
   staged_ui : String,
 ) -> (String, Array[String]) {
-  let (code, stdout, stderr) = @process.collect_output(
+  let (code, stdout, stderr) = @toolchain.collect_output(
     "moon",
     ["package", "--frozen", "--list", "--target-dir", join(stage, "_build")],
     cwd=staged_ui,

@@ -83,6 +83,6 @@ Automated validation must pass before handoff. A host-acceptance claim requires
 fingerprint-matching real-host evidence for the exact App Contract v11, runtime
 ABI v13 and renderer protocol v8 Draft Workbench and UI showcase bytes. That
 evidence is a local input and never part of repository or CI state. The
-[core 0.2.2 / UI 0.1.1 publication exception](operations/release_candidate_handoff.md#scoped-publication-exception)
+[core 0.2.3 publication exception](operations/release_candidate_handoff.md#scoped-publication-exception)
 allows registry publication after both CI jobs pass while host validation stays
 pending; it does not change the actual evidence gates.

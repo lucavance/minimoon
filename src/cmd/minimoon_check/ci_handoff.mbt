@@ -47,7 +47,7 @@ fn ci_handoff_check_source() -> String {
     #|function sandbox(label) {
     #|  const directory = path.join(temporary, label)
     #|  fs.mkdirSync(directory)
-    #|  for (const file of ["moon.mod", "ui/moon.mod", "docs/operations/miniapp_devtools_validation.md"]) {
+    #|  for (const file of ["moon.mod", "ui/moon.mod", "package.json", "docs/operations/miniapp_devtools_validation.md"]) {
     #|    write(directory, file, fs.readFileSync(path.join(root, file)))
     #|  }
     #|  for (const [fixture, name] of fixtures) {
@@ -138,7 +138,7 @@ fn ci_handoff_check_source() -> String {
     #|    assert.equal(handoff.appDirectory, fixture)
     #|    assert.equal(handoff.fixture, name)
     #|    assert.equal(handoff.commit, commit)
-    #|    assert.equal(handoff.versions.minimoon, "0.2.2")
+    #|    assert.equal(handoff.versions.minimoon, "0.2.3")
     #|    assert.equal(handoff.versions.minimoonUi, "0.1.1")
     #|    const manifest = JSON.parse(fs.readFileSync(path.join(base, "manifest.json"), "utf8"))
     #|    const summary = JSON.parse(fs.readFileSync(path.join(base, "release_summary.json"), "utf8"))
@@ -149,7 +149,7 @@ fn ci_handoff_check_source() -> String {
     #|      assert.throws(() => assertTechnicalVersions(oldHandoff, manifest, summary, checklist), /must use the current version/)
     #|      cases++
     #|    }
-    #|    for (const tool of ["moon", "node", "bun"]) assert.ok(handoff.toolchain[tool])
+    #|    for (const tool of ["moon", "vp", "node", "bun"]) assert.ok(handoff.toolchain[tool])
     #|    const sums = fs.readFileSync(path.join(base, "SHA256SUMS"), "utf8")
     #|    for (const file of ["manifest.json", "smoke_checklist.json", "verify_report.json", "release_summary.json", "HANDOFF.json", "VALIDATION.md", "dist/app.js", "dist/project.private.config.example.json"]) {
     #|      assert.ok(sums.includes(`  ${file}\n`), `handoff checksums omit ${file}`)
@@ -250,9 +250,9 @@ async fn ci_handoff_gate(root : String) -> Unit {
     create_mode=CreateOrTruncate,
     permission=0o600,
   )
-  let (code, stdout, stderr) = @process.collect_output(
-    "bun",
-    [script, root],
+  let (code, stdout, stderr) = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args([script, root]),
     cwd=root,
   )
   @fs.rmdir(temp, recursive=true)

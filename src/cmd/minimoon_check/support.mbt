@@ -19,7 +19,7 @@ async fn run(
   let working_dir = cwd.unwrap_or(root)
   println("\n==> " + label)
   println("$ " + command + " " + display_args.unwrap_or(args).join(" "))
-  let code = @process.run(command, args, cwd=working_dir, extra_env?=env) catch {
+  let code = @toolchain.run(command, args, cwd=working_dir, extra_env?=env) catch {
     err => abort("failed to start \{label}: \{err}")
   }
   guard code == 0 else { abort(label + " exited with code \{code}") }
@@ -35,7 +35,7 @@ async fn require_command_failure(
 ) -> Unit {
   println("\n==> " + label)
   println("$ " + command + " " + args.join(" "))
-  let (code, stdout, stderr) = @process.collect_output(command, args, cwd~) catch {
+  let (code, stdout, stderr) = @toolchain.collect_output(command, args, cwd~) catch {
     err => abort("failed to start \{label}: \{err}")
   }
   guard code != 0 else { abort(label + " unexpectedly succeeded") }

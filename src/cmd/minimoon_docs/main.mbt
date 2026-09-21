@@ -106,8 +106,9 @@ fn mmdc_invocation(arguments : Array[String]) -> (String, Array[String]) {
     Some(binary) if binary.trim() != "" => (binary, arguments)
     _ =>
       (
-        "bunx",
+        "vp",
         [
+          "dlx",
           "--package",
           "@mermaid-js/mermaid-cli@" + renderer_version,
           "mmdc",
@@ -120,7 +121,7 @@ fn mmdc_invocation(arguments : Array[String]) -> (String, Array[String]) {
 ///|
 async fn run_mmdc(arguments : Array[String], root : String) -> Unit {
   let (command, args) = mmdc_invocation(arguments)
-  let (code, stdout, stderr) = @process.collect_output(command, args, cwd=root) catch {
+  let (code, stdout, stderr) = collect_renderer_output(command, args, root) catch {
     error => abort("failed to start Mermaid CLI: \{error}")
   }
   guard code == 0 else {
@@ -136,7 +137,7 @@ async fn run_mmdc(arguments : Array[String], root : String) -> Unit {
 ///|
 async fn require_renderer_version(root : String) -> Unit {
   let (command, args) = mmdc_invocation(["--version"])
-  let (code, stdout, stderr) = @process.collect_output(command, args, cwd=root) catch {
+  let (code, stdout, stderr) = collect_renderer_output(command, args, root) catch {
     error => abort("failed to inspect Mermaid CLI: \{error}")
   }
   let output = (stdout.text() + stderr.text()).trim().to_owned()
@@ -271,8 +272,8 @@ fn asset_readme(diagrams : Array[Diagram]) -> String {
     "> **English:**\n>\n> This directory contains the 21 diagrams used by the bilingual Minimoon code-analysis suite. SVG is losslessly scalable; PNG is exported at 3×.\n\n" +
     "## 重新生成 / Regeneration\n\n" +
     "```bash\n" +
-    "bun run docs:diagrams\n" +
-    "bun run docs:diagrams:check\n" +
+    "vp run docs:diagrams\n" +
+    "vp run docs:diagrams:check\n" +
     "```\n\n" +
     "默认使用固定的 Mermaid CLI 11.17.0 和仓库内受控的无沙箱渲染配置；也可以通过 `MMDC_BIN` 和 `PUPPETEER_EXECUTABLE_PATH` 指定本地工具。\n\n" +
     "> **English:**\n>\n> The command defaults to pinned Mermaid CLI 11.17.0 and the repository's controlled no-sandbox rendering configuration. `MMDC_BIN` and `PUPPETEER_EXECUTABLE_PATH` may select local tools.\n\n" +

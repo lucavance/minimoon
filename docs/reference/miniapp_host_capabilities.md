@@ -142,7 +142,7 @@ The host suite also runs the generated Platform HTTP scenarios offline, includin
 timeout, synchronous failure, unavailable API, malformed response, concurrent
 out-of-order completion and duplicate callbacks. It separately loads Request Lifecycle
 for true secondary-page unload cancellation and stale-instance checks.
-`bun run check:http-live` builds both fixtures and uses a Bun-fetch
+`vp run check:http-live` builds both fixtures and uses a Bun-fetch
 `wx.request` transport shim against [Apifox Echo](https://echo.apifox.com/).
 Its 12 cases cover the ten generated Platform scenarios, App draft echo after
 editor unload and UI Form echo. The report binds each fixture's fingerprint and

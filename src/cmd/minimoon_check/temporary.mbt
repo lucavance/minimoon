@@ -98,7 +98,7 @@ async fn supervised_check_process(
   let directory = create_check_temporary(base, "run")
   println("Minimoon check temporary directory: " + directory)
   errdefer cleanup_check_temporary(directory)
-  let code = @process.run(
+  let code = @toolchain.run(
     command,
     args,
     cwd=root,

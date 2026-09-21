@@ -106,9 +106,11 @@ async fn audit_ui_gallery_javascript(root : String, mode : String) -> Unit {
   run(
     root,
     "UI showcase JavaScript compatibility (" + mode + ")",
-    "bun",
-    args,
-    display_args=["-e", "<inline MiniApp syntax and host-global audit>"],
+    "vp",
+    @toolchain.bun_args(args),
+    display_args=@toolchain.bun_args([
+      "-e", "<inline MiniApp syntax and host-global audit>",
+    ]),
   )
 }
 

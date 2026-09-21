@@ -34,11 +34,12 @@ body:
     id: environment
     attributes:
       label: Environment
-      description: Include MoonBit, Node, Bun, OS, Developer Tools/base-library/device when relevant.
+      description: Include MoonBit, vp, Node, managed Bun, OS, Developer Tools/base-library/device when relevant.
       placeholder: |-
         MoonBit:
+        vp:
         Node:
-        Bun:
+        Managed Bun:
         OS:
         Developer Tools / base library / device:
     validations:

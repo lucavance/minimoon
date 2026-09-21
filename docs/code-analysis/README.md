@@ -22,11 +22,11 @@
 >
 > Every conclusion comes from the current Minimoon source, tests, and generated artifacts. The MIT-licensed bilingual documentation in the reference repository supplied only an organizational and diagram-delivery pattern; this suite copies neither its domain content nor implementation code.
 
-本专题及高清图是维护者资料，保留在源码仓库中，并通过 `.moonignore` 排除在核心 Moon registry archive 之外；核心包硬上限为 320 KiB，另保留 8 KiB 余量。UI 包独立维持 250 KiB 硬上限和 16 KiB 余量。这不会影响应用依赖或生成的小程序字节。
+本专题及高清图是维护者资料，保留在源码仓库中，并通过 `.moonignore` 排除在核心 Moon registry archive 之外；核心包硬上限为 328 KiB，另保留 8 KiB 余量。UI 包独立维持 250 KiB 硬上限和 16 KiB 余量。这不会影响应用依赖或生成的小程序字节。
 
 > **English:**
 >
-> This suite and its high-resolution assets are maintainer material kept in the source repository. `.moonignore` excludes them from the core Moon registry archive, with its 320 KiB hard ceiling and 8 KiB reserve. UI independently retains a 250 KiB hard ceiling and 16 KiB reserve. They do not affect application dependencies or generated MiniApp bytes.
+> This suite and its high-resolution assets are maintainer material kept in the source repository. `.moonignore` excludes them from the core Moon registry archive, with its 328 KiB hard ceiling and 8 KiB reserve. UI independently retains a 250 KiB hard ceiling and 16 KiB reserve. They do not affect application dependencies or generated MiniApp bytes.
 
 ## 2. 当前仓库形态 / Current Repository Shape
 

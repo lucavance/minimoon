@@ -1,4 +1,5 @@
 import {
+  "lampclaw/minimoon/internal_toolchain" @toolchain,
   "lampclaw/minimoon/internal_host_validation" @host_validation,
   "lampclaw/minimoon/internal_versions" @versions,
   "lampclaw/minimoon/tooling_minimoon_build" @build,

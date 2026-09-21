@@ -1,6 +1,6 @@
 # Minimoon 草稿工作台
 
-Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.2` 公共 API 的轻量示例：
+Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.3` 公共 API 的轻量示例：
 **四个原生 Tab、一个编辑器、四个能力实验室，共九条路由**。
 它同时承担核心框架 conformance 验收，不是账号系统或云笔记服务。
 
@@ -13,12 +13,12 @@ Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.2` 公共 API �
 在仓库根目录运行：
 
 ```bash
-bun run minimoon verify examples/miniapp_draft_workbench --candidate
+vp run minimoon verify examples/miniapp_draft_workbench --candidate
 ```
 
-当前 `0.2.2` 源码包含输入框宿主修复：连续输入时只更新变化的属性，
+当前 `0.2.3` 源码包含输入框宿主修复：连续输入时只更新变化的属性，
 不反复写入未变化的焦点／选区属性，并适配新的 MoonBit 工具链。
-使用上述仓库 CLI 或确认已发布后的 `0.2.2` Registry CLI，不能混用旧工具生成的文件。
+使用上述仓库 CLI 或确认已发布后的 `0.2.3` Registry CLI，不能混用旧工具生成的文件。
 运行前准备 `moon 0.1.20260920`／`moonc v0.10.14`、Node `>=24.20.0` 和 Bun `1.4.2`。
 
 导入 **`examples/miniapp_draft_workbench/dist/`**，不要导入源码目录。
@@ -95,14 +95,14 @@ Page 与 App 所有权，以及原有控件和渲染实验。
 新增回归检查标题和正文逐次输入、中文内容及删除时的实际宿主写入路径。
 仍需在模拟器和真机检查连续英文输入、中文输入法组词、粘贴、删除、
 中间插入及两框切换，确认光标不跳走，标题文字和占位文字上下均不遮挡。
-`bun run check:http-live` 验证十种平台 HTTP 场景、编辑器卸载后的 App 草稿回显及
+`vp run check:http-live` 验证十种平台 HTTP 场景、编辑器卸载后的 App 草稿回显及
 UI Showcase 表单回显，共 12 项；
 使用真实公共 API，但传输适配仍是脚本，不等于真实微信宿主。
 
 `generated/verify_report.json` 与 `release_summary.json` 是公开 candidate 记录；
 `devtools.evidence.json` 私人且被 Git 忽略。新名称、九路由和新产物必须重新验收，
 不能沿用旧核心证据。本轮共享宿主修复也改变了 UI 产物，UI Showcase 必须另行复验。
-本次核心 `0.2.2`／UI `0.1.1` 可按已授权的
+本次核心 `0.2.3` 可按已授权的
 [发布例外](../../docs/operations/release_candidate_handoff.md#scoped-publication-exception)
 在两个 CI 任务通过后发布，宿主验证仍保持 pending。
 不宣称生产请求域名或完整 HTTPS/TLS 验证，验证命令本身不会发布包。

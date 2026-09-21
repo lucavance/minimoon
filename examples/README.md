@@ -20,7 +20,7 @@ UI Showcase to explore framework behavior rather than copying their full content
 Build and verify from the repository root:
 
 ```bash
-bun run check:candidate
+vp run --no-cache check:candidate
 ```
 
 `generated/verify_report.json` is the tracked automated candidate source.

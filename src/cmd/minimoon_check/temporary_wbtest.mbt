@@ -77,9 +77,12 @@ async test "supervisor cleans success failure crash and launch error without fol
     #|if (process.argv[2] === 'kill') process.kill(process.pid, 'SIGKILL')
     #|else process.exit(Number(process.argv[2]))
   for mode in ["0", "7", "kill"] {
-    let code = supervised_check_process(root, runs, "bun", [
-      "-e", source, outside, mode,
-    ])
+    let code = supervised_check_process(
+      root,
+      runs,
+      "vp",
+      @toolchain.bun_args(["-e", source, outside, mode]),
+    )
     if mode == "0" {
       assert_eq(code, 0)
     } else if mode == "7" {

@@ -42,8 +42,8 @@ async test "disk host Tab routing rejects empty missing and extra stale route se
   // Use the release host minification flags; the probe must not parse identifiers.
   for file in ["minimoon.host.js", "minimoon.protocol.js"] {
     let (passed, detail) = run(
-      "bun",
-      [
+      "vp",
+      @toolchain.bun_args([
         "build",
         "dist/" + file,
         "--target",
@@ -56,7 +56,7 @@ async test "disk host Tab routing rejects empty missing and extra stale route se
         "--external=*",
         "--outfile",
         "minified.cjs",
-      ],
+      ]),
       root,
     )
     assert_true(passed, msg=detail)

@@ -8,7 +8,7 @@ or `setData` is needed.
 
 ## Project status
 
-This source documents core `lampclaw/minimoon 0.2.2` and optional
+This source documents core `lampclaw/minimoon 0.2.3` and optional
 `lampclaw/minimoon_ui 0.1.1`, both pre-1.0. Check
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
 for registry availability before following the fixed-version installation below.
@@ -23,7 +23,8 @@ Until that version is available, use the [source workflow](docs/guides/miniapp_q
 ## Before you start
 
 Use `moon 0.1.20260920` / `moonc v0.10.14` or newer, Node `>=24.20.0`,
-Bun `1.4.2` and WeChat Developer Tools with Skyline support.
+global `vp 0.3.3` and WeChat Developer Tools with Skyline support.
+`vp` manages Node and Bun `1.4.2`; a separate Bun installation is unnecessary.
 Git is needed for the optional source development workflow.
 Both CI jobs pin `0.10.14+7d59c7ec9` (`moon 0.1.20260920`).
 Upgrade older MoonBit installations before using this source or these packages.
@@ -34,17 +35,17 @@ version checks and the pinned CI toolchain.
 ## Create your first app
 
 Start in a development directory outside any existing Moon workspace, with
-enough free space. Run these commands in a terminal with MoonBit, Node and Bun
-available:
+enough free space. Complete the linked environment setup, then run these
+commands in a terminal with MoonBit and `vp` available:
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon@0.2.2
+moon install lampclaw/minimoon/cmd/minimoon@0.2.3
 minimoon --version
 minimoon init my-app
 cd my-app
 moon update
-bun install
+vp install
 minimoon build .
 minimoon verify . --candidate
 ```
@@ -56,18 +57,19 @@ before running the MiniApp.
 
 Use a new or empty `my-app/`. The app's `moon.mod` declares its core dependency,
 resolved from Mooncakes; no `moon.work` or framework checkout is needed.
-Do not pass `--minimoon-root` for this setup. `bun install` installs the app's
+Do not pass `--minimoon-root` for this setup. `vp install` installs the app's
 style build tools.
 
-Confirm `minimoon --version` reports `0.2.2`; check PATH if another installed CLI
+Confirm `minimoon --version` reports `0.2.3`; check PATH if another installed CLI
 is selected. See [fixed-version installation](docs/guides/miniapp_quickstart.md#install-a-specific-version)
 and [upgrading an existing app](docs/reference/compatibility_and_upgrades.md#upgrade-procedure).
 To develop the framework or use unpublished changes, follow the separate
 [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
 
-The `0.2.2` CLI includes the App-aware contract helper compatibility fix and
-uses explicit package-qualified MoonBit APIs. The default Starter still has no
-`application` entry; follow [shared state](docs/guides/shared_state.md) to add one.
+The `0.2.3` CLI routes its JavaScript tools through `vp`, retaining Bun
+`1.4.2` internally and Node for stylesheet processing. It includes the earlier
+App-aware helper and MoonBit compiler compatibility fixes. The default Starter
+still has no `application` entry; follow [shared state](docs/guides/shared_state.md) to add one.
 Upgrade both the CLI and the application dependency when migrating an existing app.
 
 Enable Skyline, ES6-to-ES5 transformation, enhanced compilation and minification
@@ -79,8 +81,9 @@ For your AppID, edit only the ignored private configuration described in the
 You should see **Hello Minimoon**, a counter starting at **0**, a name input and
 **Open details**. Tap **+1**: the counter becomes **1**. Open Details and return.
 A passed CLI check is automated validation, not proof that these host interactions passed.
-The core `0.2.2` / UI `0.1.1` publication is authorized after both CI jobs pass
-without waiting for new WeChat host validation; host status remains pending.
+Core `0.2.3` publication is authorized after both CI jobs pass without waiting
+for new WeChat host validation; host status remains pending. UI stays at the
+already published `0.1.1` and does not need republication.
 See the [scoped release exception](docs/operations/release_candidate_handoff.md#scoped-publication-exception).
 
 ### Make your first change
@@ -144,7 +147,7 @@ components are ordinary functions, not a mandatory object hierarchy.
 | [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md) | Exploring native UI components across 6 pages |
 
 Draft Workbench's Platform laboratory owns the HTTP scenarios. From the framework
-checkout, `bun run check:http-live` checks those scenarios, a typed draft echo
+checkout, `vp run check:http-live` checks those scenarios, a typed draft echo
 after editor unload, and the UI Form echo against public Apifox Echo (12 cases);
 it is not a WeChat host test.
 
