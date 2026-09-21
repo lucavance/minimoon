@@ -1,36 +1,83 @@
 # Project status
 
-Current source targets core `0.2.3`, the vp command migration. Publication and
-its final CI/registry checks are **pending** until recorded below. The latest
-confirmed published versions remain core `0.2.2` and independent
-`lampclaw/minimoon_ui 0.1.1`, published on **2026-09-21**. UI keeps its core
-`0.2.2` declaration and will not be republished for this patch.
+Minimoon core `0.2.3` was published to Mooncakes on **2026-09-21**.
+The independent `lampclaw/minimoon_ui 0.1.1` remains the existing published UI
+release and was **not republished**; its manifest still declares core `0.2.2`.
+Applications selecting this patch declare core `0.2.3` directly.
 
-See the [0.2.2 publication checkpoint](#core-022-and-ui-011-publication),
+See the [0.2.3 publication checkpoint](#core-023-publication),
+[core 0.2.2 / UI 0.1.1 history](#core-022-and-ui-011-publication),
 [core 0.2.1 history](#core-021-publication) and
 [0.2.0 publication history](#publication-checkpoint) for completed releases.
 The 0.1 API consumer remains a frozen historical record; current API gates
 compile the 0.2 consumer. Public generated reports retain candidate state.
 
-## Core 0.2.3 candidate
+## Core 0.2.3 publication
 
-Current source requires global `vp 0.3.3` for JavaScript tooling. It manages
-Bun `1.4.2` internally and Node `26.9.0` through `devEngines.runtime`, retaining
-Node `>=24.20.0` support and `bun.lock`. Repository tasks, CI, internal tools,
-new Starter guidance and current documentation use vp. Application API and
-Contract `11` / ABI `13` / renderer protocol `8` stay unchanged.
+Core was published from the frozen source commit
+[`16e4879516be85c76c13943fc502171c6482758e`](https://github.com/lucavance/minimoon/commit/16e4879516be85c76c13943fc502171c6482758e).
+The [primary and Node 24 CI jobs](https://github.com/lucavance/minimoon/actions/runs/35578967839)
+both passed for that exact commit before publication. The complete local
+candidate gate was rerun, confirming unchanged package contents, artifact
+fingerprints and a clean worktree.
 
-The user explicitly authorized this core-only publication after complete local
-candidate checks and both CI jobs pass for the frozen commit, without waiting
-for new WeChat host validation. Notify the user when CI passes and continue
-publication; the [scoped exception](operations/release_candidate_handoff.md#scoped-publication-exception)
-does not weaken source, package or consumer checks. Host status remains
-`pending` and tracked reports retain `release: false`.
+The [downloaded core archive](https://download.mooncakes.io/user/lampclaw/minimoon/0.2.3.zip)
+is **323,732 bytes / 183 files** and is byte-identical to the frozen reviewed ZIP:
+SHA-256 `68beff0823797e43daff972bc6af825f43af98ad5250f6d2d7fc948f5a6df607`.
+Every file path and file-content hash matched. UI's original published archive
+retained its recorded SHA-256
+`cc8561bad224d315bad3d7236228b73f09719128bdb7f8d65547331091e0de46`;
+its file contents also matched the original reviewed UI archive.
 
-Until core `0.2.3` publication is confirmed here, use the quickstart's
-[source workflow](guides/miniapp_quickstart.md#create-from-the-current-source).
-Installing published CLI `0.2.2` still gives its original direct Bun launches;
-updating this repository does not change that immutable archive.
+`moon publish --frozen` stopped before upload because its newly extracted
+self-check needed dependency installation. After verifying the version was
+still unoccupied and the source, dependency graph and archive contents were
+unchanged, ordinary `moon publish` completed the full self-check and returned
+HTTP `200 OK`. No check was skipped and no occupied version was overwritten.
+
+This patch makes global `vp 0.3.3` the entry point for JavaScript package
+management, repository tasks, internal tooling, CI and Starter guidance.
+Bun `1.4.2` remains the managed backend and `bun.lock` stays authoritative.
+`devEngines.runtime` selects Node `26.9.0`, retaining Node `>=24.20.0` support
+and explicit lower-bound CI coverage. No separate Bun installation or local
+`vite-plus`, Vite or Vitest dependency is needed. The patch also fixes child
+process cleanup on cancellation and the Starter's next-step directory guidance.
+Upgrade the CLI as well as the application dependency; the immutable `0.2.2`
+CLI keeps its original direct Bun launches.
+
+The checked application API and Contract `11` / runtime ABI `13` / renderer
+protocol `8` are unchanged. All **110 tracked generated files** are byte-identical
+to the pre-migration artifacts. Local native **464** and JavaScript **363** tests,
+coverage, the complete candidate gate and all **21 documentation diagrams** passed.
+The core archive budget review retains an 8 KiB reserve within a 328 KiB hard
+ceiling; UI and generated-runtime budgets are unchanged.
+
+Fresh registry consumers outside every framework workspace passed:
+
+- All **48 steps** for exact CLI/core `0.2.3` installation, frozen native/JS API
+  consumers, a new Starter, the README first edit, application-enabled helpers,
+  and the existing UI `0.1.1` pair. UI checks covered native/JS root, theme and
+  headless behavior, native resources, candidate verification, deterministic
+  rebuilding and transactional rejection of an unknown resource feature.
+  Dependency graphs confirmed registry sources without local core/UI overrides.
+- A **14-step** upgrade of a Starter generated by the actual registry `0.2.2`
+  CLI. Only the core dependency and Node runtime selection were updated; all
+  six original business-source files, the stylesheet and application configuration
+  stayed byte-identical. Existing private configuration survived both the first
+  migration build and repeated build, with stable artifact fingerprints.
+- A separate **7-step** cold environment probe used a new `VP_HOME`, a path
+  containing spaces and a PATH without standalone Bun. It installed and ran
+  Node `26.9.0` and Bun `1.4.2` through vp, including the production
+  `VP_BUN_VERSION=1.4.2` / `vp env exec bun` path without inherited shim markers.
+
+These are automated publication and consumer results. The user explicitly
+authorized this core-only publication after local candidate checks and both CI
+jobs passed, without waiting for new WeChat host validation. The
+[scoped exception](operations/release_candidate_handoff.md#scoped-publication-exception)
+does not establish a real-host pass or weaken the evidence gates. Developer
+Tools status remains `pending`, and tracked reports retain `release: false`.
+This repository-only record does not alter the frozen core archive or existing
+UI package.
 
 ## Core 0.2.2 and UI 0.1.1 publication
 
