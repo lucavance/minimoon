@@ -1,0 +1,6 @@
+// MoonBit 0.10.14 explicitly emits these pre-existing implicit trait methods.
+// Reviewed against 0.2/http.mbti.
+// The historical snapshot remains unchanged.
+// Existing HttpError implementations: Show
+pub fn HttpError::output(Self, &Logger) -> Unit
+pub fn HttpError::to_string(Self) -> String

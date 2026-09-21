@@ -2,24 +2,24 @@
 test "tabs choose first enabled panel and preserve forced content with semantic hiding" {
   let runtime = @testing.mount(
     form_test_page(_ => {
-      tabs(
+      @minimoon_ui.tabs(
         id="tabs",
         force_mount=true,
         list_variant=TabsLine,
         items=@minimoon.Val::constant([
-          panel(
+          @minimoon_ui.panel(
             key="locked",
             title="Locked",
             content=@minimoon.text("Locked content"),
             disabled=true,
           ),
-          panel(
+          @minimoon_ui.panel(
             key="first",
             title="First",
             content=@minimoon.text("First content"),
             icon=@minimoon.text("★"),
           ),
-          panel(
+          @minimoon_ui.panel(
             key="second",
             title="Second",
             content=@minimoon.text("Second content"),
@@ -60,14 +60,22 @@ test "tabs recover when dynamic selected item disappears" {
   let runtime = @testing.mount(
     form_test_page(_ => {
       let initial = [
-        panel(key="a", title="A", content=@minimoon.text("A content")),
-        panel(key="b", title="B", content=@minimoon.text("B content")),
+        @minimoon_ui.panel(
+          key="a",
+          title="A",
+          content=@minimoon.text("A content"),
+        ),
+        @minimoon_ui.panel(
+          key="b",
+          title="B",
+          content=@minimoon.text("B content"),
+        ),
       ]
       let (items, update) = @minimoon.create_variable(initial)
-      let tabs = tabs(id="tabs", items~, initial_selected="b")
+      let tabs = @minimoon_ui.tabs(id="tabs", items~, initial_selected="b")
       tabs.map(tabs => {
         @minimoon.div([
-          button(
+          @minimoon_ui.button(
             id="remove",
             on_tap=update(items => items.filter(item => item.key != "b")),
             "Remove B",
@@ -86,14 +94,22 @@ test "tabs recover when dynamic selected item disappears" {
 test "single accordion canonicalizes keys and force mount keeps closed children" {
   let runtime = @testing.mount(
     form_test_page(_ => {
-      accordion(
+      @minimoon_ui.accordion(
         id="faq",
         force_mount=true,
         show_indicator=false,
         initial_open_keys=["a", "b", "missing"],
         items=@minimoon.Val::constant([
-          panel(key="a", title="A", content=@minimoon.text("A content")),
-          panel(key="b", title="B", content=@minimoon.text("B content")),
+          @minimoon_ui.panel(
+            key="a",
+            title="A",
+            content=@minimoon.text("A content"),
+          ),
+          @minimoon_ui.panel(
+            key="b",
+            title="B",
+            content=@minimoon.text("B content"),
+          ),
         ]),
       )
     }),
@@ -126,14 +142,18 @@ test "single accordion canonicalizes keys and force mount keeps closed children"
 test "readonly and mixed checkbox states adapt without false change callbacks" {
   let runtime = @testing.mount(
     form_test_page(_ => {
-      stack([
-        checkbox(id="mixed", indeterminate=true),
-        checkbox(id="locked", initially_checked=true, read_only=true),
-        switch(id="readonly-switch", read_only=true),
-        input_stateful(
+      @minimoon_ui.stack([
+        @minimoon_ui.checkbox(id="mixed", indeterminate=true),
+        @minimoon_ui.checkbox(
+          id="locked",
+          initially_checked=true,
+          read_only=true,
+        ),
+        @minimoon_ui.switch(id="readonly-switch", read_only=true),
+        @minimoon_ui.input_stateful(
           id="readonly-input",
           initial_value="fixed",
-          options=input_options(read_only=true),
+          options=@minimoon_ui.input_options(read_only=true),
         ),
       ])
     }),
@@ -168,7 +188,7 @@ test "readonly and mixed checkbox states adapt without false change callbacks" {
 ///|
 test "focus styles use native focus and blur state" {
   let runtime = @testing.mount(
-    form_test_page(_ => input_stateful(id="focused")),
+    form_test_page(_ => @minimoon_ui.input_stateful(id="focused")),
   )
   let _ = runtime.focus(@testing.by_id("focused"), "", 200)
   assert_true(

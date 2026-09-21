@@ -46,7 +46,9 @@ async fn create_check_temporary(base : String, prefix : String) -> String {
     .to_array()
     .join("")
   let directory = join(parent, prefix + "-" + token)
-  @fs.mkdir(directory, permission=0o700)
+  // Transfer ownership before the caller registers cleanup; cancellation must
+  // not strand a directory between successful creation and returning its path.
+  @async.protect_from_cancel(() => @fs.mkdir(directory, permission=0o700))
   directory
 }
 
@@ -69,6 +71,22 @@ fn check_child_environment(directory : String) -> Map[String, String] {
 }
 
 ///|
+async fn cleanup_check_temporary(directory : String) -> Unit nocancel {
+  @async.protect_from_cancel(() => {
+    try {
+      if @fs.exists(directory) {
+        @fs.rmdir(directory, recursive=true)
+      }
+    } catch {
+      error =>
+        println(
+          "minimoon: could not remove check temporary directory: \{error}",
+        )
+    }
+  })
+}
+
+///|
 // A worker abort is a process exit, not a catchable MoonBit error. Keep its
 // lifetime and cleanup in a separate parent process, including launch errors.
 async fn supervised_check_process(
@@ -79,7 +97,7 @@ async fn supervised_check_process(
 ) -> Int {
   let directory = create_check_temporary(base, "run")
   println("Minimoon check temporary directory: " + directory)
-  errdefer (if @fs.exists(directory) { @fs.rmdir(directory, recursive=true) })
+  errdefer cleanup_check_temporary(directory)
   let code = @process.run(
     command,
     args,

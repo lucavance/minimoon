@@ -42,6 +42,8 @@ pub(all) struct Buffer {
   saved : Draft
   revision : Int
 } derive(Eq)
+pub fn Buffer::equal(Self, Self) -> Bool
+pub fn Buffer::not_equal(Self, Self) -> Bool
 
 pub struct Deps {
   work : @minimoon.Shared[Workbench]
@@ -56,10 +58,15 @@ pub(all) struct Draft {
   title : String
   note : String
 } derive(Eq, ToJson, @json.FromJson)
+pub fn Draft::equal(Self, Self) -> Bool
+pub fn Draft::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn Draft::not_equal(Self, Self) -> Bool
+pub fn Draft::to_json(Self) -> Json
 
 pub(all) struct DraftEcho {
   json : Draft
 } derive(@json.FromJson)
+pub fn DraftEcho::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 
 pub(all) struct EchoModel {
   token : Int
@@ -67,6 +74,8 @@ pub(all) struct EchoModel {
   submitted : Draft
   status : EchoStatus
 } derive(Eq)
+pub fn EchoModel::equal(Self, Self) -> Bool
+pub fn EchoModel::not_equal(Self, Self) -> Bool
 
 pub(all) enum EchoStatus {
   EchoIdle
@@ -75,11 +84,15 @@ pub(all) enum EchoStatus {
   EchoFailed(String)
   EchoOutdated
 } derive(Eq)
+pub fn EchoStatus::equal(Self, Self) -> Bool
+pub fn EchoStatus::not_equal(Self, Self) -> Bool
 
 pub struct FetchModel {
   epoch : Int
   label : String
 } derive(Eq)
+pub fn FetchModel::equal(Self, Self) -> Bool
+pub fn FetchModel::not_equal(Self, Self) -> Bool
 
 pub(all) enum FetchMsg {
   Load
@@ -94,6 +107,8 @@ pub(all) enum Intent {
   ClearAll
   Initialize
 } derive(Eq)
+pub fn Intent::equal(Self, Self) -> Bool
+pub fn Intent::not_equal(Self, Self) -> Bool
 
 pub(all) struct PendingWrite {
   token : Int
@@ -102,11 +117,17 @@ pub(all) struct PendingWrite {
   buffer : Buffer
   saved_id : Int?
 } derive(Eq)
+pub fn PendingWrite::equal(Self, Self) -> Bool
+pub fn PendingWrite::not_equal(Self, Self) -> Bool
 
 pub(all) struct Record {
   id : Int
   draft : Draft
 } derive(Eq, ToJson, @json.FromJson)
+pub fn Record::equal(Self, Self) -> Bool
+pub fn Record::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn Record::not_equal(Self, Self) -> Bool
+pub fn Record::to_json(Self) -> Json
 
 pub(all) enum StorageState {
   Loading
@@ -114,12 +135,18 @@ pub(all) enum StorageState {
   Writing
   ReadFailed
 } derive(Eq)
+pub fn StorageState::equal(Self, Self) -> Bool
+pub fn StorageState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Store {
   version : Int
   next_id : Int
   records : Array[Record]
 } derive(Eq, ToJson, @json.FromJson)
+pub fn Store::equal(Self, Self) -> Bool
+pub fn Store::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn Store::not_equal(Self, Self) -> Bool
+pub fn Store::to_json(Self) -> Json
 
 pub(all) enum WorkMsg {
   Reload
@@ -146,6 +173,8 @@ pub(all) struct Workbench {
   notice : String
   echo : EchoModel
 } derive(Eq)
+pub fn Workbench::equal(Self, Self) -> Bool
+pub fn Workbench::not_equal(Self, Self) -> Bool
 
 // Type aliases
 

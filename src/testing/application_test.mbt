@@ -31,14 +31,16 @@ fn input_lifecycle_page() -> @minimoon.Page {
 
 ///|
 test "mount uses actual input and Load Show Ready ordering" {
-  let runtime = mount(input_lifecycle_page(), input={ "name": "actual" })
+  let runtime = @testing.mount(input_lifecycle_page(), input={
+    "name": "actual",
+  })
   assert_eq(
-    runtime.get(by_id("events")).text_content(),
+    runtime.get(@testing.by_id("events")).text_content(),
     "actual:load;show;ready;",
   )
   runtime.quiesce()
   assert_eq(
-    runtime.get(by_id("events")).text_content(),
+    runtime.get(@testing.by_id("events")).text_content(),
     "actual:load;show;ready;",
   )
   let _ = runtime.dispose()
@@ -48,7 +50,7 @@ test "mount uses actual input and Load Show Ready ordering" {
 ///|
 test "input decoding failures are catchable test failures not preview fallback" {
   let error = try {
-    let _ = mount(input_lifecycle_page())
+    let _ = @testing.mount(input_lifecycle_page())
     "unexpected success"
   } catch {
     Failure(message) => message
@@ -56,7 +58,7 @@ test "input decoding failures are catchable test failures not preview fallback" 
   }
   assert_true(error.contains("typed_test"))
   assert_true(error.contains("name is required"))
-  let app = launch(@minimoon.app(build=_ => ()))
+  let app = @testing.launch(@minimoon.app(build=_ => ()))
   let error = try {
     let _ = app.mount(_ => input_lifecycle_page())
     "unexpected success"
@@ -69,7 +71,7 @@ test "input decoding failures are catchable test failures not preview fallback" 
     "name": "after-failure",
   })
   assert_eq(
-    valid.get(by_id("events")).text_content(),
+    valid.get(@testing.by_id("events")).text_content(),
     "after-failure:load;show;ready;",
   )
   let _ = app.dispose()
@@ -127,44 +129,44 @@ fn shared_test_page(
 
 ///|
 test "launch and page quiesce settle the App inbox and all visible shared pages" {
-  let app = launch(shared_test_app())
+  let app = @testing.launch(shared_test_app())
   let first = app.mount(deps => shared_test_page(deps, "first"))
   let second = app.mount(deps => shared_test_page(deps, "second"))
-  assert_eq(first.get(by_id("count")).text_content(), "30")
-  assert_eq(second.get(by_id("count")).text_content(), "30")
-  assert_eq(first.get(by_id("visibility")).text_content(), "shown")
-  let scope = second.within(by_id("shared-root"))
-  let _ = first.tap(by_id("increment"))
+  assert_eq(first.get(@testing.by_id("count")).text_content(), "30")
+  assert_eq(second.get(@testing.by_id("count")).text_content(), "30")
+  assert_eq(first.get(@testing.by_id("visibility")).text_content(), "shown")
+  let scope = second.within(@testing.by_id("shared-root"))
+  let _ = first.tap(@testing.by_id("increment"))
   first.quiesce()
-  assert_eq(first.get(by_id("count")).text_content(), "31")
-  assert_eq(scope.get(by_id("count")).text_content(), "31")
+  assert_eq(first.get(@testing.by_id("count")).text_content(), "31")
+  assert_eq(scope.get(@testing.by_id("count")).text_content(), "31")
   let _ = first.lifecycle("onHide")
-  let _ = second.tap(by_id("increment"))
+  let _ = second.tap(@testing.by_id("increment"))
   second.quiesce()
-  assert_eq(second.get(by_id("count")).text_content(), "32")
-  assert_eq(first.get(by_id("count")).text_content(), "31")
+  assert_eq(second.get(@testing.by_id("count")).text_content(), "32")
+  assert_eq(first.get(@testing.by_id("count")).text_content(), "31")
   let _ = first.lifecycle("onShow")
   app.quiesce()
-  assert_eq(first.get(by_id("count")).text_content(), "32")
+  assert_eq(first.get(@testing.by_id("count")).text_content(), "32")
   let _ = app.dispose()
 }
 
 ///|
 test "disposing one page retains App state and disposing the App is idempotent" {
-  let app = launch(shared_test_app())
+  let app = @testing.launch(shared_test_app())
   let first = app.mount(deps => shared_test_page(deps, "first"))
   let second = app.mount(deps => shared_test_page(deps, "second"))
-  let _ = first.tap(by_id("increment"))
+  let _ = first.tap(@testing.by_id("increment"))
   let _ = first.dispose()
   second.quiesce()
-  assert_eq(second.get(by_id("count")).text_content(), "31")
-  let _ = second.tap(by_id("increment"))
+  assert_eq(second.get(@testing.by_id("count")).text_content(), "31")
+  let _ = second.tap(@testing.by_id("increment"))
   app.quiesce()
-  assert_eq(second.get(by_id("count")).text_content(), "32")
+  assert_eq(second.get(@testing.by_id("count")).text_content(), "32")
   let _ = app.dispose()
   app.dispose()
   assert_eq(first.dispose(), "[]")
-  assert_eq(second.tap(by_id("increment")), "[]")
+  assert_eq(second.tap(@testing.by_id("increment")), "[]")
   app.quiesce()
   let error = try {
     let _ = app.mount(deps => shared_test_page(deps, "late"))
@@ -178,7 +180,7 @@ test "disposing one page retains App state and disposing the App is idempotent" 
 
 ///|
 test "quiesce leaves future ticks and unresolved host requests pending" {
-  let runtime = mount(
+  let runtime = @testing.mount(
     @minimoon.page(
       id="pending",
       route=@minimoon.route("pages/pending/index"),
@@ -202,9 +204,9 @@ test "quiesce leaves future ticks and unresolved host requests pending" {
     ),
   )
   runtime.quiesce(max_steps=1)
-  assert_eq(runtime.get(by_id("pending-count")).text_content(), "0")
+  assert_eq(runtime.get(@testing.by_id("pending-count")).text_content(), "0")
   let _ = runtime.tick("tick")
   runtime.quiesce()
-  assert_eq(runtime.get(by_id("pending-count")).text_content(), "1")
+  assert_eq(runtime.get(@testing.by_id("pending-count")).text_content(), "1")
   assert_true(runtime.dispose().contains("CancelEffect"))
 }

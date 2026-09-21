@@ -51,6 +51,12 @@ fn embedded_fixture_inventory(entries : Array[EmbeddedInventoryEntry]) -> Unit {
         "src/tooling_minimoon_build/transaction_wbtest.mbt", "successful promotion removes obsolete dist files and leaves unowned metadata alone",
       ),
       (
+        "src/tooling_minimoon_build/transaction_wbtest.mbt", "cancellation at every promotion boundary completes one consistent commit",
+      ),
+      (
+        "src/tooling_minimoon_build/transaction_wbtest.mbt", "cancelled staging is cleaned before any live output promotion",
+      ),
+      (
         "src/tooling_minimoon_verify/verify_wbtest.mbt", "artifact fingerprints are independent of checkout location",
       ),
       (

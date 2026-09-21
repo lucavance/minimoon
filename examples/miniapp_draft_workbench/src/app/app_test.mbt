@@ -1,6 +1,6 @@
 ///|
 test "business buffer and technical counter are independent App domains" {
-  let app = program().create_runtime()
+  let app = @app.program().create_runtime()
   defer ignore(app.dispose())
   ignore(app.lifecycle("onLaunch", "{}"))
   let deps = app.deps()

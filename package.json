@@ -28,7 +28,7 @@
     "eslint-scope": "9.1.2",
     "postcss": "8.5.28",
     "tailwindcss": "4.3.3",
-    "weapp-tailwindcss": "5.5.1"
+    "weapp-tailwindcss": "5.5.7"
   },
   "devEngines": {
     "packageManager": {

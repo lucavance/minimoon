@@ -1,0 +1,5 @@
+// MoonBit 0.10.14 explicitly emits these pre-existing implicit trait methods.
+// Reviewed against ui/0.1/resources.mbti.
+// The historical snapshot remains unchanged.
+
+

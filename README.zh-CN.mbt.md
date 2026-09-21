@@ -7,10 +7,11 @@
 
 ## 项目状态
 
-当前源码对应核心 `lampclaw/minimoon 0.2.1` 与可选的
-`lampclaw/minimoon_ui 0.1.0`，仍处于 1.0 之前的阶段。
-默认从 Mooncakes 安装最新已发布的 CLI，创建独立应用。发布状态及源码与已发布包的差异见
-[项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)。
+当前源码对应核心 `lampclaw/minimoon 0.2.2` 与可选的
+`lampclaw/minimoon_ui 0.1.1`，仍处于 1.0 之前的阶段。
+执行下面的固定版本安装前，先在
+[项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)确认版本已在 Mooncakes 可用；
+尚未发布时使用[源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
 
 ## 已实现的主要能力
 
@@ -20,12 +21,12 @@
 
 ## 开始之前
 
-准备 `moon 0.1.20260904`／`moonc v0.10.12` 或更新版本、Node `>=24.20.0`、
+准备 `moon 0.1.20260920`／`moonc v0.10.14` 或更新版本、Node `>=24.20.0`、
 Bun `1.4.2`，以及支持 Skyline 的微信开发者工具。
 可选的源码开发流程还需要 Git。
-已有 `moon 0.1.20260907` 无需降级。
-两个 CI 任务固定使用 `0.10.13+cbb11c36f`（`moon 0.1.20260915`）；
-最低支持版本保持不变。
+两个 CI 任务固定使用 `0.10.14+7d59c7ec9`（`moon 0.1.20260920`）。
+使用本次源码和包之前，请升级更早的 MoonBit 工具链。
+CI 覆盖 Node 24.20.0 与 26.9.0。
 [环境说明](docs/guides/miniapp_quickstart.md#prerequisites)包含版本检查与 CI 固定工具链。
 
 ## 创建第一个应用
@@ -35,7 +36,7 @@ Bun `1.4.2`，以及支持 Skyline 的微信开发者工具。
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon
+moon install lampclaw/minimoon/cmd/minimoon@0.2.2
 minimoon --version
 minimoon init my-app
 cd my-app
@@ -54,14 +55,15 @@ minimoon verify . --candidate
 解析；无需 `moon.work` 或框架源码目录。此流程不传 `--minimoon-root`。
 `bun install` 安装应用的样式构建工具。
 
-省略 CLI 版本号会选择注册表中的最新版本。需要可重复的安装时，参见
-[固定版本安装](docs/guides/miniapp_quickstart.md#install-a-specific-version)。
+确认 `minimoon --version` 输出 `0.2.2`；如有其他版本，检查 PATH 中的旧 CLI。
+参见[固定版本安装](docs/guides/miniapp_quickstart.md#install-a-specific-version)及
+[已有应用升级步骤](docs/reference/compatibility_and_upgrades.md#upgrade-procedure)。
 开发框架或使用尚未发布的改动时，使用单独的
 [源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
 
-在 `moonc v0.10.13` 下，已发布的 `0.2.1` CLI 支持上述 Starter。
-启用 `application` 的应用需要使用当前源码 CLI，其中包含尚未发布的构建兼容修正；
-详见[工具链兼容说明](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)。
+`0.2.2` CLI 包含 App-aware 合约辅助代码的兼容修正，并使用显式包限定 API。
+默认 Starter 仍不启用 `application`；需要时按[共享状态指南](docs/guides/shared_state.md)添加。
+迁移已有应用时同时升级 CLI 和应用的核心依赖。
 
 启用 Skyline、ES6 转 ES5、增强编译与压缩（`setting.es6=true`、
 `setting.enhance=true`、`setting.minified=true`），线上最低基础库为 **3.17.0**。
@@ -71,6 +73,9 @@ minimoon verify . --candidate
 你应看到 **Hello Minimoon**、初始值为 **0** 的计数器、名称输入框与 **Open details**。
 点击 **+1** 后变为 **1**，进入 Details 后可以返回。
 CLI 检查通过只代表自动化验证，不代表这些宿主交互已经通过。
+本次核心 `0.2.2`／UI `0.1.1` 已获授权在两个 CI 任务通过后发布，
+不等待新的微信宿主验证；宿主状态仍为 pending。
+详见[本次发布例外](docs/operations/release_candidate_handoff.md#scoped-publication-exception)。
 
 ### 第一次修改
 

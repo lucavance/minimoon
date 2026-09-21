@@ -1,0 +1,18 @@
+// MoonBit 0.10.14 explicitly emits these pre-existing implicit trait methods.
+// Reviewed against 0.2/components.mbti.
+// The historical snapshot remains unchanged.
+// Existing MenuPlacement implementations: @debug.Debug, Eq
+// Existing MenuState implementations: Eq
+// Existing Orientation implementations: @debug.Debug, Eq
+// Existing SheetSide implementations: @debug.Debug, Eq
+pub fn MenuPlacement::equal(Self, Self) -> Bool
+pub fn MenuPlacement::not_equal(Self, Self) -> Bool
+pub fn MenuPlacement::to_repr(Self) -> @debug.Repr
+pub fn MenuState::equal(Self, Self) -> Bool
+pub fn MenuState::not_equal(Self, Self) -> Bool
+pub fn Orientation::equal(Self, Self) -> Bool
+pub fn Orientation::not_equal(Self, Self) -> Bool
+pub fn Orientation::to_repr(Self) -> @debug.Repr
+pub fn SheetSide::equal(Self, Self) -> Bool
+pub fn SheetSide::not_equal(Self, Self) -> Bool
+pub fn SheetSide::to_repr(Self) -> @debug.Repr

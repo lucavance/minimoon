@@ -5,12 +5,12 @@ test "pure input and textarea compose in a view without allocating state" {
       let (value, update) = @minimoon.create_variable("")
       value.view(value => {
         @minimoon.div([
-          input(
+          @minimoon_ui.input(
             id="pure-input",
             value~,
             on_input=update.map(value => _ => value),
           ),
-          textarea(
+          @minimoon_ui.textarea(
             id="pure-textarea",
             value~,
             on_input=update.map(value => _ => value),
@@ -41,13 +41,13 @@ test "text field commits the last of several same-frame inputs with current vali
   let runtime = form_test_page(_ => {
       let (value, update) = @minimoon.create_variable("")
       let state = value.map(value => {
-        field_state(
+        @minimoon_ui.field_state(
           id="batched",
           label="Name",
           error=if value.length() < 3 { "Too short" } else { "" },
         )
       })
-      text_field(state, value, update.map(value => _ => value))
+      @minimoon_ui.text_field(state, value, update.map(value => _ => value))
     })
     .create_runtime()
     .unwrap()
@@ -80,10 +80,10 @@ test "text field dynamically binds errors options disabled and native semantics"
       let (value, update_value) = @minimoon.create_variable("")
       let (disabled, update_disabled) = @minimoon.create_variable(false)
       let (options, update_options) = @minimoon.create_variable(
-        input_options(name="name", placeholder="Name"),
+        @minimoon_ui.input_options(name="name", placeholder="Name"),
       )
       let state = @minimoon.Val::map2(value, disabled, (value, disabled) => {
-        field_state(
+        @minimoon_ui.field_state(
           id="validated",
           label="Name",
           description="At least three characters",
@@ -92,46 +92,56 @@ test "text field dynamically binds errors options disabled and native semantics"
           disabled~,
         )
       })
-      text_field(state, value, update_value.map(value => _ => value), options~).view(node => {
-          @minimoon.div([
-            node,
-            button(
-              id="field-lock",
-              on_tap=update_disabled(_ => true),
-              "Lock field",
-            ),
-            button(
-              id="field-unlock",
-              on_tap=update_disabled(_ => false),
-              "Unlock field",
-            ),
-            button(
-              id="option-lock",
-              on_tap=update_options(_ => {
-                input_options(name="name", placeholder="Name", disabled=true)
-              }),
-              "Lock options",
-            ),
-            button(
-              id="option-readonly",
-              on_tap=update_options(_ => input_options(read_only=true)),
-              "Readonly",
-            ),
-            button(
-              id="option-invalid",
-              on_tap=update_options(_ => input_options(invalid=true)),
-              "Invalid",
-            ),
-            button(
-              id="option-reset",
-              on_tap=update_options(_ => {
-                input_options(placeholder="Changed", maxlength=24)
-              }),
-              "Reset options",
-            ),
-          ])
-        },
-      )
+      @minimoon_ui.text_field(
+        state,
+        value,
+        update_value.map(value => _ => value),
+        options~,
+      ).view(node => {
+        @minimoon.div([
+          node,
+          @minimoon_ui.button(
+            id="field-lock",
+            on_tap=update_disabled(_ => true),
+            "Lock field",
+          ),
+          @minimoon_ui.button(
+            id="field-unlock",
+            on_tap=update_disabled(_ => false),
+            "Unlock field",
+          ),
+          @minimoon_ui.button(
+            id="option-lock",
+            on_tap=update_options(_ => {
+              @minimoon_ui.input_options(
+                name="name",
+                placeholder="Name",
+                disabled=true,
+              )
+            }),
+            "Lock options",
+          ),
+          @minimoon_ui.button(
+            id="option-readonly",
+            on_tap=update_options(_ => {
+              @minimoon_ui.input_options(read_only=true)
+            }),
+            "Readonly",
+          ),
+          @minimoon_ui.button(
+            id="option-invalid",
+            on_tap=update_options(_ => @minimoon_ui.input_options(invalid=true)),
+            "Invalid",
+          ),
+          @minimoon_ui.button(
+            id="option-reset",
+            on_tap=update_options(_ => {
+              @minimoon_ui.input_options(placeholder="Changed", maxlength=24)
+            }),
+            "Reset options",
+          ),
+        ])
+      })
     }),
   )
   assert_eq(
@@ -251,8 +261,10 @@ test "text field composes focus blur confirm callbacks and keeps instances indep
   let page = form_test_page(_ => {
     let (value, update_value) = @minimoon.create_variable("")
     let (events, update_events) = @minimoon.create_variable("")
-    let control = text_field(
-      @minimoon.Val::constant(field_state(id="events", label="Events")),
+    let control = @minimoon_ui.text_field(
+      @minimoon.Val::constant(
+        @minimoon_ui.field_state(id="events", label="Events"),
+      ),
       value,
       update_value.map(value => _ => value),
       on_focus=update_events.map(detail => {
@@ -296,7 +308,7 @@ test "stateful textarea preserves focus across input and forwards typed events" 
   let runtime = @testing.mount(
     form_test_page(_ => {
       let (events, update_events) = @minimoon.create_variable("")
-      let control = textarea_stateful(
+      let control = @minimoon_ui.textarea_stateful(
         id="textarea-events",
         on_focus=update_events.map(_ => events => events + "focus;"),
         on_confirm=update_events.map(value => {

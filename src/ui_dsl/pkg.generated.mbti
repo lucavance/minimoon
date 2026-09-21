@@ -75,6 +75,7 @@ pub enum Node {
   Retained(Int, Node)
   Empty
 }
+pub fn Node::to_children(Self) -> Array[Self]
 pub impl IsChildren for Node
 
 // Type aliases

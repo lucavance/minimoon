@@ -1,8 +1,8 @@
 ///|
-let supported_moon_floor = "0.1.20260904"
+let supported_moon_floor = "0.1.20260920"
 
 ///|
-let supported_moonc_floor = "0.10.12"
+let supported_moonc_floor = "0.10.14"
 
 ///|
 let supported_node_engine = ">=24.20.0"
@@ -11,7 +11,7 @@ let supported_node_engine = ">=24.20.0"
 let node_lts_floor = "24.20.0"
 
 ///|
-let primary_node_version = "26.8.1"
+let primary_node_version = "26.9.0"
 
 ///|
 let supported_bun_version = "1.4.2"
@@ -159,7 +159,7 @@ async fn static_suite(root : String) -> Unit {
   guard installers.length() == 2 &&
     installers.all(line => {
       line.trim() ==
-      "curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.13+cbb11c36f"
+      "curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9"
     }) else {
     abort("both CI jobs must install the reviewed official MoonBit binary")
   }

@@ -24,13 +24,15 @@ See the [workbench guide](https://github.com/lucavance/minimoon/blob/main/exampl
 ## Independent UI fixture
 
 [`ui/examples/showcase`](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
-is the separate six-page release fixture for `lampclaw/minimoon_ui 0.1.0`
-with core `0.2.0`. It covers 64 RUI families plus Form and Theme: foundation,
+is the separate six-page release fixture for `lampclaw/minimoon_ui 0.1.1`
+with core `0.2.2`. It covers 64 RUI families plus Form and Theme: foundation,
 overlay/disclosure, forms, data/date, layout/navigation and feedback behavior.
 Its native/JS tests, generated resource checks, candidate report, artifact
 fingerprint and local host evidence are independent of Draft Workbench. Both
 fixtures must pass when the shared core host or UI release is changed; one
-application's evidence cannot authorize the other.
+application's evidence cannot authorize the other. The current
+[publication exception](../operations/release_candidate_handoff.md#scoped-publication-exception)
+keeps host acceptance pending and does not supply evidence for either fixture.
 The UI fixture keeps the no-application entry path and no-argument factories;
 like the core fixture, its source configuration requires schema `11`.
 

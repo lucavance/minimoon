@@ -5,7 +5,28 @@ defined by `moon.mod`; it does not use Git version tags. Registry availability
 is recorded in the repository's
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 
-## [0.1.0] - Unreleased
+## [0.1.1] - Unreleased
+
+### Changed
+
+- Declare core `lampclaw/minimoon@0.2.2` and advance the native resource bundle
+  version to `0.1.1`. Keep the existing components and additive public API baseline.
+- Require `moon 0.1.20260920` / `moonc v0.10.14`; qualify cross-package test
+  references and explicitly publish derived trait methods needed to preserve
+  the existing API on the new compiler.
+- Synchronize installation, upgrade, resource and isolated-package guidance
+  with the matching core CLI and the new dependency/toolchain baseline.
+
+### Validation and publication
+
+- Check native/JS behavior, API snapshots, resources, archive consumers and the
+  regenerated six-page showcase together with the core candidate.
+- This pair is authorized for publication after both CI jobs pass without
+  waiting for a new Skyline host pass. Candidate reports keep `release: false`
+  and Developer Tools `pending`; actual host evidence remains separate and
+  fingerprint-bound. This exception does not change `verify --release`.
+
+## [0.1.0] - 2026-09-09
 
 ### Added
 

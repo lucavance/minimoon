@@ -1,7 +1,7 @@
 # Typed HTTP requests
 
 Import the optional `lampclaw/minimoon/http` package as `@http`, alongside the
-root `lampclaw/minimoon` package. It is part of core 0.2.0, not a separate
+root `lampclaw/minimoon` package. It is part of core 0.2.2, not a separate
 module or a dependency on Rabbita's browser runtime. Pages or applications
 executing requests must declare the root `Request` capability.
 

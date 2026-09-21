@@ -29,13 +29,13 @@ jobs:
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.13+cbb11c36f
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          node-version: 26.8.1
+          node-version: 26.9.0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
@@ -63,12 +63,12 @@ jobs:
           version_at_least() {
             [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n 1)" = "$1" ]
           }
-          version_at_least "0.1.20260904" "$installed_moon" || {
-            echo "moon $installed_moon is below the supported floor 0.1.20260904" >&2
+          version_at_least "0.1.20260920" "$installed_moon" || {
+            echo "moon $installed_moon is below the supported floor 0.1.20260920" >&2
             exit 1
           }
-          version_at_least "0.10.12" "$installed_moonc" || {
-            echo "moonc $installed_moonc is below the supported floor 0.10.12" >&2
+          version_at_least "0.10.14" "$installed_moonc" || {
+            echo "moonc $installed_moonc is below the supported floor 0.10.14" >&2
             exit 1
           }
 
@@ -91,10 +91,10 @@ jobs:
           set -euo pipefail
           core_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' moon.mod)"
           ui_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' ui/moon.mod)"
-          # UI 0.1.0 retains its published core dependency declaration.
-          if [ "$core_version" != "0.2.1" ] || [ "$ui_version" != "0.1.0" ] ||
-             ! grep -Fq '"lampclaw/minimoon@0.2.0"' ui/moon.mod; then
-            echo "CI handoff requires the reviewed core 0.2.1 / UI 0.1.0 pair and unchanged UI core 0.2.0 declaration" >&2
+          # The reviewed UI patch requires the matching core compatibility release.
+          if [ "$core_version" != "0.2.2" ] || [ "$ui_version" != "0.1.1" ] ||
+             ! grep -Fq '"lampclaw/minimoon@0.2.2"' ui/moon.mod; then
+            echo "CI handoff requires the reviewed core 0.2.2 / UI 0.1.1 pair and UI core 0.2.2 dependency" >&2
             exit 1
           fi
           moon_version="$(moon version --all)"
@@ -249,7 +249,7 @@ jobs:
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.13+cbb11c36f
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Node 24 LTS floor

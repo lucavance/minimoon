@@ -17,7 +17,7 @@ Minimoon is Elm-style without forcing one global application model. A local
 component can own a state machine inside a keyed or dynamic `Val` branch. `Val`
 is a read-only incremental value; mutable signals are not public.
 
-## Product surface in 0.2.0
+## Product surface in 0.2.2
 
 - module: `lampclaw/minimoon`
 - state: opaque `Cmd`, callable `Emit[Msg]`, and model-first tuple updates;
@@ -67,7 +67,7 @@ WeChat Developer Tools.
 
 ## Optional native component library
 
-Core `0.2.0` supports the separately packaged `lampclaw/minimoon_ui 0.1.0`
+Core `0.2.2` supports the separately packaged `lampclaw/minimoon_ui 0.1.1`
 library. Its native
 RUI adaptation follows the same Val/page ownership model; it does not introduce
 HTML, DOM, SSR, browser events or handwritten bridge authoring. UI is opt-in,

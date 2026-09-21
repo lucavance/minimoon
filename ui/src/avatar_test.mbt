@@ -3,7 +3,7 @@ test "avatar status tracks loading loaded error and isolates old source events" 
   let runtime = form_test_page(_ => {
       let (source, update_source) = @minimoon.create_variable("first.png")
       let (status, update_status) = @minimoon.create_variable("initial")
-      let avatar = avatar_with_fallback(
+      let avatar = @minimoon_ui.avatar_with_fallback(
         id="photo",
         src=source,
         on_status_change=update_status.map(status => {
@@ -21,7 +21,7 @@ test "avatar status tracks loading loaded error and isolates old source events" 
         @minimoon.div([
           avatar,
           @minimoon.p("status:" + status),
-          button(
+          @minimoon_ui.button(
             event_key="next-photo",
             on_tap=update_source(_ => "second.png"),
             "Next",

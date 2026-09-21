@@ -77,10 +77,10 @@ test "HTTP builders dispatch the four supported methods with empty bodies" {
   let resolve = capture(result)
   for
     entry in [
-      (get("https://example.test").expect_json(resolve), "GET"),
-      (delete("https://example.test").expect_json(resolve), "DELETE"),
-      (post("https://example.test").expect_json(resolve), "POST"),
-      (put("https://example.test").expect_json(resolve), "PUT"),
+      (@http.get("https://example.test").expect_json(resolve), "GET"),
+      (@http.delete("https://example.test").expect_json(resolve), "DELETE"),
+      (@http.post("https://example.test").expect_json(resolve), "POST"),
+      (@http.put("https://example.test").expect_json(resolve), "PUT"),
     ] {
     let (command, verb) = entry
     let runtime = runtime_for(command)
@@ -106,26 +106,32 @@ test "HTTP constructors snapshot query and headers and preserve timeout options"
   ]
   let headers = { "X-Test": "before" }
   let commands = [
-    get("https://example.test/?old=yes", query~, headers~, timeout_ms=123).expect_json(
+    @http.get("https://example.test/?old=yes", query~, headers~, timeout_ms=123).expect_json(
       capture(result),
     ),
-    delete("https://example.test/?old=yes", query~, headers~, timeout_ms=123).expect_json(
-      capture(result),
-    ),
-    post("https://example.test/?old=yes", query~, headers~, timeout_ms=123).expect_json(
-      capture(result),
-    ),
-    put("https://example.test/?old=yes", query~, headers~, timeout_ms=123).expect_json(
+    @http.delete(
+      "https://example.test/?old=yes",
+      query~,
+      headers~,
+      timeout_ms=123,
+    ).expect_json(capture(result)),
+    @http.post(
+      "https://example.test/?old=yes",
+      query~,
+      headers~,
+      timeout_ms=123,
+    ).expect_json(capture(result)),
+    @http.put("https://example.test/?old=yes", query~, headers~, timeout_ms=123).expect_json(
       capture(result),
     ),
   ]
-  let deferred = get(
+  let deferred = @http.get(
     "https://example.test/?old=yes",
     query~,
     headers~,
     timeout_ms=123,
   )
-  let deferred_body = post(
+  let deferred_body = @http.post(
     "https://example.test/?old=yes",
     query~,
     headers~,
@@ -160,46 +166,48 @@ test "HTTP JSON and text bodies use root encoding and snapshot nested JSON" {
   let user : User = { name: "MoonBit", count: 2, }
   let nested = { "value": Json::string("before") }
   let values = [Json::object(nested)]
-  let builder = post("https://example.test").with_json(Json::array(values))
+  let builder = @http.post("https://example.test").with_json(
+    Json::array(values),
+  )
   nested["value"] = Json::string("after")
   values.clear()
   for
     entry in [
       (builder, "[{\"value\":\"before\"}]", "application/json"),
       (
-        post("https://example.test").with_json(user),
+        @http.post("https://example.test").with_json(user),
         ToJson::to_json(user).stringify(),
         "application/json",
       ),
       (
-        put("https://example.test").with_json(Json::null()),
+        @http.put("https://example.test").with_json(Json::null()),
         "null",
         "application/json",
       ),
       (
-        post("https://example.test").with_json("hello"),
+        @http.post("https://example.test").with_json("hello"),
         "\"hello\"",
         "application/json",
       ),
       (
-        put("https://example.test").with_text("raw +&="),
+        @http.put("https://example.test").with_text("raw +&="),
         "raw +&=",
         "text/plain; charset=utf-8",
       ),
       (
-        post("https://example.test").with_text(""),
+        @http.post("https://example.test").with_text(""),
         "",
         "text/plain; charset=utf-8",
       ),
       (
-        post("https://example.test", headers={
+        @http.post("https://example.test", headers={
           "Content-Type": "application/problem+json",
         }).with_json(Json::null()),
         "null",
         "application/problem+json",
       ),
       (
-        put("https://example.test", headers={
+        @http.put("https://example.test", headers={
           "Content-Type": "application/xml",
         }).with_text("<test/>"),
         "<test/>",
@@ -223,7 +231,7 @@ test "HTTP expect_json decodes 2xx values and settles each root request once" {
   let result : Ref[Result[User, Error]?] = Ref(None)
   let deliveries = Ref(0)
   let runtime = runtime_for(
-    get("https://example.test").expect_json(value => {
+    @http.get("https://example.test").expect_json(value => {
       deliveries.val += 1
       result.val = Some(value)
       @minimoon.none
@@ -252,7 +260,7 @@ test "HTTP expect_json decodes 2xx values and settles each root request once" {
 test "HTTP non-2xx status preserves the full response before typed decoding" {
   let result : Ref[Result[User, Error]?] = Ref(None)
   let runtime = runtime_for(
-    get("https://example.test").expect_json(capture(result)),
+    @http.get("https://example.test").expect_json(capture(result)),
   )
   for status in [0, 199, 300, 304, 400, 401, 500] {
     let (id, _) = begin_request(runtime)
@@ -269,7 +277,7 @@ test "HTTP non-2xx status preserves the full response before typed decoding" {
       ),
     )
     match result.val {
-      Some(Err(HttpError::BadStatus(response))) => {
+      Some(Err(@http.HttpError::BadStatus(response))) => {
         assert_eq(response.status_code, status)
         assert_eq(response.data, Json::string("not a User"))
         assert_eq(response.headers["retry-after"], "3")
@@ -300,7 +308,7 @@ test "HTTP typed decode errors retain the original JsonDecodeError path and type
     error => Some(error)
   }
   let runtime = runtime_for(
-    get("https://example.test").expect_json(capture(result)),
+    @http.get("https://example.test").expect_json(capture(result)),
   )
   let (id, _) = begin_request(runtime)
   ignore(runtime.resolve_effect(id, "success", response(200, data)))
@@ -321,14 +329,14 @@ test "HTTP does not parse the host Json data string a second time" {
   let text_result : Ref[Result[String, Error]?] = Ref(None)
   let number_result : Ref[Result[Int, Error]?] = Ref(None)
   let text = runtime_for(
-    get("https://example.test").expect_json(capture(text_result)),
+    @http.get("https://example.test").expect_json(capture(text_result)),
   )
   let (id, _) = begin_request(text)
   ignore(text.resolve_effect(id, "success", response(200, Json::string("42"))))
   assert_eq(text_result.val.unwrap().unwrap(), "42")
   ignore(text.dispose())
   let number = runtime_for(
-    get("https://example.test").expect_json(capture(number_result)),
+    @http.get("https://example.test").expect_json(capture(number_result)),
   )
   let (id, _) = begin_request(number)
   ignore(
@@ -342,7 +350,7 @@ test "HTTP does not parse the host Json data string a second time" {
 test "HTTP transport errors retain the complete root HostError" {
   let result : Ref[Result[Json, Error]?] = Ref(None)
   let runtime = runtime_for(
-    get("https://example.test").expect_json(capture(result)),
+    @http.get("https://example.test").expect_json(capture(result)),
   )
   let raw = Json::object({
     "error": Json::string("request:fail timeout"),
@@ -358,7 +366,7 @@ test "HTTP transport errors retain the complete root HostError" {
     let (id, _) = begin_request(runtime)
     ignore(runtime.resolve_effect(id, phase, raw.stringify()))
     match result.val {
-      Some(Err(HttpError::RequestError(error))) => {
+      Some(Err(@http.HttpError::RequestError(error))) => {
         assert_eq(error.capability, @minimoon.Request)
         assert_eq(error.kind, kind)
         assert_eq(error.message, "request:fail timeout")
@@ -377,12 +385,14 @@ test "HTTP invalid options are deferred and do not invoke the host" {
   let resolve = capture(result)
   for
     command in [
-      get("http://example.test").expect_json(resolve),
-      get("https://example.test", timeout_ms=0).expect_json(resolve),
-      delete("https://example.test", headers={ "Referer": "secret" }).expect_json(
+      @http.get("http://example.test").expect_json(resolve),
+      @http.get("https://example.test", timeout_ms=0).expect_json(resolve),
+      @http.delete("https://example.test", headers={ "Referer": "secret" }).expect_json(
         resolve,
       ),
-      post("https://example.test", headers={ "Content-Type": "text/plain" })
+      @http.post("https://example.test", headers={
+        "Content-Type": "text/plain",
+      })
       .with_json(1)
       .expect_json(resolve),
     ] {
@@ -394,7 +404,9 @@ test "HTTP invalid options are deferred and do not invoke the host" {
     assert_true(
       result.val
       is Some(
-        Err(HttpError::RequestError({ kind: @minimoon.InvalidPayload, .. }))
+        Err(
+          @http.HttpError::RequestError({ kind: @minimoon.InvalidPayload, .. })
+        )
       ),
     )
     ignore(runtime.dispose())
@@ -405,14 +417,14 @@ test "HTTP invalid options are deferred and do not invoke the host" {
 test "HTTP malformed host response remains a root validation error" {
   let result : Ref[Result[Json, Error]?] = Ref(None)
   let runtime = runtime_for(
-    get("https://example.test").expect_json(capture(result)),
+    @http.get("https://example.test").expect_json(capture(result)),
   )
   let (id, _) = begin_request(runtime)
   ignore(runtime.resolve_effect(id, "success", "{\"statusCode\":\"200\"}"))
   assert_true(
     result.val
     is Some(
-      Err(HttpError::RequestError({ kind: @minimoon.InvalidPayload, .. }))
+      Err(@http.HttpError::RequestError({ kind: @minimoon.InvalidPayload, .. }))
     ),
   )
   ignore(runtime.dispose())
@@ -422,7 +434,7 @@ test "HTTP malformed host response remains a root validation error" {
 test "HTTP disposal cancels pending requests and drops late completions" {
   let result : Ref[Result[Json, Error]?] = Ref(None)
   let runtime = runtime_for(
-    get("https://example.test").expect_json(capture(result)),
+    @http.get("https://example.test").expect_json(capture(result)),
   )
   let (id, _) = begin_request(runtime)
   assert_true(runtime.dispose().contains("CancelEffect"))
@@ -437,14 +449,16 @@ test "HTTP disposal cancels pending requests and drops late completions" {
 test "HTTP capability availability is reported by the existing host boundary" {
   let result : Ref[Result[Json, Error]?] = Ref(None)
   let runtime = runtime_for(
-    get("https://example.test").expect_json(capture(result)),
+    @http.get("https://example.test").expect_json(capture(result)),
     capabilities=[],
   )
   let (id, _) = begin_request(runtime)
   ignore(runtime.resolve_effect(id, "unavailable", "{}"))
   assert_true(
     result.val
-    is Some(Err(HttpError::RequestError({ kind: @minimoon.Unavailable, .. }))),
+    is Some(
+      Err(@http.HttpError::RequestError({ kind: @minimoon.Unavailable, .. }))
+    ),
   )
   ignore(runtime.dispose())
 }
@@ -453,7 +467,7 @@ test "HTTP capability availability is reported by the existing host boundary" {
 test "HTTP builders remain reusable without sharing response callbacks" {
   let first_result : Ref[Result[Int, Error]?] = Ref(None)
   let second_result : Ref[Result[Int, Error]?] = Ref(None)
-  let builder = post("https://example.test").with_json(42)
+  let builder = @http.post("https://example.test").with_json(42)
   let first = runtime_for(builder.expect_json(capture(first_result)))
   let second = runtime_for(builder.expect_json(capture(second_result)))
   let (first_id, first_payload) = begin_request(first)
@@ -494,7 +508,7 @@ test "HTTP typed commands inherit application ownership beyond page lifetime" {
       if message == -1 {
         (
           value,
-          get("https://example.test").expect_json(result => {
+          @http.get("https://example.test").expect_json(result => {
             let decoded : Int = match result {
               Ok(value) => value
               Err(_) => -2

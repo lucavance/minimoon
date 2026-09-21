@@ -2,7 +2,9 @@
 test "interaction exercises minimal-v2 semantic navigation and overlays" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let runtime = runtime_app
+    .create_page(@interaction.program(runtime_app.deps()))
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let initial = runtime.snapshot()

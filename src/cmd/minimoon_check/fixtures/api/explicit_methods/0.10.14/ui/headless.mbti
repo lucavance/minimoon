@@ -1,0 +1,23 @@
+// MoonBit 0.10.14 explicitly emits these pre-existing implicit trait methods.
+// Reviewed against ui/0.1/headless.mbti.
+// The historical snapshot remains unchanged.
+// Existing Bounds implementations: @debug.Debug, Eq
+// Existing CalendarDate implementations: @debug.Debug, Eq
+// Existing DateSelection implementations: @debug.Debug, Eq
+// Existing Placement implementations: @debug.Debug, Eq
+// Existing SliderSpec implementations: @debug.Debug, Eq
+pub fn Bounds::equal(Self, Self) -> Bool
+pub fn Bounds::not_equal(Self, Self) -> Bool
+pub fn Bounds::to_repr(Self) -> @debug.Repr
+pub fn CalendarDate::equal(Self, Self) -> Bool
+pub fn CalendarDate::not_equal(Self, Self) -> Bool
+pub fn CalendarDate::to_repr(Self) -> @debug.Repr
+pub fn DateSelection::equal(Self, Self) -> Bool
+pub fn DateSelection::not_equal(Self, Self) -> Bool
+pub fn DateSelection::to_repr(Self) -> @debug.Repr
+pub fn Placement::equal(Self, Self) -> Bool
+pub fn Placement::not_equal(Self, Self) -> Bool
+pub fn Placement::to_repr(Self) -> @debug.Repr
+pub fn SliderSpec::equal(Self, Self) -> Bool
+pub fn SliderSpec::not_equal(Self, Self) -> Bool
+pub fn SliderSpec::to_repr(Self) -> @debug.Repr

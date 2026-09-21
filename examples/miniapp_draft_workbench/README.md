@@ -1,6 +1,6 @@
 # Minimoon 草稿工作台
 
-Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.0` 公共 API 的轻量示例：
+Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.2` 公共 API 的轻量示例：
 **四个原生 Tab、一个编辑器、四个能力实验室，共九条路由**。
 它同时承担核心框架 conformance 验收，不是账号系统或云笔记服务。
 
@@ -16,9 +16,10 @@ Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.0` 公共 API �
 bun run minimoon verify examples/miniapp_draft_workbench --candidate
 ```
 
-当前仓库另含尚未发布的输入框宿主修复：连续输入时只更新变化的属性，
-不反复写入未变化的焦点／选区属性。请使用上述仓库 CLI 或本次生成物；
-已发布的 Registry `0.2.0` CLI 不包含此修复。版本号和公共 API 不变。
+当前 `0.2.2` 源码包含输入框宿主修复：连续输入时只更新变化的属性，
+不反复写入未变化的焦点／选区属性，并适配新的 MoonBit 工具链。
+使用上述仓库 CLI 或确认已发布后的 `0.2.2` Registry CLI，不能混用旧工具生成的文件。
+运行前准备 `moon 0.1.20260920`／`moonc v0.10.14`、Node `>=24.20.0` 和 Bun `1.4.2`。
 
 导入 **`examples/miniapp_draft_workbench/dist/`**，不要导入源码目录。
 沿用 Skyline、基础库至少 3.17.0，以及
@@ -101,4 +102,7 @@ UI Showcase 表单回显，共 12 项；
 `generated/verify_report.json` 与 `release_summary.json` 是公开 candidate 记录；
 `devtools.evidence.json` 私人且被 Git 忽略。新名称、九路由和新产物必须重新验收，
 不能沿用旧核心证据。本轮共享宿主修复也改变了 UI 产物，UI Showcase 必须另行复验。
-不宣称生产请求域名或完整 HTTPS/TLS 验证，也不会自动发布包。
+本次核心 `0.2.2`／UI `0.1.1` 可按已授权的
+[发布例外](../../docs/operations/release_candidate_handoff.md#scoped-publication-exception)
+在两个 CI 任务通过后发布，宿主验证仍保持 pending。
+不宣称生产请求域名或完整 HTTPS/TLS 验证，验证命令本身不会发布包。

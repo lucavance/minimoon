@@ -35,7 +35,9 @@ async fn new_build_transaction(base : String) -> String {
     .to_array()
     .join("")
   let directory = join(base, token)
-  @fs.mkdir(directory, permission=0o700)
+  // Return ownership to the caller before cancellation can interrupt its
+  // errdefer registration and strand the newly created transaction directory.
+  @async.protect_from_cancel(() => @fs.mkdir(directory, permission=0o700))
   directory
 }
 
@@ -84,6 +86,21 @@ async fn promote_build_outputs(
   entries : Array[BuildReplacement],
   backup_root : String,
   rename_output? : async (String, String) -> Unit = build_rename,
+) -> Unit {
+  // Observe an already pending cancellation before touching the live output.
+  @async.pause()
+  // Once promotion starts, finish either the commit or its recovery. A cancelled
+  // caller must never skip recovery and then delete the only copy of old output.
+  @async.protect_from_cancel(() => {
+    promote_build_outputs_protected(entries, backup_root, rename_output~)
+  })
+}
+
+///|
+async fn promote_build_outputs_protected(
+  entries : Array[BuildReplacement],
+  backup_root : String,
+  rename_output~ : async (String, String) -> Unit,
 ) -> Unit {
   @fs.mkdir(backup_root, permission=0o700, recursive=true)
   let promotions : Array[BuildPromotion] = []
@@ -160,8 +177,8 @@ async fn promote_build_outputs(
 }
 
 ///|
-async fn cleanup_build_transaction(directory : String) -> Unit {
-  remove_build_output(directory) catch {
+async fn cleanup_build_transaction(directory : String) -> Unit nocancel {
+  @async.protect_from_cancel(() => remove_build_output(directory)) catch {
     error =>
       println(
         "minimoon: could not remove build temporary directory " +

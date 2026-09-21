@@ -3,8 +3,8 @@ test "compound overlay preserves rich trigger actions and reports dismissal reas
   let runtime = @testing.mount(
     component_page(context => {
       let (events, emit) = @minimoon.create_variable("")
-      stack([
-        overlay_provider(
+      @minimoon_ui.stack([
+        @minimoon_ui.overlay_provider(
           context,
           id="rich",
           force_mount=true,
@@ -20,18 +20,18 @@ test "compound overlay preserves rich trigger actions and reports dismissal reas
           }),
           render=scope => {
             @minimoon.fragment([
-              overlay_trigger(
+              @minimoon_ui.overlay_trigger(
                 scope,
                 @minimoon.text("Rich trigger"),
                 on_tap=emit(previous => previous + "tap"),
               ),
-              overlay_content(
+              @minimoon_ui.overlay_content(
                 scope,
                 [
-                  overlay_title(scope, "Title"),
-                  overlay_description(scope, "Description"),
-                  overlay_footer(
-                    overlay_action(
+                  @minimoon_ui.overlay_title(scope, "Title"),
+                  @minimoon_ui.overlay_description(scope, "Description"),
+                  @minimoon_ui.overlay_footer(
+                    @minimoon_ui.overlay_action(
                       scope,
                       "Apply",
                       on_tap=emit(previous => previous + "action"),
@@ -76,16 +76,20 @@ test "rich grouped menu honors per-item close policy and controlled menubar" {
     component_page(context => {
       let (value, emit) = @minimoon.create_variable((None : String?))
       let items = @minimoon.Val::constant([
-        menu_group(key="group", label="Group", items=[
-          menu_customize(
-            menu_item(key="keep", label="Keep", on_select=@minimoon.none),
+        @minimoon_ui.menu_group(key="group", label="Group", items=[
+          @minimoon_ui.menu_customize(
+            @minimoon_ui.menu_item(
+              key="keep",
+              label="Keep",
+              on_select=@minimoon.none,
+            ),
             content=@minimoon.text("Rich item"),
             shortcut="Hint",
             inset=true,
             close_on_select=false,
           ),
-          menu_customize(
-            menu_checkbox_item(
+          @minimoon_ui.menu_customize(
+            @minimoon_ui.menu_checkbox_item(
               key="close",
               label="Check",
               checked=false,
@@ -96,8 +100,8 @@ test "rich grouped menu honors per-item close policy and controlled menubar" {
           ),
         ]),
       ])
-      stack([
-        menubar_controlled(
+      @minimoon_ui.stack([
+        @minimoon_ui.menubar_controlled(
           context,
           id="bar",
           groups=[
@@ -133,16 +137,22 @@ test "rich grouped menu honors per-item close policy and controlled menubar" {
 test "multi combobox preserves query, removes chips, clears and reports changes" {
   let runtime = @testing.mount(
     component_page(context => {
-      let (state, emit) = @minimoon.create_variable(combobox_state())
+      let (state, emit) = @minimoon.create_variable(
+        @minimoon_ui.combobox_state(),
+      )
       let (events, log) = @minimoon.create_variable("")
-      stack([
-        combobox_provider_controlled(
+      @minimoon_ui.stack([
+        @minimoon_ui.combobox_provider_controlled(
           context,
           id="multi",
           options=@minimoon.Val::constant([
-            combobox_option(value="one", label="First"),
-            combobox_option(value="two", label="Second"),
-            combobox_option(value="lock", label="Locked", disabled=true),
+            @minimoon_ui.combobox_option(value="one", label="First"),
+            @minimoon_ui.combobox_option(value="two", label="Second"),
+            @minimoon_ui.combobox_option(
+              value="lock",
+              label="Locked",
+              disabled=true,
+            ),
           ]),
           state~,
           on_change=emit.map(next => _ => next),
@@ -182,27 +192,27 @@ test "command provider filters keywords keeps forced items and invokes selection
   let runtime = @testing.mount(
     component_page(_ => {
       let (selected, emit) = @minimoon.create_variable("")
-      stack([
-        command_provider(
+      @minimoon_ui.stack([
+        @minimoon_ui.command_provider(
           id="commands",
           on_value_select=emit.map(value => _ => value),
           render=scope => {
             @minimoon.fragment([
-              command_input(scope),
-              command_list([
-                command_item(
+              @minimoon_ui.command_input(scope),
+              @minimoon_ui.command_list([
+                @minimoon_ui.command_item(
                   scope,
                   value="save",
                   keywords=["persist"],
                   @minimoon.text("Save"),
                 ),
-                command_item(
+                @minimoon_ui.command_item(
                   scope,
                   value="always",
                   force_mount=true,
                   @minimoon.text("Always"),
                 ),
-                command_item(
+                @minimoon_ui.command_item(
                   scope,
                   value="disabled",
                   keywords=["persist"],

@@ -20,6 +20,8 @@ pub(all) suberror HttpError {
   RequestError(@minimoon.HostError)
   BadStatus(@minimoon.RequestResult)
 }
+pub fn HttpError::output(Self, &Logger) -> Unit
+pub fn HttpError::to_string(Self) -> String
 pub impl Show for HttpError
 
 // Types and methods

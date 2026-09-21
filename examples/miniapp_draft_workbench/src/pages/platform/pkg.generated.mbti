@@ -29,6 +29,8 @@ pub struct Model {
   media : String
   request_error : String
 } derive(Eq)
+pub fn Model::equal(Self, Self) -> Bool
+pub fn Model::not_equal(Self, Self) -> Bool
 
 pub enum Msg {
   StorageInput(String)

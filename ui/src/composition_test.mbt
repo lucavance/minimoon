@@ -1,13 +1,13 @@
 ///|
 fn component_page(
-  build : (UiContext) -> @minimoon.Val[@minimoon.Node],
+  build : (@minimoon_ui.UiContext) -> @minimoon.Val[@minimoon.Node],
 ) -> @minimoon.Page {
   @minimoon.page(
     id="ui_composition",
     route=@minimoon.route("pages/ui_composition/ui_composition"),
     title="UI composition",
     capabilities=[@minimoon.MeasureNodes],
-    build=page => root(page, build),
+    build=page => @minimoon_ui.root(page, build),
   )
 }
 
@@ -26,10 +26,13 @@ test "dialog content stays reactive and layers escape scrolling parents" {
           ),
         ])
       })
-      dialog(context, id="modal", title="Modal", trigger_label="Open", content~).map(node => {
-          @minimoon.scroll_view(id="scroller", scroll_y=true, node)
-        },
-      )
+      @minimoon_ui.dialog(
+        context,
+        id="modal",
+        title="Modal",
+        trigger_label="Open",
+        content~,
+      ).map(node => @minimoon.scroll_view(id="scroller", scroll_y=true, node))
     }),
   )
   let _ = runtime.tap(@testing.by_id("modal-trigger"))
@@ -68,13 +71,17 @@ test "accordion multiple state and tabs react to replaced content" {
       let (count, emit) = @minimoon.create_variable(0)
       let items = count.map(count => {
         [
-          panel(
+          @minimoon_ui.panel(
             key="one",
             title="One",
             content=@minimoon.text("Value " + count.to_string()),
           ),
-          panel(key="two", title="Two", content=@minimoon.text("Second")),
-          panel(
+          @minimoon_ui.panel(
+            key="two",
+            title="Two",
+            content=@minimoon.text("Second"),
+          ),
+          @minimoon_ui.panel(
             key="locked",
             title="Locked",
             content=@minimoon.text("Forbidden"),
@@ -82,9 +89,9 @@ test "accordion multiple state and tabs react to replaced content" {
           ),
         ]
       })
-      stack([
-        accordion(id="accordion", items~, multiple=true),
-        tabs(id="tabs", items~, initial_selected="one"),
+      @minimoon_ui.stack([
+        @minimoon_ui.accordion(id="accordion", items~, multiple=true),
+        @minimoon_ui.tabs(id="tabs", items~, initial_selected="one"),
         @minimoon.Val::constant(
           @minimoon.button(
             on_tap=emit(value => value + 1),
@@ -123,18 +130,27 @@ test "menu checkbox and submenu state update without closing parent" {
       let (checked, emit) = @minimoon.create_variable(false)
       let items = checked.map(checked => {
         [
-          menu_checkbox_item(
+          @minimoon_ui.menu_checkbox_item(
             key="check",
             label="Check",
             checked~,
             on_change=emit.map(value => _ => value),
           ),
-          menu_submenu(key="more", label="More", items=[
-            menu_item(key="done", label="Done", on_select=@minimoon.none),
+          @minimoon_ui.menu_submenu(key="more", label="More", items=[
+            @minimoon_ui.menu_item(
+              key="done",
+              label="Done",
+              on_select=@minimoon.none,
+            ),
           ]),
         ]
       })
-      dropdown_menu(context, id="menu", trigger_label="Menu", items~)
+      @minimoon_ui.dropdown_menu(
+        context,
+        id="menu",
+        trigger_label="Menu",
+        items~,
+      )
     }),
   )
   let _ = runtime.tap(@testing.by_id("menu-trigger"))
@@ -151,7 +167,7 @@ test "menu checkbox and submenu state update without closing parent" {
 ///|
 test "calendar range and disabled dates are independent across page instances" {
   let page = component_page(_ => {
-    calendar(
+    @minimoon_ui.calendar(
       id="calendar",
       initial_month=@headless.calendar_date(year=2024, month=2, day=1),
       initial_selected=@headless.Range(None, None),
@@ -181,10 +197,12 @@ test "calendar range and disabled dates are independent across page instances" {
 test "data table sorts filters pages and preserves selected row keys" {
   let runtime = @testing.mount(
     component_page(_ => {
-      data_table(
+      @minimoon_ui.data_table(
         id="table",
         rows=@minimoon.Val::constant(["Two", "Ten", "One"]),
-        columns=[data_column(key="name", label="Name", text=value => value)],
+        columns=[
+          @minimoon_ui.data_column(key="name", label="Name", text=value => value),
+        ],
         row_key=value => value,
         page_size=2,
       )
@@ -211,25 +229,25 @@ test "combobox filters and command invokes only enabled action" {
   let runtime = @testing.mount(
     component_page(context => {
       let (count, emit) = @minimoon.create_variable(0)
-      stack([
-        combobox(
+      @minimoon_ui.stack([
+        @minimoon_ui.combobox(
           context,
           id="combo",
           label="Choose",
           options=@minimoon.Val::constant([
-            choice_option(key="one", label="One"),
-            choice_option(key="two", label="Two"),
+            @minimoon_ui.choice_option(key="one", label="One"),
+            @minimoon_ui.choice_option(key="two", label="Two"),
           ]),
         ),
-        command(
+        @minimoon_ui.command(
           id="cmd",
           items=@minimoon.Val::constant([
-            menu_item(
+            @minimoon_ui.menu_item(
               key="run",
               label="Run",
               on_select=emit(value => value + 1),
             ),
-            menu_item(
+            @minimoon_ui.menu_item(
               key="locked",
               label="Locked",
               on_select=emit(value => value + 10),
@@ -255,18 +273,22 @@ test "combobox filters and command invokes only enabled action" {
 test "toast and sonner share page queue with timer pause dismiss and limits" {
   let runtime = @testing.mount(
     component_page(context => {
-      stack([
+      @minimoon_ui.stack([
         @minimoon.Val::constant(
           @minimoon.button(
             event_key="notify",
-            on_tap=toast(
+            on_tap=@minimoon_ui.toast(
               context,
-              toast_notice(id="notice", title="Saved", duration_ms=500),
+              @minimoon_ui.toast_notice(
+                id="notice",
+                title="Saved",
+                duration_ms=500,
+              ),
             ),
             "Notify",
           ),
         ),
-        sonner(context),
+        @minimoon_ui.sonner(context),
       ])
     }),
   )

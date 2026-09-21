@@ -1,0 +1,79 @@
+// MoonBit 0.10.14 explicitly emits these pre-existing implicit trait methods.
+// Reviewed against 0.2/root.mbti.
+// The historical snapshot remains unchanged.
+// Existing AppLifecycleHook implementations: Eq
+// Existing Capability implementations: @debug.Debug, Eq
+// Existing FormButtonType implementations: @debug.Debug, Eq
+// Existing HostErrorKind implementations: @debug.Debug, Eq
+// Existing HttpMethod implementations: @debug.Debug, Eq
+// Existing ImageLoadDetail implementations: @debug.Debug, Eq
+// Existing ImageMode implementations: @debug.Debug, Eq
+// Existing InputType implementations: @debug.Debug, Eq
+// Existing LayoutRect implementations: @debug.Debug, Eq, ToJson
+// Existing NavigatorMode implementations: Eq
+// Existing Node implementations: Eq, IsChildren
+// Existing NodeRect implementations: @debug.Debug, Eq
+// Existing PageLayout implementations: @debug.Debug, Eq, ToJson
+// Existing PageLifecycleHook implementations: Eq
+// Existing SemanticRole implementations: @debug.Debug, Eq
+// Existing Status implementations: Enumerate, Eq
+// Existing TouchDetail implementations: @debug.Debug, Eq
+// Existing TouchPoint implementations: @debug.Debug, Eq
+// Existing WindowMetrics implementations: @debug.Debug, Eq, ToJson
+pub fn AppLifecycleHook::equal(Self, Self) -> Bool
+pub fn AppLifecycleHook::not_equal(Self, Self) -> Bool
+pub fn Capability::equal(Self, Self) -> Bool
+pub fn Capability::not_equal(Self, Self) -> Bool
+pub fn Capability::to_repr(Self) -> @debug.Repr
+pub fn FormButtonType::equal(Self, Self) -> Bool
+pub fn FormButtonType::not_equal(Self, Self) -> Bool
+pub fn FormButtonType::to_repr(Self) -> @debug.Repr
+pub fn HostErrorKind::equal(Self, Self) -> Bool
+pub fn HostErrorKind::not_equal(Self, Self) -> Bool
+pub fn HostErrorKind::to_repr(Self) -> @debug.Repr
+pub fn HttpMethod::equal(Self, Self) -> Bool
+pub fn HttpMethod::not_equal(Self, Self) -> Bool
+pub fn HttpMethod::to_repr(Self) -> @debug.Repr
+pub fn ImageLoadDetail::equal(Self, Self) -> Bool
+pub fn ImageLoadDetail::not_equal(Self, Self) -> Bool
+pub fn ImageLoadDetail::to_repr(Self) -> @debug.Repr
+pub fn ImageMode::equal(Self, Self) -> Bool
+pub fn ImageMode::not_equal(Self, Self) -> Bool
+pub fn ImageMode::to_repr(Self) -> @debug.Repr
+pub fn InputType::equal(Self, Self) -> Bool
+pub fn InputType::not_equal(Self, Self) -> Bool
+pub fn InputType::to_repr(Self) -> @debug.Repr
+pub fn LayoutRect::equal(Self, Self) -> Bool
+pub fn LayoutRect::not_equal(Self, Self) -> Bool
+pub fn LayoutRect::to_json(Self) -> Json
+pub fn LayoutRect::to_repr(Self) -> @debug.Repr
+pub fn NavigatorMode::equal(Self, Self) -> Bool
+pub fn NavigatorMode::not_equal(Self, Self) -> Bool
+pub fn Node::equal(Self, Self) -> Bool
+pub fn Node::not_equal(Self, Self) -> Bool
+pub fn Node::to_nodes(Self) -> Array[Self]
+pub fn NodeRect::equal(Self, Self) -> Bool
+pub fn NodeRect::not_equal(Self, Self) -> Bool
+pub fn NodeRect::to_repr(Self) -> @debug.Repr
+pub fn PageLayout::equal(Self, Self) -> Bool
+pub fn PageLayout::not_equal(Self, Self) -> Bool
+pub fn PageLayout::to_json(Self) -> Json
+pub fn PageLayout::to_repr(Self) -> @debug.Repr
+pub fn PageLifecycleHook::equal(Self, Self) -> Bool
+pub fn PageLifecycleHook::not_equal(Self, Self) -> Bool
+pub fn SemanticRole::equal(Self, Self) -> Bool
+pub fn SemanticRole::not_equal(Self, Self) -> Bool
+pub fn SemanticRole::to_repr(Self) -> @debug.Repr
+pub fn[T : Eq] Status::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq] Status::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T] Status::tag(Self[T]) -> String
+pub fn TouchDetail::equal(Self, Self) -> Bool
+pub fn TouchDetail::not_equal(Self, Self) -> Bool
+pub fn TouchDetail::to_repr(Self) -> @debug.Repr
+pub fn TouchPoint::equal(Self, Self) -> Bool
+pub fn TouchPoint::not_equal(Self, Self) -> Bool
+pub fn TouchPoint::to_repr(Self) -> @debug.Repr
+pub fn WindowMetrics::equal(Self, Self) -> Bool
+pub fn WindowMetrics::not_equal(Self, Self) -> Bool
+pub fn WindowMetrics::to_json(Self) -> Json
+pub fn WindowMetrics::to_repr(Self) -> @debug.Repr

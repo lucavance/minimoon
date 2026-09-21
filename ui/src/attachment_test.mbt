@@ -4,37 +4,44 @@ test "attachment states and typed sizes map to native semantics and styles" {
     form_test_page(_ => {
       @minimoon.Val::constant(
         @minimoon.div([
-          attachment(
+          @minimoon_ui.attachment(
             id="upload",
             state=AttachmentUploading,
             size=AttachmentXs,
             orientation=Vertical,
             [
-              attachment_media(
+              @minimoon_ui.attachment_media(
                 id="icon",
                 variant=IconMedia,
                 content=@minimoon.text("File"),
               ),
-              attachment_content([
-                attachment_title("Upload"),
-                attachment_description("Working"),
+              @minimoon_ui.attachment_content([
+                @minimoon_ui.attachment_title("Upload"),
+                @minimoon_ui.attachment_description("Working"),
               ]),
             ],
           ),
-          attachment(id="error", state=AttachmentError, [
-            attachment_media(src="/assets/mmui/check-dark.svg", error=true),
-            attachment_title("Failed"),
+          @minimoon_ui.attachment(id="error", state=AttachmentError, [
+            @minimoon_ui.attachment_media(
+              src="/assets/mmui/check-dark.svg",
+              error=true,
+            ),
+            @minimoon_ui.attachment_title("Failed"),
           ]),
-          attachment(
+          @minimoon_ui.attachment(
             id="processing",
             state=AttachmentProcessing,
-            attachment_title("Processing"),
+            @minimoon_ui.attachment_title("Processing"),
           ),
-          attachment(id="idle", state=AttachmentIdle, attachment_title("Ready")),
-          attachment(
+          @minimoon_ui.attachment(
+            id="idle",
+            state=AttachmentIdle,
+            @minimoon_ui.attachment_title("Ready"),
+          ),
+          @minimoon_ui.attachment(
             id="done",
             state=AttachmentDone,
-            attachment_title("Complete"),
+            @minimoon_ui.attachment_title("Complete"),
           ),
         ]),
       )
@@ -71,20 +78,20 @@ test "attachment rich action guards disabled activation and navigation" {
     form_test_page(_ => {
       let (count, update) = @minimoon.create_variable(0)
       count.map(count => {
-        attachment([
-          attachment_action(
+        @minimoon_ui.attachment([
+          @minimoon_ui.attachment_action(
             id="active",
             label="Retry",
             content=@minimoon.text("Retry " + count.to_string()),
             on_tap=update(count => count + 1),
           ),
-          attachment_action(
+          @minimoon_ui.attachment_action(
             id="disabled",
             label="Remove",
             disabled=true,
             on_tap=update(count => count + 1),
           ),
-          attachment_trigger_link(
+          @minimoon_ui.attachment_trigger_link(
             id="link",
             target=@minimoon.route("pages/files/files"),
             disabled=true,

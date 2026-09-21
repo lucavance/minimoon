@@ -1,9 +1,9 @@
 ///|
 test "resource selection is deterministic and transitive" {
-  let first = resources(["form", "date-picker", "form"])
-  let second = resources(["date-picker", "form"])
+  let first = @resources.resources(["form", "date-picker", "form"])
+  let second = @resources.resources(["date-picker", "form"])
   assert_eq(first, second)
-  assert_eq(features().length(), 66)
+  assert_eq(@resources.features().length(), 66)
   guard first.assets[0].content is @build_resources.Text(manifest) else {
     abort("text manifest")
   }
@@ -12,7 +12,7 @@ test "resource selection is deterministic and transitive" {
   assert_true(manifest.contains("calendar\n"))
   assert_true(manifest.contains("popover\n"))
   assert_true(first.wxss.contains(".mmui-input"))
-  guard resources([]).assets[0].content is @build_resources.Text(all) else {
+  guard @resources.resources([]).assets[0].content is @build_resources.Text(all) else {
     abort("text manifest")
   }
   assert_eq(all.split("\n").length(), 67)
@@ -20,7 +20,7 @@ test "resource selection is deterministic and transitive" {
 
 ///|
 test "SVG resources use explicit size and do not introduce browser CSS" {
-  let resources = resources([])
+  let resources = @resources.resources([])
   assert_eq(resources.assets.length(), 7)
   for asset in resources.assets {
     assert_true(asset.path.has_prefix("assets/mmui/"))

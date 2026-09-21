@@ -1,6 +1,7 @@
 ///|
 async fn docs_suite(root : String) -> Unit {
   let temp = check_temporary("minimoon-docs-check")
+  defer cleanup_check_temporary(temp)
   let script = join(temp, "docs_check.cjs")
   @fs.write_file(
     script,
@@ -33,12 +34,12 @@ async fn docs_suite(root : String) -> Unit {
   ]
   let init_code = @process.run("git", ["init", "-q"], cwd=bad_links) catch {
     err => {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_check_temporary(temp)
       abort("failed to initialize documentation check fixture: \{err}")
     }
   }
   guard init_code == 0 else {
-    @fs.rmdir(temp, recursive=true)
+    cleanup_check_temporary(temp)
     abort("failed to initialize documentation check fixture")
   }
   let (bad_code, bad_stdout, bad_stderr) = @process.collect_output(
@@ -55,7 +56,7 @@ async fn docs_suite(root : String) -> Unit {
     cwd=bad_links,
   ) catch {
     err => {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_check_temporary(temp)
       abort("failed to start documentation check self-test: \{err}")
     }
   }
@@ -66,7 +67,7 @@ async fn docs_suite(root : String) -> Unit {
     (bad_stdout.text() + bad_stderr.text()).contains(
       "ui/README.mbt.md: broken local Markdown link",
     ) else {
-    @fs.rmdir(temp, recursive=true)
+    cleanup_check_temporary(temp)
     abort("documentation check did not reject its broken-link fixture")
   }
   let (self_code, self_stdout, self_stderr) = @process.collect_output(
@@ -75,7 +76,7 @@ async fn docs_suite(root : String) -> Unit {
     cwd=root,
   ) catch {
     err => {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_check_temporary(temp)
       abort("failed to start documentation validator self-test: \{err}")
     }
   }
@@ -83,14 +84,14 @@ async fn docs_suite(root : String) -> Unit {
     (self_stdout.text() + self_stderr.text()).contains(
       "documentation validator self-test passed",
     ) else {
-    @fs.rmdir(temp, recursive=true)
+    cleanup_check_temporary(temp)
     abort("documentation validator negative cases did not pass")
   }
   for fixture in ["examples/miniapp_draft_workbench", "ui/examples/showcase"] {
     let report = read_json(root, fixture + "/generated/verify_report.json")
     let actual = @verify.artifact_fingerprint(join(root, fixture))
     guard json_string(report, "artifactFingerprint") == actual else {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_check_temporary(temp)
       abort(
         fixture + " documentation report does not match current artifact bytes",
       )
@@ -102,12 +103,12 @@ async fn docs_suite(root : String) -> Unit {
   println("$ bun " + args.join(" "))
   let (code, stdout, stderr) = @process.collect_output("bun", args, cwd=root) catch {
     err => {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_check_temporary(temp)
       abort("failed to start documentation check: \{err}")
     }
   }
   let output = stdout.text() + stderr.text()
-  @fs.rmdir(temp, recursive=true)
+  cleanup_check_temporary(temp)
   guard code == 0 else {
     abort("documentation check failed:\n" + output.trim().to_owned())
   }

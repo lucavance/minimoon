@@ -1,7 +1,7 @@
 # Minimoon UI
 
 Native, touch-first Skyline components for Minimoon. Module
-`lampclaw/minimoon_ui 0.1.0` depends on core `lampclaw/minimoon 0.2.0`.
+`lampclaw/minimoon_ui 0.1.1` depends on core `lampclaw/minimoon 0.2.2`.
 
 The fixed reference is RUI 0.1.1 in Rabbita 0.15.6, commit
 `b1291945fd0201a0b5b39513b88585d6122db7bc`. The library uses public Minimoon
@@ -12,12 +12,19 @@ upstream visual-recipe attribution are retained in [LICENSE](LICENSE) and
 
 ## Install
 
+Use `moon 0.1.20260920` / `moonc v0.10.14` or newer and the matching core CLI
+`0.2.2`. Style tooling uses Node `>=24.20.0` and Bun `1.4.2`; CI also checks
+Node `26.9.0`. First confirm registry availability in
+[project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
+Before publication, use an explicit source workspace instead of assuming these
+versions are downloadable.
+
 Add both modules to the application's TOML-style `moon.mod`:
 
 ```moonbit
 import {
-  "lampclaw/minimoon@0.2.0",
-  "lampclaw/minimoon_ui@0.1.0",
+  "lampclaw/minimoon@0.2.2",
+  "lampclaw/minimoon_ui@0.1.1",
 }
 ```
 
@@ -64,6 +71,17 @@ Feature selection currently chooses resource groups, not per-component CSS
 tree shaking: base/foundation/compound styles and the six theme icons are shared;
 form styles are included when required. The resolved feature inventory is
 deterministic, but selecting one feature does not produce only its selectors.
+
+## Upgrade an existing UI application
+
+Upgrade the CLI to `0.2.2`, core to `0.2.2` and UI to `0.1.1` together. Update
+an existing style `package.json` to weapp-tailwindcss `5.5.7`, keeping Tailwind
+`4.3.3`, PostCSS `8.5.28` and its override; run `bun install` to refresh the
+lockfile. `minimoon build` does not rewrite that manifest. Use explicit package
+qualifiers and public trait extensions where required by the new MoonBit
+compiler. Follow the [complete upgrade procedure](https://github.com/lucavance/minimoon/blob/main/docs/reference/compatibility_and_upgrades.md#upgrade-procedure),
+then rebuild all resources and generated artifacts. Old fingerprints do not
+validate the new bytes.
 
 ## Page ownership
 
@@ -165,7 +183,7 @@ bun run minimoon verify ui/examples/showcase --candidate
 Import `ui/examples/showcase/dist` unchanged into Developer Tools with Skyline
 and a minimum online base library of 3.17.0. Follow every check in the showcase's
 `miniapp.minimoon.json`, including multiple-value controls, delayed surfaces,
-mobile sidebar gestures and page lifecycle. Core's Conformance fixture needs
+mobile sidebar gestures and page lifecycle. Core's Draft Workbench fixture needs
 its own new fingerprint-bound validation because the shared host bytes changed.
 
 The API map covers 428 upstream functions and 89 types. Native substitution is
@@ -179,21 +197,23 @@ message keys, so layout measurement can preserve the reader's position.
 
 ## Maintainer publication boundary
 
-Publication is a separate, explicitly authorized maintainer action. With
-`moon 0.1.20260907`, do not publish directly from this repository's `ui/` directory
-or run `moon -C ui publish`: packaging can inherit the root `.moonignore`
-`/ui/` exclusion and produce an empty archive. The repository gate packages an
+Publication is a separate, explicitly authorized maintainer action. Do not
+publish directly from this repository's `ui/` directory or run
+`moon -C ui publish`: the packaging issue observed with `moon 0.1.20260907`
+can inherit the root `.moonignore` `/ui/` exclusion and produce an empty archive. The repository gate packages an
 isolated source copy and validates its actual ZIP, required files and consumers.
 
-Core `0.2.0` and UI `0.1.0` are already published; see the
-[publication checkpoint](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md#publication-checkpoint).
-The checked `_build/publish/lampclaw-minimoon_ui-0.1.0.zip` is the archive example
-for that completed release. Future package changes require a new, unoccupied
-version and validation of its archive. After the matching core resolves and
-publication is explicitly authorized, unpack the reviewed UI archive outside
-every Git repository and Moon workspace ancestor. Check `moon.mod`, `src/`,
-README and LICENSE, resolve registry core and rerun consumers, then publish the
-unchanged extracted module under the new version.
+The current candidate archive is
+`_build/publish/lampclaw-minimoon_ui-0.1.1.zip`. After core `0.2.2` resolves,
+unpack that reviewed UI archive outside every Git repository and Moon workspace
+ancestor. Check `moon.mod`, `src/`, README and LICENSE, resolve registry core
+and rerun consumers, then publish the unchanged extracted module under its
+unoccupied version. Existing published versions remain immutable.
+
+For core `0.2.2` / UI `0.1.1`, the user authorizes publication after complete
+candidate checks and both CI jobs pass, without waiting for new host validation.
+Developer Tools remains pending, reports keep `release: false`, and no host pass
+is implied. The actual `verify --release` evidence gate is unchanged.
 Follow the [ordered release procedure](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md#ordered-local-registry-publication).
 The linked guides are repository-hosted because `ui/docs` is not shipped in
 the registry archive.

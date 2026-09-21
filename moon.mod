@@ -1,10 +1,10 @@
 name = "lampclaw/minimoon"
 
-version = "0.2.1"
+version = "0.2.2"
 
 import {
-  "moonbitlang/async@0.21.2",
-  "moonbitlang/x@0.5.1",
+  "moonbitlang/async@0.22.1",
+  "moonbitlang/x@0.5.5",
 }
 
 readme = "README.mbt.md"

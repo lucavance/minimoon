@@ -6,7 +6,9 @@ test "calendar Gregorian endpoints have unique dates and inert placeholders" {
       @headless.calendar_date(year=9999, month=12, day=31),
     ] {
     let runtime = @testing.mount(
-      component_page(_ => calendar(id="bounds", initial_month=date, today=date)),
+      component_page(_ => {
+        @minimoon_ui.calendar(id="bounds", initial_month=date, today=date)
+      }),
     )
     assert_eq(runtime.query_all(@testing.by_label(date.iso())).length(), 1)
     let event = if date.year == 1 { "previous" } else { "next" }
@@ -29,7 +31,7 @@ test "calendar Gregorian endpoints have unique dates and inert placeholders" {
 test "calendar hides outside days and whole disabled calendar is inert" {
   let runtime = @testing.mount(
     component_page(_ => {
-      calendar(
+      @minimoon_ui.calendar(
         id="disabled",
         initial_month=@headless.calendar_date(year=2024, month=2, day=1),
         show_outside_days=false,
@@ -53,7 +55,7 @@ test "date picker presets update controlled value label and open callback" {
     component_page(context => {
       let (selected, change) = @minimoon.create_variable(@headless.Single(None))
       let (open, change_open) = @minimoon.create_variable(false)
-      let picker = date_picker_controlled(
+      let picker = @minimoon_ui.date_picker_controlled(
         context,
         id="picker",
         label="Choose",
@@ -62,7 +64,7 @@ test "date picker presets update controlled value label and open callback" {
         on_change=change.map(value => _ => value),
         open~,
         on_open_change=change_open.map(value => _ => value),
-        presets=[date_picker_preset(label="Today", value=date)],
+        presets=[@minimoon_ui.date_picker_preset(label="Today", value=date)],
         format_value=value => {
           if value is @headless.Single(Some(value)) {
             "Chosen " + value.iso()
@@ -94,7 +96,7 @@ test "date range picker keeps incomplete selection open and closes completed ran
       let (selected, change) = @minimoon.create_variable(
         @headless.Range(None, None),
       )
-      date_range_picker(
+      @minimoon_ui.date_range_picker(
         context,
         id="range",
         label="Range",
@@ -119,20 +121,20 @@ test "date range picker keeps incomplete selection open and closes completed ran
 test "data table numeric sorting visibility and searchable fields are independent" {
   let runtime = @testing.mount(
     component_page(_ => {
-      data_table(
+      @minimoon_ui.data_table(
         id="numbers",
         rows=@minimoon.Val::constant([10, 2, 1]),
         row_key=value => value.to_string(),
         selectable=false,
         columns=[
-          data_column(
+          @minimoon_ui.data_column(
             key="number",
             label="Number",
             text=value => value.to_string(),
             numeric_value=value => value.to_double(),
             hideable=false,
           ),
-          data_column(
+          @minimoon_ui.data_column(
             key="secret",
             label="Secret",
             text=_ => "hidden-query",
@@ -162,13 +164,13 @@ test "data table numeric sorting visibility and searchable fields are independen
 test "data table explicit comparator overrides numeric projection" {
   let runtime = @testing.mount(
     component_page(_ => {
-      data_table(
+      @minimoon_ui.data_table(
         id="compare",
         rows=@minimoon.Val::constant([1, 2, 10]),
         row_key=value => value.to_string(),
         selectable=false,
         columns=[
-          data_column(
+          @minimoon_ui.data_column(
             key="n",
             label="N",
             text=value => value.to_string(),
@@ -188,12 +190,15 @@ test "native table spans use actual two-dimensional geometry" {
   let runtime = @testing.mount(
     component_page(_ => {
       @minimoon.Val::constant(
-        table_spanning(columns=3, row_height=40, rows=[
+        @minimoon_ui.table_spanning(columns=3, row_height=40, rows=[
           [
-            table_span_head("Both", colspan=2),
-            table_span_head("Tall", rowspan=2),
+            @minimoon_ui.table_span_head("Both", colspan=2),
+            @minimoon_ui.table_span_head("Tall", rowspan=2),
           ],
-          [table_span_cell("Left"), table_span_cell("Right")],
+          [
+            @minimoon_ui.table_span_cell("Left"),
+            @minimoon_ui.table_span_cell("Right"),
+          ],
         ]),
       )
     }),
@@ -229,14 +234,29 @@ test "chart supports native indicators legend positions and inactive tooltip" {
   let runtime = @testing.mount(
     component_page(_ => {
       @minimoon.Val::constant(
-        chart_container([
-          chart_tooltip_content(active=false, "Invisible"),
-          chart_tooltip_content([
-            chart_tooltip_item(label="Dot", value="1", indicator=ChartDot),
-            chart_tooltip_item(label="Line", value="2", indicator=ChartLine),
-            chart_tooltip_item(label="Dashed", value="3", indicator=ChartDashed),
+        @minimoon_ui.chart_container([
+          @minimoon_ui.chart_tooltip_content(active=false, "Invisible"),
+          @minimoon_ui.chart_tooltip_content([
+            @minimoon_ui.chart_tooltip_item(
+              label="Dot",
+              value="1",
+              indicator=ChartDot,
+            ),
+            @minimoon_ui.chart_tooltip_item(
+              label="Line",
+              value="2",
+              indicator=ChartLine,
+            ),
+            @minimoon_ui.chart_tooltip_item(
+              label="Dashed",
+              value="3",
+              indicator=ChartDashed,
+            ),
           ]),
-          chart_legend(position=LegendTop, chart_legend_item(label="Top")),
+          @minimoon_ui.chart_legend(
+            position=LegendTop,
+            @minimoon_ui.chart_legend_item(label="Top"),
+          ),
         ]),
       )
     }),

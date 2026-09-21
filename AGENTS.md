@@ -153,13 +153,13 @@ the user explicitly authorizes that action.
   whitespace and trailing commas when the exact formatting is not the behavior
   under test.
 
-- The supported toolchain floor is `moon 0.1.20260904` with `moonc v0.10.12`.
+- The supported toolchain floor is `moon 0.1.20260920` with `moonc v0.10.14`.
   Both CI jobs use the official installer pinned to the complete prebuilt
-  release `0.10.13+cbb11c36f` (`moon 0.1.20260915`), not latest; Rust is not required.
-  Existing local `moon 0.1.20260907` tools remain valid without downgrading.
+  release `0.10.14+7d59c7ec9` (`moon 0.1.20260920`), not latest; Rust is not required.
+  Older MoonBit toolchains must be upgraded for core `0.2.2` / UI `0.1.1`.
   JavaScript tooling
   supports Node `>=24.20.0`; CI validates the 24.20.0 lower boundary and the
-  26.8.1 primary environment, while Bun is pinned to `1.4.2`. No `.node-version`
+  26.9.0 primary environment, while Bun is pinned to `1.4.2`. No `.node-version`
   is committed or generated. Updating the toolchain pin requires review and
   regeneration/validation of affected artifacts.
   Empty `{}` expressions are ambiguous: use `Map([])` for empty maps,
@@ -215,6 +215,15 @@ tracked reports return to the public candidate state. Require unchanged
 source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
+
+For core `0.2.2` / UI `0.1.1` only, the user explicitly authorizes publication
+after the complete local candidate checks and both CI jobs pass for the frozen
+commit, without waiting for new WeChat host validation. Notify the user when
+CI passes, then continue the authorized publication. Keep tracked reports at
+`release: false` and Developer Tools status `pending`; never record an unperformed
+host pass or weaken `verify --release`, `check:all`, or `check:mvp`. This scoped
+exception is documented in `docs/operations/release_candidate_handoff.md` and
+does not waive package, consumer, source-cleanliness, or version checks.
 
 ## WeChat Developer Tools Validation
 

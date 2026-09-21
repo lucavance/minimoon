@@ -2,7 +2,7 @@
 test "workbench summarizes drafts and routes to editor or saved list without technical controls" {
   let app = @application.program().create_runtime()
   defer ignore(app.dispose())
-  let page = app.create_page(program(app.deps())).unwrap()
+  let page = app.create_page(@workbench.program(app.deps())).unwrap()
   ignore(page.lifecycle("onLoad", "{}"))
   ignore(page.mount())
   assert_true(page.snapshot().contains("workbench-overview"))

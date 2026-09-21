@@ -12,7 +12,7 @@ pub(all) struct Store {
 } derive(Eq, ToJson, @json.FromJson)
 
 ///|
-extend Store with ToJson::{to_json}
+pub extend Store with ToJson::{to_json}
 
 ///|
 pub(all) struct Buffer {

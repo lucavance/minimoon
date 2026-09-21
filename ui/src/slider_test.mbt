@@ -39,8 +39,8 @@ fn slider_measurement(id : String) -> String {
 ///|
 test "range slider measures track, preserves thumb ordering and rolls back canceled gesture" {
   let runtime = form_test_page(page => {
-      root(page, context => {
-        slider_values(
+      @minimoon_ui.root(page, context => {
+        @minimoon_ui.slider_values(
           context,
           id="range",
           default_values=[20, 80],
@@ -85,8 +85,8 @@ test "range slider measures track, preserves thumb ordering and rolls back cance
 ///|
 test "pending measurement cannot revive a hidden slider gesture" {
   let runtime = form_test_page(page => {
-      root(page, context => {
-        slider_values(
+      @minimoon_ui.root(page, context => {
+        @minimoon_ui.slider_values(
           context,
           id="range",
           default_values=[20, 80],
@@ -117,8 +117,8 @@ test "pending measurement cannot revive a hidden slider gesture" {
 ///|
 test "vertical slider commits the touch end position including release before measurement" {
   let runtime = form_test_page(page => {
-      root(page, context => {
-        slider_values(
+      @minimoon_ui.root(page, context => {
+        @minimoon_ui.slider_values(
           context,
           id="vertical",
           default_values=[20, 80],

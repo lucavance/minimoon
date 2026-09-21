@@ -138,8 +138,8 @@ fn ci_handoff_check_source() -> String {
     #|    assert.equal(handoff.appDirectory, fixture)
     #|    assert.equal(handoff.fixture, name)
     #|    assert.equal(handoff.commit, commit)
-    #|    assert.equal(handoff.versions.minimoon, "0.2.1")
-    #|    assert.equal(handoff.versions.minimoonUi, "0.1.0")
+    #|    assert.equal(handoff.versions.minimoon, "0.2.2")
+    #|    assert.equal(handoff.versions.minimoonUi, "0.1.1")
     #|    const manifest = JSON.parse(fs.readFileSync(path.join(base, "manifest.json"), "utf8"))
     #|    const summary = JSON.parse(fs.readFileSync(path.join(base, "release_summary.json"), "utf8"))
     #|    const checklist = JSON.parse(fs.readFileSync(path.join(base, "smoke_checklist.json"), "utf8"))
@@ -204,8 +204,8 @@ fn ci_handoff_check_source() -> String {
     #|    reject(`${bundle}-untracked-dist`, (dir) => write(dir, `${fixture}/dist/unreviewed.txt`, "unreviewed"), /committed dist files only/)
     #|    reject(`${bundle}-symlink`, (dir) => fs.symlinkSync("app.js", path.join(dir, fixture, "dist/linked.js")), /symlinks/)
     #|  }
-    #|  reject("wrong-pair", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.0"\nimport { "lampclaw/minimoon@0.1.1" }\n'), /reviewed core/)
-    #|  reject("changed-published-ui-dependency", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.0"\nimport { "lampclaw/minimoon@0.2.1" }\n'), /unchanged UI/)
+    #|  reject("wrong-pair", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.0"\nimport { "lampclaw/minimoon@0.2.2" }\n'), /reviewed core/)
+    #|  reject("old-ui-core-dependency", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.1"\nimport { "lampclaw/minimoon@0.2.1" }\n'), /UI core 0.2.2 dependency/)
     #|  reject("wrong-core-version", (dir) => write(dir, "moon.mod", 'version = "0.2.0"\n'), /reviewed core/)
     #|  for (const [fixture, , bundle] of fixtures) {
     #|    reject(`${bundle}-old-core-dependency`, (dir) => write(dir, `${fixture}/moon.mod`, 'import { "lampclaw/minimoon@0.2.0" }\n'), /reviewed core dependency/)

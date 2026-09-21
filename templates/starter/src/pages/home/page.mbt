@@ -6,6 +6,9 @@ pub struct Model {
 } derive(Eq)
 
 ///|
+pub extend Model with Eq::{equal, not_equal}
+
+///|
 pub enum Msg {
   Increment
   Decrement

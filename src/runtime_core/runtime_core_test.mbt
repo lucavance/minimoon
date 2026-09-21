@@ -8,23 +8,31 @@ enum RuntimeMsg {
 } derive(Eq)
 
 ///|
-fn runtime_component(initial : Int) -> Component[Int, RuntimeMsg] {
-  checked_component(
+fn runtime_component(initial : Int) -> @runtime_core.Component[Int, RuntimeMsg] {
+  @runtime_core.checked_component(
     model=initial,
     update=(model, msg) => {
       match msg {
-        Increment => no_cmd(model + 1)
-        Decrement => no_cmd(model - 1)
+        Increment => @runtime_core.no_cmd(model + 1)
+        Decrement => @runtime_core.no_cmd(model - 1)
         IncrementThenDecrement =>
-          with_cmds(model, [message(Increment), message(Decrement)])
+          @runtime_core.with_cmds(model, [
+            @runtime_core.message(Increment),
+            @runtime_core.message(Decrement),
+          ])
         StartEffect =>
-          with_cmd(
+          @runtime_core.with_cmd(
             model + 1,
-            host_effect(host_effect_request("custom.echo", "{\"value\":1}"), _ => {
-              Decrement
-            }),
+            @runtime_core.host_effect(
+              @runtime_core.host_effect_request("custom.echo", "{\"value\":1}"),
+              _ => Decrement,
+            ),
           )
-        NavigateOnly => with_cmd(model, navigate_to_cmd("/pages/next/next"))
+        NavigateOnly =>
+          @runtime_core.with_cmd(
+            model,
+            @runtime_core.navigate_to_cmd("/pages/next/next"),
+          )
       }
     },
     view=(model, _emit) => @ui.text(model.to_string()),
@@ -34,11 +42,13 @@ fn runtime_component(initial : Int) -> Component[Int, RuntimeMsg] {
 
 ///|
 test "runtime command queue flushes one ordered batch" {
-  let flushes : Ref[Array[Array[RuntimeCommand]]] = Ref([])
-  let queue = RuntimeCommandQueue::new(commands => flushes.val.push(commands))
+  let flushes : Ref[Array[Array[@runtime_core.RuntimeCommand]]] = Ref([])
+  let queue = @runtime_core.RuntimeCommandQueue::new(commands => {
+    flushes.val.push(commands)
+  })
   queue.batch(fn() {
-    queue.push(mount_context("counter"))
-    queue.push(replace_view_tree("counter", "{\"count\":0}"))
+    queue.push(@runtime_core.mount_context("counter"))
+    queue.push(@runtime_core.replace_view_tree("counter", "{\"count\":0}"))
   })
   assert_eq(flushes.val.length(), 1)
   assert_eq(flushes.val[0].length(), 2)
@@ -49,24 +59,24 @@ test "runtime command queue flushes one ordered batch" {
 ///|
 test "runtime commands encode the resident host protocol" {
   let commands = [
-    mount_context("counter"),
-    replace_view_tree("counter", "{\"count\":1}"),
-    navigate_to_command("/pages/details/details"),
-    navigate_back_command(1),
-    dispose_context("counter"),
+    @runtime_core.mount_context("counter"),
+    @runtime_core.replace_view_tree("counter", "{\"count\":1}"),
+    @runtime_core.navigate_to_command("/pages/details/details"),
+    @runtime_core.navigate_back_command(1),
+    @runtime_core.dispose_context("counter"),
   ]
   for command in commands {
     assert_eq(command.schema_json_size(), command.schema_json().length())
   }
   for
     command in [
-      redirect_to_command("/pages/home/home"),
-      emit_host_event("counter", "tap", "{}"),
+      @runtime_core.redirect_to_command("/pages/home/home"),
+      @runtime_core.emit_host_event("counter", "tap", "{}"),
     ] {
     assert_eq(command.schema_json_size(), command.schema_json().length())
   }
   inspect(
-    runtime_commands_json(commands),
+    @runtime_core.runtime_commands_json(commands),
     content="[{\"type\":\"MountContext\",\"component_id\":\"counter\"},{\"type\":\"ReplaceViewTree\",\"component_id\":\"counter\",\"base_revision\":0,\"revision\":1,\"tree\":{\"count\":1}},{\"type\":\"NavigateTo\",\"url\":\"/pages/details/details\"},{\"type\":\"NavigateBack\",\"delta\":1},{\"type\":\"DisposeContext\",\"component_id\":\"counter\"}]",
   )
 }
@@ -74,11 +84,11 @@ test "runtime commands encode the resident host protocol" {
 ///|
 test "runtime command diagnostics summarize patch and lifecycle traffic" {
   let ops = "[{\"op\":\"set\",\"path\":[\"text\"],\"value\":\"A\"}]"
-  let diagnostics = runtime_command_diagnostics([
-    mount_context("todos"),
-    patch_view_tree("todos", ops),
-    emit_host_event("todos", "tap", "{}"),
-    dispose_context("todos"),
+  let diagnostics = @runtime_core.runtime_command_diagnostics([
+    @runtime_core.mount_context("todos"),
+    @runtime_core.patch_view_tree("todos", ops),
+    @runtime_core.emit_host_event("todos", "tap", "{}"),
+    @runtime_core.dispose_context("todos"),
   ])
   assert_eq(diagnostics.command_count, 4)
   assert_eq(diagnostics.state_update_count, 1)
@@ -89,8 +99,10 @@ test "runtime command diagnostics summarize patch and lifecycle traffic" {
 
 ///|
 test "running component mounts and executes follow-up messages atomically" {
-  let batches : Ref[Array[Array[RuntimeCommand]]] = Ref([])
-  let queue = RuntimeCommandQueue::new(commands => batches.val.push(commands))
+  let batches : Ref[Array[Array[@runtime_core.RuntimeCommand]]] = Ref([])
+  let queue = @runtime_core.RuntimeCommandQueue::new(commands => {
+    batches.val.push(commands)
+  })
   let running = runtime_component(0)
     .with_model(10)
     .run_host(component_id="counter", queue~)
@@ -107,11 +119,13 @@ test "running component mounts and executes follow-up messages atomically" {
 
 ///|
 test "invalid projection rolls back the model" {
-  let batches : Ref[Array[Array[RuntimeCommand]]] = Ref([])
-  let queue = RuntimeCommandQueue::new(commands => batches.val.push(commands))
-  let component = checked_component(
+  let batches : Ref[Array[Array[@runtime_core.RuntimeCommand]]] = Ref([])
+  let queue = @runtime_core.RuntimeCommandQueue::new(commands => {
+    batches.val.push(commands)
+  })
+  let component = @runtime_core.checked_component(
     model=0,
-    update=(model, _msg : Unit) => no_cmd(model + 1),
+    update=(model, _msg : Unit) => @runtime_core.no_cmd(model + 1),
     view=(model, _emit) => @ui.text(model.to_string()),
     project=model => if model > 0 { Err("invalid") } else { Ok("{}") },
   )
@@ -124,15 +138,21 @@ test "invalid projection rolls back the model" {
 
 ///|
 test "projection guard skips equal state while commands still run" {
-  let batches : Ref[Array[Array[RuntimeCommand]]] = Ref([])
+  let batches : Ref[Array[Array[@runtime_core.RuntimeCommand]]] = Ref([])
   let projections = Ref(0)
-  let queue = RuntimeCommandQueue::new(commands => batches.val.push(commands))
-  let component = checked_component(
+  let queue = @runtime_core.RuntimeCommandQueue::new(commands => {
+    batches.val.push(commands)
+  })
+  let component = @runtime_core.checked_component(
     model=0,
     update=(model, msg : RuntimeMsg) => {
       match msg {
-        NavigateOnly => with_cmd(model, navigate_to_cmd("/pages/next/next"))
-        _ => no_cmd(model + 1)
+        NavigateOnly =>
+          @runtime_core.with_cmd(
+            model,
+            @runtime_core.navigate_to_cmd("/pages/next/next"),
+          )
+        _ => @runtime_core.no_cmd(model + 1)
       }
     },
     view=(model, _emit) => @ui.text(model.to_string()),
@@ -153,15 +173,17 @@ test "projection guard skips equal state while commands still run" {
 
 ///|
 test "host effects resolve once and late results are suppressed" {
-  let batches : Ref[Array[Array[RuntimeCommand]]] = Ref([])
-  let queue = RuntimeCommandQueue::new(commands => batches.val.push(commands))
+  let batches : Ref[Array[Array[@runtime_core.RuntimeCommand]]] = Ref([])
+  let queue = @runtime_core.RuntimeCommandQueue::new(commands => {
+    batches.val.push(commands)
+  })
   let running = runtime_component(0).run_host(component_id="counter", queue~)
   let _ = running.mount()
   let _ = running.dispatch(StartEffect)
   assert_eq(running.model(), 1)
   assert_eq(running.pending_effect_count(), 1)
   assert_true(
-    runtime_command_diagnostics(batches.val[1])
+    @runtime_core.runtime_command_diagnostics(batches.val[1])
     .describe()
     .contains("effect:counter/counter:0/custom.echo"),
   )
@@ -182,7 +204,7 @@ test "host effects resolve once and late results are suppressed" {
   let _ = running.dispose()
   let cancellation_described = Ref(false)
   for batch in batches.val {
-    if runtime_command_diagnostics(batch)
+    if @runtime_core.runtime_command_diagnostics(batch)
       .describe()
       .contains("effect_cancel:counter/counter:1") {
       cancellation_described.val = true
@@ -197,7 +219,7 @@ test "host effects resolve once and late results are suppressed" {
 
 ///|
 test "completed host effects retain no per-request tombstones" {
-  let queue = RuntimeCommandQueue::new(_ => ())
+  let queue = @runtime_core.RuntimeCommandQueue::new(_ => ())
   let running = runtime_component(0).run_host(component_id="bounded", queue~)
   let _ = running.mount()
   for sequence = 0; sequence < 4096; sequence = sequence + 1 {
@@ -241,36 +263,36 @@ test "local effects are page-owned, wake after emits, and cancel on dispose" {
   let cancellations = Ref(0)
   let wakes = Ref(0)
   let wake_sequences : Array[Int] = []
-  let component = checked_component(
+  let component = @runtime_core.checked_component(
     model=0,
     update=(model, msg) => {
       match msg {
         StartOwnedEffect =>
-          with_cmd(
+          @runtime_core.with_cmd(
             model,
-            local_effect((emit, finish) => {
+            @runtime_core.local_effect((emit, finish) => {
               saved_emit.val = Some(emit)
               saved_finish.val = Some(finish)
               fn() { cancellations.val += 1 }
             }),
           )
         StartSynchronousOwnedEffect =>
-          with_cmd(
+          @runtime_core.with_cmd(
             model,
-            local_effect((emit, finish) => {
+            @runtime_core.local_effect((emit, finish) => {
               emit(OwnedEffectIncrement)
               finish()
               fn() { cancellations.val += 100 }
             }),
           )
-        OwnedEffectIncrement => no_cmd(model + 1)
-        OwnedEffectAppend(value) => no_cmd(model * 10 + value)
+        OwnedEffectIncrement => @runtime_core.no_cmd(model + 1)
+        OwnedEffectAppend(value) => @runtime_core.no_cmd(model * 10 + value)
       }
     },
     view=(model, _emit) => @ui.text(model.to_string()),
     project=model => Ok(model.to_string()),
   )
-  let queue = RuntimeCommandQueue::new(_ => ())
+  let queue = @runtime_core.RuntimeCommandQueue::new(_ => ())
   let running = component.run_host(component_id="owned", queue~, wake_async=fn(
     sequence,
   ) {
@@ -326,14 +348,14 @@ test "local effects are page-owned, wake after emits, and cancel on dispose" {
 test "local effect cancellation suppresses reentrant emit and finish" {
   let cancellations = Ref(0)
   let wakes = Ref(0)
-  let component = checked_component(
+  let component = @runtime_core.checked_component(
     model=0,
     update=(model, msg) => {
       match msg {
         StartReentrantCancel =>
-          with_cmd(
+          @runtime_core.with_cmd(
             model,
-            local_effect((emit, finish) => {
+            @runtime_core.local_effect((emit, finish) => {
               fn() {
                 cancellations.val += 1
                 emit(ReentrantCancelPublished)
@@ -341,13 +363,13 @@ test "local effect cancellation suppresses reentrant emit and finish" {
               }
             }),
           )
-        ReentrantCancelPublished => no_cmd(model + 1)
+        ReentrantCancelPublished => @runtime_core.no_cmd(model + 1)
       }
     },
     view=(model, _emit) => @ui.text(model.to_string()),
     project=model => Ok(model.to_string()),
   )
-  let queue = RuntimeCommandQueue::new(_ => ())
+  let queue = @runtime_core.RuntimeCommandQueue::new(_ => ())
   let running = component.run_host(component_id="reentrant-cancel", queue~, wake_async=_ => {
     wakes.val += 1
   })
@@ -368,9 +390,11 @@ test "local effect cancellation suppresses reentrant emit and finish" {
 
 ///|
 test "component context owns cleanup and rejects late writes" {
-  let batches : Ref[Array[Array[RuntimeCommand]]] = Ref([])
-  let queue = RuntimeCommandQueue::new(commands => batches.val.push(commands))
-  let context = ComponentContext::new("counter", queue)
+  let batches : Ref[Array[Array[@runtime_core.RuntimeCommand]]] = Ref([])
+  let queue = @runtime_core.RuntimeCommandQueue::new(commands => {
+    batches.val.push(commands)
+  })
+  let context = @runtime_core.ComponentContext::new("counter", queue)
   assert_eq(context.id(), "counter")
   assert_true(context.lifecycle_state() is ComponentCreated)
   assert_true(context.mount().is_ok())
@@ -390,12 +414,12 @@ test "component context owns cleanup and rejects late writes" {
 
 ///|
 test "command mapping preserves host effects and navigation" {
-  let command : Cmd[Int] = cmd_batch([
-    message(1),
-    navigate_to_cmd("/pages/details/details"),
-    navigate_back_or_redirect_cmd(1, "/pages/home/home"),
+  let command : @runtime_core.Cmd[Int] = @runtime_core.cmd_batch([
+    @runtime_core.message(1),
+    @runtime_core.navigate_to_cmd("/pages/details/details"),
+    @runtime_core.navigate_back_or_redirect_cmd(1, "/pages/home/home"),
   ])
-  match map_cmd(command, value => value.to_string()) {
+  match @runtime_core.map_cmd(command, value => value.to_string()) {
     CmdBatch(commands) => {
       match commands[0] {
         CmdMessage("1") => ()
@@ -412,15 +436,16 @@ test "command mapping preserves host effects and navigation" {
 
 ///|
 test "command helpers cover local effects and navigation" {
-  let empty_command : Cmd[Int] = none()
-  match map_cmd(empty_command, (value : Int) => value.to_string()) {
+  let empty_command : @runtime_core.Cmd[Int] = @runtime_core.none()
+  match
+    @runtime_core.map_cmd(empty_command, (value : Int) => value.to_string()) {
     CmdNone => ()
     _ => fail("mapped empty command missing")
   }
   let local_value = Ref("")
   match
-    map_cmd(
-      local_effect((emit, finish) => {
+    @runtime_core.map_cmd(
+      @runtime_core.local_effect((emit, finish) => {
         emit(7)
         finish()
         fn() {  }
@@ -434,59 +459,71 @@ test "command helpers cover local effects and navigation" {
   }
   assert_eq(local_value.val, "local:7")
   match
-    map_cmd(host_effect(host_effect_request("custom.echo", "{}"), _ => 9), value => {
-      "host:" + value.to_string()
-    }) {
+    @runtime_core.map_cmd(
+      @runtime_core.host_effect(
+        @runtime_core.host_effect_request("custom.echo", "{}"),
+        _ => 9,
+      ),
+      value => "host:" + value.to_string(),
+    ) {
     CmdHostEffect(_, resolve) =>
       assert_eq(resolve(HostEffectOk("{}")), "host:9")
     _ => fail("mapped host effect missing")
   }
-  let redirect_command : Cmd[Int] = redirect_to_cmd("/redirect")
-  let back_command : Cmd[Int] = navigate_back_cmd(2)
+  let redirect_command : @runtime_core.Cmd[Int] = @runtime_core.redirect_to_cmd(
+    "/redirect",
+  )
+  let back_command : @runtime_core.Cmd[Int] = @runtime_core.navigate_back_cmd(2)
   for
     command in [
-      map_cmd(redirect_command, value => value.to_string()),
-      map_cmd(back_command, value => value.to_string()),
+      @runtime_core.map_cmd(redirect_command, value => value.to_string()),
+      @runtime_core.map_cmd(back_command, value => value.to_string()),
     ] {
     match command {
       CmdRedirectTo(_) | CmdNavigateBack(_) => ()
       _ => fail("mapped navigation command missing")
     }
   }
-  let (model, _) : (Int, Cmd[Unit]) = with_navigate_to(1, "/next")
-  let (redirected, _) : (Int, Cmd[Unit]) = with_redirect_to(2, "/redirect")
-  let (back, _) : (Int, Cmd[Unit]) = with_navigate_back(3, 1)
+  let (model, _) : (Int, @runtime_core.Cmd[Unit]) = @runtime_core.with_navigate_to(
+    1, "/next",
+  )
+  let (redirected, _) : (Int, @runtime_core.Cmd[Unit]) = @runtime_core.with_redirect_to(
+    2, "/redirect",
+  )
+  let (back, _) : (Int, @runtime_core.Cmd[Unit]) = @runtime_core.with_navigate_back(
+    3, 1,
+  )
   assert_eq(model + redirected + back, 6)
 }
 
 ///|
 test "runtime diagnostics cover every host command family and warning level" {
   let commands = [
-    replace_view_tree("page", "{}"),
-    runtime_error("page", "invalid", "bad"),
-    navigate_to_command("/next"),
-    redirect_to_command("/redirect"),
-    navigate_back_command(2),
-    navigate_back_or_redirect_command(1, "/home"),
-    start_subscription_command("page", "clock", 1000),
-    stop_subscription_command("page", "clock"),
+    @runtime_core.replace_view_tree("page", "{}"),
+    @runtime_core.runtime_error("page", "invalid", "bad"),
+    @runtime_core.navigate_to_command("/next"),
+    @runtime_core.redirect_to_command("/redirect"),
+    @runtime_core.navigate_back_command(2),
+    @runtime_core.navigate_back_or_redirect_command(1, "/home"),
+    @runtime_core.start_subscription_command("page", "clock", 1000),
+    @runtime_core.stop_subscription_command("page", "clock"),
   ]
   let descriptions = commands.map(command => command.describe()).join("|")
   assert_true(descriptions.contains("ReplaceViewTree(page, 0->1, {})"))
   assert_true(descriptions.contains("RedirectTo(/redirect)"))
   assert_true(descriptions.contains("NavigateBackOrRedirect(1, /home)"))
   assert_true(descriptions.contains("StartSubscription(page, clock, 1000)"))
-  let diagnostics = runtime_command_diagnostics(commands)
+  let diagnostics = @runtime_core.runtime_command_diagnostics(commands)
   assert_eq(diagnostics.effect_count, 0)
   assert_true(diagnostics.breakdown.contains("navigate_back_or#1//home"))
   assert_true(diagnostics.describe().contains("commands=8"))
 
-  let medium = runtime_command_diagnostics([
-    replace_view_tree("page", String::make(256 * 1024, 'x')),
+  let medium = @runtime_core.runtime_command_diagnostics([
+    @runtime_core.replace_view_tree("page", String::make(256 * 1024, 'x')),
   ])
   assert_true(medium.describe().contains("at least 256KiB"))
-  let large = runtime_command_diagnostics([
-    replace_view_tree("page", String::make(1024 * 1024, 'x')),
+  let large = @runtime_core.runtime_command_diagnostics([
+    @runtime_core.replace_view_tree("page", String::make(1024 * 1024, 'x')),
   ])
   assert_true(large.describe().contains("at least 1MiB"))
 }

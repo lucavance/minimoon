@@ -1,6 +1,7 @@
 ///|
 async fn application_host_smoke(root : String, dist : String) -> Unit {
   let temp = check_temporary("minimoon-application-smoke")
+  defer cleanup_check_temporary(temp)
   let script = join(temp, "application_smoke.cjs")
   @fs.write_file(
     script,
@@ -10,11 +11,11 @@ async fn application_host_smoke(root : String, dist : String) -> Unit {
   )
   let result = @process.collect_output("bun", [script, dist], cwd=root) catch {
     error => {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_check_temporary(temp)
       abort("application smoke could not start: \{error}")
     }
   }
-  @fs.rmdir(temp, recursive=true)
+  cleanup_check_temporary(temp)
   let (code, stdout, stderr) = result
   guard code == 0 else {
     abort("application host smoke failed: " + stdout.text() + stderr.text())
@@ -24,6 +25,7 @@ async fn application_host_smoke(root : String, dist : String) -> Unit {
 ///|
 async fn application_type_gate(root : String) -> Unit {
   let temp = check_temporary("minimoon-shared-types")
+  defer cleanup_check_temporary(temp)
   let consumer = join(temp, "consumer")
   let source = join(consumer, "src")
   @fs.mkdir(source, permission=0o755, recursive=true)
@@ -120,5 +122,5 @@ async fn application_type_gate(root : String) -> Unit {
     ["test", "--target", "js", "--deny-warn"],
     cwd=consumer,
   )
-  @fs.rmdir(temp, recursive=true)
+  cleanup_check_temporary(temp)
 }

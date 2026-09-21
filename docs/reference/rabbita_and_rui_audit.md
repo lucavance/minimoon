@@ -245,7 +245,7 @@ implementation delta.
 | [PR #179: HTML memoization and empty-fragment moves](https://github.com/moonbit-community/rabbita/pull/179) | Review empty/keyed subtree moves, retained-cache lifetime and current event handlers. Existing `Val` composition and retained normalization cover the local optimization boundary; no new `memo` API or browser VDOM migration is required |
 | [PR #165: cross-realm pointer events](https://github.com/moonbit-community/rabbita/pull/165) | Browser DOM event handling; MiniApp events use typed host payload decoding, so no port is required |
 | [PR #174: SSR rendering timeout](https://github.com/moonbit-community/rabbita/pull/174) | Server rendering lifecycle; Minimoon has no SSR path to update |
-| [PR #176: workspace dependency alignment](https://github.com/moonbit-community/rabbita/pull/176) | Upstream workspace maintenance; local core already declares async 0.21.2 and x 0.5.1, and imports neither Warren nor the browser runtime |
+| [PR #176: workspace dependency alignment](https://github.com/moonbit-community/rabbita/pull/176) | Upstream workspace maintenance; at this review point local core declared async 0.21.2 and x 0.5.1, and imports neither Warren nor the browser runtime |
 
 The follow-up adds local regression scenarios in
 [`tree_diff_wbtest.mbt`](../../src/renderer_miniapp/tree_diff_wbtest.mbt)

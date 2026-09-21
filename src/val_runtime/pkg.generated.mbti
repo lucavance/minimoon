@@ -142,6 +142,8 @@ pub fn Graph::set_shared_visible(Self, Bool) -> Unit
 pub fn Graph::take_initial_command(Self) -> Cmd
 
 type GraphGeneration derive(Eq)
+pub fn GraphGeneration::equal(Self, Self) -> Bool
+pub fn GraphGeneration::not_equal(Self, Self) -> Bool
 
 pub(all) enum HostOutcome {
   HostOk(String)
@@ -162,6 +164,9 @@ pub enum Status[T] {
   Loaded(T)
   Failed(Error)
 }
+pub fn[T : Eq] Status::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq] Status::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T] Status::tag(Self[T]) -> String
 pub impl[T] @internal_duplix.Enumerate for Status[T]
 pub impl[T : Eq] Eq for Status[T]
 

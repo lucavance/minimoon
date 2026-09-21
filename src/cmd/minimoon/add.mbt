@@ -24,12 +24,22 @@ fn page_package_id(page : Json) -> String {
 }
 
 ///|
-async fn write_formatted_moon(file : String, content : String) -> Unit {
+async fn format_moon(file : String) -> Int {
+  @process.run("moon", ["fmt", file], cwd=dirname(file))
+}
+
+///|
+async fn write_formatted_moon(
+  file : String,
+  content : String,
+  format? : async (String) -> Int = format_moon,
+) -> Unit {
   write_file(file, content)
-  let code = @process.run("moon", ["fmt", file], cwd=dirname(file)) catch {
-    error => fail("could not format generated MoonBit source: \{error}")
+  let code = format(file) catch {
+    error =>
+      raise Failure("could not format generated MoonBit source: \{error}")
   }
-  guard code == 0 else { fail("moon fmt failed for " + file) }
+  guard code == 0 else { raise Failure("moon fmt failed for " + file) }
 }
 
 ///|
@@ -65,14 +75,22 @@ fn page_source(
 }
 
 ///|
-fn page_test_source(route : String, application? : String) -> String {
+fn page_test_source(
+  name : String,
+  route : String,
+  application? : String,
+) -> String {
   "///|\n" +
   "test \"generated page contract\" {\n" +
   "  inspect(" +
   (match application {
     Some(program) =>
-      "@application." + program + "().preview(deps => program(deps).route())"
-    None => "program().route()"
+      "@minimoon.App::preview(@application." +
+      program +
+      "(), deps => @minimoon.Page::route(@" +
+      name +
+      ".program(deps)))"
+    None => "@minimoon.Page::route(@" + name + ".program())"
   }) +
   ", content=" +
   route.escape() +
@@ -108,7 +126,8 @@ async fn run_add_page(
   guard !@fs.exists(page_dir) else { fail("page already exists: " + page_dir) }
   let route = route_override.unwrap_or("pages/" + name + "/" + name)
   let title = title_override.unwrap_or(name)
-  let config = @json.parse(@fs.read_file(config_path).text()) catch {
+  let old_config = @fs.read_file(config_path).text()
+  let config = @json.parse(old_config) catch {
     error => fail("miniapp.minimoon.json is invalid: \{error}")
   }
   let fields = match config {
@@ -137,32 +156,32 @@ async fn run_add_page(
     }
     None => pages.push(entry)
   }
-  @fs.mkdir(page_dir, permission=0o755, recursive=true)
   let result = try {
-    write_file(
-      join_path(page_dir, "moon.pkg"),
-      miniapp_package_manifest(application?=application.map(entry => entry.0)),
-    )
-    write_formatted_moon(
-      join_path(page_dir, "page.mbt"),
-      page_source(name, route, title, application=application is Some(_)),
-    )
-    write_formatted_moon(
-      join_path(page_dir, "page_test.mbt"),
-      page_test_source(route, application?=application.map(entry => entry.1)),
-    )
-    write_file(config_path, Json::object(fields).stringify(indent=2) + "\n")
+    scaffold_transaction(page_dir, [(config_path, old_config)], [], () => {
+      write_file(
+        join_path(page_dir, "moon.pkg"),
+        miniapp_package_manifest(application?=application.map(entry => entry.0)),
+      )
+      write_formatted_moon(
+        join_path(page_dir, "page.mbt"),
+        page_source(name, route, title, application=application is Some(_)),
+      )
+      write_formatted_moon(
+        join_path(page_dir, "page_test.mbt"),
+        page_test_source(
+          name,
+          route,
+          application?=application.map(entry => entry.1),
+        ),
+      )
+      write_file(config_path, Json::object(fields).stringify(indent=2) + "\n")
+    })
     None
   } catch {
     error => Some("\{error}")
   }
   match result {
-    Some(error) => {
-      if @fs.exists(page_dir) {
-        @fs.rmdir(page_dir, recursive=true)
-      }
-      fail("could not add page; generated files were rolled back: " + error)
-    }
+    Some(error) => fail("could not add page: " + error)
     None => {
       println("Added page " + name + " at src/pages/" + name)
       println("Route: " + route)
@@ -175,8 +194,10 @@ fn component_source(name : String) -> String {
   let _ = name
   "///|\n" +
   "pub struct Props {\n  label : String\n  event_key : String\n} derive(Eq)\n\n" +
+  "///|\npub extend Props with Eq::{equal, not_equal}\n\n" +
   "///|\n" +
   "pub struct Model {\n  value : Int\n} derive(Eq)\n\n" +
+  "///|\npub extend Model with Eq::{equal, not_equal}\n\n" +
   "///|\n" +
   "pub enum Msg {\n  Increment\n}\n\n" +
   "///|\n" +
@@ -292,54 +313,58 @@ async fn run_add_component(
   let next_manifest = "import {\n" +
     dependency +
     old_manifest["import {\n".length():].to_owned()
-  @fs.mkdir(component_dir, permission=0o755, recursive=true)
   let result = try {
-    write_formatted_moon(
-      join_path(component_dir, "component.mbt"),
-      component_source(name),
+    scaffold_transaction(
+      component_dir,
+      [(page_manifest, old_manifest)],
+      [page_binding],
+      () => {
+        write_formatted_moon(
+          join_path(component_dir, "component.mbt"),
+          component_source(name),
+        )
+        write_formatted_moon(
+          join_path(component_dir, "component_test.mbt"),
+          "///|\ntest \"generated component public surface\" {\n" +
+          "  let definition = @minimoon.page(\n" +
+          "    id=\"component_test\",\n" +
+          "    route=@minimoon.route(\"pages/component_test/component_test\"),\n" +
+          "    title=\"Component Test\",\n" +
+          "    build=_ => {\n" +
+          "      @" +
+          name +
+          ".component(\n" +
+          "        @minimoon.Val::constant(\n" +
+          "          @" +
+          name +
+          ".props(label=\"Status\", event_key=\"status/increment\"),\n" +
+          "        ),\n" +
+          "      )\n" +
+          "    },\n" +
+          "  )\n" +
+          "  let runtime = definition.create_runtime().unwrap()\n" +
+          "  let _ = runtime.lifecycle(\"onLoad\", \"{}\")\n" +
+          "  let _ = runtime.lifecycle(\"onShow\", \"{}\")\n" +
+          "  let _ = runtime.mount()\n" +
+          "  inspect(runtime.snapshot().contains(\"Status 0\"), content=\"true\")\n" +
+          "  let _ = runtime.dispatch(\"status/increment\", \"{}\")\n" +
+          "  inspect(runtime.snapshot().contains(\"Status 1\"), content=\"true\")\n" +
+          "}\n",
+        )
+        write_file(
+          join_path(component_dir, "moon.pkg"),
+          miniapp_package_manifest(),
+        )
+        write_formatted_moon(page_binding, component_page_binding_source(name))
+        write_file(page_manifest, next_manifest)
+      },
     )
-    write_formatted_moon(
-      join_path(component_dir, "component_test.mbt"),
-      "///|\ntest \"generated component public surface\" {\n" +
-      "  let definition = @minimoon.page(\n" +
-      "    id=\"component_test\",\n" +
-      "    route=@minimoon.route(\"pages/component_test/component_test\"),\n" +
-      "    title=\"Component Test\",\n" +
-      "    build=_ => {\n" +
-      "      component(\n" +
-      "        @minimoon.Val::constant(\n" +
-      "          props(label=\"Status\", event_key=\"status/increment\"),\n" +
-      "        ),\n" +
-      "      )\n" +
-      "    },\n" +
-      "  )\n" +
-      "  let runtime = definition.create_runtime().unwrap()\n" +
-      "  let _ = runtime.lifecycle(\"onLoad\", \"{}\")\n" +
-      "  let _ = runtime.lifecycle(\"onShow\", \"{}\")\n" +
-      "  let _ = runtime.mount()\n" +
-      "  inspect(runtime.snapshot().contains(\"Status 0\"), content=\"true\")\n" +
-      "  let _ = runtime.dispatch(\"status/increment\", \"{}\")\n" +
-      "  inspect(runtime.snapshot().contains(\"Status 1\"), content=\"true\")\n" +
-      "}\n",
-    )
-    write_file(join_path(component_dir, "moon.pkg"), miniapp_package_manifest())
-    write_formatted_moon(page_binding, component_page_binding_source(name))
-    write_file(page_manifest, next_manifest)
     None
   } catch {
     error => Some("\{error}")
   }
   match result {
-    Some(error) => {
-      if @fs.exists(component_dir) {
-        @fs.rmdir(component_dir, recursive=true)
-      }
-      if @fs.exists(page_binding) {
-        @fs.remove(page_binding)
-      }
-      write_file(page_manifest, old_manifest)
-      fail("could not add component; changes were rolled back: " + error)
-    }
+    Some(error) => fail("could not add component: " + error)
     None => {
       println("Added component " + name + " at src/components/" + name)
       println("Use " + name + "_component(props) from the page Val graph")

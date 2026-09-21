@@ -3,38 +3,39 @@
 ## Near-term priorities
 
 Keep registry-based Starter onboarding and English/Chinese documentation
-consistent: application authors begin with
-`moon install lampclaw/minimoon/cmd/minimoon` and `minimoon init my-app`.
-Source installation remains available for framework development and unpublished
-changes. The current release candidate is core `0.2.1`; UI stays at its published
-`0.1.0`. Complete exact-artifact release prerequisites and fresh registry consumers
-before recording publication.
-Implemented capabilities are described below; release readiness is separate
-from implementation completion. Deferred directions are not dated feature
-commitments.
+consistent. Once availability is recorded in project status, application
+authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.2` and
+`minimoon init my-app`. Source installation remains available for framework
+development and unpublished candidates. The current source pair is core
+`0.2.2` / UI `0.1.1`, with UI declaring core `0.2.2`.
 
-## 0.2.1 patch candidate
+Implemented capabilities are described below. CI, registry availability and
+real-host acceptance remain distinct results. Deferred directions are not
+dated feature commitments.
 
-- Ship the shared-host input/textarea fix so value changes preserve unchanged
-  native focus and selection properties.
-- Preserve the previous distributable, build metadata and configured stylesheet
-  when an ordinary build fails; retain private project settings. Diagnostics may
-  update, and a later verification failure keeps the newly built output.
-- Make registry onboarding lead directly to importing `dist/` into Developer
-  Tools, and document upgrading both the CLI and application dependency.
-- Preserve the checked 0.2 public API, Contract `11`, ABI `13` and protocol `8`.
-  Validate core `0.2.1` with the already published UI `0.1.0`, whose manifest still
-  declares core `0.2.0`; do not republish UI under an occupied version.
+## Core 0.2.2 and UI 0.1.1 candidate
 
-Acceptance requires the repository gates, both frozen CI handoff bundles, the
-user's exact-fingerprint Skyline checks, local release verification and fresh
-registry-only Starter/UI consumers. Candidate generation does not establish a
-host pass or registry availability. See the [release runbook](operations/release_candidate_handoff.md).
+- Adopt `moon 0.1.20260920` / `moonc v0.10.14`, the reviewed dependency updates,
+  explicit package references and public trait extensions while preserving
+  the checked API and Contract `11` / ABI `13` / protocol `8`.
+- Include the App-aware helper fix absent from the older registry CLI.
+- Update the UI dependency/resource version, current documentation, both
+  README languages, generated Starter guidance and complete fixture artifacts.
+- Keep Node `>=24.20.0` support, validate Node `26.9.0` as the primary CI
+  environment, and retain Bun `1.4.2` as package manager/task runner.
+
+Publication requires complete local candidate checks, both jobs on the frozen
+CI commit, reviewed core/UI archives and fresh registry consumers. For this
+pair, the user explicitly authorizes publication after CI without waiting for
+new WeChat host validation. Notify the user of CI success before continuing
+the authorized publication. Reports keep host status pending and
+`release: false`; the actual release evidence gates remain intact. See the
+[scoped release exception](operations/release_candidate_handoff.md#scoped-publication-exception).
 
 ## Draft Workbench demonstration
 
-The published baseline is core `0.2.0` with UI `0.1.0`; the `0.2.1` candidate
-keeps its public APIs. The former Conformance engineering name is
+The current source preserves the checked core 0.2 and UI 0.1 API baselines.
+The former Conformance engineering name is
 migrated to `miniapp_draft_workbench`, keeping its core verification responsibility.
 
 Four business Tabs — 工作台 / 草稿 / 联机 / 更多 — connect local CRUD with
@@ -44,9 +45,9 @@ run; successful storage is required before reporting saved records.
 
 The shallow curved hero and fixed safe navigation geometry are retained.
 No backend, account, cloud sync, autosave or UI component expansion is planned.
-Both changed fixture artifacts need new host acceptance; the UI package itself
-is unchanged. Before the user's contest deadline, prioritize
-regression, device validation and a reproducible three-minute demonstration.
+Both changed fixture artifacts need new validation before claiming host
+acceptance. The package publication exception does not establish that result.
+Prioritize regression, device validation and a reproducible three-minute demonstration.
 See the [workbench guide](../examples/miniapp_draft_workbench/README.md).
 
 ## HTTP and application state
@@ -72,7 +73,8 @@ Hide, and explicit disposal invalidates stale delivery. See
 [shared state](guides/shared_state.md) for ownership, migration and acceptance.
 Dynamic account/workspace scopes remain deferred; business request epochs
 invalidate responses after logout or reset. Generated-byte changes require a
-separate byte-budget review and exact-artifact Skyline validation before release.
+separate byte-budget review and exact-artifact Skyline validation before a host
+acceptance claim.
 
 ## 0.1.0 first non-prerelease release
 
@@ -149,7 +151,8 @@ an implicit UI dependency.
 The [UI migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md)
 distinguishes actual implemented capabilities, native substitutions and outstanding
 work. API names or 64 showcase headings alone are not evidence of full parity.
-Both applications require exact-fingerprint Skyline validation before release.
+Both applications require exact-fingerprint Skyline validation for a host
+acceptance claim; the current publication exception leaves that result pending.
 
 The UI fixture's
 [`verify_report.json`](../ui/examples/showcase/generated/verify_report.json)
@@ -160,17 +163,16 @@ is local and Git-ignored, just like the core fixture's evidence above.
 
 ## Release preparation
 
-Core `0.2.0` and UI `0.1.0` were published on 2026-09-09. Core `0.2.1` is the
-next patch candidate and requires the full release validation cycle.
-Freeze the synchronized documentation, reviewed packages, source commit and
-two CI handoff bundles before manual acceptance. Follow the
-[release runbook](operations/release_candidate_handoff.md): both fixtures need
-real Skyline acceptance, then local release gates, candidate report restoration,
-and unchanged fingerprints before publishing core `0.2.1` only. UI `0.1.0`
-remains the existing registry dependency.
-Fresh consumers outside all workspaces verify actual registry resolution.
-Current publication availability belongs in
-[project status](project_status.md), not in immutable package contents.
+Freeze synchronized documentation, reviewed package contents, the source commit
+and both CI handoff bundles. Follow the
+[release runbook](operations/release_candidate_handoff.md): publish core `0.2.2`
+first, verify fresh registry CLI/core consumers, then publish UI `0.1.1` from
+its independently extracted checked archive. Verify the combined registry
+consumer outside all workspaces. Preserve actual-evidence gates and candidate
+report restoration even though this scoped publication does not wait for host
+acceptance. Record dates, source SHA and registry checks only after they happen.
+Current publication availability belongs in [project status](project_status.md),
+not in immutable package contents.
 
 ## Deferred
 

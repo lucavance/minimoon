@@ -54,7 +54,7 @@ remains an internal implementation detail.
 - archive-validated registry initialization and Linux candidate handoff
 - typed touch, image, form, label, slider and progress controls, native node
   measurement, and declarative page-owned layers
-- opt-in `lampclaw/minimoon_ui 0.1.0`: native RUI component migration, typed
+- opt-in `lampclaw/minimoon_ui 0.1.1`: native RUI component migration, typed
   Vega theme/direction, deterministic build resources and a six-page showcase
 
 ## Maintained fixture and starter
@@ -79,7 +79,10 @@ name is retained only as historical terminology for the core acceptance role.
 - direct WeChat Developer Tools or physical-device CI automation
 - an application backend or real payment workflow
 
-Automated validation must pass before handoff. A release claim additionally
-requires fingerprint-matching real-host evidence for the exact App Contract v11,
-runtime ABI v13, renderer protocol v8 Conformance and UI showcase bytes. That evidence is a
-local release input and is never part of repository or CI state.
+Automated validation must pass before handoff. A host-acceptance claim requires
+fingerprint-matching real-host evidence for the exact App Contract v11, runtime
+ABI v13 and renderer protocol v8 Draft Workbench and UI showcase bytes. That
+evidence is a local input and never part of repository or CI state. The
+[core 0.2.2 / UI 0.1.1 publication exception](operations/release_candidate_handoff.md#scoped-publication-exception)
+allows registry publication after both CI jobs pass while host validation stays
+pending; it does not change the actual evidence gates.

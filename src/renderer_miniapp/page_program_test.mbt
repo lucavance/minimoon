@@ -16,8 +16,8 @@ enum PageProgramTestMsg {
 ///|
 fn page_program_test_fixture(
   model? : PageProgramTestModel = { count: 1, name: "Minimoon", ready: false, },
-) -> PageProgram[PageProgramTestModel, PageProgramTestMsg] {
-  simple_page_program(
+) -> @renderer_miniapp.PageProgram[PageProgramTestModel, PageProgramTestMsg] {
+  @renderer_miniapp.simple_page_program(
     id="profile",
     route="pages/profile/profile",
     title="Profile",
@@ -43,17 +43,21 @@ fn page_program_test_fixture(
       ])
     },
     capabilities=[
-      miniapp_capability("wx.getStorage"),
-      miniapp_capability("wx.navigateTo"),
-      miniapp_capability("wx.navigateBack"),
+      @renderer_miniapp.miniapp_capability("wx.getStorage"),
+      @renderer_miniapp.miniapp_capability("wx.navigateTo"),
+      @renderer_miniapp.miniapp_capability("wx.navigateBack"),
     ],
     lifecycle=[
-      lifecycle_event(page_lifecycle_hook("onLoad"), payload => {
-        Ok(Loaded(event_detail_value(payload)))
-      }),
-      lifecycle_message(page_lifecycle_hook("onShow"), Visible),
+      @renderer_miniapp.lifecycle_event(
+        @renderer_miniapp.page_lifecycle_hook("onLoad"),
+        payload => Ok(Loaded(@renderer_miniapp.event_detail_value(payload))),
+      ),
+      @renderer_miniapp.lifecycle_message(
+        @renderer_miniapp.page_lifecycle_hook("onShow"),
+        Visible,
+      ),
     ],
-    inputs=[string_page_input("name", value => Rename(value))],
+    inputs=[@renderer_miniapp.string_page_input("name", value => Rename(value))],
   )
 }
 
@@ -71,7 +75,7 @@ priv enum LatestSubscriptionMsg {
 
 ///|
 test "retained host subscription keeps one handle and dispatches its latest message" {
-  let program = simple_page_program(
+  let program = @renderer_miniapp.simple_page_program(
     id="latest_subscription",
     route="pages/latest-subscription/latest-subscription",
     title="Latest subscription",
@@ -90,8 +94,8 @@ test "retained host subscription keeps one handle and dispatches its latest mess
       )
     },
     subscriptions=model => {
-      subscriptions([
-        every(
+      @renderer_miniapp.subscriptions([
+        @renderer_miniapp.every(
           key="retained-clock",
           interval_ms=1000,
           msg=ObserveSubscription(model.revision),
@@ -121,15 +125,15 @@ test "host capability and event names round trip comprehensively" {
       "wx.getLocation", "wx.chooseMedia", "wx.requestPayment", "wx.navigateTo", "wx.redirectTo",
       "wx.navigateBack", "custom.echo",
     ] {
-    assert_eq(miniapp_capability(name).name(), name)
+    assert_eq(@renderer_miniapp.miniapp_capability(name).name(), name)
   }
   for name in ["tap", "input", "change", "submit", "longpress"] {
-    assert_eq(page_event_kind(name).host_name(), name)
+    assert_eq(@renderer_miniapp.page_event_kind(name).host_name(), name)
   }
-  let empty : Subscriptions[Unit] = no_subscriptions()
+  let empty : @renderer_miniapp.Subscriptions[Unit] = @renderer_miniapp.no_subscriptions()
   let _ = empty
 
-  let registry : Events[Unit] = events()
+  let registry : @renderer_miniapp.Events[Unit] = @renderer_miniapp.events()
   assert_eq(registry.owner_id(), 0)
   let committed = Ref(false)
   registry.on_candidate_commit(fn() { committed.val = true })
@@ -188,9 +192,9 @@ test "dynamic tree normalization maps concrete values and typed events" {
     ]),
     @ui.button(on_click="Increment", "Save <now>"),
   ])
-  let tree = normalize_miniapp_tree(node, [
-    tap_event("Increment", Increment),
-    input_value_event("Rename", value => Rename(value)),
+  let tree = @renderer_miniapp.normalize_miniapp_tree(node, [
+    @renderer_miniapp.tap_event("Increment", Increment),
+    @renderer_miniapp.input_value_event("Rename", value => Rename(value)),
   ]).stringify()
   assert_eq(tree.contains("\"className\":\"page min-h-_b100vh_B\""), true)
   assert_eq(tree.contains("\"text\":\"Minimoon\""), true)
@@ -200,7 +204,7 @@ test "dynamic tree normalization maps concrete values and typed events" {
 
 ///|
 test "generated WXML keeps textarea and picker model bindings host-safe" {
-  let wxml = dynamic_templates_wxml()
+  let wxml = @renderer_miniapp.dynamic_templates_wxml()
   assert_eq(
     wxml.contains(
       "<textarea wx:elif=\"{{node.kind === 'textarea'}}\" id=\"{{p.id}}\"",
@@ -223,7 +227,7 @@ test "generated WXML keeps textarea and picker model bindings host-safe" {
 
 ///|
 test "generated page WXML imports the shared recursive template" {
-  let wxml = dynamic_page_wxml(
+  let wxml = @renderer_miniapp.dynamic_page_wxml(
     "controls",
     templates_src="../../../minimoon.templates.wxml",
   )
@@ -237,7 +241,7 @@ test "generated page WXML imports the shared recursive template" {
 
 ///|
 test "recursive WXML passes short aliases without dropping node or event bindings" {
-  let wxml = dynamic_templates_wxml()
+  let wxml = @renderer_miniapp.dynamic_templates_wxml()
   let calls = wxml.split("is=\"minimoon_dynamic_node\"").length() - 1
   assert_true(calls > 10)
   assert_eq(wxml.split("p: child.props, e: child.events").length() - 1, calls)
@@ -259,7 +263,7 @@ enum DecoderEventTestMsg {
   TextChanged(String)
   StringsChanged(Array[String])
   IndexChanged(Int)
-  ScrollChanged(MiniappScrollDetail)
+  ScrollChanged(@renderer_miniapp.MiniappScrollDetail)
   DecoderTapped
 }
 
@@ -282,7 +286,7 @@ fn scroll_detail_fields() -> Map[String, Json] {
 
 ///|
 test "typed event helpers cover valid, malformed, scoped, and scroll payloads" {
-  let registry : Events[DecoderEventTestMsg] = events()
+  let registry : @renderer_miniapp.Events[DecoderEventTestMsg] = @renderer_miniapp.events()
   let bool_event = registry.change_bool("bool", value => BoolChanged(value))
   assert_true(
     bool_event.decode(detail_payload(Json::boolean(true)))
@@ -385,15 +389,15 @@ test "typed event helpers cover valid, malformed, scoped, and scroll payloads" {
   )
   assert_true(scroll_event.decode(Json::empty_object()) is Err(_))
 
-  let child : Events[DecoderEventTestMsg] = events()
+  let child : @renderer_miniapp.Events[DecoderEventTestMsg] = @renderer_miniapp.events()
   let _ = child.tap("tap", DecoderTapped)
   registry.include_scoped("child", child, message => message)
   assert_true(registry.entries().any(event => event.key() == "child/tap"))
   registry.include_scoped("", child, message => message)
   registry.include_scoped("bad/scope", child, message => message)
   registry.include_scoped("child", child, message => message)
-  let child_subscriptions = subscriptions([
-    every(key="tick", interval_ms=10, msg=DecoderTapped),
+  let child_subscriptions = @renderer_miniapp.subscriptions([
+    @renderer_miniapp.every(key="tick", interval_ms=10, msg=DecoderTapped),
   ])
   registry.include_scoped_subscriptions("child", child_subscriptions, (
     message : DecoderEventTestMsg,
@@ -402,18 +406,20 @@ test "typed event helpers cover valid, malformed, scoped, and scroll payloads" {
 
 ///|
 test "page metadata accessors and boundary decoders are observable" {
-  let input = string_page_input("name", value => TextChanged(value))
+  let input = @renderer_miniapp.string_page_input("name", value => {
+    TextChanged(value)
+  })
   assert_eq(input.name(), "name")
   assert_true(input.decode("Mini") is Ok(TextChanged("Mini")))
-  let lifecycle = lifecycle_message(
-    page_lifecycle_hook("onShow"),
+  let lifecycle = @renderer_miniapp.lifecycle_message(
+    @renderer_miniapp.page_lifecycle_hook("onShow"),
     DecoderTapped,
   )
   assert_true(lifecycle.hook() is Show)
   assert_true(lifecycle.decode(Json::empty_object()) is Ok(DecoderTapped))
-  assert_eq(event_detail_value(Json::string("invalid")), "")
+  assert_eq(@renderer_miniapp.event_detail_value(Json::string("invalid")), "")
   assert_eq(
-    event_detail_value(
+    @renderer_miniapp.event_detail_value(
       Json::object({
         "detail": Json::object({ "value": Json::number(9.0, repr="9") }),
       }),
@@ -447,7 +453,7 @@ test "page runtime rejects every malformed batch and payload envelope atomically
 
 ///|
 test "swiper current decoder consumes detail.current rather than picker value" {
-  let registry : Events[CurrentEventTestMsg] = events()
+  let registry : @renderer_miniapp.Events[CurrentEventTestMsg] = @renderer_miniapp.events()
   let event = registry.change_current("slide", current => {
     CurrentChanged(current)
   })
@@ -520,7 +526,7 @@ test "typed page lifecycle and query inputs decode to application messages" {
   let program = page_program_test_fixture()
   match
     program.decode_lifecycle(
-      page_lifecycle_hook("onShow"),
+      @renderer_miniapp.page_lifecycle_hook("onShow"),
       Json::empty_object(),
     ) {
     Ok(Some(Visible)) => ()
@@ -536,7 +542,7 @@ test "typed page lifecycle and query inputs decode to application messages" {
 ///|
 test "ABI v13 page runtime mounts, dispatches, snapshots, and disposes one page" {
   let runtime = page_program_test_fixture().create_runtime()
-  assert_eq(runtime_api_version(), 13)
+  assert_eq(@renderer_miniapp.runtime_api_version(), 13)
   assert_eq(runtime.page_id(), "profile")
   assert_eq(
     runtime.mount(),
@@ -620,7 +626,7 @@ enum HostWriteBudgetMsg {
 
 ///|
 test "renderer v6 replaces when an otherwise safe patch exceeds 32 host writes" {
-  let program = simple_page_program(
+  let program = @renderer_miniapp.simple_page_program(
     id="host_write_budget",
     route="pages/host-write-budget/host-write-budget",
     title="Host write budget",
@@ -675,7 +681,7 @@ test "ABI v13 rejects malformed payloads and unknown host inputs explicitly" {
 
 ///|
 test "ABI v13 rejects page input and lifecycle decode failures before Model update" {
-  let program = simple_page_program(
+  let program = @renderer_miniapp.simple_page_program(
     id="decode_boundary",
     route="pages/decode-boundary/decode-boundary",
     title="Decode boundary",
@@ -689,11 +695,16 @@ test "ABI v13 rejects page input and lifecycle decode failures before Model upda
       }
     },
     view=(_events, model) => @ui.h1(model.name),
-    inputs=[page_input("name", _ => Err(decode_error("invalid query")))],
-    lifecycle=[
-      lifecycle_event(page_lifecycle_hook("onShow"), _ => {
-        Err(decode_error("invalid lifecycle"))
+    inputs=[
+      @renderer_miniapp.page_input("name", _ => {
+        Err(@renderer_miniapp.decode_error("invalid query"))
       }),
+    ],
+    lifecycle=[
+      @renderer_miniapp.lifecycle_event(
+        @renderer_miniapp.page_lifecycle_hook("onShow"),
+        _ => Err(@renderer_miniapp.decode_error("invalid lifecycle")),
+      ),
     ],
   )
   let runtime = program.create_runtime()
@@ -724,7 +735,7 @@ enum InvalidViewMsg {
 
 ///|
 test "ABI v13 rolls back Model when the next dynamic view is invalid" {
-  let program = simple_page_program(
+  let program = @renderer_miniapp.simple_page_program(
     id="invalid_view",
     route="pages/invalid-view/invalid-view",
     title="Invalid view",
@@ -771,7 +782,7 @@ enum BranchEventMsg {
 
 ///|
 test "render-scoped events remove handlers with their dynamic branch" {
-  let program = simple_page_program(
+  let program = @renderer_miniapp.simple_page_program(
     id="branch_events",
     route="pages/branch-events/branch-events",
     title="Branch events",
@@ -811,8 +822,8 @@ test "dynamic tree validation rejects duplicate keyed siblings" {
     @ui.keyed("same", @ui.text("first")),
     @ui.keyed("same", @ui.text("second")),
   ])
-  let events : Array[PageEvent[InvalidViewMsg]] = []
-  match normalize_miniapp_tree_checked(node, events) {
+  let events : Array[@renderer_miniapp.PageEvent[InvalidViewMsg]] = []
+  match @renderer_miniapp.normalize_miniapp_tree_checked(node, events) {
     Err(error) => assert_eq(error.contains("duplicate"), true)
     Ok(_) => fail("expected duplicate keyed sibling error")
   }
@@ -831,8 +842,11 @@ struct EffectRuntimeModel {
 }
 
 ///|
-fn effect_runtime_program() -> PageProgram[EffectRuntimeModel, EffectRuntimeMsg] {
-  page_program(
+fn effect_runtime_program() -> @renderer_miniapp.PageProgram[
+  EffectRuntimeModel,
+  EffectRuntimeMsg,
+] {
+  @renderer_miniapp.page_program(
     id="effect",
     route="pages/effect/effect",
     title="Effect",
@@ -860,7 +874,7 @@ fn effect_runtime_program() -> PageProgram[EffectRuntimeModel, EffectRuntimeMsg]
       let _ = events.tap("StartEffect", StartEffect)
       @ui.h1(model.status)
     },
-    capabilities=[miniapp_capability("wx.login")],
+    capabilities=[@renderer_miniapp.miniapp_capability("wx.login")],
   )
 }
 
@@ -875,8 +889,8 @@ enum LocalEffectRuntimeMsg {
 fn local_effect_runtime_program(
   saved_emit : Ref[((LocalEffectRuntimeMsg) -> Unit)?],
   saved_finish : Ref[(() -> Unit)?],
-) -> PageProgram[String, LocalEffectRuntimeMsg] {
-  page_program(
+) -> @renderer_miniapp.PageProgram[String, LocalEffectRuntimeMsg] {
+  @renderer_miniapp.page_program(
     id="local_effect",
     route="pages/local_effect/local_effect",
     title="Local effect",

@@ -103,3 +103,32 @@ async test "supervisor cleans success failure crash and launch error without fol
   assert_eq(@fs.read_file(join(outside, "sentinel")).text(), "keep")
   @fs.rmdir(base, recursive=true)
 }
+
+///|
+async test "cancelled check cleanup removes its directory and preserves the cancellation" {
+  let root = @fs.tmpdir(prefix="minimoon-check-cancel")
+  defer @fs.rmdir(root, recursive=true)
+  let directory = join(root, "worker")
+  let reached = Ref(false)
+  @async.with_task_group(group => {
+    let task : @async.Task[Unit?] = group.spawn(() => {
+      @async.handle_cancellation(() => {
+        defer cleanup_check_temporary(directory)
+        @fs.mkdir(directory)
+        @fs.write_file(join(directory, "leftover"), "temporary")
+        reached.val = true
+        for ;; {
+          @async.pause()
+        }
+      })
+    })
+    while !reached.val {
+      @async.pause()
+    }
+    task.cancel()
+    assert_true(task.wait() is None)
+  })
+  assert_false(@fs.exists(directory))
+  // Cleanup is also safe when an explicit success/error path already removed it.
+  cleanup_check_temporary(directory)
+}

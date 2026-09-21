@@ -3,7 +3,9 @@ test "request lifecycle owns an optional marker and a page-owned delayed request
   let app = @application.program().create_runtime()
   defer ignore(app.dispose())
   let page = app
-    .create_page(program(app.deps()), input={ "name": "Query Probe" })
+    .create_page(@request_lifecycle.program(app.deps()), input={
+      "name": "Query Probe",
+    })
     .unwrap()
   ignore(page.lifecycle("onLoad", "{\"name\":\"Query Probe\"}"))
   ignore(page.mount())
@@ -32,7 +34,7 @@ test "request lifecycle owns an optional marker and a page-owned delayed request
 test "request lifecycle exposes push replace and stack-aware back with no catalogue" {
   let app = @application.program().create_runtime()
   defer ignore(app.dispose())
-  let page = app.create_page(program(app.deps())).unwrap()
+  let page = app.create_page(@request_lifecycle.program(app.deps())).unwrap()
   ignore(page.lifecycle("onLoad", "{}"))
   ignore(page.mount())
   for

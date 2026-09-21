@@ -43,21 +43,25 @@ test "normalized-tree tests query and drive the public page runtime" {
       })
     },
   )
-  let runtime = mount(page)
-  assert_eq(runtime.query_all(by_kind("button")).length(), 1)
-  assert_eq(runtime.get(by_section("testing-root")).kind(), "view")
-  let root = runtime.within(by_section("testing-root"))
-  let controls = root.within(by_section("testing-controls"))
-  assert_eq(root.query_all(by_kind("button")).length(), 1)
-  assert_eq(controls.get(by_label("Increment count")).text_content(), "0")
-  assert_eq(runtime.get(by_id("increment")).text_content(), "0")
-  let _ = controls.tap(by_label("Increment count"))
-  assert_eq(controls.get(by_id("increment")).text_content(), "1")
-  let _ = runtime.input(by_id("name"), "minimoon")
-  assert_true(
-    controls.get(by_id("name")).prop("value") == Some(Json::string("minimoon")),
+  let runtime = @testing.mount(page)
+  assert_eq(runtime.query_all(@testing.by_kind("button")).length(), 1)
+  assert_eq(runtime.get(@testing.by_section("testing-root")).kind(), "view")
+  let root = runtime.within(@testing.by_section("testing-root"))
+  let controls = root.within(@testing.by_section("testing-controls"))
+  assert_eq(root.query_all(@testing.by_kind("button")).length(), 1)
+  assert_eq(
+    controls.get(@testing.by_label("Increment count")).text_content(),
+    "0",
   )
-  assert_true(root.query(by_label("Missing")) is None)
+  assert_eq(runtime.get(@testing.by_id("increment")).text_content(), "0")
+  let _ = controls.tap(@testing.by_label("Increment count"))
+  assert_eq(controls.get(@testing.by_id("increment")).text_content(), "1")
+  let _ = runtime.input(@testing.by_id("name"), "minimoon")
+  assert_true(
+    controls.get(@testing.by_id("name")).prop("value") ==
+    Some(Json::string("minimoon")),
+  )
+  assert_true(root.query(@testing.by_label("Missing")) is None)
   let _ = runtime.dispose()
 }
 
@@ -173,29 +177,42 @@ fn driver_page(id : String) -> @minimoon.Page {
 }
 
 ///|
-fn assert_driver_status(runtime : TestRuntime, expected : String) -> Unit raise {
-  assert_eq(runtime.get(by_id("driver-status")).text_content(), expected)
+fn assert_driver_status(
+  runtime : @testing.TestRuntime,
+  expected : String,
+) -> Unit raise {
+  assert_eq(
+    runtime.get(@testing.by_id("driver-status")).text_content(),
+    expected,
+  )
 }
 
 ///|
 test "runtime semantic drivers produce native MiniApp payload shapes" {
-  let runtime = mount(driver_page("runtime_drivers"))
-  let _ = runtime.tap(by_label("Driver tap"))
+  let runtime = @testing.mount(driver_page("runtime_drivers"))
+  let _ = runtime.tap(@testing.by_label("Driver tap"))
   assert_driver_status(runtime, "tap")
-  let _ = runtime.input(by_label("Driver input"), "MoonBit")
+  let _ = runtime.input(@testing.by_label("Driver input"), "MoonBit")
   assert_driver_status(runtime, "input:MoonBit")
-  let _ = runtime.change(by_label("Driver switch"), Json::boolean(true))
+  let _ = runtime.change(
+    @testing.by_label("Driver switch"),
+    Json::boolean(true),
+  )
   assert_driver_status(runtime, "change:true")
-  let _ = runtime.confirm(by_label("Driver input"), "confirmed")
+  let _ = runtime.confirm(@testing.by_label("Driver input"), "confirmed")
   assert_driver_status(runtime, "confirm:confirmed")
-  let _ = runtime.focus(by_label("Driver input"), "focused", 40)
+  let _ = runtime.focus(@testing.by_label("Driver input"), "focused", 40)
   assert_driver_status(runtime, "focus:focused:40")
-  let _ = runtime.blur_input(by_label("Driver input"), "blurred")
+  let _ = runtime.blur_input(@testing.by_label("Driver input"), "blurred")
   assert_driver_status(runtime, "input-blur:blurred")
-  let _ = runtime.blur_textarea(by_label("Driver textarea"), "notes", 5)
+  let _ = runtime.blur_textarea(
+    @testing.by_label("Driver textarea"),
+    "notes",
+    5,
+  )
   assert_driver_status(runtime, "textarea-blur:notes:5")
   let _ = runtime.scroll(
-    by_id("driver-scroll"),
+    @testing.by_id("driver-scroll"),
     scroll_left=1.25,
     scroll_top=42.5,
     scroll_height=300.75,
@@ -204,42 +221,48 @@ test "runtime semantic drivers produce native MiniApp payload shapes" {
     delta_y=5.25,
   )
   assert_driver_status(runtime, "scroll:1.25:42.5:300.75:100.125:-0.5:5.25")
-  let _ = runtime.upper(by_id("driver-scroll"))
+  let _ = runtime.upper(@testing.by_id("driver-scroll"))
   assert_driver_status(runtime, "upper")
-  let _ = runtime.lower(by_id("driver-scroll"))
+  let _ = runtime.lower(@testing.by_id("driver-scroll"))
   assert_driver_status(runtime, "lower")
-  let _ = runtime.change(by_id("driver-swiper"), Json::number(1.0, repr="1"))
+  let _ = runtime.change(
+    @testing.by_id("driver-swiper"),
+    Json::number(1.0, repr="1"),
+  )
   assert_driver_status(runtime, "swiper:1")
   let _ = runtime.dispose()
 }
 
 ///|
-fn assert_scope_status(scope : TestScope, expected : String) -> Unit raise {
-  assert_eq(scope.get(by_id("driver-status")).text_content(), expected)
+fn assert_scope_status(
+  scope : @testing.TestScope,
+  expected : String,
+) -> Unit raise {
+  assert_eq(scope.get(@testing.by_id("driver-status")).text_content(), expected)
 }
 
 ///|
 test "scoped semantic drivers re-resolve the latest subtree" {
-  let runtime = mount(driver_page("scope_drivers"))
-  let scope = runtime.within(by_section("driver-root"))
-  assert_eq(scope.query_all(by_role("button")).length(), 1)
-  assert_true(scope.query(by_text("Tap")) is Some(_))
-  let _ = scope.tap(by_label("Driver tap"))
+  let runtime = @testing.mount(driver_page("scope_drivers"))
+  let scope = runtime.within(@testing.by_section("driver-root"))
+  assert_eq(scope.query_all(@testing.by_role("button")).length(), 1)
+  assert_true(scope.query(@testing.by_text("Tap")) is Some(_))
+  let _ = scope.tap(@testing.by_label("Driver tap"))
   assert_scope_status(scope, "tap")
-  let _ = scope.input(by_label("Driver input"), "MoonBit")
+  let _ = scope.input(@testing.by_label("Driver input"), "MoonBit")
   assert_scope_status(scope, "input:MoonBit")
-  let _ = scope.change(by_label("Driver switch"), Json::boolean(true))
+  let _ = scope.change(@testing.by_label("Driver switch"), Json::boolean(true))
   assert_scope_status(scope, "change:true")
-  let _ = scope.confirm(by_label("Driver input"), "confirmed")
+  let _ = scope.confirm(@testing.by_label("Driver input"), "confirmed")
   assert_scope_status(scope, "confirm:confirmed")
-  let _ = scope.focus(by_label("Driver input"), "focused", 40)
+  let _ = scope.focus(@testing.by_label("Driver input"), "focused", 40)
   assert_scope_status(scope, "focus:focused:40")
-  let _ = scope.blur_input(by_label("Driver input"), "blurred")
+  let _ = scope.blur_input(@testing.by_label("Driver input"), "blurred")
   assert_scope_status(scope, "input-blur:blurred")
-  let _ = scope.blur_textarea(by_label("Driver textarea"), "notes", 5)
+  let _ = scope.blur_textarea(@testing.by_label("Driver textarea"), "notes", 5)
   assert_scope_status(scope, "textarea-blur:notes:5")
   let _ = scope.scroll(
-    by_id("driver-scroll"),
+    @testing.by_id("driver-scroll"),
     scroll_left=1.25,
     scroll_top=42.5,
     scroll_height=300.75,
@@ -248,11 +271,14 @@ test "scoped semantic drivers re-resolve the latest subtree" {
     delta_y=5.25,
   )
   assert_scope_status(scope, "scroll:1.25:42.5:300.75:100.125:-0.5:5.25")
-  let _ = scope.upper(by_id("driver-scroll"))
+  let _ = scope.upper(@testing.by_id("driver-scroll"))
   assert_scope_status(scope, "upper")
-  let _ = scope.lower(by_id("driver-scroll"))
+  let _ = scope.lower(@testing.by_id("driver-scroll"))
   assert_scope_status(scope, "lower")
-  let _ = scope.change(by_id("driver-swiper"), Json::number(1.0, repr="1"))
+  let _ = scope.change(
+    @testing.by_id("driver-swiper"),
+    Json::number(1.0, repr="1"),
+  )
   assert_scope_status(scope, "swiper:1")
   let _ = runtime.dispose()
 }
@@ -280,9 +306,9 @@ test "query_all reports ambiguous selectors without aborting" {
       )
     },
   )
-  let runtime = mount(page)
-  assert_eq(runtime.query_all(by_label("Duplicate")).length(), 2)
-  assert_true(runtime.query(by_label("Duplicate")) is Some(_))
+  let runtime = @testing.mount(page)
+  assert_eq(runtime.query_all(@testing.by_label("Duplicate")).length(), 2)
+  assert_true(runtime.query(@testing.by_label("Duplicate")) is Some(_))
   let _ = runtime.dispose()
 }
 
@@ -294,8 +320,8 @@ test "panic get rejects a missing selector" {
     title="Testing missing",
     build=_ => @minimoon.Val::constant(@minimoon.div([@minimoon.nothing()])),
   )
-  let runtime = mount(page)
-  let _ = runtime.get(by_label("Missing"))
+  let runtime = @testing.mount(page)
+  let _ = runtime.get(@testing.by_label("Missing"))
 }
 
 ///|
@@ -323,6 +349,6 @@ test "panic event driver rejects an ambiguous selector" {
       )
     },
   )
-  let runtime = mount(page)
-  let _ = runtime.tap(by_label("Duplicate"))
+  let runtime = @testing.mount(page)
+  let _ = runtime.tap(@testing.by_label("Duplicate"))
 }

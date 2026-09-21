@@ -806,18 +806,27 @@ pub(all) enum AddonAlign {
   BlockStart
   BlockEnd
 } derive(Eq, @debug.Debug)
+pub fn AddonAlign::equal(Self, Self) -> Bool
+pub fn AddonAlign::not_equal(Self, Self) -> Bool
+pub fn AddonAlign::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Alignment {
   Start
   Center
   End
 } derive(Eq, @debug.Debug)
+pub fn Alignment::equal(Self, Self) -> Bool
+pub fn Alignment::not_equal(Self, Self) -> Bool
+pub fn Alignment::to_repr(Self) -> @debug.Repr
 
 pub(all) enum AttachmentSize {
   AttachmentDefaultSize
   AttachmentSm
   AttachmentXs
 } derive(Eq, @debug.Debug)
+pub fn AttachmentSize::equal(Self, Self) -> Bool
+pub fn AttachmentSize::not_equal(Self, Self) -> Bool
+pub fn AttachmentSize::to_repr(Self) -> @debug.Repr
 
 pub(all) enum AttachmentState {
   AttachmentIdle
@@ -826,12 +835,18 @@ pub(all) enum AttachmentState {
   AttachmentError
   AttachmentDone
 } derive(Eq, @debug.Debug)
+pub fn AttachmentState::equal(Self, Self) -> Bool
+pub fn AttachmentState::not_equal(Self, Self) -> Bool
+pub fn AttachmentState::to_repr(Self) -> @debug.Repr
 
 pub(all) enum AvatarImageStatus {
   AvatarLoading
   AvatarLoaded
   AvatarError
 } derive(Eq, @debug.Debug)
+pub fn AvatarImageStatus::equal(Self, Self) -> Bool
+pub fn AvatarImageStatus::not_equal(Self, Self) -> Bool
+pub fn AvatarImageStatus::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ButtonSize {
   Default
@@ -843,6 +858,9 @@ pub(all) enum ButtonSize {
   IconSm
   IconLg
 } derive(Eq, @debug.Debug)
+pub fn ButtonSize::equal(Self, Self) -> Bool
+pub fn ButtonSize::not_equal(Self, Self) -> Bool
+pub fn ButtonSize::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ButtonVariant {
   Default
@@ -852,6 +870,9 @@ pub(all) enum ButtonVariant {
   Destructive
   Link
 } derive(Eq, @debug.Debug)
+pub fn ButtonVariant::equal(Self, Self) -> Bool
+pub fn ButtonVariant::not_equal(Self, Self) -> Bool
+pub fn ButtonVariant::to_repr(Self) -> @debug.Repr
 
 type CarouselScope
 
@@ -860,17 +881,26 @@ pub(all) enum ChartIndicator {
   ChartLine
   ChartDashed
 } derive(Eq, @debug.Debug)
+pub fn ChartIndicator::equal(Self, Self) -> Bool
+pub fn ChartIndicator::not_equal(Self, Self) -> Bool
+pub fn ChartIndicator::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ChartLegendPosition {
   LegendTop
   LegendBottom
 } derive(Eq, @debug.Debug)
+pub fn ChartLegendPosition::equal(Self, Self) -> Bool
+pub fn ChartLegendPosition::not_equal(Self, Self) -> Bool
+pub fn ChartLegendPosition::to_repr(Self) -> @debug.Repr
 
 pub(all) enum CheckState {
   Unchecked
   Checked
   Indeterminate
 } derive(Eq, @debug.Debug)
+pub fn CheckState::equal(Self, Self) -> Bool
+pub fn CheckState::not_equal(Self, Self) -> Bool
+pub fn CheckState::to_repr(Self) -> @debug.Repr
 
 pub(all) struct ChoiceOption {
   key : String
@@ -878,6 +908,9 @@ pub(all) struct ChoiceOption {
   disabled : Bool
   group : String
 } derive(Eq, @debug.Debug)
+pub fn ChoiceOption::equal(Self, Self) -> Bool
+pub fn ChoiceOption::not_equal(Self, Self) -> Bool
+pub fn ChoiceOption::to_repr(Self) -> @debug.Repr
 
 type ComboboxScope
 pub fn ComboboxScope::choose(Self, String) -> @minimoon.Cmd
@@ -892,6 +925,9 @@ pub(all) struct ComboboxState {
   query : String
   open : Bool
 } derive(Eq, @debug.Debug)
+pub fn ComboboxState::equal(Self, Self) -> Bool
+pub fn ComboboxState::not_equal(Self, Self) -> Bool
+pub fn ComboboxState::to_repr(Self) -> @debug.Repr
 
 type CommandScope
 pub fn CommandScope::matches(Self, String, keywords? : Array[String]) -> Bool
@@ -902,6 +938,9 @@ pub struct DatePickerPreset {
   label : String
   value : @headless.DateSelection
 } derive(Eq, @debug.Debug)
+pub fn DatePickerPreset::equal(Self, Self) -> Bool
+pub fn DatePickerPreset::not_equal(Self, Self) -> Bool
+pub fn DatePickerPreset::to_repr(Self) -> @debug.Repr
 
 pub struct FieldState {
   id : String
@@ -911,7 +950,10 @@ pub struct FieldState {
   required : Bool
   disabled : Bool
 } derive(Eq, @debug.Debug)
+pub fn FieldState::equal(Self, Self) -> Bool
+pub fn FieldState::not_equal(Self, Self) -> Bool
 pub fn FieldState::semantics(Self, role? : @minimoon.SemanticRole) -> @minimoon.Semantics
+pub fn FieldState::to_repr(Self) -> @debug.Repr
 
 pub struct InputOptions {
   disabled : Bool
@@ -926,18 +968,27 @@ pub struct InputOptions {
   selection_start : Int?
   selection_end : Int?
 } derive(Eq, @debug.Debug)
+pub fn InputOptions::equal(Self, Self) -> Bool
+pub fn InputOptions::not_equal(Self, Self) -> Bool
+pub fn InputOptions::to_repr(Self) -> @debug.Repr
 
 pub(all) enum MarkerVariant {
   PlainMarker
   SeparatorMarker
   BorderMarker
 } derive(Eq, @debug.Debug)
+pub fn MarkerVariant::equal(Self, Self) -> Bool
+pub fn MarkerVariant::not_equal(Self, Self) -> Bool
+pub fn MarkerVariant::to_repr(Self) -> @debug.Repr
 
 pub(all) enum MediaVariant {
   PlainMedia
   IconMedia
   ImageMedia
 } derive(Eq, @debug.Debug)
+pub fn MediaVariant::equal(Self, Self) -> Bool
+pub fn MediaVariant::not_equal(Self, Self) -> Bool
+pub fn MediaVariant::to_repr(Self) -> @debug.Repr
 
 pub(all) struct MenuGroup {
   key : String
@@ -949,19 +1000,29 @@ pub(all) enum MenuIndicatorPlacement {
   IndicatorStart
   IndicatorEnd
 } derive(Eq, @debug.Debug)
+pub fn MenuIndicatorPlacement::equal(Self, Self) -> Bool
+pub fn MenuIndicatorPlacement::not_equal(Self, Self) -> Bool
+pub fn MenuIndicatorPlacement::to_repr(Self) -> @debug.Repr
 
 type MenuItem
+pub fn MenuItem::equal(Self, Self) -> Bool
+pub fn MenuItem::not_equal(Self, Self) -> Bool
 pub impl Eq for MenuItem
 
 pub(all) struct MessageItem {
   key : String
   content : @minimoon.Node
 } derive(Eq)
+pub fn MessageItem::equal(Self, Self) -> Bool
+pub fn MessageItem::not_equal(Self, Self) -> Bool
 
 pub(all) enum MessageScrollDirection {
   ScrollStart
   ScrollEnd
 } derive(Eq, @debug.Debug)
+pub fn MessageScrollDirection::equal(Self, Self) -> Bool
+pub fn MessageScrollDirection::not_equal(Self, Self) -> Bool
+pub fn MessageScrollDirection::to_repr(Self) -> @debug.Repr
 
 pub(all) struct NavigationItem {
   key : String
@@ -977,6 +1038,9 @@ pub(all) enum Orientation {
   Horizontal
   Vertical
 } derive(Eq, @debug.Debug)
+pub fn Orientation::equal(Self, Self) -> Bool
+pub fn Orientation::not_equal(Self, Self) -> Bool
+pub fn Orientation::to_repr(Self) -> @debug.Repr
 
 pub struct OtpScope {
   value : String
@@ -985,6 +1049,9 @@ pub struct OtpScope {
   disabled : Bool
   invalid : Bool
 } derive(Eq, @debug.Debug)
+pub fn OtpScope::equal(Self, Self) -> Bool
+pub fn OtpScope::not_equal(Self, Self) -> Bool
+pub fn OtpScope::to_repr(Self) -> @debug.Repr
 
 pub(all) enum OverlayCloseReason {
   CloseButton
@@ -993,6 +1060,9 @@ pub(all) enum OverlayCloseReason {
   PageHidden
   Programmatic
 } derive(Eq, @debug.Debug)
+pub fn OverlayCloseReason::equal(Self, Self) -> Bool
+pub fn OverlayCloseReason::not_equal(Self, Self) -> Bool
+pub fn OverlayCloseReason::to_repr(Self) -> @debug.Repr
 
 pub(all) enum OverlayKind {
   DialogSurface
@@ -1003,6 +1073,9 @@ pub(all) enum OverlayKind {
   TooltipSurface
   ContextSurface
 } derive(Eq, @debug.Debug)
+pub fn OverlayKind::equal(Self, Self) -> Bool
+pub fn OverlayKind::not_equal(Self, Self) -> Bool
+pub fn OverlayKind::to_repr(Self) -> @debug.Repr
 
 type OverlayScope
 
@@ -1014,11 +1087,16 @@ pub(all) struct Panel {
   icon : @minimoon.Node?
   trigger : @minimoon.Node?
 } derive(Eq)
+pub fn Panel::equal(Self, Self) -> Bool
+pub fn Panel::not_equal(Self, Self) -> Bool
 
 pub(all) enum ReactionSide {
   ReactionTop
   ReactionBottom
 } derive(Eq, @debug.Debug)
+pub fn ReactionSide::equal(Self, Self) -> Bool
+pub fn ReactionSide::not_equal(Self, Self) -> Bool
+pub fn ReactionSide::to_repr(Self) -> @debug.Repr
 
 pub(all) struct ResizablePane {
   key : String
@@ -1026,6 +1104,8 @@ pub(all) struct ResizablePane {
   minimum : Double
   maximum : Double
 } derive(Eq)
+pub fn ResizablePane::equal(Self, Self) -> Bool
+pub fn ResizablePane::not_equal(Self, Self) -> Bool
 
 pub(all) enum Side {
   Top
@@ -1033,23 +1113,35 @@ pub(all) enum Side {
   Bottom
   Left
 } derive(Eq, @debug.Debug)
+pub fn Side::equal(Self, Self) -> Bool
+pub fn Side::not_equal(Self, Self) -> Bool
+pub fn Side::to_repr(Self) -> @debug.Repr
 
 pub(all) enum SidebarCollapsible {
   SidebarOffcanvas
   SidebarIcon
   SidebarFixed
 } derive(Eq, @debug.Debug)
+pub fn SidebarCollapsible::equal(Self, Self) -> Bool
+pub fn SidebarCollapsible::not_equal(Self, Self) -> Bool
+pub fn SidebarCollapsible::to_repr(Self) -> @debug.Repr
 
 pub(all) enum SidebarMenuButtonSize {
   SidebarMenuSm
   SidebarMenuDefault
   SidebarMenuLg
 } derive(Eq, @debug.Debug)
+pub fn SidebarMenuButtonSize::equal(Self, Self) -> Bool
+pub fn SidebarMenuButtonSize::not_equal(Self, Self) -> Bool
+pub fn SidebarMenuButtonSize::to_repr(Self) -> @debug.Repr
 
 pub(all) enum SidebarMenuButtonVariant {
   SidebarMenuButtonDefault
   SidebarMenuButtonOutline
 } derive(Eq, @debug.Debug)
+pub fn SidebarMenuButtonVariant::equal(Self, Self) -> Bool
+pub fn SidebarMenuButtonVariant::not_equal(Self, Self) -> Bool
+pub fn SidebarMenuButtonVariant::to_repr(Self) -> @debug.Repr
 
 type SidebarScope
 
@@ -1057,12 +1149,18 @@ pub(all) enum SidebarSide {
   SidebarLeft
   SidebarRight
 } derive(Eq, @debug.Debug)
+pub fn SidebarSide::equal(Self, Self) -> Bool
+pub fn SidebarSide::not_equal(Self, Self) -> Bool
+pub fn SidebarSide::to_repr(Self) -> @debug.Repr
 
 pub(all) struct SidebarState {
   collapsed : Bool
   mobile_open : Bool
   width : Double
 } derive(Eq, @debug.Debug)
+pub fn SidebarState::equal(Self, Self) -> Bool
+pub fn SidebarState::not_equal(Self, Self) -> Bool
+pub fn SidebarState::to_repr(Self) -> @debug.Repr
 
 type SidebarSurfaceScope
 pub fn SidebarSurfaceScope::is_icon_only(Self) -> Bool
@@ -1073,12 +1171,18 @@ pub(all) enum SidebarVariant {
   SidebarFloating
   SidebarInset
 } derive(Eq, @debug.Debug)
+pub fn SidebarVariant::equal(Self, Self) -> Bool
+pub fn SidebarVariant::not_equal(Self, Self) -> Bool
+pub fn SidebarVariant::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Size {
   Small
   Medium
   Large
 } derive(Eq, @debug.Debug)
+pub fn Size::equal(Self, Self) -> Bool
+pub fn Size::not_equal(Self, Self) -> Bool
+pub fn Size::to_repr(Self) -> @debug.Repr
 
 pub struct TableSpanCell {
   content : @minimoon.Node
@@ -1096,13 +1200,21 @@ pub(all) struct TableState {
   selected_keys : Array[String]
   hidden_columns : Array[String]
 } derive(Eq, @debug.Debug)
+pub fn TableState::equal(Self, Self) -> Bool
+pub fn TableState::not_equal(Self, Self) -> Bool
+pub fn TableState::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TabsListVariant {
   TabsDefault
   TabsLine
 } derive(Eq, @debug.Debug)
+pub fn TabsListVariant::equal(Self, Self) -> Bool
+pub fn TabsListVariant::not_equal(Self, Self) -> Bool
+pub fn TabsListVariant::to_repr(Self) -> @debug.Repr
 
 type Toast
+pub fn Toast::equal(Self, Self) -> Bool
+pub fn Toast::not_equal(Self, Self) -> Bool
 pub impl Eq for Toast
 
 pub(all) enum ToastPosition {
@@ -1113,12 +1225,18 @@ pub(all) enum ToastPosition {
   ToastBottomCenter
   ToastBottomRight
 } derive(Eq, @debug.Debug)
+pub fn ToastPosition::equal(Self, Self) -> Bool
+pub fn ToastPosition::not_equal(Self, Self) -> Bool
+pub fn ToastPosition::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ToastVariant {
   ToastDefault
   ToastDestructive
   ToastSuccess
 } derive(Eq, @debug.Debug)
+pub fn ToastVariant::equal(Self, Self) -> Bool
+pub fn ToastVariant::not_equal(Self, Self) -> Bool
+pub fn ToastVariant::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Tone {
   Default
@@ -1130,6 +1248,9 @@ pub(all) enum Tone {
   Ghost
   Link
 } derive(Eq, @debug.Debug)
+pub fn Tone::equal(Self, Self) -> Bool
+pub fn Tone::not_equal(Self, Self) -> Bool
+pub fn Tone::to_repr(Self) -> @debug.Repr
 
 type UiContext
 pub fn UiContext::visible(Self) -> @minimoon.Val[Bool]

@@ -15,16 +15,16 @@ fn form_test_page(
 test "native text inputs own values and preserve typed options" {
   let runtime = @testing.mount(
     form_test_page(_ => {
-      stack([
-        input_stateful(
+      @minimoon_ui.stack([
+        @minimoon_ui.input_stateful(
           id="name",
-          options=input_options(placeholder="Name", maxlength=12),
+          options=@minimoon_ui.input_options(placeholder="Name", maxlength=12),
         ),
-        textarea_stateful(id="notes", initial_value="Initial"),
-        input_stateful(
+        @minimoon_ui.textarea_stateful(id="notes", initial_value="Initial"),
+        @minimoon_ui.input_stateful(
           id="disabled",
           initial_value="Locked",
-          options=input_options(disabled=true),
+          options=@minimoon_ui.input_options(disabled=true),
         ),
       ])
     }),
@@ -51,10 +51,10 @@ test "native text inputs own values and preserve typed options" {
 test "checkbox and switch state is independent and disabled callbacks are inert" {
   let runtime = @testing.mount(
     form_test_page(_ => {
-      stack([
-        checkbox(id="accept", label="Accept"),
-        switch(id="enabled"),
-        switch(id="locked", disabled=true),
+      @minimoon_ui.stack([
+        @minimoon_ui.checkbox(id="accept", label="Accept"),
+        @minimoon_ui.switch(id="enabled"),
+        @minimoon_ui.switch(id="locked", disabled=true),
       ])
     }),
   )
@@ -81,15 +81,15 @@ test "checkbox and switch state is independent and disabled callbacks are inert"
 ///|
 test "radio and native select validate selected keys and filtered native indices" {
   let options = @minimoon.Val::constant([
-    choice_option(key="one", label="One"),
-    choice_option(key="locked", label="Locked", disabled=true),
-    choice_option(key="three", label="Three"),
+    @minimoon_ui.choice_option(key="one", label="One"),
+    @minimoon_ui.choice_option(key="locked", label="Locked", disabled=true),
+    @minimoon_ui.choice_option(key="three", label="Three"),
   ])
   let runtime = @testing.mount(
     form_test_page(_ => {
-      stack([
-        radio_group(id="radio", options~, initial_value="one"),
-        native_select(id="picker", options~, initial_value="one"),
+      @minimoon_ui.stack([
+        @minimoon_ui.radio_group(id="radio", options~, initial_value="one"),
+        @minimoon_ui.native_select(id="picker", options~, initial_value="one"),
       ])
     }),
   )
@@ -116,12 +116,14 @@ test "radio and native select validate selected keys and filtered native indices
 ///|
 test "toggle groups support multiple independent selections and disabled items" {
   let options = @minimoon.Val::constant([
-    choice_option(key="bold", label="Bold"),
-    choice_option(key="italic", label="Italic"),
-    choice_option(key="locked", label="Locked", disabled=true),
+    @minimoon_ui.choice_option(key="bold", label="Bold"),
+    @minimoon_ui.choice_option(key="italic", label="Italic"),
+    @minimoon_ui.choice_option(key="locked", label="Locked", disabled=true),
   ])
   let runtime = @testing.mount(
-    form_test_page(_ => toggle_group(id="format", options~, multiple=true)),
+    form_test_page(_ => {
+      @minimoon_ui.toggle_group(id="format", options~, multiple=true)
+    }),
   )
   let _ = runtime.tap(@testing.by_id("format-bold"))
   let _ = runtime.tap(@testing.by_id("format-italic"))
@@ -149,9 +151,9 @@ test "toggle groups support multiple independent selections and disabled items" 
 test "OTP paste normalizes numeric values and Unicode slots without key simulation" {
   let runtime = @testing.mount(
     form_test_page(_ => {
-      stack([
-        input_otp(id="numeric", length=4),
-        input_otp(id="unicode", length=3, numeric=false),
+      @minimoon_ui.stack([
+        @minimoon_ui.input_otp(id="numeric", length=4),
+        @minimoon_ui.input_otp(id="unicode", length=3, numeric=false),
       ])
     }),
   )
@@ -173,7 +175,7 @@ test "OTP paste normalizes numeric values and Unicode slots without key simulati
 
 ///|
 test "form field labels and errors stay linked to the native control" {
-  let field = field_state(
+  let field = @minimoon_ui.field_state(
     id="email",
     label="Email",
     description="Your address",
@@ -183,7 +185,7 @@ test "form field labels and errors stay linked to the native control" {
   let runtime = @testing.mount(
     form_test_page(_ => {
       @minimoon.Val::constant(
-        form_field(
+        @minimoon_ui.form_field(
           field,
           @minimoon.input(
             id="email",
@@ -220,14 +222,14 @@ test "form field labels and errors stay linked to the native control" {
 ///|
 test "select layer uses a native list, rejects disabled options and closes on hide" {
   let options = @minimoon.Val::constant([
-    choice_option(key="one", label="One"),
-    choice_option(key="locked", label="Locked", disabled=true),
-    choice_option(key="three", label="Three", group="Other"),
+    @minimoon_ui.choice_option(key="one", label="One"),
+    @minimoon_ui.choice_option(key="locked", label="Locked", disabled=true),
+    @minimoon_ui.choice_option(key="three", label="Three", group="Other"),
   ])
   let runtime = @testing.mount(
     form_test_page(page => {
-      root(page, context => {
-        select(context, id="select", options~, initial_value="one")
+      @minimoon_ui.root(page, context => {
+        @minimoon_ui.select(context, id="select", options~, initial_value="one")
       })
     }),
   )
@@ -255,10 +257,15 @@ test "select layer uses a native list, rejects disabled options and closes on hi
 test "native single slider commits through typed change and disabled slider stays fixed" {
   let runtime = @testing.mount(
     form_test_page(page => {
-      root(page, context => {
-        stack([
-          slider(context, id="volume", default_value=25),
-          slider(context, id="locked", default_value=10, disabled=true),
+      @minimoon_ui.root(page, context => {
+        @minimoon_ui.stack([
+          @minimoon_ui.slider(context, id="volume", default_value=25),
+          @minimoon_ui.slider(
+            context,
+            id="locked",
+            default_value=10,
+            disabled=true,
+          ),
         ])
       })
     }),
@@ -281,24 +288,27 @@ test "foundation variants render rich content and preserve disabled actions" {
     form_test_page(_ => {
       let (count, update) = @minimoon.create_variable(0)
       count.map(count => {
-        card([
-          card_header(card_title("Title")),
-          card_content([
-            alert(variant=Destructive, alert_description("Warning")),
-            badge("Badge"),
-            kbd("⌘ K"),
-            button(id="rich", on_tap=update(value => value + 1), [
+        @minimoon_ui.card([
+          @minimoon_ui.card_header(@minimoon_ui.card_title("Title")),
+          @minimoon_ui.card_content([
+            @minimoon_ui.alert(
+              variant=Destructive,
+              @minimoon_ui.alert_description("Warning"),
+            ),
+            @minimoon_ui.badge("Badge"),
+            @minimoon_ui.kbd("⌘ K"),
+            @minimoon_ui.button(id="rich", on_tap=update(value => value + 1), [
               @minimoon.text("Count"),
               @minimoon.text(count.to_string()),
             ]),
-            button(
+            @minimoon_ui.button(
               id="locked",
               disabled=true,
               on_tap=update(value => value + 1),
               "Locked",
             ),
-            skeleton(),
-            spinner(),
+            @minimoon_ui.skeleton(),
+            @minimoon_ui.spinner(),
           ]),
         ])
       })

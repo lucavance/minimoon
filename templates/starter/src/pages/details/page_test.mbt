@@ -1,6 +1,8 @@
 ///|
 test "starter details decodes query and keeps independent page state" {
-  let runtime = program().create_runtime(input={ "from": "MoonBit" }).unwrap()
+  let runtime = @details.program()
+    .create_runtime(input={ "from": "MoonBit" })
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{\"from\":\"MoonBit\"}")
   let _ = runtime.lifecycle("onShow", "{}")
   let _ = runtime.dispatch("details/toggle", "{}")

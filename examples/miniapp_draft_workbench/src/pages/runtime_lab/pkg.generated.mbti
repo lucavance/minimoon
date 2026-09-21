@@ -13,8 +13,12 @@ pub fn program(@app.Deps) -> @minimoon.Page
 
 // Types and methods
 type CardEntry derive(Eq)
+pub fn CardEntry::equal(Self, Self) -> Bool
+pub fn CardEntry::not_equal(Self, Self) -> Bool
 
 type Item derive(Eq)
+pub fn Item::equal(Self, Self) -> Bool
+pub fn Item::not_equal(Self, Self) -> Bool
 
 pub struct Model {
   cards : Array[CardEntry]
@@ -39,6 +43,8 @@ pub struct Model {
   selected : String
   replace_root : Bool
 } derive(Eq)
+pub fn Model::equal(Self, Self) -> Bool
+pub fn Model::not_equal(Self, Self) -> Bool
 
 pub enum Msg {
   ReorderCards
@@ -72,6 +78,8 @@ pub enum Msg {
 }
 
 type Slide derive(Eq)
+pub fn Slide::equal(Self, Self) -> Bool
+pub fn Slide::not_equal(Self, Self) -> Bool
 
 // Type aliases
 

@@ -24,6 +24,14 @@ async fn copy_frozen_api_consumer(root : String, destination : String) -> Unit {
       permission=0o644,
     )
   }
+  let compatibility = "src/cmd/minimoon_check/fixtures/api/explicit_methods/consumer_0_2.mbt"
+  require_file(root, compatibility)
+  @fs.write_file(
+    join(destination, "src/compatibility.mbt"),
+    @fs.read_file(join(root, compatibility)).text(),
+    create_mode=CreateOrTruncate,
+    permission=0o644,
+  )
 }
 
 ///|
@@ -74,6 +82,13 @@ async fn frozen_api_consumer_gate(root : String) -> Unit {
       "moon",
       ["build", "--target", target, "--deny-warn"],
       cwd=temp,
+    )
+    run(
+      root,
+      "Run historical method consumer (" + target + ")",
+      "moon",
+      ["test", "--target", target, "--deny-warn"],
+      cwd=consumer,
     )
   }
   @fs.rmdir(temp, recursive=true)

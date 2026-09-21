@@ -153,8 +153,8 @@ pub async fn generate_tailwind(loaded : Json) -> Unit {
   }
   let node_root = find_node_root(app_dir)
   let temp_dir = join(temp_root, "tailwind")
+  defer cleanup_build_transaction(temp_root)
   @fs.mkdir(temp_dir, permission=0o700, recursive=true)
-  defer (if @fs.exists(temp_root) { @fs.rmdir(temp_root, recursive=true) })
   let input = string(loaded, "tailwindInputAbs")
   let resolved_input = join(
     Path::dirname(input).to_string(),
@@ -174,13 +174,17 @@ pub async fn generate_tailwind(loaded : Json) -> Unit {
     .split("@import 'tailwindcss'")
     .collect()
     .join("@import '" + tailwind_package + "'")
-  @fs.write_file(
-    resolved_input,
-    source,
-    create_mode=CreateNew,
-    permission=0o600,
-  )
-  defer (if @fs.exists(resolved_input) { @fs.remove(resolved_input) })
+  // CreateNew may reject a pre-existing file, which this invocation must not
+  // remove. Finish creation before registering cleanup without a cancel gap.
+  @async.protect_from_cancel(() => {
+    @fs.write_file(
+      resolved_input,
+      source,
+      create_mode=CreateNew,
+      permission=0o600,
+    )
+  })
+  defer cleanup_build_transaction(resolved_input)
   write(adapter, adapter_source())
   let routes = array(field(loaded, "appMetadata"), "pages").map(page => {
     field(page, "route")
@@ -193,7 +197,7 @@ pub async fn generate_tailwind(loaded : Json) -> Unit {
       "Tailwind generation",
     )
     run_checked(
-      "bun",
+      "node",
       [
         adapter,
         raw_css,
@@ -301,7 +305,9 @@ pub async fn build(
         BuildRecoveryError(_) => preserve_backup.val = true
         _ => ()
       }
-      @miniapp_tooling.write_build_failure(config_file, "\{error}") catch {
+      @async.protect_from_cancel(() => {
+        @miniapp_tooling.write_build_failure(config_file, "\{error}")
+      }) catch {
         diagnostic_error =>
           println(
             "minimoon: could not write build diagnostic: \{diagnostic_error}",

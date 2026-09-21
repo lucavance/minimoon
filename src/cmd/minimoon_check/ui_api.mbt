@@ -15,9 +15,10 @@ async fn ui_api_suite(root : String) -> Unit {
     let snapshot = baseline + entry.0 + ".mbti"
     require_file(root, snapshot)
     require_file(root, entry.1)
-    let violations = api_compatibility_violations(
+    let violations = api_explicit_method_violations(
       @fs.read_file(join(root, snapshot)).text(),
       @fs.read_file(join(root, entry.1)).text(),
+      api_reviewed_explicit_methods(root, "ui/" + entry.0),
       false,
     )
     guard violations.is_empty() else {

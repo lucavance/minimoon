@@ -114,7 +114,9 @@ pub enum MiniappCapability {
   NavigateBack
   Custom(String)
 } derive(Eq)
+pub fn MiniappCapability::equal(Self, Self) -> Bool
 pub fn MiniappCapability::name(Self) -> String
+pub fn MiniappCapability::not_equal(Self, Self) -> Bool
 
 pub struct MiniappDecodeError {
   message : String
@@ -149,7 +151,9 @@ pub enum PageEventKind {
   Submit
   CustomEvent(String)
 } derive(Eq)
+pub fn PageEventKind::equal(Self, Self) -> Bool
 pub fn PageEventKind::host_name(Self) -> String
+pub fn PageEventKind::not_equal(Self, Self) -> Bool
 
 pub struct PageInput[Msg] {
   name : String
@@ -173,7 +177,9 @@ pub enum PageLifecycleHook {
   PullDownRefresh
   ReachBottom
 } derive(Eq)
+pub fn PageLifecycleHook::equal(Self, Self) -> Bool
 pub fn PageLifecycleHook::host_name(Self) -> String
+pub fn PageLifecycleHook::not_equal(Self, Self) -> Bool
 
 pub struct PageProgram[Model, Msg] {
   id : String

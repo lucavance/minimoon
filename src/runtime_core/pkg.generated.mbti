@@ -147,11 +147,17 @@ pub(all) enum EffectResolveResult {
   EffectAlreadyResolved
   EffectContextDisposed
 } derive(Eq, @debug.Debug)
+pub fn EffectResolveResult::equal(Self, Self) -> Bool
+pub fn EffectResolveResult::not_equal(Self, Self) -> Bool
+pub fn EffectResolveResult::to_repr(Self) -> @debug.Repr
 
 pub(all) enum HostEffectOutcome {
   HostEffectOk(String)
   HostEffectErr(String, String, String)
 } derive(Eq, @debug.Debug)
+pub fn HostEffectOutcome::equal(Self, Self) -> Bool
+pub fn HostEffectOutcome::not_equal(Self, Self) -> Bool
+pub fn HostEffectOutcome::to_repr(Self) -> @debug.Repr
 
 pub struct HostEffectRequest {
   capability : String

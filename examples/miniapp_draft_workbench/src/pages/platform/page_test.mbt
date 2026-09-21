@@ -2,7 +2,7 @@
 test "platform reports failures beside each capability without overwriting HTTP errors" {
   let app = @application.program().create_runtime()
   defer ignore(app.dispose())
-  let page = app.create_page(program(app.deps())).unwrap()
+  let page = app.create_page(@platform.program(app.deps())).unwrap()
   ignore(page.lifecycle("onLoad", "{}"))
   ignore(page.mount())
   let request = page.dispatch("platform/request", "{}")
@@ -30,7 +30,7 @@ test "platform reports failures beside each capability without overwriting HTTP 
 test "platform storage has its own editable value and no shared state controls" {
   let app = @application.program().create_runtime()
   defer ignore(app.dispose())
-  let page = app.create_page(program(app.deps())).unwrap()
+  let page = app.create_page(@platform.program(app.deps())).unwrap()
   ignore(page.lifecycle("onLoad", "{}"))
   ignore(page.mount())
   ignore(

@@ -191,6 +191,7 @@ async fn compile_resource_bundle(
     )
   }
   let target = join(app_root, ".minimoon-tmp/resources-" + index.to_string())
+  defer cleanup_compilation_directories([directory, target])
   write(
     join(directory, "moon.pkg"),
     "import {\n  \"lampclaw/minimoon/resources\" @resources,\n  " +
@@ -221,10 +222,6 @@ async fn compile_resource_bundle(
     Ok(@json.parse(output.trim()))
   } catch {
     error => Err(error)
-  }
-  @fs.rmdir(directory, recursive=true)
-  if @fs.exists(target) {
-    @fs.rmdir(target, recursive=true)
   }
   match result {
     Ok(bundle) => bundle

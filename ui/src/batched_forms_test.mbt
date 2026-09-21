@@ -10,12 +10,12 @@ fn form_batch(keys : Array[String]) -> String {
 ///|
 test "multiple ToggleGroup merges same-frame option taps" {
   let runtime = form_test_page(_ => {
-      toggle_group(
+      @minimoon_ui.toggle_group(
         id="group",
         multiple=true,
         options=@minimoon.Val::constant([
-          choice_option(key="a", label="A"),
-          choice_option(key="b", label="B"),
+          @minimoon_ui.choice_option(key="a", label="A"),
+          @minimoon_ui.choice_option(key="b", label="B"),
         ]),
       )
     })
@@ -32,12 +32,20 @@ test "multiple ToggleGroup merges same-frame option taps" {
 ///|
 test "multiple Accordion merges same-frame panel taps" {
   let runtime = form_test_page(_ => {
-      accordion(
+      @minimoon_ui.accordion(
         id="accordion",
         multiple=true,
         items=@minimoon.Val::constant([
-          panel(key="a", title="A", content=@minimoon.text("First")),
-          panel(key="b", title="B", content=@minimoon.text("Second")),
+          @minimoon_ui.panel(
+            key="a",
+            title="A",
+            content=@minimoon.text("First"),
+          ),
+          @minimoon_ui.panel(
+            key="b",
+            title="B",
+            content=@minimoon.text("Second"),
+          ),
         ]),
       )
     })
@@ -57,7 +65,7 @@ test "multiple Accordion merges same-frame panel taps" {
 ///|
 test "repeated same-frame Toggle taps cancel each other" {
   let runtime = form_test_page(_ => {
-      toggle(
+      @minimoon_ui.toggle(
         id="toggle",
         content=@minimoon.Val::constant(@minimoon.text("Toggle")),
       )
@@ -78,14 +86,14 @@ test "repeated same-frame Toggle taps cancel each other" {
 test "controlled ToggleGroup reads parent state after each batch request" {
   let runtime = form_test_page(_ => {
       let (value, update) = @minimoon.create_variable([])
-      toggle_group_controlled(
+      @minimoon_ui.toggle_group_controlled(
         id="group",
         multiple=true,
         value~,
         on_change=update.map(value => _ => value),
         options=@minimoon.Val::constant([
-          choice_option(key="a", label="A"),
-          choice_option(key="b", label="B"),
+          @minimoon_ui.choice_option(key="a", label="A"),
+          @minimoon_ui.choice_option(key="b", label="B"),
         ]),
       )
     })
@@ -108,12 +116,12 @@ test "controlled ToggleGroup reads parent state after each batch request" {
 test "same-frame external option change prevents stale ToggleGroup activation" {
   let runtime = form_test_page(_ => {
       let (options, update) = @minimoon.create_variable([
-        choice_option(key="a", label="A"),
-        choice_option(key="b", label="B"),
+        @minimoon_ui.choice_option(key="a", label="A"),
+        @minimoon_ui.choice_option(key="b", label="B"),
       ])
-      toggle_group(id="group", options~, multiple=true).map(node => {
+      @minimoon_ui.toggle_group(id="group", options~, multiple=true).map(node => {
         @minimoon.div([
-          button(
+          @minimoon_ui.button(
             event_key="disable",
             on_tap=update(options => {
               options.map(option => { ..option, disabled: true, })
@@ -137,19 +145,19 @@ test "same-frame external option change prevents stale ToggleGroup activation" {
 ///|
 test "repeated same-frame Accordion and Collapsible taps close again" {
   let runtime = form_test_page(_ => {
-      stack([
-        accordion(
+      @minimoon_ui.stack([
+        @minimoon_ui.accordion(
           id="accordion",
           multiple=true,
           items=@minimoon.Val::constant([
-            panel(
+            @minimoon_ui.panel(
               key="a",
               title="A",
               content=@minimoon.text("Accordion secret"),
             ),
           ]),
         ),
-        collapsible(
+        @minimoon_ui.collapsible(
           id="collapse",
           title="Collapse",
           content=@minimoon.Val::constant(@minimoon.text("Collapsible secret")),
@@ -175,7 +183,7 @@ test "repeated same-frame Accordion and Collapsible taps close again" {
 test "OTP completion observes the preceding input in the same frame" {
   let runtime = form_test_page(_ => {
       let (completed, update) = @minimoon.create_variable(0)
-      let otp = input_otp(
+      let otp = @minimoon_ui.input_otp(
         id="otp",
         length=4,
         on_complete=update.map(_ => count => count + 1),
@@ -209,19 +217,19 @@ test "OTP completion observes the preceding input in the same frame" {
 test "native choice keys are checked against current options after frame decode" {
   let runtime = form_test_page(_ => {
       let (options, update_options) = @minimoon.create_variable([
-        choice_option(key="a", label="A"),
-        choice_option(key="b", label="B"),
+        @minimoon_ui.choice_option(key="a", label="A"),
+        @minimoon_ui.choice_option(key="b", label="B"),
       ])
       let (changes, update_changes) = @minimoon.create_variable(0)
       let on_change = update_changes.map((_ : String) => count => count + 1)
-      let controls = stack([
-        radio_group_controlled(
+      let controls = @minimoon_ui.stack([
+        @minimoon_ui.radio_group_controlled(
           id="radio",
           options~,
           value=@minimoon.Val::constant("b"),
           on_change~,
         ),
-        native_select_controlled(
+        @minimoon_ui.native_select_controlled(
           id="picker",
           options~,
           value=@minimoon.Val::constant("b"),
@@ -230,7 +238,7 @@ test "native choice keys are checked against current options after frame decode"
       ])
       @minimoon.Val::map2(controls, changes, (controls, changes) => {
         @minimoon.div([
-          button(
+          @minimoon_ui.button(
             event_key="remove",
             on_tap=update_options(options => {
               options.filter(option => option.key != "a")
@@ -258,11 +266,19 @@ test "native choice keys are checked against current options after frame decode"
 test "Tabs reject a panel removed earlier in the same frame" {
   let runtime = form_test_page(_ => {
       let (items, update_items) = @minimoon.create_variable([
-        panel(key="a", title="A", content=@minimoon.text("A panel")),
-        panel(key="b", title="B", content=@minimoon.text("B panel")),
+        @minimoon_ui.panel(
+          key="a",
+          title="A",
+          content=@minimoon.text("A panel"),
+        ),
+        @minimoon_ui.panel(
+          key="b",
+          title="B",
+          content=@minimoon.text("B panel"),
+        ),
       ])
       let (changes, update_changes) = @minimoon.create_variable(0)
-      let tabs = tabs_controlled(
+      let tabs = @minimoon_ui.tabs_controlled(
         id="tabs",
         items~,
         selected=@minimoon.Val::constant(Some("b")),
@@ -270,7 +286,7 @@ test "Tabs reject a panel removed earlier in the same frame" {
       )
       @minimoon.Val::map2(tabs, changes, (tabs, changes) => {
         @minimoon.div([
-          button(
+          @minimoon_ui.button(
             event_key="remove",
             on_tap=update_items(items => items.filter(item => item.key != "a")),
             "Remove A",

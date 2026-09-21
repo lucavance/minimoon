@@ -2,7 +2,9 @@
 test "lab scopes component events and reconciles subscriptions" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let runtime = runtime_app
+    .create_page(@runtime_lab.program(runtime_app.deps()))
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let primary = "$component:toggle-card:cards:primary"
   let mount = runtime.mount()
@@ -30,7 +32,9 @@ test "lab scopes component events and reconciles subscriptions" {
 test "lab keyed component reorder preserves identity and restarts lifecycle" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let runtime = runtime_app
+    .create_page(@runtime_lab.program(runtime_app.deps()))
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let secondary = "$component:toggle-card:cards:secondary"
   let _ = runtime.mount()
@@ -62,11 +66,15 @@ test "lab keyed component reorder preserves identity and restarts lifecycle" {
 test "same-route page instances isolate component caches and disposal" {
   let first_app = @application.program().create_runtime()
   defer ignore(first_app.dispose())
-  let first = first_app.create_page(program(first_app.deps())).unwrap()
+  let first = first_app
+    .create_page(@runtime_lab.program(first_app.deps()))
+    .unwrap()
   let _ = first.lifecycle("onLoad", "{}")
   let second_app = @application.program().create_runtime()
   defer ignore(second_app.dispose())
-  let second = second_app.create_page(program(second_app.deps())).unwrap()
+  let second = second_app
+    .create_page(@runtime_lab.program(second_app.deps()))
+    .unwrap()
   let _ = second.lifecycle("onLoad", "{}")
   let primary = "$component:toggle-card:cards:primary"
   let _ = first.mount()
@@ -94,7 +102,9 @@ test "same-route page instances isolate component caches and disposal" {
 test "protocol v7 lab decodes scroll and high-frequency controls" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let runtime = runtime_app
+    .create_page(@runtime_lab.program(runtime_app.deps()))
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let _ = runtime.dispatch("controls/jump-controls", "{}")
@@ -133,7 +143,9 @@ test "protocol v7 lab decodes scroll and high-frequency controls" {
 test "controlled native values survive one structural transaction" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let runtime = runtime_app
+    .create_page(@runtime_lab.program(runtime_app.deps()))
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let _ = runtime.dispatch(
@@ -171,7 +183,7 @@ test "controlled native values survive one structural transaction" {
 test "runtime experiment shortcuts are one-shot and match the four responsibility groups" {
   let app = @application.program().create_runtime()
   defer ignore(app.dispose())
-  let page = app.create_page(program(app.deps())).unwrap()
+  let page = app.create_page(@runtime_lab.program(app.deps())).unwrap()
   ignore(page.lifecycle("onLoad", "{}"))
   ignore(page.mount())
   for
@@ -200,7 +212,9 @@ test "runtime experiment shortcuts are one-shot and match the four responsibilit
 test "lab exercises branches, unkeyed rows, keyed reorder, input, and root replacement" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let runtime = runtime_app
+    .create_page(@runtime_lab.program(runtime_app.deps()))
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   inspect(runtime.snapshot().contains("collapsed branch"), content="true")
@@ -284,7 +298,9 @@ test "lab exercises branches, unkeyed rows, keyed reorder, input, and root repla
 test "lab isolates focused keyed reorder from the resident page tick" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let runtime = runtime_app
+    .create_page(@runtime_lab.program(runtime_app.deps()))
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let armed = runtime.dispatch("dynamic/arm-focused-reorder", "{}")
@@ -321,7 +337,9 @@ test "lab isolates focused keyed reorder from the resident page tick" {
 test "lab delay probe uses a cancellable 600ms host timeout" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let runtime = runtime_app
+    .create_page(@runtime_lab.program(runtime_app.deps()))
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.mount()
   let started = runtime.dispatch("dynamic/start-delay", "{}")
@@ -349,7 +367,7 @@ test "lab delay probe uses a cancellable 600ms host timeout" {
   let disposing_app = @application.program().create_runtime()
   defer ignore(disposing_app.dispose())
   let disposing = disposing_app
-    .create_page(program(disposing_app.deps()))
+    .create_page(@runtime_lab.program(disposing_app.deps()))
     .unwrap()
   let _ = disposing.lifecycle("onLoad", "{}")
   let _ = disposing.mount()
@@ -368,14 +386,20 @@ test "conformance lab uses ABI v13, shared WXML, and query isolation marker" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
   let runtime = runtime_app
-    .create_page(program(runtime_app.deps()), input={ "instance": "second" })
+    .create_page(@runtime_lab.program(runtime_app.deps()), input={
+      "instance": "second",
+    })
     .unwrap()
   let _ = runtime.lifecycle("onLoad", "{\"instance\":\"second\"}")
   inspect(runtime.snapshot().contains("instance: second"), content="true")
-  let contract = @application.program().preview(deps => program(deps).contract())
+  let contract = @application.program().preview(deps => {
+    @runtime_lab.program(deps).contract()
+  })
   inspect(contract.contains("\"runtimeApiVersion\":13"), content="true")
   inspect(contract.contains("\"rendererProtocolVersion\":8"), content="true")
-  let wxml = @application.program().preview(deps => program(deps).wxml())
+  let wxml = @application.program().preview(deps => {
+    @runtime_lab.program(deps).wxml()
+  })
   inspect(wxml.contains("minimoon_dynamic_node"), content="true")
   inspect(wxml.contains("minimoon.templates.wxml"), content="true")
 }
@@ -384,7 +408,9 @@ test "conformance lab uses ABI v13, shared WXML, and query isolation marker" {
 test "lab exposes bilingual guidance and stack-aware return" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
-  let runtime = runtime_app.create_page(program(runtime_app.deps())).unwrap()
+  let runtime = runtime_app
+    .create_page(@runtime_lab.program(runtime_app.deps()))
+    .unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let tree = runtime.snapshot()
   inspect(tree.contains("\"section\":\"runtime-lab-intro\""), content="true")

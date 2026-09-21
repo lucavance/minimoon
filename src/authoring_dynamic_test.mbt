@@ -19,13 +19,13 @@ priv enum SwitchLocalMessage {
 
 ///|
 test "switch keeps same-tag state reactive and rolls rejected branches back" {
-  let definition = page(
+  let definition = @minimoon.page(
     id="val_switch_transaction",
-    route=route("pages/val_switch_transaction/val_switch_transaction"),
+    route=@minimoon.route("pages/val_switch_transaction/val_switch_transaction"),
     title="Val Switch Transaction",
     build=_ => {
       let initial : SwitchInput = { tag: "a", value: 1, }
-      let (source, emit_source) = create_pure_state(initial, update=(
+      let (source, emit_source) = @minimoon.create_pure_state(initial, update=(
         _current : SwitchInput,
         message,
       ) => {
@@ -38,12 +38,12 @@ test "switch keeps same-tag state reactive and rolls rejected branches back" {
       })
       let branch = source.switch_by(
         (initial, input) => {
-          let (count, emit_count) = create_pure_state(0, update=(
+          let (count, emit_count) = @minimoon.create_pure_state(0, update=(
             value,
             _message,
           ) => value + 1)
-          Val::map2(input, count, (current, count_value) => {
-            button(
+          @minimoon.Val::map2(input, count, (current, count_value) => {
+            @minimoon.button(
               on_tap=emit_count(IncrementSwitchLocal),
               event_key="switch-local",
               initial.tag +
@@ -56,31 +56,47 @@ test "switch keeps same-tag state reactive and rolls rejected branches back" {
         },
         by=value => value.tag,
       )
-      Val::map2(source, branch, (current, branch) => {
+      @minimoon.Val::map2(source, branch, (current, branch) => {
         let children = [
-          button(
+          @minimoon.button(
             on_tap=emit_source(UpdateSameTag),
             event_key="switch-same",
             "same tag",
           ),
-          button(
+          @minimoon.button(
             on_tap=emit_source(ShowInvalid),
             event_key="switch-invalid",
             "invalid",
           ),
-          button(on_tap=emit_source(ShowB), event_key="switch-b", "show b"),
-          button(on_tap=emit_source(ShowA), event_key="switch-a", "show a"),
+          @minimoon.button(
+            on_tap=emit_source(ShowB),
+            event_key="switch-b",
+            "show b",
+          ),
+          @minimoon.button(
+            on_tap=emit_source(ShowA),
+            event_key="switch-a",
+            "show a",
+          ),
           branch,
         ]
         if current.tag == "invalid" {
           children.push(
-            button(on_tap=none, event_key="duplicate", "duplicate one"),
+            @minimoon.button(
+              on_tap=@minimoon.none,
+              event_key="duplicate",
+              "duplicate one",
+            ),
           )
           children.push(
-            button(on_tap=none, event_key="duplicate", "duplicate two"),
+            @minimoon.button(
+              on_tap=@minimoon.none,
+              event_key="duplicate",
+              "duplicate two",
+            ),
           )
         }
-        div(children)
+        @minimoon.div(children)
       })
     },
   )
@@ -119,12 +135,14 @@ priv enum BranchInitSiblingMessage {
 
 ///|
 test "dynamic branch init runs after commit and preserves graph invalidation" {
-  let definition = page(
+  let definition = @minimoon.page(
     id="val_branch_init_transaction",
-    route=route("pages/val_branch_init_transaction/val_branch_init_transaction"),
+    route=@minimoon.route(
+      "pages/val_branch_init_transaction/val_branch_init_transaction",
+    ),
     title="Val Branch Init Transaction",
     build=_ => {
-      let (sibling, emit_sibling) = create_pure_state(0, update=(
+      let (sibling, emit_sibling) = @minimoon.create_pure_state(0, update=(
         current,
         message,
       ) => {
@@ -132,7 +150,7 @@ test "dynamic branch init runs after commit and preserves graph invalidation" {
           BranchMounted | IncrementSibling => current + 1
         }
       })
-      let (source, emit_source) = create_pure_state("a", update=(
+      let (source, emit_source) = @minimoon.create_pure_state("a", update=(
         _current,
         message,
       ) => {
@@ -143,55 +161,59 @@ test "dynamic branch init runs after commit and preserves graph invalidation" {
       })
       let branch = source.switch_by(
         (initial, input) => {
-          let (branch_state, _emit_branch) = create_state_with_init(
-            init=(_emit : Emit[Unit]) => {
-              with_cmd(initial, emit_sibling(BranchMounted))
+          let (branch_state, _emit_branch) = @minimoon.create_state_with_init(
+            init=(_emit : @minimoon.Emit[Unit]) => {
+              @minimoon.with_cmd(initial, emit_sibling(BranchMounted))
             },
-            update=(current, _message : Unit, _) => no_cmd(current),
+            update=(current, _message : Unit, _) => @minimoon.no_cmd(current),
           )
-          Val::map2(input, branch_state, (current, mounted_tag) => {
-            p("branch:" + current + ":" + mounted_tag)
+          @minimoon.Val::map2(input, branch_state, (current, mounted_tag) => {
+            @minimoon.p("branch:" + current + ":" + mounted_tag)
           })
         },
         by=value => value,
       )
-      Val::map3(source, sibling, branch, (current, sibling_count, branch) => {
+      @minimoon.Val::map3(source, sibling, branch, (
+        current,
+        sibling_count,
+        branch,
+      ) => {
         let children = [
-          button(
+          @minimoon.button(
             on_tap=emit_source(BranchInitShowB),
             event_key="branch-init/show-b",
             "show b",
           ),
-          button(
+          @minimoon.button(
             on_tap=emit_source(BranchInitShowInvalid),
             event_key="branch-init/show-invalid",
             "show invalid",
           ),
-          button(
+          @minimoon.button(
             on_tap=emit_sibling(IncrementSibling),
             event_key="branch-init/increment-sibling",
             "increment sibling",
           ),
-          p("state:" + current + ":" + sibling_count.to_string()),
+          @minimoon.p("state:" + current + ":" + sibling_count.to_string()),
           branch,
         ]
         if current == "invalid" {
           children.push(
-            button(
-              on_tap=none,
+            @minimoon.button(
+              on_tap=@minimoon.none,
               event_key="branch-init/duplicate",
               "duplicate one",
             ),
           )
           children.push(
-            button(
-              on_tap=none,
+            @minimoon.button(
+              on_tap=@minimoon.none,
               event_key="branch-init/duplicate",
               "duplicate two",
             ),
           )
         }
-        div(children)
+        @minimoon.div(children)
       })
     },
   )
@@ -247,13 +269,13 @@ priv enum EnumerateLocalMessage {
 ///|
 test "enumerate preserves tagged state and pauses inactive subscriptions" {
   let builds = Ref(0)
-  let definition = page(
+  let definition = @minimoon.page(
     id="val_enumerate_cache",
-    route=route("pages/val_enumerate_cache/val_enumerate_cache"),
+    route=@minimoon.route("pages/val_enumerate_cache/val_enumerate_cache"),
     title="Val Enumerate Cache",
     build=context => {
       let initial : EnumerateInput = { tag: "a", value: 1, }
-      let (source, emit_source) = create_pure_state(initial, update=(
+      let (source, emit_source) = @minimoon.create_pure_state(initial, update=(
         _current : EnumerateInput,
         message,
       ) => {
@@ -265,9 +287,9 @@ test "enumerate preserves tagged state and pauses inactive subscriptions" {
       let branch = source.enumerate_by(
         (initial, input) => {
           builds.val += 1
-          let (count, emit_count) = create_state(
+          let (count, emit_count) = @minimoon.create_state(
             0,
-            update=(value, _message, _) => no_cmd(value + 1),
+            update=(value, _message, _) => @minimoon.no_cmd(value + 1),
             subscriptions=(_, emit) => {
               context.every(
                 key="enumerate/" + initial.tag,
@@ -276,8 +298,8 @@ test "enumerate preserves tagged state and pauses inactive subscriptions" {
               )
             },
           )
-          Val::map2(input, count, (current, count_value) => {
-            button(
+          @minimoon.Val::map2(input, count, (current, count_value) => {
+            @minimoon.button(
               on_tap=emit_count(EnumeratePulse),
               event_key="enumerate-local",
               initial.tag +
@@ -290,14 +312,14 @@ test "enumerate preserves tagged state and pauses inactive subscriptions" {
         },
         by=value => value.tag,
       )
-      Val::map2(source, branch, (_current, branch) => {
-        div([
-          button(
+      @minimoon.Val::map2(source, branch, (_current, branch) => {
+        @minimoon.div([
+          @minimoon.button(
             on_tap=emit_source(ShowEnumerateA),
             event_key="enumerate-a",
             "show a",
           ),
-          button(
+          @minimoon.button(
             on_tap=emit_source(ShowEnumerateB),
             event_key="enumerate-b",
             "show b",
@@ -336,9 +358,9 @@ priv enum PageInputMessage {
 
 ///|
 test "state with input initializes from actual page input" {
-  let definition = page_with_input(
+  let definition = @minimoon.page_with_input(
     id="val_page_input",
-    route=route("pages/val_page_input/val_page_input"),
+    route=@minimoon.route("pages/val_page_input/val_page_input"),
     title="Val Page Input",
     preview_input=() => 1,
     decode_input=fields => {
@@ -351,11 +373,11 @@ test "state with input initializes from actual page input" {
       )
     },
     build=(context, input) => {
-      let (count, _emit_count) = create_state_with_input(
-        input=Val::constant(input),
-        init=(_emit, initial_input) => no_cmd(initial_input),
+      let (count, _emit_count) = @minimoon.create_state_with_input(
+        input=@minimoon.Val::constant(input),
+        init=(_emit, initial_input) => @minimoon.no_cmd(initial_input),
         update=(current, current_input, _message, _) => {
-          no_cmd(current + current_input)
+          @minimoon.no_cmd(current + current_input)
         },
         subscriptions=(_, current_input, emit) => {
           context.every(
@@ -365,7 +387,7 @@ test "state with input initializes from actual page input" {
           )
         },
       )
-      count.view(value => p("input count:" + value.to_string()))
+      count.view(value => @minimoon.p("input count:" + value.to_string()))
     },
   )
   let runtime = definition.create_runtime(input={ "step": "3" }).unwrap()
@@ -378,7 +400,7 @@ test "state with input initializes from actual page input" {
 }
 
 ///|
-fn resource_label(status : Status[String]) -> String {
+fn resource_label(status : @minimoon.Status[String]) -> String {
   match status {
     Pending => "pending"
     Loaded(value) => "loaded:" + value
@@ -389,16 +411,16 @@ fn resource_label(status : Status[String]) -> String {
 ///|
 test "resource runs one initial command and records success or failure" {
   let success_loads = Ref(0)
-  let success = page(
+  let success = @minimoon.page(
     id="val_resource_success",
-    route=route("pages/val_resource_success/val_resource_success"),
+    route=@minimoon.route("pages/val_resource_success/val_resource_success"),
     title="Val Resource Success",
     build=_ => {
-      let status = create_resource(emit => {
+      let status = @minimoon.create_resource(emit => {
         success_loads.val += 1
         emit(Ok("ready"))
       })
-      status.view(status => p(resource_label(status)))
+      status.view(status => @minimoon.p(resource_label(status)))
     },
   )
   let success_runtime = success.create_runtime().unwrap()
@@ -408,16 +430,16 @@ test "resource runs one initial command and records success or failure" {
   assert_eq(success_runtime.snapshot().contains("loaded:ready"), true)
   assert_eq(success_loads.val, 1)
 
-  let failure = page(
+  let failure = @minimoon.page(
     id="val_resource_failure",
-    route=route("pages/val_resource_failure/val_resource_failure"),
+    route=@minimoon.route("pages/val_resource_failure/val_resource_failure"),
     title="Val Resource Failure",
     build=_ => {
-      let status = create_resource(emit => {
+      let status = @minimoon.create_resource(emit => {
         let error : Error = Failure::Failure("offline")
         emit(Err(error))
       })
-      status.view(status => p(resource_label(status)))
+      status.view(status => @minimoon.p(resource_label(status)))
     },
   )
   let failure_runtime = failure.create_runtime().unwrap()
@@ -435,42 +457,42 @@ priv enum ResourceScopeMessage {
 
 ///|
 test "resource completion from a disposed branch is ignored" {
-  let saved_emit : Ref[Emit[Result[String, Error]]?] = Ref(None)
-  let definition = page(
+  let saved_emit : Ref[@minimoon.Emit[Result[String, Error]]?] = Ref(None)
+  let definition = @minimoon.page(
     id="val_resource_scope",
-    route=route("pages/val_resource_scope/val_resource_scope"),
+    route=@minimoon.route("pages/val_resource_scope/val_resource_scope"),
     title="Val Resource Scope",
     build=_ => {
-      let (visible, emit_visible) = create_pure_state(true, update=(
+      let (visible, emit_visible) = @minimoon.create_pure_state(true, update=(
         _current,
         _message : ResourceScopeMessage,
       ) => false)
       let branch = visible.switch_by(
         (initial, _input) => {
           if initial {
-            let status = create_resource(resource_emit => {
+            let status = @minimoon.create_resource(resource_emit => {
               saved_emit.val = Some(resource_emit)
-              none
+              @minimoon.none
             })
-            status.view(status => p(resource_label(status)))
+            status.view(status => @minimoon.p(resource_label(status)))
           } else {
-            Val::constant(p("resource scope disposed"))
+            @minimoon.Val::constant(@minimoon.p("resource scope disposed"))
           }
         },
         by=value => value.to_string(),
       )
-      Val::map2(visible, branch, (_visible, branch) => {
+      @minimoon.Val::map2(visible, branch, (_visible, branch) => {
         let complete = match saved_emit.val {
           Some(resource_emit) => resource_emit(Ok("late"))
-          None => none
+          None => @minimoon.none
         }
-        div([
-          button(
+        @minimoon.div([
+          @minimoon.button(
             on_tap=emit_visible(DisposeResourceScope),
             event_key="resource-dispose",
             "dispose resource",
           ),
-          button(
+          @minimoon.button(
             on_tap=complete,
             event_key="resource-complete",
             "complete resource",

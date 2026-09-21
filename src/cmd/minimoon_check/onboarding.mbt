@@ -42,7 +42,7 @@ async fn onboarding_gate(
     (
       #|///|
       #|test "documented first edit preserves count and navigation" {
-      #|  let runtime = program().create_runtime().unwrap()
+      #|  let runtime = @home.program().create_runtime().unwrap()
       #|  let _ = runtime.lifecycle("onLoad", "{}")
       #|  let _ = runtime.lifecycle("onShow", "{}")
       #|  let _ = runtime.mount()
@@ -70,7 +70,7 @@ async fn onboarding_gate(
     (
       #|///|
       #|test "README counter compiles and increments" {
-      #|  let runtime = program().create_runtime().unwrap()
+      #|  let runtime = @readme_counter.program().create_runtime().unwrap()
       #|  let _ = runtime.lifecycle("onLoad", "{}")
       #|  let _ = runtime.lifecycle("onShow", "{}")
       #|  let _ = runtime.mount()

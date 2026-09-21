@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "renderer": "@mermaid-js/mermaid-cli",
-  "rendererVersion": "11.16.0",
+  "rendererVersion": "11.17.0",
   "scale": 3,
   "diagramCount": 21,
   "diagrams": [

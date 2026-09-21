@@ -17,11 +17,17 @@ pub(all) enum ColorMode {
   Light
   Dark
 } derive(Eq, @debug.Debug)
+pub fn ColorMode::equal(Self, Self) -> Bool
+pub fn ColorMode::not_equal(Self, Self) -> Bool
+pub fn ColorMode::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TextDirection {
   Ltr
   Rtl
 } derive(Eq, @debug.Debug)
+pub fn TextDirection::equal(Self, Self) -> Bool
+pub fn TextDirection::not_equal(Self, Self) -> Bool
+pub fn TextDirection::to_repr(Self) -> @debug.Repr
 
 pub struct Theme {
   mode : ColorMode
@@ -29,7 +35,10 @@ pub struct Theme {
   tokens : Tokens
 } derive(Eq, @debug.Debug)
 pub fn Theme::class_name(Self) -> String
+pub fn Theme::equal(Self, Self) -> Bool
+pub fn Theme::not_equal(Self, Self) -> Bool
 pub fn Theme::style(Self) -> String
+pub fn Theme::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Tokens {
   background : String
@@ -42,6 +51,9 @@ pub(all) struct Tokens {
   destructive : String
   radius : Int
 } derive(Eq, @debug.Debug)
+pub fn Tokens::equal(Self, Self) -> Bool
+pub fn Tokens::not_equal(Self, Self) -> Bool
+pub fn Tokens::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 

@@ -1,0 +1,166 @@
+// MoonBit 0.10.14 explicitly emits these pre-existing implicit trait methods.
+// Reviewed against ui/0.1/root.mbti.
+// The historical snapshot remains unchanged.
+// Existing AddonAlign implementations: @debug.Debug, Eq
+// Existing Alignment implementations: @debug.Debug, Eq
+// Existing AttachmentSize implementations: @debug.Debug, Eq
+// Existing AttachmentState implementations: @debug.Debug, Eq
+// Existing AvatarImageStatus implementations: @debug.Debug, Eq
+// Existing ButtonSize implementations: @debug.Debug, Eq
+// Existing ButtonVariant implementations: @debug.Debug, Eq
+// Existing ChartIndicator implementations: @debug.Debug, Eq
+// Existing ChartLegendPosition implementations: @debug.Debug, Eq
+// Existing CheckState implementations: @debug.Debug, Eq
+// Existing ChoiceOption implementations: @debug.Debug, Eq
+// Existing ComboboxState implementations: @debug.Debug, Eq
+// Existing DatePickerPreset implementations: @debug.Debug, Eq
+// Existing FieldState implementations: @debug.Debug, Eq
+// Existing InputOptions implementations: @debug.Debug, Eq
+// Existing MarkerVariant implementations: @debug.Debug, Eq
+// Existing MediaVariant implementations: @debug.Debug, Eq
+// Existing MenuIndicatorPlacement implementations: @debug.Debug, Eq
+// Existing MenuItem implementations: Eq
+// Existing MessageItem implementations: Eq
+// Existing MessageScrollDirection implementations: @debug.Debug, Eq
+// Existing Orientation implementations: @debug.Debug, Eq
+// Existing OtpScope implementations: @debug.Debug, Eq
+// Existing OverlayCloseReason implementations: @debug.Debug, Eq
+// Existing OverlayKind implementations: @debug.Debug, Eq
+// Existing Panel implementations: Eq
+// Existing ReactionSide implementations: @debug.Debug, Eq
+// Existing ResizablePane implementations: Eq
+// Existing Side implementations: @debug.Debug, Eq
+// Existing SidebarCollapsible implementations: @debug.Debug, Eq
+// Existing SidebarMenuButtonSize implementations: @debug.Debug, Eq
+// Existing SidebarMenuButtonVariant implementations: @debug.Debug, Eq
+// Existing SidebarSide implementations: @debug.Debug, Eq
+// Existing SidebarState implementations: @debug.Debug, Eq
+// Existing SidebarVariant implementations: @debug.Debug, Eq
+// Existing Size implementations: @debug.Debug, Eq
+// Existing TableState implementations: @debug.Debug, Eq
+// Existing TabsListVariant implementations: @debug.Debug, Eq
+// Existing Toast implementations: Eq
+// Existing ToastPosition implementations: @debug.Debug, Eq
+// Existing ToastVariant implementations: @debug.Debug, Eq
+// Existing Tone implementations: @debug.Debug, Eq
+pub fn AddonAlign::equal(Self, Self) -> Bool
+pub fn AddonAlign::not_equal(Self, Self) -> Bool
+pub fn AddonAlign::to_repr(Self) -> @debug.Repr
+pub fn Alignment::equal(Self, Self) -> Bool
+pub fn Alignment::not_equal(Self, Self) -> Bool
+pub fn Alignment::to_repr(Self) -> @debug.Repr
+pub fn AttachmentSize::equal(Self, Self) -> Bool
+pub fn AttachmentSize::not_equal(Self, Self) -> Bool
+pub fn AttachmentSize::to_repr(Self) -> @debug.Repr
+pub fn AttachmentState::equal(Self, Self) -> Bool
+pub fn AttachmentState::not_equal(Self, Self) -> Bool
+pub fn AttachmentState::to_repr(Self) -> @debug.Repr
+pub fn AvatarImageStatus::equal(Self, Self) -> Bool
+pub fn AvatarImageStatus::not_equal(Self, Self) -> Bool
+pub fn AvatarImageStatus::to_repr(Self) -> @debug.Repr
+pub fn ButtonSize::equal(Self, Self) -> Bool
+pub fn ButtonSize::not_equal(Self, Self) -> Bool
+pub fn ButtonSize::to_repr(Self) -> @debug.Repr
+pub fn ButtonVariant::equal(Self, Self) -> Bool
+pub fn ButtonVariant::not_equal(Self, Self) -> Bool
+pub fn ButtonVariant::to_repr(Self) -> @debug.Repr
+pub fn ChartIndicator::equal(Self, Self) -> Bool
+pub fn ChartIndicator::not_equal(Self, Self) -> Bool
+pub fn ChartIndicator::to_repr(Self) -> @debug.Repr
+pub fn ChartLegendPosition::equal(Self, Self) -> Bool
+pub fn ChartLegendPosition::not_equal(Self, Self) -> Bool
+pub fn ChartLegendPosition::to_repr(Self) -> @debug.Repr
+pub fn CheckState::equal(Self, Self) -> Bool
+pub fn CheckState::not_equal(Self, Self) -> Bool
+pub fn CheckState::to_repr(Self) -> @debug.Repr
+pub fn ChoiceOption::equal(Self, Self) -> Bool
+pub fn ChoiceOption::not_equal(Self, Self) -> Bool
+pub fn ChoiceOption::to_repr(Self) -> @debug.Repr
+pub fn ComboboxState::equal(Self, Self) -> Bool
+pub fn ComboboxState::not_equal(Self, Self) -> Bool
+pub fn ComboboxState::to_repr(Self) -> @debug.Repr
+pub fn DatePickerPreset::equal(Self, Self) -> Bool
+pub fn DatePickerPreset::not_equal(Self, Self) -> Bool
+pub fn DatePickerPreset::to_repr(Self) -> @debug.Repr
+pub fn FieldState::equal(Self, Self) -> Bool
+pub fn FieldState::not_equal(Self, Self) -> Bool
+pub fn FieldState::to_repr(Self) -> @debug.Repr
+pub fn InputOptions::equal(Self, Self) -> Bool
+pub fn InputOptions::not_equal(Self, Self) -> Bool
+pub fn InputOptions::to_repr(Self) -> @debug.Repr
+pub fn MarkerVariant::equal(Self, Self) -> Bool
+pub fn MarkerVariant::not_equal(Self, Self) -> Bool
+pub fn MarkerVariant::to_repr(Self) -> @debug.Repr
+pub fn MediaVariant::equal(Self, Self) -> Bool
+pub fn MediaVariant::not_equal(Self, Self) -> Bool
+pub fn MediaVariant::to_repr(Self) -> @debug.Repr
+pub fn MenuIndicatorPlacement::equal(Self, Self) -> Bool
+pub fn MenuIndicatorPlacement::not_equal(Self, Self) -> Bool
+pub fn MenuIndicatorPlacement::to_repr(Self) -> @debug.Repr
+pub fn MenuItem::equal(Self, Self) -> Bool
+pub fn MenuItem::not_equal(Self, Self) -> Bool
+pub fn MessageItem::equal(Self, Self) -> Bool
+pub fn MessageItem::not_equal(Self, Self) -> Bool
+pub fn MessageScrollDirection::equal(Self, Self) -> Bool
+pub fn MessageScrollDirection::not_equal(Self, Self) -> Bool
+pub fn MessageScrollDirection::to_repr(Self) -> @debug.Repr
+pub fn Orientation::equal(Self, Self) -> Bool
+pub fn Orientation::not_equal(Self, Self) -> Bool
+pub fn Orientation::to_repr(Self) -> @debug.Repr
+pub fn OtpScope::equal(Self, Self) -> Bool
+pub fn OtpScope::not_equal(Self, Self) -> Bool
+pub fn OtpScope::to_repr(Self) -> @debug.Repr
+pub fn OverlayCloseReason::equal(Self, Self) -> Bool
+pub fn OverlayCloseReason::not_equal(Self, Self) -> Bool
+pub fn OverlayCloseReason::to_repr(Self) -> @debug.Repr
+pub fn OverlayKind::equal(Self, Self) -> Bool
+pub fn OverlayKind::not_equal(Self, Self) -> Bool
+pub fn OverlayKind::to_repr(Self) -> @debug.Repr
+pub fn Panel::equal(Self, Self) -> Bool
+pub fn Panel::not_equal(Self, Self) -> Bool
+pub fn ReactionSide::equal(Self, Self) -> Bool
+pub fn ReactionSide::not_equal(Self, Self) -> Bool
+pub fn ReactionSide::to_repr(Self) -> @debug.Repr
+pub fn ResizablePane::equal(Self, Self) -> Bool
+pub fn ResizablePane::not_equal(Self, Self) -> Bool
+pub fn Side::equal(Self, Self) -> Bool
+pub fn Side::not_equal(Self, Self) -> Bool
+pub fn Side::to_repr(Self) -> @debug.Repr
+pub fn SidebarCollapsible::equal(Self, Self) -> Bool
+pub fn SidebarCollapsible::not_equal(Self, Self) -> Bool
+pub fn SidebarCollapsible::to_repr(Self) -> @debug.Repr
+pub fn SidebarMenuButtonSize::equal(Self, Self) -> Bool
+pub fn SidebarMenuButtonSize::not_equal(Self, Self) -> Bool
+pub fn SidebarMenuButtonSize::to_repr(Self) -> @debug.Repr
+pub fn SidebarMenuButtonVariant::equal(Self, Self) -> Bool
+pub fn SidebarMenuButtonVariant::not_equal(Self, Self) -> Bool
+pub fn SidebarMenuButtonVariant::to_repr(Self) -> @debug.Repr
+pub fn SidebarSide::equal(Self, Self) -> Bool
+pub fn SidebarSide::not_equal(Self, Self) -> Bool
+pub fn SidebarSide::to_repr(Self) -> @debug.Repr
+pub fn SidebarState::equal(Self, Self) -> Bool
+pub fn SidebarState::not_equal(Self, Self) -> Bool
+pub fn SidebarState::to_repr(Self) -> @debug.Repr
+pub fn SidebarVariant::equal(Self, Self) -> Bool
+pub fn SidebarVariant::not_equal(Self, Self) -> Bool
+pub fn SidebarVariant::to_repr(Self) -> @debug.Repr
+pub fn Size::equal(Self, Self) -> Bool
+pub fn Size::not_equal(Self, Self) -> Bool
+pub fn Size::to_repr(Self) -> @debug.Repr
+pub fn TableState::equal(Self, Self) -> Bool
+pub fn TableState::not_equal(Self, Self) -> Bool
+pub fn TableState::to_repr(Self) -> @debug.Repr
+pub fn TabsListVariant::equal(Self, Self) -> Bool
+pub fn TabsListVariant::not_equal(Self, Self) -> Bool
+pub fn TabsListVariant::to_repr(Self) -> @debug.Repr
+pub fn Toast::equal(Self, Self) -> Bool
+pub fn Toast::not_equal(Self, Self) -> Bool
+pub fn ToastPosition::equal(Self, Self) -> Bool
+pub fn ToastPosition::not_equal(Self, Self) -> Bool
+pub fn ToastPosition::to_repr(Self) -> @debug.Repr
+pub fn ToastVariant::equal(Self, Self) -> Bool
+pub fn ToastVariant::not_equal(Self, Self) -> Bool
+pub fn ToastVariant::to_repr(Self) -> @debug.Repr
+pub fn Tone::equal(Self, Self) -> Bool
+pub fn Tone::not_equal(Self, Self) -> Bool
+pub fn Tone::to_repr(Self) -> @debug.Repr

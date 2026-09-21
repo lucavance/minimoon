@@ -225,9 +225,9 @@ async fn emit_host_bridge(
   if @fs.exists(temp_root) {
     @fs.rmdir(temp_root, recursive=true)
   }
+  defer cleanup_compilation_directories([temp_root])
   write(source_file, source)
   let result = {
-    errdefer (if @fs.exists(temp_root) { @fs.rmdir(temp_root, recursive=true) })
     let _ = run_checked(
       "bun",
       [
@@ -310,6 +310,7 @@ async fn compile_page_contract(
   let temp_dir = join(app_root, temp_relative)
   let temp_root = join(app_root, ".minimoon-tmp")
   let target_dir = join(temp_root, "page-" + index.to_string())
+  defer cleanup_compilation_directories([temp_dir, temp_root])
   if @fs.exists(temp_dir) {
     @fs.rmdir(temp_dir, recursive=true)
   }
@@ -342,14 +343,6 @@ async fn compile_page_contract(
     },
   )
   let result = {
-    errdefer {
-      if @fs.exists(temp_dir) {
-        @fs.rmdir(temp_dir, recursive=true)
-      }
-      if @fs.exists(temp_root) {
-        @fs.rmdir(temp_root, recursive=true)
-      }
-    }
     let _ = run_checked(
       "moon",
       ["fmt", temp_relative + "/main.mbt"],
@@ -492,6 +485,7 @@ async fn compile_app_runtime(
   let temp_dir = join(app_root, temp_relative)
   let temp_root = join(app_root, ".minimoon-tmp")
   let target_dir = join(temp_root, "app-runtime")
+  defer cleanup_compilation_directories([temp_dir, temp_root])
   if @fs.exists(temp_dir) {
     @fs.rmdir(temp_dir, recursive=true)
   }
@@ -507,14 +501,6 @@ async fn compile_app_runtime(
     app_runtime_package_source(pages, contracts, application?),
   )
   let result = {
-    errdefer {
-      if @fs.exists(temp_dir) {
-        @fs.rmdir(temp_dir, recursive=true)
-      }
-      if @fs.exists(temp_root) {
-        @fs.rmdir(temp_root, recursive=true)
-      }
-    }
     let _ = run_checked(
       "moon",
       ["fmt", temp_relative + "/main.mbt"],

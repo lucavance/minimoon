@@ -2,7 +2,7 @@
 type Path = @path.Path
 
 ///|
-let renderer_version = "11.16.0"
+let renderer_version = "11.17.0"
 
 ///|
 let diagram_scale = 3
@@ -274,8 +274,8 @@ fn asset_readme(diagrams : Array[Diagram]) -> String {
     "bun run docs:diagrams\n" +
     "bun run docs:diagrams:check\n" +
     "```\n\n" +
-    "默认使用固定的 Mermaid CLI 11.16.0 和仓库内受控的无沙箱渲染配置；也可以通过 `MMDC_BIN` 和 `PUPPETEER_EXECUTABLE_PATH` 指定本地工具。\n\n" +
-    "> **English:**\n>\n> The command defaults to pinned Mermaid CLI 11.16.0 and the repository's controlled no-sandbox rendering configuration. `MMDC_BIN` and `PUPPETEER_EXECUTABLE_PATH` may select local tools.\n\n" +
+    "默认使用固定的 Mermaid CLI 11.17.0 和仓库内受控的无沙箱渲染配置；也可以通过 `MMDC_BIN` 和 `PUPPETEER_EXECUTABLE_PATH` 指定本地工具。\n\n" +
+    "> **English:**\n>\n> The command defaults to pinned Mermaid CLI 11.17.0 and the repository's controlled no-sandbox rendering configuration. `MMDC_BIN` and `PUPPETEER_EXECUTABLE_PATH` may select local tools.\n\n" +
     "## 图表索引 / Diagram Index\n\n" +
     "清单按正文出现顺序列出每张图的可缩放版本、高清位图和可审查源文件。\n\n" +
     "> **English:**\n>\n> The inventory follows document order and links each diagram's scalable export, high-resolution bitmap, and reviewable source.\n\n" +
@@ -364,12 +364,26 @@ async fn compare_file(expected : String, actual : String) -> Unit {
 }
 
 ///|
+async fn cleanup_diagram_temporary(temp : String) -> Unit nocancel {
+  @async.protect_from_cancel(() => {
+    try {
+      if @fs.exists(temp) {
+        @fs.rmdir(temp, recursive=true)
+      }
+    } catch {
+      error => println("could not remove diagram temporary directory: \{error}")
+    }
+  })
+}
+
+///|
 async fn check(root : String, canonical : String) -> Unit {
   let temp = @fs.tmpdir(prefix="minimoon-code-analysis-diagrams")
+  defer cleanup_diagram_temporary(temp)
   let generated = join(temp, "diagrams")
   let diagrams = render(root, generated) catch {
     error => {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_diagram_temporary(temp)
       abort("diagram check failed: \{error}")
     }
   }
@@ -383,7 +397,7 @@ async fn check(root : String, canonical : String) -> Unit {
     join(generated, "manifest.json"),
   )
   compare_file(join(canonical, "README.md"), join(generated, "README.md"))
-  @fs.rmdir(temp, recursive=true)
+  cleanup_diagram_temporary(temp)
   println("21 code-analysis diagrams are stable")
 }
 

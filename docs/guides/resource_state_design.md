@@ -1,6 +1,6 @@
 # Resource state
 
-Minimoon `0.1.0` provides one deliberately small, graph-owned, one-shot
+Minimoon provides one deliberately small, graph-owned, one-shot
 resource helper:
 
 ```moonbit

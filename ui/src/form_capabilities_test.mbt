@@ -2,25 +2,28 @@
 test "native form names and custom controlled values remain explicit" {
   let runtime = @testing.mount(
     form_test_page(_ => {
-      stack([
-        textarea_stateful(id="notes", options=input_options(name="notes")),
-        checkbox(id="accept", name="accept"),
-        switch(id="switch", name="notifications"),
-        radio_group(
+      @minimoon_ui.stack([
+        @minimoon_ui.textarea_stateful(
+          id="notes",
+          options=@minimoon_ui.input_options(name="notes"),
+        ),
+        @minimoon_ui.checkbox(id="accept", name="accept"),
+        @minimoon_ui.switch(id="switch", name="notifications"),
+        @minimoon_ui.radio_group(
           id="radio",
           name="plan",
           options=@minimoon.Val::constant([
-            choice_option(key="basic", label="Basic"),
+            @minimoon_ui.choice_option(key="basic", label="Basic"),
           ]),
         ),
-        native_select(
+        @minimoon_ui.native_select(
           id="picker",
           name="region",
           size=Small,
           invalid=true,
           required=true,
           options=@minimoon.Val::constant([
-            choice_option(key="eu", label="Europe"),
+            @minimoon_ui.choice_option(key="eu", label="Europe"),
           ]),
         ),
       ])
@@ -42,7 +45,7 @@ test "native form names and custom controlled values remain explicit" {
   let submission = form_test_page(_ => {
       let (submitted, update) = @minimoon.create_variable("")
       submitted.map(submitted => {
-        form(
+        @minimoon_ui.form(
           id="native-form",
           submit_key="submit",
           values={
@@ -75,15 +78,15 @@ test "native form names and custom controlled values remain explicit" {
 test "single toggle group normalizes duplicate and foreign initial keys" {
   let runtime = @testing.mount(
     form_test_page(_ => {
-      toggle_group(
+      @minimoon_ui.toggle_group(
         id="single",
         initial_value=["a", "a", "missing", "b"],
         size=Small,
         variant=Outline,
         spacing=6,
         options=@minimoon.Val::constant([
-          choice_option(key="a", label="A"),
-          choice_option(key="b", label="B"),
+          @minimoon_ui.choice_option(key="a", label="A"),
+          @minimoon_ui.choice_option(key="b", label="B"),
         ]),
         render=(option, selected) => {
           @minimoon.text(
@@ -118,15 +121,15 @@ test "single toggle group normalizes duplicate and foreign initial keys" {
 test "Select externally controlled open retains custom rendering and native selection guards" {
   let runtime = @testing.mount(
     form_test_page(page => {
-      root(page, context => {
+      @minimoon_ui.root(page, context => {
         let (open, set_open) = @minimoon.create_variable(true)
         let (value, set_value) = @minimoon.create_variable("a")
-        let selected = select_controlled(
+        let selected = @minimoon_ui.select_controlled(
           context,
           id="rich-select",
           options=@minimoon.Val::constant([
-            choice_option(key="a", label="Alpha"),
-            choice_option(key="b", label="Beta"),
+            @minimoon_ui.choice_option(key="a", label="Alpha"),
+            @minimoon_ui.choice_option(key="b", label="Beta"),
           ]),
           value~,
           on_change=set_value.map(value => _ => value),
@@ -141,12 +144,19 @@ test "Select externally controlled open retains custom rendering and native sele
             )
           },
           render_content=rows => {
-            select_content([select_label("Choices"), @minimoon.fragment(rows)])
+            @minimoon_ui.select_content([
+              @minimoon_ui.select_label("Choices"),
+              @minimoon.fragment(rows),
+            ])
           },
         )
         selected.map(node => {
           @minimoon.div([
-            button(id="external-open", on_tap=set_open(_ => true), "Open"),
+            @minimoon_ui.button(
+              id="external-open",
+              on_tap=set_open(_ => true),
+              "Open",
+            ),
             node,
           ])
         })
@@ -177,20 +187,30 @@ test "Select externally controlled open retains custom rendering and native sele
 ///|
 test "Select measures initial and programmatic opening and rejects disposed responses" {
   let runtime = form_test_page(page => {
-      root(page, context => {
+      @minimoon_ui.root(page, context => {
         let (open, change) = @minimoon.create_variable(true)
-        select_controlled(
+        @minimoon_ui.select_controlled(
           context,
           id="positioned",
           open~,
           on_open_change=change.map(open => _ => open),
-          options=@minimoon.Val::constant([choice_option(key="a", label="A")]),
+          options=@minimoon.Val::constant([
+            @minimoon_ui.choice_option(key="a", label="A"),
+          ]),
           value=@minimoon.Val::constant("a"),
           on_change=@minimoon.Emit(_ => @minimoon.none),
         ).map(node => {
           @minimoon.div([
-            button(event_key="close", on_tap=change(_ => false), "Close"),
-            button(event_key="open", on_tap=change(_ => true), "Open"),
+            @minimoon_ui.button(
+              event_key="close",
+              on_tap=change(_ => false),
+              "Close",
+            ),
+            @minimoon_ui.button(
+              event_key="open",
+              on_tap=change(_ => true),
+              "Open",
+            ),
             node,
           ])
         })

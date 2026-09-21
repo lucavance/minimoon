@@ -1,6 +1,6 @@
 ///|
 test "starter home owns state, lifecycle, controlled input, and navigation" {
-  let runtime = program().create_runtime().unwrap()
+  let runtime = @home.program().create_runtime().unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")
   let _ = runtime.lifecycle("onShow", "{}")
   let _ = runtime.mount()

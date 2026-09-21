@@ -4,7 +4,52 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
-## [0.2.1] - Unreleased
+## [0.2.2] - Unreleased
+
+### Changed
+
+- Require `moon 0.1.20260920` / `moonc v0.10.14` and pin both CI jobs to the
+  official `0.10.14+7d59c7ec9` prebuilt release. Update `moonbitlang/async` to
+  `0.22.1` and `moonbitlang/x` to `0.5.5`.
+- Use explicit package qualifiers in blackbox tests and explicit public trait
+  extensions to preserve existing derived methods under the new compiler.
+  Retain the checked public API and Contract `11` / ABI `13` / protocol `8`.
+- Advance the primary CI Node version to `26.9.0`, retaining the `>=24.20.0`
+  support floor and lower-bound CI job. Bun remains `1.4.2`.
+- Update weapp-tailwindcss to `5.5.7` in the repository and generated Starter,
+  refreshing the lockfile while retaining Tailwind `4.3.3` and PostCSS `8.5.28`.
+- Refresh the documentation diagram renderer to Mermaid CLI `11.17.0` and
+  regenerate its checked visual artifacts.
+- Pair core with UI `0.1.1`, whose declared core dependency is `0.2.2`.
+  Pin README onboarding to CLI `0.2.2` and document migration of existing
+  module dependencies, npm manifests and explicit MoonBit references.
+
+### Fixed
+
+- Keep build commit/rollback consistent when async operations are cancelled,
+  preserve recovery backups if restoration fails, and finish temporary-file
+  cleanup without cancellation interrupting it.
+- Restore configuration and generated source files when `add page` or
+  `add component` formatting fails or is cancelled, while preserving the
+  original failure for diagnosis.
+- Run the JavaScript-only stylesheet adapter with the supported Node runtime;
+  weapp-tailwindcss now requires `node:module.findPackageJSON`, which is absent
+  from the pinned Bun runtime. Bun remains the package manager and task runner.
+- Include the App-aware helper's explicit `App::preview` / `Page::contract`
+  calls and unused-import cleanups that were absent from the `0.2.1` archive.
+  Upgrade the CLI as well as the application library to receive this fix.
+
+### Validation and publication
+
+- Regenerate both fixtures and review their complete artifacts and fingerprints
+  with the new compiler and stylesheet dependencies.
+- This core/UI pair has explicit authorization for registry publication after
+  complete local candidate validation and both CI jobs pass for the frozen
+  commit, without waiting for new WeChat host validation. Public reports remain
+  `release: false` with Developer Tools `pending`; the actual release evidence
+  gates are unchanged. Registry availability is recorded in project status.
+
+## [0.2.1] - 2026-09-15
 
 ### Fixed
 

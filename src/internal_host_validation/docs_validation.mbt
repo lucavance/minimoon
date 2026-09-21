@@ -23,8 +23,8 @@ pub fn docs_check_source() -> String {
     #|  { name: "miniapp_draft_workbench", directory: "examples/miniapp_draft_workbench" },
     #|  { name: "minimoon_ui_showcase", directory: "ui/examples/showcase" },
     #|]
-    #|// UI is already published independently; a core patch does not rewrite its manifest or README.
-    #|const publishedUiVersions = { "lampclaw/minimoon": "0.2.0", "lampclaw/minimoon_ui": "0.1.0" }
+    #|// Validate the reviewed pair; historical publication facts live in project_status.md.
+    #|const currentUiVersions = { "lampclaw/minimoon": "0.2.2", "lampclaw/minimoon_ui": "0.1.1" }
     #|
     #|function moduleVersionProblems(source, content, expected) {
     #|  const problems = []
@@ -482,17 +482,17 @@ pub fn docs_check_source() -> String {
     #|    ["unqualified page interval owner", authoringOwnershipProblems("fixture.md", "The page renderer is the sole owner of live host interval keys"), "unqualified page-only authoring claim"],
     #|    ["unqualified subscription owner", authoringOwnershipProblems("fixture.md", "The renderer owns the only live host-subscription table"), "unqualified page-only authoring claim"],
     #|    ["wrong core module version", moduleVersionProblems("fixture.md", "lampclaw/minimoon@9.9.9", { "lampclaw/minimoon": productVersion }), "stale module version"],
-    #|    ["wrong UI module version", moduleVersionProblems("fixture.md", "lampclaw/minimoon_ui 9.9.9", { "lampclaw/minimoon_ui": "0.1.0" }), "stale module version"],
-    #|    ["rewritten published UI dependency", moduleVersionProblems("ui/moon.mod", 'import { "lampclaw/minimoon@0.2.1" }', { "lampclaw/minimoon": publishedUiVersions["lampclaw/minimoon"] }), "stale module version"],
-    #|    ["old core in current README", moduleVersionProblems("README.mbt.md", "lampclaw/minimoon@0.2.0", { "lampclaw/minimoon": "0.2.1" }), "stale module version"],
+    #|    ["wrong UI module version", moduleVersionProblems("fixture.md", "lampclaw/minimoon_ui 9.9.9", { "lampclaw/minimoon_ui": currentUiVersions["lampclaw/minimoon_ui"] }), "stale module version"],
+    #|    ["outdated UI dependency", moduleVersionProblems("ui/moon.mod", 'import { "lampclaw/minimoon@0.2.1" }', { "lampclaw/minimoon": currentUiVersions["lampclaw/minimoon"] }), "stale module version"],
+    #|    ["old core in current README", moduleVersionProblems("README.mbt.md", "lampclaw/minimoon@0.2.1", { "lampclaw/minimoon": productVersion }), "stale module version"],
     #|  ]
     #|  for (const [name, problems, expected] of cases) {
     #|    if (!problems.some((problem) => problem.includes(expected))) throw new Error(`documentation self-test did not reject ${name}`)
     #|  }
     #|  const accepted = [
-    #|    ["published UI keeps its dependency floor", moduleVersionProblems("ui/moon.mod", 'import { "lampclaw/minimoon@0.2.0" }', { "lampclaw/minimoon": publishedUiVersions["lampclaw/minimoon"] })],
-    #|    ["published UI documentation retains published versions", moduleVersionProblems("ui/README.mbt.md", "lampclaw/minimoon@0.2.0 and lampclaw/minimoon_ui@0.1.0", publishedUiVersions)],
-    #|    ["current core with independently published UI", moduleVersionProblems("README.mbt.md", "lampclaw/minimoon@0.2.1 and lampclaw/minimoon_ui@0.1.0", { "lampclaw/minimoon": "0.2.1", "lampclaw/minimoon_ui": "0.1.0" })],
+    #|    ["current UI requires the fixed core", moduleVersionProblems("ui/moon.mod", 'import { "lampclaw/minimoon@0.2.2" }', { "lampclaw/minimoon": currentUiVersions["lampclaw/minimoon"] })],
+    #|    ["current UI documentation matches the reviewed pair", moduleVersionProblems("ui/README.mbt.md", "lampclaw/minimoon@0.2.2 and lampclaw/minimoon_ui@0.1.1", currentUiVersions)],
+    #|    ["current core with independently versioned UI", moduleVersionProblems("README.mbt.md", "lampclaw/minimoon@0.2.2 and lampclaw/minimoon_ui@0.1.1", currentUiVersions)],
     #|    ["current versions", versionReferenceProblems("fixture.md", `App Contract v${contractVersion}; ABI ${runtimeVersion}; renderer protocol \`${protocolVersion}\``, expected)],
     #|    ["current version table", versionReferenceProblems("fixture.md", `| App Contract | ${contractVersion} |\n| runtime ABI | \`${runtimeVersion}\` |\n| renderer protocol | ${protocolVersion} |`, expected)],
     #|    ["current colon versions", versionReferenceProblems("fixture.md", `App Contract schema: ${contractVersion}; runtime API/state ABI: ${runtimeVersion}; renderer protocol: ${protocolVersion}`, expected)],
@@ -772,8 +772,8 @@ pub fn docs_check_source() -> String {
     #|}
     #|if (diagramManifest) {
     #|  if (diagramManifest.schemaVersion !== 1) fail("code-analysis diagram manifest schema must be 1")
-    #|  if (diagramManifest.renderer !== "@mermaid-js/mermaid-cli" || diagramManifest.rendererVersion !== "11.16.0") {
-    #|    fail("code-analysis diagram renderer is not pinned to Mermaid CLI 11.16.0")
+    #|  if (diagramManifest.renderer !== "@mermaid-js/mermaid-cli" || diagramManifest.rendererVersion !== "11.17.0") {
+    #|    fail("code-analysis diagram renderer is not pinned to Mermaid CLI 11.17.0")
     #|  }
     #|  if (diagramManifest.scale !== 3 || diagramManifest.diagramCount !== 21 || !Array.isArray(diagramManifest.diagrams)) {
     #|    fail("code-analysis diagram manifest count or scale is invalid")
@@ -842,13 +842,13 @@ pub fn docs_check_source() -> String {
     #|
     #|if (!read("moon.mod").includes(`version = "${productVersion}"`)) fail("moon.mod product version differs from internal_versions")
     #|const uiModuleVersion = read("ui/moon.mod").match(/^version\s*=\s*"([^"]+)"/m)?.[1]
-    #|if (uiModuleVersion !== publishedUiVersions["lampclaw/minimoon_ui"]) fail("ui/moon.mod differs from the independently published UI version")
-    #|for (const problem of moduleVersionProblems("ui/moon.mod", read("ui/moon.mod"), { "lampclaw/minimoon": publishedUiVersions["lampclaw/minimoon"] })) fail(problem)
+    #|if (uiModuleVersion !== currentUiVersions["lampclaw/minimoon_ui"]) fail("ui/moon.mod differs from the reviewed UI version")
+    #|for (const problem of moduleVersionProblems("ui/moon.mod", read("ui/moon.mod"), { "lampclaw/minimoon": currentUiVersions["lampclaw/minimoon"] })) fail(problem)
     #|const moduleVersions = { "lampclaw/minimoon": productVersion, "lampclaw/minimoon_ui": uiModuleVersion }
     #|for (const source of ["README.mbt.md", "README.zh-CN.mbt.md"]) {
     #|  for (const problem of moduleVersionProblems(source, read(source), moduleVersions)) fail(problem)
     #|}
-    #|for (const problem of moduleVersionProblems("ui/README.mbt.md", read("ui/README.mbt.md"), publishedUiVersions)) fail(problem)
+    #|for (const problem of moduleVersionProblems("ui/README.mbt.md", read("ui/README.mbt.md"), currentUiVersions)) fail(problem)
     #|for (const fixture of fixtures) {
     #|  for (const problem of moduleVersionProblems(fixture.directory + "/moon.mod", read(fixture.directory + "/moon.mod"), { "lampclaw/minimoon": productVersion })) fail(problem)
     #|}
@@ -869,7 +869,7 @@ pub fn docs_check_source() -> String {
     #|    "docs/README.md", "docs/guides/miniapp_quickstart.md", "docs/project_status.md", "docs/roadmap.md",
     #|    "docs/architecture.md", "docs/operations/release_candidate_handoff.md", "docs/guides/http.md",
     #|    "docs/guides/shared_state.md", "docs/guides/native_navigation.md",
-    #|    "moon install lampclaw/minimoon/cmd/minimoon", "minimoon init my-app", "minimoon verify . --candidate", "my-app/dist/",
+    #|    `moon install lampclaw/minimoon/cmd/minimoon@${productVersion}`, "minimoon init my-app", "minimoon verify . --candidate", "my-app/dist/",
     #|    "src/pages/home/page.mbt", 'name: "My App"', "Hello My App", "create_variable", "count.view",
     #|  ]) {
     #|    if (!content.includes(token)) fail(readme + ": missing onboarding fact: " + token)

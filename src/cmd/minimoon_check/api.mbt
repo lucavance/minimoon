@@ -270,9 +270,10 @@ async fn api_suite(root : String) -> Unit {
     require_file(root, source)
     let baseline_path = baseline_dir + "/" + snapshot
     require_file(root, baseline_path)
-    let violations = api_compatibility_violations(
+    let violations = api_explicit_method_violations(
       @fs.read_file(join(root, baseline_path)).text(),
       @fs.read_file(join(root, source)).text(),
+      api_reviewed_explicit_methods(root, label),
       exact,
     )
     guard violations.is_empty() else {

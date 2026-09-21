@@ -1,0 +1,19 @@
+// MoonBit 0.10.14 explicitly emits these pre-existing implicit trait methods.
+// Reviewed against ui/0.1/theme.mbti.
+// The historical snapshot remains unchanged.
+// Existing ColorMode implementations: @debug.Debug, Eq
+// Existing TextDirection implementations: @debug.Debug, Eq
+// Existing Theme implementations: @debug.Debug, Eq
+// Existing Tokens implementations: @debug.Debug, Eq
+pub fn ColorMode::equal(Self, Self) -> Bool
+pub fn ColorMode::not_equal(Self, Self) -> Bool
+pub fn ColorMode::to_repr(Self) -> @debug.Repr
+pub fn TextDirection::equal(Self, Self) -> Bool
+pub fn TextDirection::not_equal(Self, Self) -> Bool
+pub fn TextDirection::to_repr(Self) -> @debug.Repr
+pub fn Theme::equal(Self, Self) -> Bool
+pub fn Theme::not_equal(Self, Self) -> Bool
+pub fn Theme::to_repr(Self) -> @debug.Repr
+pub fn Tokens::equal(Self, Self) -> Bool
+pub fn Tokens::not_equal(Self, Self) -> Bool
+pub fn Tokens::to_repr(Self) -> @debug.Repr

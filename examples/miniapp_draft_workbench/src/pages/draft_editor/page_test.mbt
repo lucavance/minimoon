@@ -3,7 +3,7 @@ fn open_editor(
   app : @minimoon.AppRuntime[@application.Deps],
 ) -> @minimoon.PageRuntime {
   let page = app
-    .create_page(program(app.deps()), input={ "from": "test" })
+    .create_page(@draft_editor.program(app.deps()), input={ "from": "test" })
     .unwrap()
   ignore(page.lifecycle("onLoad", "{\"from\":\"test\"}"))
   ignore(page.lifecycle("onShow", "{}"))
@@ -54,7 +54,9 @@ test "editor rejects malformed route input before graph creation" {
       { "from": "test", "mode": "edit", "id": "-1" },
       { "from": "test", "mode": "edit", "id": "oops" },
     ] {
-    assert_true(app.create_page(program(app.deps()), input=fields) is Err(_))
+    assert_true(
+      app.create_page(@draft_editor.program(app.deps()), input=fields) is Err(_),
+    )
   }
 }
 

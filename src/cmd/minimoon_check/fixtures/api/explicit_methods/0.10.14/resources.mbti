@@ -1,0 +1,15 @@
+// MoonBit 0.10.14 explicitly emits these pre-existing implicit trait methods.
+// Reviewed against 0.2/resources.mbti.
+// The historical snapshot remains unchanged.
+// Existing ResourceAsset implementations: @debug.Debug, Eq
+// Existing ResourceBundle implementations: @debug.Debug, Eq
+// Existing ResourceContent implementations: @debug.Debug, Eq
+pub fn ResourceAsset::equal(Self, Self) -> Bool
+pub fn ResourceAsset::not_equal(Self, Self) -> Bool
+pub fn ResourceAsset::to_repr(Self) -> @debug.Repr
+pub fn ResourceBundle::equal(Self, Self) -> Bool
+pub fn ResourceBundle::not_equal(Self, Self) -> Bool
+pub fn ResourceBundle::to_repr(Self) -> @debug.Repr
+pub fn ResourceContent::equal(Self, Self) -> Bool
+pub fn ResourceContent::not_equal(Self, Self) -> Bool
+pub fn ResourceContent::to_repr(Self) -> @debug.Repr

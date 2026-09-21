@@ -12,6 +12,7 @@ fn dynamic_app_host_smoke_source() -> String {
 ///|
 async fn dynamic_app_host_smoke(root : String, page_file : String) -> Unit {
   let temp = check_temporary("minimoon-dynamic-app-smoke")
+  defer cleanup_check_temporary(temp)
   let script = join(temp, "host_smoke.cjs")
   @fs.write_file(
     script,
@@ -25,12 +26,12 @@ async fn dynamic_app_host_smoke(root : String, page_file : String) -> Unit {
     cwd=root,
   ) catch {
     err => {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_check_temporary(temp)
       abort("failed to start dynamic renderer bridge smoke: \{err}")
     }
   }
   let output = stdout.text() + "\n" + stderr.text()
-  @fs.rmdir(temp, recursive=true)
+  cleanup_check_temporary(temp)
   guard code == 0 else {
     abort("dynamic renderer bridge smoke failed: " + output.trim().to_owned())
   }
@@ -39,6 +40,7 @@ async fn dynamic_app_host_smoke(root : String, page_file : String) -> Unit {
 ///|
 async fn scheduler_host_smoke(root : String, host_file : String) -> Unit {
   let temp = check_temporary("minimoon-scheduler-smoke")
+  defer cleanup_check_temporary(temp)
   let script = join(temp, "scheduler_smoke.cjs")
   @fs.write_file(
     script,
@@ -57,12 +59,12 @@ async fn scheduler_host_smoke(root : String, host_file : String) -> Unit {
     cwd=root,
   ) catch {
     err => {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_check_temporary(temp)
       abort("failed to start scheduler host smoke: \{err}")
     }
   }
   let output = stdout.text() + "\n" + stderr.text()
-  @fs.rmdir(temp, recursive=true)
+  cleanup_check_temporary(temp)
   guard code == 0 else {
     abort("scheduler host smoke failed: " + output.trim().to_owned())
   }
@@ -89,6 +91,7 @@ async fn navigation_host_smoke(
   page_files : Array[String],
 ) -> Unit {
   let temp = check_temporary("minimoon-navigation-smoke")
+  defer cleanup_check_temporary(temp)
   let script = join(temp, "host_smoke.cjs")
   @fs.write_file(
     script,
@@ -102,12 +105,12 @@ async fn navigation_host_smoke(
     cwd=root,
   ) catch {
     err => {
-      @fs.rmdir(temp, recursive=true)
+      cleanup_check_temporary(temp)
       abort("failed to start navigation bridge smoke: \{err}")
     }
   }
   let output = stdout.text() + "\n" + stderr.text()
-  @fs.rmdir(temp, recursive=true)
+  cleanup_check_temporary(temp)
   guard code == 0 else {
     abort("navigation bridge smoke failed: " + output.trim().to_owned())
   }
