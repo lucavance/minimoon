@@ -8,8 +8,8 @@ or `setData` is needed.
 
 ## Project status
 
-This source documents core `lampclaw/minimoon 0.2.3` and optional
-`lampclaw/minimoon_ui 0.1.1`, both pre-1.0. Check
+This source documents core `lampclaw/minimoon 0.2.4` and optional
+`lampclaw/minimoon_ui 0.1.2`, both pre-1.0. Check
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
 for registry availability before following the fixed-version installation below.
 Until that version is available, use the [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
@@ -28,7 +28,7 @@ global `vp 0.3.3` and WeChat Developer Tools with Skyline support.
 Git is needed for the optional source development workflow.
 Both CI jobs pin `0.10.14+7d59c7ec9` (`moon 0.1.20260920`).
 Upgrade older MoonBit installations before using this source or these packages.
-CI covers Node 24.20.0 and 26.9.0.
+CI covers Node 24.20.0 and 26.10.0.
 See [environment setup](docs/guides/miniapp_quickstart.md#prerequisites) for
 version checks and the pinned CI toolchain.
 
@@ -40,7 +40,7 @@ commands in a terminal with MoonBit and `vp` available:
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon@0.2.3
+moon install lampclaw/minimoon/cmd/minimoon@0.2.4
 minimoon --version
 minimoon init my-app
 cd my-app
@@ -60,15 +60,16 @@ resolved from Mooncakes; no `moon.work` or framework checkout is needed.
 Do not pass `--minimoon-root` for this setup. `vp install` installs the app's
 style build tools.
 
-Confirm `minimoon --version` reports `0.2.3`; check PATH if another installed CLI
+Confirm `minimoon --version` reports `0.2.4`; check PATH if another installed CLI
 is selected. See [fixed-version installation](docs/guides/miniapp_quickstart.md#install-a-specific-version)
 and [upgrading an existing app](docs/reference/compatibility_and_upgrades.md#upgrade-procedure).
 To develop the framework or use unpublished changes, follow the separate
 [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
 
-The `0.2.3` CLI routes its JavaScript tools through `vp`, retaining Bun
-`1.4.2` internally and Node for stylesheet processing. It includes the earlier
-App-aware helper and MoonBit compiler compatibility fixes. The default Starter
+The `0.2.4` CLI routes its JavaScript tools through `vp`, retaining Bun
+`1.4.2` internally and Node for stylesheet processing. This patch fixes keyed
+list growth, nested branch visibility, lifecycle decode failures, App timer
+verification cleanup and custom output paths. The default Starter
 still has no `application` entry; follow [shared state](docs/guides/shared_state.md) to add one.
 Upgrade both the CLI and the application dependency when migrating an existing app.
 
@@ -81,9 +82,10 @@ For your AppID, edit only the ignored private configuration described in the
 You should see **Hello Minimoon**, a counter starting at **0**, a name input and
 **Open details**. Tap **+1**: the counter becomes **1**. Open Details and return.
 A passed CLI check is automated validation, not proof that these host interactions passed.
-Core `0.2.3` publication is authorized after both CI jobs pass without waiting
-for new WeChat host validation; host status remains pending. UI stays at the
-already published `0.1.1` and does not need republication.
+Core `0.2.4` and UI `0.1.2` publication is authorized after complete local
+candidate checks and both CI jobs pass without waiting for new WeChat host
+validation; host status remains pending. UI `0.1.2` fixes Slider touch
+cancellation and declares core `0.2.4`.
 See the [scoped release exception](docs/operations/release_candidate_handoff.md#scoped-publication-exception).
 
 ### Make your first change

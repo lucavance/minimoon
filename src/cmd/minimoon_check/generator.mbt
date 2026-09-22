@@ -478,6 +478,7 @@ async fn generator_suite(root : String) -> Unit {
     "install", "--bin", bin, "--path", "src/cmd/minimoon",
   ])
   let executable = join(bin, "minimoon")
+  verification_regression_gate(root, executable)
   run(root, "Installed CLI help", executable, ["--help"])
   run(root, "Installed CLI version", executable, ["--version"])
   require_command_failure(

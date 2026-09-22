@@ -102,7 +102,7 @@ async fn vp_toolchain_policy(root : String) -> Unit {
   guard installers.length() == 2 &&
     installers.all(line => {
       line.contains(
-        "voidzero-dev/setup-vp@49c3e4e92c52e7f8392712a9267bbe71c5ab30e5",
+        "voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f",
       )
     }) else {
     abort("both CI jobs must pin the reviewed setup-vp action")

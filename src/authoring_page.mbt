@@ -1,5 +1,8 @@
 ///|
-priv struct GraphMessage(Cmd)
+priv enum GraphMessage {
+  GraphCommand(Cmd)
+  PreparedLifecycle(Cmd, Array[@runtime.Cmd[GraphMessage]])
+}
 
 ///|
 struct PageRuntime(
@@ -143,7 +146,7 @@ fn collect_intervals(
       }
     @val.SubEvery(key, interval_ms, command) =>
       entries.push(
-        @renderer.every(key~, interval_ms~, msg=GraphMessage(command)),
+        @renderer.every(key~, interval_ms~, msg=GraphCommand(command)),
       )
   }
 }
@@ -172,7 +175,7 @@ fn collect_runtime_commands(
     @val.CmdEffect(start) =>
       output.push(
         @runtime.local_effect((emit, finish) => {
-          start(command => emit(GraphMessage(Cmd(command))), finish)
+          start(command => emit(GraphCommand(Cmd(command))), finish)
         }),
       )
     @val.CmdHostEffect(capability, payload, resolve) =>
@@ -185,7 +188,7 @@ fn collect_runtime_commands(
               @runtime.HostEffectErr(phase, message, payload) =>
                 @val.HostErr(phase, message, payload)
             }
-            GraphMessage(Cmd(resolve(converted)))
+            GraphCommand(Cmd(resolve(converted)))
           },
         ),
       )
@@ -222,9 +225,14 @@ fn graph_update(
   epoch : Int,
   initialized : Ref[Bool],
 ) -> (Int, @runtime.Cmd[GraphMessage]) {
-  graph.begin()
-  let commands : Array[@runtime.Cmd[GraphMessage]] = []
-  graph.run(fn() { collect_runtime_commands(message.0, commands) })
+  let (command, commands) = match message {
+    GraphCommand(command) => {
+      graph.begin()
+      (command, [])
+    }
+    PreparedLifecycle(command, commands) => (command, commands)
+  }
+  graph.run(fn() { collect_runtime_commands(command, commands) })
   let revision = graph.candidate_revision()
   if revision == epoch {
     graph.commit()
@@ -236,7 +244,7 @@ fn graph_update(
       @runtime.local_effect((emit, finish) => {
         let pending = graph.take_initial_command()
         if graph_command_has_runtime_work(pending) {
-          emit(GraphMessage(Cmd(pending)))
+          emit(GraphCommand(Cmd(pending)))
         }
         finish()
         fn() {  }
@@ -272,9 +280,15 @@ struct Page {
     @renderer.PageProgram[Int, GraphMessage],
     @val.Graph,
     PageLayoutState,
+    Ref[Bool],
   )
   make_program : (Map[String, String], PageLayout) -> Result[
-    (@renderer.PageProgram[Int, GraphMessage], @val.Graph, PageLayoutState),
+    (
+      @renderer.PageProgram[Int, GraphMessage],
+      @val.Graph,
+      PageLayoutState,
+      Ref[Bool],
+    ),
     DecodeError,
   ]
 }
@@ -299,7 +313,7 @@ pub fn Page::initial_tree(
   self : Page,
   layout? : PageLayout = PageLayout::unavailable(),
 ) -> Json {
-  let (program, graph, _) = (self.make_preview)(layout)
+  let (program, graph, _, _) = (self.make_preview)(layout)
   let value = program.initial_tree()
   graph.dispose()
   value
@@ -307,7 +321,7 @@ pub fn Page::initial_tree(
 
 ///|
 pub fn Page::contract(self : Page) -> String {
-  let (program, graph, _) = (self.make_preview)(PageLayout::unavailable())
+  let (program, graph, _, _) = (self.make_preview)(PageLayout::unavailable())
   let value = program.contract()
   graph.dispose()
   value
@@ -315,7 +329,7 @@ pub fn Page::contract(self : Page) -> String {
 
 ///|
 pub fn Page::contract_json(self : Page) -> Json {
-  let (program, graph, _) = (self.make_preview)(PageLayout::unavailable())
+  let (program, graph, _, _) = (self.make_preview)(PageLayout::unavailable())
   let value = program.contract_json()
   graph.dispose()
   value
@@ -323,7 +337,7 @@ pub fn Page::contract_json(self : Page) -> Json {
 
 ///|
 pub fn Page::wxml(self : Page) -> String {
-  let (program, graph, _) = (self.make_preview)(PageLayout::unavailable())
+  let (program, graph, _, _) = (self.make_preview)(PageLayout::unavailable())
   let value = program.wxml()
   graph.dispose()
   value
@@ -336,7 +350,7 @@ pub fn Page::create_runtime(
   layout? : PageLayout = PageLayout::unavailable(),
 ) -> Result[PageRuntime, DecodeError] {
   let snapshot = input.copy()
-  let (program, graph, layout_state) = match
+  let (program, graph, layout_state, loaded) = match
     (self.make_program)(snapshot.copy(), layout) {
     Ok(value) => value
     Err(error) => return Err(error)
@@ -347,7 +361,7 @@ pub fn Page::create_runtime(
     disposed.val = true
     ignore(runtime.dispose())
   })
-  Ok(PageRuntime(runtime, graph, Ref(false), disposed, snapshot, layout_state))
+  Ok(PageRuntime(runtime, graph, loaded, disposed, snapshot, layout_state))
 }
 
 ///|
@@ -457,7 +471,6 @@ pub fn PageRuntime::lifecycle(
         "page_input_mismatch", "onLoad input differs from the runtime input snapshot",
       )
     }
-    self.2.val = true
   } else if self.entry_error() is Some(error) {
     return error
   }
@@ -553,6 +566,7 @@ fn[Input] make_page(
   let make_program = fn(input : Input, layout : PageLayout) {
     let graph = @val.Graph::new()
     let initialized = Ref(false)
+    let loaded = Ref(false)
     let (root, layout_state) = graph.build(fn() {
       let layout_state = PageLayoutState::new(
         graph,
@@ -571,27 +585,34 @@ fn[Input] make_page(
     ].map(hook => {
       let core_hook = @renderer.page_lifecycle_hook(hook.host_name())
       @renderer.lifecycle_event(core_hook, payload => {
-        let lifecycle_message = @val.CmdMessage(fn() {
-          match
-            lifecycle_subscription_command(
-              graph.current_subscriptions(),
-              hook.host_name(),
-              payload,
-            ) {
-            Ok(command) => command.0
-            Err(_) => none.0
+        // Show decoders must observe the latest layout and application values.
+        // Keep those writes provisional until every decoder and the view accept
+        // the same transaction; no effect starts during preparation.
+        graph.begin()
+        let commands : Array[@runtime.Cmd[GraphMessage]] = []
+        let decoded = graph.run(fn() {
+          if hook == Show {
+            collect_runtime_commands(layout_state.command(), commands)
+            collect_runtime_commands(Cmd(graph.refresh_shared()), commands)
           }
+          lifecycle_subscription_command(
+            graph.current_subscriptions(),
+            hook.host_name(),
+            payload,
+          )
         })
-        let command = if hook == Show {
-          batch([
-            layout_state.command(),
-            Cmd(@val.CmdMessage(fn() { graph.refresh_shared() })),
-            lifecycle_message,
-          ])
-        } else {
-          lifecycle_message
+        match decoded {
+          Err(error) => {
+            graph.rollback()
+            Err(@renderer.decode_error(error.message()))
+          }
+          Ok(command) => {
+            if hook == Load {
+              loaded.val = true
+            }
+            Ok(PreparedLifecycle(command, commands))
+          }
         }
-        Ok(GraphMessage(command))
       })
     })
     let initial_command = graph.take_initial_command()
@@ -614,7 +635,7 @@ fn[Input] make_page(
       },
       capabilities=capabilities.map(capability => capability.to_core()),
       lifecycle=lifecycle_events,
-      init=GraphMessage(
+      init=GraphCommand(
         Cmd(
           @val.CmdMessage(fn() {
             initialized.val = true
@@ -623,14 +644,14 @@ fn[Input] make_page(
         ),
       ),
       subscriptions=_ => graph_subscriptions(graph),
-      refresh=GraphMessage(
+      refresh=GraphCommand(
         batch([
           layout_state.command(),
           Cmd(@val.CmdMessage(fn() { graph.refresh_shared() })),
         ]),
       ),
     )
-    (program, graph, layout_state)
+    (program, graph, layout_state, loaded)
   }
   {
     id,

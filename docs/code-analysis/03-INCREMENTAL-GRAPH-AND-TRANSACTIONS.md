@@ -145,11 +145,11 @@ fn[Model : Eq] StateSlot::stage(self : StateSlot[Model], next : Model) -> Unit {
 
 ## 4. Scope、可见性与释放 / Scope, Visibility, and Disposal
 
-scope 形成一棵独立于 UI 节点树的所有权树。scope 保存 cleanup 与 visibility callback；父 scope 的隐藏/释放递归传播到子 scope。这里讨论的页面 `RootScope` 属于页面 graph，页面 dispose 时整棵所有权树只能释放一次。可选 App 拥有独立 graph 与 root scope；页面卸载只释放页面绑定，不释放 App。
+scope 形成一棵独立于 UI 节点树的所有权树。scope 保存 cleanup、visibility callback、本地活动状态和有效可见性；有效可见性由本地状态与父级可见性共同决定。父级恢复不会激活仍被本地隐藏的缓存分支。这里讨论的页面 `RootScope` 属于页面 graph，页面 dispose 时整棵所有权树只能释放一次。可选 App 拥有独立 graph 与 root scope；页面卸载只释放页面绑定，不释放 App。
 
 > **English:**
 >
-> Scopes form an ownership tree separate from the UI node tree. A scope stores cleanup and visibility callbacks, and parent hiding/disposal propagates recursively. The page `RootScope` discussed here belongs to the page graph, and disposing the page releases that ownership tree exactly once. An optional App owns a separate graph and root scope; page unload releases page bindings, not the App.
+> Scopes form an ownership tree separate from the UI node tree. A scope stores cleanup and visibility callbacks, local activation and effective visibility. Effective visibility combines local activation with the parent's visibility, so showing an ancestor cannot reactivate an inactive cached branch. The page `RootScope` belongs to the page graph and is disposed exactly once. An optional App owns a separate graph and root scope; page unload releases page bindings, not the App.
 
 ```mermaid
 flowchart TB
@@ -172,16 +172,21 @@ flowchart TB
 
 [SVG](assets/diagrams/svg/03-INCREMENTAL-GRAPH-AND-TRANSACTIONS-2.svg) · [PNG 3×](assets/diagrams/png/03-INCREMENTAL-GRAPH-AND-TRANSACTIONS-2.png) · [Mermaid](assets/diagrams/source/03-INCREMENTAL-GRAPH-AND-TRANSACTIONS-2.mmd)
 
-> **源码 / Source:** [`src/internal_duplix/duplix_scope.mbt`](../../src/internal_duplix/duplix_scope.mbt) · symbols: `RootScope::dispose`, `Scope::set_visible`, `Scope::dispose`
+> **源码 / Source:** [`src/internal_duplix/duplix_scope.mbt`](../../src/internal_duplix/duplix_scope.mbt) · symbols: `RootScope::dispose`, `Scope::refresh_visibility`, `Scope::dispose`
 
 ```moonbit
-fn Scope::set_visible(self : Scope, visible : Bool) -> Unit {
+fn Scope::refresh_visibility(self : Scope, parent_visible : Bool) -> Unit {
+  let visible = self.local_visible && parent_visible
+  if self.effective_visible == visible {
+    return
+  }
+  self.effective_visible = visible
   for callback in self.visibility {
     callback(visible)
   }
   for id in self.sub_scopes {
     if global_scopes.get(id) is Some(scope) {
-      scope.set_visible(visible)
+      scope.refresh_visibility(visible)
     }
   }
 }

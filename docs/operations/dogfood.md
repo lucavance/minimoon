@@ -45,11 +45,11 @@ three host paths:
 The canonical nine-route Draft Workbench fixture owns core release evidence; the
 independent six-page `ui/examples/showcase` owns UI release evidence. A paired
 core/UI host-acceptance claim requires both. The
-[core 0.2.3 publication exception](release_candidate_handoff.md#scoped-publication-exception)
+[core 0.2.4 publication exception](release_candidate_handoff.md#scoped-publication-exception)
 does not mark either fixture as host-validated. Dogfood results are application feedback, not
 evidence for either fixture, and must never be copied into or used to edit
 their evidence JSON manually. Record whether the dogfood consumer resolves
-core `0.2.3` alone or the core `0.2.3` / UI `0.1.1` pair, including
+core `0.2.4` alone or the core `0.2.4` / UI `0.1.2` pair, including
 any development workspace override.
 
 ## Observation record

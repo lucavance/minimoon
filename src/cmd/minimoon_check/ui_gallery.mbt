@@ -121,8 +121,9 @@ async fn build_verify_ui_gallery(
   release : Bool,
 ) -> Unit {
   let app_root = join(root, ui_gallery)
-  let _ = @build.build(root, join(app_root, "miniapp.minimoon.json"), mode)
-  let report = @verify.verify(app_root, release)
+  let config_path = join(app_root, "miniapp.minimoon.json")
+  let dist_dir = @build.build(root, config_path, mode)
+  let report = @verify.verify(app_root, release, dist_dir~, config_path~)
   guard json_string(report, "status") == "passed" else {
     abort("UI showcase verification failed")
   }

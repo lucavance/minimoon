@@ -24,6 +24,7 @@ priv enum SliderMessage {
   MoveDrag(@minimoon.TouchDetail)
   EndDrag(@minimoon.TouchDetail)
   CancelDrag
+  CancelDragTouch(@minimoon.TouchDetail)
   Measured(Int, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
 }
 
@@ -80,7 +81,10 @@ pub fn slider_values_controlled(
     update=(state, input, message, emit) => {
       let current = spec.normalize(input)
       match message {
-        CancelDrag => {
+        CancelDragTouch(detail) if !(state.drag is Some(drag) &&
+          slider_point(detail.changed_touches, drag.pointer) is Some(_)) =>
+          @minimoon.no_cmd(state)
+        CancelDrag | CancelDragTouch(_) => {
           let restore = state.drag
             .map(drag => on_change(drag.initial))
             .unwrap_or(@minimoon.none)
@@ -313,7 +317,7 @@ pub fn slider_values_controlled(
         on_touch_start=emit.map(detail => StartDrag(detail)),
         on_touch_move=emit.map(detail => MoveDrag(detail)),
         on_touch_end=emit.map(detail => EndDrag(detail)),
-        on_touch_cancel=emit.map(_ => CancelDrag),
+        on_touch_cancel=emit.map(detail => CancelDragTouch(detail)),
         [ui_container("slider-track", nodes, id=id + "-track")],
       )
     }

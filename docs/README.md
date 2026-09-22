@@ -7,7 +7,7 @@ The canonical source is the current `lucavance/minimoon` repository.
 
 New application authors should begin with the [quickstart](guides/miniapp_quickstart.md):
 confirm availability in [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md), install the registry
-CLI with `moon install lampclaw/minimoon/cmd/minimoon@0.2.3`,
+CLI with `moon install lampclaw/minimoon/cmd/minimoon@0.2.4`,
 create an independent Starter, preview it, then change its initial name and
 rebuild. Continue with [page authoring](guides/miniapp_authoring_example.md),
 [HTTP](guides/http.md), [navigation](guides/native_navigation.md),

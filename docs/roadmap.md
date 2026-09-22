@@ -4,21 +4,39 @@
 
 Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Once availability is recorded in project status, application
-authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.3` and
+authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.4` and
 `minimoon init my-app`. Source installation remains available for framework
 development and unpublished candidates. The current source pair is core
-`0.2.3` / UI `0.1.1`, with UI retaining its published core `0.2.2` declaration.
+`0.2.4` / UI `0.1.2`, with UI declaring core `0.2.4`.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
 dated feature commitments.
 
-## Core 0.2.3 vp migration
+## Core 0.2.4 / UI 0.1.2 corrections
+
+- Fix keyed batch growth and nested branch visibility during cache restoration
+  and rollback, preserving the existing public API and diff budgets.
+- Surface lifecycle decoder failures without committing candidate state or
+  effects; failed Load decoding remains retryable.
+- Dispose App resources after verification, bound child execution and honor
+  custom configuration/output paths throughout verification and evidence.
+- Preserve Slider gestures when unrelated pointers are canceled.
+- Publish core first, then the independently reviewed UI archive; validate new
+  registry consumers and upgrades from core `0.2.3` / UI `0.1.1`.
+
+The user authorizes both patch publications after complete local candidate checks
+and both CI jobs on the frozen commit, without waiting for new host validation.
+Notify the user of CI success and continue publication. Both CI handoff bundles
+remain pending for the user's validation on another machine; evidence gates
+are unchanged. See the [scoped release exception](operations/release_candidate_handoff.md#scoped-publication-exception).
+
+## Core 0.2.3 vp migration (completed)
 
 - Use global `vp 0.3.3` for JavaScript package management, repository tasks,
   internal tool launches, CI, documentation and generated Starter guidance.
   Bun `1.4.2` remains the managed package-manager/runtime backend.
-- Select Node `26.9.0` through `devEngines.runtime` and retain Node `>=24.20.0`
+- Select Node `26.10.0` through `devEngines.runtime` and retain Node `>=24.20.0`
   support with an explicit lower-bound CI environment. No `.node-version`
   or local `vite-plus`, Vite or Vitest dependency is introduced.
 - Retain the MoonBit `0.10.14+7d59c7ec9` toolchain, reviewed dependencies,
@@ -26,12 +44,8 @@ dated feature commitments.
 - Publish only core `0.2.3`; UI stays at the already published `0.1.1`.
   Validate new and upgraded Starters plus the combined registry consumer.
 
-Publication requires complete local candidate checks, both jobs on the frozen
-CI commit, the reviewed core archive and fresh registry consumers. The user
-explicitly authorizes this publication after CI without waiting for new WeChat
-host validation. Notify the user of CI success, then continue publication.
-Reports retain host status pending and `release: false`; actual evidence gates
-remain intact. See the [scoped release exception](operations/release_candidate_handoff.md#scoped-publication-exception).
+The completed core-only publication and its independent consumer results are
+recorded in [project status](project_status.md). It did not establish a host pass.
 
 ## Draft Workbench demonstration
 
@@ -166,9 +180,9 @@ is local and Git-ignored, just like the core fixture's evidence above.
 
 Freeze synchronized documentation, reviewed package contents, the source commit
 and both CI handoff bundles. Follow the
-[release runbook](operations/release_candidate_handoff.md): publish core `0.2.3`,
-then verify fresh registry CLI/core consumers and the existing UI `0.1.1` pair
-outside all workspaces. UI is not republished. Preserve actual-evidence gates
+[release runbook](operations/release_candidate_handoff.md): publish core `0.2.4`,
+verify fresh registry CLI/core consumers, then publish UI `0.1.2` and validate
+the pair outside all workspaces. Preserve actual-evidence gates
 and candidate report restoration even though this scoped publication does not
 wait for host acceptance. Record dates, source SHA and registry checks only
 after they happen. Current availability belongs in [project status](project_status.md),

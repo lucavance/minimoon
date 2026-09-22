@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "status": "passed",
   "release": false,
-  "artifactFingerprint": "fnv1a64-relpath-v2:916b526d37e0b911",
+  "artifactFingerprint": "fnv1a64-relpath-v2:2e5807c6e898a2e1",
   "checks": [
     {
       "name": "build-resources",
       "status": "passed",
-      "detail": "declared native provider assets exist below dist/assets and participate in the artifact fingerprint"
+      "detail": "declared native provider assets exist below the output assets directory and participate in the artifact fingerprint"
     },
     {
       "name": "native-tab-bar",

@@ -101,7 +101,7 @@ fn materialize_node(
           let key = materialized_event_key(binding, path)
           let _ = events.custom(key, binding.kind(), payload => {
             match binding.decode(payload) {
-              Ok(command) => Ok(GraphMessage(command))
+              Ok(command) => Ok(GraphCommand(command))
               Err(error) => Err(error)
             }
           })

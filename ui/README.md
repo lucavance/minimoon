@@ -1,8 +1,8 @@
 # Minimoon UI
 
 Native, touch-first Skyline components for Minimoon. Module
-`lampclaw/minimoon_ui 0.1.1` declares core `0.2.2`; this source guide uses
-the compatible core `lampclaw/minimoon 0.2.3` patch without republishing UI.
+`lampclaw/minimoon_ui 0.1.2` declares core `lampclaw/minimoon 0.2.4`.
+This patch keeps Slider gestures active when an unrelated touch is canceled.
 
 The fixed reference is RUI 0.1.1 in Rabbita 0.15.6, commit
 `b1291945fd0201a0b5b39513b88585d6122db7bc`. The library uses public Minimoon
@@ -14,7 +14,7 @@ upstream visual-recipe attribution are retained in [LICENSE](LICENSE) and
 ## Install
 
 Use `moon 0.1.20260920` / `moonc v0.10.14` or newer and the matching core CLI
-`0.2.3`. Global `vp 0.3.3` manages Node `26.9.0` and Bun `1.4.2`;
+`0.2.4`. Global `vp 0.3.3` manages Node `26.10.0` and Bun `1.4.2`;
 Node `>=24.20.0` remains supported and CI checks the lower boundary. Follow
 the [environment setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/miniapp_quickstart.md#prerequisites);
 no separate Bun installation or local `vite-plus` dependency is needed.
@@ -27,8 +27,8 @@ Add both modules to the application's TOML-style `moon.mod`:
 
 ```moonbit
 import {
-  "lampclaw/minimoon@0.2.3",
-  "lampclaw/minimoon_ui@0.1.1",
+  "lampclaw/minimoon@0.2.4",
+  "lampclaw/minimoon_ui@0.1.2",
 }
 ```
 
@@ -78,11 +78,11 @@ deterministic, but selecting one feature does not produce only its selectors.
 
 ## Upgrade an existing UI application
 
-Upgrade the CLI and your direct core dependency to `0.2.3`; keep UI at `0.1.1`.
-UI itself keeps its published core `0.2.2` declaration. Set Node `26.9.0` in
+Upgrade the CLI and your direct core dependency to `0.2.4`, and UI to `0.1.2`.
+UI also declares core `0.2.4`. Set Node `26.10.0` in
 `devEngines.runtime` while retaining `engines.node: ">=24.20.0"` and Bun
 `1.4.2` in `devEngines.packageManager`. Update
-an existing style `package.json` to weapp-tailwindcss `5.5.7`, keeping Tailwind
+an existing style `package.json` to weapp-tailwindcss `5.5.8`, keeping Tailwind
 `4.3.3`, PostCSS `8.5.28` and its override; run `vp install` to refresh the
 lockfile. `minimoon build` does not rewrite that manifest. Use explicit package
 qualifiers and public trait extensions where required by the new MoonBit
@@ -210,15 +210,12 @@ publish directly from this repository's `ui/` directory or run
 can inherit the root `.moonignore` `/ui/` exclusion and produce an empty archive. The repository gate packages an
 isolated source copy and validates its actual ZIP, required files and consumers.
 
-UI `0.1.1` is already published, with its original core `0.2.2` dependency.
-This core `0.2.3` migration updates repository guidance and consumers, but does
-not republish UI or change the occupied registry archive. The checked source
-archive remains `_build/publish/lampclaw-minimoon_ui-0.1.1.zip`; its current
-repository documentation may differ from the immutable published README.
-Future UI publications must use an unoccupied version and the independently
-extracted, reviewed archive workflow.
+The checked source archive is `_build/publish/lampclaw-minimoon_ui-0.1.2.zip`.
+Publish its reviewed contents from an independent directory after registry
+core `0.2.4` and fresh consumers pass. Previously published UI archives remain
+immutable; confirm that the new version is unoccupied before upload.
 
-For core `0.2.3`, the user authorizes publication after complete candidate checks
+For core `0.2.4` and UI `0.1.2`, the user authorizes publication after complete candidate checks
 and both CI jobs pass, without waiting for new host validation. Developer Tools
 remains pending, reports keep `release: false`, and no host pass is implied.
 The actual `verify --release` evidence gate is unchanged. Follow the

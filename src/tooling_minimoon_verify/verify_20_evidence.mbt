@@ -88,14 +88,20 @@ async fn sync_release_summary(
 }
 
 ///|
-pub async fn verify(app_root : String, require_devtools : Bool) -> Json {
+pub async fn verify(
+  app_root : String,
+  require_devtools : Bool,
+  dist_dir? : String,
+  config_path? : String,
+) -> Json {
+  let layout = artifact_layout(app_root, dist_dir?, config_path?)
   let manifest_file = join(app_root, "generated/manifest.json")
   guard @fs.exists(manifest_file) else {
     abort("generated/manifest.json is missing; run minimoon build first")
   }
   let manifest = read_json(manifest_file)
-  let checks = generated_checks(app_root, manifest)
-  let app = read_json(join(app_root, "dist/app.json"))
+  let checks = generated_checks(layout, manifest)
+  let app = read_json(join(layout.dist, "app.json"))
   let clean_custom_navigation = valid_custom_navigation_app_config(app)
   checks.push(
     status(
@@ -151,7 +157,7 @@ pub async fn verify(app_root : String, require_devtools : Bool) -> Json {
       },
     ),
   )
-  let fingerprint = artifact_fingerprint(app_root)
+  let fingerprint = fingerprint(layout)
   let current_evidence = if require_devtools {
     matching_evidence(app_root, fingerprint)
   } else {
@@ -181,6 +187,8 @@ pub async fn record_devtools(
   recorded_at : String,
   tool_version : String,
   notes : String,
+  dist_dir? : String,
+  config_path? : String,
 ) -> Json {
   guard status_value == "passed" || status_value == "failed" else {
     raise Failure::Failure("DevTools status must be passed or failed")
@@ -191,7 +199,8 @@ pub async fn record_devtools(
   guard tool_version != "" else {
     raise Failure::Failure("--tool-version is required")
   }
-  let config = read_json(join(app_root, "miniapp.minimoon.json"))
+  let layout = artifact_layout(app_root, dist_dir?, config_path?)
+  let config = read_json(layout.config_file)
   let summary_file = join(app_root, "generated/release_summary.json")
   guard @fs.exists(summary_file) &&
     string(read_json(summary_file), "mode") == "release" else {
@@ -207,7 +216,7 @@ pub async fn record_devtools(
     "recordedAt": Json::string(recorded_at),
     "tool": Json::string("WeChat Developer Tools"),
     "toolVersion": Json::string(tool_version),
-    "artifactFingerprint": Json::string(artifact_fingerprint(app_root)),
+    "artifactFingerprint": Json::string(fingerprint(layout)),
     "notes": Json::string(notes),
   })
   write_json(join(app_root, "generated/devtools.evidence.json"), evidence)

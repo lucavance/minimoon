@@ -1,15 +1,18 @@
 ///|
-async fn generated_checks(app_root : String, manifest : Json) -> Array[Json] {
+async fn generated_checks(
+  layout : ArtifactLayout,
+  manifest : Json,
+) -> Array[Json] {
+  let app_root = layout.app_root
   let checks : Array[Json] = []
-  checks.push(resource_assets_status(app_root, manifest))
-  checks.push(tab_bar_status(app_root, manifest))
-  checks.push(native_tab_host_status(app_root, manifest))
-  let dist = join(app_root, "dist")
-  let temp = join(app_root, ".minimoon-tmp/verify")
-  if @fs.exists(join(app_root, ".minimoon-tmp")) {
-    @fs.rmdir(join(app_root, ".minimoon-tmp"), recursive=true)
-  }
-  @fs.mkdir(temp, permission=0o700, recursive=true)
+  checks.push(resource_assets_status(app_root, manifest, dist_dir=layout.dist))
+  checks.push(tab_bar_status(app_root, manifest, dist_dir=layout.dist))
+  checks.push(native_tab_host_status(app_root, manifest, dist_dir=layout.dist))
+  let dist = layout.dist
+  let temp = @async.protect_from_cancel(() => {
+    @fs.tmpdir(prefix="minimoon-verify")
+  })
+  defer cleanup_verification(temp)
   let preload = join(temp, "preload.mjs")
   write(preload, @host_js.verify_preload_source())
   let page_files : Array[String] = []
@@ -184,6 +187,14 @@ async fn generated_checks(app_root : String, manifest : Json) -> Array[Json] {
       },
     ),
   )
-  @fs.rmdir(join(app_root, ".minimoon-tmp"), recursive=true)
   checks
+}
+
+///|
+async fn cleanup_verification(directory : String) -> Unit nocancel {
+  @async.protect_from_cancel(() => {
+    if @fs.exists(directory) {
+      @fs.rmdir(directory, recursive=true)
+    }
+  })
 }

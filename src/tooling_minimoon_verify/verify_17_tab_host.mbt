@@ -1,5 +1,9 @@
 ///|
-async fn native_tab_host_status(app_root : String, manifest : Json) -> Json {
+async fn native_tab_host_status(
+  app_root : String,
+  manifest : Json,
+  dist_dir? : String = join(app_root, "dist"),
+) -> Json {
   let routes = array(manifest, "pages").map(page => "/" + string(page, "route"))
   let tabs : Array[String] = []
   match object(manifest, "manifest").get("tabBar") {
@@ -30,7 +34,7 @@ async fn native_tab_host_status(app_root : String, manifest : Json) -> Json {
     "vp",
     @toolchain.bun_args([
       "--eval",
-      @host_js.native_tab_host_source(routes, tabs),
+      @host_js.native_tab_host_source(routes, tabs, dist_dir~),
     ]),
     app_root,
   )

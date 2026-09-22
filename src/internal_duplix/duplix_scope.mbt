@@ -11,6 +11,8 @@ let root_scope : @slotmap.Id = global_scopes.allocate_with(id => {
   sub_scopes: Set([]),
   cleanups: [],
   visibility: [],
+  local_visible: true,
+  effective_visible: true,
 })
 
 ///|
@@ -32,6 +34,8 @@ pub fn RootScope::new() -> RootScope {
       sub_scopes: Set([]),
       cleanups: [],
       visibility: [],
+      local_visible: true,
+      effective_visible: true,
     }),
     disposed: Ref(false),
   }
@@ -66,16 +70,21 @@ priv struct Scope {
   sub_scopes : Set[@slotmap.Id]
   cleanups : Array[() -> Unit]
   visibility : Array[(Bool) -> Unit]
+  mut local_visible : Bool
+  mut effective_visible : Bool
 }
 
 ///|
 fn[A] with_scope(f : (@slotmap.Id) -> A) -> A {
+  let parent = get_scope()
   let id = global_scopes.allocate_with(id => {
     id,
     parent: Some(current_scope.val),
     sub_scopes: Set([]),
     cleanups: [],
     visibility: [],
+    local_visible: true,
+    effective_visible: parent.effective_visible,
   })
   let result = current_scope.protect(id, () => f(id))
   if global_scopes.get(current_scope.val) is Some(scope) {
@@ -91,17 +100,28 @@ pub fn on_cleanup(f : () -> Unit) -> Unit {
 
 ///|
 pub fn on_visibility(f : (Bool) -> Unit) -> Unit {
-  get_scope().visibility.push(f)
+  let scope = get_scope()
+  scope.visibility.push(f)
+  // Registrants start active. A child built below a hidden ancestor must be
+  // inactive immediately, without adding initial shown callbacks elsewhere.
+  if !scope.effective_visible {
+    f(false)
+  }
 }
 
 ///|
-fn Scope::set_visible(self : Scope, visible : Bool) -> Unit {
+fn Scope::refresh_visibility(self : Scope, parent_visible : Bool) -> Unit {
+  let visible = self.local_visible && parent_visible
+  if self.effective_visible == visible {
+    return
+  }
+  self.effective_visible = visible
   for callback in self.visibility {
     callback(visible)
   }
   for id in self.sub_scopes {
     if global_scopes.get(id) is Some(scope) {
-      scope.set_visible(visible)
+      scope.refresh_visibility(visible)
     }
   }
 }
@@ -109,7 +129,12 @@ fn Scope::set_visible(self : Scope, visible : Bool) -> Unit {
 ///|
 fn set_scope_visible(id : @slotmap.Id, visible : Bool) -> Unit {
   if global_scopes.get(id) is Some(scope) {
-    scope.set_visible(visible)
+    scope.local_visible = visible
+    let parent_visible = match scope.parent {
+      Some(parent) => global_scopes[parent].effective_visible
+      None => true
+    }
+    scope.refresh_visibility(parent_visible)
   }
 }
 

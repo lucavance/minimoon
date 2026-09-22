@@ -25,7 +25,11 @@ fn safe_resource_asset(path : String) -> Bool {
 }
 
 ///|
-async fn resource_assets_status(app_root : String, manifest : Json) -> Json {
+async fn resource_assets_status(
+  app_root : String,
+  manifest : Json,
+  dist_dir? : String = join(app_root, "dist"),
+) -> Json {
   let errors : Array[String] = []
   match object(manifest, "manifest").get("resources") {
     None => ()
@@ -43,7 +47,7 @@ async fn resource_assets_status(app_root : String, manifest : Json) -> Json {
           if !safe_resource_asset(path) {
             errors.push("unsafe declared resource path: " + path)
           } else {
-            let file = join(app_root, "dist/" + path)
+            let file = join(dist_dir, path)
             if !@fs.exists(file) {
               errors.push("missing declared resource asset: " + path)
             } else if @fs.kind(file, follow_symlink=false) != @fs.Regular {
@@ -65,7 +69,7 @@ async fn resource_assets_status(app_root : String, manifest : Json) -> Json {
     "build-resources",
     errors.is_empty(),
     if errors.is_empty() {
-      "declared native provider assets exist below dist/assets and participate in the artifact fingerprint"
+      "declared native provider assets exist below the output assets directory and participate in the artifact fingerprint"
     } else {
       errors.join("; ")
     },

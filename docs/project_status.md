@@ -1,5 +1,35 @@
 # Project status
 
+The current source candidate is core `0.2.4` / UI `0.1.2`; UI declares core
+`0.2.4`. These versions are being prepared and are not yet recorded as published.
+The user authorizes publication after complete local candidate checks and both
+CI jobs on the frozen commit, while Developer Tools validation remains pending
+on another machine. The completed publication records below remain unchanged.
+
+## Dependency review for the 0.2.4 / 0.1.2 candidate
+
+The 2026-09-23 review selects `weapp-tailwindcss 5.5.8`, primary Node
+`26.10.0` and the SHA-pinned `setup-vp 1.21.1` action. The stylesheet update
+includes the PostCSS parser-instance fix for theme colors and opacity utilities
+in independent installations; the new Starter receives the same dependency
+and runtime pins. See the upstream [weapp changelog](https://github.com/sonofmagic/weapp-tailwindcss/blob/main/packages/weapp-tailwindcss/CHANGELOG.md),
+[PostCSS adapter changelog](https://github.com/sonofmagic/weapp-tailwindcss/blob/main/packages/postcss/CHANGELOG.md),
+[Node 26 changelog](https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V26.md)
+and [setup-vp release](https://github.com/voidzero-dev/setup-vp/releases/tag/v1.21.1).
+
+The refreshed Mooncakes index confirms `moonbitlang/async 0.22.1` and
+`moonbitlang/x 0.5.5` are already the latest non-yanked versions. The direct
+JavaScript dependencies Tailwind/CLI `4.3.3`, PostCSS `8.5.28`, Acorn `8.18.0`
+and `eslint-scope 9.1.2` are also current. MoonBit `0.10.14`, global `vp 0.3.3`
+and managed Bun `1.4.2` remain pinned. CI retains Node `24.20.0` as the supported
+lower-bound test; its purpose is compatibility coverage rather than selection
+of the newest Node 24 release. The existing lockfile advisory scan returned no
+findings; the refreshed lockfile and complete candidate must pass again before
+publication. Historical API consumers and publication records retain their
+original versions.
+
+## Previously published pair
+
 Minimoon core `0.2.3` was published to Mooncakes on **2026-09-21**.
 The independent `lampclaw/minimoon_ui 0.1.1` remains the existing published UI
 release and was **not republished**; its manifest still declares core `0.2.2`.
@@ -198,7 +228,7 @@ no published package was changed in response.
 ## Current implementation
 
 For application authors, the README and [quickstart](guides/miniapp_quickstart.md)
-start with `moon install lampclaw/minimoon/cmd/minimoon@0.2.3` and
+start with `moon install lampclaw/minimoon/cmd/minimoon@0.2.4` and
 `minimoon init my-app` after confirming registry availability here. This selects
 the documented CLI and creates an independent application; create it outside
 existing Moon workspaces. The
@@ -223,14 +253,15 @@ not real-host evidence. Both examples now default to public Apifox Echo; the liv
 probe covers Platform's ten cases, App draft echo after editor unload and the UI
 Form's typed echo. Changes to either fixture fingerprint require new host
 acceptance; public echo remains a testing service, not cloud persistence.
-Core's product version is `0.2.3`; Contract `11`,
+Core's source product version is `0.2.4`; Contract `11`,
 runtime ABI `13` and renderer protocol `8` do not change. The original `0.2.0`
 publication checkpoint below remains an immutable historical release.
 
 Core `0.2.1` includes the shared-host input fix: value edits
 do not replay unchanged native focus/selection properties. The draft title input
 has a taller layout intended to avoid clipping. Upgrade both the CLI and the
-application's core dependency to the current `0.2.3`, then regenerate all artifacts; the
+application's core dependency to the current source `0.2.4` after registry availability
+is recorded, then regenerate all artifacts; the
 `0.2.0` CLI does not include this fix. Changed artifact fingerprints require
 fresh real-host acceptance. Automated host-write checks do not establish native
 cursor or IME correctness.

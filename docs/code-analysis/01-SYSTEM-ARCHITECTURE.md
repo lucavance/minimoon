@@ -128,9 +128,14 @@ fn graph_update(
   message : GraphMessage,
   epoch : Int,
 ) -> (Int, @runtime.Cmd[GraphMessage]) {
-  graph.begin()
-  let commands : Array[@runtime.Cmd[GraphMessage]] = []
-  graph.run(fn() { collect_runtime_commands(message.0, commands) })
+  let (command, commands) = match message {
+    GraphCommand(command) => {
+      graph.begin()
+      (command, [])
+    }
+    PreparedLifecycle(command, commands) => (command, commands)
+  }
+  graph.run(fn() { collect_runtime_commands(command, commands) })
   let revision = graph.candidate_revision()
   if revision == epoch {
     graph.commit()
@@ -139,11 +144,11 @@ fn graph_update(
 }
 ```
 
-`graph_update` 不直接生成 UI。它开启候选事务、执行消息命令并返回候选 revision；真正的 `view` 在 renderer component 的 projection 阶段读取 graph。只有 projection 接受相同 revision 时才触发 commit，否则注册在候选事件表上的 rollback 回调恢复所有权状态。
+`graph_update` 不直接生成 UI。普通消息开启候选事务；生命周期消息复用解码准备阶段的事务，使 Show 解码器能读取最新布局和共享状态。解码失败会先回滚，成功后执行消息命令并返回候选 revision；真正的 `view` 在 renderer component 的 projection 阶段读取 graph。只有 projection 接受相同 revision 时才触发 commit，否则候选事件表上的 rollback 回调恢复所有权状态。上面的节选省略初始化命令的提交后排空逻辑。
 
 > **English:**
 >
-> `graph_update` does not directly generate UI. It begins a candidate transaction, executes the message command, and returns a candidate revision. The renderer component reads the graph during projection. Only an accepted projection of the same revision triggers commit; otherwise rollback callbacks registered with the candidate event table restore ownership state.
+> `graph_update` does not directly generate UI. Ordinary messages begin a transaction; lifecycle messages reuse the decoding preparation transaction so Show decoders observe current layout and shared values. Failed decoding rolls back first. Accepted messages execute their command and return a candidate revision. The renderer reads the graph during projection; acceptance commits, while rejection restores ownership through rollback callbacks. This excerpt omits the committed initialization-command drain.
 
 > **源码 / Source:** [`src/renderer_miniapp/page_program_20_runtime_entry.mbt`](../../src/renderer_miniapp/page_program_20_runtime_entry.mbt) · symbol: `PageRuntime`
 

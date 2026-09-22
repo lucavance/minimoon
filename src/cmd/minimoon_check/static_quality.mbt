@@ -11,7 +11,7 @@ let supported_node_engine = ">=24.20.0"
 let node_lts_floor = "24.20.0"
 
 ///|
-let primary_node_version = "26.9.0"
+let primary_node_version = "26.10.0"
 
 ///|
 let supported_bun_version = "1.4.2"

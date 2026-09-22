@@ -24,8 +24,8 @@ pub fn docs_check_source() -> String {
     #|  { name: "minimoon_ui_showcase", directory: "ui/examples/showcase" },
     #|]
     #|// The independently published UI module retains its reviewed core dependency.
-    #|const uiCoreDependency = "0.2.2"
-    #|const currentUiVersions = { "lampclaw/minimoon": productVersion, "lampclaw/minimoon_ui": "0.1.1" }
+    #|const uiCoreDependency = "0.2.4"
+    #|const currentUiVersions = { "lampclaw/minimoon": productVersion, "lampclaw/minimoon_ui": "0.1.2" }
     #|
     #|function moduleVersionProblems(source, content, expected) {
     #|  const problems = []
@@ -491,9 +491,9 @@ pub fn docs_check_source() -> String {
     #|    if (!problems.some((problem) => problem.includes(expected))) throw new Error(`documentation self-test did not reject ${name}`)
     #|  }
     #|  const accepted = [
-    #|    ["current UI requires the fixed core", moduleVersionProblems("ui/moon.mod", 'import { "lampclaw/minimoon@0.2.2" }', { "lampclaw/minimoon": uiCoreDependency })],
-    #|    ["current UI documentation matches the reviewed pair", moduleVersionProblems("ui/README.mbt.md", `lampclaw/minimoon@${productVersion} and lampclaw/minimoon_ui@0.1.1`, currentUiVersions)],
-    #|    ["current core with independently versioned UI", moduleVersionProblems("README.mbt.md", `lampclaw/minimoon@${productVersion} and lampclaw/minimoon_ui@0.1.1`, currentUiVersions)],
+    #|    ["current UI requires the fixed core", moduleVersionProblems("ui/moon.mod", 'import { "lampclaw/minimoon@0.2.4" }', { "lampclaw/minimoon": uiCoreDependency })],
+    #|    ["current UI documentation matches the reviewed pair", moduleVersionProblems("ui/README.mbt.md", `lampclaw/minimoon@${productVersion} and lampclaw/minimoon_ui@0.1.2`, currentUiVersions)],
+    #|    ["current core with independently versioned UI", moduleVersionProblems("README.mbt.md", `lampclaw/minimoon@${productVersion} and lampclaw/minimoon_ui@0.1.2`, currentUiVersions)],
     #|    ["current versions", versionReferenceProblems("fixture.md", `App Contract v${contractVersion}; ABI ${runtimeVersion}; renderer protocol \`${protocolVersion}\``, expected)],
     #|    ["current version table", versionReferenceProblems("fixture.md", `| App Contract | ${contractVersion} |\n| runtime ABI | \`${runtimeVersion}\` |\n| renderer protocol | ${protocolVersion} |`, expected)],
     #|    ["current colon versions", versionReferenceProblems("fixture.md", `App Contract schema: ${contractVersion}; runtime API/state ABI: ${runtimeVersion}; renderer protocol: ${protocolVersion}`, expected)],

@@ -127,6 +127,7 @@ fn embedded_inventory(
     SelectedLiterals(true, [
       ("const routes = ", 1),
       ("\nconst tabRoutes = ", 1),
+      ("\nconst dist = ", 1),
       ("\nconst abi = ", 1),
     ]),
   )
@@ -217,6 +218,46 @@ fn embedded_inventory(
       ] {
       add(toolchain_tests, "test:" + entry.0, "test", entry.1)
     }
+  }
+  let verify_tests = "src/tooling_minimoon_verify/layout_timeout_wbtest.mbt"
+  if sources.any(source => source.0 == verify_tests) {
+    exclude(
+      verify_tests, "test:custom output fingerprint excludes only its local private config",
+      "synthetic fingerprint file data, not executable JavaScript",
+    )
+    add(
+      verify_tests,
+      "test:verification timeout cancels the resident managed Bun process",
+      "test",
+      SelectedLiterals(false, [
+        ("require('node:fs')", 1),
+        ("try { process.kill(", 1),
+        (", 0); process.exitCode", 1),
+      ]),
+    )
+  }
+  let smoke_tests = "src/tooling_minimoon_verify/smoke_cleanup_wbtest.mbt"
+  if sources.any(source => source.0 == smoke_tests) {
+    add(
+      smoke_tests,
+      "test:host smoke drains Hide and cleans every App on success or failure",
+      "test",
+      SelectedLiterals(true, [
+        ("const log = ", 1),
+        (", ", 2),
+        (" + ':' + value", 1),
+        ("const mode = ", 1),
+        ("\n", 1),
+        ("App({ onHide()", 1),
+        ("require('./minimoon.app.js')", 1),
+      ]),
+    )
+  }
+  let verification_gate = "src/cmd/minimoon_check/verification_regression.mbt"
+  if sources.any(source => source.0 == verification_gate) {
+    exclude(
+      verification_gate, "fn:verification_regression_gate", "MoonBit App consumer source and CLI invocations, no JavaScript implementation",
+    )
   }
   let toolchain_policy_tests = "src/cmd/minimoon_check/toolchain_policy_wbtest.mbt"
   if sources.any(source => source.0 == toolchain_policy_tests) {

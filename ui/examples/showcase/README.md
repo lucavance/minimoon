@@ -1,7 +1,7 @@
 # Minimoon UI showcase
 
-This six-page verification application exercises `lampclaw/minimoon_ui 0.1.1`
-with core `lampclaw/minimoon 0.2.3`. It covers all 64 pinned RUI families plus
+This six-page verification application exercises `lampclaw/minimoon_ui 0.1.2`
+with core `lampclaw/minimoon 0.2.4`. It covers all 64 pinned RUI families plus
 Form and Theme, with native substitutions described in the
 [migration map](../../docs/migration.md).
 

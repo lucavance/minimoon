@@ -11,9 +11,13 @@ fn native_tab_color(value : Json) -> Bool {
 }
 
 ///|
-async fn tab_bar_status(app_root : String, manifest : Json) -> Json {
+async fn tab_bar_status(
+  app_root : String,
+  manifest : Json,
+  dist_dir? : String = join(app_root, "dist"),
+) -> Json {
   let errors : Array[String] = []
-  let app_file = join(app_root, "dist/app.json")
+  let app_file = join(dist_dir, "app.json")
   if !@fs.exists(app_file) {
     return status("native-tab-bar", false, "app.json is missing")
   }
@@ -104,7 +108,7 @@ async fn tab_bar_status(app_root : String, manifest : Json) -> Json {
                   "native tabBar icon must reference a declared PNG: " + path,
                 )
               } else {
-                let file = join(app_root, "dist/" + path)
+                let file = join(dist_dir, path)
                 if !@fs.exists(file) ||
                   @fs.kind(file, follow_symlink=false) != @fs.Regular {
                   errors.push("native tabBar icon is missing: " + path)
@@ -135,7 +139,7 @@ async fn tab_bar_status(app_root : String, manifest : Json) -> Json {
     errors.push("manifest tabBar must be an object or null")
   }
   for page in array(manifest, "pages") {
-    let file = join(app_root, "dist/" + string(page, "route") + ".json")
+    let file = join(dist_dir, string(page, "route") + ".json")
     if !@fs.exists(file) {
       errors.push("page config is missing: " + string(page, "route"))
       continue

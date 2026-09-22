@@ -4,6 +4,23 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
+## [0.2.4]
+
+- Fix keyed list batch insertions and mixed moves by resolving positions
+  against the current successor, retaining the existing diff budgets.
+- Preserve nested branch activation across ancestor visibility changes and
+  transactional rollback, including subscriptions and shared bindings.
+- Propagate lifecycle decoder failures, roll back candidate work and allow
+  failed Load decoding to retry without starting initialization effects.
+- Dispose App timers and effects after host verification, bound subprocess
+  execution, and honor custom configuration files and output directories
+  throughout verification and artifact evidence.
+- Pair with UI `0.1.2`, which declares core `0.2.4` and fixes unrelated touch
+  cancellation during Slider gestures. Public API and Contract 11 / ABI 13 /
+  protocol 8 remain unchanged; real-host acceptance is separate.
+- Update Starter to `weapp-tailwindcss 5.5.8` and Node `26.10.0`, retaining
+  compatibility checks at the supported Node `24.20.0` lower boundary.
+
 ## [0.2.3]
 
 ### Changed

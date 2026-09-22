@@ -39,7 +39,7 @@ fn join(base : String, child : String) -> String {
 ///|
 async fn read_json(file : String) -> Json {
   @json.parse(@fs.read_file(file).text()) catch {
-    err => abort("invalid JSON in " + file + ": \{err}")
+    err => raise Failure::Failure("invalid JSON in " + file + ": \{err}")
   }
 }
 
@@ -98,8 +98,9 @@ fn portable_relative_path(app_root : String, file : String) -> String {
 }
 
 ///|
-async fn fingerprint_files(app_root : String) -> Array[String] {
-  let dist = join(app_root, "dist")
+async fn fingerprint_files(layout : ArtifactLayout) -> Array[String] {
+  let app_root = layout.app_root
+  let dist = layout.dist
   let files : Array[String] = []
   @fs.walk(
     dist,
@@ -108,7 +109,7 @@ async fn fingerprint_files(app_root : String) -> Array[String] {
         let file = join(path, name)
         if @fs.kind(file, follow_symlink=false) == @fs.Regular {
           let relative = portable_relative_path(app_root, file)
-          if relative != "dist/project.private.config.json" {
+          if file != join(dist, "project.private.config.json") {
             files.push(relative)
           }
         }
@@ -123,22 +124,34 @@ async fn fingerprint_files(app_root : String) -> Array[String] {
 }
 
 ///|
-pub async fn artifact_fingerprint(app_root : String) -> String {
+pub async fn artifact_fingerprint(
+  app_root : String,
+  dist_dir? : String,
+  config_path? : String,
+) -> String {
+  fingerprint(artifact_layout(app_root, dist_dir?, config_path?))
+}
+
+///|
+async fn fingerprint(layout : ArtifactLayout) -> String {
+  let app_root = layout.app_root
   for
     relative in [
-      "dist/app.json", "generated/manifest.json", "generated/smoke_checklist.json",
+      portable_relative_path(app_root, join(layout.dist, "app.json")),
+      "generated/manifest.json",
+      "generated/smoke_checklist.json",
     ] {
     let file = join(app_root, relative)
     guard @fs.exists(file) &&
       @fs.kind(file, follow_symlink=false) == @fs.Regular else {
-      abort(
+      raise Failure::Failure(
         "artifact fingerprint input is missing: " +
         relative +
         "; run minimoon build first",
       )
     }
   }
-  let files = fingerprint_files(app_root)
+  let files = fingerprint_files(layout)
   let mut hash = 14695981039346656037UL
   for relative in files {
     let file = join(app_root, relative)
@@ -260,8 +273,16 @@ async fn run(
   command : String,
   args : Array[String],
   cwd : String,
+  timeout_ms? : Int = 30000,
 ) -> (Bool, String) {
-  let (code, stdout, stderr) = @toolchain.collect_output(command, args, cwd~) catch {
+  let (code, stdout, stderr) = @async.with_timeout(timeout_ms, () => {
+    @toolchain.collect_output(command, args, cwd~)
+  }) catch {
+    @async.TimeoutError =>
+      return (
+        false,
+        command + " timed out after " + timeout_ms.to_string() + " ms",
+      )
     err => {
       let hint = if command == "vp" {
         ". Install Vite+ CLI 0.3.3 and make sure `vp` is available on PATH."

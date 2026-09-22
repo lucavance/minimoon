@@ -179,5 +179,5 @@ pub fn resources(requested : Array[String]) -> @build_resources.ResourceBundle {
     extra_rules() +
     "\n" +
     attachment_rules()
-  { id: "lampclaw/minimoon_ui/vega-v1", version: "0.1.1", wxss: css, assets, }
+  { id: "lampclaw/minimoon_ui/vega-v1", version: "0.1.2", wxss: css, assets, }
 }

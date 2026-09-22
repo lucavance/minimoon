@@ -276,10 +276,15 @@ async fn main {
         fail("verify accepts either --candidate or --release, not both")
       }
       let mode = if release || candidate { "release" } else { "dev" }
-      let _ = @build.build(cwd, config_path, mode) catch {
+      let dist_dir = @build.build(cwd, config_path, mode) catch {
         err => fail("build failed: \{err}")
       }
-      let report = @verify.verify(dirname(config_path), release) catch {
+      let report = @verify.verify(
+        dirname(config_path),
+        release,
+        dist_dir~,
+        config_path~,
+      ) catch {
         err => fail("verification failed: \{err}")
       }
       let status = match report {
@@ -326,6 +331,7 @@ async fn main {
           fail("devtools record requires --tool-version")
         }),
         match_value(matches.values, "notes").unwrap_or(""),
+        config_path~,
       ) catch {
         err => fail("could not record DevTools evidence: \{err}")
       }

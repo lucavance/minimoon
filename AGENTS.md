@@ -165,8 +165,8 @@ the user explicitly authorizes that action.
   Older MoonBit toolchains must be upgraded for core `0.2.2` and later / UI `0.1.1`.
   JavaScript tooling
   supports Node `>=24.20.0`; CI validates the 24.20.0 lower boundary and the
-  26.9.0 primary environment, while global `vp 0.3.3` manages Bun `1.4.2`.
-  The repository and new Starter pin Node `26.9.0` through `devEngines.runtime`; CI overrides it for
+  26.10.0 primary environment, while global `vp 0.3.3` manages Bun `1.4.2`.
+  The repository and new Starter pin Node `26.10.0` through `devEngines.runtime`; CI overrides it for
   lower-bound checks. No `.node-version`
   is committed or generated. Updating the toolchain pin requires review and
   regeneration/validation of affected artifacts.
@@ -224,8 +224,7 @@ source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
 
-For the published core `0.2.2` / UI `0.1.1` pair and the core `0.2.3` vp
-migration, the user explicitly authorizes publication
+For the core `0.2.4` / UI `0.1.2` fixes, the user explicitly authorizes publication
 after the complete local candidate checks and both CI jobs pass for the frozen
 commit, without waiting for new WeChat host validation. Notify the user when
 CI passes, then continue the authorized publication. Keep tracked reports at
@@ -233,8 +232,11 @@ CI passes, then continue the authorized publication. Keep tracked reports at
 host pass or weaken `verify --release`, `check:all`, or `check:mvp`. This scoped
 exception is documented in `docs/operations/release_candidate_handoff.md` and
 does not waive package, consumer, source-cleanliness, or version checks.
-Core `0.2.3` is a core-only publication: UI remains the published `0.1.1`,
-including its unchanged core `0.2.2` dependency declaration.
+Publish core `0.2.4` first, validate fresh registry consumers, then publish UI
+`0.1.2` with its core `0.2.4` dependency from the independently reviewed archive.
+The user will validate both exact CI handoff artifacts on another machine.
+Prior core `0.2.2` / UI `0.1.1` and core-only `0.2.3` publication records remain
+historical; this authorization does not extend to future versions.
 
 ## WeChat Developer Tools Validation
 

@@ -42,7 +42,12 @@ fn AppDriver::new(
       graph.begin()
       let commands : Array[@runtime.Cmd[GraphMessage]] = []
       graph.run(fn() {
-        collect_app_commands(message.0.0, capabilities, output, commands)
+        match message {
+          GraphCommand(command) =>
+            collect_app_commands(command.0, capabilities, output, commands)
+          PreparedLifecycle(_, _) =>
+            abort("prepared page lifecycle cannot run in an application")
+        }
       })
       graph.commit()
       owner.publish()
@@ -117,7 +122,7 @@ fn AppDriver::drain(self : AppDriver) -> Unit {
   for _index = 0; _index < 2048; _index = _index + 1 {
     match self.owner.next() {
       Some(command) => {
-        let _ = self.running.dispatch(GraphMessage(Cmd(command)))
+        let _ = self.running.dispatch(GraphCommand(Cmd(command)))
       }
       None => break
     }

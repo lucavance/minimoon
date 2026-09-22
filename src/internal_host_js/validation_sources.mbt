@@ -17,7 +17,9 @@ pub fn host_smoke_source(
   "globalThis.Component = () => { throw new Error(\"unvalidated Chaining page registration is forbidden\") }\n" +
   "globalThis.App = () => {}\n" +
   "globalThis.wx = { navigateTo() {}, redirectTo() {} }\n" +
+  ";(async () => {\nconst activePages = new Map()\ntry {\n" +
   "for (const file of pageFiles) { bootApplication(file); require(file) }\n" +
+  "await flushApplicationTasks()\n" +
   "if (definitions.length !== " +
   page_files.length().to_string() +
   ") throw new Error(\"Page Definition API registration count mismatch\")\n" +
@@ -54,14 +56,26 @@ pub fn host_smoke_source(
   "    }\n" +
   "    if (callback) callback()\n" +
   "  }, replaceDataOnPath(path, value) { pending.push([\"set\", path, value]) }, spliceArrayDataOnPath(path, index, del, items) { pending.push([\"splice\", path, index, del, items]) }, groupUpdates(callback) { callback(); for (const op of pending.splice(0)) { if (op[0] === \"set\") assign(this.data, op[1], op[2]); else resolve(this.data, op[1]).splice(op[2], op[3], ...op[4]) } } }\n" +
+  "  activePages.set(host, page)\n" +
   "  page.onLoad.call(host, pageInputs[pageIndex] || {})\n" +
   "  page.onShow.call(host)\n" +
   "  page.onReady.call(host)\n" +
+  "  await flushApplicationTasks()\n" +
   "  if (!host.__mmInstanceId) throw new Error(\"runtime instance missing\")\n" +
   "  assertStyleParity(host.data, wxss)\n" +
   "  page.onUnload.call(host)\n" +
+  "  activePages.delete(host)\n" +
   "  if (host.__mmInstanceId !== null) throw new Error(\"runtime instance was not cleared on unload\")\n" +
-  "}\n"
+  "}\n" +
+  "for (const { application } of bootedApplications.values()) if (application.onHide) application.onHide()\n" +
+  "await flushApplicationTasks()\n" +
+  "} finally {\n" +
+  "  let failure\n" +
+  "  for (const [host, page] of activePages) { try { page.onUnload.call(host) } catch (error) { failure ||= error } }\n" +
+  "  try { disposeApplications() } catch (error) { failure ||= error }\n" +
+  "  await flushApplicationTasks()\n" +
+  "  if (failure) throw failure\n" +
+  "}\n})().catch(error => { console.error(error); process.exitCode = 1 })\n"
 }
 
 ///|

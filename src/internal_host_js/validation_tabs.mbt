@@ -4,17 +4,20 @@
 pub fn native_tab_host_source(
   routes : Array[String],
   tab_routes : Array[String],
+  dist_dir? : String = "dist",
 ) -> String {
   "const routes = " +
   Json::array(routes.map(Json::string)).stringify() +
   "\nconst tabRoutes = " +
   Json::array(tab_routes.map(Json::string)).stringify() +
+  "\nconst dist = " +
+  dist_dir.escape() +
   "\nconst abi = " +
   @versions.runtime_api_version().to_string() +
   "\n" +
   (
     #|const fs = require("node:fs"), path = require("node:path"), vm = require("node:vm")
-    #|const hostFile = path.resolve("dist/minimoon.host.js"), protocolFile = path.resolve("dist/minimoon.protocol.js")
+    #|const hostFile = path.resolve(dist, "minimoon.host.js"), protocolFile = path.resolve(dist, "minimoon.protocol.js")
     #|const protocol = { exports: {} }, calls = [], errors = []
     #|vm.runInNewContext(fs.readFileSync(protocolFile, "utf8"), { module: protocol }, { filename: protocolFile, timeout: 1000 })
     #|let definition, depth = 1

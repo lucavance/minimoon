@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      VP_NODE_VERSION: 26.9.0
+      VP_NODE_VERSION: 26.10.0
       VP_PACKAGE_MANAGER: bun@1.4.2
 
     defaults:
@@ -35,11 +35,11 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: Setup Vite+ (26.9.0)
-        uses: voidzero-dev/setup-vp@49c3e4e92c52e7f8392712a9267bbe71c5ab30e5 # v1.19.0
+      - name: Setup Vite+ (26.10.0)
+        uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
         with:
           version: 0.3.3
-          node-version: 26.9.0
+          node-version: 26.10.0
           run-install: false
           cache: true
 
@@ -92,10 +92,10 @@ jobs:
           set -euo pipefail
           core_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' moon.mod)"
           ui_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' ui/moon.mod)"
-          # Published UI 0.1.1 retains its compatible core 0.2.2 dependency.
-          if [ "$core_version" != "0.2.3" ] || [ "$ui_version" != "0.1.1" ] ||
-             ! grep -Fq '"lampclaw/minimoon@0.2.2"' ui/moon.mod; then
-            echo "CI handoff requires the reviewed core 0.2.3 / UI 0.1.1 pair and UI core 0.2.2 dependency" >&2
+          # Freeze the reviewed patch pair and UI's matching core dependency.
+          if [ "$core_version" != "0.2.4" ] || [ "$ui_version" != "0.1.2" ] ||
+             ! grep -Fq '"lampclaw/minimoon@0.2.4"' ui/moon.mod; then
+            echo "CI handoff requires the reviewed core 0.2.4 / UI 0.1.2 pair and UI core 0.2.4 dependency" >&2
             exit 1
           fi
           moon_version="$(moon version --all)"
@@ -259,7 +259,7 @@ jobs:
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Vite+ (24.20.0)
-        uses: voidzero-dev/setup-vp@49c3e4e92c52e7f8392712a9267bbe71c5ab30e5 # v1.19.0
+        uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
         with:
           version: 0.3.3
           node-version: 24.20.0

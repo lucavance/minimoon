@@ -58,37 +58,52 @@ fn diff_keyed_children(
   for target = next_ids.length() - 1; target >= 0; target = target - 1 {
     let identity = next_ids[target]
     let current = working_positions.get(identity).unwrap_or(-1)
+    // The final index can exceed the current length while several nodes are
+    // still missing. Insert before the already-processed next sibling instead.
+    let anchor = if target + 1 < next_ids.length() {
+      match working_positions.get(next_ids[target + 1]) {
+        Some(position) => position
+        None => return false
+      }
+    } else {
+      working.length()
+    }
     if current < 0 {
-      structure.push(
-        SpliceTreeChildren(tree_path_field(path, "children"), target, 0, [
-          next_children[target],
-        ]),
-      )
       structure_cost.val += 1
       if structure_cost.val > 32 {
         return false
       }
-      working.insert(target, identity)
-      inserted.add(identity)
-      reindex_string_positions(working, working_positions, target)
-    } else if !keep.contains(identity) && current != target {
       structure.push(
-        MoveTreeChild(
-          tree_path_field(path, "children"),
-          current,
-          target,
-          identity,
+        SpliceTreeChildren(tree_path_field(path, "children"), anchor, 0, [
           next_children[target],
-        ),
+        ]),
       )
+      working.insert(anchor, identity)
+      inserted.add(identity)
+      reindex_string_positions(working, working_positions, anchor)
+    } else if !keep.contains(identity) {
+      // MoveTreeChild removes first, so an anchor to the right shifts left.
+      let destination = anchor - (if current < anchor { 1 } else { 0 })
+      if current == destination {
+        continue
+      }
       structure_cost.val += 2
       if structure_cost.val > 32 {
         return false
       }
+      structure.push(
+        MoveTreeChild(
+          tree_path_field(path, "children"),
+          current,
+          destination,
+          identity,
+          next_children[target],
+        ),
+      )
       let value = working.remove(current)
-      working.insert(target, value)
+      working.insert(destination, value)
       moved.add(identity)
-      let start = if current < target { current } else { target }
+      let start = if current < destination { current } else { destination }
       reindex_string_positions(working, working_positions, start)
     }
   }
