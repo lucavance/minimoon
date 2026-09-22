@@ -1,14 +1,76 @@
 # Project status
 
-The current source candidate is core `0.2.4` / UI `0.1.2`; UI declares core
-`0.2.4`. These versions are being prepared and are not yet recorded as published.
-The user authorizes publication after complete local candidate checks and both
-CI jobs on the frozen commit, while Developer Tools validation remains pending
-on another machine. The completed publication records below remain unchanged.
+Core `0.2.4` and UI `0.1.2` were published to Mooncakes on **2026-09-23
+(Asia/Shanghai)**. UI declares core `0.2.4`. Both packages and fresh registry
+consumers passed the authorized automated publication checks. WeChat Developer
+Tools acceptance remains pending on another machine; tracked reports retain
+`release: false` and Developer Tools `pending`.
 
-## Dependency review for the 0.2.4 / 0.1.2 candidate
+## Core 0.2.4 and UI 0.1.2 publication
 
-The 2026-09-23 review selects `weapp-tailwindcss 5.5.8`, primary Node
+The frozen source is
+[`25281b3b901f3c424c6e2fdcc9af8954753860b4`](https://github.com/lucavance/minimoon/commit/25281b3b901f3c424c6e2fdcc9af8954753860b4).
+Both the primary Node `26.10.0` and Node `24.20.0` compatibility jobs
+[passed for that exact commit](https://github.com/lucavance/minimoon/actions/runs/35763266472)
+before publication. Local native **486** and JavaScript **381** tests, coverage,
+the complete candidate gate and its publication-time rerun passed. Source,
+package contents and both fixture fingerprints remained unchanged, with a clean
+worktree before upload. No version tag or GitHub Release was created.
+
+This patch fixes keyed list insertions and moves, nested visibility propagation,
+lifecycle decoder rollback and retry, App timer cleanup during verification,
+custom configuration/output verification, and Slider pointer cancellation.
+Public application APIs and Contract `11` / ABI `13` / renderer protocol `8`
+remain unchanged. The dependency refresh is recorded below.
+
+The actual downloaded archives match every reviewed file path, size, SHA-256
+and content byte:
+
+| Package | Download | Bytes / files | Download SHA-256 |
+| --- | --- | --- | --- |
+| Core `0.2.4` | [Mooncakes ZIP](https://download.mooncakes.io/user/lampclaw/minimoon/0.2.4.zip) | 326,680 / 184 | `477fc64f4bdb2f8e8b1e885cd22f97d693bd49bcce9e25782d3f4932cd672f15` |
+| UI `0.1.2` | [Mooncakes ZIP](https://download.mooncakes.io/user/lampclaw/minimoon_ui/0.1.2.zip) | 119,438 / 78 | `dc54835f6cdd2bb0dc38a18ddffed10ceb31b923628916f3bb0db2a9715c0744` |
+
+Core's ZIP is byte-identical to its frozen review archive. UI's reviewed ZIP
+hash was `6c4f969a374a3783e4cbeecf04ca50c3a17f37aa0268822d3d14a255b4aab624`;
+independent extraction and repackaging changed only ZIP container metadata.
+All 78 extracted files remained byte-identical. UI was published outside all
+Git and Moon workspace ancestors after **54** prepublication checks, with core
+resolved from the registry. Both `--frozen` publication attempts stopped before
+upload because extracted self-checks needed dependency installation. After
+rechecking availability, dependency versions and reviewed contents, normal
+`moon publish` completed its self-check and returned HTTP `200 OK` for each.
+UI's archive self-check reports an unused test import because test files are
+excluded; native/JS production checks with `--deny-warn` passed.
+
+Independent registry consumers passed frozen API and explicit-method native/JS
+checks and runtime interactions, a new Starter, the published README example
+and first edit, and a real `0.2.3` Starter upgrade preserving ten original source,
+style, configuration and private files. An App with foreground subscriptions
+passed native/JS behavior checks and repeated build/verify using a configuration
+filename and nested output directory containing spaces; fingerprints were stable.
+
+The published core/UI pair then passed **95** consumer and upgrade checks:
+registry-only dependency resolution, UI's exact core declaration, native/JS
+root/headless/theme behavior, native resources, candidate verification,
+deterministic rebuilding and unknown-resource failure atomicity. Upgrading a
+separate `0.2.3` / `0.1.1` consumer preserved business source, styles, application
+configuration, `package.json`, `bun.lock` and private project configuration.
+
+The unchanged CI handoffs for real-host validation are:
+
+- [Core workbench bundle](https://github.com/lucavance/minimoon/actions/runs/35763266472/artifacts/10711805773).
+- [UI showcase bundle](https://github.com/lucavance/minimoon/actions/runs/35763266472/artifacts/10711249197).
+
+Read each bundle's exact artifact fingerprint from its `HANDOFF.json` and
+`verify_report.json`. Import its unchanged `dist/`, following `VALIDATION.md` and
+[Developer Tools checklist](operations/miniapp_devtools_validation.md).
+Automated publication does not establish a real-host pass; evidence remains
+local and fingerprint-bound.
+
+## Dependency review for 0.2.4 / 0.1.2
+
+The 2026-09-23 review selected `weapp-tailwindcss 5.5.8`, primary Node
 `26.10.0` and the SHA-pinned `setup-vp 1.21.1` action. The stylesheet update
 includes the PostCSS parser-instance fix for theme colors and opacity utilities
 in independent installations; the new Starter receives the same dependency
@@ -23,16 +85,16 @@ JavaScript dependencies Tailwind/CLI `4.3.3`, PostCSS `8.5.28`, Acorn `8.18.0`
 and `eslint-scope 9.1.2` are also current. MoonBit `0.10.14`, global `vp 0.3.3`
 and managed Bun `1.4.2` remain pinned. CI retains Node `24.20.0` as the supported
 lower-bound test; its purpose is compatibility coverage rather than selection
-of the newest Node 24 release. The existing lockfile advisory scan returned no
-findings; the refreshed lockfile and complete candidate must pass again before
-publication. Historical API consumers and publication records retain their
-original versions.
+of the newest Node 24 release. Advisory scans of the original and refreshed
+lockfiles and an independently installed new Starter returned no findings.
+Frozen installation preserved the updated lockfile bytes. Historical API
+consumers and publication records retain their original versions.
 
 ## Previously published pair
 
 Minimoon core `0.2.3` was published to Mooncakes on **2026-09-21**.
-The independent `lampclaw/minimoon_ui 0.1.1` remains the existing published UI
-release and was **not republished**; its manifest still declares core `0.2.2`.
+For that core-only release, the independent UI remained `0.1.1` and was
+**not republished**; its immutable manifest declares core `0.2.2`.
 Applications selecting this patch declare core `0.2.3` directly.
 
 See the [0.2.3 publication checkpoint](#core-023-publication),
