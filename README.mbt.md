@@ -23,7 +23,7 @@ Until that version is available, use the [source workflow](docs/guides/miniapp_q
 ## Before you start
 
 Use `moon 0.1.20260920` / `moonc v0.10.14` or newer, Node `>=24.20.0`,
-global `vp 0.3.3` and WeChat Developer Tools with Skyline support.
+global `vp 1.0.0-rc.0` (prerelease) and WeChat Developer Tools with Skyline support.
 `vp` manages Node and Bun `1.4.2`; a separate Bun installation is unnecessary.
 Git is needed for the optional source development workflow.
 Both CI jobs pin `0.10.14+7d59c7ec9` (`moon 0.1.20260920`).

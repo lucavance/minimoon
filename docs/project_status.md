@@ -6,6 +6,17 @@ consumers passed the authorized automated publication checks. WeChat Developer
 Tools acceptance remains pending on another machine; tracked reports retain
 `release: false` and Developer Tools `pending`.
 
+## Current development: vp 1.0.0-rc.0
+
+The repository and CI adopt global `vp 1.0.0-rc.0` (prerelease), retaining
+primary Node `26.10.0`, supported-floor Node `24.20.0`, managed Bun `1.4.2`
+and the pinned MoonBit toolchain. The prior
+[compatibility CI](https://github.com/lucavance/minimoon/actions/runs/35806762655)
+passed both Node environments. Each adoption commit must pass the same two CI
+jobs. This update changes current source guidance and diagnostics without
+changing product versions or publishing new registry packages. The publication
+records below describe the immutable published archives.
+
 ## Core 0.2.4 and UI 0.1.2 publication
 
 The frozen source is
@@ -364,14 +375,15 @@ consumer and generated-host checks are separate from core's starter contract.
 ## Toolchain validation
 
 The supported toolchain floor is `moon 0.1.20260920` with `moonc v0.10.14`;
-global `vp 0.3.3` manages Bun `1.4.2` and the Node runtime. Both CI jobs use the
-official installer for prebuilt
-release `0.10.14+7d59c7ec9` (`moon 0.1.20260920`), not latest, without Rust.
+global `vp 1.0.0-rc.0` (prerelease) manages Bun `1.4.2` and the Node runtime.
+Both CI jobs use the official installer for prebuilt release `0.10.14+7d59c7ec9`
+(`moon 0.1.20260920`), not latest, without Rust.
 Older MoonBit installations must be upgraded for these releases.
 JavaScript tooling supports Node `>=24.20.0`; CI validates the Node 24.20.0
-lower boundary and Node 26.9.0 primary environment, installing the committed
-JavaScript lockfile. The repository and new Starters select Node `26.9.0`
-through `devEngines.runtime`; CI explicitly overrides the lower-bound job.
+lower boundary and Node 26.10.0 primary environment, installing the committed
+JavaScript lockfile. The repository and Starters generated from current source
+select Node `26.10.0` through `devEngines.runtime`; CI explicitly overrides the
+lower-bound job.
 Acceptance tasks use `vp run --no-cache`. Toolchain configuration is not itself
 a passing CI result;
 the release checkpoint must identify the successful run for the frozen SHA.

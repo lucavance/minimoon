@@ -14,7 +14,7 @@ upstream visual-recipe attribution are retained in [LICENSE](LICENSE) and
 ## Install
 
 Use `moon 0.1.20260920` / `moonc v0.10.14` or newer and the matching core CLI
-`0.2.4`. Global `vp 0.3.3` manages Node `26.10.0` and Bun `1.4.2`;
+`0.2.4`. Global `vp 1.0.0-rc.0` (prerelease) manages Node `26.10.0` and Bun `1.4.2`;
 Node `>=24.20.0` remains supported and CI checks the lower boundary. Follow
 the [environment setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/miniapp_quickstart.md#prerequisites);
 no separate Bun installation or local `vite-plus` dependency is needed.

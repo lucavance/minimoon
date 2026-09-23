@@ -115,9 +115,9 @@ Before starting a task:
 4. Inspect the relevant source, tests, generated artifacts, and documentation
    before proposing or implementing a change.
 
-Install global `vp 0.3.3` and initialize its managed environment as documented
-in `docs/guides/miniapp_quickstart.md`. For a fresh checkout, prepare the pinned
-environment with:
+Install global `vp 1.0.0-rc.0` (prerelease) and initialize its managed environment
+as documented in `docs/guides/miniapp_quickstart.md`. For a fresh checkout,
+prepare the pinned environment with:
 
 ```bash
 vp install --frozen-lockfile
@@ -165,7 +165,7 @@ the user explicitly authorizes that action.
   Older MoonBit toolchains must be upgraded for core `0.2.2` and later / UI `0.1.1`.
   JavaScript tooling
   supports Node `>=24.20.0`; CI validates the 24.20.0 lower boundary and the
-  26.10.0 primary environment, while global `vp 0.3.3` manages Bun `1.4.2`.
+  26.10.0 primary environment, while global `vp 1.0.0-rc.0` manages Bun `1.4.2`.
   The repository and new Starter pin Node `26.10.0` through `devEngines.runtime`; CI overrides it for
   lower-bound checks. No `.node-version`
   is committed or generated. Updating the toolchain pin requires review and

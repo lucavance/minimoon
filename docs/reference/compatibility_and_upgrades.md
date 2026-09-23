@@ -70,7 +70,7 @@ are not supported for the new source syntax. The direct dependencies are
 
 Repository and generated-starter JavaScript tooling support Node `>=24.20.0`,
 with CI coverage at the 24.20.0 lower boundary and in the 26.10.0 primary
-environment. Global `vp 0.3.3` manages the pinned Bun `1.4.2` backend;
+environment. Global `vp 1.0.0-rc.0` (prerelease) manages pinned Bun `1.4.2`;
 `devEngines.runtime` selects Node `26.10.0` without adding `.node-version`.
 The Node minimum has not changed.
 Update CI, the package consumer gate, starter guidance and compatibility notes
@@ -143,9 +143,10 @@ The application style manifest must keep these exact versions:
 | `devEngines.runtime` | Node `26.10.0` |
 
 The repository also pins `acorn 8.18.0` and `eslint-scope 9.1.2` for validation;
-ordinary applications do not need these two packages. Global `vp 0.3.3` is
-required for the `0.2.4` CLI's JavaScript tooling. Install and initialize it using
-the [quickstart](../guides/miniapp_quickstart.md#prerequisites); separate Bun
+ordinary applications do not need these two packages. Use global `vp 1.0.0-rc.0`,
+the current repository and CI baseline, for the `0.2.4` CLI's JavaScript tooling.
+Install and initialize it using the
+[quickstart](../guides/miniapp_quickstart.md#prerequisites); separate Bun
 installation is unnecessary. No local `vite-plus`, Vite or Vitest package is
 required. The global CLI's missing-local-`vite-plus` notice is expected here.
 
@@ -167,8 +168,8 @@ the internal launcher preserves that selection.
    [UI changelog](https://github.com/lucavance/minimoon/blob/main/ui/CHANGELOG.md)
    when applicable, and [publication status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
    Use the source workflow if the target versions are not available yet.
-2. Upgrade MoonBit to the minimum above and initialize global `vp 0.3.3`. Install
-   `moon install lampclaw/minimoon/cmd/minimoon@0.2.4`, confirm
+2. Upgrade MoonBit to the minimum above and initialize global `vp 1.0.0-rc.0`.
+   Install `moon install lampclaw/minimoon/cmd/minimoon@0.2.4`, confirm
    `minimoon --version` reports `0.2.4`, and check PATH for older binaries.
 3. Update the application's direct dependency to `lampclaw/minimoon@0.2.4` and,
    if used, `lampclaw/minimoon_ui@0.1.2`. Update direct async/x imports to the

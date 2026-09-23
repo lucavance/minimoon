@@ -276,7 +276,7 @@ async fn run_checked(
   let (code, stdout, stderr) = @toolchain.collect_output(command, args, cwd~) catch {
     err => {
       let hint = if command == "vp" {
-        ". Install Vite+ CLI 0.3.3 and make sure `vp` is available on PATH."
+        ". Install Vite+ CLI 1.0.0-rc.0 and make sure `vp` is available on PATH."
       } else {
         ""
       }

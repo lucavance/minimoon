@@ -8,7 +8,7 @@ release process first. [Back to README](../../README.md).
 
 - MoonBit: `moon 0.1.20260920` with `moonc v0.10.14` or newer.
   Upgrade older installations before using core `0.2.4` or UI `0.1.2`.
-- Global `vp 0.3.3`, managing Node `26.10.0` and Bun `1.4.2`.
+- Global `vp 1.0.0-rc.0` (prerelease), managing Node `26.10.0` and Bun `1.4.2`.
   A separate Node or Bun installation is unnecessary; the supported Node range
   remains `>=24.20.0`.
 - A writable development directory with enough free space, and WeChat
@@ -20,10 +20,10 @@ release process first. [Back to README](../../README.md).
 Install the pinned global CLI on macOS/Linux:
 
 ```bash
-curl -fsSL https://vite.plus | VP_VERSION=0.3.3 bash
+curl -fsSL https://vite.plus | VP_VERSION=1.0.0-rc.0 bash
 ```
 
-On Windows PowerShell, set `$env:VP_VERSION = "0.3.3"`, then run
+On Windows PowerShell, set `$env:VP_VERSION = "1.0.0-rc.0"`, then run
 `irm https://vite.plus/ps1 | iex`. See the
 [official installer guide](https://viteplus.dev/guide/).
 Open a new terminal, initialize its managed environment, and check the tools:

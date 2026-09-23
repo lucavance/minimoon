@@ -13,6 +13,16 @@ Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
 dated feature commitments.
 
+## Current development: vp 1.0.0-rc.0
+
+Adopt global `vp 1.0.0-rc.0` (prerelease) for the repository, CI and current
+Starter guidance. Keep primary Node `26.10.0`, supported-floor Node `24.20.0`,
+managed Bun `1.4.2` and the MoonBit toolchain unchanged. The prior
+[compatibility CI](https://github.com/lucavance/minimoon/actions/runs/35806762655)
+passed both Node environments. Each adoption commit must pass the same two CI
+jobs. This tooling update does not change product versions
+or publish new registry packages.
+
 ## Core 0.2.4 / UI 0.1.2 corrections
 
 - Fix keyed batch growth and nested branch visibility during cache restoration

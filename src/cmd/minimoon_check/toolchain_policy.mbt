@@ -107,7 +107,7 @@ async fn vp_toolchain_policy(root : String) -> Unit {
     }) else {
     abort("both CI jobs must pin the reviewed setup-vp action")
   }
-  for setting in ["version: 0.3.3", "run-install: false"] {
+  for setting in ["version: 1.0.0-rc.0", "run-install: false"] {
     guard workflow.split("\n").filter(line => line.trim() == setting).length() ==
       2 else {
       abort("both CI jobs must explicitly set " + setting)
@@ -115,7 +115,7 @@ async fn vp_toolchain_policy(root : String) -> Unit {
   }
   for
     token in [
-      "version: 0.3.3", "vp install --frozen-lockfile", "vp env current --json",
+      "version: 1.0.0-rc.0", "vp install --frozen-lockfile", "vp env current --json",
       "vp run --no-cache check:coverage", "vp run --no-cache check:candidate",
     ] {
     require_text(root, workflow_path, token)

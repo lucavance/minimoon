@@ -1,7 +1,6 @@
 ///|
 /// Use with this package's process helpers to pin Bun without a wrapper process.
-/// vp 0.3.3's explicit --package-manager execution spawns a child; its shim
-/// execution replaces itself on Unix so cancellation reaches the backend.
+/// The vp shim replaces itself on Unix so cancellation reaches the backend.
 pub fn bun_args(args : Array[String]) -> Array[String] {
   ["env", "exec", "bun", ..args]
 }
@@ -43,7 +42,7 @@ async fn prepare_environment(
   ) catch {
     err =>
       raise Failure::Failure(
-        "Unable to start vp: \{err}. Install Vite+ CLI 0.3.3 and make sure `vp` is available on PATH.",
+        "Unable to start vp: \{err}. Install Vite+ CLI 1.0.0-rc.0 and make sure `vp` is available on PATH.",
       )
   }
   guard code == 0 else {
