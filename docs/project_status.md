@@ -1,29 +1,75 @@
 # Project status
 
-Core `0.2.4` and UI `0.1.2` were published to Mooncakes on **2026-09-23
-(Asia/Shanghai)**. UI declares core `0.2.4`. Both packages and fresh registry
-consumers passed the authorized automated publication checks. WeChat Developer
-Tools acceptance remains pending on another machine; tracked reports retain
-`release: false` and Developer Tools `pending`.
+Core `0.2.5` and UI `0.1.3` were published to Mooncakes on **2026-09-30
+(Asia/Shanghai)**. UI declares core `0.2.5`. Both packages and fresh registry
+consumers passed the authorized automated publication checks. The user
+validated both exact candidate artifacts in WeChat Developer Tools; the local
+fingerprint-bound evidence is recorded below. Tracked reports intentionally
+retain `release: false` and Developer Tools `pending`.
 
-## Current source release preparation (2026-09-30)
+## Core 0.2.5 and UI 0.1.3 publication
 
-The repository and CI use stable global `vp 1.0.0`. The core module and
-maintained Workbench resolve `moonbitlang/async 0.22.4`; the repository and
-generated Starter use `weapp-tailwindcss 5.5.11`. MoonBit `0.10.14`,
-`moonbitlang/x 0.5.5`, primary Node `26.10.0`, the supported Node floor
-`24.20.0`, and managed Bun `1.4.2` remain unchanged. The exact toolchain and
-dependency updates require both CI jobs to pass. Current source manifests target
-core `0.2.5` / UI `0.1.3`, with UI depending on core `0.2.5`; the registry still
-serves the published core `0.2.4` / UI `0.1.2` pair until the new release passes
-its frozen candidate, CI, archive and consumer checks. Local WeChat Developer
-Tools evidence is recorded for the dependency-update candidate and remains
-Git-ignored; compare its fingerprints with the versioned release candidate and
-repeat host validation if either generated artifact changes. Previously
-published archives remain immutable.
+The frozen source is
+[`94dbb39ecfef18d184e2dd1335144c78f328a8d0`](https://github.com/lucavance/minimoon/commit/94dbb39ecfef18d184e2dd1335144c78f328a8d0).
+Both the primary Test job and Node 24 LTS compatibility job
+[passed for that exact commit](https://github.com/lucavance/minimoon/actions/runs/36685829008)
+before publication. The repository uses `vp 1.0.0`, MoonBit `0.1.20260920` /
+`moonc v0.10.14`, async `0.22.4`, x `0.5.5`, `weapp-tailwindcss 5.5.11`,
+Node `26.10.0` (floor `24.20.0`) and managed Bun `1.4.2`. The tracked reports
+and artifact fingerprints returned to the frozen candidate state before upload.
+No version tag or GitHub Release was created.
+
+Mooncakes metadata and downloaded archives resolve both new versions. The
+downloaded file contents match the reviewed archive contents:
+
+| Package | Download | Bytes / files | Registry ZIP SHA-256 | Reviewed candidate ZIP SHA-256 |
+| --- | --- | ---: | --- | --- |
+| Core `0.2.5` | [Mooncakes ZIP](https://download.mooncakes.io/user/lampclaw/minimoon/0.2.5.zip) | 326,645 / 184 | `460a95af7fc06e29ad1a4c704d7f59c1c396f734e1b619bc93b8d653218d8763` | `460a95af7fc06e29ad1a4c704d7f59c1c396f734e1b619bc93b8d653218d8763` |
+| UI `0.1.3` | [Mooncakes ZIP](https://download.mooncakes.io/user/lampclaw/minimoon_ui/0.1.3.zip) | 119,353 / 78 | `7ca326a9ec73fd03754ada7380a3913916fd8b0bb0bd3043878bb35e18fd4275` | `5b1d2f5ee5b5f100919a8d39ea1f70f94119b47a97856034b3d895341f4139f6` |
+
+Core's published ZIP is byte-identical to its reviewed candidate. UI was
+published from the reviewed archive extracted outside Git and Moon workspace
+ancestors. Its independently packaged ZIP has different container bytes, but
+all 78 paths and file contents match the reviewed candidate. Both `moon publish
+--frozen` checks stopped before upload because their isolated self-checks needed
+dependency installation. After rechecking that the versions were unoccupied
+and package contents and dependencies were unchanged, ordinary `moon publish`
+passed its self-check and returned HTTP `200 OK` for each package. The UI
+self-check prints one unused test-only import warning; production packages and
+the independent UI consumer passed their relevant warning-free checks.
+
+Fresh registry consumers passed the publication checks:
+
+- Core `0.2.5`: a new Starter resolved the registry CLI and core, passed the
+  README first-edit flow, and passed native/JS application-enabled checks. A
+  custom configuration filename and nested output path passed candidate
+  verification and repeated byte-stable builds; `--release` correctly rejected
+  missing host evidence without changing distributable bytes.
+- Core `0.2.5` with UI `0.1.3`: the registry-only UI Showcase resolved this exact
+  pair. Native and JS checks passed, with 10 tests passing on each target. The
+  native build provider emitted the declared UI resource manifest and SVGs;
+  rebuilding was byte-stable, and an unknown feature failed without replacing
+  the prior `dist/`.
+- A Starter created with CLI/core `0.2.4` and UI `0.1.2` upgraded to CLI/core
+  `0.2.5` and UI `0.1.3`. Its business source, MiniApp configuration, source
+  styles and private configuration stayed unchanged; its two JS tests passed,
+  and candidate output rebuilt deterministically.
+
+The two user-reported WeChat Developer Tools passes were recorded locally at
+`2026-09-30T08:17:52Z` with `Stable 2.02.2608070`:
+
+| Fixture | Result |
+| --- | --- |
+| Draft Workbench | Passed |
+| UI Showcase | Passed |
+
+The local ignored evidence remains bound to the frozen artifact fingerprints.
+Tracked verification reports remain `release: false` with Developer Tools
+`pending`; no host pass is written into a committed report.
 
 The dated review below records the versions and evidence for the immutable
-published archives; newer source dependencies do not rewrite those records.
+previously published archives; newer source dependencies do not rewrite those
+records.
 
 ## Core 0.2.4 and UI 0.1.2 publication
 
