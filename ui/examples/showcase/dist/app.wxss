@@ -178,43 +178,47 @@ view,text,::after,::before {
     --tw-duration: initial;
     }
 :host,page,.tw-root,wx-root-portal-content {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
       "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
       "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --color-red-500: rgb(251, 44, 54);
-    --color-orange-600: rgb(236, 86, 0);
-    --color-amber-50: rgb(255, 251, 235);
-    --color-amber-200: rgb(254, 230, 133);
-    --color-amber-700: rgb(181, 82, 0);
-    --color-emerald-50: rgb(236, 253, 245);
-    --color-emerald-600: rgb(0, 150, 105);
-    --color-teal-600: rgb(0, 148, 136);
-    --color-cyan-600: rgb(0, 145, 179);
-    --color-sky-50: rgb(240, 249, 255);
-    --color-sky-200: rgb(184, 230, 254);
-    --color-sky-600: rgb(0, 132, 199);
-    --color-sky-700: rgb(0, 105, 162);
-    --color-blue-700: rgb(20, 71, 230);
-    --color-indigo-600: rgb(79, 57, 246);
-    --color-violet-600: rgb(127, 34, 254);
-    --color-violet-700: rgb(112, 8, 231);
-    --color-fuchsia-600: rgb(197, 0, 218);
-    --color-rose-600: rgb(230, 0, 69);
-    --color-slate-100: rgb(241, 245, 249);
-    --color-slate-500: rgb(98, 116, 142);
-    --color-slate-600: rgb(69, 85, 108);
-    --color-slate-700: rgb(49, 65, 88);
-    --color-slate-800: rgb(29, 41, 61);
-    --color-zinc-700: rgb(63, 63, 70);
-    --color-white: #fff;
-    --font-weight-semibold: 600;
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-    --default-transition-duration: 150ms;
-    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    --default-font-family: var(--font-sans);
-    --default-mono-font-family: var(--font-mono);
+  --color-red-500: rgb(251, 44, 54);
+  --color-orange-600: rgb(236, 86, 0);
+  --color-amber-50: rgb(255, 251, 235);
+  --color-amber-200: rgb(254, 230, 133);
+  --color-amber-700: rgb(181, 82, 0);
+  --color-emerald-50: rgb(236, 253, 245);
+  --color-emerald-600: rgb(0, 150, 105);
+  --color-teal-600: rgb(0, 148, 136);
+  --color-cyan-600: rgb(0, 145, 179);
+  --color-sky-50: rgb(240, 249, 255);
+  --color-sky-200: rgb(184, 230, 254);
+  --color-sky-600: rgb(0, 132, 199);
+  --color-sky-700: rgb(0, 105, 162);
+  --color-blue-700: rgb(20, 71, 230);
+  --color-indigo-600: rgb(79, 57, 246);
+  --color-violet-600: rgb(127, 34, 254);
+  --color-violet-700: rgb(112, 8, 231);
+  --color-fuchsia-600: rgb(197, 0, 218);
+  --color-rose-600: rgb(230, 0, 69);
+  --color-slate-100: rgb(241, 245, 249);
+  --color-slate-500: rgb(98, 116, 142);
+  --color-slate-600: rgb(69, 85, 108);
+  --color-slate-700: rgb(49, 65, 88);
+  --color-slate-800: rgb(29, 41, 61);
+  --color-zinc-700: rgb(63, 63, 70);
+  --color-white: #fff;
+  --font-weight-semibold: 600;
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  --default-font-family: var(--font-sans);
+  --default-mono-font-family: var(--font-mono);
 }
   ._evisible {
     visibility: visible !important;

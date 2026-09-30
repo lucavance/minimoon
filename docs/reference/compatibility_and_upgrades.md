@@ -66,11 +66,11 @@ Core `0.2.4` and UI `0.1.2` require at least `moon 0.1.20260920` with
 prebuilt release `0.10.14+7d59c7ec9` (`moon 0.1.20260920`), not latest;
 Rust is not required. This raises the previous MoonBit minimum: older compilers
 are not supported for the new source syntax. The direct dependencies are
-`moonbitlang/async@0.22.1` and `moonbitlang/x@0.5.5`.
+`moonbitlang/async@0.22.4` and `moonbitlang/x@0.5.5`.
 
 Repository and generated-starter JavaScript tooling support Node `>=24.20.0`,
 with CI coverage at the 24.20.0 lower boundary and in the 26.10.0 primary
-environment. Global `vp 1.0.0-rc.0` (prerelease) manages pinned Bun `1.4.2`;
+environment. Global `vp 1.0.0` manages pinned Bun `1.4.2`;
 `devEngines.runtime` selects Node `26.10.0` without adding `.node-version`.
 The Node minimum has not changed.
 Update CI, the package consumer gate, starter guidance and compatibility notes
@@ -138,12 +138,12 @@ The application style manifest must keep these exact versions:
 | --- | --- |
 | `@tailwindcss/cli` and `tailwindcss` | `4.3.3` |
 | `postcss`, including `overrides.postcss` | `8.5.28` |
-| `weapp-tailwindcss` | `5.5.8` |
+| `weapp-tailwindcss` | `5.5.11` |
 | `devEngines.packageManager` | Bun `1.4.2` |
 | `devEngines.runtime` | Node `26.10.0` |
 
 The repository also pins `acorn 8.18.0` and `eslint-scope 9.1.2` for validation;
-ordinary applications do not need these two packages. Use global `vp 1.0.0-rc.0`,
+ordinary applications do not need these two packages. Use global `vp 1.0.0`,
 the current repository and CI baseline, for the `0.2.4` CLI's JavaScript tooling.
 Install and initialize it using the
 [quickstart](../guides/miniapp_quickstart.md#prerequisites); separate Bun
@@ -168,7 +168,7 @@ the internal launcher preserves that selection.
    [UI changelog](https://github.com/lucavance/minimoon/blob/main/ui/CHANGELOG.md)
    when applicable, and [publication status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
    Use the source workflow if the target versions are not available yet.
-2. Upgrade MoonBit to the minimum above and initialize global `vp 1.0.0-rc.0`.
+2. Upgrade MoonBit to the minimum above and initialize global `vp 1.0.0`.
    Install `moon install lampclaw/minimoon/cmd/minimoon@0.2.4`, confirm
    `minimoon --version` reports `0.2.4`, and check PATH for older binaries.
 3. Update the application's direct dependency to `lampclaw/minimoon@0.2.4` and,

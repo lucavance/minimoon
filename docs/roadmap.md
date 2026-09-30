@@ -13,15 +13,15 @@ Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
 dated feature commitments.
 
-## Current development: vp 1.0.0-rc.0
+## Current development: stable Vite+ and dependency refresh
 
-Adopt global `vp 1.0.0-rc.0` (prerelease) for the repository, CI and current
-Starter guidance. Keep primary Node `26.10.0`, supported-floor Node `24.20.0`,
-managed Bun `1.4.2` and the MoonBit toolchain unchanged. The prior
-[compatibility CI](https://github.com/lucavance/minimoon/actions/runs/35806762655)
-passed both Node environments. Each adoption commit must pass the same two CI
-jobs. This tooling update does not change product versions
-or publish new registry packages.
+Use global `vp 1.0.0` for repository tasks, package installation, internal
+tool launches and CI. Refresh `moonbitlang/async` to `0.22.4` and
+`weapp-tailwindcss` to `5.5.11` in the repository and generated Starter.
+MoonBit remains pinned to the current `0.10.14` release; `moonbitlang/x 0.5.5`,
+Node `26.10.0` / `>=24.20.0`, and managed Bun `1.4.2` remain unchanged. The
+current source pair stays core `0.2.4` / UI `0.1.2`; published archives are
+immutable and this maintenance update does not publish packages.
 
 ## Core 0.2.4 / UI 0.1.2 corrections
 

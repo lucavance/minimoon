@@ -4,6 +4,13 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
+## [Unreleased]
+
+- Adopt stable Vite+ CLI `1.0.0`, update `moonbitlang/async` to `0.22.4`, and
+  refresh the repository and generated Starter to `weapp-tailwindcss 5.5.11`.
+- Keep MoonBit `0.10.14`, `moonbitlang/x 0.5.5`, Node `26.10.0` / `>=24.20.0`,
+  and Bun `1.4.2` at their reviewed versions.
+
 ## [0.2.4]
 
 - Fix keyed list batch insertions and mixed moves by resolving positions

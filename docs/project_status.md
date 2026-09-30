@@ -6,16 +6,19 @@ consumers passed the authorized automated publication checks. WeChat Developer
 Tools acceptance remains pending on another machine; tracked reports retain
 `release: false` and Developer Tools `pending`.
 
-## Current development: vp 1.0.0-rc.0
+## Current source tooling and dependencies (2026-09-30)
 
-The repository and CI adopt global `vp 1.0.0-rc.0` (prerelease), retaining
-primary Node `26.10.0`, supported-floor Node `24.20.0`, managed Bun `1.4.2`
-and the pinned MoonBit toolchain. The prior
-[compatibility CI](https://github.com/lucavance/minimoon/actions/runs/35806762655)
-passed both Node environments. Each adoption commit must pass the same two CI
-jobs. This update changes current source guidance and diagnostics without
-changing product versions or publishing new registry packages. The publication
-records below describe the immutable published archives.
+The repository and CI use stable global `vp 1.0.0`. The core module and
+maintained Workbench resolve `moonbitlang/async 0.22.4`; the repository and
+generated Starter use `weapp-tailwindcss 5.5.11`. MoonBit `0.10.14`,
+`moonbitlang/x 0.5.5`, primary Node `26.10.0`, the supported Node floor
+`24.20.0`, and managed Bun `1.4.2` remain unchanged. The exact toolchain and
+dependency updates require both CI jobs to pass. Product versions remain core
+`0.2.4` / UI `0.1.2`; already published archives remain immutable, and this
+source maintenance update does not publish packages.
+
+The dated review below records the versions and evidence for the immutable
+published archives; newer source dependencies do not rewrite those records.
 
 ## Core 0.2.4 and UI 0.1.2 publication
 
@@ -375,7 +378,9 @@ consumer and generated-host checks are separate from core's starter contract.
 ## Toolchain validation
 
 The supported toolchain floor is `moon 0.1.20260920` with `moonc v0.10.14`;
-global `vp 1.0.0-rc.0` (prerelease) manages Bun `1.4.2` and the Node runtime.
+global `vp 1.0.0` manages Bun `1.4.2` and the Node runtime. Current source
+dependencies are `moonbitlang/async 0.22.4`, `moonbitlang/x 0.5.5`, and
+`weapp-tailwindcss 5.5.11`.
 Both CI jobs use the official installer for prebuilt release `0.10.14+7d59c7ec9`
 (`moon 0.1.20260920`), not latest, without Rust.
 Older MoonBit installations must be upgraded for these releases.
