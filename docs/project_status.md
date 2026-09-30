@@ -6,16 +6,21 @@ consumers passed the authorized automated publication checks. WeChat Developer
 Tools acceptance remains pending on another machine; tracked reports retain
 `release: false` and Developer Tools `pending`.
 
-## Current source tooling and dependencies (2026-09-30)
+## Current source release preparation (2026-09-30)
 
 The repository and CI use stable global `vp 1.0.0`. The core module and
 maintained Workbench resolve `moonbitlang/async 0.22.4`; the repository and
 generated Starter use `weapp-tailwindcss 5.5.11`. MoonBit `0.10.14`,
 `moonbitlang/x 0.5.5`, primary Node `26.10.0`, the supported Node floor
 `24.20.0`, and managed Bun `1.4.2` remain unchanged. The exact toolchain and
-dependency updates require both CI jobs to pass. Product versions remain core
-`0.2.4` / UI `0.1.2`; already published archives remain immutable, and this
-source maintenance update does not publish packages.
+dependency updates require both CI jobs to pass. Current source manifests target
+core `0.2.5` / UI `0.1.3`, with UI depending on core `0.2.5`; the registry still
+serves the published core `0.2.4` / UI `0.1.2` pair until the new release passes
+its frozen candidate, CI, archive and consumer checks. Local WeChat Developer
+Tools evidence is recorded for the dependency-update candidate and remains
+Git-ignored; compare its fingerprints with the versioned release candidate and
+repeat host validation if either generated artifact changes. Previously
+published archives remain immutable.
 
 The dated review below records the versions and evidence for the immutable
 published archives; newer source dependencies do not rewrite those records.

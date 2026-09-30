@@ -5,6 +5,11 @@ defined by `moon.mod`; it does not use Git version tags. Registry availability
 is recorded in the repository's
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 
+## [0.1.3]
+
+- Declare core `lampclaw/minimoon@0.2.5` and version the native resource bundle
+  at `0.1.3`. The public component API is unchanged.
+
 ## [0.1.2]
 
 - Ignore Slider touch cancellation from unrelated pointers. Active-pointer

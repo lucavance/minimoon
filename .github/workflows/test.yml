@@ -93,9 +93,9 @@ jobs:
           core_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' moon.mod)"
           ui_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' ui/moon.mod)"
           # Freeze the reviewed patch pair and UI's matching core dependency.
-          if [ "$core_version" != "0.2.4" ] || [ "$ui_version" != "0.1.2" ] ||
-             ! grep -Fq '"lampclaw/minimoon@0.2.4"' ui/moon.mod; then
-            echo "CI handoff requires the reviewed core 0.2.4 / UI 0.1.2 pair and UI core 0.2.4 dependency" >&2
+          if [ "$core_version" != "0.2.5" ] || [ "$ui_version" != "0.1.3" ] ||
+             ! grep -Fq '"lampclaw/minimoon@0.2.5"' ui/moon.mod; then
+            echo "CI handoff requires the reviewed core 0.2.5 / UI 0.1.3 pair and UI core 0.2.5 dependency" >&2
             exit 1
           fi
           moon_version="$(moon version --all)"

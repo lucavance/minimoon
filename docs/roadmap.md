@@ -4,24 +4,24 @@
 
 Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Once availability is recorded in project status, application
-authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.4` and
+authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.5` and
 `minimoon init my-app`. Source installation remains available for framework
 development and unpublished candidates. The current source pair is core
-`0.2.4` / UI `0.1.2`, with UI declaring core `0.2.4`.
+`0.2.5` / UI `0.1.3`, with UI declaring core `0.2.5`.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
 dated feature commitments.
 
-## Current development: stable Vite+ and dependency refresh
+## Current release preparation: stable Vite+ and dependency refresh
 
 Use global `vp 1.0.0` for repository tasks, package installation, internal
 tool launches and CI. Refresh `moonbitlang/async` to `0.22.4` and
 `weapp-tailwindcss` to `5.5.11` in the repository and generated Starter.
 MoonBit remains pinned to the current `0.10.14` release; `moonbitlang/x 0.5.5`,
 Node `26.10.0` / `>=24.20.0`, and managed Bun `1.4.2` remain unchanged. The
-current source pair stays core `0.2.4` / UI `0.1.2`; published archives are
-immutable and this maintenance update does not publish packages.
+current source pair is core `0.2.5` / UI `0.1.3`; previously published
+archives remain immutable. The public MoonBit APIs are unchanged.
 
 ## Core 0.2.4 / UI 0.1.2 corrections
 
@@ -190,8 +190,8 @@ is local and Git-ignored, just like the core fixture's evidence above.
 
 Freeze synchronized documentation, reviewed package contents, the source commit
 and both CI handoff bundles. Follow the
-[release runbook](operations/release_candidate_handoff.md): publish core `0.2.4`,
-verify fresh registry CLI/core consumers, then publish UI `0.1.2` and validate
+[release runbook](operations/release_candidate_handoff.md): publish core `0.2.5`,
+verify fresh registry CLI/core consumers, then publish UI `0.1.3` and validate
 the pair outside all workspaces. Preserve actual-evidence gates
 and candidate report restoration even though this scoped publication does not
 wait for host acceptance. Record dates, source SHA and registry checks only

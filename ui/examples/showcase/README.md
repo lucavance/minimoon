@@ -1,7 +1,7 @@
 # Minimoon UI showcase
 
-This six-page verification application exercises `lampclaw/minimoon_ui 0.1.2`
-with core `lampclaw/minimoon 0.2.4`. It covers all 64 pinned RUI families plus
+This six-page verification application exercises `lampclaw/minimoon_ui 0.1.3`
+with core `lampclaw/minimoon 0.2.5`. It covers all 64 pinned RUI families plus
 Form and Theme, with native substitutions described in the
 [migration map](../../docs/migration.md).
 
@@ -9,7 +9,8 @@ The Forms page sends only a non-sensitive title to public
 `https://echo.apifox.com/post`, with a ten-second timeout. Typed echo is not
 persistent storage. `vp run check:http-live` includes this form alongside the
 core example's HTTP scenarios; it is a transport-shim check, not WeChat evidence.
-This endpoint change requires fresh acceptance of the UI fixture's new fingerprint.
+Changes to this endpoint invalidate prior host evidence and require validation
+against the current fixture fingerprint.
 
 From the repository root:
 

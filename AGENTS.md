@@ -224,19 +224,20 @@ source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
 
-For the core `0.2.4` / UI `0.1.2` fixes, the user explicitly authorizes publication
-after the complete local candidate checks and both CI jobs pass for the frozen
-commit, without waiting for new WeChat host validation. Notify the user when
-CI passes, then continue the authorized publication. Keep tracked reports at
-`release: false` and Developer Tools status `pending`; never record an unperformed
-host pass or weaken `verify --release`, `check:all`, or `check:mvp`. This scoped
-exception is documented in `docs/operations/release_candidate_handoff.md` and
-does not waive package, consumer, source-cleanliness, or version checks.
-Publish core `0.2.4` first, validate fresh registry consumers, then publish UI
-`0.1.2` with its core `0.2.4` dependency from the independently reviewed archive.
-The user will validate both exact CI handoff artifacts on another machine.
-Prior core `0.2.2` / UI `0.1.1` and core-only `0.2.3` publication records remain
-historical; this authorization does not extend to future versions.
+For the core `0.2.5` / UI `0.1.3` toolchain and dependency refresh, the user
+explicitly authorizes publication after the complete local candidate checks,
+fingerprint-matched WeChat Developer Tools validation for both fixtures, and
+both CI jobs pass for the frozen commit. Notify the user when CI passes, then
+continue the authorized publication. Keep tracked reports at `release: false`
+and Developer Tools status `pending`; never record an unperformed host pass or
+weaken `verify --release`, `check:all`, or `check:mvp`. This scoped authorization
+is documented in `docs/operations/release_candidate_handoff.md` and does not
+waive package, consumer, source-cleanliness, or version checks. Publish core
+`0.2.5` first, validate fresh registry consumers, then publish UI `0.1.3` with
+its core `0.2.5` dependency from the independently reviewed archive. Prior core
+`0.2.4` / UI `0.1.2`, core `0.2.2` / UI `0.1.1`, and core-only `0.2.3`
+publication records remain historical; this authorization does not extend to
+future versions.
 
 ## WeChat Developer Tools Validation
 

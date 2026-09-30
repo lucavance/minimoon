@@ -2,8 +2,8 @@
 
 This workflow keeps deterministic Linux validation, real Skyline acceptance
 and explicit local registry publication distinct. The current source pair is
-core `lampclaw/minimoon@0.2.4` and UI `lampclaw/minimoon_ui@0.1.2`;
-UI declares core `0.2.4`. Actual published versions and historical checkpoints
+core `lampclaw/minimoon@0.2.5` and UI `lampclaw/minimoon_ui@0.1.3`;
+UI declares core `0.2.5`. Actual published versions and historical checkpoints
 are recorded in [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 Never overwrite an occupied registry version or treat an old host result as
 acceptance of changed artifacts.
@@ -28,6 +28,19 @@ another fingerprint or recorded without an actual pass. `verify --release`,
 contents, consumers, source cleanliness and both CI jobs remain required.
 The general host acceptance procedure below still applies before claiming
 Skyline acceptance; future publications need their own authorization.
+
+## Current authorized release: 0.2.5 / 0.1.3
+
+The user explicitly authorized publication of core `0.2.5` followed by UI
+`0.1.3` after the complete local candidate, both CI jobs for the frozen commit,
+package archive review and fresh registry-consumer checks pass. The user has
+reported successful WeChat Developer Tools validation for both
+dependency-update fixture fingerprints, and the tool version and user-reported
+results are recorded only in the local Git-ignored evidence files. Compare
+those fingerprints with the versioned release candidate; changed output requires
+renewed host validation. The regular `verify --release`,
+`check:all` and `check:mvp` gates still apply; this authorization waives no
+validation requirement.
 
 ## Freeze documentation and produce candidates
 
@@ -73,8 +86,8 @@ or use `moon -C ui publish`.
 The UI archive gate instead copies source into a temporary independent Git
 root, runs the real `moon package`, checks the archive allowlist and required
 files, and compiles consumers from the extracted package. Its reviewed output
-is `_build/publish/lampclaw-minimoon_ui-0.1.2.zip`. The core candidate archive is
-`_build/publish/lampclaw-minimoon-0.2.4.zip`. UI publication must use that checked
+is `_build/publish/lampclaw-minimoon_ui-0.1.3.zip`. The core candidate archive is
+`_build/publish/lampclaw-minimoon-0.2.5.zip`. UI publication must use that checked
 archive extracted outside all Git and Moon workspace ancestors, after registry
 core is available and consumers pass. A successful archive gate does not itself
 publish either module. Previously published archives remain immutable.
@@ -225,9 +238,9 @@ repository-only changes as well.
 
 Publication is an explicitly authorized local operator action, not a CI step.
 Authenticate as the module owner; do not add registry credentials to CI.
-Keep core `0.2.4` and UI `0.1.2` fixed throughout these
-checks. The user-approved exception above permits both host results to remain
-pending. Never modify an occupied registry version.
+Keep core `0.2.5` and UI `0.1.3` fixed throughout these
+checks. Require current fingerprint-matched host evidence for both fixtures;
+never modify an occupied registry version.
 
 1. Confirm both target versions are unoccupied immediately before publication.
    Use the registry index and actual download GET; the download service's HEAD
@@ -250,12 +263,12 @@ moon publish --frozen
    `moon publish` from the same checkout may then complete the normal self-check.
    Never use this fallback for a source-check failure or dependency drift.
    If an upload result is ambiguous, query the registry before retrying.
-3. Wait until Mooncakes resolves core `0.2.4`. In a fresh temporary directory
+3. Wait until Mooncakes resolves core `0.2.5`. In a fresh temporary directory
    outside this repository and every ancestor `moon.work`, install the registry
    CLI into a temporary binary directory:
 
 ```bash
-moon install --bin <temporary-bin> lampclaw/minimoon/cmd/minimoon@0.2.4
+moon install --bin <temporary-bin> lampclaw/minimoon/cmd/minimoon@0.2.5
 <temporary-bin>/minimoon --version
 <temporary-bin>/minimoon init <temporary-app>
 ```
@@ -270,28 +283,29 @@ moon install --bin <temporary-bin> lampclaw/minimoon/cmd/minimoon@0.2.4
    Test with vp-managed tools and no independently installed Bun. Compare the
    downloaded core inventory and file hashes against the reviewed archive;
    ZIP metadata alone is not a source-content difference.
-4. Upgrade a Starter created by registry CLI `0.2.3` to CLI/core `0.2.4`.
+4. Upgrade a Starter created by registry CLI `0.2.4` to CLI/core `0.2.5`.
    Follow the upgrade guide and preserve application logic, configuration,
    styles and private settings.
    Check/test, build, verify and repeat the build to establish deterministic
-   output. Old CLI archives remain unchanged. Extract the reviewed UI `0.1.2`
-   ZIP outside every Git and Moon workspace ancestor. Check the extracted
-   module and consumers against registry core `0.2.4`, then publish from that
+output. Old CLI archives remain unchanged. Extract the reviewed UI `0.1.3`
+ZIP outside every Git and Moon workspace ancestor. Check the extracted
+module and consumers against registry core `0.2.5`, then publish from that
    directory using the same self-check rules as core. Do not publish from the
    repository's `ui/` directory.
-5. Create a registry-only consumer declaring core `0.2.4` and UI `0.1.2`.
-   Confirm those resolved versions and UI's core `0.2.4` declaration.
+5. Create a registry-only consumer declaring core `0.2.5` and UI `0.1.3`.
+   Confirm those resolved versions and UI's core `0.2.5` declaration.
    Import root, headless and theme for native/JS behavior checks; exercise
    resources through the native build provider, not application JavaScript.
    Build and verify a candidate, reject unknown resources without corrupting
-   prior artifacts, and test deterministic rebuilding. Compare downloaded core
-   and UI contents to their reviewed ZIPs. Upgrade a separate core `0.2.3` /
-   UI `0.1.1` application to the new pair, preserving business source and private
+prior artifacts, and test deterministic rebuilding. Compare downloaded core
+and UI contents to their reviewed ZIPs. Upgrade a separate core `0.2.4` /
+UI `0.1.2` application to the new pair, preserving business source and private
    settings; rerun its build and candidate checks.
 6. Only after both publications and all fresh consumers pass, record the actual source SHA,
    publication date, CI result, registry links and package content checks in
-   repository-only `docs/project_status.md`. Keep host acceptance pending and
-   describe both new packages. Commit and push the status
+   repository-only `docs/project_status.md`. Keep generated reports in candidate
+   state and describe the local fingerprint-bound host evidence accurately.
+   Commit and push the status
    update and require its CI to pass. Do not modify already published contents.
 
 If a publication or consumer check fails, report the exact partial state.

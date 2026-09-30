@@ -1,8 +1,8 @@
 # Minimoon UI
 
 Native, touch-first Skyline components for Minimoon. Module
-`lampclaw/minimoon_ui 0.1.2` declares core `lampclaw/minimoon 0.2.4`.
-This patch keeps Slider gestures active when an unrelated touch is canceled.
+`lampclaw/minimoon_ui 0.1.3` declares core `lampclaw/minimoon 0.2.5`.
+The public component API is unchanged.
 
 The fixed reference is RUI 0.1.1 in Rabbita 0.15.6, commit
 `b1291945fd0201a0b5b39513b88585d6122db7bc`. The library uses public Minimoon
@@ -14,7 +14,7 @@ upstream visual-recipe attribution are retained in [LICENSE](LICENSE) and
 ## Install
 
 Use `moon 0.1.20260920` / `moonc v0.10.14` or newer and the matching core CLI
-`0.2.4`. Global `vp 1.0.0` manages Node `26.10.0` and Bun `1.4.2`;
+`0.2.5`. Global `vp 1.0.0` manages Node `26.10.0` and Bun `1.4.2`;
 Node `>=24.20.0` remains supported and CI checks the lower boundary. Follow
 the [environment setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/miniapp_quickstart.md#prerequisites);
 no separate Bun installation or local `vite-plus` dependency is needed.
@@ -27,8 +27,8 @@ Add both modules to the application's TOML-style `moon.mod`:
 
 ```moonbit
 import {
-  "lampclaw/minimoon@0.2.4",
-  "lampclaw/minimoon_ui@0.1.2",
+  "lampclaw/minimoon@0.2.5",
+  "lampclaw/minimoon_ui@0.1.3",
 }
 ```
 
@@ -78,8 +78,8 @@ deterministic, but selecting one feature does not produce only its selectors.
 
 ## Upgrade an existing UI application
 
-Upgrade the CLI and your direct core dependency to `0.2.4`, and UI to `0.1.2`.
-UI also declares core `0.2.4`. Set Node `26.10.0` in
+Upgrade the CLI and your direct core dependency to `0.2.5`, and UI to `0.1.3`.
+UI also declares core `0.2.5`. Set Node `26.10.0` in
 `devEngines.runtime` while retaining `engines.node: ">=24.20.0"` and Bun
 `1.4.2` in `devEngines.packageManager`. Update
 an existing style `package.json` to weapp-tailwindcss `5.5.11`, keeping Tailwind
@@ -210,15 +210,15 @@ publish directly from this repository's `ui/` directory or run
 can inherit the root `.moonignore` `/ui/` exclusion and produce an empty archive. The repository gate packages an
 isolated source copy and validates its actual ZIP, required files and consumers.
 
-The checked source archive is `_build/publish/lampclaw-minimoon_ui-0.1.2.zip`.
+The checked source archive is `_build/publish/lampclaw-minimoon_ui-0.1.3.zip`.
 Publish its reviewed contents from an independent directory after registry
-core `0.2.4` and fresh consumers pass. Previously published UI archives remain
+core `0.2.5` and fresh consumers pass. Previously published UI archives remain
 immutable; confirm that the new version is unoccupied before upload.
 
-For core `0.2.4` and UI `0.1.2`, the user authorizes publication after complete candidate checks
-and both CI jobs pass, without waiting for new host validation. Developer Tools
-remains pending, reports keep `release: false`, and no host pass is implied.
-The actual `verify --release` evidence gate is unchanged. Follow the
+For core `0.2.5` and UI `0.1.3`, the release checklist requires complete
+candidate checks, both CI jobs, fingerprint-matched host validation and fresh
+registry consumers. Developer Tools evidence stays local and tracked reports
+remain in candidate state. Follow the
 [ordered release procedure](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md#ordered-local-registry-publication).
 The linked guides are repository-hosted because `ui/docs` is not shipped in
 the registry archive.

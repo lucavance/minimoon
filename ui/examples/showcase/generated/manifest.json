@@ -60,7 +60,7 @@
       "package": "lampclaw/minimoon_ui/resources",
       "features": [],
       "id": "lampclaw/minimoon_ui/vega-v1",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "wxssBytes": 27330,
       "assets": [
         "assets/mmui/features.txt",
