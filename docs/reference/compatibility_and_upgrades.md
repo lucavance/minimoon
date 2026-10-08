@@ -147,6 +147,12 @@ Use the exact application style versions for the selected CLI:
 | `devEngines.packageManager` | Bun `1.4.2` | Bun `1.4.2` |
 | `devEngines.runtime` | Node `26.10.0` | Node `26.11.1` |
 
+Unpublished source also generates `overrides.source-map-js: "1.2.2"` to
+remove vulnerable nested resolutions. The registry `0.2.6` CLI retains its
+original template. Existing apps can add this override and reinstall; see the
+[source audit policy](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md#source-dependency-audit-policy)
+for the remaining `braces` advisory and temporary exception.
+
 Only the repository needs `acorn 8.19.0` and `eslint-scope 9.1.2` for validation.
 Use `vp 1.1.0` for source or `vp 1.0.0` for the published baseline. Follow the
 [quickstart](../guides/miniapp_quickstart.md#prerequisites); separate Bun and

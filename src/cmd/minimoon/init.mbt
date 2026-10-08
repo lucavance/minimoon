@@ -269,7 +269,8 @@ fn create_init_manifest(plan : InitPlan) -> InitManifest {
     "    }\n" +
     "  },\n" +
     "  \"overrides\": {\n" +
-    "    \"postcss\": \"8.5.29\"\n" +
+    "    \"postcss\": \"8.5.29\",\n" +
+    "    \"source-map-js\": \"1.2.2\"\n" +
     "  }\n" +
     "}\n",
   })

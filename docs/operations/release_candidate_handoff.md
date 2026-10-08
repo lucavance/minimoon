@@ -8,10 +8,13 @@ are recorded in [project status](https://github.com/lucavance/minimoon/blob/main
 Never overwrite an occupied registry version or treat an old host result as
 acceptance of changed artifacts.
 
-The user authorizes pushing this candidate after local candidate checks, then
-publishing after both CI jobs on the frozen commit and fingerprint-matched
-host validation pass. Publish core first, then the reviewed UI archive after
-fresh core consumers pass. Historical exceptions below do not waive these gates.
+The authorized core `0.2.6` / UI `0.1.4` publication is complete. The current
+audit repair is delivered as source; neither occupied version is overwritten.
+Future package releases require authorization and the gates below.
+
+Run `vp run --no-cache check:audit` separately from candidate validation. Its
+[source audit policy](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md#source-dependency-audit-policy)
+documents the remaining advisory, exact temporary exception and UTC deadline.
 
 ## Scoped publication exception
 

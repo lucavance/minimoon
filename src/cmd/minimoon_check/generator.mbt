@@ -617,9 +617,12 @@ async fn generator_suite(root : String) -> Unit {
     }
     require_text(app, "README.md", "vp install")
     forbid_text(app, "README.md", "bun install")
-    guard json_string(json_field(generated_package, "overrides"), "postcss") ==
-      json_string(repository_overrides, "postcss") else {
-      abort(template + " template has stale PostCSS override")
+    let generated_overrides = json_field(generated_package, "overrides")
+    for dependency in ["postcss", "source-map-js"] {
+      guard json_string(generated_overrides, dependency) ==
+        json_string(repository_overrides, dependency) else {
+        abort(template + " template has stale override " + dependency)
+      }
     }
     guard !@fs.exists(join(app, "_minimoon")) &&
       !@fs.exists(join(app, "src/cmd")) else {

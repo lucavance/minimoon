@@ -247,7 +247,7 @@ minimoon verify . --candidate
 
 If you already cloned the repository, start at `cd minimoon` from its parent.
 `my-app/` must be new or empty. Ensure `minimoon` resolves to the locally
-installed `0.2.6` CLI; an older registry CLI lacks the new Starter pins.
+installed CLI: registry `0.2.6` lacks the unpublished source-map-js override.
 
 The generated `moon.work` binds your app to the framework checkout. Keep both
 directories while developing in source mode. Removing that workspace switches

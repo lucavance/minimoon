@@ -1,6 +1,7 @@
 ///|
 async fn run_suite(root : String, suite : String) -> Unit {
   match suite {
+    "audit" => audit_suite(root)
     "static" => static_suite(root)
     "docs" => docs_suite(root)
     "metrics" => metrics_suite(root)

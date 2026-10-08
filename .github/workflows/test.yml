@@ -14,7 +14,7 @@ concurrency:
 jobs:
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
       VP_NODE_VERSION: 26.11.1
@@ -49,11 +49,6 @@ jobs:
           vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.2"'
           vp install --frozen-lockfile
 
-      - name: Dependency advisory scan
-        continue-on-error: true
-        timeout-minutes: 3
-        run: vp pm audit --level high
-
       - name: MoonBit environment
         run: |
           moon update
@@ -72,6 +67,25 @@ jobs:
             echo "moonc $installed_moonc is below the supported floor 0.10.14" >&2
             exit 1
           }
+
+      - name: Dependency advisory scan
+        id: dependency-audit
+        timeout-minutes: 3
+        run: vp run --no-cache check:audit
+
+      - name: Dependency advisory summary
+        if: ${{ always() && (steps.dependency-audit.outcome == 'success' || steps.dependency-audit.outcome == 'failure') }}
+        run: |
+          jq -r '"Dependency audit: " + .status + "\n" + .reason' _build/dependency-audit/summary.json >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload dependency advisory report
+        if: ${{ always() && (steps.dependency-audit.outcome == 'success' || steps.dependency-audit.outcome == 'failure') }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: minimoon-dependency-audit-${{ github.sha }}
+          path: _build/dependency-audit/
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Minimoon candidate gate
         run: |
@@ -239,7 +253,7 @@ jobs:
 
   node-lts-compat:
     name: Node 24 LTS compatibility
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
       VP_NODE_VERSION: 24.20.0

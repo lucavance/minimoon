@@ -11,6 +11,52 @@ Tailwind/CLI `4.3.3`, managed Bun `1.4.2` and Node `>=24.20.0` support remain
 unchanged. Registry CLI `0.2.6` generates the new Starter pins; previous CLI
 `0.2.5` retains Node `26.10.0`, PostCSS `8.5.28` and weapp-tailwindcss `5.5.11`.
 
+## Source dependency audit policy
+
+The subsequent source repair keeps core `0.2.6` / UI `0.1.4` version metadata
+and is **unpublished**. It adds `overrides.source-map-js: "1.2.2"` alongside
+the PostCSS override in the repository and source-generated Starter. This
+removes the two nested `source-map-js 1.2.1` resolutions affected by
+[GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q).
+The published `0.2.6` CLI retains its original Starter template; use the
+source CLI for this repair, or add that override to an existing app and run
+`vp install`, followed by `vp install --frozen-lockfile`.
+
+`vp run --no-cache check:audit` is a small, separate repository gate. It runs the
+pinned, vp-managed Bun audit, evaluates its raw JSON against all lockfile
+resolutions, and retains `audit.json`, `stderr.log` and `summary.json` under
+Git-ignored `_build/dependency-audit/`. CI runs the gate after MoonBit setup,
+blocks on failure, and uploads the reports even when the audit fails. Both
+jobs use `ubuntu-24.04` to keep the host image fixed.
+
+One high-severity advisory remains:
+[`braces` GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm).
+No patched registry version was available when the policy was approved on
+2026-10-08. The user approved a temporary exception only for this exact
+advisory URL, severity `high`, and installed `braces 3.0.3` at every lockfile
+location. It is valid through **2026-10-22 UTC**, and fails starting at
+**2026-10-23T00:00:00Z**. Production uses the current clock; no CLI or
+environment option extends the deadline.
+
+This exception accepts a known vulnerability; it is not a fix or a clean
+security audit. The reviewed path is build-time tooling: the one-shot Tailwind
+build and weapp CSS processing use developer-controlled sources and fixed
+patterns, including `**/*.css`. Static tracing found no MiniApp event or
+network payload path into the vulnerable brace-expansion call. Keep build
+patterns and plugins reviewed and reject untrusted build inputs; another
+input path requires reassessment. Track the
+[upstream issue](https://github.com/micromatch/braces/issues/70) and replace
+the exception with a reviewed patched release as soon as one is available.
+
+The summary distinguishes `clean`, `accepted_exception` and `failed`.
+An accepted exception prints its deadline and never reports zero
+vulnerabilities. Other high/critical advisories, a changed advisory or installed
+version, an expired exception, invalid JSON/lock data, inconsistent exit codes,
+stderr, network errors, launch failures and timeouts all fail the gate.
+Lower-severity findings remain visible in the report. This repair is delivered
+as source and an override existing apps can apply; no new package publication
+is needed, and both occupied versions remain immutable.
+
 ## Core 0.2.6 and UI 0.1.4 publication
 
 The frozen source is
