@@ -8,11 +8,13 @@ or `setData` is needed.
 
 ## Project status
 
-This source documents core `lampclaw/minimoon 0.2.5` and optional
-`lampclaw/minimoon_ui 0.1.3`, both pre-1.0. Check
+This source documents core `lampclaw/minimoon 0.2.6` and optional
+`lampclaw/minimoon_ui 0.1.4`, both pre-1.0. Check
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
 for registry availability before following the fixed-version installation below.
 Until that version is available, use the [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
+
+Registry availability is separate from candidate validation.
 
 ## What you can build
 
@@ -23,12 +25,12 @@ Until that version is available, use the [source workflow](docs/guides/miniapp_q
 ## Before you start
 
 Use `moon 0.1.20260920` / `moonc v0.10.14` or newer, Node `>=24.20.0`,
-global `vp 1.0.0` and WeChat Developer Tools with Skyline support.
+global `vp 1.1.0` for current source and WeChat Developer Tools with Skyline support.
 `vp` manages Node and Bun `1.4.2`; a separate Bun installation is unnecessary.
 Git is needed for the optional source development workflow.
 Both CI jobs pin `0.10.14+7d59c7ec9` (`moon 0.1.20260920`).
 Upgrade older MoonBit installations before using this source or these packages.
-CI covers Node 24.20.0 and 26.10.0.
+Current source selects Node `26.11.1`; CI covers Node 24.20.0 and 26.11.1.
 See [environment setup](docs/guides/miniapp_quickstart.md#prerequisites) for
 version checks and the pinned CI toolchain.
 
@@ -40,7 +42,7 @@ commands in a terminal with MoonBit and `vp` available:
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon@0.2.5
+moon install lampclaw/minimoon/cmd/minimoon@0.2.6
 minimoon --version
 minimoon init my-app
 cd my-app
@@ -60,15 +62,15 @@ resolved from Mooncakes; no `moon.work` or framework checkout is needed.
 Do not pass `--minimoon-root` for this setup. `vp install` installs the app's
 style build tools.
 
-Confirm `minimoon --version` reports `0.2.5`; check PATH if another installed CLI
+Confirm `minimoon --version` reports `0.2.6`; check PATH if another installed CLI
 is selected. See [fixed-version installation](docs/guides/miniapp_quickstart.md#install-a-specific-version)
 and [upgrading an existing app](docs/reference/compatibility_and_upgrades.md#upgrade-procedure).
 To develop the framework or use unpublished changes, follow the separate
 [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
 
-The `0.2.5` CLI routes JavaScript tools through stable `vp 1.0.0`, with managed
-Bun `1.4.2` and Node for stylesheet processing. This patch refreshes the
-`async` and `weapp-tailwindcss` dependencies; the public MoonBit API is unchanged.
+The `0.2.6` CLI uses `vp 1.1.0`, managed Bun `1.4.2` and Node `26.11.1`.
+The [style pins](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
+include PostCSS `8.5.29` and weapp-tailwindcss `5.5.12`; public MoonBit APIs are unchanged.
 The default Starter still has no `application` entry; follow
 [shared state](docs/guides/shared_state.md) to add one.
 Upgrade both the CLI and the application dependency when migrating an existing app.
@@ -82,8 +84,8 @@ For your AppID, edit only the ignored private configuration described in the
 You should see **Hello Minimoon**, a counter starting at **0**, a name input and
 **Open details**. Tap **+1**: the counter becomes **1**. Open Details and return.
 A passed CLI check is automated validation, not proof that these host interactions passed.
-The current source pair is core `0.2.5` and optional UI `0.1.3`; UI declares
-core `0.2.5`. Check [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md) for Mooncakes
+The current source pair is core `0.2.6` and optional UI `0.1.4`; UI declares
+core `0.2.6`. Check [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md) for Mooncakes
 availability and the release validation state.
 
 ### Make your first change

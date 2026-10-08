@@ -1,6 +1,6 @@
 # Minimoon 草稿工作台
 
-Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.5` 公共 API 的轻量示例：
+Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.6` 公共 API 的轻量示例：
 **四个原生 Tab、一个编辑器、四个能力实验室，共九条路由**。
 它同时承担核心框架 conformance 验收，不是账号系统或云笔记服务。
 
@@ -16,9 +16,9 @@ Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.2.5` 公共 API �
 vp run minimoon verify examples/miniapp_draft_workbench --candidate
 ```
 
-当前 `0.2.5` 源码使用稳定版 Vite+ CLI `1.0.0` 和更新后的
+当前 `0.2.6` 源码使用 Vite+ CLI `1.1.0` 和已固定的
 `moonbitlang/async 0.22.4`。使用上述仓库 CLI 或确认发布后的
-`0.2.5` Registry CLI，不能混用旧工具生成的文件。
+`0.2.6` Registry CLI，不能混用旧工具生成的文件。
 运行前准备 `moon 0.1.20260920`／`moonc v0.10.14`、Node `>=24.20.0` 和 Bun `1.4.2`。
 
 导入 **`examples/miniapp_draft_workbench/dist/`**，不要导入源码目录。
@@ -102,5 +102,5 @@ UI Showcase 表单回显，共 12 项；
 `generated/verify_report.json` 与 `release_summary.json` 是公开 candidate 记录；
 `devtools.evidence.json` 私人且被 Git 忽略。新名称、九路由和新产物必须重新验收，
 不能沿用旧核心证据。本轮共享宿主修复也改变了 UI 产物，UI Showcase 必须另行复验。
-当前源码版本为核心 `0.2.5`；候选产物、宿主验证和注册表可用性分别核验。
+当前源码版本为核心 `0.2.6`；候选产物、宿主验证和注册表可用性分别核验。
 不宣称生产请求域名或完整 HTTPS/TLS 验证，验证命令本身不会发布包。

@@ -42,7 +42,7 @@ async fn prepare_environment(
   ) catch {
     err =>
       raise Failure::Failure(
-        "Unable to start vp: \{err}. Install Vite+ CLI 1.0.0 and make sure `vp` is available on PATH.",
+        "Unable to start vp: \{err}. Install Vite+ CLI 1.1.0 and make sure `vp` is available on PATH.",
       )
   }
   guard code == 0 else {

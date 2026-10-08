@@ -4,26 +4,45 @@
 
 Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Once availability is recorded in project status, application
-authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.5` and
+authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.6` and
 `minimoon init my-app`. Source installation remains available for framework
 development and unpublished candidates. The current source pair is core
-`0.2.5` / UI `0.1.3`, with UI declaring core `0.2.5`.
+`0.2.6` / UI `0.1.4`, with UI declaring core `0.2.6`.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
 dated feature commitments.
 
-## Current release preparation: stable Vite+ and dependency refresh
+## Current release preparation: core 0.2.6 / UI 0.1.4
+
+Refresh Acorn to `8.19.0`, PostCSS and its override to `8.5.29`,
+weapp-tailwindcss to `5.5.12`, primary Node to `26.11.1`, global `vp` to
+`1.1.0` and SHA-pinned `actions/upload-artifact` to `7.0.2`. Synchronize the
+repository, source-generated Starter, CI and environment guidance. Retain
+MoonBit `0.10.14`, async `0.22.4`, x `0.5.5`, Tailwind/CLI `4.3.3`, managed
+Bun `1.4.2`, Node `>=24.20.0` support and the public MoonBit API boundaries.
+
+The candidate pair is core `0.2.6` / UI `0.1.4`; UI declares core `0.2.6`.
+Previous registry CLI `0.2.5` retains its original pins. Until the new pair is
+available, use the source workflow. Run complete
+candidate checks and independent Starter installation/build checks. Changed
+fixture fingerprints need renewed real-host validation before claiming a pass.
+The user authorizes push after those local checks and publication after both
+CI jobs for the frozen commit and exact-fingerprint host validation pass. Publish core
+first, verify fresh registry consumers, then publish the reviewed UI archive.
+No tags or GitHub Release are included.
+
+## Core 0.2.5 / UI 0.1.3 stable Vite+ refresh (completed)
 
 Use global `vp 1.0.0` for repository tasks, package installation, internal
 tool launches and CI. Refresh `moonbitlang/async` to `0.22.4` and
 `weapp-tailwindcss` to `5.5.11` in the repository and generated Starter.
 MoonBit remains pinned to the current `0.10.14` release; `moonbitlang/x 0.5.5`,
 Node `26.10.0` / `>=24.20.0`, and managed Bun `1.4.2` remain unchanged. The
-current source pair is core `0.2.5` / UI `0.1.3`; previously published
+release pair was core `0.2.5` / UI `0.1.3`; previously published
 archives remain immutable. The public MoonBit APIs are unchanged.
 
-## Core 0.2.4 / UI 0.1.2 corrections
+## Core 0.2.4 / UI 0.1.2 corrections (completed)
 
 - Fix keyed batch growth and nested branch visibility during cache restoration
   and rollback, preserving the existing public API and diff budgets.
@@ -35,7 +54,7 @@ archives remain immutable. The public MoonBit APIs are unchanged.
 - Publish core first, then the independently reviewed UI archive; validate new
   registry consumers and upgrades from core `0.2.3` / UI `0.1.1`.
 
-The user authorizes both patch publications after complete local candidate checks
+The historical authorization allowed both patch publications after complete local candidate checks
 and both CI jobs on the frozen commit, without waiting for new host validation.
 Notify the user of CI success and continue publication. Both CI handoff bundles
 remain pending for the user's validation on another machine; evidence gates
@@ -71,7 +90,7 @@ run; successful storage is required before reporting saved records.
 The shallow curved hero and fixed safe navigation geometry are retained.
 No backend, account, cloud sync, autosave or UI component expansion is planned.
 Both changed fixture artifacts need new validation before claiming host
-acceptance. The package publication exception does not establish that result.
+acceptance. Historical publication exceptions do not establish that result.
 Prioritize regression, device validation and a reproducible three-minute demonstration.
 See the [workbench guide](../examples/miniapp_draft_workbench/README.md).
 
@@ -177,7 +196,7 @@ The [UI migration map](https://github.com/lucavance/minimoon/blob/main/ui/docs/m
 distinguishes actual implemented capabilities, native substitutions and outstanding
 work. API names or 64 showcase headings alone are not evidence of full parity.
 Both applications require exact-fingerprint Skyline validation for a host
-acceptance claim; the current publication exception leaves that result pending.
+acceptance claim; publication requires matching evidence for both fixtures.
 
 The UI fixture's
 [`verify_report.json`](../ui/examples/showcase/generated/verify_report.json)
@@ -186,17 +205,18 @@ are independent public candidate records. Its
 [`devtools.evidence.json`](../ui/examples/showcase/generated/devtools.evidence.json)
 is local and Git-ignored, just like the core fixture's evidence above.
 
-## Release preparation
+## Release process
 
 Freeze synchronized documentation, reviewed package contents, the source commit
-and both CI handoff bundles. Follow the
-[release runbook](operations/release_candidate_handoff.md): publish core `0.2.5`,
-verify fresh registry CLI/core consumers, then publish UI `0.1.3` and validate
-the pair outside all workspaces. Preserve actual-evidence gates
-and candidate report restoration even though this scoped publication does not
-wait for host acceptance. Record dates, source SHA and registry checks only
-after they happen. Current availability belongs in [project status](project_status.md),
-not in immutable package contents.
+and both CI handoff bundles before any separately authorized release. Follow
+the [release runbook](operations/release_candidate_handoff.md), validating core
+registry consumers before publishing its matching UI archive. The `0.2.5` /
+`0.1.3` publication is complete; occupied versions and archives are immutable.
+The current pair has its own authorization and requires both CI jobs plus
+fingerprint-matched host validation. Preserve
+actual-evidence gates and candidate report restoration. Record dates, source
+SHA and registry checks only after they happen. Current availability belongs
+in [project status](project_status.md), not in immutable package contents.
 
 ## Deferred
 

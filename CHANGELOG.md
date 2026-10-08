@@ -4,6 +4,15 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
+## [0.2.6]
+
+- Update global Vite+ to `1.1.0`, primary Node to `26.11.1`, Acorn to `8.19.0`,
+  PostCSS and its override to `8.5.29`, and weapp-tailwindcss to `5.5.12`.
+  Synchronize Starter pins and pin CI upload-artifact to `7.0.2`.
+- Retain the reviewed MoonBit, async, x, Tailwind and Bun versions, Node
+  `>=24.20.0` support, public MoonBit API and Contract 11 / ABI 13 / protocol 8.
+- Pair with UI `0.1.4`, which declares core `0.2.6`.
+
 ## [0.2.5]
 
 - Adopt stable Vite+ CLI `1.0.0`, update `moonbitlang/async` to `0.22.4`, and

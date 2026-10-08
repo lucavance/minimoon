@@ -5,6 +5,12 @@ defined by `moon.mod`; it does not use Git version tags. Registry availability
 is recorded in the repository's
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 
+## [0.1.4]
+
+- Declare core `lampclaw/minimoon@0.2.6` and version the native resource bundle
+  at `0.1.4`. Keep the public component API and synchronize the reviewed
+  JavaScript toolchain guidance with core.
+
 ## [0.1.3]
 
 - Declare core `lampclaw/minimoon@0.2.5` and version the native resource bundle

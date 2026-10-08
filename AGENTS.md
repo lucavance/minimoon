@@ -115,7 +115,7 @@ Before starting a task:
 4. Inspect the relevant source, tests, generated artifacts, and documentation
    before proposing or implementing a change.
 
-Install global `vp 1.0.0` and initialize its managed environment
+Install global `vp 1.1.0` and initialize its managed environment
 as documented in `docs/guides/miniapp_quickstart.md`. For a fresh checkout,
 prepare the pinned environment with:
 
@@ -165,14 +165,21 @@ the user explicitly authorizes that action.
   Older MoonBit toolchains must be upgraded for core `0.2.2` and later / UI `0.1.1`.
   JavaScript tooling
   supports Node `>=24.20.0`; CI validates the 24.20.0 lower boundary and the
-  26.10.0 primary environment, while global `vp 1.0.0` manages Bun `1.4.2`.
-  The repository and new Starter pin Node `26.10.0` through `devEngines.runtime`; CI overrides it for
-  lower-bound checks. No `.node-version`
+  26.11.1 primary environment, while global `vp 1.1.0` manages Bun `1.4.2`.
+  The repository and Starters generated from current source pin Node `26.11.1`
+  through `devEngines.runtime`; CI overrides it for lower-bound checks. No `.node-version`
   is committed or generated. Updating the toolchain pin requires review and
   regeneration/validation of affected artifacts.
   Empty `{}` expressions are ambiguous: use `Map([])` for empty maps,
   `Json::empty_object()` for empty JSON objects, and `{ () }` for empty blocks.
   The aggregate gate requires `moon check` to be warning-free.
+
+- The current source pair is core `0.2.6` / UI `0.1.4`.
+  Previous registry CLI `0.2.5` generates
+  its original Node `26.10.0`, PostCSS `8.5.28` and weapp-tailwindcss `5.5.11`
+  pins. Before the new pair is published, use the source CLI for refreshed
+  Starter output. Published archives remain immutable; historical release
+  evidence does not establish a host pass for changed artifact fingerprints.
 
 - Avoid committing broad formatting drift from a global `moon fmt`. If you run
   `moon fmt` or `moon info`, inspect the diff and keep only changes that belong
@@ -224,17 +231,19 @@ source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
 
-For the core `0.2.5` / UI `0.1.3` toolchain and dependency refresh, the user
-explicitly authorizes publication after the complete local candidate checks,
-fingerprint-matched WeChat Developer Tools validation for both fixtures, and
-both CI jobs pass for the frozen commit. Notify the user when CI passes, then
+For the core `0.2.6` / UI `0.1.4` toolchain and dependency refresh, the user
+explicitly authorizes pushing the reviewed candidate after complete local
+candidate checks, then publishing after both CI jobs pass for the frozen commit
+and fingerprint-matched WeChat Developer Tools validation passes for both fixtures.
+Notify the user when CI passes, then
 continue the authorized publication. Keep tracked reports at `release: false`
 and Developer Tools status `pending`; never record an unperformed host pass or
 weaken `verify --release`, `check:all`, or `check:mvp`. This scoped authorization
 is documented in `docs/operations/release_candidate_handoff.md` and does not
 waive package, consumer, source-cleanliness, or version checks. Publish core
-`0.2.5` first, validate fresh registry consumers, then publish UI `0.1.3` with
-its core `0.2.5` dependency from the independently reviewed archive. Prior core
+`0.2.6` first, validate fresh registry consumers, then publish UI `0.1.4` with
+its core `0.2.6` dependency from the independently reviewed archive. Core
+`0.2.5` / UI `0.1.3` were published on 2026-09-30. Prior core
 `0.2.4` / UI `0.1.2`, core `0.2.2` / UI `0.1.1`, and core-only `0.2.3`
 publication records remain historical; this authorization does not extend to
 future versions.

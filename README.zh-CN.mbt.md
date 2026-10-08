@@ -7,11 +7,13 @@
 
 ## 项目状态
 
-当前源码对应核心 `lampclaw/minimoon 0.2.5` 与可选的
-`lampclaw/minimoon_ui 0.1.3`，仍处于 1.0 之前的阶段。
+当前源码对应核心 `lampclaw/minimoon 0.2.6` 与可选的
+`lampclaw/minimoon_ui 0.1.4`，仍处于 1.0 之前的阶段。
 执行下面的固定版本安装前，先在
 [项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)确认版本已在 Mooncakes 可用；
 尚未发布时使用[源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
+
+候选验证与注册表可用性分别记录。
 
 ## 已实现的主要能力
 
@@ -22,12 +24,12 @@
 ## 开始之前
 
 准备 `moon 0.1.20260920`／`moonc v0.10.14` 或更新版本、Node `>=24.20.0`、
-全局 `vp 1.0.0`，以及支持 Skyline 的微信开发者工具。
+全局 `vp 1.1.0`（当前源码环境），以及支持 Skyline 的微信开发者工具。
 `vp` 管理 Node 和内部使用的 Bun `1.4.2`，无需单独安装 Bun。
 可选的源码开发流程还需要 Git。
 两个 CI 任务固定使用 `0.10.14+7d59c7ec9`（`moon 0.1.20260920`）。
 使用本次源码和包之前，请升级更早的 MoonBit 工具链。
-CI 覆盖 Node 24.20.0 与 26.10.0。
+当前源码选择 Node `26.11.1`；CI 覆盖 Node 24.20.0 与 26.11.1。
 [环境说明](docs/guides/miniapp_quickstart.md#prerequisites)包含版本检查与 CI 固定工具链。
 
 ## 创建第一个应用
@@ -37,7 +39,7 @@ CI 覆盖 Node 24.20.0 与 26.10.0。
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon@0.2.5
+moon install lampclaw/minimoon/cmd/minimoon@0.2.6
 minimoon --version
 minimoon init my-app
 cd my-app
@@ -56,15 +58,15 @@ minimoon verify . --candidate
 解析；无需 `moon.work` 或框架源码目录。此流程不传 `--minimoon-root`。
 `vp install` 安装应用的样式构建工具。
 
-确认 `minimoon --version` 输出 `0.2.5`；如有其他版本，检查 PATH 中的旧 CLI。
+确认 `minimoon --version` 输出 `0.2.6`；如有其他版本，检查 PATH 中的旧 CLI。
 参见[固定版本安装](docs/guides/miniapp_quickstart.md#install-a-specific-version)及
 [已有应用升级步骤](docs/reference/compatibility_and_upgrades.md#upgrade-procedure)。
 开发框架或使用尚未发布的改动时，使用单独的
 [源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
 
-`0.2.5` CLI 通过稳定版 `vp 1.0.0` 调用 JavaScript 工具，内部使用受管理的
-Bun `1.4.2`，样式处理使用 Node。本补丁更新 `async` 与 `weapp-tailwindcss`
-依赖；公开 MoonBit API 保持不变。
+`0.2.6` CLI 使用 `vp 1.1.0`、受管理的 Bun `1.4.2` 和 Node `26.11.1`。
+[样式配置](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
+包含 PostCSS `8.5.29` 和 weapp-tailwindcss `5.5.12`；公开 MoonBit API 不变。
 默认 Starter 仍不启用 `application`；需要时按[共享状态指南](docs/guides/shared_state.md)添加。
 迁移已有应用时同时升级 CLI 和应用的核心依赖。
 
@@ -76,7 +78,7 @@ Bun `1.4.2`，样式处理使用 Node。本补丁更新 `async` 与 `weapp-tailw
 你应看到 **Hello Minimoon**、初始值为 **0** 的计数器、名称输入框与 **Open details**。
 点击 **+1** 后变为 **1**，进入 Details 后可以返回。
 CLI 检查通过只代表自动化验证，不代表这些宿主交互已经通过。
-当前源码版本为核心 `0.2.5` 和可选 UI `0.1.3`；UI 声明依赖核心 `0.2.5`。
+当前源码版本为核心 `0.2.6` 和可选 UI `0.1.4`；UI 声明依赖核心 `0.2.6`。
 请在[项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)中确认 Mooncakes 可用性和发布验证状态。
 
 ### 第一次修改

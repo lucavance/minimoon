@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      VP_NODE_VERSION: 26.10.0
+      VP_NODE_VERSION: 26.11.1
       VP_PACKAGE_MANAGER: bun@1.4.2
 
     defaults:
@@ -35,11 +35,11 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: Setup Vite+ (26.10.0)
+      - name: Setup Vite+ (26.11.1)
         uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
         with:
-          version: 1.0.0
-          node-version: 26.10.0
+          version: 1.1.0
+          node-version: 26.11.1
           run-install: false
           cache: true
 
@@ -93,9 +93,9 @@ jobs:
           core_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' moon.mod)"
           ui_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' ui/moon.mod)"
           # Freeze the reviewed patch pair and UI's matching core dependency.
-          if [ "$core_version" != "0.2.5" ] || [ "$ui_version" != "0.1.3" ] ||
-             ! grep -Fq '"lampclaw/minimoon@0.2.5"' ui/moon.mod; then
-            echo "CI handoff requires the reviewed core 0.2.5 / UI 0.1.3 pair and UI core 0.2.5 dependency" >&2
+          if [ "$core_version" != "0.2.6" ] || [ "$ui_version" != "0.1.4" ] ||
+             ! grep -Fq '"lampclaw/minimoon@0.2.6"' ui/moon.mod; then
+            echo "CI handoff requires the reviewed core 0.2.6 / UI 0.1.4 pair and UI core 0.2.6 dependency" >&2
             exit 1
           fi
           moon_version="$(moon version --all)"
@@ -222,7 +222,7 @@ jobs:
           git diff --exit-code
 
       - name: Upload core WeChat Developer Tools handoff
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: minimoon-devtools-${{ github.sha }}
           path: _build/devtools-handoff/core/
@@ -230,7 +230,7 @@ jobs:
           retention-days: 14
 
       - name: Upload UI WeChat Developer Tools handoff
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: minimoon-ui-devtools-${{ github.sha }}
           path: _build/devtools-handoff/ui/
@@ -261,7 +261,7 @@ jobs:
       - name: Setup Vite+ (24.20.0)
         uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
         with:
-          version: 1.0.0
+          version: 1.1.0
           node-version: 24.20.0
           run-install: false
           cache: true
