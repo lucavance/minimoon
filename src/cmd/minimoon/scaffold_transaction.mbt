@@ -6,7 +6,7 @@ async fn scaffold_transaction(
   restored_files : Array[(String, String)],
   created_files : Array[String],
   operation : async () -> Unit,
-  report_recovery? : (String) -> Unit = println,
+  report_recovery~ : (String) -> Unit = println,
 ) -> Unit {
   errdefer @async.protect_from_cancel(() => {
     let failures : Array[String] = []

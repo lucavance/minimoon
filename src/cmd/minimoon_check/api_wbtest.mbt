@@ -6,9 +6,9 @@ fn api_test_interface(body : String) -> String {
 ///|
 fn api_test_manifest(
   series : String,
-  contract : Int,
-  runtime : Int,
-  renderer : Int,
+  contract : Int32,
+  runtime : Int32,
+  renderer : Int32,
 ) -> Json {
   Json::object({
     "schemaVersion": Json::number(1.0),

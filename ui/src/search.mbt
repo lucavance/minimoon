@@ -80,7 +80,7 @@ pub fn combobox(
   id~ : String,
   label~ : String,
   options~ : @minimoon.Val[Array[ChoiceOption]],
-  initial_value? : String = "",
+  initial_value~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   let (value, emit) = @minimoon.create_variable(initial_value)
   combobox_controlled(
@@ -97,7 +97,7 @@ pub fn combobox(
 pub fn command(
   id~ : String,
   items~ : @minimoon.Val[Array[MenuItem]],
-  placeholder? : String = "Search commands",
+  placeholder~ : String = "Search commands",
 ) -> @minimoon.Val[@minimoon.Node] {
   let (query, emit_query) = @minimoon.create_variable("")
   let results = @minimoon.Val::map2(items, query, (items, query) => {

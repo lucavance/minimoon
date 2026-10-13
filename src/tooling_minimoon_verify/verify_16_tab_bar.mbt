@@ -14,7 +14,7 @@ fn native_tab_color(value : Json) -> Bool {
 async fn tab_bar_status(
   app_root : String,
   manifest : Json,
-  dist_dir? : String = join(app_root, "dist"),
+  dist_dir~ : String = join(app_root, "dist"),
 ) -> Json {
   let errors : Array[String] = []
   let app_file = join(dist_dir, "app.json")

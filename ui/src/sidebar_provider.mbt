@@ -227,7 +227,7 @@ pub fn[Input : Eq] sidebar_provider_controlled_with_input(
   on_change~ : @minimoon.Emit[SidebarState],
   input~ : @minimoon.Val[Input],
   render~ : (SidebarScope, Input) -> @minimoon.Node,
-  style? : String = "",
+  style~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   sidebar_build(context, id, input, state, on_change, render, style)
 }
@@ -239,7 +239,7 @@ pub fn sidebar_provider_controlled(
   state~ : @minimoon.Val[SidebarState],
   on_change~ : @minimoon.Emit[SidebarState],
   render~ : (SidebarScope) -> @minimoon.Node,
-  style? : String = "",
+  style~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   sidebar_build(
     context,
@@ -258,13 +258,13 @@ pub fn[Input : Eq] sidebar_provider_with_input(
   id~ : String,
   input~ : @minimoon.Val[Input],
   render~ : (SidebarScope, Input) -> @minimoon.Node,
-  default_collapsed? : Bool = false,
-  default_mobile_open? : Bool = false,
-  default_width? : Double = 256.0,
+  default_collapsed~ : Bool = false,
+  default_mobile_open~ : Bool = false,
+  default_width~ : Double = 256.0,
   on_collapsed_change? : @minimoon.Emit[Bool],
   on_mobile_open_change? : @minimoon.Emit[Bool],
   on_width_change? : @minimoon.Emit[Double],
-  style? : String = "",
+  style~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   let (state, emit) = @minimoon.create_state(
     sidebar_state(
@@ -300,13 +300,13 @@ pub fn sidebar_provider(
   context : UiContext,
   id~ : String,
   render~ : (SidebarScope) -> @minimoon.Node,
-  default_collapsed? : Bool = false,
-  default_mobile_open? : Bool = false,
-  default_width? : Double = 256.0,
+  default_collapsed~ : Bool = false,
+  default_mobile_open~ : Bool = false,
+  default_width~ : Double = 256.0,
   on_collapsed_change? : @minimoon.Emit[Bool],
   on_mobile_open_change? : @minimoon.Emit[Bool],
   on_width_change? : @minimoon.Emit[Double],
-  style? : String = "",
+  style~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   sidebar_provider_with_input(
     context,

@@ -171,15 +171,15 @@ pub fn program() -> @minimoon.Page {
               label="ID",
               hideable=false,
               searchable=false,
-              text=(row : (String, String, Int)) => row.0,
+              text=(row : (String, String, Int32)) => row.0,
             ),
             @ui.data_column(key="name", label="Name", text=(
-              row : (String, String, Int),
+              row : (String, String, Int32),
             ) => row.1),
             @ui.data_column(
               key="count",
               label="Count",
-              text=(row : (String, String, Int)) => row.2.to_string(),
+              text=(row : (String, String, Int32)) => row.2.to_string(),
               numeric_value=row => row.2.to_double(),
             ),
           ],

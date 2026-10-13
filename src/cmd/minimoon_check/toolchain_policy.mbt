@@ -3,7 +3,7 @@
 // comments, or the backend argument vector passed to vp.
 fn bare_bun_process_violations(source : String) -> Array[String] {
   let violations : Array[String] = []
-  let calls : Array[(String, Int)] = []
+  let calls : Array[(String, Int32)] = []
   let mut identifier = ""
   let mut cursor = 0
   while cursor < source.length() {
@@ -102,13 +102,13 @@ async fn vp_toolchain_policy(root : String) -> Unit {
   guard installers.length() == 2 &&
     installers.all(line => {
       line.contains(
-        "voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f",
+        "voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af",
       )
     }) else {
     abort("both CI jobs must pin the reviewed setup-vp action")
   }
   for setting in ["version: 1.1.0", "run-install: false"] {
-    guard workflow.split("\n").filter(line => line.trim() == setting).length() ==
+    guard workflow.split("\n").filter(line => line.trim() == setting).count() ==
       2 else {
       abort("both CI jobs must explicitly set " + setting)
     }

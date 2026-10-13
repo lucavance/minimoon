@@ -149,7 +149,7 @@ test "interaction owns native controls and independent local component scopes" {
   ignore(
     tab.change(
       @testing.by_event_key("controls/checked"),
-      ["typed", "scoped"].to_json(),
+      Json(["typed", "scoped"]),
     ),
   )
   ignore(

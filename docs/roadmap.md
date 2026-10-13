@@ -4,16 +4,37 @@
 
 Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Once availability is recorded in project status, application
-authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.6` and
+authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.7` and
 `minimoon init my-app`. Source installation remains available for framework
 development and unpublished candidates. The current source pair is core
-`0.2.6` / UI `0.1.4`, with UI declaring core `0.2.6`.
+`0.2.7` / UI `0.1.5`, with UI declaring core `0.2.7`.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
 dated feature commitments.
 
-## Current release preparation: core 0.2.6 / UI 0.1.4
+## Current local candidate: core 0.2.7 / UI 0.1.5
+
+Raise the MoonBit floor to `moon 0.1.20261012` / `moonc 0.10.15` and pin both
+CI jobs to official prebuilt release `0.10.15+943464bfa`. Migrate deprecated
+built-in JSON conversion and iterator counting and format source and generated
+templates with the same toolchain. Preserve the checked public API boundaries
+and Contract 11 / ABI 13 / protocol 8.
+
+Refresh managed Bun to `1.4.3`, PostCSS and its override to `8.5.30`,
+weapp-tailwindcss to `5.6.1` and SHA-pinned setup-vp to `1.21.2`. Keep global
+vp `1.1.0`, primary Node `26.11.1`, the Node `24.20.0` lower-bound check,
+async `0.22.4`, x `0.5.5`, Tailwind/CLI `4.3.3`, Acorn `8.19.0`, eslint-scope
+`9.1.2` and source-map-js override `1.2.2`. Use weapp's default JavaScript kernel.
+
+The user authorized complete local candidate validation and reviewable archives.
+Push, remote CI execution and publication are separate future actions. Use the
+source CLI until registry availability is recorded. Renew only the exact
+braces `3.0.3` advisory exception until `2026-11-23T00:00:00Z`; keep complete
+scanning, strict matching and expiry enforcement. Changed fixture fingerprints
+require renewed real-host validation before a host pass or future release.
+
+## Core 0.2.6 / UI 0.1.4 tooling refresh (completed)
 
 Refresh Acorn to `8.19.0`, PostCSS and its override to `8.5.29`,
 weapp-tailwindcss to `5.5.12`, primary Node to `26.11.1`, global `vp` to
@@ -22,12 +43,12 @@ repository, source-generated Starter, CI and environment guidance. Retain
 MoonBit `0.10.14`, async `0.22.4`, x `0.5.5`, Tailwind/CLI `4.3.3`, managed
 Bun `1.4.2`, Node `>=24.20.0` support and the public MoonBit API boundaries.
 
-The candidate pair is core `0.2.6` / UI `0.1.4`; UI declares core `0.2.6`.
+The released pair is core `0.2.6` / UI `0.1.4`; UI declares core `0.2.6`.
 Previous registry CLI `0.2.5` retains its original pins. Until the new pair is
 available, use the source workflow. Run complete
 candidate checks and independent Starter installation/build checks. Changed
 fixture fingerprints need renewed real-host validation before claiming a pass.
-The user authorizes push after those local checks and publication after both
+The historical authorization allowed push after those local checks and publication after both
 CI jobs for the frozen commit and exact-fingerprint host validation pass. Publish core
 first, verify fresh registry consumers, then publish the reviewed UI archive.
 No tags or GitHub Release are included.
@@ -212,8 +233,8 @@ and both CI handoff bundles before any separately authorized release. Follow
 the [release runbook](operations/release_candidate_handoff.md), validating core
 registry consumers before publishing its matching UI archive. The `0.2.5` /
 `0.1.3` publication is complete; occupied versions and archives are immutable.
-The current pair has its own authorization and requires both CI jobs plus
-fingerprint-matched host validation. Preserve
+The current pair is authorized through local candidate checks only. A future
+authorized publication requires both CI jobs plus fingerprint-matched host validation. Preserve
 actual-evidence gates and candidate report restoration. Record dates, source
 SHA and registry checks only after they happen. Current availability belongs
 in [project status](project_status.md), not in immutable package contents.

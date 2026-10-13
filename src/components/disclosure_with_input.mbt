@@ -13,9 +13,9 @@ pub fn[Input] disclosure_spec_with_input(
   id~ : String,
   label~ : String,
   panel~ : (Input) -> @minimoon.Node,
-  root_class? : String = "",
-  trigger_class? : String = "",
-  panel_class? : String = "",
+  root_class~ : String = "",
+  trigger_class~ : String = "",
+  panel_class~ : String = "",
 ) -> DisclosureSpecWithInput[Input] {
   guard id != "" else { abort("disclosure id must not be empty") }
   { id, label, panel, root_class, trigger_class, panel_class, }
@@ -72,7 +72,7 @@ pub fn[Input : Eq] disclosure_controlled_with_input(
 pub fn[Input : Eq] disclosure_with_input(
   spec : DisclosureSpecWithInput[Input],
   input~ : @minimoon.Val[Input],
-  initially_expanded? : Bool = false,
+  initially_expanded~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (expanded, update_expanded) = @minimoon.create_variable(
     initially_expanded,

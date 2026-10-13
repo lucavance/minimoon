@@ -4,6 +4,19 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
+## [0.2.7]
+
+- Require `moon 0.1.20261012` / `moonc 0.10.15`; migrate deprecated JSON
+  conversion and iterator counting, and synchronize formatting and templates.
+- Create component package metadata before formatting scaffold source.
+- Update managed Bun to `1.4.3`, PostCSS/override to `8.5.30`,
+  weapp-tailwindcss to `5.6.1` and SHA-pinned setup-vp to `1.21.2`.
+  Keep the JavaScript kernel and source-map-js override `1.2.2`.
+- Renew the exact braces `3.0.3` advisory exception until
+  `2026-11-23T00:00:00Z`, retaining full scanning and expiry enforcement.
+- Pair with UI `0.1.5`; preserve public APIs, Contract 11 / ABI 13 / protocol 8
+  and Node `>=24.20.0` / `26.11.1`. This is a local candidate.
+
 ## [0.2.6]
 
 - Update global Vite+ to `1.1.0`, primary Node to `26.11.1`, Acorn to `8.19.0`,

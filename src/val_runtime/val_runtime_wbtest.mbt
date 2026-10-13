@@ -14,7 +14,7 @@ fn run_message(graph : Graph, command : Cmd) -> Cmd {
 test "decode errors and mapped emitters preserve values" {
   let error = decode_error("invalid payload")
   assert_eq(error.message(), "invalid payload")
-  let received : Ref[Int?] = Ref(None)
+  let received : Ref[Int32?] = Ref(None)
   let numbers = Emit(value => {
     received.val = Some(value)
     none
@@ -106,7 +106,7 @@ test "dynamic branch initial commands follow candidate transactions" {
 ///|
 test "resource runs one initial load and records its completion" {
   let graph = Graph::new()
-  let resolvers : Ref[Array[Emit[Result[Int, Error]]]] = Ref([])
+  let resolvers : Ref[Array[Emit[Result[Int32, Error]]]] = Ref([])
   let resource = graph.build(fn() {
     create_resource(emit => {
       resolvers.val.push(emit)
@@ -130,7 +130,7 @@ test "resource runs one initial load and records its completion" {
 ///|
 test "resource keeps the first committed terminal completion" {
   let graph = Graph::new()
-  let resolver : Ref[Emit[Result[Int, Error]]?] = Ref(None)
+  let resolver : Ref[Emit[Result[Int32, Error]]?] = Ref(None)
   let resource = graph.build(fn() {
     create_resource(emit => {
       resolver.val = Some(emit)
@@ -164,7 +164,7 @@ test "resource keeps the first committed terminal completion" {
 ///|
 test "resource failure wins when it is the first committed completion" {
   let graph = Graph::new()
-  let resolver : Ref[Emit[Result[Int, Error]]?] = Ref(None)
+  let resolver : Ref[Emit[Result[Int32, Error]]?] = Ref(None)
   let resource = graph.build(fn() {
     create_resource(emit => {
       resolver.val = Some(emit)
@@ -187,7 +187,7 @@ test "resource failure wins when it is the first committed completion" {
 ///|
 test "rolled back resource completion leaves the resource pending" {
   let graph = Graph::new()
-  let resolver : Ref[Emit[Result[Int, Error]]?] = Ref(None)
+  let resolver : Ref[Emit[Result[Int32, Error]]?] = Ref(None)
   let resource = graph.build(fn() {
     create_resource(emit => {
       resolver.val = Some(emit)
@@ -215,7 +215,7 @@ test "rolled back resource completion leaves the resource pending" {
 ///|
 test "disposed resource ignores a late completion" {
   let graph = Graph::new()
-  let resolver : Ref[Emit[Result[Int, Error]]?] = Ref(None)
+  let resolver : Ref[Emit[Result[Int32, Error]]?] = Ref(None)
   let _resource = graph.build(fn() {
     create_resource(emit => {
       resolver.val = Some(emit)
@@ -237,9 +237,9 @@ test "disposed resource ignores a late completion" {
 
 ///|
 test "status equality compares loaded values and normalizes failures" {
-  let pending : Status[Int] = Pending
-  let failed_a : Status[Int] = Failed(Failure::Failure("a"))
-  let failed_b : Status[Int] = Failed(Failure::Failure("b"))
+  let pending : Status[Int32] = Pending
+  let failed_a : Status[Int32] = Failed(Failure::Failure("a"))
+  let failed_b : Status[Int32] = Failed(Failure::Failure("b"))
   assert_true(pending == Pending)
   assert_true(Loaded(2) == Loaded(2))
   assert_false(Loaded(2) == Loaded(3))

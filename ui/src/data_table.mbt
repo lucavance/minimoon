@@ -7,7 +7,7 @@ struct DataColumn[T] {
   sortable : Bool
   searchable : Bool
   hideable : Bool
-  compare : (T, T) -> Int
+  compare : (T, T) -> Int32
 }
 
 ///|
@@ -16,10 +16,10 @@ pub fn[T] data_column(
   label~ : String,
   text~ : (T) -> String,
   render? : (T) -> @minimoon.Node,
-  sortable? : Bool = true,
-  searchable? : Bool = true,
-  hideable? : Bool = true,
-  compare? : (T, T) -> Int,
+  sortable~ : Bool = true,
+  searchable~ : Bool = true,
+  hideable~ : Bool = true,
+  compare? : (T, T) -> Int32,
   numeric_value? : (T) -> Double,
 ) -> DataColumn[T] {
   {
@@ -42,8 +42,8 @@ pub fn[T] data_column(
 ///|
 pub(all) struct TableState {
   query : String
-  page : Int
-  page_size : Int
+  page : Int32
+  page_size : Int32
   sort_key : String
   descending : Bool
   selected_keys : Array[String]
@@ -51,7 +51,7 @@ pub(all) struct TableState {
 } derive(Eq, Debug)
 
 ///|
-pub fn table_state(page_size? : Int = 10) -> TableState {
+pub fn table_state(page_size~ : Int32 = 10) -> TableState {
   {
     query: "",
     page: 0,
@@ -66,8 +66,8 @@ pub fn table_state(page_size? : Int = 10) -> TableState {
 ///|
 pub fn[C : @minimoon.IsChildren] table(
   children : C,
-  id? : String = "",
-  class? : String = "",
+  id~ : String = "",
+  class~ : String = "",
 ) -> @minimoon.Node {
   @minimoon.scroll_view(
     scroll_x=true,
@@ -99,7 +99,7 @@ pub fn[C : @minimoon.IsChildren] table_footer(children : C) -> @minimoon.Node {
 ///|
 pub fn[C : @minimoon.IsChildren] table_row(
   children : C,
-  selected? : Bool = false,
+  selected~ : Bool = false,
 ) -> @minimoon.Node {
   ui_container(
     "table-row",
@@ -134,10 +134,10 @@ pub fn table_caption(text : String) -> @minimoon.Node {
 ///|
 pub fn pagination_controlled(
   id~ : String,
-  page~ : @minimoon.Val[Int],
-  total~ : @minimoon.Val[Int],
-  on_change~ : @minimoon.Emit[Int],
-  page_size? : Int = 10,
+  page~ : @minimoon.Val[Int32],
+  total~ : @minimoon.Val[Int32],
+  on_change~ : @minimoon.Emit[Int32],
+  page_size~ : Int32 = 10,
 ) -> @minimoon.Val[@minimoon.Node] {
   let dispatch = form_dispatch(
     @minimoon.Val::map2(page, total, (page, total) => (page, total)),
@@ -198,8 +198,8 @@ pub fn pagination_controlled(
 ///|
 pub fn pagination(
   id~ : String,
-  total~ : @minimoon.Val[Int],
-  page_size? : Int = 10,
+  total~ : @minimoon.Val[Int32],
+  page_size~ : Int32 = 10,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (page, emit) = @minimoon.create_variable(0)
   pagination_controlled(
@@ -212,7 +212,7 @@ pub fn pagination(
 }
 
 ///|
-fn compare_text(a : String, b : String) -> Int {
+fn compare_text(a : String, b : String) -> Int32 {
   let aa = a.iter().collect()
   let bb = b.iter().collect()
   for i = 0; i < aa.length().min(bb.length()); i = i + 1 {
@@ -234,7 +234,7 @@ pub fn[T : Eq] data_table_controlled(
   row_key~ : (T) -> String,
   state~ : @minimoon.Val[TableState],
   on_change~ : @minimoon.Emit[TableState],
-  selectable? : Bool = true,
+  selectable~ : Bool = true,
 ) -> @minimoon.Val[@minimoon.Node] {
   let column_keys : Map[String, Bool] = Map([])
   for column in columns {
@@ -386,8 +386,8 @@ pub fn[T : Eq] data_table(
   rows~ : @minimoon.Val[Array[T]],
   columns~ : Array[DataColumn[T]],
   row_key~ : (T) -> String,
-  page_size? : Int = 10,
-  selectable? : Bool = true,
+  page_size~ : Int32 = 10,
+  selectable~ : Bool = true,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (state, emit) = @minimoon.create_variable(table_state(page_size~))
   data_table_controlled(

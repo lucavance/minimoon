@@ -1,6 +1,6 @@
 ///|
 struct PageProgramTestModel {
-  count : Int
+  count : Int32
   name : String
   ready : Bool
 }
@@ -15,7 +15,7 @@ enum PageProgramTestMsg {
 
 ///|
 fn page_program_test_fixture(
-  model? : PageProgramTestModel = { count: 1, name: "Minimoon", ready: false, },
+  model~ : PageProgramTestModel = { count: 1, name: "Minimoon", ready: false, },
 ) -> @renderer_miniapp.PageProgram[PageProgramTestModel, PageProgramTestMsg] {
   @renderer_miniapp.simple_page_program(
     id="profile",
@@ -63,14 +63,14 @@ fn page_program_test_fixture(
 
 ///|
 priv struct LatestSubscriptionModel {
-  revision : Int
-  seen : Int
+  revision : Int32
+  seen : Int32
 }
 
 ///|
 priv enum LatestSubscriptionMsg {
   AdvanceSubscriptionModel
-  ObserveSubscription(Int)
+  ObserveSubscription(Int32)
 }
 
 ///|
@@ -242,9 +242,9 @@ test "generated page WXML imports the shared recursive template" {
 ///|
 test "recursive WXML passes short aliases without dropping node or event bindings" {
   let wxml = @renderer_miniapp.dynamic_templates_wxml()
-  let calls = wxml.split("is=\"minimoon_dynamic_node\"").length() - 1
+  let calls = wxml.split("is=\"minimoon_dynamic_node\"").count() - 1
   assert_true(calls > 10)
-  assert_eq(wxml.split("p: child.props, e: child.events").length() - 1, calls)
+  assert_eq(wxml.split("p: child.props, e: child.events").count() - 1, calls)
   assert_true(wxml.contains("{{node.children}}"))
   assert_true(wxml.contains("{{p.ariaValueNow}}"))
   assert_true(wxml.contains("{{e.touchcancel}}"))
@@ -254,7 +254,7 @@ test "recursive WXML passes short aliases without dropping node or event binding
 
 ///|
 enum CurrentEventTestMsg {
-  CurrentChanged(Int)
+  CurrentChanged(Int32)
 }
 
 ///|
@@ -262,7 +262,7 @@ enum DecoderEventTestMsg {
   BoolChanged(Bool)
   TextChanged(String)
   StringsChanged(Array[String])
-  IndexChanged(Int)
+  IndexChanged(Int32)
   ScrollChanged(@renderer_miniapp.MiniappScrollDetail)
   DecoderTapped
 }
@@ -771,7 +771,7 @@ test "ABI v13 rolls back Model when the next dynamic view is invalid" {
 ///|
 struct BranchEventModel {
   visible : Bool
-  hidden_hits : Int
+  hidden_hits : Int32
 }
 
 ///|
@@ -920,7 +920,9 @@ fn local_effect_runtime_program(
 
 ///|
 #cfg(target="js")
-extern "js" fn install_runtime_wake_v12_for_test(wake : (Int) -> Unit) -> Unit =
+extern "js" fn install_runtime_wake_v12_for_test(
+  wake : (Int32) -> Unit,
+) -> Unit =
   #|(wake) => { globalThis.__minimoonRuntimeWakeV12 = wake }
 
 ///|
@@ -960,7 +962,7 @@ test "ABI v13 internal drain publishes asynchronous local effect commands" {
 test "ABI v13 captures one transient host wake for asynchronous local effects" {
   let saved_emit : Ref[((LocalEffectRuntimeMsg) -> Unit)?] = Ref(None)
   let saved_finish : Ref[(() -> Unit)?] = Ref(None)
-  let wakes : Ref[Array[Int]] = Ref([])
+  let wakes : Ref[Array[Int32]] = Ref([])
   install_runtime_wake_v12_for_test(fn(through) { wakes.val.push(through) })
   let runtime = local_effect_runtime_program(saved_emit, saved_finish).create_runtime()
   clear_runtime_wake_v12_for_test()

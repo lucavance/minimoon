@@ -19,7 +19,7 @@ fn api_trim_trailing_whitespace(line : String) -> String {
 }
 
 ///|
-fn api_delimiter_delta(line : String) -> Int {
+fn api_delimiter_delta(line : String) -> Int32 {
   let mut delta = 0
   for index = 0; index < line.length(); index = index + 1 {
     match line[index] {
@@ -184,9 +184,9 @@ fn api_baseline_series(version : String) -> String? {
 fn api_manifest_violations(
   manifest : Json,
   product_series : String,
-  app_contract_version : Int,
-  runtime_api_version : Int,
-  renderer_protocol_version : Int,
+  app_contract_version : Int32,
+  runtime_api_version : Int32,
+  renderer_protocol_version : Int32,
 ) -> Array[String] {
   let violations : Array[String] = []
   for

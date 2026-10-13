@@ -6,8 +6,8 @@ priv struct NormalizedCacheEntry {
 
 ///|
 priv struct NormalizationWork {
-  node_visits : Int
-  cache_hits : Int
+  node_visits : Int32
+  cache_hits : Int32
 }
 
 ///|
@@ -25,17 +25,17 @@ priv struct NormalizationContext[Msg] {
   active : Map[String, NormalizedCacheEntry]
   updates : Map[String, NormalizedCacheEntry]
   reached : Set[String]
-  node_visits : Ref[Int]
-  cache_hits : Ref[Int]
+  node_visits : Ref[Int32]
+  cache_hits : Ref[Int32]
 }
 
 ///|
-fn retained_cache_key(identity : Int, path : String) -> String {
+fn retained_cache_key(identity : Int32, path : String) -> String {
   identity.to_string() + "@" + path.length().to_string() + ":" + path
 }
 
 ///|
-fn indexed_normalization_path(path : String, index : Int) -> String {
+fn indexed_normalization_path(path : String, index : Int32) -> String {
   path + "/i:" + index.to_string()
 }
 
@@ -390,7 +390,7 @@ pub fn dynamic_templates_wxml() -> String {
 ///|
 pub fn dynamic_page_wxml(
   page_id : String,
-  templates_src? : String = "../../minimoon.templates.wxml",
+  templates_src~ : String = "../../minimoon.templates.wxml",
 ) -> String {
   "<import src=\"" +
   templates_src +

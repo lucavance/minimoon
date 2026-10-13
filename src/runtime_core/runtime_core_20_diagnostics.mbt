@@ -158,7 +158,7 @@ fn describe_runtime_command_target(command : RuntimeCommand) -> String {
 }
 
 ///|
-fn runtime_command_payload_warning(payload_size : Int) -> String {
+fn runtime_command_payload_warning(payload_size : Int32) -> String {
   if payload_size >= 1024 * 1024 {
     "RuntimeCommand payload is at least 1MiB; split component state or use keyed operations"
   } else if payload_size >= 256 * 1024 {

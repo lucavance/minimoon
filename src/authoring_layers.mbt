@@ -60,9 +60,9 @@ fn collect_layers(
 /// Place all declarative layers after the content, outside scrolling and
 /// clipped containers. Call once at the page's visual root.
 pub fn[C : IsChildren] layer_root(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let children = children.to_nodes()

@@ -1,7 +1,7 @@
 ///|
 priv struct ErasedProbe {
   label : String
-  value : Int
+  value : Int32
 }
 
 ///|

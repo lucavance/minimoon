@@ -1,13 +1,13 @@
 ///|
 priv struct AppDriver {
   owner : @val.Application
-  running : @runtime.RunningComponent[Int, GraphMessage]
+  running : @runtime.RunningComponent[Int32, GraphMessage]
   output : Ref[Array[@runtime.RuntimeCommand]]
   launched : Ref[Bool]
   visible : Ref[Bool]
-  intervals : Map[String, Int]
+  intervals : Map[String, Int32]
   subscription_messages : Map[String, Cmd]
-  through : Ref[Int]
+  through : Ref[Int32]
 }
 
 ///|
@@ -153,7 +153,7 @@ fn AppDriver::take_commands(self : AppDriver) -> String {
 
 ///|
 fn AppDriver::sync_intervals(self : AppDriver) -> Unit {
-  let next : Map[String, (Int, Cmd)] = Map([])
+  let next : Map[String, (Int32, Cmd)] = Map([])
   if self.visible.val && !self.owner.is_disposed() {
     let graph = self.owner.graph()
     graph.run(fn() {

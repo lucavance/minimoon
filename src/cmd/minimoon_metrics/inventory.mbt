@@ -3,7 +3,7 @@ enum EmbeddedExtraction {
   AllLiterals
   RawLiterals
   ExceptLiterals(Array[String])
-  SelectedLiterals(Bool, Array[(String, Int)])
+  SelectedLiterals(Bool, Array[(String, Int32)])
   Excluded
 } derive(Debug)
 
@@ -14,7 +14,7 @@ struct EmbeddedInventoryEntry {
   category : String
   extraction : EmbeddedExtraction
   reason : String
-  ignored_literals : Array[(String, Int)]
+  ignored_literals : Array[(String, Int32)]
 } derive(Debug)
 
 ///|
@@ -23,8 +23,8 @@ fn embedded_entry(
   declaration : String,
   category : String,
   extraction : EmbeddedExtraction,
-  reason? : String = "",
-  ignored_literals? : Array[(String, Int)] = [],
+  reason~ : String = "",
+  ignored_literals~ : Array[(String, Int32)] = [],
 ) -> EmbeddedInventoryEntry {
   { file, declaration, category, extraction, reason, ignored_literals, }
 }

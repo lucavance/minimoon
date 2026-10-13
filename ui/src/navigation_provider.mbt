@@ -6,10 +6,10 @@ pub fn[Input : Eq] navigation_menu_provider_controlled_with_input(
   value~ : @minimoon.Val[String?],
   on_value_change~ : @minimoon.Emit[String?],
   render~ : (NavigationMenuScope, Input) -> @minimoon.Node,
-  viewport? : Bool = true,
-  aria_label? : String = "Main navigation",
-  side_offset? : Double = 8.0,
-  align_offset? : Double = 0.0,
+  viewport~ : Bool = true,
+  aria_label~ : String = "Main navigation",
+  side_offset~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (_, toggle) = @minimoon.create_state_with_input(
     input=value,
@@ -142,10 +142,10 @@ pub fn navigation_menu_provider_controlled(
   value~ : @minimoon.Val[String?],
   on_value_change~ : @minimoon.Emit[String?],
   render~ : (NavigationMenuScope) -> @minimoon.Node,
-  viewport? : Bool = true,
-  aria_label? : String = "Main navigation",
-  side_offset? : Double = 8.0,
-  align_offset? : Double = 0.0,
+  viewport~ : Bool = true,
+  aria_label~ : String = "Main navigation",
+  side_offset~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
 ) -> @minimoon.Val[@minimoon.Node] {
   navigation_menu_provider_controlled_with_input(
     context,
@@ -168,11 +168,11 @@ pub fn[Input : Eq] navigation_menu_provider_with_input(
   input~ : @minimoon.Val[Input],
   render~ : (NavigationMenuScope, Input) -> @minimoon.Node,
   default_value? : String,
-  viewport? : Bool = true,
+  viewport~ : Bool = true,
   on_value_change? : @minimoon.Emit[String?],
-  aria_label? : String = "Main navigation",
-  side_offset? : Double = 8.0,
-  align_offset? : Double = 0.0,
+  aria_label~ : String = "Main navigation",
+  side_offset~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (value, set_value) = @minimoon.create_variable(default_value)
   navigation_menu_provider_controlled_with_input(
@@ -200,11 +200,11 @@ pub fn navigation_menu_root(
   id~ : String,
   render~ : (NavigationMenuScope) -> @minimoon.Node,
   default_value? : String,
-  viewport? : Bool = true,
+  viewport~ : Bool = true,
   on_value_change? : @minimoon.Emit[String?],
-  aria_label? : String = "Main navigation",
-  side_offset? : Double = 8.0,
-  align_offset? : Double = 0.0,
+  aria_label~ : String = "Main navigation",
+  side_offset~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
 ) -> @minimoon.Val[@minimoon.Node] {
   navigation_menu_provider_with_input(
     context,

@@ -26,7 +26,7 @@ pub fn[Deps] App::capabilities(self : App[Deps]) -> Array[Capability] {
 ///|
 pub fn[Deps] app(
   build~ : (AppContext) -> Deps,
-  capabilities? : Array[Capability] = [],
+  capabilities~ : Array[Capability] = [],
 ) -> App[Deps] {
   for capability in capabilities {
     guard capability is (Request | Login | GetStorage | SetStorage) else {
@@ -61,8 +61,8 @@ pub fn[Deps] AppRuntime::deps(self : AppRuntime[Deps]) -> Deps {
 pub fn[Deps] AppRuntime::create_page(
   self : AppRuntime[Deps],
   page : Page,
-  input? : Map[String, String] = Map([]),
-  layout? : PageLayout = PageLayout::unavailable(),
+  input~ : Map[String, String] = Map([]),
+  layout~ : PageLayout = PageLayout::unavailable(),
 ) -> Result[PageRuntime, DecodeError] {
   self.driver.owner.with_pages(() => page.create_runtime(input~, layout~))
 }
@@ -182,7 +182,7 @@ pub fn AppContext::on_hide(self : AppContext, command : Cmd) -> Sub {
 pub fn AppContext::every(
   self : AppContext,
   key~ : String,
-  interval_ms~ : Int,
+  interval_ms~ : Int32,
   command~ : Cmd,
 ) -> Sub {
   let _ = self

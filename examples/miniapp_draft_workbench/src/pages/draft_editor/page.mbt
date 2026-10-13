@@ -7,7 +7,7 @@ priv struct Input {
 ///|
 priv enum Msg {
   Send(@application.Buffer)
-  Finished(Int, Result[@application.DraftEcho, Error])
+  Finished(Int32, Result[@application.DraftEcho, Error])
 }
 
 ///|

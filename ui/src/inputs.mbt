@@ -4,28 +4,28 @@ pub struct InputOptions {
   read_only : Bool
   invalid : Bool
   placeholder : String
-  maxlength : Int
+  maxlength : Int32
   input_type : @minimoon.InputType
   password : Bool
   focus : Bool
   name : String
-  selection_start : Int?
-  selection_end : Int?
+  selection_start : Int32?
+  selection_end : Int32?
 } derive(Eq, Debug)
 
 ///|
 pub fn input_options(
-  disabled? : Bool = false,
-  read_only? : Bool = false,
-  invalid? : Bool = false,
-  placeholder? : String = "",
-  maxlength? : Int = 140,
-  input_type? : @minimoon.InputType = @minimoon.TextInput,
-  password? : Bool = false,
-  focus? : Bool = false,
-  name? : String = "",
-  selection_start? : Int,
-  selection_end? : Int,
+  disabled~ : Bool = false,
+  read_only~ : Bool = false,
+  invalid~ : Bool = false,
+  placeholder~ : String = "",
+  maxlength~ : Int32 = 140,
+  input_type~ : @minimoon.InputType = @minimoon.TextInput,
+  password~ : Bool = false,
+  focus~ : Bool = false,
+  name~ : String = "",
+  selection_start? : Int32,
+  selection_end? : Int32,
 ) -> InputOptions {
   guard maxlength >= -1 else { abort("maxlength must be -1 or nonnegative") }
   {
@@ -51,8 +51,8 @@ pub fn input(
   id~ : String,
   value~ : String,
   on_input~ : @minimoon.Emit[String],
-  options? : InputOptions = input_options(),
-  focused? : Bool = false,
+  options~ : InputOptions = input_options(),
+  focused~ : Bool = false,
   on_confirm? : @minimoon.Emit[String],
   semantics? : @minimoon.Semantics,
   on_focus? : @minimoon.Emit[@minimoon.FocusDetail],
@@ -91,8 +91,8 @@ pub fn input(
 /// A convenience input that owns its value and focus for this component lifetime.
 pub fn input_stateful(
   id~ : String,
-  initial_value? : String = "",
-  options? : InputOptions = input_options(),
+  initial_value~ : String = "",
+  options~ : InputOptions = input_options(),
   on_confirm? : @minimoon.Emit[String],
   semantics? : @minimoon.Semantics,
   on_focus? : @minimoon.Emit[@minimoon.FocusDetail],
@@ -117,8 +117,8 @@ pub fn textarea(
   id~ : String,
   value~ : String,
   on_input~ : @minimoon.Emit[String],
-  options? : InputOptions = input_options(),
-  focused? : Bool = false,
+  options~ : InputOptions = input_options(),
+  focused~ : Bool = false,
   on_confirm? : @minimoon.Emit[String],
   semantics? : @minimoon.Semantics,
   on_focus? : @minimoon.Emit[@minimoon.FocusDetail],
@@ -153,8 +153,8 @@ pub fn textarea(
 /// A convenience textarea that owns its value and native focus state.
 pub fn textarea_stateful(
   id~ : String,
-  initial_value? : String = "",
-  options? : InputOptions = input_options(),
+  initial_value~ : String = "",
+  options~ : InputOptions = input_options(),
   on_confirm? : @minimoon.Emit[String],
   semantics? : @minimoon.Semantics,
   on_focus? : @minimoon.Emit[@minimoon.FocusDetail],

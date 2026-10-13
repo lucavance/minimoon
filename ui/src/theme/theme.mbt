@@ -21,11 +21,11 @@ pub(all) struct Tokens {
   muted_foreground : String
   border : String
   destructive : String
-  radius : Int
+  radius : Int32
 } derive(Eq, Debug)
 
 ///|
-pub fn tokens(mode? : ColorMode = Light) -> Tokens {
+pub fn tokens(mode~ : ColorMode = Light) -> Tokens {
   match mode {
     Light =>
       {
@@ -63,8 +63,8 @@ pub struct Theme {
 
 ///|
 pub fn theme(
-  mode? : ColorMode = Light,
-  direction? : TextDirection = Ltr,
+  mode~ : ColorMode = Light,
+  direction~ : TextDirection = Ltr,
   tokens? : Tokens,
 ) -> Theme {
   let palette = tokens.unwrap_or(default_tokens(mode))

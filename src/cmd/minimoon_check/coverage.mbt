@@ -1,12 +1,12 @@
 ///|
 struct CoverageEntry {
   path : String
-  covered : Int
-  total : Int
+  covered : Int32
+  total : Int32
 }
 
 ///|
-fn coverage_integer(value : String, label : String) -> Int {
+fn coverage_integer(value : String, label : String) -> Int32 {
   guard value != "" else { abort(label + " must be an integer") }
   let result = Ref(0)
   for index = 0; index < value.length(); index = index + 1 {
@@ -75,9 +75,9 @@ fn is_coverage_production_source(path : String) -> Bool {
 ///|
 fn require_coverage(
   label : String,
-  covered : Int,
-  total : Int,
-  minimum_percent : Int,
+  covered : Int32,
+  total : Int32,
+  minimum_percent : Int32,
 ) -> Unit {
   guard total > 0 else { abort(label + " coverage has no measurable points") }
   println(
@@ -99,7 +99,7 @@ fn require_coverage(
 fn require_coverage_group(
   entries : Array[CoverageEntry],
   label : String,
-  minimum_percent : Int,
+  minimum_percent : Int32,
   matches : (String) -> Bool,
 ) -> Unit {
   let covered = Ref(0)

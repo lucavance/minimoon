@@ -75,7 +75,7 @@ pub fn[E : Eq, A : Eq] Node::enumerate_by(
 /// restores the previous cache and active scope exactly.
 pub fn[E : Eq, A : Eq] Node::enumerate_bounded_by(
   map : Node[E],
-  capacity~ : Int,
+  capacity~ : Int32,
   f : (E, Node[E]) -> Node[A],
   by~ : (E) -> String,
 ) -> Node[A] {
@@ -83,7 +83,7 @@ pub fn[E : Eq, A : Eq] Node::enumerate_bounded_by(
     abort("bounded enumeration capacity must be positive")
   }
   let cache : Map[String, DynamicBranch[E, A]] = Map([])
-  let recency : Map[String, Int] = Map([])
+  let recency : Map[String, Int32] = Map([])
   let mut active_tag : String? = None
   let mut use_clock = 0
   map.bind(value => {
@@ -123,7 +123,7 @@ pub fn[E : Eq, A : Eq] Node::enumerate_bounded_by(
       }
       None => {
         let previous_active = active_tag
-        let evicted : (String, DynamicBranch[E, A], Int)? = if cache.length() >=
+        let evicted : (String, DynamicBranch[E, A], Int32)? = if cache.length() >=
           capacity {
           let victim_tag : Ref[String?] = Ref(None)
           let victim_use = Ref(0)
@@ -208,7 +208,7 @@ priv struct AssocEntry[V, C] {
   set_value : (V) -> Unit
   result : Node[C]
   scope : @slotmap.Id
-  mut epoch : Int
+  mut epoch : Int32
 }
 
 ///|

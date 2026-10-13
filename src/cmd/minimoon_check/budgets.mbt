@@ -2,39 +2,39 @@
 // vp migration review, 2026-09-21: initial core archive 323,623 B.
 // The managed-process launcher and setup docs need one additional 8 KiB step.
 // Retain the 8 KiB reserve; runtime, Starter and UI byte budgets are unchanged.
-let registry_archive_hard_limit : Int = 328 * 1024
+let registry_archive_hard_limit : Int32 = 328 * 1024
 
 ///|
-let registry_archive_reserve : Int = 8 * 1024
+let registry_archive_reserve : Int32 = 8 * 1024
 
 ///|
-let registry_archive_operating_limit : Int = registry_archive_hard_limit -
+let registry_archive_operating_limit : Int32 = registry_archive_hard_limit -
   registry_archive_reserve
 
 ///|
 // Approved Draft Workbench review, 2026-09-10: runtime/aggregate 427,143/461,392 B.
 // Only the core example's fixed ceilings change; framework/Starter/UI gates do not.
-let conformance_runtime_limit : Int = 440000
+let conformance_runtime_limit : Int32 = 440000
 
 ///|
-let conformance_javascript_limit : Int = 480000
+let conformance_javascript_limit : Int32 = 480000
 
 ///|
 // Independent starter follow-up: optimized runtime/aggregate 226,205/253,966 B.
-let starter_runtime_limit : Int = 230000
+let starter_runtime_limit : Int32 = 230000
 
 ///|
-let starter_javascript_limit : Int = 258000
+let starter_javascript_limit : Int32 = 258000
 
 ///|
 // Native navigation/layout calibration: no-App 17,501 B; App 18,276 B.
-let page_host_limit : Int = 18000
+let page_host_limit : Int32 = 18000
 
 ///|
-let application_host_limit : Int = 19000
+let application_host_limit : Int32 = 19000
 
 ///|
-fn shared_host_limit(application : Bool) -> Int {
+fn shared_host_limit(application : Bool) -> Int32 {
   if application {
     application_host_limit
   } else {
@@ -43,6 +43,6 @@ fn shared_host_limit(application : Bool) -> Int {
 }
 
 ///|
-fn byte_budget_allows(size : Int, limit : Int) -> Bool {
+fn byte_budget_allows(size : Int32, limit : Int32) -> Bool {
   size >= 0 && size <= limit
 }

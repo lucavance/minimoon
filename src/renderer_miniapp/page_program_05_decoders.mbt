@@ -69,7 +69,7 @@ pub fn[Msg] Events::change_strings(
 pub fn[Msg] Events::change_index(
   self : Events[Msg],
   key : String,
-  to_msg : (Int) -> Msg,
+  to_msg : (Int32) -> Msg,
 ) -> PageEvent[Msg] {
   self.custom(key, Change, payload => {
     match event_detail(payload) {
@@ -96,7 +96,7 @@ pub fn[Msg] Events::change_index(
 pub fn[Msg] Events::change_current(
   self : Events[Msg],
   key : String,
-  to_msg : (Int) -> Msg,
+  to_msg : (Int32) -> Msg,
 ) -> PageEvent[Msg] {
   self.custom(key, Change, payload => {
     match event_detail(payload) {
@@ -123,7 +123,7 @@ pub fn[Msg] Events::change_current(
 }
 
 ///|
-fn decimal_index(value : String) -> Int? {
+fn decimal_index(value : String) -> Int32? {
   if value == "" {
     return None
   }

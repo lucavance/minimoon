@@ -24,7 +24,7 @@ pub enum Node {
   Text(String)
   Fragment(Array[Node])
   KeyedFragment(Array[KeyedNode])
-  Retained(Int, Node)
+  Retained(Int32, Node)
   Empty
 }
 
@@ -111,7 +111,7 @@ pub fn keyed_fragment(children : Array[KeyedNode]) -> Node {
 ///|
 /// Attaches an opaque authoring identity that renderers may use for retained
 /// subtree caches. The wrapper has no host-visible representation.
-pub fn retained(identity : Int, node : Node) -> Node {
+pub fn retained(identity : Int32, node : Node) -> Node {
   Retained(identity, node)
 }
 
@@ -165,10 +165,10 @@ pub fn map_event_keys(node : Node, map : (EventKey) -> EventKey) -> Node {
 ///|
 pub fn element(
   tag : String,
-  id? : String = "",
-  class? : String = "",
-  attrs? : Array[Attr] = [],
-  children? : Array[Node] = [],
+  id~ : String = "",
+  class~ : String = "",
+  attrs~ : Array[Attr] = [],
+  children~ : Array[Node] = [],
 ) -> Node {
   if id != "" {
     attrs.push(attr("id", id))
@@ -181,9 +181,9 @@ pub fn element(
 
 ///|
 pub fn[C : IsChildren] h1(
-  id? : String = "",
-  class? : String = "",
-  attrs? : Array[Attr] = [],
+  id~ : String = "",
+  class~ : String = "",
+  attrs~ : Array[Attr] = [],
   children : C,
 ) -> Node {
   element("h1", id~, class~, attrs~, children=children.to_children())
@@ -191,9 +191,9 @@ pub fn[C : IsChildren] h1(
 
 ///|
 pub fn[C : IsChildren] div(
-  id? : String = "",
-  class? : String = "",
-  attrs? : Array[Attr] = [],
+  id~ : String = "",
+  class~ : String = "",
+  attrs~ : Array[Attr] = [],
   children : C,
 ) -> Node {
   element("div", id~, class~, attrs~, children=children.to_children())
@@ -201,9 +201,9 @@ pub fn[C : IsChildren] div(
 
 ///|
 pub fn[C : IsChildren] span(
-  id? : String = "",
-  class? : String = "",
-  attrs? : Array[Attr] = [],
+  id~ : String = "",
+  class~ : String = "",
+  attrs~ : Array[Attr] = [],
   children : C,
 ) -> Node {
   element("span", id~, class~, attrs~, children=children.to_children())
@@ -211,9 +211,9 @@ pub fn[C : IsChildren] span(
 
 ///|
 pub fn[C : IsChildren] p(
-  id? : String = "",
-  class? : String = "",
-  attrs? : Array[Attr] = [],
+  id~ : String = "",
+  class~ : String = "",
+  attrs~ : Array[Attr] = [],
   children : C,
 ) -> Node {
   element("p", id~, class~, attrs~, children=children.to_children())
@@ -221,10 +221,10 @@ pub fn[C : IsChildren] p(
 
 ///|
 pub fn[C : IsChildren] button(
-  id? : String = "",
-  class? : String = "",
-  on_click? : String = "",
-  attrs? : Array[Attr] = [],
+  id~ : String = "",
+  class~ : String = "",
+  on_click~ : String = "",
+  attrs~ : Array[Attr] = [],
   children : C,
 ) -> Node {
   if on_click != "" {
@@ -235,20 +235,20 @@ pub fn[C : IsChildren] button(
 
 ///|
 pub fn input(
-  id? : String = "",
-  class? : String = "",
-  attrs? : Array[Attr] = [],
+  id~ : String = "",
+  class~ : String = "",
+  attrs~ : Array[Attr] = [],
 ) -> Node {
   element("input", id~, class~, attrs~)
 }
 
 ///|
 pub fn image(
-  id? : String = "",
-  class? : String = "",
-  src? : String = "",
-  alt? : String = "",
-  attrs? : Array[Attr] = [],
+  id~ : String = "",
+  class~ : String = "",
+  src~ : String = "",
+  alt~ : String = "",
+  attrs~ : Array[Attr] = [],
 ) -> Node {
   if src != "" {
     attrs.push(src_attr(src))

@@ -7,14 +7,14 @@ pub(all) enum CheckState {
 
 ///|
 pub fn checkbox_state_controlled(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
   state~ : @minimoon.Val[CheckState],
   on_change~ : @minimoon.Emit[CheckState],
-  label? : String = "",
-  disabled? : Bool = false,
-  read_only? : Bool = false,
-  invalid? : Bool = false,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  read_only~ : Bool = false,
+  invalid~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   state.map(state => {
     @minimoon.checkbox_group(
@@ -53,13 +53,13 @@ pub fn checkbox_state_controlled(
 
 ///|
 pub fn checkbox_state(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
-  initial? : CheckState = Unchecked,
-  label? : String = "",
-  disabled? : Bool = false,
-  read_only? : Bool = false,
-  invalid? : Bool = false,
+  initial~ : CheckState = Unchecked,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  read_only~ : Bool = false,
+  invalid~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (state, update) = @minimoon.create_variable(initial)
   checkbox_state_controlled(

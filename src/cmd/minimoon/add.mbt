@@ -24,7 +24,7 @@ fn page_package_id(page : Json) -> String {
 }
 
 ///|
-async fn format_moon(file : String) -> Int {
+async fn format_moon(file : String) -> Int32 {
   @process.run("moon", ["fmt", file], cwd=dirname(file))
 }
 
@@ -32,7 +32,7 @@ async fn format_moon(file : String) -> Int {
 async fn write_formatted_moon(
   file : String,
   content : String,
-  format? : async (String) -> Int = format_moon,
+  format~ : async (String) -> Int32 = format_moon,
 ) -> Unit {
   write_file(file, content)
   let code = format(file) catch {
@@ -47,7 +47,7 @@ fn page_source(
   name : String,
   route : String,
   title : String,
-  application? : Bool = false,
+  application~ : Bool = false,
 ) -> String {
   "///|\n" +
   "fn app(_context : @minimoon.PageContext) -> @minimoon.Val[@minimoon.Node] {\n" +
@@ -319,6 +319,11 @@ async fn run_add_component(
       [(page_manifest, old_manifest)],
       [page_binding],
       () => {
+        // Package metadata must exist before moon fmt selects generated files.
+        write_file(
+          join_path(component_dir, "moon.pkg"),
+          miniapp_package_manifest(),
+        )
         write_formatted_moon(
           join_path(component_dir, "component.mbt"),
           component_source(name),
@@ -350,10 +355,6 @@ async fn run_add_component(
           "  let _ = runtime.dispatch(\"status/increment\", \"{}\")\n" +
           "  inspect(runtime.snapshot().contains(\"Status 1\"), content=\"true\")\n" +
           "}\n",
-        )
-        write_file(
-          join_path(component_dir, "moon.pkg"),
-          miniapp_package_manifest(),
         )
         write_formatted_moon(page_binding, component_page_binding_source(name))
         write_file(page_manifest, next_manifest)

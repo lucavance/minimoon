@@ -11,7 +11,7 @@ pub fn tab_item(
   key~ : String,
   label~ : String,
   panel~ : @minimoon.Node,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> TabItem {
   guard key != "" else { abort("tab key must not be empty") }
   guard label != "" else { abort("tab label must not be empty") }
@@ -80,15 +80,15 @@ pub fn tabs_controlled(
   items~ : Array[TabItem],
   selected_key~ : @minimoon.Val[String?],
   on_change~ : @minimoon.Emit[String?],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  root_class? : String = "",
-  list_class? : String = "",
-  tab_class_name? : String = "",
-  active_tab_class? : String = "",
-  inactive_tab_class? : String = "",
-  panel_class? : String = "",
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  root_class~ : String = "",
+  list_class~ : String = "",
+  tab_class_name~ : String = "",
+  active_tab_class~ : String = "",
+  inactive_tab_class~ : String = "",
+  panel_class~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   guard id != "" else { abort("tabs id must not be empty") }
   validate_tab_items(items)
@@ -169,15 +169,15 @@ pub fn tabs(
   id~ : String,
   items~ : Array[TabItem],
   initial_selected_key? : String,
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  root_class? : String = "",
-  list_class? : String = "",
-  tab_class_name? : String = "",
-  active_tab_class? : String = "",
-  inactive_tab_class? : String = "",
-  panel_class? : String = "",
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  root_class~ : String = "",
+  list_class~ : String = "",
+  tab_class_name~ : String = "",
+  active_tab_class~ : String = "",
+  inactive_tab_class~ : String = "",
+  panel_class~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   validate_tab_items(items)
   let (selected, update_selected) = @minimoon.create_variable(

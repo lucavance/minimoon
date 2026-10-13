@@ -6,7 +6,7 @@ test "application disposal frees page bindings stores subscriptions and registry
     let shared = owner.build(fn() {
         owner.create_state_with_init(
           _ => (0, none),
-          (model, msg : Int, _) => (model + msg, none),
+          (model, msg : Int32, _) => (model + msg, none),
           Some((_, emit) => every("tick", 1000, emit.emit(1))),
         )
       }).0

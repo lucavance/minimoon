@@ -33,8 +33,8 @@ pub(all) enum Cmd {
   CmdNavigateTo(String)
   CmdRedirectTo(String)
   CmdSwitchTab(String)
-  CmdNavigateBack(Int)
-  CmdNavigateBackOrRedirect(Int, String)
+  CmdNavigateBack(Int32)
+  CmdNavigateBackOrRedirect(Int32, String)
 }
 
 ///|
@@ -83,7 +83,7 @@ pub fn switch_tab(url : String) -> Cmd {
 }
 
 ///|
-pub fn navigate_back(delta : Int) -> Cmd {
+pub fn navigate_back(delta : Int32) -> Cmd {
   guard delta >= 1 else {
     abort("MiniApp navigateBack delta must be at least 1")
   }
@@ -91,7 +91,7 @@ pub fn navigate_back(delta : Int) -> Cmd {
 }
 
 ///|
-pub fn navigate_back_or_redirect(delta : Int, fallback : String) -> Cmd {
+pub fn navigate_back_or_redirect(delta : Int32, fallback : String) -> Cmd {
   guard delta >= 1 else {
     abort("MiniApp navigateBack delta must be at least 1")
   }
@@ -105,7 +105,7 @@ pub fn navigate_back_or_redirect(delta : Int, fallback : String) -> Cmd {
 pub(all) enum Sub {
   SubNone
   SubBatch(Array[Sub])
-  SubEvery(String, Int, Cmd)
+  SubEvery(String, Int32, Cmd)
   SubLifecycle(String, (Json) -> Result[Cmd, DecodeError])
 }
 
@@ -118,7 +118,7 @@ pub fn sub_batch(subscriptions : Array[Sub]) -> Sub {
 pub let no_sub : Sub = SubNone
 
 ///|
-pub fn every(key : String, interval_ms : Int, command : Cmd) -> Sub {
+pub fn every(key : String, interval_ms : Int32, command : Cmd) -> Sub {
   guard key != "" else { abort("subscription key must not be empty") }
   guard interval_ms > 0 else { abort("subscription interval must be positive") }
   SubEvery(key, interval_ms, command)
@@ -143,8 +143,8 @@ pub struct Graph {
   generation : GraphGeneration
   root_scope : @duplix.RootScope
   transaction_active : Ref[Bool]
-  revision : Ref[Int]
-  pending_changes : Ref[Int]
+  revision : Ref[Int32]
+  pending_changes : Ref[Int32]
   commits : Ref[Array[() -> Unit]]
   rollbacks : Ref[Array[() -> Unit]]
   state_registry : StateRegistry
@@ -221,7 +221,7 @@ pub fn Graph::begin(self : Graph) -> Unit {
 }
 
 ///|
-pub fn Graph::candidate_revision(self : Graph) -> Int {
+pub fn Graph::candidate_revision(self : Graph) -> Int32 {
   self.revision.val + (if self.pending_changes.val > 0 { 1 } else { 0 })
 }
 

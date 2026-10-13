@@ -77,7 +77,7 @@ priv enum DriverMessage {
   DriverScroll(@minimoon.ScrollDetail)
   DriverUpper
   DriverLower
-  DriverSwiper(Int)
+  DriverSwiper(Int32)
 }
 
 ///|

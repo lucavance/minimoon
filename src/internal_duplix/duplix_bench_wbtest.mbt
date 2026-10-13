@@ -1,5 +1,5 @@
 ///|
-fn exercise_bounded_scopes(count : Int) -> Int {
+fn exercise_bounded_scopes(count : Int32) -> Int32 {
   let root = RootScope::new()
   let disposed = Ref(0)
   let (output, set_source) = root.run(fn() {
@@ -24,7 +24,7 @@ fn exercise_bounded_scopes(count : Int) -> Int {
 }
 
 ///|
-fn bench_bounded_scopes(b : @bench.T, count : Int) -> Unit {
+fn bench_bounded_scopes(b : @bench.T, count : Int32) -> Unit {
   b.bench(fn() { b.keep(exercise_bounded_scopes(count)) })
 }
 

@@ -11,7 +11,7 @@ pub fn[Input] accordion_item_with_input(
   key~ : String,
   label~ : String,
   panel~ : (Input) -> @minimoon.Node,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> AccordionItemWithInput[Input] {
   guard key != "" else { abort("accordion item key must not be empty") }
   guard label != "" else { abort("accordion item label must not be empty") }
@@ -155,14 +155,14 @@ pub fn[Input : Eq] accordion_single_controlled_with_input(
   input~ : @minimoon.Val[Input],
   open_key~ : @minimoon.Val[String?],
   on_change~ : @minimoon.Emit[String?],
-  label? : String = "",
-  collapsible? : Bool = true,
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
-  root_class? : String = "",
-  item_class? : String = "",
-  trigger_class? : String = "",
-  panel_class? : String = "",
+  label~ : String = "",
+  collapsible~ : Bool = true,
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
+  root_class~ : String = "",
+  item_class~ : String = "",
+  trigger_class~ : String = "",
+  panel_class~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   guard id != "" else { abort("accordion id must not be empty") }
   validate_accordion_items_with_input(items)
@@ -200,14 +200,14 @@ pub fn[Input : Eq] accordion_single_with_input(
   items~ : Array[AccordionItemWithInput[Input]],
   input~ : @minimoon.Val[Input],
   initial_open_key? : String,
-  label? : String = "",
-  collapsible? : Bool = true,
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
-  root_class? : String = "",
-  item_class? : String = "",
-  trigger_class? : String = "",
-  panel_class? : String = "",
+  label~ : String = "",
+  collapsible~ : Bool = true,
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
+  root_class~ : String = "",
+  item_class~ : String = "",
+  trigger_class~ : String = "",
+  panel_class~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   validate_accordion_items_with_input(items)
   let (open_key, update_open_key) = @minimoon.create_variable(
@@ -265,13 +265,13 @@ pub fn[Input : Eq] accordion_multiple_controlled_with_input(
   input~ : @minimoon.Val[Input],
   open_keys~ : @minimoon.Val[Array[String]],
   on_change~ : @minimoon.Emit[Array[String]],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
-  root_class? : String = "",
-  item_class? : String = "",
-  trigger_class? : String = "",
-  panel_class? : String = "",
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
+  root_class~ : String = "",
+  item_class~ : String = "",
+  trigger_class~ : String = "",
+  panel_class~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   guard id != "" else { abort("accordion id must not be empty") }
   validate_accordion_items_with_input(items)
@@ -298,14 +298,14 @@ pub fn[Input : Eq] accordion_multiple_with_input(
   id~ : String,
   items~ : Array[AccordionItemWithInput[Input]],
   input~ : @minimoon.Val[Input],
-  initial_open_keys? : Array[String] = [],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
-  root_class? : String = "",
-  item_class? : String = "",
-  trigger_class? : String = "",
-  panel_class? : String = "",
+  initial_open_keys~ : Array[String] = [],
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
+  root_class~ : String = "",
+  item_class~ : String = "",
+  trigger_class~ : String = "",
+  panel_class~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   validate_accordion_items_with_input(items)
   let (open_keys, update_open_keys) = @minimoon.create_variable(

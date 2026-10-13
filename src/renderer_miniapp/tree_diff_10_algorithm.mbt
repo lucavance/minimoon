@@ -7,8 +7,8 @@ fn diff_keyed_children(
 ) -> Bool {
   let old_ids : Array[String] = []
   let next_ids : Array[String] = []
-  let old_indices : Map[String, Int] = Map([])
-  let next_indices : Map[String, Int] = Map([])
+  let old_indices : Map[String, Int32] = Map([])
+  let next_indices : Map[String, Int32] = Map([])
   let next_id_set : Set[String] = Set([])
   for child in old_children {
     match tree_child_identity(child) {
@@ -31,7 +31,7 @@ fn diff_keyed_children(
   }
   let structure : Array[TreePatchOp] = []
   let working = old_ids.map(identity => identity)
-  let working_positions : Map[String, Int] = Map([])
+  let working_positions : Map[String, Int32] = Map([])
   reindex_string_positions(working, working_positions, 0)
   let structure_cost = Ref(0)
   for index = old_ids.length() - 1; index >= 0; index = index - 1 {
@@ -218,7 +218,7 @@ fn diff_miniapp_trees(old_tree : Json, next_tree : Json) -> TreeDiffResult {
 }
 
 ///|
-fn TreePatchOp::host_write_cost(self : TreePatchOp) -> Int {
+fn TreePatchOp::host_write_cost(self : TreePatchOp) -> Int32 {
   match self {
     SetTreeField(_, _) => 1
     SpliceTreeChildren(_, _, _, _) => 1
@@ -227,7 +227,7 @@ fn TreePatchOp::host_write_cost(self : TreePatchOp) -> Int {
 }
 
 ///|
-fn tree_patch_host_write_cost(ops : Array[TreePatchOp]) -> Int {
+fn tree_patch_host_write_cost(ops : Array[TreePatchOp]) -> Int32 {
   let total = Ref(0)
   for op in ops {
     total.val = total.val + op.host_write_cost()
@@ -237,9 +237,9 @@ fn tree_patch_host_write_cost(ops : Array[TreePatchOp]) -> Int {
 
 ///|
 fn should_use_tree_patch(
-  patch_bytes : Int,
-  replace_bytes : Int,
-  host_write_cost : Int,
+  patch_bytes : Int32,
+  replace_bytes : Int32,
+  host_write_cost : Int32,
 ) -> Bool {
   patch_bytes * 4 <= replace_bytes * 3 && host_write_cost <= 32
 }

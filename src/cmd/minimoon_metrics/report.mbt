@@ -1,10 +1,10 @@
 ///|
 struct FileTotals {
-  mut files : Int
-  mut bytes : Int
-  mut physical_lines : Int
-  mut text_files : Int
-  mut binary_files : Int
+  mut files : Int32
+  mut bytes : Int32
+  mut physical_lines : Int32
+  mut text_files : Int32
+  mut binary_files : Int32
 } derive(Debug)
 
 ///|
@@ -35,7 +35,7 @@ fn total_files(entries : Array[FileMetric]) -> FileTotals {
 }
 
 ///|
-fn metrics_number(value : Int) -> Json {
+fn metrics_number(value : Int32) -> Json {
   Json::number(value.to_double())
 }
 

@@ -1,6 +1,6 @@
 name = "lampclaw/minimoon"
 
-version = "0.2.6"
+version = "0.2.7"
 
 import {
   "moonbitlang/async@0.22.4",

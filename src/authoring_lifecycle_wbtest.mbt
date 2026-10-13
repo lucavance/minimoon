@@ -141,13 +141,13 @@ test "rejected Load remains retryable and does not consume boot or init commands
 ///|
 test "Show decoders observe staged layout and shared state and failure rolls both back" {
   let application = app(build=context => {
-    context.create_pure_state(0, update=(count, delta : Int) => count + delta)
+    context.create_pure_state(0, update=(count, delta : Int32) => count + delta)
   }).create_runtime()
   defer ignore(application.dispose())
   ignore(application.lifecycle("onLaunch", "{}"))
   let reject = Ref(false)
-  let observed : Array[(String, Int)] = []
-  let inputs : Ref[Val[(PageLayout, Int)]?] = Ref(None)
+  let observed : Array[(String, Int32)] = []
+  let inputs : Ref[Val[(PageLayout, Int32)]?] = Ref(None)
   let definition = page(
     id="lifecycle_show",
     route=route("pages/lifecycle/show"),
@@ -216,7 +216,7 @@ test "Show decoders observe staged layout and shared state and failure rolls bot
     ToJson::to_json(test_layout(430.0)).stringify(),
   )
   assert_false(accepted.contains("RuntimeError"))
-  assert_eq(accepted.split("\"base_revision\":").length(), 2)
+  assert_eq(accepted.split("\"base_revision\":").count(), 2)
   assert_eq(observed, [("375", 0), ("420", 7), ("430", 7)])
   assert_true(runtime.snapshot().contains("width:430 shared:7 shows:2"))
 }
@@ -224,7 +224,7 @@ test "Show decoders observe staged layout and shared state and failure rolls bot
 ///|
 test "rejected Hide still defers shared and layout updates until the host shows the page" {
   let application = app(build=context => {
-    context.create_pure_state(0, update=(count, delta : Int) => count + delta)
+    context.create_pure_state(0, update=(count, delta : Int32) => count + delta)
   }).create_runtime()
   defer ignore(application.dispose())
   ignore(application.lifecycle("onLaunch", "{}"))

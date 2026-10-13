@@ -2,14 +2,14 @@
 pub struct Model {
   enabled : Bool
   note : String
-  pulses : Int
+  pulses : Int32
 } derive(Eq)
 
 ///|
 pub struct Props {
   id : String
   title : String
-  pulse_step : Int
+  pulse_step : Int32
   tone : String
 } derive(Eq)
 
@@ -29,7 +29,7 @@ pub fn initial_model() -> Model {
 pub fn props(
   id~ : String,
   title~ : String,
-  pulse_step~ : Int,
+  pulse_step~ : Int32,
   tone~ : String,
 ) -> Props {
   { id, title, pulse_step, tone, }

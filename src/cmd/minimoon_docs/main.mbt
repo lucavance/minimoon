@@ -17,7 +17,7 @@ let documents : ReadOnlyArray[String] = [
 ///|
 struct Diagram {
   document : String
-  index : Int
+  index : Int32
   heading : String
   stem : String
   mermaid : String
@@ -175,7 +175,7 @@ fn svg_view_box(svg : String, file : String) -> String {
 }
 
 ///|
-fn png_u32(data : Bytes, offset : Int) -> Int {
+fn png_u32(data : Bytes, offset : Int32) -> Int32 {
   (data[offset].to_int() << 24) |
   (data[offset + 1].to_int() << 16) |
   (data[offset + 2].to_int() << 8) |
@@ -183,7 +183,7 @@ fn png_u32(data : Bytes, offset : Int) -> Int {
 }
 
 ///|
-fn png_dimensions(data : Bytes, file : String) -> (Int, Int) {
+fn png_dimensions(data : Bytes, file : String) -> (Int32, Int32) {
   guard data.length() >= 24 &&
     data[0] == 0x89 &&
     data[1] == 0x50 &&
@@ -195,7 +195,7 @@ fn png_dimensions(data : Bytes, file : String) -> (Int, Int) {
 }
 
 ///|
-fn json_int(value : Int) -> Json {
+fn json_int(value : Int32) -> Json {
   Json::number(value.to_double(), repr=value.to_string())
 }
 

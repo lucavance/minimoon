@@ -10,7 +10,7 @@ fn test_png_asset() -> Json {
 }
 
 ///|
-fn resource_test_u32(value : UInt) -> Bytes {
+fn resource_test_u32(value : UInt32) -> Bytes {
   Bytes::from_array([
     (value >> 24).to_byte(),
     (value >> 16).to_byte(),
@@ -35,7 +35,7 @@ fn resource_test_chunk(kind : Bytes, payload : Bytes) -> Bytes {
 }
 
 ///|
-fn resource_test_png(width : UInt, padding : Int) -> Json raise {
+fn resource_test_png(width : UInt32, padding : Int32) -> Json raise {
   let asset = test_png_asset()
   let source = resource_asset_bytes(asset)
   let header = resource_test_chunk(

@@ -1,7 +1,7 @@
 ///|
 pub fn[Model, Msg] PageProgram::create_runtime(
   self : PageProgram[Model, Msg],
-  boot? : Bool = false,
+  boot~ : Bool = false,
 ) -> PageRuntime {
   let commands : Ref[Array[@runtime.RuntimeCommand]] = Ref([])
   let initial_tree = self.initial_tree()
@@ -23,14 +23,14 @@ pub fn[Model, Msg] PageProgram::create_runtime(
   })
   let mounted = Ref(false)
   let disposed = Ref(false)
-  let active_subscription_intervals : Map[String, Int] = Map([])
+  let active_subscription_intervals : Map[String, Int32] = Map([])
   let subscription_messages : Map[String, Msg] = Map([])
   let sync_subscriptions = fn() {
     if !mounted.val {
       return
     }
     let next = self.active_subscriptions.val
-    let next_intervals : Map[String, Int] = Map([])
+    let next_intervals : Map[String, Int32] = Map([])
     for entry in next {
       next_intervals[entry.key] = entry.interval_ms
     }

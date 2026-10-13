@@ -16,7 +16,7 @@
   "application": null,
   "tabBar": null,
   "runtimeBytes": {
-    "application": 567798
+    "application": 569237
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -60,7 +60,7 @@
       "package": "lampclaw/minimoon_ui/resources",
       "features": [],
       "id": "lampclaw/minimoon_ui/vega-v1",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "wxssBytes": 27330,
       "assets": [
         "assets/mmui/features.txt",

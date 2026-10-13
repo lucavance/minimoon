@@ -18,12 +18,12 @@ pub(all) enum AttachmentSize {
 ///|
 pub fn[C : @minimoon.IsChildren] attachment(
   children : C,
-  state? : AttachmentState = AttachmentDone,
-  size? : AttachmentSize = AttachmentDefaultSize,
-  orientation? : Orientation = Horizontal,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  state~ : AttachmentState = AttachmentDone,
+  size~ : AttachmentSize = AttachmentDefaultSize,
+  orientation~ : Orientation = Horizontal,
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   let state_class = match state {
     AttachmentIdle => "mmui-attachment-idle"
@@ -60,9 +60,9 @@ pub fn[C : @minimoon.IsChildren] attachment(
 ///|
 pub fn[C : @minimoon.IsChildren] attachment_group(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   @minimoon.scroll_view(
     id~,
@@ -77,14 +77,14 @@ pub fn[C : @minimoon.IsChildren] attachment_group(
 ///|
 /// Supply a native image URL or rich icon/content; image loading remains native.
 pub fn attachment_media(
-  src? : String = "",
-  alt? : String = "",
-  variant? : MediaVariant = ImageMedia,
+  src~ : String = "",
+  alt~ : String = "",
+  variant~ : MediaVariant = ImageMedia,
   content? : @minimoon.Node,
-  error? : Bool = false,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  error~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "attachment-media",
@@ -118,9 +118,9 @@ pub fn attachment_media(
 ///|
 pub fn[C : @minimoon.IsChildren] attachment_content(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("attachment-content", id~, class~, style~, children.to_nodes())
 }
@@ -128,9 +128,9 @@ pub fn[C : @minimoon.IsChildren] attachment_content(
 ///|
 pub fn[C : @minimoon.IsChildren] attachment_title(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("attachment-title", id~, class~, style~, children.to_nodes())
 }
@@ -138,9 +138,9 @@ pub fn[C : @minimoon.IsChildren] attachment_title(
 ///|
 pub fn[C : @minimoon.IsChildren] attachment_description(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "attachment-description",
@@ -154,9 +154,9 @@ pub fn[C : @minimoon.IsChildren] attachment_description(
 ///|
 pub fn[C : @minimoon.IsChildren] attachment_actions(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("attachment-actions", id~, class~, style~, children.to_nodes())
 }
@@ -166,12 +166,12 @@ pub fn attachment_action(
   label~ : String,
   on_tap~ : @minimoon.Cmd,
   content? : @minimoon.Node,
-  variant? : ButtonVariant = Ghost,
-  size? : ButtonSize = IconSm,
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  variant~ : ButtonVariant = Ghost,
+  size~ : ButtonSize = IconSm,
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   button(
     on_tap~,
@@ -191,10 +191,10 @@ pub fn attachment_trigger(
   label~ : String,
   on_tap~ : @minimoon.Cmd,
   content? : @minimoon.Node,
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   attachment_action(
     label~,
@@ -211,9 +211,9 @@ pub fn attachment_trigger(
 ///|
 pub fn[C : @minimoon.IsChildren] attachment_trigger_link(
   target~ : @minimoon.Route,
-  disabled? : Bool = false,
-  label? : String = "",
-  id? : String = "",
+  disabled~ : Bool = false,
+  label~ : String = "",
+  id~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   if disabled {

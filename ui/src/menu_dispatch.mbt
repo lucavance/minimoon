@@ -27,7 +27,7 @@ fn menu_dispatch(
   id : String,
   items : @minimoon.Val[Array[MenuItem]],
   close : @minimoon.Cmd,
-  open? : @minimoon.Val[Bool] = @minimoon.Val::constant(true),
+  open~ : @minimoon.Val[Bool] = @minimoon.Val::constant(true),
 ) -> (@minimoon.Val[Array[String]], @minimoon.Emit[String]) {
   @minimoon.create_state_with_input(
     input=@minimoon.Val::map2(items, open, (items, open) => (items, open)),

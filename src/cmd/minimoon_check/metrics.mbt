@@ -7,7 +7,7 @@ fn metrics_field(value : Json, key : String) -> Json? {
 }
 
 ///|
-fn metrics_count(value : Json?) -> Int? {
+fn metrics_count(value : Json?) -> Int32? {
   match value {
     Some(Number(number, ..)) if number >= 0 && number <= 2147483647.0 => {
       let integer = number.to_int()

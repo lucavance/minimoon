@@ -1,5 +1,5 @@
 ///|
-fn png_test_u32(value : UInt) -> Bytes {
+fn png_test_u32(value : UInt32) -> Bytes {
   Bytes::from_array([
     (value >> 24).to_byte(),
     (value >> 16).to_byte(),
@@ -18,13 +18,13 @@ fn png_test_chunk(kind : Bytes, payload : Bytes) -> Bytes {
 
 ///|
 fn png_test_header(
-  width? : UInt = 1,
-  height? : UInt = 1,
-  depth? : Byte = 8,
-  color? : Byte = 6,
-  compression? : Byte = 0,
-  filter? : Byte = 0,
-  interlace? : Byte = 0,
+  width~ : UInt32 = 1,
+  height~ : UInt32 = 1,
+  depth~ : Byte = 8,
+  color~ : Byte = 6,
+  compression~ : Byte = 0,
+  filter~ : Byte = 0,
+  interlace~ : Byte = 0,
 ) -> Bytes {
   png_test_chunk(
     b"IHDR",

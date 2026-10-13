@@ -1,7 +1,7 @@
 ///|
 struct Messages {
-  next : Int
-  oldest : Int
+  next : Int32
+  oldest : Int32
   rows : Array[(String, String)]
 } derive(Eq)
 

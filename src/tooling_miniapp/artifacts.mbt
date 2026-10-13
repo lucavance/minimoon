@@ -41,8 +41,8 @@ fn validate_contract(contract : Json, package_path : String) -> Unit {
 
 ///|
 fn shared_host_bridge(
-  application? : Bool = false,
-  tab_routes? : Array[String] = [],
+  application~ : Bool = false,
+  tab_routes~ : Array[String] = [],
 ) -> String {
   @host_js.shared_host_bridge(application~, tab_routes~)
 }
@@ -79,7 +79,7 @@ fn initial_tree_bridge(contracts : Array[Json]) -> String {
 ///|
 fn page_bridge(
   contract : Json,
-  page_index : Int,
+  page_index : Int32,
   runtime_module : String,
   host_module : String,
   initial_module : String,
@@ -104,7 +104,7 @@ fn page_bridge(
 }
 
 ///|
-fn app_json(routes : Array[String], tab_bar? : Json = Json::null()) -> Json {
+fn app_json(routes : Array[String], tab_bar~ : Json = Json::null()) -> Json {
   let fields = {
     "pages": Json::array(routes.map(route => Json::string(route))),
     "renderer": Json::string("skyline"),
@@ -161,7 +161,7 @@ fn page_json(contract : Json) -> Json {
 }
 
 ///|
-async fn write_page(dist : String, contract : Json, page_index : Int) -> Unit {
+async fn write_page(dist : String, contract : Json, page_index : Int32) -> Unit {
   let route = string(contract, "route")
   let base = join(dist, route)
   let host_relative = Path::relative(

@@ -94,7 +94,7 @@ pub fn[A, E : Error] attempt(
 
 ///|
 #cfg(target="js")
-pub fn delay(command : Cmd, milliseconds : Int) -> Cmd {
+pub fn delay(command : Cmd, milliseconds : Int32) -> Cmd {
   guard milliseconds >= 0 else { abort("delay must not be negative") }
   CmdHostEffect(
     "minimoon.timeout",
@@ -105,7 +105,7 @@ pub fn delay(command : Cmd, milliseconds : Int) -> Cmd {
 
 ///|
 #cfg(not(target="js"))
-pub fn delay(command : Cmd, milliseconds : Int) -> Cmd {
+pub fn delay(command : Cmd, milliseconds : Int32) -> Cmd {
   guard milliseconds >= 0 else { abort("delay must not be negative") }
   CmdEffect((emit, finish) => {
     emit(command)

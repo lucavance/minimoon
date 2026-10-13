@@ -23,9 +23,9 @@ test "calendar multiple selection retains both dates from a decoded event batch"
   })
   let _ = runtime.mount()
   let _ = runtime.dispatch_batch(data_batch(["multi/date/8", "multi/date/10"]))
-  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").length(), 3)
+  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").count(), 3)
   let _ = runtime.dispatch_batch(data_batch(["multi/date/8", "multi/date/10"]))
-  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").length(), 1)
+  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").count(), 1)
   let _ = runtime.dispose()
 }
 
@@ -128,7 +128,7 @@ test "date picker completes a batched range and closes only after the second cho
 }
 
 ///|
-fn data_batch_table(page_size : Int) -> @minimoon.PageRuntime {
+fn data_batch_table(page_size : Int32) -> @minimoon.PageRuntime {
   advanced_native_page(_ => {
     let (state, change) = @minimoon.create_variable(table_state(page_size~))
     let view = data_table_controlled(

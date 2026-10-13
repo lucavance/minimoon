@@ -14,9 +14,9 @@ pub(all) enum ChartLegendPosition {
 ///|
 pub fn[C : @minimoon.IsChildren] chart_container(
   children : C,
-  id? : String = "",
-  label? : String = "Chart",
-  style? : String = "",
+  id~ : String = "",
+  label~ : String = "Chart",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "chart",
@@ -30,7 +30,7 @@ pub fn[C : @minimoon.IsChildren] chart_container(
 ///|
 pub fn[C : @minimoon.IsChildren] chart_tooltip(
   children : C,
-  visible? : Bool = true,
+  visible~ : Bool = true,
 ) -> @minimoon.Node {
   if visible {
     ui_container("chart-tooltip", children.to_nodes())
@@ -68,7 +68,7 @@ pub fn chart_style(colors : Array[(String, String)]) -> String {
 ///|
 pub fn[C : @minimoon.IsChildren] chart_tooltip_content(
   children : C,
-  active? : Bool = true,
+  active~ : Bool = true,
 ) -> @minimoon.Node {
   if !active {
     return @minimoon.nothing()
@@ -89,8 +89,8 @@ pub fn chart_tooltip_label(label : String) -> @minimoon.Node {
 pub fn chart_tooltip_item(
   label~ : String,
   value~ : String,
-  color? : String = "#737373",
-  indicator? : ChartIndicator = ChartDot,
+  color~ : String = "#737373",
+  indicator~ : ChartIndicator = ChartDot,
 ) -> @minimoon.Node {
   let style = match indicator {
     ChartDot => "width:10px;height:10px;border-radius:2px;background:" + color
@@ -111,7 +111,7 @@ pub fn chart_tooltip_item(
 ///|
 pub fn[C : @minimoon.IsChildren] chart_legend(
   children : C,
-  position? : ChartLegendPosition = LegendBottom,
+  position~ : ChartLegendPosition = LegendBottom,
 ) -> @minimoon.Node {
   ui_container(
     "chart-legend",
@@ -131,7 +131,7 @@ fn legend_spacing(position : ChartLegendPosition) -> String {
 ///|
 pub fn[C : @minimoon.IsChildren] chart_legend_content(
   children : C,
-  position? : ChartLegendPosition = LegendBottom,
+  position~ : ChartLegendPosition = LegendBottom,
 ) -> @minimoon.Node {
   ui_container(
     "chart-legend-content",
@@ -143,7 +143,7 @@ pub fn[C : @minimoon.IsChildren] chart_legend_content(
 ///|
 pub fn chart_legend_item(
   label~ : String,
-  color? : String = "#737373",
+  color~ : String = "#737373",
 ) -> @minimoon.Node {
   ui_container("chart-legend-item", [
     @minimoon.span(style="color:" + color, "●"),

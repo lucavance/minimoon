@@ -35,7 +35,7 @@ priv enum SurfaceMessage {
   SurfaceText(String)
   SurfaceBool(Bool)
   SurfaceStrings(Array[String])
-  SurfaceIndex(Int)
+  SurfaceIndex(Int32)
   SurfaceScroll(@minimoon.ScrollDetail)
 }
 
@@ -412,7 +412,7 @@ test "elmish_page keeps view model-first and subscriptions page-aware" {
 priv enum NativeInputMessage {
   NativeFocused(String)
   NativeBlurred(String)
-  NativeTextareaBlurred(Int)
+  NativeTextareaBlurred(Int32)
   NativeConfirmed(String)
   NativeTapped
 }
@@ -654,7 +654,7 @@ priv enum KeyedLifetimeShape {
 ///|
 priv struct KeyedLifetimeRowSpec {
   shape : KeyedLifetimeShape
-  version : Int
+  version : Int32
 } derive(Eq)
 
 ///|
@@ -709,8 +709,8 @@ fn keyed_lifetime_snapshot_texts(
 
 ///|
 test "keyed empty rows preserve local state on moves and refresh or dispose event handlers" {
-  let scopes : Map[String, Int] = Map([])
-  let renders : Map[String, Int] = Map([])
+  let scopes : Map[String, Int32] = Map([])
+  let renders : Map[String, Int32] = Map([])
   let definition = @minimoon.page(
     id="keyed_lifetime",
     route=@minimoon.route("pages/keyed-lifetime/index"),

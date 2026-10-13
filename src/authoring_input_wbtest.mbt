@@ -162,7 +162,7 @@ test "invalid application page input never constructs or registers a page graph"
 ///|
 test "page flush drains ready completions but excludes unresolved local effects" {
   let callback : Ref[((@val.Cmd) -> Unit)?] = Ref(None)
-  let address : Ref[Emit[Int]?] = Ref(None)
+  let address : Ref[Emit[Int32]?] = Ref(None)
   let definition = page(
     id="ready_work",
     route=route("pages/ready_work/ready_work"),
@@ -181,7 +181,7 @@ test "page flush drains ready completions but excludes unresolved local effects"
             ),
           )
         },
-        update=(value : Int, delta : Int, _) => (value + delta, none),
+        update=(value : Int32, delta : Int32, _) => (value + delta, none),
       )
       value.view(value => button(on_tap=emit(1), value.to_string()))
     },

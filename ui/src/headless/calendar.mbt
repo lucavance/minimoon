@@ -2,13 +2,13 @@
 /// Gregorian date algorithms adapted from RUI calendar.mbt at b1291945.
 /// MIT; see the module THIRD_PARTY_NOTICES.md.
 pub struct CalendarDate {
-  year : Int
-  month : Int
-  day : Int
+  year : Int32
+  month : Int32
+  day : Int32
 } derive(Eq, Debug)
 
 ///|
-pub fn days_in_month(year : Int, month : Int) -> Int {
+pub fn days_in_month(year : Int32, month : Int32) -> Int32 {
   match month {
     2 =>
       if year % 400 == 0 || (year % 4 == 0 && year % 100 != 0) {
@@ -22,14 +22,18 @@ pub fn days_in_month(year : Int, month : Int) -> Int {
 }
 
 ///|
-pub fn calendar_date(year~ : Int, month~ : Int, day~ : Int) -> CalendarDate {
+pub fn calendar_date(
+  year~ : Int32,
+  month~ : Int32,
+  day~ : Int32,
+) -> CalendarDate {
   let year = year.clamp(min=1, max=9999)
   let month = month.clamp(min=1, max=12)
   { year, month, day: day.clamp(min=1, max=days_in_month(year, month)), }
 }
 
 ///|
-pub fn CalendarDate::ordinal(self : CalendarDate) -> Int {
+pub fn CalendarDate::ordinal(self : CalendarDate) -> Int32 {
   let year = self.year - 1
   let mut days = 365 * year + year / 4 - year / 100 + year / 400 + self.day
   for month = 1; month < self.month; month = month + 1 {
@@ -39,14 +43,14 @@ pub fn CalendarDate::ordinal(self : CalendarDate) -> Int {
 }
 
 ///|
-pub fn CalendarDate::weekday(self : CalendarDate) -> Int {
+pub fn CalendarDate::weekday(self : CalendarDate) -> Int32 {
   self.ordinal() % 7
 }
 
 ///|
 pub fn CalendarDate::add_months(
   self : CalendarDate,
-  delta : Int,
+  delta : Int32,
 ) -> CalendarDate {
   let index = ((self.year - 1) * 12 + self.month - 1 + delta).clamp(
     min=0,
@@ -56,7 +60,10 @@ pub fn CalendarDate::add_months(
 }
 
 ///|
-pub fn CalendarDate::add_days(self : CalendarDate, delta : Int) -> CalendarDate {
+pub fn CalendarDate::add_days(
+  self : CalendarDate,
+  delta : Int32,
+) -> CalendarDate {
   let target = (self.ordinal() + delta).clamp(min=1, max=3652059)
   let mut low = 1
   let mut high = 9999

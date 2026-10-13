@@ -23,17 +23,17 @@ pub fn dialog_spec(
   title~ : String,
   trigger_label~ : String,
   content~ : (@minimoon.Cmd) -> @minimoon.Node,
-  description? : String = "",
-  close_label? : String = "Close",
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
-  root_class? : String = "",
-  trigger_class? : String = "",
-  overlay_class? : String = "",
-  surface_class? : String = "",
-  title_class? : String = "",
-  description_class? : String = "",
-  close_class? : String = "",
+  description~ : String = "",
+  close_label~ : String = "Close",
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
+  root_class~ : String = "",
+  trigger_class~ : String = "",
+  overlay_class~ : String = "",
+  surface_class~ : String = "",
+  title_class~ : String = "",
+  description_class~ : String = "",
+  close_class~ : String = "",
 ) -> DialogSpec {
   guard id != "" else { abort("dialog id must not be empty") }
   guard title != "" else { abort("dialog title must not be empty") }
@@ -188,7 +188,7 @@ pub fn dialog_controlled(
 ///|
 pub fn dialog(
   spec : DialogSpec,
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, update_open) = @minimoon.create_variable(initially_open)
   dialog_controlled(spec, open~, on_change=update_open.map(value => _ => value))
@@ -234,18 +234,18 @@ pub fn sheet_spec(
   title~ : String,
   trigger_label~ : String,
   content~ : (@minimoon.Cmd) -> @minimoon.Node,
-  side? : SheetSide = Right,
-  description? : String = "",
-  close_label? : String = "Close",
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
-  root_class? : String = "",
-  trigger_class? : String = "",
-  overlay_class? : String = "",
-  surface_class? : String = "",
-  title_class? : String = "",
-  description_class? : String = "",
-  close_class? : String = "",
+  side~ : SheetSide = Right,
+  description~ : String = "",
+  close_label~ : String = "Close",
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
+  root_class~ : String = "",
+  trigger_class~ : String = "",
+  overlay_class~ : String = "",
+  surface_class~ : String = "",
+  title_class~ : String = "",
+  description_class~ : String = "",
+  close_class~ : String = "",
 ) -> SheetSpec {
   let dialog = dialog_spec(
     id~,
@@ -279,7 +279,7 @@ pub fn sheet_controlled(
 ///|
 pub fn sheet(
   spec : SheetSpec,
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, update_open) = @minimoon.create_variable(initially_open)
   sheet_controlled(spec, open~, on_change=update_open.map(value => _ => value))

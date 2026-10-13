@@ -5,16 +5,16 @@ pub fn combobox_provider_controlled(
   options~ : @minimoon.Val[Array[ChoiceOption]],
   state~ : @minimoon.Val[ComboboxState],
   on_change~ : @minimoon.Emit[ComboboxState],
-  multiple? : Bool = false,
-  disabled? : Bool = false,
-  invalid? : Bool = false,
-  required? : Bool = false,
-  placeholder? : String = "Choose",
-  empty_text? : String = "No results",
+  multiple~ : Bool = false,
+  disabled~ : Bool = false,
+  invalid~ : Bool = false,
+  required~ : Bool = false,
+  placeholder~ : String = "Choose",
+  empty_text~ : String = "No results",
   on_query_change? : @minimoon.Emit[String],
   on_values_change? : @minimoon.Emit[Array[String]],
   on_open_change? : @minimoon.Emit[Bool],
-  filter? : (ChoiceOption, String) -> Bool = (option, query) => {
+  filter~ : (ChoiceOption, String) -> Bool = (option, query) => {
     option.label.to_lower().contains(query.to_lower()) ||
     option.key.to_lower().contains(query.to_lower())
   },
@@ -131,11 +131,11 @@ pub fn combobox_provider(
   context : UiContext,
   id~ : String,
   options~ : @minimoon.Val[Array[ChoiceOption]],
-  initial? : ComboboxState = combobox_state(),
-  multiple? : Bool = false,
-  disabled? : Bool = false,
-  invalid? : Bool = false,
-  required? : Bool = false,
+  initial~ : ComboboxState = combobox_state(),
+  multiple~ : Bool = false,
+  disabled~ : Bool = false,
+  invalid~ : Bool = false,
+  required~ : Bool = false,
   on_query_change? : @minimoon.Emit[String],
   on_values_change? : @minimoon.Emit[Array[String]],
   on_open_change? : @minimoon.Emit[Bool],
@@ -188,7 +188,7 @@ pub fn[C : @minimoon.IsChildren] combobox_content(
 ///|
 pub fn[C : @minimoon.IsChildren] combobox_empty(
   children : C,
-  visible? : Bool = true,
+  visible~ : Bool = true,
 ) -> @minimoon.Node {
   if visible {
     ui_container("combobox-empty", children.to_nodes())

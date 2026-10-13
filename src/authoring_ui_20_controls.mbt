@@ -1,13 +1,13 @@
 ///|
 pub fn button(
   on_tap~ : Cmd,
-  event_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  event_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
   label : String,
 ) -> Node {
   let binding = event_binding(
@@ -26,7 +26,7 @@ pub fn button(
 /// Native MiniApp focus payload shared by `input` and `textarea`.
 pub struct FocusDetail {
   value : String
-  height : Int
+  height : Int32
 }
 
 ///|
@@ -39,7 +39,7 @@ pub struct InputBlurDetail {
 /// Native MiniApp `textarea` blur payload.
 pub struct TextareaBlurDetail {
   value : String
-  cursor : Int
+  cursor : Int32
 }
 
 ///|
@@ -86,25 +86,25 @@ pub fn input(
   value~ : String,
   on_input~ : Emit[String],
   input_type? : InputType,
-  maxlength? : Int,
+  maxlength? : Int32,
   password? : Bool,
-  selection_start? : Int,
-  selection_end? : Int,
-  name? : String = "",
-  event_key? : String = "",
-  disabled? : Bool = false,
-  focus? : Bool = false,
+  selection_start? : Int32,
+  selection_end? : Int32,
+  name~ : String = "",
+  event_key~ : String = "",
+  disabled~ : Bool = false,
+  focus~ : Bool = false,
   on_confirm? : Emit[String],
-  confirm_key? : String = "",
+  confirm_key~ : String = "",
   on_focus? : Emit[FocusDetail],
-  focus_key? : String = "",
+  focus_key~ : String = "",
   on_blur? : Emit[InputBlurDetail],
-  blur_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
-  placeholder? : String = "",
+  blur_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
+  placeholder~ : String = "",
   semantics? : Semantics,
 ) -> Node {
   if maxlength is Some(limit) {
@@ -195,16 +195,16 @@ pub fn input(
 
 ///|
 pub fn switch(
-  name? : String = "",
+  name~ : String = "",
   checked~ : Bool,
   on_change~ : Emit[Bool],
-  event_key? : String = "",
-  disabled? : Bool = false,
-  color? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  event_key~ : String = "",
+  disabled~ : Bool = false,
+  color~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
 ) -> Node {
   let binding = event_binding(
@@ -228,13 +228,13 @@ pub fn switch(
 
 ///|
 pub fn[C : IsChildren] checkbox_group(
-  name? : String = "",
+  name~ : String = "",
   on_change~ : Emit[Array[String]],
-  event_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  event_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   children : C,
 ) -> Node {
   let binding = event_binding(
@@ -268,12 +268,12 @@ pub fn[C : IsChildren] checkbox_group(
 ///|
 pub fn[C : IsChildren] checkbox(
   value~ : String,
-  checked? : Bool = false,
-  disabled? : Bool = false,
-  color? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  checked~ : Bool = false,
+  disabled~ : Bool = false,
+  color~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let children = children.to_nodes()
@@ -290,13 +290,13 @@ pub fn[C : IsChildren] checkbox(
 
 ///|
 pub fn[C : IsChildren] radio_group(
-  name? : String = "",
+  name~ : String = "",
   on_change~ : Emit[String],
-  event_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  event_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   children : C,
 ) -> Node {
   let binding = event_binding(
@@ -330,12 +330,12 @@ pub fn[C : IsChildren] radio_group(
 ///|
 pub fn[C : IsChildren] radio(
   value~ : String,
-  checked? : Bool = false,
-  disabled? : Bool = false,
-  color? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  checked~ : Bool = false,
+  disabled~ : Bool = false,
+  color~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let children = children.to_nodes()
@@ -364,7 +364,7 @@ pub struct ScrollDetail {
 fn detail_int(
   detail : Map[String, Json],
   name : String,
-) -> Result[Int, DecodeError] {
+) -> Result[Int32, DecodeError] {
   match detail.get(name) {
     Some(Number(value, ..)) =>
       match event_int32(value) {
@@ -441,25 +441,25 @@ fn detail_scroll(payload : Json) -> Result[ScrollDetail, DecodeError] {
 
 ///|
 pub fn[C : IsChildren] scroll_view(
-  scroll_x? : Bool = false,
-  scroll_y? : Bool = false,
-  scroll_top? : Int = 0,
-  scroll_left? : Int = 0,
+  scroll_x~ : Bool = false,
+  scroll_y~ : Bool = false,
+  scroll_top~ : Int32 = 0,
+  scroll_left~ : Int32 = 0,
   scroll_top_px? : Double,
   scroll_left_px? : Double,
-  scroll_into_view? : String = "",
-  upper_threshold? : Int = 50,
-  lower_threshold? : Int = 50,
+  scroll_into_view~ : String = "",
+  upper_threshold~ : Int32 = 50,
+  lower_threshold~ : Int32 = 50,
   on_scroll? : Emit[ScrollDetail],
-  scroll_key? : String = "",
+  scroll_key~ : String = "",
   on_upper? : Cmd,
-  upper_key? : String = "",
+  upper_key~ : String = "",
   on_lower? : Cmd,
-  lower_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  lower_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   children : C,
 ) -> Node {
   let scroll_binding = on_scroll.map(send => {
@@ -537,24 +537,24 @@ pub fn[C : IsChildren] scroll_view(
 
 ///|
 pub fn textarea(
-  name? : String = "",
+  name~ : String = "",
   value~ : String,
   on_input~ : Emit[String],
-  input_key? : String = "",
-  placeholder? : String = "",
-  maxlength? : Int = 140,
-  disabled? : Bool = false,
-  focus? : Bool = false,
+  input_key~ : String = "",
+  placeholder~ : String = "",
+  maxlength~ : Int32 = 140,
+  disabled~ : Bool = false,
+  focus~ : Bool = false,
   on_confirm? : Emit[String],
-  confirm_key? : String = "",
+  confirm_key~ : String = "",
   on_focus? : Emit[FocusDetail],
-  focus_key? : String = "",
+  focus_key~ : String = "",
   on_blur? : Emit[TextareaBlurDetail],
-  blur_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  blur_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
 ) -> Node {
   let input_binding = event_binding(
@@ -616,15 +616,15 @@ pub fn textarea(
 
 ///|
 pub fn[C : IsChildren] picker_selector(
-  name? : String = "",
+  name~ : String = "",
   options~ : Array[String],
-  selected~ : Int,
-  on_change~ : Emit[Int],
-  event_key? : String = "",
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  selected~ : Int32,
+  on_change~ : Emit[Int32],
+  event_key~ : String = "",
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let binding = event_binding(
@@ -660,14 +660,14 @@ pub fn[C : IsChildren] picker_selector(
 
 ///|
 pub fn[C : IsChildren] picker_date(
-  name? : String = "",
+  name~ : String = "",
   value~ : String,
   on_change~ : Emit[String],
-  disabled? : Bool = false,
-  event_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  disabled~ : Bool = false,
+  event_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let binding = event_binding(
@@ -697,14 +697,14 @@ pub fn[C : IsChildren] picker_date(
 
 ///|
 pub fn[C : IsChildren] picker_time(
-  name? : String = "",
+  name~ : String = "",
   value~ : String,
   on_change~ : Emit[String],
-  disabled? : Bool = false,
-  event_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  disabled~ : Bool = false,
+  event_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let binding = event_binding(
@@ -734,14 +734,14 @@ pub fn[C : IsChildren] picker_time(
 
 ///|
 pub fn[C : IsChildren] picker_region(
-  name? : String = "",
+  name~ : String = "",
   value~ : Array[String],
   on_change~ : Emit[Array[String]],
-  disabled? : Bool = false,
-  event_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  disabled~ : Bool = false,
+  event_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let binding = event_binding(
@@ -776,17 +776,17 @@ pub fn[C : IsChildren] picker_region(
 
 ///|
 pub fn[C : IsChildren] swiper(
-  current? : Int = 0,
-  vertical? : Bool = false,
-  autoplay? : Bool = false,
-  circular? : Bool = false,
-  interval? : Int = 5000,
-  duration? : Int = 500,
-  on_change? : Emit[Int],
-  event_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  current~ : Int32 = 0,
+  vertical~ : Bool = false,
+  autoplay~ : Bool = false,
+  circular~ : Bool = false,
+  interval~ : Int32 = 5000,
+  duration~ : Int32 = 500,
+  on_change? : Emit[Int32],
+  event_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let change_binding = on_change.map(send => {
@@ -823,10 +823,10 @@ pub fn[C : IsChildren] swiper(
 
 ///|
 pub fn[C : IsChildren] swiper_item(
-  item_id? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  item_id~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let children = children.to_nodes()

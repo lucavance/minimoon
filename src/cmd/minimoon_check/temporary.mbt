@@ -94,7 +94,7 @@ async fn supervised_check_process(
   base : String,
   command : String,
   args : Array[String],
-) -> Int {
+) -> Int32 {
   let directory = create_check_temporary(base, "run")
   println("Minimoon check temporary directory: " + directory)
   errdefer cleanup_check_temporary(directory)

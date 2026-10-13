@@ -98,12 +98,12 @@ pub fn Application::next(self : Application) -> Cmd? {
 }
 
 ///|
-pub fn Application::pending_count(self : Application) -> Int {
+pub fn Application::pending_count(self : Application) -> Int32 {
   self.messages.length()
 }
 
 ///|
-pub fn Application::page_count(self : Application) -> Int {
+pub fn Application::page_count(self : Application) -> Int32 {
   self.pages.length()
 }
 

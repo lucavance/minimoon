@@ -1,12 +1,12 @@
 ///|
 struct ProbeTimer {
-  due : Int
+  due : Int32
   resolve : (Unit) -> Unit
 }
 
 ///|
 struct ProbeClock {
-  now : Ref[Int]
+  now : Ref[Int32]
   timers : Ref[Array[ProbeTimer]]
 }
 
@@ -19,13 +19,13 @@ fn probe_clock() -> ProbeClock {
 fn ProbeClock::schedule(
   self : ProbeClock,
   resolve : (Unit) -> Unit,
-  milliseconds : Int,
+  milliseconds : Int32,
 ) -> Unit {
   self.timers.val.push({ due: self.now.val + milliseconds, resolve, })
 }
 
 ///|
-fn ProbeClock::advance(self : ProbeClock, milliseconds : Int) -> Unit {
+fn ProbeClock::advance(self : ProbeClock, milliseconds : Int32) -> Unit {
   let target = self.now.val + milliseconds
   let ready : Array[ProbeTimer] = []
   let pending : Array[ProbeTimer] = []

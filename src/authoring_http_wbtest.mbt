@@ -64,7 +64,7 @@ test "HTTP encodes queries and all bodies once and snapshots mutable input" {
       ),
     )
     assert_eq(fields["data"], Json::string(expected))
-    assert_eq(fields["timeout"], (123).to_json())
+    assert_eq(fields["timeout"], Json(123))
     assert_eq(
       fields["header"],
       Json::object({ "content-type": Json::string(content_type) }),
@@ -109,14 +109,14 @@ test "HTTP encodes queries and all bodies once and snapshots mutable input" {
       Json::object({ "content-type": Json::string(content_type) }),
     )
   }
-  let json_fields = { "x": (1).to_json() }
+  let json_fields = { "x": Json(1) }
   let cmd = request(
     "https://example.test",
     resolve,
     http_method=Post,
     body=JsonBody(Json::object(json_fields)),
   )
-  json_fields["x"] = (2).to_json()
+  json_fields["x"] = Json(2)
   assert_eq(http_fields(cmd)["data"], Json::string("{\"x\":1}"))
   assert_true(result.val is None)
 }

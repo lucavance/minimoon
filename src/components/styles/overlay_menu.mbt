@@ -4,10 +4,10 @@ pub fn dialog_spec(
   title~ : String,
   trigger_label~ : String,
   content~ : (@minimoon.Cmd) -> @minimoon.Node,
-  description? : String = "",
-  close_label? : String = "Close",
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
+  description~ : String = "",
+  close_label~ : String = "Close",
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
 ) -> @headless.DialogSpec {
   @headless.dialog_spec(
     id~,
@@ -31,7 +31,7 @@ pub fn dialog_spec(
 ///|
 pub fn dialog(
   spec : @headless.DialogSpec,
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.dialog(spec, initially_open~)
 }
@@ -69,11 +69,11 @@ pub fn sheet_spec(
   title~ : String,
   trigger_label~ : String,
   content~ : (@minimoon.Cmd) -> @minimoon.Node,
-  side? : SheetSide = Right,
-  description? : String = "",
-  close_label? : String = "Close",
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
+  side~ : SheetSide = Right,
+  description~ : String = "",
+  close_label~ : String = "Close",
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
 ) -> @headless.SheetSpec {
   @headless.sheet_spec(
     id~,
@@ -98,7 +98,7 @@ pub fn sheet_spec(
 ///|
 pub fn sheet(
   spec : @headless.SheetSpec,
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.sheet(spec, initially_open~)
 }
@@ -118,10 +118,10 @@ pub fn[Input] dialog_spec_with_input(
   title~ : String,
   trigger_label~ : String,
   content~ : (@minimoon.Cmd, Input) -> @minimoon.Node,
-  description? : String = "",
-  close_label? : String = "Close",
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
+  description~ : String = "",
+  close_label~ : String = "Close",
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
 ) -> @headless.DialogSpecWithInput[Input] {
   @headless.dialog_spec_with_input(
     id~,
@@ -146,7 +146,7 @@ pub fn[Input] dialog_spec_with_input(
 pub fn[Input : Eq] dialog_with_input(
   spec : @headless.DialogSpecWithInput[Input],
   input~ : @minimoon.Val[Input],
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.dialog_with_input(spec, input~, initially_open~)
 }
@@ -167,11 +167,11 @@ pub fn[Input] sheet_spec_with_input(
   title~ : String,
   trigger_label~ : String,
   content~ : (@minimoon.Cmd, Input) -> @minimoon.Node,
-  side? : SheetSide = Right,
-  description? : String = "",
-  close_label? : String = "Close",
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
+  side~ : SheetSide = Right,
+  description~ : String = "",
+  close_label~ : String = "Close",
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
 ) -> @headless.SheetSpecWithInput[Input] {
   @headless.sheet_spec_with_input(
     id~,
@@ -197,7 +197,7 @@ pub fn[Input] sheet_spec_with_input(
 pub fn[Input : Eq] sheet_with_input(
   spec : @headless.SheetSpecWithInput[Input],
   input~ : @minimoon.Val[Input],
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.sheet_with_input(spec, input~, initially_open~)
 }
@@ -214,9 +214,9 @@ pub fn[Input : Eq] sheet_controlled_with_input(
 
 ///|
 pub fn menu_state(
-  open? : Bool = false,
-  checked_keys? : Array[String] = [],
-  radio_values? : Array[(String, String)] = [],
+  open~ : Bool = false,
+  checked_keys~ : Array[String] = [],
+  radio_values~ : Array[(String, String)] = [],
 ) -> @headless.MenuState {
   @headless.menu_state(open~, checked_keys~, radio_values~)
 }
@@ -225,9 +225,9 @@ pub fn menu_state(
 pub fn menu_item(
   key~ : String,
   label~ : String,
-  on_select? : @minimoon.Cmd = @minimoon.none,
-  disabled? : Bool = false,
-  close_on_select? : Bool = true,
+  on_select~ : @minimoon.Cmd = @minimoon.none,
+  disabled~ : Bool = false,
+  close_on_select~ : Bool = true,
 ) -> @headless.MenuEntry {
   @headless.menu_item(key~, label~, on_select~, disabled~, close_on_select~)
 }
@@ -246,8 +246,8 @@ pub fn menu_separator(key~ : String) -> @headless.MenuEntry {
 pub fn menu_checkbox_item(
   key~ : String,
   label~ : String,
-  on_select? : @minimoon.Cmd = @minimoon.none,
-  disabled? : Bool = false,
+  on_select~ : @minimoon.Cmd = @minimoon.none,
+  disabled~ : Bool = false,
 ) -> @headless.MenuEntry {
   @headless.menu_checkbox_item(key~, label~, on_select~, disabled~)
 }
@@ -258,8 +258,8 @@ pub fn menu_radio_item(
   label~ : String,
   group~ : String,
   value~ : String,
-  on_select? : @minimoon.Cmd = @minimoon.none,
-  disabled? : Bool = false,
+  on_select~ : @minimoon.Cmd = @minimoon.none,
+  disabled~ : Bool = false,
 ) -> @headless.MenuEntry {
   @headless.menu_radio_item(key~, label~, group~, value~, on_select~, disabled~)
 }
@@ -269,7 +269,7 @@ pub fn menu_submenu(
   key~ : String,
   label~ : String,
   items~ : Array[@headless.MenuEntry],
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @headless.MenuEntry {
   @headless.menu_submenu(key~, label~, items~, disabled~)
 }
@@ -297,8 +297,8 @@ pub fn dropdown_spec(
   id~ : String,
   trigger_label~ : String,
   items~ : Array[@headless.MenuEntry],
-  placement? : MenuPlacement = BottomStart,
-  disabled? : Bool = false,
+  placement~ : MenuPlacement = BottomStart,
+  disabled~ : Bool = false,
 ) -> @headless.MenuSpec {
   @headless.dropdown_spec(
     id~,
@@ -321,7 +321,7 @@ pub fn dropdown_spec(
 ///|
 pub fn dropdown(
   spec : @headless.MenuSpec,
-  initial_state? : @headless.MenuState = @headless.menu_state(),
+  initial_state~ : @headless.MenuState = @headless.menu_state(),
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.dropdown(spec, initial_state~)
 }

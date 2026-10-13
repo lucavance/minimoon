@@ -1,7 +1,7 @@
 ///|
 priv struct DynamicTestInput {
   tag : String
-  value : Int
+  value : Int32
 } derive(Eq)
 
 ///|
@@ -82,8 +82,8 @@ test "enumerate caches state and only exposes the active branch" {
   let a_cleaned = Ref(0)
   let b_cleaned = Ref(0)
   let c_cleaned = Ref(0)
-  let set_a_local : Ref[((Int) -> Unit)?] = Ref(None)
-  let set_b_local : Ref[((Int) -> Unit)?] = Ref(None)
+  let set_a_local : Ref[((Int32) -> Unit)?] = Ref(None)
+  let set_b_local : Ref[((Int32) -> Unit)?] = Ref(None)
   let (output, set_source) = root.run(fn() {
     let (source, set_source) = input({ tag: "a", value: 1, })
     let output = source.enumerate_by(
@@ -175,8 +175,8 @@ test "enumerate caches state and only exposes the active branch" {
 test "bounded enumerate evicts committed LRU state and restores rollback" {
   let root = RootScope::new()
   let builds = Ref(0)
-  let cleaned : Map[String, Int] = Map([])
-  let set_a_local : Ref[((Int) -> Unit)?] = Ref(None)
+  let cleaned : Map[String, Int32] = Map([])
+  let set_a_local : Ref[((Int32) -> Unit)?] = Ref(None)
   let (output, set_source) = root.run(fn() {
     let (source, set_source) = input({ tag: "a", value: 1, })
     let output = source.enumerate_bounded_by(

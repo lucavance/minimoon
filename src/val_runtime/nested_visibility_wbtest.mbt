@@ -29,8 +29,8 @@ test "nested subscriptions and emitters preserve active selection across restore
   // have different cache retention and candidate rollback paths.
   for mode in [0, 1, 2] {
     let graph = Graph::new()
-    let emitters : Map[String, Emit[Int]] = Map([])
-    let hits : Map[String, Int] = Map([])
+    let emitters : Map[String, Emit[Int32]] = Map([])
+    let hits : Map[String, Int32] = Map([])
     let cleaned = Ref(0)
     let (root, set_outer, set_inner) = graph.build(fn() {
       let (outer, set_outer) = graph.create_input("A")
@@ -44,7 +44,7 @@ test "nested subscriptions and emitters preserve active selection across restore
             @duplix.on_cleanup(fn() { cleaned.val += 1 })
             let (state, emit) = create_state(
               0,
-              update=(current, amount : Int, _) => {
+              update=(current, amount : Int32, _) => {
                 hits[tag] = hits.get(tag).unwrap_or(0) + 1
                 (current + amount, none)
               },
@@ -150,9 +150,9 @@ test "nested subscriptions and emitters preserve active selection across restore
 test "nested shared bindings refresh only the effectively visible branch" {
   let owner = Application::new()
   let (value, set_shared) = owner.build(() => owner.graph.create_input(0))
-  let shared : Shared[Int] = { address: owner.address, value, }
+  let shared : Shared[Int32] = { address: owner.address, value, }
   let graph = owner.with_pages(Graph::new)
-  let samples : Map[String, Int] = Map([])
+  let samples : Map[String, Int32] = Map([])
   let wakes = Ref(0)
   graph.attach_shared_runtime(fn() { wakes.val += 1 }, fn() { () })
   let (root, set_outer, set_inner) = graph.build(fn() {

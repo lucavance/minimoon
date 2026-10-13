@@ -7,9 +7,9 @@ pub(all) struct ComboboxState {
 
 ///|
 pub fn combobox_state(
-  values? : Array[String] = [],
-  query? : String = "",
-  open? : Bool = false,
+  values~ : Array[String] = [],
+  query~ : String = "",
+  open~ : Bool = false,
 ) -> ComboboxState {
   { values, query, open, }
 }
@@ -37,7 +37,7 @@ pub fn ComboboxScope::state(self : ComboboxScope) -> ComboboxState {
 ///|
 pub fn ComboboxScope::options(
   self : ComboboxScope,
-  filtered? : Bool = true,
+  filtered~ : Bool = true,
 ) -> Array[ChoiceOption] {
   if filtered {
     self.filtered_options
@@ -75,7 +75,7 @@ pub fn ComboboxScope::remove(
 ///|
 pub fn combobox_input(
   scope : ComboboxScope,
-  placeholder? : String = "Search",
+  placeholder~ : String = "Search",
 ) -> @minimoon.Node {
   @minimoon.input(
     id=scope.id + "-input",
@@ -102,7 +102,7 @@ pub fn combobox_input(
 ///|
 pub fn combobox_chips_input(
   scope : ComboboxScope,
-  placeholder? : String = "Search",
+  placeholder~ : String = "Search",
 ) -> @minimoon.Node {
   combobox_input(scope, placeholder~)
 }
@@ -110,7 +110,7 @@ pub fn combobox_chips_input(
 ///|
 pub fn combobox_trigger(
   scope : ComboboxScope,
-  label? : String = "Choose",
+  label~ : String = "Choose",
 ) -> @minimoon.Node {
   @minimoon.button(
     id=scope.id + "-trigger",
@@ -128,7 +128,7 @@ pub fn combobox_trigger(
 ///|
 pub fn combobox_clear(
   scope : ComboboxScope,
-  label? : String = "Clear",
+  label~ : String = "Clear",
 ) -> @minimoon.Node {
   @minimoon.button(
     event_key=scope.id + "/clear",
@@ -143,7 +143,7 @@ pub fn[C : @minimoon.IsChildren] combobox_chip(
   scope : ComboboxScope,
   value~ : String,
   children : C,
-  removable? : Bool = true,
+  removable~ : Bool = true,
 ) -> @minimoon.Node {
   ui_container("combobox-chip", [
     @minimoon.fragment(children.to_nodes()),
@@ -165,7 +165,7 @@ pub fn[C : @minimoon.IsChildren] combobox_item(
   scope : ComboboxScope,
   value~ : String,
   children : C,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @minimoon.Node {
   @minimoon.button_children(
     event_key=scope.id + "/option/" + value,
@@ -182,7 +182,7 @@ pub fn[C : @minimoon.IsChildren] combobox_item(
 ///|
 pub fn combobox_value(
   scope : ComboboxScope,
-  placeholder? : String = "",
+  placeholder~ : String = "",
 ) -> @minimoon.Node {
   let labels = scope.state.values.map(key => {
     select_value(scope.options, key, placeholder=key)
@@ -200,7 +200,7 @@ pub fn combobox_value(
 pub fn combobox_option(
   value~ : String,
   label~ : String,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> ChoiceOption {
   choice_option(key=value, label~, disabled~)
 }

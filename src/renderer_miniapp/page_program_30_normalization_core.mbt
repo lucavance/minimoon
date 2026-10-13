@@ -156,7 +156,7 @@ fn[Msg] checked_tree_props(
 }
 
 ///|
-fn signed_decimal(value : String) -> Int? {
+fn signed_decimal(value : String) -> Int32? {
   if value == "" {
     return None
   }

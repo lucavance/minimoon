@@ -1,5 +1,26 @@
 # Project status
 
+## Current upgrade candidate
+
+The current source pair is **core `0.2.7` / UI `0.1.5`**, with UI declaring
+core `0.2.7`. Both are unpublished candidates. Complete local candidate gates,
+coverage, native/JS tests and Node 24 lower-bound checks passed on 2026-10-13 in
+an independent clean checkout. The user authorized commit and push to `main`,
+followed by CI, and will perform WeChat Developer Tools validation afterward.
+Publication requires separate authorization and all release gates. Neither
+remote CI nor new WeChat Developer Tools acceptance is claimed here.
+
+The supported MoonBit floor becomes `moon 0.1.20261012` / `moonc 0.10.15`,
+with both CI jobs pinned to `0.10.15+943464bfa`. The candidate updates managed
+Bun to `1.4.3`, PostCSS and its override to `8.5.30`, weapp-tailwindcss to
+`5.6.1` and SHA-pinned setup-vp to `1.21.2`. The default weapp JavaScript kernel,
+vp `1.1.0`, primary Node `26.11.1`, Node `>=24.20.0`, async `0.22.4`, x `0.5.5`,
+Tailwind/CLI `4.3.3`, Acorn `8.19.0`, eslint-scope `9.1.2`, source-map-js override
+`1.2.2`, public MoonBit APIs and Contract 11 / ABI 13 / protocol 8 are preserved.
+
+Use the source CLI for new Starters until registry availability is recorded.
+The published packages and evidence below retain their original contents.
+
 ## Current published package availability
 
 Core `0.2.6` and UI `0.1.4` were published to Mooncakes on **2026-10-08
@@ -13,8 +34,9 @@ unchanged. Registry CLI `0.2.6` generates the new Starter pins; previous CLI
 
 ## Source dependency audit policy
 
-The subsequent source repair keeps core `0.2.6` / UI `0.1.4` version metadata
-and is **unpublished**. It adds `overrides.source-map-js: "1.2.2"` alongside
+The original unpublished repair kept core `0.2.6` / UI `0.1.4` version metadata.
+The current `0.2.7` / `0.1.5` candidate carries that repair forward: it adds
+`overrides.source-map-js: "1.2.2"` alongside
 the PostCSS override in the repository and source-generated Starter. This
 removes the two nested `source-map-js 1.2.1` resolutions affected by
 [GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q).
@@ -34,12 +56,15 @@ One high-severity advisory remains:
 No patched registry version was available when the policy was approved on
 2026-10-08. The user approved a temporary exception only for this exact
 advisory URL, severity `high`, and installed `braces 3.0.3` at every lockfile
-location. It is valid through **2026-10-22 UTC**, and fails starting at
-**2026-10-23T00:00:00Z**. Production uses the current clock; no CLI or
+location. After reassessment on **2026-10-13**, the user approved renewal through
+**2026-11-22 UTC**, failing starting at **2026-11-23T00:00:00Z** (08:00 Asia/Shanghai).
+Production uses the current clock; no CLI or
 environment option extends the deadline.
 
 This exception accepts a known vulnerability; it is not a fix or a clean
-security audit. The reviewed path is build-time tooling: the one-shot Tailwind
+security audit. Deeply nested brace patterns can exhaust the recursive
+compile/expand walkers' JavaScript call stack, including patterns below the
+default character limit. The reviewed path is build-time tooling: the one-shot Tailwind
 build and weapp CSS processing use developer-controlled sources and fixed
 patterns, including `**/*.css`. Static tracing found no MiniApp event or
 network payload path into the vulnerable brace-expansion call. Keep build
@@ -54,8 +79,8 @@ vulnerabilities. Other high/critical advisories, a changed advisory or installed
 version, an expired exception, invalid JSON/lock data, inconsistent exit codes,
 stderr, network errors, launch failures and timeouts all fail the gate.
 Lower-severity findings remain visible in the report. This repair is delivered
-as source and an override existing apps can apply; no new package publication
-is needed, and both occupied versions remain immutable.
+as source and an override existing apps can apply. The new local upgrade
+candidate includes it; both occupied versions remain immutable.
 
 ## Core 0.2.6 and UI 0.1.4 publication
 
@@ -463,7 +488,7 @@ no published package was changed in response.
 ## Current implementation
 
 For application authors, the README and [quickstart](guides/miniapp_quickstart.md)
-start with `moon install lampclaw/minimoon/cmd/minimoon@0.2.6` and
+start with `moon install lampclaw/minimoon/cmd/minimoon@0.2.7` and
 `minimoon init my-app` after confirming registry availability here. This selects
 the documented CLI and creates an independent application; create it outside
 existing Moon workspaces. The
@@ -488,14 +513,14 @@ not real-host evidence. Both examples now default to public Apifox Echo; the liv
 probe covers Platform's ten cases, App draft echo after editor unload and the UI
 Form's typed echo. Changes to either fixture fingerprint require new host
 acceptance; public echo remains a testing service, not cloud persistence.
-Core's source product version is `0.2.6`; Contract `11`,
+Core's source product version is `0.2.7`; Contract `11`,
 runtime ABI `13` and renderer protocol `8` do not change. The original `0.2.0`
 publication checkpoint below remains an immutable historical release.
 
 Core `0.2.1` includes the shared-host input fix: value edits
 do not replay unchanged native focus/selection properties. The draft title input
 has a taller layout intended to avoid clipping. Upgrade both the CLI and the
-application's core dependency to the current source `0.2.6` after registry availability
+application's core dependency to the current source `0.2.7` after registry availability
 is recorded, then regenerate all artifacts; the
 `0.2.0` CLI does not include this fix. Changed artifact fingerprints require
 fresh real-host acceptance. Automated host-write checks do not establish native
@@ -536,12 +561,12 @@ consumer and generated-host checks are separate from core's starter contract.
 
 ## Toolchain validation
 
-The supported toolchain floor is `moon 0.1.20260920` with `moonc v0.10.14`;
-global `vp 1.1.0` manages Bun `1.4.2` and the Node runtime. Current source
+The supported toolchain floor is `moon 0.1.20261012` with `moonc v0.10.15`;
+global `vp 1.1.0` manages Bun `1.4.3` and the Node runtime. Current source
 dependencies are `moonbitlang/async 0.22.4`, `moonbitlang/x 0.5.5`, and
-`weapp-tailwindcss 5.5.12`, PostCSS `8.5.29` and Acorn `8.19.0`.
-Both CI jobs use the official installer for prebuilt release `0.10.14+7d59c7ec9`
-(`moon 0.1.20260920`), not latest, without Rust.
+`weapp-tailwindcss 5.6.1`, PostCSS `8.5.30` and Acorn `8.19.0`.
+Both CI jobs use the official installer for prebuilt release `0.10.15+943464bfa`
+(`moon 0.1.20261012`), not latest, without Rust.
 Older MoonBit installations must be upgraded for these releases.
 JavaScript tooling supports Node `>=24.20.0`; CI validates the Node 24.20.0
 lower boundary and Node 26.11.1 primary environment, installing the committed

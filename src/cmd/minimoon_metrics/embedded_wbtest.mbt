@@ -1,5 +1,5 @@
 ///|
-fn embedded_test_int(value : Json, key : String) -> Int {
+fn embedded_test_int(value : Json, key : String) -> Int32 {
   match value {
     Object(fields) =>
       match fields.get(key) {

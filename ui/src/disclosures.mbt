@@ -13,7 +13,7 @@ pub fn panel(
   key~ : String,
   title~ : String,
   content~ : @minimoon.Node,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
   icon? : @minimoon.Node,
   trigger? : @minimoon.Node,
 ) -> Panel {
@@ -28,9 +28,9 @@ pub fn collapsible_controlled(
   content~ : @minimoon.Val[@minimoon.Node],
   open~ : @minimoon.Val[Bool],
   on_change~ : @minimoon.Emit[Bool],
-  disabled? : Bool = false,
-  force_mount? : Bool = false,
-  show_indicator? : Bool = true,
+  disabled~ : Bool = false,
+  force_mount~ : Bool = false,
+  show_indicator~ : Bool = true,
 ) -> @minimoon.Val[@minimoon.Node] {
   let tap = form_dispatch(open, (current, _ : Unit) => {
     if disabled {
@@ -69,10 +69,10 @@ pub fn collapsible(
   id~ : String,
   title~ : String,
   content~ : @minimoon.Val[@minimoon.Node],
-  initially_open? : Bool = false,
-  disabled? : Bool = false,
-  force_mount? : Bool = false,
-  show_indicator? : Bool = true,
+  initially_open~ : Bool = false,
+  disabled~ : Bool = false,
+  force_mount~ : Bool = false,
+  show_indicator~ : Bool = true,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, emit) = @minimoon.create_variable(initially_open)
   collapsible_controlled(
@@ -93,11 +93,11 @@ pub fn accordion_controlled(
   items~ : @minimoon.Val[Array[Panel]],
   open_keys~ : @minimoon.Val[Array[String]],
   on_change~ : @minimoon.Emit[Array[String]],
-  multiple? : Bool = false,
-  collapsible? : Bool = true,
-  disabled? : Bool = false,
-  force_mount? : Bool = false,
-  show_indicator? : Bool = true,
+  multiple~ : Bool = false,
+  collapsible~ : Bool = true,
+  disabled~ : Bool = false,
+  force_mount~ : Bool = false,
+  show_indicator~ : Bool = true,
 ) -> @minimoon.Val[@minimoon.Node] {
   let tap = form_dispatch(
     @minimoon.Val::map2(items, open_keys, (items, keys) => (items, keys)),
@@ -178,12 +178,12 @@ pub fn accordion_controlled(
 pub fn accordion(
   id~ : String,
   items~ : @minimoon.Val[Array[Panel]],
-  initial_open_keys? : Array[String] = [],
-  multiple? : Bool = false,
-  collapsible? : Bool = true,
-  disabled? : Bool = false,
-  force_mount? : Bool = false,
-  show_indicator? : Bool = true,
+  initial_open_keys~ : Array[String] = [],
+  multiple~ : Bool = false,
+  collapsible~ : Bool = true,
+  disabled~ : Bool = false,
+  force_mount~ : Bool = false,
+  show_indicator~ : Bool = true,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (keys, emit) = @minimoon.create_variable(initial_open_keys)
   accordion_controlled(
@@ -205,9 +205,9 @@ pub fn tabs_controlled(
   items~ : @minimoon.Val[Array[Panel]],
   selected~ : @minimoon.Val[String?],
   on_change~ : @minimoon.Emit[String?],
-  vertical? : Bool = false,
-  force_mount? : Bool = false,
-  list_variant? : TabsListVariant = TabsDefault,
+  vertical~ : Bool = false,
+  force_mount~ : Bool = false,
+  list_variant~ : TabsListVariant = TabsDefault,
 ) -> @minimoon.Val[@minimoon.Node] {
   let change = form_dispatch(items, (items, key : String) => {
     if items.any(item => item.key == key && !item.disabled) {
@@ -274,9 +274,9 @@ pub fn tabs(
   id~ : String,
   items~ : @minimoon.Val[Array[Panel]],
   initial_selected? : String,
-  vertical? : Bool = false,
-  force_mount? : Bool = false,
-  list_variant? : TabsListVariant = TabsDefault,
+  vertical~ : Bool = false,
+  force_mount~ : Bool = false,
+  list_variant~ : TabsListVariant = TabsDefault,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (selected, emit) = @minimoon.create_variable(initial_selected)
   tabs_controlled(

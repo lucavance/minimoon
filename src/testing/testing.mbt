@@ -80,7 +80,7 @@ struct TestNode {
 struct TestRuntime {
   runtime : @minimoon.PageRuntime
   disposed : Ref[Bool]
-  settle : (Int) -> Unit raise
+  settle : (Int32) -> Unit raise
 }
 
 ///|
@@ -384,7 +384,7 @@ fn detail_payload(fields : Map[String, Json]) -> Json {
 }
 
 ///|
-fn json_int(value : Int) -> Json {
+fn json_int(value : Int32) -> Json {
   Json::number(value.to_double(), repr=value.to_string())
 }
 
@@ -398,7 +398,7 @@ fn change_payload(node : TestNode, value : Json) -> Json {
 }
 
 ///|
-fn focus_payload(value : String, height : Int) -> Json {
+fn focus_payload(value : String, height : Int32) -> Json {
   detail_payload({ "value": Json::string(value), "height": json_int(height) })
 }
 
@@ -408,7 +408,7 @@ fn input_blur_payload(value : String) -> Json {
 }
 
 ///|
-fn textarea_blur_payload(value : String, cursor : Int) -> Json {
+fn textarea_blur_payload(value : String, cursor : Int32) -> Json {
   detail_payload({ "value": Json::string(value), "cursor": json_int(cursor) })
 }
 
@@ -484,7 +484,7 @@ pub fn TestRuntime::focus(
   self : TestRuntime,
   selector : Selector,
   value : String,
-  height : Int,
+  height : Int32,
 ) -> String {
   dispatch_node_event(
     self.runtime,
@@ -513,7 +513,7 @@ pub fn TestRuntime::blur_textarea(
   self : TestRuntime,
   selector : Selector,
   value : String,
-  cursor : Int,
+  cursor : Int32,
 ) -> String {
   dispatch_node_event(
     self.runtime,
@@ -617,7 +617,7 @@ pub fn TestScope::focus(
   self : TestScope,
   selector : Selector,
   value : String,
-  height : Int,
+  height : Int32,
 ) -> String {
   dispatch_node_event(
     self.runtime,
@@ -646,7 +646,7 @@ pub fn TestScope::blur_textarea(
   self : TestScope,
   selector : Selector,
   value : String,
-  cursor : Int,
+  cursor : Int32,
 ) -> String {
   dispatch_node_event(
     self.runtime,
@@ -701,7 +701,7 @@ pub fn TestScope::lower(self : TestScope, selector : Selector) -> String {
 pub fn TestRuntime::lifecycle(
   self : TestRuntime,
   hook : String,
-  payload? : Json = Json::empty_object(),
+  payload~ : Json = Json::empty_object(),
 ) -> String {
   self.runtime.lifecycle(hook, payload.stringify())
 }

@@ -29,7 +29,7 @@ pub fn menu_item(
   key~ : String,
   label~ : String,
   on_select~ : @minimoon.Cmd,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> MenuItem {
   {
     key,
@@ -47,7 +47,7 @@ pub fn menu_checkbox_item(
   label~ : String,
   checked~ : Bool,
   on_change~ : @minimoon.Emit[Bool],
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> MenuItem {
   {
     key,
@@ -65,7 +65,7 @@ pub fn menu_radio_item(
   label~ : String,
   selected~ : Bool,
   on_select~ : @minimoon.Cmd,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> MenuItem {
   {
     key,
@@ -82,7 +82,7 @@ pub fn menu_submenu(
   key~ : String,
   label~ : String,
   items~ : Array[MenuItem],
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> MenuItem {
   {
     key,
@@ -211,7 +211,7 @@ pub fn dropdown_menu_controlled(
   items~ : @minimoon.Val[Array[MenuItem]],
   open~ : @minimoon.Val[Bool],
   on_change~ : @minimoon.Emit[Bool],
-  context_menu? : Bool = false,
+  context_menu~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (expanded, emit) = menu_dispatch(id, items, on_change(false), open~)
   let content = @minimoon.Val::view2(items, expanded, (items, expanded) => {

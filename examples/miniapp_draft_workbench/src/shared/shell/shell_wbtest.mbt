@@ -1,7 +1,7 @@
 ///|
 fn sample_layout(
   window_height : Double,
-  screen_top? : Double = 0.0,
+  screen_top~ : Double = 0.0,
 ) -> @minimoon.PageLayout {
   {
     window: Some({

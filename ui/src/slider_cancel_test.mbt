@@ -1,6 +1,6 @@
 ///|
-fn slider_cancel_event(active : Array[Int], changed : Array[Int]) -> String {
-  fn point(identifier : Int) -> Json {
+fn slider_cancel_event(active : Array[Int32], changed : Array[Int32]) -> String {
+  fn point(identifier : Int32) -> Json {
     Json::object({
       "identifier": Json::number(identifier.to_double()),
       "clientX": Json::number(60.0),
@@ -17,7 +17,9 @@ fn slider_cancel_event(active : Array[Int], changed : Array[Int]) -> String {
 }
 
 ///|
-fn slider_cancel_runtime(commits : Array[Array[Int]]) -> @minimoon.PageRuntime {
+fn slider_cancel_runtime(
+  commits : Array[Array[Int32]],
+) -> @minimoon.PageRuntime {
   let runtime = form_test_page(page => {
       @minimoon_ui.root(page, context => {
         @minimoon_ui.slider_values(
@@ -42,7 +44,7 @@ fn slider_cancel_runtime(commits : Array[Array[Int]]) -> @minimoon.PageRuntime {
 
 ///|
 test "slider ignores secondary and empty touch cancellations and commits the active pointer" {
-  let commits : Array[Array[Int]] = []
+  let commits : Array[Array[Int32]] = []
   let runtime = slider_cancel_runtime(commits)
   defer ignore(runtime.dispose())
   ignore(
@@ -86,7 +88,7 @@ test "slider ignores secondary and empty touch cancellations and commits the act
 
 ///|
 test "slider pending measurement survives secondary cancel and owning cancel restores once" {
-  let commits : Array[Array[Int]] = []
+  let commits : Array[Array[Int32]] = []
   let runtime = slider_cancel_runtime(commits)
   defer ignore(runtime.dispose())
   assert_eq(
@@ -128,7 +130,7 @@ test "slider pending measurement survives secondary cancel and owning cancel res
 
 ///|
 test "slider ignores a canceled pointer's late measurement during a new drag" {
-  let commits : Array[Array[Int]] = []
+  let commits : Array[Array[Int32]] = []
   let runtime = slider_cancel_runtime(commits)
   defer ignore(runtime.dispose())
   ignore(
@@ -165,8 +167,8 @@ test "slider ignores a canceled pointer's late measurement during a new drag" {
 
 ///|
 test "controlled slider cancellation emits once and leaves external values authoritative" {
-  let changes : Array[Array[Int]] = []
-  let commits : Array[Array[Int]] = []
+  let changes : Array[Array[Int32]] = []
+  let commits : Array[Array[Int32]] = []
   let runtime = form_test_page(page => {
       @minimoon_ui.root(page, context => {
         let (values, update) = @minimoon.create_variable([20, 80])

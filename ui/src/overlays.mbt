@@ -59,10 +59,10 @@ pub fn overlay_controlled(
   content~ : @minimoon.Val[@minimoon.Node],
   open~ : @minimoon.Val[Bool],
   on_change~ : @minimoon.Emit[Bool],
-  kind? : OverlayKind = DialogSurface,
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
-  placement? : @headless.Placement = @headless.BottomStart,
+  kind~ : OverlayKind = DialogSurface,
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
+  placement~ : @headless.Placement = @headless.BottomStart,
 ) -> @minimoon.Val[@minimoon.Node] {
   let floating = kind is PopoverSurface ||
     kind is PreviewSurface ||
@@ -171,7 +171,7 @@ pub fn dialog_controlled(
   content~ : @minimoon.Val[@minimoon.Node],
   open~ : @minimoon.Val[Bool],
   on_change~ : @minimoon.Emit[Bool],
-  close_on_overlay? : Bool = true,
+  close_on_overlay~ : Bool = true,
 ) -> @minimoon.Val[@minimoon.Node] {
   overlay_controlled(
     context,
@@ -192,7 +192,7 @@ pub fn dialog(
   title~ : String,
   trigger_label~ : String,
   content~ : @minimoon.Val[@minimoon.Node],
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, emit) = @minimoon.create_variable(initially_open)
   dialog_controlled(
@@ -213,7 +213,7 @@ pub fn sheet(
   title~ : String,
   trigger_label~ : String,
   content~ : @minimoon.Val[@minimoon.Node],
-  side? : Side = Right,
+  side~ : Side = Right,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, emit) = @minimoon.create_variable(false)
   overlay_controlled(
@@ -236,7 +236,7 @@ pub fn alert_dialog(
   trigger_label~ : String,
   content~ : @minimoon.Val[@minimoon.Node],
   on_confirm~ : @minimoon.Cmd,
-  confirm_label? : String = "Confirm",
+  confirm_label~ : String = "Confirm",
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, emit) = @minimoon.create_variable(false)
   let confirm = form_dispatch(
@@ -281,7 +281,7 @@ pub fn popover(
   title~ : String,
   trigger_label~ : String,
   content~ : @minimoon.Val[@minimoon.Node],
-  placement? : @headless.Placement = @headless.BottomStart,
+  placement~ : @headless.Placement = @headless.BottomStart,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, emit) = @minimoon.create_variable(false)
   overlay_controlled(

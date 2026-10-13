@@ -60,7 +60,7 @@ fn decode_store(data : Json) -> Result[Store, String] {
       "本地数据版本或容量不受支持，未覆盖原数据。",
     )
   }
-  let ids : Map[Int, Bool] = Map([])
+  let ids : Map[Int32, Bool] = Map([])
   for record in store.records {
     guard record.id > 0 && record.id < store.next_id && !ids.contains(record.id) else {
       return Err("草稿标识损坏，未覆盖原数据。")
@@ -78,7 +78,7 @@ fn write_store(
   current : Workbench,
   store : Store,
   intent : Intent?,
-  saved_id : Int?,
+  saved_id : Int32?,
   emit : @minimoon.Emit[WorkMsg],
 ) -> (Workbench, @minimoon.Cmd) {
   let token = current.epoch + 1

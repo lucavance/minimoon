@@ -22,10 +22,10 @@ pub struct LocationResult {
 ///|
 pub struct MediaFile {
   temp_file_path : String
-  size : Int?
+  size : Int32?
   file_type : String?
-  width : Int?
-  height : Int?
+  width : Int32?
+  height : Int32?
   duration : Double?
   thumb_temp_file_path : String?
 }
@@ -227,7 +227,7 @@ fn number_field(fields : Map[String, Json], name : String) -> Double? {
 }
 
 ///|
-fn host_int32(value : Double) -> Int? {
+fn host_int32(value : Double) -> Int32? {
   if value < 0.0 || value > 2147483647.0 {
     return None
   }
@@ -307,7 +307,7 @@ fn decode_location(value : Json) -> Result[LocationResult, HostError] {
 fn optional_media_int(
   fields : Map[String, Json],
   name : String,
-) -> Result[Int?, Unit] {
+) -> Result[Int32?, Unit] {
   match fields.get(name) {
     None => Ok(None)
     Some(Number(value, ..)) =>
@@ -483,11 +483,11 @@ pub fn switch_tab(target : Route) -> Cmd {
 }
 
 ///|
-pub fn navigate_back(delta? : Int = 1) -> Cmd {
+pub fn navigate_back(delta~ : Int32 = 1) -> Cmd {
   Cmd(@val.navigate_back(delta))
 }
 
 ///|
-pub fn navigate_back_or(fallback~ : Route, delta? : Int = 1) -> Cmd {
+pub fn navigate_back_or(fallback~ : Route, delta~ : Int32 = 1) -> Cmd {
   Cmd(@val.navigate_back_or_redirect(delta, fallback.url()))
 }

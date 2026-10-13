@@ -15,7 +15,7 @@ test "application local async completion survives page unload and drops after ap
           ),
         )
       },
-      update=(value : Int, delta : Int, _) => (value + delta, none),
+      update=(value : Int32, delta : Int32, _) => (value + delta, none),
     )
   })
   let app = definition.create_runtime()
@@ -60,7 +60,7 @@ fn application_request_id(commands : String) -> String {
 ///|
 test "application HTTP is independent of page capabilities visibility and lifetime" {
   let definition = app(capabilities=[Request], build=context => {
-    context.create_state(0, update=(_, msg : Int, emit) => {
+    context.create_state(0, update=(_, msg : Int32, emit) => {
       if msg == -1 {
         (
           0,
@@ -166,7 +166,7 @@ test "shared bindings leave no registered pages after repeated reuse" {
 ///|
 test "application state machines with different models and messages compose independently" {
   let definition = app(build=context => {
-    let count = context.create_pure_state(0, update=(value, delta : Int) => {
+    let count = context.create_pure_state(0, update=(value, delta : Int32) => {
       value + delta
     })
     let label = context.create_pure_state("initial", update=(_, value : String) => {

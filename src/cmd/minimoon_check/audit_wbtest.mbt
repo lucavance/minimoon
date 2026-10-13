@@ -18,9 +18,9 @@ fn audit_test_lock(records : Array[String]) -> String {
 
 ///|
 fn audit_test_report(
-  name? : String = "braces",
-  url? : String = dependency_audit_exception_url,
-  severity? : String = "high",
+  name~ : String = "braces",
+  url~ : String = dependency_audit_exception_url,
+  severity~ : String = "high",
 ) -> String {
   let packages : Map[String, Json] = Map([])
   packages[name] = Json::array([

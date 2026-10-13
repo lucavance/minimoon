@@ -2,15 +2,16 @@
 
 This workflow keeps deterministic Linux validation, real Skyline acceptance
 and explicit local registry publication distinct. The current source pair is
-core `lampclaw/minimoon@0.2.6` and UI `lampclaw/minimoon_ui@0.1.4`;
-UI declares core `0.2.6`. Actual published versions and historical checkpoints
+core `lampclaw/minimoon@0.2.7` and UI `lampclaw/minimoon_ui@0.1.5`;
+UI declares core `0.2.7`. Actual published versions and historical checkpoints
 are recorded in [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 Never overwrite an occupied registry version or treat an old host result as
 acceptance of changed artifacts.
 
-The authorized core `0.2.6` / UI `0.1.4` publication is complete. The current
-audit repair is delivered as source; neither occupied version is overwritten.
-Future package releases require authorization and the gates below.
+Core `0.2.7` / UI `0.1.5` is authorized for commit, push to `main` and CI after
+local checks. The user will perform WeChat Developer Tools validation afterward.
+Publication requires separate authorization and all gates below. The previous
+core `0.2.6` / UI `0.1.4` publication is complete.
 
 Run `vp run --no-cache check:audit` separately from candidate validation. Its
 [source audit policy](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md#source-dependency-audit-policy)
@@ -96,8 +97,8 @@ or use `moon -C ui publish`.
 The UI archive gate instead copies source into a temporary independent Git
 root, runs the real `moon package`, checks the archive allowlist and required
 files, and compiles consumers from the extracted package. Its reviewed output
-is `_build/publish/lampclaw-minimoon_ui-0.1.4.zip`. The core candidate archive is
-`_build/publish/lampclaw-minimoon-0.2.6.zip`. UI publication must use that checked
+is `_build/publish/lampclaw-minimoon_ui-0.1.5.zip`. The core candidate archive is
+`_build/publish/lampclaw-minimoon-0.2.7.zip`. UI publication must use that checked
 archive extracted outside all Git and Moon workspace ancestors, after registry
 core is available and consumers pass. A successful archive gate does not itself
 publish either module. Previously published archives remain immutable.
@@ -106,8 +107,8 @@ After review, commit and push the complete candidate to `main`, then require
 both the primary `Test` job and `Node 24 LTS compatibility` job to pass for that
 exact commit. Freeze the source SHA, toolchain versions, package contents and
 both artifact fingerprints. A newer source commit requires its own CI result.
-Notify the user with the successful CI link before following the ordered
-publication procedure once all required gates pass; no further approval is needed.
+Notify the user with the successful CI link. For an explicitly authorized
+publication, follow the ordered procedure once all gates pass without re-asking.
 Do not create version tags or a GitHub Release as part of this workflow.
 
 ## Repository validation reference
@@ -247,7 +248,7 @@ repository-only changes as well.
 
 Publication is an explicitly authorized local operator action, not a CI step.
 Authenticate as the module owner; do not add registry credentials to CI.
-Keep core `0.2.6` and UI `0.1.4` fixed throughout these
+Keep core `0.2.7` and UI `0.1.5` fixed throughout these
 checks. Require current fingerprint-matched host evidence for both fixtures;
 never modify an occupied registry version.
 
@@ -272,12 +273,12 @@ moon publish --frozen
    `moon publish` from the same checkout may then complete the normal self-check.
    Never use this fallback for a source-check failure or dependency drift.
    If an upload result is ambiguous, query the registry before retrying.
-3. Wait until Mooncakes resolves core `0.2.6`. In a fresh temporary directory
+3. Wait until Mooncakes resolves core `0.2.7`. In a fresh temporary directory
    outside this repository and every ancestor `moon.work`, install the registry
    CLI into a temporary binary directory:
 
 ```bash
-moon install --bin <temporary-bin> lampclaw/minimoon/cmd/minimoon@0.2.6
+moon install --bin <temporary-bin> lampclaw/minimoon/cmd/minimoon@0.2.7
 <temporary-bin>/minimoon --version
 <temporary-bin>/minimoon init <temporary-app>
 ```
@@ -292,17 +293,17 @@ moon install --bin <temporary-bin> lampclaw/minimoon/cmd/minimoon@0.2.6
    Test with vp-managed tools and no independently installed Bun. Compare the
    downloaded core inventory and file hashes against the reviewed archive;
    ZIP metadata alone is not a source-content difference.
-4. Upgrade a Starter created by registry CLI `0.2.5` to CLI/core `0.2.6`.
+4. Upgrade a Starter created by registry CLI `0.2.5` to CLI/core `0.2.7`.
    Follow the upgrade guide and preserve application logic, configuration,
    styles and private settings.
    Check/test, build, verify and repeat the build to establish deterministic
-output. Old CLI archives remain unchanged. Extract the reviewed UI `0.1.4`
+output. Old CLI archives remain unchanged. Extract the reviewed UI `0.1.5`
 ZIP outside every Git and Moon workspace ancestor. Check the extracted
-module and consumers against registry core `0.2.6`, then publish from that
+module and consumers against registry core `0.2.7`, then publish from that
    directory using the same self-check rules as core. Do not publish from the
    repository's `ui/` directory.
-5. Create a registry-only consumer declaring core `0.2.6` and UI `0.1.4`.
-   Confirm those resolved versions and UI's core `0.2.6` declaration.
+5. Create a registry-only consumer declaring core `0.2.7` and UI `0.1.5`.
+   Confirm those resolved versions and UI's core `0.2.7` declaration.
    Import root, headless and theme for native/JS behavior checks; exercise
    resources through the native build provider, not application JavaScript.
    Build and verify a candidate, reject unknown resources without corrupting

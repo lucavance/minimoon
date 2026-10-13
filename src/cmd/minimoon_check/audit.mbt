@@ -3,10 +3,10 @@
 let dependency_audit_exception_url = "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm"
 
 ///|
-let dependency_audit_exception_deadline = "2026-10-23T00:00:00Z"
+let dependency_audit_exception_deadline = "2026-11-23T00:00:00Z"
 
 ///|
-let dependency_audit_exception_deadline_ms : UInt64 = 1792713600000UL
+let dependency_audit_exception_deadline_ms : UInt64 = 1795392000000UL
 
 ///|
 struct DependencyAuditDecision {
@@ -54,7 +54,7 @@ fn dependency_audit_lock_packages(
 
 ///|
 fn evaluate_dependency_audit(
-  exit_code : Int,
+  exit_code : Int32,
   stdout : String,
   stderr : String,
   lock_source : String,
@@ -131,7 +131,7 @@ fn evaluate_dependency_audit(
 ///|
 fn dependency_audit_summary(
   decision : DependencyAuditDecision,
-  exit_code : Int?,
+  exit_code : Int32?,
 ) -> Json {
   Json::object({
     "status": Json::string(decision.status),
@@ -152,7 +152,7 @@ async fn persist_dependency_audit(
   stdout : String,
   stderr : String,
   decision : DependencyAuditDecision,
-  exit_code : Int?,
+  exit_code : Int32?,
 ) -> Unit nocancel {
   @async.protect_from_cancel(() => {
     let summary = dependency_audit_summary(decision, exit_code).stringify(
@@ -180,7 +180,7 @@ async fn audit_suite(root : String) -> Unit {
   @fs.mkdir(directory, recursive=true, allow_exist=true, permission=0o700)
   let mut stdout = ""
   let mut stderr = ""
-  let mut exit_code : Int? = None
+  let mut exit_code : Int32? = None
   persist_dependency_audit(
     directory,
     stdout,

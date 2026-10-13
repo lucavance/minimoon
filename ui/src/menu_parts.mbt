@@ -30,8 +30,8 @@ fn default_menu_presentation(label : String) -> MenuPresentation {
 fn menu_item_content(
   presentation : MenuPresentation,
   checked? : Bool,
-  radio? : Bool = false,
-  submenu? : Bool = false,
+  radio~ : Bool = false,
+  submenu~ : Bool = false,
 ) -> @minimoon.Node {
   let marker = match checked {
     Some(checked) =>
@@ -85,11 +85,11 @@ fn menu_item_content(
 pub fn menu_customize(
   item : MenuItem,
   content? : @minimoon.Node,
-  shortcut? : String = "",
-  inset? : Bool = false,
-  destructive? : Bool = false,
+  shortcut~ : String = "",
+  inset~ : Bool = false,
+  destructive~ : Bool = false,
   close_on_select? : Bool,
-  indicator_placement? : MenuIndicatorPlacement = IndicatorStart,
+  indicator_placement~ : MenuIndicatorPlacement = IndicatorStart,
 ) -> MenuItem {
   {
     ..item,
@@ -109,7 +109,7 @@ pub fn menu_customize(
 pub fn menu_group(
   key~ : String,
   items~ : Array[MenuItem],
-  label? : String = "",
+  label~ : String = "",
 ) -> MenuItem {
   {
     key,

@@ -121,28 +121,28 @@ pub fn[Model, Msg] RunningComponent::resolve_host_effect(
 ///|
 pub fn[Model, Msg] RunningComponent::pending_effect_count(
   self : RunningComponent[Model, Msg],
-) -> Int {
+) -> Int32 {
   self.pending_effects.length()
 }
 
 ///|
 pub fn[Model, Msg] RunningComponent::pending_local_effect_count(
   self : RunningComponent[Model, Msg],
-) -> Int {
+) -> Int32 {
   self.pending_local_effects.length()
 }
 
 ///|
 pub fn[Model, Msg] RunningComponent::pending_local_message_count(
   self : RunningComponent[Model, Msg],
-) -> Int {
+) -> Int32 {
   self.pending_local_messages.length()
 }
 
 ///|
 pub fn[Model, Msg] RunningComponent::drain_local_messages(
   self : RunningComponent[Model, Msg],
-  through~ : Int,
+  through~ : Int32,
 ) -> ContextWriteResult {
   if self.context.is_disposed() {
     self.pending_local_messages.clear()

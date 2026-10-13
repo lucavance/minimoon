@@ -1,7 +1,7 @@
 # Compatibility and upgrades
 
 Minimoon is pre-1.0. This policy defines the compatibility guarantees maintained
-for core `0.2.6` and optional UI `0.1.4`, including the versioned transition
+for core `0.2.7` and optional UI `0.1.5`, including the versioned transition
 from the frozen core 0.1 consumer baseline.
 
 ## Compatibility surfaces
@@ -50,10 +50,11 @@ is the verified MiniApp host format; ESM is not an implied upgrade.
 | `0.2.3` | `0.1.1` | Historical core-only vp migration; UI keeps its core `0.2.2` declaration |
 | `0.2.4` | `0.1.2` | Previous published source pair; runtime, verification and Slider fixes; UI declares core `0.2.4` |
 | `0.2.5` | `0.1.3` | Previous published pair; stable Vite+ and dependency refresh; UI declares core `0.2.5` |
-| `0.2.6` | `0.1.4` | Current candidate; tooling and stylesheet refresh; unchanged public APIs; UI declares core `0.2.6`; publication status is recorded separately |
+| `0.2.6` | `0.1.4` | Previous published pair; tooling and stylesheet refresh; UI declares core `0.2.6` |
+| `0.2.7` | `0.1.5` | Local candidate; MoonBit 0.10.15 and build dependency refresh; unchanged public APIs; UI declares core `0.2.7` |
 
 Previously published archives and their dependency declarations remain immutable.
-Upgrade the CLI and direct core dependency to `0.2.6`, and optional UI to `0.1.4`.
+Upgrade the CLI and direct core dependency to `0.2.7`, and optional UI to `0.1.5`.
 See [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
 for actual publication and consumer results. This matrix does not establish
 real-host acceptance or certify every future `0.2.x` / `0.1.x` combination.
@@ -63,29 +64,28 @@ consumer gates for another pair.
 
 ## Toolchain compatibility
 
-Core `0.2.6` and UI `0.1.4` require at least `moon 0.1.20260920` with
-`moonc v0.10.14`. Both CI jobs use the official installer pinned to the complete
-prebuilt release `0.10.14+7d59c7ec9` (`moon 0.1.20260920`), not latest;
+Core `0.2.7` and UI `0.1.5` require at least `moon 0.1.20261012` with
+`moonc v0.10.15`. Both CI jobs use the official installer pinned to the complete
+prebuilt release `0.10.15+943464bfa` (`moon 0.1.20261012`), not latest;
 Rust is not required. This raises the previous MoonBit minimum: older compilers
 are not supported for the new source syntax. The direct dependencies are
 `moonbitlang/async@0.22.4` and `moonbitlang/x@0.5.5`.
 
 Repository and generated-starter JavaScript tooling support Node `>=24.20.0`,
 with current CI coverage at the 24.20.0 lower boundary and in the 26.11.1 primary
-environment. Current source uses global `vp 1.1.0` to manage pinned Bun `1.4.2`;
+environment. Current source uses global `vp 1.1.0` to manage pinned Bun `1.4.3`;
 `devEngines.runtime` selects Node `26.11.1` without adding `.node-version`.
 The Node minimum has not changed.
 Update CI, the package consumer gate, starter guidance and compatibility notes
 together when changing these constraints.
 
-Previous registry CLI `0.2.5` retains its released pins (table below), verified
-with `vp 1.0.0` and Node `26.10.0`. Upgrade the CLI for new Starter pins.
+Published registry CLI `0.2.6` retains its released pins (table below), verified
+with `vp 1.1.0` and Node `26.11.1`. Use the source CLI for candidate Starter pins
+until the new version is published.
 
-The new compiler requires explicit package qualifiers in blackbox tests and
-other cross-package references. For example, use `@minimoon.page(...)` and
-`@minimoon.ScrollDetail` when `moon.pkg` assigns the alias `@minimoon` to the
-core package. A UI blackbox test similarly uses its declared `@ui` alias. Do
-not qualify a local declaration as though it belonged to another package.
+Blackbox tests and cross-package references use declared package aliases:
+`@minimoon.page(...)`, `@minimoon.ScrollDetail`, or `@ui` in UI tests.
+Local declarations need no package qualifier.
 
 For library types whose concrete derived methods are part of the published API,
 retain the derivation and explicitly export those extensions, for example:
@@ -99,16 +99,15 @@ pub extend Model with Eq::{equal, not_equal}
 pub extend Model with Debug::{to_repr}
 ```
 
-The framework applies this migration to preserve existing derived methods,
-including equality, debug and JSON conversion methods. It is not an instruction
-to expose every private application type. Review generated `.mbti` files and
-compile consumers after adapting your own library code. The new compiler can
-print explicit method signatures for methods that were implicit in earlier
-interfaces. The repository keeps its frozen core/UI baseline snapshots unchanged
-and checks the reviewed explicit signatures separately; it does not accept
-arbitrary snapshot regeneration as compatibility evidence. The checked API
+Export existing public equality, debug and JSON conversion methods, retaining
+private application types. Review generated `.mbti` files and compile consumers.
+The repository keeps frozen core/UI baselines and checks the reviewed explicit
+signatures separately; arbitrary snapshot regeneration is not compatibility evidence. The checked API
 contracts and App Contract `11` / ABI `13` / renderer protocol `8` remain the
-compatibility boundaries.
+compatibility boundaries. The 0.10.15 update replaces deprecated built-in
+`value.to_json()` calls with `Json(value)` and iterator `length()` with `count()`;
+array and string lengths retain their existing meaning. Generated sources
+must use the new formatter's `Int32` and default-parameter spelling.
 
 The `0.2.2` CLI also contains the App-aware helper fix and import cleanups that
 were absent from registry CLI `0.2.1`. That older CLI can fail `--deny-warn` for
@@ -129,23 +128,24 @@ The root `/ui/` rule makes direct `cd ui` publication (including
 `moon -C ui publish`) unsafe: it can produce an empty ZIP despite source being
 present. The UI archive gate packages an isolated source copy under its own Git
 root and validates the actual archive, required files and consumers. The checked
-ZIP is `_build/publish/lampclaw-minimoon_ui-0.1.4.zip`.
+ZIP is `_build/publish/lampclaw-minimoon_ui-0.1.5.zip`.
 
-Publish core `0.2.6` first, validate registry consumers, then publish the reviewed
-UI `0.1.4` archive from an independent directory. Validate the complete registry
+Publish core `0.2.7` first, validate registry consumers, then publish the reviewed
+UI `0.1.5` archive from an independent directory. Validate the complete registry
 pair and upgrades from core `0.2.5` / UI `0.1.3`; follow the
 [release procedure](../operations/release_candidate_handoff.md#ordered-local-registry-publication).
 Packaging checks do not prove registry availability or a host pass.
 
 Use the exact application style versions for the selected CLI:
 
-| Dependency | Previous CLI `0.2.5` | Current CLI `0.2.6` |
+| Dependency | Published CLI `0.2.6` | Candidate CLI `0.2.7` |
 | --- | --- | --- |
 | `@tailwindcss/cli` and `tailwindcss` | `4.3.3` | `4.3.3` |
-| `postcss`, including `overrides.postcss` | `8.5.28` | `8.5.29` |
-| `weapp-tailwindcss` | `5.5.11` | `5.5.12` |
-| `devEngines.packageManager` | Bun `1.4.2` | Bun `1.4.2` |
-| `devEngines.runtime` | Node `26.10.0` | Node `26.11.1` |
+| `postcss`, including `overrides.postcss` | `8.5.29` | `8.5.30` |
+| `weapp-tailwindcss` | `5.5.12` | `5.6.1` |
+| `devEngines.packageManager` | Bun `1.4.2` | Bun `1.4.3` |
+| `devEngines.runtime` | Node `26.11.1` | Node `26.11.1` |
+| `overrides.source-map-js` | not declared | `1.2.2` |
 
 Unpublished source also generates `overrides.source-map-js: "1.2.2"` to
 remove vulnerable nested resolutions. The registry `0.2.6` CLI retains its
@@ -154,7 +154,7 @@ original template. Existing apps can add this override and reinstall; see the
 for the remaining `braces` advisory and temporary exception.
 
 Only the repository needs `acorn 8.19.0` and `eslint-scope 9.1.2` for validation.
-Use `vp 1.1.0` for source or `vp 1.0.0` for the published baseline. Follow the
+Use `vp 1.1.0` for source and the published baseline. Follow the
 [quickstart](../guides/miniapp_quickstart.md#prerequisites); separate Bun and
 local `vite-plus`, Vite or Vitest packages are unnecessary. The
 missing-local-`vite-plus` notice is expected.
@@ -164,7 +164,7 @@ checks use `vp run --no-cache <task>`. Preserve the native MoonBit build pipelin
 Vite+ built-ins `vp build`, `vp test` and `vp check` do not run Minimoon tasks.
 Bun remains the package-manager/runtime backend and `bun.lock` remains tracked.
 Internal Bun tools execute through the shared launcher using
-`vp env exec bun <arguments>` with process-local `VP_BUN_VERSION=1.4.2`.
+`vp env exec bun <arguments>` with process-local `VP_BUN_VERSION=1.4.3`.
 Bun management must be enabled (`vp env on bun`); the direct managed launch
 preserves process termination and cancellation. The stylesheet adapter uses
 `vp node` because weapp-tailwindcss requires Node's `findPackageJSON`.
@@ -179,17 +179,17 @@ the internal launcher preserves that selection.
    Use the source workflow if the target versions are not available yet.
 2. Use the MoonBit minimum above and global `vp 1.1.0`.
    After registry availability is recorded, install
-   `moon install lampclaw/minimoon/cmd/minimoon@0.2.6`; until then follow the
+   `moon install lampclaw/minimoon/cmd/minimoon@0.2.7`; until then follow the
    [source workflow](../guides/miniapp_quickstart.md#create-from-the-current-source)
-   instead. Check PATH and confirm `minimoon --version` reports `0.2.6`.
-3. Update the application's direct dependency to `lampclaw/minimoon@0.2.6` and,
-   if used, `lampclaw/minimoon_ui@0.1.4`. Update direct async/x imports to the
+   instead. Check PATH and confirm `minimoon --version` reports `0.2.7`.
+3. Update the application's direct dependency to `lampclaw/minimoon@0.2.7` and,
+   if used, `lampclaw/minimoon_ui@0.1.5`. Update direct async/x imports to the
    reviewed versions above when the application declares them. Run `moon update`
    and confirm the resolved versions without unintended workspace overrides.
 4. Update an existing application's `package.json` to the current style
    versions above, retain `engines.node: ">=24.20.0"` and the PostCSS override, and set
    `devEngines.runtime` to `{ "name": "node", "version": "26.11.1" }` alongside
-   `devEngines.packageManager: { "name": "bun", "version": "1.4.2" }`. Run
+   `devEngines.packageManager: { "name": "bun", "version": "1.4.3" }`. Run
    `vp install` to update its lockfile. Rebuilding does not rewrite an existing
    manifest. Subsequent reproducible installs use `vp install --frozen-lockfile`.
 5. Apply explicit package qualification and public derived-method extensions
@@ -217,7 +217,7 @@ file is unsupported. A published module version cannot be overwritten.
 ## Core 0.2 and optional UI 0.1
 
 The new UI module is independently named `lampclaw/minimoon_ui`; it depends on
-core 0.2.6, not on Rabbita. Existing optional components and both minimal themes
+core 0.2.7, not on Rabbita. Existing optional components and both minimal themes
 remain available. The frozen 0.1 consumer is historical source, not a required
 compatibility gate against the current core. The maintained consumer targets
 the current 0.2 API; migrate source calls and exhaustive enum matches before

@@ -1,7 +1,7 @@
 ///|
 priv struct SourceSpan {
-  line : Int
-  column : Int
+  line : Int32
+  column : Int32
 }
 
 ///|
@@ -9,8 +9,8 @@ priv struct ConfigIssue {
   code : String
   message : String
   file : String
-  line : Int
-  column : Int
+  line : Int32
+  column : Int32
   json_pointer : String
   hint : String
 }
@@ -22,7 +22,7 @@ priv struct ConfigDocument {
 }
 
 ///|
-fn source_span(raw : String, offset : Int) -> SourceSpan {
+fn source_span(raw : String, offset : Int32) -> SourceSpan {
   let mut line = 1
   let mut column = 1
   for index = 0; index < offset && index < raw.length(); index = index + 1 {
@@ -42,7 +42,7 @@ fn pointer_key(value : String) -> String {
 }
 
 ///|
-fn skip_space(raw : String, offset : Ref[Int]) -> Unit {
+fn skip_space(raw : String, offset : Ref[Int32]) -> Unit {
   while offset.val < raw.length() &&
         (
           raw[offset.val] == ' ' ||
@@ -55,7 +55,7 @@ fn skip_space(raw : String, offset : Ref[Int]) -> Unit {
 }
 
 ///|
-fn scan_string(raw : String, offset : Ref[Int]) -> (Int, Int) {
+fn scan_string(raw : String, offset : Ref[Int32]) -> (Int32, Int32) {
   let start = offset.val
   offset.val = offset.val + 1
   let mut escaped = false
@@ -75,7 +75,7 @@ fn scan_string(raw : String, offset : Ref[Int]) -> (Int, Int) {
 }
 
 ///|
-fn decoded_key(raw : String, start : Int, end : Int) -> String {
+fn decoded_key(raw : String, start : Int32, end : Int32) -> String {
   let parsed = @json.parse(raw[start:end]) catch { _ => Json::string("") }
   match parsed {
     String(value) => value
@@ -84,7 +84,7 @@ fn decoded_key(raw : String, start : Int, end : Int) -> String {
 }
 
 ///|
-fn scan_primitive(raw : String, offset : Ref[Int]) -> Unit {
+fn scan_primitive(raw : String, offset : Ref[Int32]) -> Unit {
   while offset.val < raw.length() &&
         raw[offset.val] != ',' &&
         raw[offset.val] != ']' &&
@@ -100,7 +100,7 @@ fn scan_primitive(raw : String, offset : Ref[Int]) -> Unit {
 ///|
 fn scan_value(
   raw : String,
-  offset : Ref[Int],
+  offset : Ref[Int32],
   pointer : String,
   spans : Map[String, SourceSpan],
   duplicates : Array[ConfigIssue],

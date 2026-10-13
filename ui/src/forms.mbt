@@ -11,8 +11,8 @@ pub(all) struct ChoiceOption {
 pub fn choice_option(
   key~ : String,
   label~ : String,
-  disabled? : Bool = false,
-  group? : String = "",
+  disabled~ : Bool = false,
+  group~ : String = "",
 ) -> ChoiceOption {
   guard key != "" else { abort("choice key must not be empty") }
   { key, label, disabled, group, }
@@ -43,10 +43,10 @@ pub struct FieldState {
 pub fn field_state(
   id~ : String,
   label~ : String,
-  description? : String = "",
-  error? : String = "",
-  required? : Bool = false,
-  disabled? : Bool = false,
+  description~ : String = "",
+  error~ : String = "",
+  required~ : Bool = false,
+  disabled~ : Bool = false,
 ) -> FieldState {
   guard id != "" else { abort("field id must not be empty") }
   { id, label, description, error, required, disabled, }
@@ -55,7 +55,7 @@ pub fn field_state(
 ///|
 pub fn FieldState::semantics(
   self : FieldState,
-  role? : @minimoon.SemanticRole = @minimoon.TextboxRole,
+  role~ : @minimoon.SemanticRole = @minimoon.TextboxRole,
 ) -> @minimoon.Semantics {
   @minimoon.semantics(
     role~,
@@ -72,7 +72,7 @@ pub fn FieldState::semantics(
 ///|
 pub fn[C : @minimoon.IsChildren] field(
   state : FieldState,
-  orientation? : Orientation = Vertical,
+  orientation~ : Orientation = Vertical,
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -116,10 +116,10 @@ pub fn text_field(
   state : @minimoon.Val[FieldState],
   value : @minimoon.Val[String],
   on_input : @minimoon.Emit[String],
-  options? : @minimoon.Val[InputOptions] = @minimoon.Val::constant(
+  options~ : @minimoon.Val[InputOptions] = @minimoon.Val::constant(
     input_options(),
   ),
-  orientation? : Orientation = Vertical,
+  orientation~ : Orientation = Vertical,
   on_confirm? : @minimoon.Emit[String],
   on_focus? : @minimoon.Emit[@minimoon.FocusDetail],
   on_blur? : @minimoon.Emit[@minimoon.InputBlurDetail],
@@ -176,10 +176,10 @@ pub fn[C : @minimoon.IsChildren] field_label(
 pub fn[C : @minimoon.IsChildren] form(
   on_submit~ : @minimoon.Emit[Map[String, Json]],
   on_reset? : @minimoon.Cmd,
-  values? : Map[String, Json] = Map([]),
-  submit_key? : String = "",
-  reset_key? : String = "",
-  id? : String = "",
+  values~ : Map[String, Json] = Map([]),
+  submit_key~ : String = "",
+  reset_key~ : String = "",
+  id~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   @minimoon.form(

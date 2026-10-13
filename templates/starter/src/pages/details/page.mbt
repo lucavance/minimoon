@@ -1,7 +1,7 @@
 ///|
 pub struct Model {
   enabled : Bool
-  visits : Int
+  visits : Int32
 } derive(Eq)
 
 ///|

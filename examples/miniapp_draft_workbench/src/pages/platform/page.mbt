@@ -8,7 +8,7 @@ pub struct Model {
   request_status : String
   request_body : String
   request_code : String
-  request_case : Int
+  request_case : Int32
   request_base : String
   response_open : Bool
   toast_status : String
@@ -30,10 +30,10 @@ pub enum Msg {
   StorageSaved
   StorageFailed(String)
   LoadRequest
-  RequestCase(Int)
+  RequestCase(Int32)
   RequestBase(String)
   ToggleResponse
-  RequestLoaded(Int, String)
+  RequestLoaded(Int32, String)
   RequestFailed(String)
   ShowToast
   ToastShown

@@ -59,8 +59,8 @@ fn panel_trigger(item : Panel) -> @minimoon.Node {
 
 ///|
 pub fn[C : @minimoon.IsChildren] accordion_root(
-  id? : String = "",
-  disabled? : Bool = false,
+  id~ : String = "",
+  disabled~ : Bool = false,
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -73,9 +73,9 @@ pub fn[C : @minimoon.IsChildren] accordion_root(
 
 ///|
 pub fn[C : @minimoon.IsChildren] accordion_item(
-  id? : String = "",
-  open? : Bool = false,
-  disabled? : Bool = false,
+  id~ : String = "",
+  open~ : Bool = false,
+  disabled~ : Bool = false,
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -90,11 +90,11 @@ pub fn[C : @minimoon.IsChildren] accordion_item(
 pub fn[C : @minimoon.IsChildren] accordion_trigger(
   value~ : String,
   on_change~ : @minimoon.Emit[String],
-  open? : Bool = false,
-  disabled? : Bool = false,
-  controls? : String = "",
-  id? : String = "",
-  show_indicator? : Bool = true,
+  open~ : Bool = false,
+  disabled~ : Bool = false,
+  controls~ : String = "",
+  id~ : String = "",
+  show_indicator~ : Bool = true,
   children : C,
 ) -> @minimoon.Node {
   @minimoon.button_children(
@@ -121,10 +121,10 @@ pub fn[C : @minimoon.IsChildren] accordion_trigger(
 
 ///|
 pub fn[C : @minimoon.IsChildren] accordion_content(
-  id? : String = "",
-  open? : Bool = false,
-  force_mount? : Bool = false,
-  labelled_by? : String = "",
+  id~ : String = "",
+  open~ : Bool = false,
+  force_mount~ : Bool = false,
+  labelled_by~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   if !open && !force_mount {
@@ -146,9 +146,9 @@ pub fn[C : @minimoon.IsChildren] accordion_content(
 
 ///|
 pub fn[C : @minimoon.IsChildren] collapsible_root(
-  id? : String = "",
-  open? : Bool = false,
-  disabled? : Bool = false,
+  id~ : String = "",
+  open~ : Bool = false,
+  disabled~ : Bool = false,
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -162,11 +162,11 @@ pub fn[C : @minimoon.IsChildren] collapsible_root(
 ///|
 pub fn[C : @minimoon.IsChildren] collapsible_trigger(
   on_change~ : @minimoon.Emit[Bool],
-  open? : Bool = false,
-  disabled? : Bool = false,
-  controls? : String = "",
-  id? : String = "",
-  show_indicator? : Bool = true,
+  open~ : Bool = false,
+  disabled~ : Bool = false,
+  controls~ : String = "",
+  id~ : String = "",
+  show_indicator~ : Bool = true,
   children : C,
 ) -> @minimoon.Node {
   @minimoon.button_children(
@@ -193,10 +193,10 @@ pub fn[C : @minimoon.IsChildren] collapsible_trigger(
 
 ///|
 pub fn[C : @minimoon.IsChildren] collapsible_content(
-  id? : String = "",
-  open? : Bool = false,
-  force_mount? : Bool = false,
-  labelled_by? : String = "",
+  id~ : String = "",
+  open~ : Bool = false,
+  force_mount~ : Bool = false,
+  labelled_by~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   accordion_content(id~, open~, force_mount~, labelled_by~, children)
@@ -204,8 +204,8 @@ pub fn[C : @minimoon.IsChildren] collapsible_content(
 
 ///|
 pub fn[C : @minimoon.IsChildren] tabs_root(
-  id? : String = "",
-  vertical? : Bool = false,
+  id~ : String = "",
+  vertical~ : Bool = false,
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -218,9 +218,9 @@ pub fn[C : @minimoon.IsChildren] tabs_root(
 
 ///|
 pub fn[C : @minimoon.IsChildren] tabs_list(
-  id? : String = "",
-  vertical? : Bool = false,
-  variant? : TabsListVariant = TabsDefault,
+  id~ : String = "",
+  vertical~ : Bool = false,
+  variant~ : TabsListVariant = TabsDefault,
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -244,10 +244,10 @@ pub fn[C : @minimoon.IsChildren] tabs_list(
 pub fn[C : @minimoon.IsChildren] tabs_trigger(
   value~ : String,
   on_change~ : @minimoon.Emit[String],
-  selected? : Bool = false,
-  disabled? : Bool = false,
-  controls? : String = "",
-  id? : String = "",
+  selected~ : Bool = false,
+  disabled~ : Bool = false,
+  controls~ : String = "",
+  id~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   @minimoon.button_children(
@@ -267,10 +267,10 @@ pub fn[C : @minimoon.IsChildren] tabs_trigger(
 
 ///|
 pub fn[C : @minimoon.IsChildren] tabs_content(
-  id? : String = "",
-  selected? : Bool = false,
-  force_mount? : Bool = false,
-  labelled_by? : String = "",
+  id~ : String = "",
+  selected~ : Bool = false,
+  force_mount~ : Bool = false,
+  labelled_by~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   if !selected && !force_mount {

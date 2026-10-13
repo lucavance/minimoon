@@ -19,7 +19,7 @@ pub(all) enum MessageScrollDirection {
 
 ///|
 priv struct MessageScrollState {
-  token : Int
+  token : Int32
   keys : Array[String]
   top : Double
   content_height : Double
@@ -38,7 +38,7 @@ priv enum MessageScrollMsg {
   Reached(MessageScrollDirection)
   Pause
   Refresh
-  MeasuredScroll(Int, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
+  MeasuredScroll(Int32, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
 }
 
 ///|
@@ -59,7 +59,7 @@ fn messages_prepended(
 }
 
 ///|
-fn message_signature(items : Array[MessageItem], revision : Int) -> String {
+fn message_signature(items : Array[MessageItem], revision : Int32) -> String {
   let seen : Set[String] = Set([])
   let parts = [revision.to_string()]
   for item in items {
@@ -81,10 +81,10 @@ pub fn message_scroller(
   context : UiContext,
   id~ : String,
   items~ : @minimoon.Val[Array[MessageItem]],
-  content_revision? : @minimoon.Val[Int] = @minimoon.Val::constant(0),
-  initially_at_end? : Bool = true,
-  height? : String = "320px",
-  show_buttons? : Bool = true,
+  content_revision~ : @minimoon.Val[Int32] = @minimoon.Val::constant(0),
+  initially_at_end~ : Bool = true,
+  height~ : String = "320px",
+  show_buttons~ : Bool = true,
   render_button? : (MessageScrollDirection, @minimoon.Cmd, Bool) -> @minimoon.Node,
 ) -> @minimoon.Val[@minimoon.Node] {
   let input = @minimoon.Val::map2(items, content_revision, (items, revision) => {

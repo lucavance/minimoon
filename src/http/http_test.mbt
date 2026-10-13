@@ -1,7 +1,7 @@
 ///|
 priv struct User {
   name : String
-  count : Int
+  count : Int32
 } derive(Debug, Eq, ToJson, @json.FromJson)
 
 ///|
@@ -22,7 +22,7 @@ fn[T] capture(
 ///|
 fn runtime_for(
   command : @minimoon.Cmd,
-  capabilities? : Array[@minimoon.Capability] = [@minimoon.Request],
+  capabilities~ : Array[@minimoon.Capability] = [@minimoon.Request],
 ) -> @minimoon.PageRuntime {
   let runtime = @minimoon.page(
       id="http_test",
@@ -67,8 +67,8 @@ fn begin_request(
 }
 
 ///|
-fn response(status : Int, data : Json) -> String {
-  Json::object({ "statusCode": status.to_json(), "data": data }).stringify()
+fn response(status : Int32, data : Json) -> String {
+  Json::object({ "statusCode": Json(status), "data": data }).stringify()
 }
 
 ///|
@@ -155,7 +155,7 @@ test "HTTP constructors snapshot query and headers and preserve timeout options"
       payload["header"],
       Json::object({ "x-test": Json::string("before") }),
     )
-    assert_eq(payload["timeout"], (123).to_json())
+    assert_eq(payload["timeout"], Json(123))
     ignore(runtime.dispose())
   }
 }
@@ -269,7 +269,7 @@ test "HTTP non-2xx status preserves the full response before typed decoding" {
         id,
         "success",
         Json::object({
-          "statusCode": status.to_json(),
+          "statusCode": Json(status),
           "data": Json::string("not a User"),
           "header": Json::object({ "retry-after": Json::string("3") }),
           "cookies": Json::array([Json::string("session=redacted")]),
@@ -327,7 +327,7 @@ test "HTTP typed decode errors retain the original JsonDecodeError path and type
 ///|
 test "HTTP does not parse the host Json data string a second time" {
   let text_result : Ref[Result[String, Error]?] = Ref(None)
-  let number_result : Ref[Result[Int, Error]?] = Ref(None)
+  let number_result : Ref[Result[Int32, Error]?] = Ref(None)
   let text = runtime_for(
     @http.get("https://example.test").expect_json(capture(text_result)),
   )
@@ -355,7 +355,7 @@ test "HTTP transport errors retain the complete root HostError" {
   let raw = Json::object({
     "error": Json::string("request:fail timeout"),
     "errMsg": Json::string("request:fail timeout"),
-    "errCode": (600001).to_json(),
+    "errCode": Json(600001),
   })
   for
     entry in [
@@ -465,22 +465,18 @@ test "HTTP capability availability is reported by the existing host boundary" {
 
 ///|
 test "HTTP builders remain reusable without sharing response callbacks" {
-  let first_result : Ref[Result[Int, Error]?] = Ref(None)
-  let second_result : Ref[Result[Int, Error]?] = Ref(None)
+  let first_result : Ref[Result[Int32, Error]?] = Ref(None)
+  let second_result : Ref[Result[Int32, Error]?] = Ref(None)
   let builder = @http.post("https://example.test").with_json(42)
   let first = runtime_for(builder.expect_json(capture(first_result)))
   let second = runtime_for(builder.expect_json(capture(second_result)))
   let (first_id, first_payload) = begin_request(first)
   let (second_id, second_payload) = begin_request(second)
   assert_eq(first_payload, second_payload)
-  ignore(
-    first.resolve_effect(first_id, "success", response(200, (1).to_json())),
-  )
+  ignore(first.resolve_effect(first_id, "success", response(200, Json(1))))
   assert_eq(first_result.val.unwrap().unwrap(), 1)
   assert_true(second_result.val is None)
-  ignore(
-    second.resolve_effect(second_id, "success", response(200, (2).to_json())),
-  )
+  ignore(second.resolve_effect(second_id, "success", response(200, Json(2))))
   assert_eq(second_result.val.unwrap().unwrap(), 2)
   assert_eq(first_result.val.unwrap().unwrap(), 1)
   ignore(first.dispose())
@@ -488,7 +484,7 @@ test "HTTP builders remain reusable without sharing response callbacks" {
 }
 
 ///|
-fn shared_page(value : @minimoon.Shared[Int]) -> @minimoon.Page {
+fn shared_page(value : @minimoon.Shared[Int32]) -> @minimoon.Page {
   @minimoon.page(
     id="http_shared",
     route=@minimoon.route("pages/http/shared"),
@@ -504,12 +500,12 @@ fn shared_page(value : @minimoon.Shared[Int]) -> @minimoon.Page {
 ///|
 test "HTTP typed commands inherit application ownership beyond page lifetime" {
   let app = @minimoon.app(capabilities=[@minimoon.Request], build=context => {
-    context.create_state(0, update=(value, message : Int, emit) => {
+    context.create_state(0, update=(value, message : Int32, emit) => {
       if message == -1 {
         (
           value,
           @http.get("https://example.test").expect_json(result => {
-            let decoded : Int = match result {
+            let decoded : Int32 = match result {
               Ok(value) => value
               Err(_) => -2
             }
@@ -526,14 +522,14 @@ test "HTTP typed commands inherit application ownership beyond page lifetime" {
   ignore(first.lifecycle("onLoad", "{}"))
   let (id, _) = request_command(app.dispatch((app.deps().1)(-1)))
   assert_true(!first.dispose().contains("CancelEffect"))
-  ignore(app.resolve_effect(id, "success", response(200, (41).to_json())))
+  ignore(app.resolve_effect(id, "success", response(200, Json(41))))
   let second = app.create_page(shared_page(app.deps().0)).unwrap()
   ignore(second.lifecycle("onLoad", "{}"))
   assert_true(second.snapshot().contains("value:41"))
   let (pending, _) = request_command(app.dispatch((app.deps().1)(-1)))
   assert_true(app.dispose().contains("CancelEffect"))
   assert_eq(
-    app.resolve_effect(pending, "success", response(200, (99).to_json())),
+    app.resolve_effect(pending, "success", response(200, Json(99))),
     "[]",
   )
   ignore(second.dispose())

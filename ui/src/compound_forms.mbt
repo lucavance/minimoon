@@ -1,8 +1,8 @@
 ///|
 pub fn[C : @minimoon.IsChildren] field_set(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -17,9 +17,9 @@ pub fn[C : @minimoon.IsChildren] field_set(
 
 ///|
 pub fn[C : @minimoon.IsChildren] field_legend(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("field-legend", children.to_nodes(), id~, class~, style~)
@@ -27,9 +27,9 @@ pub fn[C : @minimoon.IsChildren] field_legend(
 
 ///|
 pub fn[C : @minimoon.IsChildren] field_group(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -44,9 +44,9 @@ pub fn[C : @minimoon.IsChildren] field_group(
 
 ///|
 pub fn[C : @minimoon.IsChildren] field_content(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("field-content", children.to_nodes(), id~, class~, style~)
@@ -54,9 +54,9 @@ pub fn[C : @minimoon.IsChildren] field_content(
 
 ///|
 pub fn[C : @minimoon.IsChildren] field_title(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("field-title", children.to_nodes(), id~, class~, style~)
@@ -64,9 +64,9 @@ pub fn[C : @minimoon.IsChildren] field_title(
 
 ///|
 pub fn[C : @minimoon.IsChildren] field_description(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("field-description", children.to_nodes(), id~, class~, style~)
@@ -74,9 +74,9 @@ pub fn[C : @minimoon.IsChildren] field_description(
 
 ///|
 pub fn[C : @minimoon.IsChildren] field_error(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -91,9 +91,9 @@ pub fn[C : @minimoon.IsChildren] field_error(
 
 ///|
 pub fn[C : @minimoon.IsChildren] field_separator(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("field-separator", children.to_nodes(), id~, class~, style~)
@@ -101,9 +101,9 @@ pub fn[C : @minimoon.IsChildren] field_separator(
 
 ///|
 pub fn[C : @minimoon.IsChildren] input_group(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -118,10 +118,10 @@ pub fn[C : @minimoon.IsChildren] input_group(
 
 ///|
 pub fn[C : @minimoon.IsChildren] input_group_addon(
-  align? : AddonAlign = InlineStart,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  align~ : AddonAlign = InlineStart,
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   let alignment = match align {
@@ -141,9 +141,9 @@ pub fn[C : @minimoon.IsChildren] input_group_addon(
 
 ///|
 pub fn[C : @minimoon.IsChildren] input_group_text(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("input-group-text", children.to_nodes(), id~, class~, style~)
@@ -151,9 +151,9 @@ pub fn[C : @minimoon.IsChildren] input_group_text(
 
 ///|
 pub fn[C : @minimoon.IsChildren] input_otp_group(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -168,9 +168,9 @@ pub fn[C : @minimoon.IsChildren] input_otp_group(
 
 ///|
 pub fn[C : @minimoon.IsChildren] progress_track(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("progress-track", children.to_nodes(), id~, class~, style~)
@@ -178,9 +178,9 @@ pub fn[C : @minimoon.IsChildren] progress_track(
 
 ///|
 pub fn[C : @minimoon.IsChildren] progress_label(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("progress-label", children.to_nodes(), id~, class~, style~)
@@ -188,9 +188,9 @@ pub fn[C : @minimoon.IsChildren] progress_label(
 
 ///|
 pub fn[C : @minimoon.IsChildren] select_group(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -205,9 +205,9 @@ pub fn[C : @minimoon.IsChildren] select_group(
 
 ///|
 pub fn[C : @minimoon.IsChildren] select_label(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("select-label", children.to_nodes(), id~, class~, style~)
@@ -215,9 +215,9 @@ pub fn[C : @minimoon.IsChildren] select_label(
 
 ///|
 pub fn[C : @minimoon.IsChildren] select_content(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -232,9 +232,9 @@ pub fn[C : @minimoon.IsChildren] select_content(
 
 ///|
 pub fn[C : @minimoon.IsChildren] form_item(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("form-item", children.to_nodes(), id~, class~, style~)
@@ -242,9 +242,9 @@ pub fn[C : @minimoon.IsChildren] form_item(
 
 ///|
 pub fn[C : @minimoon.IsChildren] form_control(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("form-control", children.to_nodes(), id~, class~, style~)
@@ -252,9 +252,9 @@ pub fn[C : @minimoon.IsChildren] form_control(
 
 ///|
 pub fn[C : @minimoon.IsChildren] form_description(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container("form-description", children.to_nodes(), id~, class~, style~)
@@ -262,9 +262,9 @@ pub fn[C : @minimoon.IsChildren] form_description(
 
 ///|
 pub fn[C : @minimoon.IsChildren] form_message(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(

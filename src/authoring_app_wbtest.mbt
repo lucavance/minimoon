@@ -1,17 +1,20 @@
 ///|
-fn shared_counter_app() -> App[(Shared[Int], Emit[Int])] {
+fn shared_counter_app() -> App[(Shared[Int32], Emit[Int32])] {
   app(build=context => {
     context.create_pure_state(0, update=(count, delta) => count + delta)
   })
 }
 
 ///|
-fn shared_counter_page(deps : (Shared[Int], Emit[Int]), id : String) -> Page {
+fn shared_counter_page(
+  deps : (Shared[Int32], Emit[Int32]),
+  id : String,
+) -> Page {
   page(id~, route=route("pages/" + id + "/" + id), title=id, build=context => {
     let count = context.bind(deps.0)
     let (page_count, emit_local) = create_pure_state(0, update=(
       count,
-      delta : Int,
+      delta : Int32,
     ) => count + delta)
     Val::view2(count, page_count, (count, page_count) => {
       div([
@@ -133,7 +136,7 @@ test "application initialization is launch-only and previews do not dispatch" {
           ),
         )
       },
-      update=(model : Int, delta : Int, _) => (model + delta, none),
+      update=(model : Int32, delta : Int32, _) => (model + delta, none),
     )
   })
   let contract = definition.preview(deps => {
@@ -243,7 +246,7 @@ test "application timers pause in background and release on disposal" {
   let definition = app(build=context => {
     context.create_state(
       0,
-      update=(count, delta : Int, _) => (count + delta, none),
+      update=(count, delta : Int32, _) => (count + delta, none),
       subscriptions=(_, emit) => {
         context.every(key="tick", interval_ms=1000, command=emit(1))
       },

@@ -22,9 +22,9 @@ fn performance_tree_node(
 
 ///|
 fn performance_tree(
-  count : Int,
-  changed_index? : Int = -1,
-  rotate? : Bool = false,
+  count : Int32,
+  changed_index~ : Int32 = -1,
+  rotate~ : Bool = false,
 ) -> Json {
   let children : Array[Json] = []
   for offset = 0; offset < count; offset = offset + 1 {
@@ -45,14 +45,14 @@ fn performance_tree(
 }
 
 ///|
-fn bench_scalar_diff(b : @bench.T, count : Int) -> Unit {
+fn bench_scalar_diff(b : @bench.T, count : Int32) -> Unit {
   let old_tree = performance_tree(count)
   let next_tree = performance_tree(count, changed_index=count / 2)
   b.bench(fn() { b.keep(diff_miniapp_trees(old_tree, next_tree)) })
 }
 
 ///|
-fn bench_keyed_reorder(b : @bench.T, count : Int) -> Unit {
+fn bench_keyed_reorder(b : @bench.T, count : Int32) -> Unit {
   let old_tree = performance_tree(count)
   let next_tree = performance_tree(count, rotate=true)
   b.bench(fn() { b.keep(diff_miniapp_trees(old_tree, next_tree)) })
@@ -64,7 +64,7 @@ fn quadratic_keyed_lis_reference(
   next : Array[String],
 ) -> Array[String] {
   let sequence_ids : Array[String] = []
-  let positions : Array[Int] = []
+  let positions : Array[Int32] = []
   for identity in next {
     for index = 0; index < working.length(); index = index + 1 {
       if working[index] == identity {
@@ -102,7 +102,7 @@ fn quadratic_keyed_lis_reference(
 }
 
 ///|
-fn performance_identities(count : Int, rotate : Bool) -> Array[String] {
+fn performance_identities(count : Int32, rotate : Bool) -> Array[String] {
   Array::makei(count, offset => {
     let index = if rotate { (offset + 1) % count } else { offset }
     "item-" + index.to_string()
@@ -110,14 +110,14 @@ fn performance_identities(count : Int, rotate : Bool) -> Array[String] {
 }
 
 ///|
-fn bench_quadratic_lis_reference(b : @bench.T, count : Int) -> Unit {
+fn bench_quadratic_lis_reference(b : @bench.T, count : Int32) -> Unit {
   let working = performance_identities(count, false)
   let next = performance_identities(count, true)
   b.bench(fn() { b.keep(quadratic_keyed_lis_reference(working, next)) })
 }
 
 ///|
-fn bench_indexed_lis(b : @bench.T, count : Int) -> Unit {
+fn bench_indexed_lis(b : @bench.T, count : Int32) -> Unit {
   let working = performance_identities(count, false)
   let next = performance_identities(count, true)
   b.bench(fn() { b.keep(keyed_lis_identities_with_work(working, next)) })
@@ -125,9 +125,9 @@ fn bench_indexed_lis(b : @bench.T, count : Int) -> Unit {
 
 ///|
 fn performance_program_with_guard(
-  count : Int,
-  projection_guard? : @runtime.ProjectionGuard[Int],
-) -> PageProgram[Int, Int] {
+  count : Int32,
+  projection_guard? : @runtime.ProjectionGuard[Int32],
+) -> PageProgram[Int32, Int32] {
   page_program(
     id="perf_" + count.to_string(),
     route="pages/perf_" + count.to_string() + "/perf_" + count.to_string(),
@@ -154,14 +154,14 @@ fn performance_program_with_guard(
 }
 
 ///|
-fn performance_program(count : Int) -> PageProgram[Int, Int] {
+fn performance_program(count : Int32) -> PageProgram[Int32, Int32] {
   performance_program_with_guard(count, projection_guard=(previous, next) => {
     previous != next
   })
 }
 
 ///|
-fn bench_event_lookup(b : @bench.T, count : Int) -> Unit {
+fn bench_event_lookup(b : @bench.T, count : Int32) -> Unit {
   let program = performance_program(count)
   let key = "event-" + (count - 1).to_string()
   let payload = Json::empty_object()
@@ -169,7 +169,7 @@ fn bench_event_lookup(b : @bench.T, count : Int) -> Unit {
 }
 
 ///|
-fn bench_noop_dispatch(b : @bench.T, count : Int) -> Unit {
+fn bench_noop_dispatch(b : @bench.T, count : Int32) -> Unit {
   let runtime = performance_program(count).create_runtime()
   let _ = runtime.mount()
   let key = "event-" + (count - 1).to_string()
@@ -178,7 +178,7 @@ fn bench_noop_dispatch(b : @bench.T, count : Int) -> Unit {
 }
 
 ///|
-fn bench_unsuppressed_noop_dispatch(b : @bench.T, count : Int) -> Unit {
+fn bench_unsuppressed_noop_dispatch(b : @bench.T, count : Int32) -> Unit {
   let runtime = performance_program_with_guard(count).create_runtime()
   let _ = runtime.mount()
   let key = "event-" + (count - 1).to_string()
@@ -187,7 +187,7 @@ fn bench_unsuppressed_noop_dispatch(b : @bench.T, count : Int) -> Unit {
 }
 
 ///|
-fn bench_create_mount(b : @bench.T, count : Int) -> Unit {
+fn bench_create_mount(b : @bench.T, count : Int32) -> Unit {
   let program = performance_program(count)
   b.bench(fn() {
     let runtime = program.create_runtime()
@@ -198,9 +198,9 @@ fn bench_create_mount(b : @bench.T, count : Int) -> Unit {
 
 ///|
 fn performance_retained_tree(
-  root_id : Int,
-  count : Int,
-  changed_index? : Int = -1,
+  root_id : Int32,
+  count : Int32,
+  changed_index~ : Int32 = -1,
 ) -> @ui.Node {
   let children : Array[@ui.KeyedNode] = []
   for index = 0; index < count; index = index + 1 {
@@ -222,14 +222,14 @@ fn performance_retained_tree(
 }
 
 ///|
-fn bench_full_normalization(b : @bench.T, count : Int) -> Unit {
+fn bench_full_normalization(b : @bench.T, count : Int32) -> Unit {
   let events : Array[PageEvent[Unit]] = []
   let candidate = performance_retained_tree(2, count, changed_index=count / 2)
   b.bench(fn() { b.keep(normalize_miniapp_tree_checked(candidate, events)) })
 }
 
 ///|
-fn bench_retained_normalization(b : @bench.T, count : Int) -> Unit {
+fn bench_retained_normalization(b : @bench.T, count : Int32) -> Unit {
   let events : Map[String, PageEvent[Unit]] = Map([])
   let entries : Ref[Map[String, NormalizedCacheEntry]] = Ref(Map([]))
   let roots : Ref[Array[String]] = Ref([])

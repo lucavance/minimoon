@@ -3,7 +3,7 @@ async fn run_build(
   root : String,
   cwd : String,
   args : Array[String],
-  start : Int,
+  start : Int32,
 ) -> Unit {
   let parsed = parse_build_args(args, start)
   if parsed.show_help {
@@ -53,7 +53,7 @@ fn watch_event_paths(event : @fs.FsEvent) -> Array[String] {
 }
 
 ///|
-async fn run_dev(cwd : String, target : String?, debounce_ms : Int) -> Unit {
+async fn run_dev(cwd : String, target : String?, debounce_ms : Int32) -> Unit {
   guard debounce_ms >= 1 && debounce_ms <= 5000 else {
     fail("--debounce-ms must be between 1 and 5000")
   }

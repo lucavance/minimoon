@@ -15,8 +15,8 @@ pub fn UiContext::visible(self : UiContext) -> @minimoon.Val[Bool] {
 pub fn root(
   page : @minimoon.PageContext,
   build : (UiContext) -> @minimoon.Val[@minimoon.Node],
-  theme? : @minimoon.Val[@theme.Theme] = @minimoon.Val::constant(@theme.theme()),
-  toast_limit? : Int = 5,
+  theme~ : @minimoon.Val[@theme.Theme] = @minimoon.Val::constant(@theme.theme()),
+  toast_limit~ : Int32 = 5,
 ) -> @minimoon.Val[@minimoon.Node] {
   guard toast_limit > 0 && toast_limit <= 100 else {
     abort("toast limit must be between 1 and 100")

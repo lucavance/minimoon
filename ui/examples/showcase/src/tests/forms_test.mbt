@@ -98,9 +98,9 @@ fn echo_submit_batch(runtime : @minimoon.PageRuntime, title : String) -> String 
 }
 
 ///|
-fn echo_reply(title : String, status? : Int = 200) -> String {
+fn echo_reply(title : String, status~ : Int32 = 200) -> String {
   Json::object({
-    "statusCode": status.to_json(),
+    "statusCode": Json(status),
     "data": Json::object({
       "json": Json::object({ "title": Json::string(title) }),
     }),

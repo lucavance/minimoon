@@ -15,7 +15,7 @@ fn field(json : Json, key : String) -> Json {
 }
 
 ///|
-fn string(json : Json, key : String, fallback? : String = "") -> String {
+fn string(json : Json, key : String, fallback~ : String = "") -> String {
   match object(json, key).get(key) {
     Some(String(value)) => value
     Some(Null) | None => fallback

@@ -2,8 +2,8 @@
 /// Compound carousel state uses native swiper physics and typed MiniApp events.
 struct CarouselScope {
   id : String
-  current : Int
-  count : Int
+  current : Int32
+  count : Int32
   circular : Bool
   orientation : Orientation
   change : @minimoon.Emit[CarouselRequest]
@@ -11,15 +11,15 @@ struct CarouselScope {
 
 ///|
 priv enum CarouselRequest {
-  Target(Int)
-  Step(Int)
+  Target(Int32)
+  Step(Int32)
 }
 
 ///|
 fn carousel_dispatch(
-  count : @minimoon.Val[Int],
-  current : @minimoon.Val[Int],
-  change : @minimoon.Emit[Int],
+  count : @minimoon.Val[Int32],
+  current : @minimoon.Val[Int32],
+  change : @minimoon.Emit[Int32],
   circular : Bool,
 ) -> @minimoon.Emit[CarouselRequest] {
   let input = @minimoon.Val::map2(count, current, (count, current) => {
@@ -49,12 +49,12 @@ fn carousel_dispatch(
 }
 
 ///|
-pub fn carousel_active_index(scope : CarouselScope) -> Int {
+pub fn carousel_active_index(scope : CarouselScope) -> Int32 {
   scope.current
 }
 
 ///|
-pub fn carousel_slide_count(scope : CarouselScope) -> Int {
+pub fn carousel_slide_count(scope : CarouselScope) -> Int32 {
   scope.count
 }
 
@@ -79,7 +79,10 @@ pub fn carousel_can_next(scope : CarouselScope) -> Bool {
 }
 
 ///|
-pub fn carousel_scroll_to(scope : CarouselScope, index : Int) -> @minimoon.Cmd {
+pub fn carousel_scroll_to(
+  scope : CarouselScope,
+  index : Int32,
+) -> @minimoon.Cmd {
   (scope.change)(Target(index))
 }
 
@@ -96,16 +99,16 @@ pub fn carousel_scroll_next(scope : CarouselScope) -> @minimoon.Cmd {
 ///|
 pub fn[Input : Eq] carousel_provider_controlled_with_input(
   id~ : String,
-  count~ : @minimoon.Val[Int],
-  current~ : @minimoon.Val[Int],
-  on_change~ : @minimoon.Emit[Int],
+  count~ : @minimoon.Val[Int32],
+  current~ : @minimoon.Val[Int32],
+  on_change~ : @minimoon.Emit[Int32],
   input~ : @minimoon.Val[Input],
   render~ : (CarouselScope, Input) -> @minimoon.Node,
-  circular? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  aria_label? : String = "Carousel",
-  class? : String = "",
-  style? : String = "",
+  circular~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  aria_label~ : String = "Carousel",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   let change = carousel_dispatch(count, current, on_change, circular)
   @minimoon.Val::view3(count, current, input, (count, current, input) => {
@@ -133,15 +136,15 @@ pub fn[Input : Eq] carousel_provider_controlled_with_input(
 ///|
 pub fn carousel_provider_controlled(
   id~ : String,
-  count~ : @minimoon.Val[Int],
-  current~ : @minimoon.Val[Int],
-  on_change~ : @minimoon.Emit[Int],
+  count~ : @minimoon.Val[Int32],
+  current~ : @minimoon.Val[Int32],
+  on_change~ : @minimoon.Emit[Int32],
   render~ : (CarouselScope) -> @minimoon.Node,
-  circular? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  aria_label? : String = "Carousel",
-  class? : String = "",
-  style? : String = "",
+  circular~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  aria_label~ : String = "Carousel",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   carousel_provider_controlled_with_input(
     id~,
@@ -161,23 +164,23 @@ pub fn carousel_provider_controlled(
 ///|
 pub fn[Input : Eq] carousel_provider_with_input(
   id~ : String,
-  count~ : @minimoon.Val[Int],
+  count~ : @minimoon.Val[Int32],
   input~ : @minimoon.Val[Input],
   render~ : (CarouselScope, Input) -> @minimoon.Node,
-  default_index? : Int = 0,
-  on_change? : @minimoon.Emit[Int],
-  circular? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  aria_label? : String = "Carousel",
-  class? : String = "",
-  style? : String = "",
+  default_index~ : Int32 = 0,
+  on_change? : @minimoon.Emit[Int32],
+  circular~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  aria_label~ : String = "Carousel",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   let (index, emit) = @minimoon.create_state_with_input(
     input=count,
     init=(_, count) => {
       @minimoon.no_cmd(default_index.clamp(min=0, max=(count - 1).max(0)))
     },
-    update=(old, count, requested : Int, _) => {
+    update=(old, count, requested : Int32, _) => {
       let next = requested.clamp(min=0, max=(count - 1).max(0))
       (
         next,
@@ -230,15 +233,15 @@ pub fn[Input : Eq] carousel_provider_with_input(
 ///|
 pub fn carousel_provider(
   id~ : String,
-  count~ : @minimoon.Val[Int],
+  count~ : @minimoon.Val[Int32],
   render~ : (CarouselScope) -> @minimoon.Node,
-  default_index? : Int = 0,
-  on_change? : @minimoon.Emit[Int],
-  circular? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  aria_label? : String = "Carousel",
-  class? : String = "",
-  style? : String = "",
+  default_index~ : Int32 = 0,
+  on_change? : @minimoon.Emit[Int32],
+  circular~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  aria_label~ : String = "Carousel",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   carousel_provider_with_input(
     id~,
@@ -260,11 +263,11 @@ pub fn[C : @minimoon.IsChildren] carousel_content(
   scope : CarouselScope,
   children : C,
   id? : String,
-  autoplay? : Bool = false,
-  interval? : Int = 5000,
-  height? : String = "200px",
-  class? : String = "",
-  style? : String = "",
+  autoplay~ : Bool = false,
+  interval~ : Int32 = 5000,
+  height~ : String = "200px",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   @minimoon.swiper(
     id=id.unwrap_or(scope.id + "-swiper"),
@@ -284,12 +287,12 @@ pub fn[C : @minimoon.IsChildren] carousel_content(
 ///|
 pub fn[C : @minimoon.IsChildren] carousel_item(
   scope : CarouselScope,
-  index~ : Int,
+  index~ : Int32,
   children : C,
   key? : String,
   aria_label? : String,
-  class? : String = "",
-  style? : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   guard index >= 0 && index < scope.count else {
     abort("carousel item index must be within slide count")
@@ -317,11 +320,11 @@ pub fn[C : @minimoon.IsChildren] carousel_item(
 pub fn carousel_items(
   scope : CarouselScope,
   items~ : Array[Panel],
-  autoplay? : Bool = false,
-  interval? : Int = 5000,
-  height? : String = "200px",
-  class? : String = "",
-  style? : String = "",
+  autoplay~ : Bool = false,
+  interval~ : Int32 = 5000,
+  height~ : String = "200px",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   guard items.length() == scope.count else {
     abort("carousel items must match slide count")
@@ -337,9 +340,9 @@ pub fn carousel_items(
 pub fn[C : @minimoon.IsChildren] carousel_previous(
   scope : CarouselScope,
   children : C,
-  disabled? : Bool = false,
-  aria_label? : String = "Previous slide",
-  class? : String = "",
+  disabled~ : Bool = false,
+  aria_label~ : String = "Previous slide",
+  class~ : String = "",
 ) -> @minimoon.Node {
   let disabled = disabled || !carousel_can_previous(scope)
   @minimoon.button_children(
@@ -360,9 +363,9 @@ pub fn[C : @minimoon.IsChildren] carousel_previous(
 pub fn[C : @minimoon.IsChildren] carousel_next(
   scope : CarouselScope,
   children : C,
-  disabled? : Bool = false,
-  aria_label? : String = "Next slide",
-  class? : String = "",
+  disabled~ : Bool = false,
+  aria_label~ : String = "Next slide",
+  class~ : String = "",
 ) -> @minimoon.Node {
   let disabled = disabled || !carousel_can_next(scope)
   @minimoon.button_children(

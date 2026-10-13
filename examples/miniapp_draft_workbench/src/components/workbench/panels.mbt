@@ -3,7 +3,7 @@ pub fn action(
   key : String,
   label : String,
   command : @minimoon.Cmd,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @minimoon.Node {
   @minimoon.button(
     class="demo-action",
@@ -17,8 +17,8 @@ pub fn action(
 ///|
 pub fn editor(
   from : String,
-  mode? : String = "resume",
-  id? : Int,
+  mode~ : String = "resume",
+  id? : Int32,
 ) -> @minimoon.Cmd {
   let query = [@minimoon.query("from", from), @minimoon.query("mode", mode)]
   if id is Some(id) {
@@ -102,7 +102,7 @@ pub fn confirmation(
 ///|
 pub fn echo_panel(
   echo : @application.EchoModel,
-  revision : Int,
+  revision : Int32,
 ) -> @minimoon.Node {
   @shell.card("最近一次联机回显", section="work-echo", [
     @minimoon.p(@application.echo_label(echo, revision)),

@@ -150,7 +150,7 @@ test "MiniApp compatibility transforms are complete and idempotent" {
   let source = "const a = new TextEncoder(); const b = new TextEncoder\n" +
     "if(globalThis.crypto?.getRandomValues){globalThis.crypto?.getRandomValues(bytes)}\n"
   let compatible = miniapp_compatible_javascript(source)
-  assert_eq(compatible.split("var __mmTextEncoder=").length(), 2)
+  assert_eq(compatible.split("var __mmTextEncoder=").count(), 2)
   assert_false(compatible.contains("new TextEncoder"))
   assert_false(compatible.contains("?."))
   assert_false(compatible.contains("??"))

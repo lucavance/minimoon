@@ -179,7 +179,7 @@ fn resource_bundle_errors(
 async fn compile_resource_bundle(
   app_root : String,
   provider : Json,
-  index : Int,
+  index : Int32,
 ) -> Json {
   let package_path = string(provider, "package")
   let features = resource_features(provider)

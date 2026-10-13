@@ -3,7 +3,7 @@
 extern "js" fn run_input_patch_test(
   protocol_source : String,
   host_source : String,
-  abi : Int,
+  abi : Int32,
 ) -> String =
   #|(source, hostSource, abi) => {
   #|  try {

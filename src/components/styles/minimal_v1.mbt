@@ -31,7 +31,7 @@ pub fn disclosure_spec(
 ///|
 pub fn disclosure(
   spec : @headless.DisclosureSpec,
-  initially_expanded? : Bool = false,
+  initially_expanded~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.disclosure(spec, initially_expanded~)
 }
@@ -50,7 +50,7 @@ pub fn accordion_item(
   key~ : String,
   label~ : String,
   panel~ : @minimoon.Node,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @headless.AccordionItem {
   @headless.accordion_item(key~, label~, panel~, disabled~)
 }
@@ -60,10 +60,10 @@ pub fn accordion_single(
   id~ : String,
   items~ : Array[@headless.AccordionItem],
   initial_open_key? : String,
-  label? : String = "",
-  collapsible? : Bool = true,
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  label~ : String = "",
+  collapsible~ : Bool = true,
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.accordion_single(
     id~,
@@ -86,10 +86,10 @@ pub fn accordion_single_controlled(
   items~ : Array[@headless.AccordionItem],
   open_key~ : @minimoon.Val[String?],
   on_change~ : @minimoon.Emit[String?],
-  label? : String = "",
-  collapsible? : Bool = true,
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  label~ : String = "",
+  collapsible~ : Bool = true,
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.accordion_single_controlled(
     id~,
@@ -111,10 +111,10 @@ pub fn accordion_single_controlled(
 pub fn accordion_multiple(
   id~ : String,
   items~ : Array[@headless.AccordionItem],
-  initial_open_keys? : Array[String] = [],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  initial_open_keys~ : Array[String] = [],
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.accordion_multiple(
     id~,
@@ -136,9 +136,9 @@ pub fn accordion_multiple_controlled(
   items~ : Array[@headless.AccordionItem],
   open_keys~ : @minimoon.Val[Array[String]],
   on_change~ : @minimoon.Emit[Array[String]],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.accordion_multiple_controlled(
     id~,
@@ -160,7 +160,7 @@ pub fn tab_item(
   key~ : String,
   label~ : String,
   panel~ : @minimoon.Node,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @headless.TabItem {
   @headless.tab_item(key~, label~, panel~, disabled~)
 }
@@ -170,9 +170,9 @@ pub fn tabs(
   id~ : String,
   items~ : Array[@headless.TabItem],
   initial_selected_key? : String,
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.tabs(
     id~,
@@ -196,9 +196,9 @@ pub fn tabs_controlled(
   items~ : Array[@headless.TabItem],
   selected_key~ : @minimoon.Val[String?],
   on_change~ : @minimoon.Emit[String?],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.tabs_controlled(
     id~,
@@ -237,7 +237,7 @@ pub fn[Input] disclosure_spec_with_input(
 pub fn[Input : Eq] disclosure_with_input(
   spec : @headless.DisclosureSpecWithInput[Input],
   input~ : @minimoon.Val[Input],
-  initially_expanded? : Bool = false,
+  initially_expanded~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.disclosure_with_input(spec, input~, initially_expanded~)
 }
@@ -262,7 +262,7 @@ pub fn[Input] accordion_item_with_input(
   key~ : String,
   label~ : String,
   panel~ : (Input) -> @minimoon.Node,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @headless.AccordionItemWithInput[Input] {
   @headless.accordion_item_with_input(key~, label~, panel~, disabled~)
 }
@@ -273,10 +273,10 @@ pub fn[Input : Eq] accordion_single_with_input(
   items~ : Array[@headless.AccordionItemWithInput[Input]],
   input~ : @minimoon.Val[Input],
   initial_open_key? : String,
-  label? : String = "",
-  collapsible? : Bool = true,
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  label~ : String = "",
+  collapsible~ : Bool = true,
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.accordion_single_with_input(
     id~,
@@ -301,10 +301,10 @@ pub fn[Input : Eq] accordion_single_controlled_with_input(
   input~ : @minimoon.Val[Input],
   open_key~ : @minimoon.Val[String?],
   on_change~ : @minimoon.Emit[String?],
-  label? : String = "",
-  collapsible? : Bool = true,
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  label~ : String = "",
+  collapsible~ : Bool = true,
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.accordion_single_controlled_with_input(
     id~,
@@ -328,10 +328,10 @@ pub fn[Input : Eq] accordion_multiple_with_input(
   id~ : String,
   items~ : Array[@headless.AccordionItemWithInput[Input]],
   input~ : @minimoon.Val[Input],
-  initial_open_keys? : Array[String] = [],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  initial_open_keys~ : Array[String] = [],
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.accordion_multiple_with_input(
     id~,
@@ -355,9 +355,9 @@ pub fn[Input : Eq] accordion_multiple_controlled_with_input(
   input~ : @minimoon.Val[Input],
   open_keys~ : @minimoon.Val[Array[String]],
   on_change~ : @minimoon.Emit[Array[String]],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.accordion_multiple_controlled_with_input(
     id~,
@@ -380,7 +380,7 @@ pub fn[Input] tab_item_with_input(
   key~ : String,
   label~ : String,
   panel~ : (Input) -> @minimoon.Node,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @headless.TabItemWithInput[Input] {
   @headless.tab_item_with_input(key~, label~, panel~, disabled~)
 }
@@ -391,9 +391,9 @@ pub fn[Input : Eq] tabs_with_input(
   items~ : Array[@headless.TabItemWithInput[Input]],
   input~ : @minimoon.Val[Input],
   initial_selected_key? : String,
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.tabs_with_input(
     id~,
@@ -419,9 +419,9 @@ pub fn[Input : Eq] tabs_controlled_with_input(
   input~ : @minimoon.Val[Input],
   selected_key~ : @minimoon.Val[String?],
   on_change~ : @minimoon.Emit[String?],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
 ) -> @minimoon.Val[@minimoon.Node] {
   @headless.tabs_controlled_with_input(
     id~,

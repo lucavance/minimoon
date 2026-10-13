@@ -29,7 +29,9 @@ test "typed native Tab navigation reaches the runtime and remains page owned" {
 
 ///|
 test "runtime Tab commands survive command mapping and diagnostics" {
-  let command : @runtime.Cmd[Int] = @runtime.switch_tab_cmd("/pages/home/home")
+  let command : @runtime.Cmd[Int32] = @runtime.switch_tab_cmd(
+    "/pages/home/home",
+  )
   assert_true(
     @runtime.map_cmd(command, value => value.to_string())
     is @runtime.CmdSwitchTab("/pages/home/home"),

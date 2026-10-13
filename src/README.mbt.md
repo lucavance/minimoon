@@ -114,8 +114,8 @@ page unloads, until its App is disposed.
 ```moonbit check
 ///|
 priv struct ReadmeAppDeps {
-  count : @minimoon.Shared[Int]
-  change_count : @minimoon.Emit[Int]
+  count : @minimoon.Shared[Int32]
+  change_count : @minimoon.Emit[Int32]
 }
 
 ///|
@@ -124,7 +124,7 @@ fn readme_app() -> @minimoon.App[ReadmeAppDeps] {
   @minimoon.app(build=context => {
     let (count, change_count) = context.create_pure_state(0, update=(
       count,
-      delta : Int,
+      delta : Int32,
     ) => count + delta)
     { count, change_count, }
   })
@@ -166,7 +166,7 @@ priv enum ReadmeLocalMsg {
 
 ///|
 fn readme_local_authoring(
-  input_value : @minimoon.Val[Int],
+  input_value : @minimoon.Val[Int32],
 ) -> @minimoon.Val[@minimoon.Node] {
   let (pure, pure_emit) = @minimoon.create_pure_state(0, update=(
     model,

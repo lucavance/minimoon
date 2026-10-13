@@ -8,9 +8,9 @@ struct MenuState {
 
 ///|
 pub fn menu_state(
-  open? : Bool = false,
-  checked_keys? : Array[String] = [],
-  radio_values? : Array[(String, String)] = [],
+  open~ : Bool = false,
+  checked_keys~ : Array[String] = [],
+  radio_values~ : Array[(String, String)] = [],
 ) -> MenuState {
   let checked : Array[String] = []
   for key in checked_keys {
@@ -78,9 +78,9 @@ enum MenuEntry {
 pub fn menu_item(
   key~ : String,
   label~ : String,
-  on_select? : @minimoon.Cmd = @minimoon.none,
-  disabled? : Bool = false,
-  close_on_select? : Bool = true,
+  on_select~ : @minimoon.Cmd = @minimoon.none,
+  disabled~ : Bool = false,
+  close_on_select~ : Bool = true,
 ) -> MenuEntry {
   guard key != "" else { abort("menu item key must not be empty") }
   guard label != "" else { abort("menu item label must not be empty") }
@@ -104,8 +104,8 @@ pub fn menu_separator(key~ : String) -> MenuEntry {
 pub fn menu_checkbox_item(
   key~ : String,
   label~ : String,
-  on_select? : @minimoon.Cmd = @minimoon.none,
-  disabled? : Bool = false,
+  on_select~ : @minimoon.Cmd = @minimoon.none,
+  disabled~ : Bool = false,
 ) -> MenuEntry {
   guard key != "" else { abort("menu checkbox key must not be empty") }
   guard label != "" else { abort("menu checkbox label must not be empty") }
@@ -118,8 +118,8 @@ pub fn menu_radio_item(
   label~ : String,
   group~ : String,
   value~ : String,
-  on_select? : @minimoon.Cmd = @minimoon.none,
-  disabled? : Bool = false,
+  on_select~ : @minimoon.Cmd = @minimoon.none,
+  disabled~ : Bool = false,
 ) -> MenuEntry {
   guard key != "" else { abort("menu radio key must not be empty") }
   guard label != "" else { abort("menu radio label must not be empty") }
@@ -133,7 +133,7 @@ pub fn menu_submenu(
   key~ : String,
   label~ : String,
   items~ : Array[MenuEntry],
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> MenuEntry {
   guard key != "" else { abort("submenu key must not be empty") }
   guard label != "" else { abort("submenu label must not be empty") }
@@ -209,17 +209,17 @@ pub fn dropdown_spec(
   id~ : String,
   trigger_label~ : String,
   items~ : Array[MenuEntry],
-  placement? : MenuPlacement = BottomStart,
-  disabled? : Bool = false,
-  root_class? : String = "",
-  trigger_class? : String = "",
-  dismiss_class? : String = "",
-  content_class? : String = "",
-  item_class? : String = "",
-  label_class? : String = "",
-  separator_class? : String = "",
-  submenu_trigger_class? : String = "",
-  submenu_content_class? : String = "",
+  placement~ : MenuPlacement = BottomStart,
+  disabled~ : Bool = false,
+  root_class~ : String = "",
+  trigger_class~ : String = "",
+  dismiss_class~ : String = "",
+  content_class~ : String = "",
+  item_class~ : String = "",
+  label_class~ : String = "",
+  separator_class~ : String = "",
+  submenu_trigger_class~ : String = "",
+  submenu_content_class~ : String = "",
 ) -> MenuSpec {
   guard id != "" else { abort("dropdown id must not be empty") }
   guard trigger_label != "" else {

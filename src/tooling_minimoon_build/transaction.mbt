@@ -85,7 +85,7 @@ async fn build_rename(source : String, target : String) -> Unit {
 async fn promote_build_outputs(
   entries : Array[BuildReplacement],
   backup_root : String,
-  rename_output? : async (String, String) -> Unit = build_rename,
+  rename_output~ : async (String, String) -> Unit = build_rename,
 ) -> Unit {
   // Observe an already pending cancellation before touching the live output.
   @async.pause()

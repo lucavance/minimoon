@@ -4,10 +4,10 @@ pub fn toggle_controlled(
   pressed~ : @minimoon.Val[Bool],
   on_change~ : @minimoon.Emit[Bool],
   content~ : @minimoon.Val[@minimoon.Node],
-  disabled? : Bool = false,
-  variant? : ButtonVariant = Ghost,
-  size? : Size = Medium,
-  invalid? : Bool = false,
+  disabled~ : Bool = false,
+  variant~ : ButtonVariant = Ghost,
+  size~ : Size = Medium,
+  invalid~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let tap = form_dispatch(pressed, (current, _ : Unit) => {
     if disabled {
@@ -42,11 +42,11 @@ pub fn toggle_controlled(
 pub fn toggle(
   id~ : String,
   content~ : @minimoon.Val[@minimoon.Node],
-  initially_pressed? : Bool = false,
-  disabled? : Bool = false,
-  variant? : ButtonVariant = Ghost,
-  size? : Size = Medium,
-  invalid? : Bool = false,
+  initially_pressed~ : Bool = false,
+  disabled~ : Bool = false,
+  variant~ : ButtonVariant = Ghost,
+  size~ : Size = Medium,
+  invalid~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (pressed, update) = @minimoon.create_variable(initially_pressed)
   toggle_controlled(
@@ -67,12 +67,12 @@ pub fn toggle_group_controlled(
   options~ : @minimoon.Val[Array[ChoiceOption]],
   value~ : @minimoon.Val[Array[String]],
   on_change~ : @minimoon.Emit[Array[String]],
-  multiple? : Bool = false,
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  variant? : ButtonVariant = Ghost,
-  size? : Size = Medium,
-  spacing? : Int = 0,
+  multiple~ : Bool = false,
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  variant~ : ButtonVariant = Ghost,
+  size~ : Size = Medium,
+  spacing~ : Int32 = 0,
   render? : (ChoiceOption, Bool) -> @minimoon.Node,
 ) -> @minimoon.Val[@minimoon.Node] {
   let tap = form_dispatch(
@@ -140,13 +140,13 @@ pub fn toggle_group_controlled(
 pub fn toggle_group(
   id~ : String,
   options~ : @minimoon.Val[Array[ChoiceOption]],
-  initial_value? : Array[String] = [],
-  multiple? : Bool = false,
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  variant? : ButtonVariant = Ghost,
-  size? : Size = Medium,
-  spacing? : Int = 0,
+  initial_value~ : Array[String] = [],
+  multiple~ : Bool = false,
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  variant~ : ButtonVariant = Ghost,
+  size~ : Size = Medium,
+  spacing~ : Int32 = 0,
   render? : (ChoiceOption, Bool) -> @minimoon.Node,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (value, update) = @minimoon.create_variable(initial_value)
@@ -168,9 +168,9 @@ pub fn toggle_group(
 ///|
 pub fn[C : @minimoon.IsChildren] toggle_group_item(
   on_tap~ : @minimoon.Cmd,
-  pressed? : Bool = false,
-  disabled? : Bool = false,
-  id? : String = "",
+  pressed~ : Bool = false,
+  disabled~ : Bool = false,
+  id~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   @minimoon.button_children(

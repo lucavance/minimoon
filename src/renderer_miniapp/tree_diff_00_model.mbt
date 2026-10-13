@@ -4,8 +4,8 @@
 /// view; they never construct host mutations themselves.
 priv enum TreePatchOp {
   SetTreeField(Array[Json], Json)
-  SpliceTreeChildren(Array[Json], Int, Int, Array[Json])
-  MoveTreeChild(Array[Json], Int, Int, String, Json)
+  SpliceTreeChildren(Array[Json], Int32, Int32, Array[Json])
+  MoveTreeChild(Array[Json], Int32, Int32, String, Json)
 }
 
 ///|
@@ -38,7 +38,7 @@ fn tree_path_field(path : Array[Json], field : String) -> Array[Json] {
 }
 
 ///|
-fn tree_path_child(path : Array[Json], index : Int) -> Array[Json] {
+fn tree_path_child(path : Array[Json], index : Int32) -> Array[Json] {
   let next = tree_path_field(path, "children")
   next.push(Json::number(index.to_double(), repr=index.to_string()))
   next
@@ -125,13 +125,13 @@ fn tree_children_kind(children : Array[Json]) -> TreeChildrenKind {
 fn keyed_lis_identities_with_work(
   working : Array[String],
   next : Array[String],
-) -> (Array[String], Int) {
-  let positions : Map[String, Int] = Map([])
+) -> (Array[String], Int32) {
+  let positions : Map[String, Int32] = Map([])
   for index = 0; index < working.length(); index = index + 1 {
     positions[working[index]] = index
   }
   let sequence_ids : Array[String] = []
-  let sequence_positions : Array[Int] = []
+  let sequence_positions : Array[Int32] = []
   for identity in next {
     match positions.get(identity) {
       Some(position) => {
@@ -145,8 +145,8 @@ fn keyed_lis_identities_with_work(
     return ([], 0)
   }
   let previous = Array::makei(sequence_ids.length(), _ => -1)
-  let tails : Array[Int] = []
-  let tail_indices : Array[Int] = []
+  let tails : Array[Int32] = []
+  let tail_indices : Array[Int32] = []
   let comparisons = Ref(0)
   for index = 0; index < sequence_ids.length(); index = index + 1 {
     let position = sequence_positions[index]
@@ -184,8 +184,8 @@ fn keyed_lis_identities_with_work(
 ///|
 fn reindex_string_positions(
   values : Array[String],
-  positions : Map[String, Int],
-  start : Int,
+  positions : Map[String, Int32],
+  start : Int32,
 ) -> Unit {
   for index = start; index < values.length(); index = index + 1 {
     positions[values[index]] = index

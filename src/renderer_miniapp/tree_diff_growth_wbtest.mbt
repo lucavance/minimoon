@@ -18,7 +18,7 @@ fn keyed_growth_sequences() -> Array[Array[String]] {
 ///|
 fn keyed_growth_tree(
   identities : Array[String],
-  version : Int,
+  version : Int32,
   reshape : Bool,
 ) -> Json {
   patch_test_node(

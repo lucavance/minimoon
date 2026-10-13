@@ -6,7 +6,7 @@ pub fn RuntimeCommandQueue::new(
 }
 
 ///|
-pub fn RuntimeCommandQueue::pending_count(self : RuntimeCommandQueue) -> Int {
+pub fn RuntimeCommandQueue::pending_count(self : RuntimeCommandQueue) -> Int32 {
   self.commands.val.length()
 }
 

@@ -1,9 +1,9 @@
 name = "lampclaw/minimoon_ui"
 
-version = "0.1.4"
+version = "0.1.5"
 
 import {
-  "lampclaw/minimoon@0.2.6",
+  "lampclaw/minimoon@0.2.7",
 }
 
 readme = "README.mbt.md"

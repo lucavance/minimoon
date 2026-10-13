@@ -1,5 +1,5 @@
 ///|
-fn nested_visibility_command_count(raw : String, kind : String) -> Int raise {
+fn nested_visibility_command_count(raw : String, kind : String) -> Int32 raise {
   match @json.parse(raw) {
     Array(commands) =>
       commands

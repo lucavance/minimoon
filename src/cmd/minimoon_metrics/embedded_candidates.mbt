@@ -73,9 +73,9 @@ fn embedded_selected_literals(
   specification : EmbeddedInventoryEntry,
 ) -> Array[EmbeddedLiteral] raise {
   let selected : Array[EmbeddedLiteral] = []
-  let prefix_hits : Map[String, Int] = Map([])
-  let ignored_hits : Map[String, Int] = Map([])
-  let except_hits : Map[String, Int] = Map([])
+  let prefix_hits : Map[String, Int32] = Map([])
+  let ignored_hits : Map[String, Int32] = Map([])
+  let except_hits : Map[String, Int32] = Map([])
   let missed : Array[String] = []
   for item in specification.ignored_literals {
     if ignored_hits.contains(item.0) || item.1 <= 0 {

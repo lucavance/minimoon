@@ -34,8 +34,8 @@ pub fn command_close(scope : CommandScope) -> @minimoon.Cmd {
 ///|
 pub fn command_input(
   scope : CommandScope,
-  placeholder? : String = "Search commands",
-  disabled? : Bool = false,
+  placeholder~ : String = "Search commands",
+  disabled~ : Bool = false,
 ) -> @minimoon.Node {
   @minimoon.input(
     event_key=scope.id + "/query",
@@ -57,9 +57,9 @@ pub fn[C : @minimoon.IsChildren] command_item(
   scope : CommandScope,
   value~ : String,
   children : C,
-  keywords? : Array[String] = [],
-  disabled? : Bool = false,
-  force_mount? : Bool = false,
+  keywords~ : Array[String] = [],
+  disabled~ : Bool = false,
+  force_mount~ : Bool = false,
   on_select? : @minimoon.Emit[String],
   on_click? : @minimoon.Cmd,
 ) -> @minimoon.Node {
@@ -105,8 +105,8 @@ pub fn command_provider_controlled(
   on_query_change~ : @minimoon.Emit[String],
   render~ : (CommandScope) -> @minimoon.Node,
   on_value_select? : @minimoon.Emit[String],
-  should_filter? : Bool = true,
-  filter? : (String, String, Array[String]) -> Bool = default_command_filter,
+  should_filter~ : Bool = true,
+  filter~ : (String, String, Array[String]) -> Bool = default_command_filter,
 ) -> @minimoon.Val[@minimoon.Node] {
   query.map(query => {
     let scope = CommandScope::{
@@ -134,11 +134,11 @@ pub fn command_provider_controlled(
 pub fn command_provider(
   id~ : String,
   render~ : (CommandScope) -> @minimoon.Node,
-  initial_query? : String = "",
+  initial_query~ : String = "",
   on_value_select? : @minimoon.Emit[String],
   on_query_change? : @minimoon.Emit[String],
-  should_filter? : Bool = true,
-  filter? : (String, String, Array[String]) -> Bool = default_command_filter,
+  should_filter~ : Bool = true,
+  filter~ : (String, String, Array[String]) -> Bool = default_command_filter,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (query, emit) = @minimoon.create_variable(initial_query)
   command_provider_controlled(
@@ -164,12 +164,12 @@ pub fn command_dialog(
   title~ : String,
   trigger_label~ : String,
   render~ : (CommandScope) -> @minimoon.Node,
-  initial_query? : String = "",
-  initially_open? : Bool = false,
-  should_filter? : Bool = true,
-  filter? : (String, String, Array[String]) -> Bool = default_command_filter,
-  close_on_select? : Bool = true,
-  close_on_overlay? : Bool = true,
+  initial_query~ : String = "",
+  initially_open~ : Bool = false,
+  should_filter~ : Bool = true,
+  filter~ : (String, String, Array[String]) -> Bool = default_command_filter,
+  close_on_select~ : Bool = true,
+  close_on_overlay~ : Bool = true,
   on_query_change? : @minimoon.Emit[String],
   on_value_select? : @minimoon.Emit[String],
   on_open_change? : @minimoon.Emit[Bool],

@@ -55,7 +55,7 @@ fn[A] fail(message : String) -> A {
 }
 
 ///|
-fn arg(args : Array[String], index : Int, label : String) -> String {
+fn arg(args : Array[String], index : Int32, label : String) -> String {
   match args.get(index) {
     Some(value) => value
     None => fail("missing " + label)
@@ -63,7 +63,7 @@ fn arg(args : Array[String], index : Int, label : String) -> String {
 }
 
 ///|
-fn decimal_arg(value : String, label : String) -> Int {
+fn decimal_arg(value : String, label : String) -> Int32 {
   guard value != "" else { return fail(label + " must be an integer") }
   let result = Ref(0)
   for index = 0; index < value.length(); index = index + 1 {
@@ -222,7 +222,7 @@ struct BuildArgs {
 } derive(Debug)
 
 ///|
-fn parse_init_args(args : Array[String], start : Int) -> InitArgs {
+fn parse_init_args(args : Array[String], start : Int32) -> InitArgs {
   let positional : Array[String] = []
   let mut name : String? = None
   let mut template = "starter"
@@ -257,7 +257,7 @@ fn parse_init_args(args : Array[String], start : Int) -> InitArgs {
 }
 
 ///|
-fn parse_build_args(args : Array[String], start : Int) -> BuildArgs {
+fn parse_build_args(args : Array[String], start : Int32) -> BuildArgs {
   let positional : Array[String] = []
   let mut config : String? = None
   let mut mode = "release"

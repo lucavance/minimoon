@@ -6,8 +6,8 @@ fn floating_bounds(
   id : String,
   open : @minimoon.Val[Bool],
   placement : @headless.Placement,
-  side_offset? : Double = 8.0,
-  align_offset? : Double = 0.0,
+  side_offset~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
   surface_id? : String,
 ) -> @minimoon.Val[@headless.Bounds?] {
   @minimoon.Val::map2(open, context.visible, (open, visible) => open && visible).switch_by(

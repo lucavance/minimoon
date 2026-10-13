@@ -12,7 +12,7 @@ priv struct Echo {
 priv struct Model {
   title : String
   busy : Bool
-  request_epoch : Int
+  request_epoch : Int32
   status : String
 } derive(Eq)
 
@@ -20,12 +20,12 @@ priv struct Model {
 priv enum Msg {
   NameChanged(String)
   Submit
-  Saved(Int, Result[Echo, Error])
+  Saved(Int32, Result[Echo, Error])
   Reset
 }
 
 ///|
-fn initial_model(epoch : Int) -> Model {
+fn initial_model(epoch : Int32) -> Model {
   {
     title: "",
     busy: false,

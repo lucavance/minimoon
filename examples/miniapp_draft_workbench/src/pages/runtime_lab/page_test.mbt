@@ -153,7 +153,7 @@ test "controlled native values survive one structural transaction" {
   )
   let reconciled = runtime.dispatch("controls/reconcile-native", "{}")
   inspect(
-    reconciled.split("\"type\":\"PatchViewTree\"").length() == 2,
+    reconciled.split("\"type\":\"PatchViewTree\"").count() == 2,
     content="true",
   )
   inspect(reconciled.contains("\"op\":\"set\""), content="true")
@@ -317,8 +317,8 @@ test "lab isolates focused keyed reorder from the resident page tick" {
   inspect(armed.contains("ReplaceViewTree"), content="false")
   let fired = runtime.subscription("lab/focused-keyed-reorder", "{}")
   inspect(fired.contains("\"op\":\"move\""), content="true")
-  inspect(fired.split("\"type\":").length() == 4, content="true")
-  inspect(fired.split("\"op\":").length() == 2, content="true")
+  inspect(fired.split("\"type\":").count() == 4, content="true")
+  inspect(fired.split("\"op\":").count() == 2, content="true")
   inspect(fired.contains("\"identity\":\"k:c\""), content="true")
   inspect(fired.contains("\"identity\":\"k:focus-probe\""), content="false")
   inspect(fired.contains("\"op\":\"set\""), content="false")
@@ -348,7 +348,7 @@ test "lab delay probe uses a cancellable 600ms host timeout" {
     content="true",
   )
   inspect(
-    started.split("\"type\":\"InvokeCapability\"").length() == 2,
+    started.split("\"type\":\"InvokeCapability\"").count() == 2,
     content="true",
   )
   inspect(started.contains("\"payload\":{\"ms\":600}"), content="true")
@@ -375,7 +375,7 @@ test "lab delay probe uses a cancellable 600ms host timeout" {
   let disposed = disposing.dispose()
   inspect(disposed.contains("CancelEffect"), content="true")
   inspect(
-    disposed.split("\"type\":\"CancelEffect\"").length() == 2,
+    disposed.split("\"type\":\"CancelEffect\"").count() == 2,
     content="true",
   )
   inspect(disposed.contains("\"request_id\":\"runtime_lab:0\""), content="true")

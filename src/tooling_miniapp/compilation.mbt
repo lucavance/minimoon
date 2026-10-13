@@ -183,7 +183,7 @@ fn app_runtime_package_manifest(
 }
 
 ///|
-fn runtime_link_options(application? : Bool = false) -> String {
+fn runtime_link_options(application~ : Bool = false) -> String {
   "supported_targets = \"js\"\n\n" +
   "pkgtype(kind: \"executable\")\n\n" +
   "options(\n" +
@@ -253,7 +253,7 @@ async fn emit_host_bridge(
 ///|
 fn contract_package_manifest(
   page_import : String,
-  input_decoder? : Bool = true,
+  input_decoder~ : Bool = true,
 ) -> String {
   "import {\n" +
   "  \"lampclaw/minimoon\" @minimoon,\n" +
@@ -297,7 +297,7 @@ async fn run_checked(
 async fn compile_page_contract(
   app_root : String,
   module_id : String,
-  index : Int,
+  index : Int32,
   page : Json,
   application? : Json,
 ) -> Json {

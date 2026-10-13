@@ -4,7 +4,7 @@
 pub fn native_tab_host_source(
   routes : Array[String],
   tab_routes : Array[String],
-  dist_dir? : String = "dist",
+  dist_dir~ : String = "dist",
 ) -> String {
   "const routes = " +
   Json::array(routes.map(Json::string)).stringify() +

@@ -11,7 +11,7 @@ pub fn[Input] tab_item_with_input(
   key~ : String,
   label~ : String,
   panel~ : (Input) -> @minimoon.Node,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> TabItemWithInput[Input] {
   guard key != "" else { abort("tab key must not be empty") }
   guard label != "" else { abort("tab label must not be empty") }
@@ -74,15 +74,15 @@ pub fn[Input : Eq] tabs_controlled_with_input(
   input~ : @minimoon.Val[Input],
   selected_key~ : @minimoon.Val[String?],
   on_change~ : @minimoon.Emit[String?],
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  root_class? : String = "",
-  list_class? : String = "",
-  tab_class_name? : String = "",
-  active_tab_class? : String = "",
-  inactive_tab_class? : String = "",
-  panel_class? : String = "",
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  root_class~ : String = "",
+  list_class~ : String = "",
+  tab_class_name~ : String = "",
+  active_tab_class~ : String = "",
+  inactive_tab_class~ : String = "",
+  panel_class~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   guard id != "" else { abort("tabs id must not be empty") }
   validate_tab_items_with_input(items)
@@ -164,15 +164,15 @@ pub fn[Input : Eq] tabs_with_input(
   items~ : Array[TabItemWithInput[Input]],
   input~ : @minimoon.Val[Input],
   initial_selected_key? : String,
-  label? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Horizontal,
-  root_class? : String = "",
-  list_class? : String = "",
-  tab_class_name? : String = "",
-  active_tab_class? : String = "",
-  inactive_tab_class? : String = "",
-  panel_class? : String = "",
+  label~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Horizontal,
+  root_class~ : String = "",
+  list_class~ : String = "",
+  tab_class_name~ : String = "",
+  active_tab_class~ : String = "",
+  inactive_tab_class~ : String = "",
+  panel_class~ : String = "",
 ) -> @minimoon.Val[@minimoon.Node] {
   validate_tab_items_with_input(items)
   let (selected, update_selected) = @minimoon.create_variable(

@@ -28,7 +28,7 @@ fn safe_resource_asset(path : String) -> Bool {
 async fn resource_assets_status(
   app_root : String,
   manifest : Json,
-  dist_dir? : String = join(app_root, "dist"),
+  dist_dir~ : String = join(app_root, "dist"),
 ) -> Json {
   let errors : Array[String] = []
   match object(manifest, "manifest").get("resources") {

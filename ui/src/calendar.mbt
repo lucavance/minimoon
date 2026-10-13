@@ -5,11 +5,11 @@ pub fn calendar_controlled(
   on_month_change~ : @minimoon.Emit[@headless.CalendarDate],
   selected~ : @minimoon.Val[@headless.DateSelection],
   on_change~ : @minimoon.Emit[@headless.DateSelection],
-  disabled_date? : (@headless.CalendarDate) -> Bool = _ => false,
-  week_start? : Int = 0,
+  disabled_date~ : (@headless.CalendarDate) -> Bool = _ => false,
+  week_start~ : Int32 = 0,
   today? : @headless.CalendarDate,
-  show_outside_days? : Bool = true,
-  disabled? : Bool = false,
+  show_outside_days~ : Bool = true,
+  disabled~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   guard week_start >= 0 && week_start <= 6 else {
     abort("calendar week_start must be between 0 and 6")
@@ -140,12 +140,12 @@ pub fn calendar_controlled(
 pub fn calendar(
   id~ : String,
   initial_month~ : @headless.CalendarDate,
-  initial_selected? : @headless.DateSelection = @headless.Single(None),
-  disabled_date? : (@headless.CalendarDate) -> Bool = _ => false,
-  week_start? : Int = 0,
+  initial_selected~ : @headless.DateSelection = @headless.Single(None),
+  disabled_date~ : (@headless.CalendarDate) -> Bool = _ => false,
+  week_start~ : Int32 = 0,
   today? : @headless.CalendarDate,
-  show_outside_days? : Bool = true,
-  disabled? : Bool = false,
+  show_outside_days~ : Bool = true,
+  disabled~ : Bool = false,
   on_select? : @minimoon.Emit[@headless.DateSelection],
   on_month_change? : @minimoon.Emit[@headless.CalendarDate],
 ) -> @minimoon.Val[@minimoon.Node] {

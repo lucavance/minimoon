@@ -1,9 +1,9 @@
 ///|
 fn slider_touch(
-  identifier : Int,
+  identifier : Int32,
   x : Double,
   y : Double,
-  ended? : Bool = false,
+  ended~ : Bool = false,
 ) -> String {
   let point = Json::object({
     "identifier": Json::number(identifier.to_double()),

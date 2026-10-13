@@ -16,7 +16,7 @@ test "vp policy allows backend arguments metadata and source fixtures" {
   for
     source in [
       "@process.run(\"vp\", [\"env\", \"exec\", \"bun\", \"--version\"])", "@process.run(\"vp\", @toolchain.bun_args(args))",
-      "let manager = { \"name\": \"bun\", \"version\": \"1.4.2\" }", "// @process.run(\"bun\", [])\nlet literal = \"@process.run(\\\"bun\\\", [])\"",
+      "let manager = { \"name\": \"bun\", \"version\": \"1.4.3\" }", "// @process.run(\"bun\", [])\nlet literal = \"@process.run(\\\"bun\\\", [])\"",
       "#|toolchain: { bun: Bun.version }",
     ] {
     assert_true(bare_bun_process_violations(source).is_empty(), msg=source)

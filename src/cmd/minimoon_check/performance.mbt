@@ -134,7 +134,7 @@ async fn performance_reports(root : String) -> Unit {
 ///|
 async fn perf_suite(root : String) -> Unit {
   build_examples(root, "release")
-  let page_limits : Array[(String, Int)] = [(".js", 2048), (".wxml", 1024)]
+  let page_limits : Array[(String, Int32)] = [(".js", 2048), (".wxml", 1024)]
   for app in example_apps {
     let manifest = read_json(
       root,

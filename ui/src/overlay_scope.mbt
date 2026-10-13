@@ -36,7 +36,7 @@ pub fn overlay_open(scope : OverlayScope) -> @minimoon.Cmd {
 ///|
 pub fn overlay_close(
   scope : OverlayScope,
-  reason? : OverlayCloseReason = Programmatic,
+  reason~ : OverlayCloseReason = Programmatic,
 ) -> @minimoon.Cmd {
   (scope.change)((false, reason))
 }
@@ -51,7 +51,7 @@ pub fn[C : @minimoon.IsChildren] overlay_trigger(
   scope : OverlayScope,
   children : C,
   on_tap? : @minimoon.Cmd,
-  class? : String = "",
+  class~ : String = "",
 ) -> @minimoon.Node {
   let command = if scope.disabled {
     @minimoon.none
@@ -90,10 +90,10 @@ pub fn[C : @minimoon.IsChildren] overlay_trigger(
 pub fn[C : @minimoon.IsChildren] overlay_content(
   scope : OverlayScope,
   children : C,
-  show_close? : Bool = true,
-  close_label? : String = "Close",
-  class? : String = "",
-  style? : String = "",
+  show_close~ : Bool = true,
+  close_label~ : String = "Close",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   let displayed = scope.open && scope.visible
   if !displayed && !scope.force_mount {
@@ -183,7 +183,7 @@ pub fn[C : @minimoon.IsChildren] overlay_close_button(
   scope : OverlayScope,
   children : C,
   on_tap? : @minimoon.Cmd,
-  key? : String = "close",
+  key~ : String = "close",
 ) -> @minimoon.Node {
   @minimoon.button_children(
     event_key=scope.id + "/" + key,
@@ -198,8 +198,8 @@ pub fn[C : @minimoon.IsChildren] overlay_action(
   scope : OverlayScope,
   children : C,
   on_tap~ : @minimoon.Cmd,
-  close? : Bool = true,
-  key? : String = "action",
+  close~ : Bool = true,
+  key~ : String = "action",
 ) -> @minimoon.Node {
   @minimoon.button_children(
     event_key=scope.id + "/" + key,
@@ -210,7 +210,7 @@ pub fn[C : @minimoon.IsChildren] overlay_action(
 }
 
 ///|
-pub fn overlay_arrow(side? : Side = Top) -> @minimoon.Node {
+pub fn overlay_arrow(side~ : Side = Top) -> @minimoon.Node {
   let margin = match side {
     Top => "margin-top:-20px;"
     Bottom => "margin-bottom:-20px;"

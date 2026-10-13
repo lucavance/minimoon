@@ -126,7 +126,7 @@ pub struct PageEvent[Msg] {
 ///|
 pub struct HostSubscription[Msg] {
   key : String
-  interval_ms : Int
+  interval_ms : Int32
   msg : Msg
 }
 
@@ -143,7 +143,7 @@ pub fn[Msg] no_subscriptions() -> Subscriptions[Msg] {
 ///|
 pub fn[Msg] every(
   key~ : String,
-  interval_ms~ : Int,
+  interval_ms~ : Int32,
   msg~ : Msg,
 ) -> HostSubscription[Msg] {
   guard key != "" else { abort("subscription key must not be empty") }
@@ -163,7 +163,7 @@ pub fn[Msg] subscriptions(
 /// candidate view, so dynamic branches expose only the handlers that are
 /// present in the candidate tree.
 pub struct Events[Msg] {
-  owner_id : Int
+  owner_id : Int32
   entries : Ref[Array[PageEvent[Msg]]]
   entry_keys : Ref[Set[String]]
   entry_index : Ref[Map[String, PageEvent[Msg]]]
@@ -183,7 +183,7 @@ pub fn[Msg] events() -> Events[Msg] {
 
 ///|
 /// Internal component renders inherit the owning PageProgram instance.
-pub fn[Msg] events_for_owner(owner_id : Int) -> Events[Msg] {
+pub fn[Msg] events_for_owner(owner_id : Int32) -> Events[Msg] {
   {
     owner_id,
     entries: Ref([]),
@@ -200,7 +200,7 @@ pub fn[Msg] events_for_owner(owner_id : Int) -> Events[Msg] {
 }
 
 ///|
-pub fn[Msg] Events::owner_id(self : Events[Msg]) -> Int {
+pub fn[Msg] Events::owner_id(self : Events[Msg]) -> Int32 {
   self.owner_id
 }
 
@@ -348,7 +348,7 @@ fn event_detail(
 }
 
 ///|
-fn event_int32(value : Double) -> Int? {
+fn event_int32(value : Double) -> Int32? {
   if value < 0.0 || value > 2147483647.0 {
     return None
   }

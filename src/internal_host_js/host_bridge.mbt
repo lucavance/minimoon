@@ -1,7 +1,7 @@
 ///|
 pub fn shared_host_bridge(
-  application? : Bool = false,
-  tab_routes? : Array[String] = [],
+  application~ : Bool = false,
+  tab_routes~ : Array[String] = [],
 ) -> String {
   let source =
     #|const { exactKeys, validateNode, applyPatch, createRendererStats, eventDispatchers, eventPayload, touchIdentity, validMeasurementPayload, validRequestPayload, measurementNodes } = require("./minimoon.protocol.js")

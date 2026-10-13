@@ -1,7 +1,7 @@
 ///|
 priv struct SwitchInput {
   tag : String
-  value : Int
+  value : Int32
 } derive(Eq)
 
 ///|
@@ -223,12 +223,12 @@ test "dynamic branch init runs after commit and preserves graph invalidation" {
   assert_true(runtime.snapshot().contains("state:a:0"))
 
   let mounted = runtime.mount()
-  assert_eq(mounted.split("\"base_revision\":").length(), 2)
+  assert_eq(mounted.split("\"base_revision\":").count(), 2)
   assert_true(runtime.snapshot().contains("\"revision\":2"))
   assert_true(runtime.snapshot().contains("state:a:1"))
 
   let show_b = runtime.dispatch("branch-init/show-b", "{}")
-  assert_eq(show_b.split("\"base_revision\":").length(), 2)
+  assert_eq(show_b.split("\"base_revision\":").count(), 2)
   assert_true(show_b.contains("\"base_revision\":2"))
   assert_true(show_b.contains("\"revision\":3"))
   assert_true(runtime.snapshot().contains("state:b:2"))
@@ -240,11 +240,11 @@ test "dynamic branch init runs after commit and preserves graph invalidation" {
   let committed = runtime.snapshot()
   let rejected = runtime.dispatch("branch-init/show-invalid", "{}")
   assert_true(rejected.contains("invalid_view"))
-  assert_eq(rejected.split("\"base_revision\":").length(), 1)
+  assert_eq(rejected.split("\"base_revision\":").count(), 1)
   assert_eq(runtime.snapshot(), committed)
 
   let after_rollback = runtime.dispatch("branch-init/increment-sibling", "{}")
-  assert_eq(after_rollback.split("\"base_revision\":").length(), 2)
+  assert_eq(after_rollback.split("\"base_revision\":").count(), 2)
   assert_true(after_rollback.contains("\"revision\":5"))
   assert_true(runtime.snapshot().contains("state:b:4"))
 }
@@ -252,7 +252,7 @@ test "dynamic branch init runs after commit and preserves graph invalidation" {
 ///|
 priv struct EnumerateInput {
   tag : String
-  value : Int
+  value : Int32
 } derive(Eq)
 
 ///|

@@ -1,7 +1,7 @@
 ///|
 pub fn host_smoke_source(
   page_files : Array[String],
-  inputs? : Array[Json] = [],
+  inputs~ : Array[Json] = [],
 ) -> String {
   validation_application_boot() +
   "const fs = require(\"node:fs\")\n" +

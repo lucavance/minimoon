@@ -8,7 +8,7 @@ priv struct RequestOptions {
   http_method : @minimoon.HttpMethod
   query : Array[@minimoon.Query]
   headers : Map[String, String]
-  timeout_ms : Int?
+  timeout_ms : Int32?
 }
 
 ///|
@@ -43,7 +43,7 @@ fn options(
   http_method : @minimoon.HttpMethod,
   query : Array[@minimoon.Query],
   headers : Map[String, String],
-  timeout_ms : Int?,
+  timeout_ms : Int32?,
 ) -> RequestOptions {
   {
     url,
@@ -59,9 +59,9 @@ fn options(
 /// URLs and request options follow the root `request` HTTPS validation rules.
 pub fn get(
   url : String,
-  query? : Array[@minimoon.Query] = [],
-  headers? : Map[String, String] = Map([]),
-  timeout_ms? : Int,
+  query~ : Array[@minimoon.Query] = [],
+  headers~ : Map[String, String] = Map([]),
+  timeout_ms? : Int32,
 ) -> Request {
   Request(options(url, Get, query, headers, timeout_ms), None)
 }
@@ -70,9 +70,9 @@ pub fn get(
 /// Construct a bodyless DELETE request, snapshotting its query and headers.
 pub fn delete(
   url : String,
-  query? : Array[@minimoon.Query] = [],
-  headers? : Map[String, String] = Map([]),
-  timeout_ms? : Int,
+  query~ : Array[@minimoon.Query] = [],
+  headers~ : Map[String, String] = Map([]),
+  timeout_ms? : Int32,
 ) -> Request {
   Request(options(url, Delete, query, headers, timeout_ms), None)
 }
@@ -81,9 +81,9 @@ pub fn delete(
 /// Construct a POST request. A body is optional before `expect_json`.
 pub fn post(
   url : String,
-  query? : Array[@minimoon.Query] = [],
-  headers? : Map[String, String] = Map([]),
-  timeout_ms? : Int,
+  query~ : Array[@minimoon.Query] = [],
+  headers~ : Map[String, String] = Map([]),
+  timeout_ms? : Int32,
 ) -> RequestWithBody {
   RequestWithBody(options(url, Post, query, headers, timeout_ms))
 }
@@ -92,9 +92,9 @@ pub fn post(
 /// Construct a PUT request. A body is optional before `expect_json`.
 pub fn put(
   url : String,
-  query? : Array[@minimoon.Query] = [],
-  headers? : Map[String, String] = Map([]),
-  timeout_ms? : Int,
+  query~ : Array[@minimoon.Query] = [],
+  headers~ : Map[String, String] = Map([]),
+  timeout_ms? : Int32,
 ) -> RequestWithBody {
   RequestWithBody(options(url, Put, query, headers, timeout_ms))
 }

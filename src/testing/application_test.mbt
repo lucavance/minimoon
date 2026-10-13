@@ -79,12 +79,12 @@ test "input decoding failures are catchable test failures not preview fallback" 
 
 ///|
 fn shared_test_app() -> @minimoon.App[
-  (@minimoon.Shared[Int], @minimoon.Emit[Int]),
+  (@minimoon.Shared[Int32], @minimoon.Emit[Int32]),
 ] {
   @minimoon.app(build=context => {
     context.create_state(
       0,
-      update=(value, delta : Int, _) => @minimoon.no_cmd(value + delta),
+      update=(value, delta : Int32, _) => @minimoon.no_cmd(value + delta),
       subscriptions=(_, emit) => {
         @minimoon.Sub::batch([
           context.on_launch(emit(10)),
@@ -97,7 +97,7 @@ fn shared_test_app() -> @minimoon.App[
 
 ///|
 fn shared_test_page(
-  deps : (@minimoon.Shared[Int], @minimoon.Emit[Int]),
+  deps : (@minimoon.Shared[Int32], @minimoon.Emit[Int32]),
   id : String,
 ) -> @minimoon.Page {
   @minimoon.page(
@@ -194,7 +194,7 @@ test "quiesce leaves future ticks and unresolved host requests pending" {
               @minimoon.request("https://example.com/pending", _ => emit(100)),
             )
           },
-          update=(count, delta : Int, _) => @minimoon.no_cmd(count + delta),
+          update=(count, delta : Int32, _) => @minimoon.no_cmd(count + delta),
           subscriptions=(_, emit) => {
             context.every(key="tick", interval_ms=1, command=emit(1))
           },

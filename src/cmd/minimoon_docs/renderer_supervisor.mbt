@@ -64,7 +64,7 @@ async fn collect_renderer_output(
   command : String,
   args : Array[String],
   root : String,
-) -> (Int, &@io.Data, &@io.Data) {
+) -> (Int32, &@io.Data, &@io.Data) {
   let temp = @fs.tmpdir(prefix="minimoon-mermaid-supervisor")
   defer cleanup_diagram_temporary(temp)
   let supervisor = join(temp, "renderer-supervisor.cjs")

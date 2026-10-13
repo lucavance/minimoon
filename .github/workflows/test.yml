@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 45
     env:
       VP_NODE_VERSION: 26.11.1
-      VP_PACKAGE_MANAGER: bun@1.4.2
+      VP_PACKAGE_MANAGER: bun@1.4.3
 
     defaults:
       run:
@@ -26,17 +26,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.15+943464bfa
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Vite+ (26.11.1)
-        uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
+        uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
           version: 1.1.0
           node-version: 26.11.1
@@ -46,7 +46,7 @@ jobs:
       - name: Install JS tooling
         run: |
           vp --version
-          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.2"'
+          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.3"'
           vp install --frozen-lockfile
 
       - name: MoonBit environment
@@ -59,12 +59,12 @@ jobs:
           version_at_least() {
             [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n 1)" = "$1" ]
           }
-          version_at_least "0.1.20260920" "$installed_moon" || {
-            echo "moon $installed_moon is below the supported floor 0.1.20260920" >&2
+          version_at_least "0.1.20261012" "$installed_moon" || {
+            echo "moon $installed_moon is below the supported floor 0.1.20261012" >&2
             exit 1
           }
-          version_at_least "0.10.14" "$installed_moonc" || {
-            echo "moonc $installed_moonc is below the supported floor 0.10.14" >&2
+          version_at_least "0.10.15" "$installed_moonc" || {
+            echo "moonc $installed_moonc is below the supported floor 0.10.15" >&2
             exit 1
           }
 
@@ -107,9 +107,9 @@ jobs:
           core_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' moon.mod)"
           ui_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' ui/moon.mod)"
           # Freeze the reviewed patch pair and UI's matching core dependency.
-          if [ "$core_version" != "0.2.6" ] || [ "$ui_version" != "0.1.4" ] ||
-             ! grep -Fq '"lampclaw/minimoon@0.2.6"' ui/moon.mod; then
-            echo "CI handoff requires the reviewed core 0.2.6 / UI 0.1.4 pair and UI core 0.2.6 dependency" >&2
+          if [ "$core_version" != "0.2.7" ] || [ "$ui_version" != "0.1.5" ] ||
+             ! grep -Fq '"lampclaw/minimoon@0.2.7"' ui/moon.mod; then
+            echo "CI handoff requires the reviewed core 0.2.7 / UI 0.1.5 pair and UI core 0.2.7 dependency" >&2
             exit 1
           fi
           moon_version="$(moon version --all)"
@@ -257,7 +257,7 @@ jobs:
     timeout-minutes: 25
     env:
       VP_NODE_VERSION: 24.20.0
-      VP_PACKAGE_MANAGER: bun@1.4.2
+      VP_PACKAGE_MANAGER: bun@1.4.3
 
     defaults:
       run:
@@ -265,15 +265,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.15+943464bfa
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Vite+ (24.20.0)
-        uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
+        uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
           version: 1.1.0
           node-version: 24.20.0
@@ -283,7 +283,7 @@ jobs:
       - name: Install toolchains and dependencies
         run: |
           vp --version
-          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.2"'
+          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.3"'
           vp install --frozen-lockfile
           moon update
 

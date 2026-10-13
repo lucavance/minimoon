@@ -1,9 +1,9 @@
 ///|
 fn retained_keyed_tree(
-  root_id : Int,
-  count : Int,
-  changed_index? : Int = -1,
-  reverse? : Bool = false,
+  root_id : Int32,
+  count : Int32,
+  changed_index~ : Int32 = -1,
+  reverse~ : Bool = false,
 ) -> @ui.Node {
   let children : Array[@ui.KeyedNode] = []
   for offset = 0; offset < count; offset = offset + 1 {
@@ -79,9 +79,9 @@ test "retained normalization visits only changed nodes and commits cache transac
 
 ///|
 fn retained_shape_tree(
-  root_id : Int,
+  root_id : Int32,
   a : @ui.Node?,
-  last? : Bool = false,
+  last~ : Bool = false,
 ) -> @ui.Node {
   let children = [
     @ui.keyed("b", @ui.retained(2, @ui.text("B"))),

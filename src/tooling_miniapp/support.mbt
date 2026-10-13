@@ -15,7 +15,7 @@ fn field(json : Json, key : String) -> Json {
 }
 
 ///|
-fn string(json : Json, key : String, fallback? : String = "") -> String {
+fn string(json : Json, key : String, fallback~ : String = "") -> String {
   match object(json, key).get(key) {
     Some(String(value)) => value
     Some(Null) | None => fallback
@@ -32,7 +32,7 @@ fn array(json : Json, key : String) -> Array[Json] {
 }
 
 ///|
-fn json_int(value : Int) -> Json {
+fn json_int(value : Int32) -> Json {
   Json::number(value.to_double(), repr=value.to_string())
 }
 

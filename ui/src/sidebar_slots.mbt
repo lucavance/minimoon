@@ -1,9 +1,9 @@
 ///|
 pub fn[C : @minimoon.IsChildren] sidebar_header(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "sidebar-header",
@@ -17,9 +17,9 @@ pub fn[C : @minimoon.IsChildren] sidebar_header(
 ///|
 pub fn[C : @minimoon.IsChildren] sidebar_footer(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "sidebar-footer",
@@ -33,9 +33,9 @@ pub fn[C : @minimoon.IsChildren] sidebar_footer(
 ///|
 pub fn[C : @minimoon.IsChildren] sidebar_group(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "sidebar-group",
@@ -50,9 +50,9 @@ pub fn[C : @minimoon.IsChildren] sidebar_group(
 ///|
 pub fn[C : @minimoon.IsChildren] sidebar_group_content(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "sidebar-group-content",
@@ -66,9 +66,9 @@ pub fn[C : @minimoon.IsChildren] sidebar_group_content(
 ///|
 pub fn[C : @minimoon.IsChildren] sidebar_menu(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "sidebar-menu",
@@ -82,9 +82,9 @@ pub fn[C : @minimoon.IsChildren] sidebar_menu(
 ///|
 pub fn[C : @minimoon.IsChildren] sidebar_menu_item(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "sidebar-menu-item",
@@ -98,9 +98,9 @@ pub fn[C : @minimoon.IsChildren] sidebar_menu_item(
 ///|
 pub fn[C : @minimoon.IsChildren] sidebar_menu_sub_item(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "sidebar-menu-sub-item",
@@ -114,9 +114,9 @@ pub fn[C : @minimoon.IsChildren] sidebar_menu_sub_item(
 ///|
 pub fn[C : @minimoon.IsChildren] sidebar_content(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  height? : String = "320px",
+  id~ : String = "",
+  class~ : String = "",
+  height~ : String = "320px",
 ) -> @minimoon.Node {
   @minimoon.scroll_view(
     id~,
@@ -131,7 +131,7 @@ pub fn[C : @minimoon.IsChildren] sidebar_content(
 pub fn[C : @minimoon.IsChildren] sidebar_group_label(
   scope : SidebarSurfaceScope,
   children : C,
-  class? : String = "",
+  class~ : String = "",
 ) -> @minimoon.Node {
   if sidebar_icon_only(scope) {
     @minimoon.nothing()
@@ -150,8 +150,8 @@ pub fn[C : @minimoon.IsChildren] sidebar_group_action(
   scope : SidebarSurfaceScope,
   on_tap~ : @minimoon.Cmd,
   children : C,
-  disabled? : Bool = false,
-  class? : String = "",
+  disabled~ : Bool = false,
+  class~ : String = "",
 ) -> @minimoon.Node {
   if sidebar_icon_only(scope) {
     @minimoon.nothing()
@@ -170,17 +170,17 @@ pub fn[C : @minimoon.IsChildren] sidebar_menu_button(
   scope : SidebarSurfaceScope,
   children : C,
   target? : @minimoon.Route,
-  is_active? : Bool = false,
-  variant? : SidebarMenuButtonVariant = SidebarMenuButtonDefault,
-  size? : SidebarMenuButtonSize = SidebarMenuDefault,
-  disabled? : Bool = false,
-  aria_label? : String = "",
+  is_active~ : Bool = false,
+  variant~ : SidebarMenuButtonVariant = SidebarMenuButtonDefault,
+  size~ : SidebarMenuButtonSize = SidebarMenuDefault,
+  disabled~ : Bool = false,
+  aria_label~ : String = "",
   on_tap? : @minimoon.Cmd,
   icon? : @minimoon.Node,
-  id? : String = "",
-  event_key? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  event_key~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   let icon_only = sidebar_icon_only(scope)
   let children = if icon_only && icon is Some(icon) {
@@ -253,8 +253,8 @@ pub fn[C : @minimoon.IsChildren] sidebar_menu_action(
   scope : SidebarSurfaceScope,
   on_tap~ : @minimoon.Cmd,
   children : C,
-  disabled? : Bool = false,
-  class? : String = "",
+  disabled~ : Bool = false,
+  class~ : String = "",
 ) -> @minimoon.Node {
   sidebar_group_action(
     scope,
@@ -269,7 +269,7 @@ pub fn[C : @minimoon.IsChildren] sidebar_menu_action(
 pub fn[C : @minimoon.IsChildren] sidebar_menu_badge(
   scope : SidebarSurfaceScope,
   children : C,
-  class? : String = "",
+  class~ : String = "",
 ) -> @minimoon.Node {
   if sidebar_icon_only(scope) {
     @minimoon.nothing()
@@ -280,9 +280,9 @@ pub fn[C : @minimoon.IsChildren] sidebar_menu_badge(
 
 ///|
 pub fn sidebar_menu_skeleton(
-  show_icon? : Bool = false,
-  width? : Int = 128,
-  class? : String = "",
+  show_icon~ : Bool = false,
+  width~ : Int32 = 128,
+  class~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "sidebar-menu-skeleton",
@@ -313,7 +313,7 @@ pub fn sidebar_menu_skeleton(
 pub fn[C : @minimoon.IsChildren] sidebar_menu_sub(
   scope : SidebarSurfaceScope,
   children : C,
-  class? : String = "",
+  class~ : String = "",
 ) -> @minimoon.Node {
   if sidebar_icon_only(scope) {
     @minimoon.nothing()
@@ -332,10 +332,10 @@ pub fn[C : @minimoon.IsChildren] sidebar_menu_sub_button(
   scope : SidebarSurfaceScope,
   children : C,
   target? : @minimoon.Route,
-  is_active? : Bool = false,
-  disabled? : Bool = false,
+  is_active~ : Bool = false,
+  disabled~ : Bool = false,
   on_tap? : @minimoon.Cmd,
-  class? : String = "",
+  class~ : String = "",
 ) -> @minimoon.Node {
   if sidebar_icon_only(scope) {
     @minimoon.nothing()
@@ -354,7 +354,7 @@ pub fn[C : @minimoon.IsChildren] sidebar_menu_sub_button(
 }
 
 ///|
-pub fn sidebar_separator(class? : String = "") -> @minimoon.Node {
+pub fn sidebar_separator(class~ : String = "") -> @minimoon.Node {
   ui_container(
     "sidebar-separator",
     class~,
@@ -368,12 +368,12 @@ pub fn sidebar_separator(class? : String = "") -> @minimoon.Node {
 pub fn sidebar_input(
   value~ : String,
   on_input~ : @minimoon.Emit[String],
-  name? : String = "",
-  placeholder? : String = "Search",
-  disabled? : Bool = false,
-  id? : String = "",
-  event_key? : String = "",
-  class? : String = "",
+  name~ : String = "",
+  placeholder~ : String = "Search",
+  disabled~ : Bool = false,
+  id~ : String = "",
+  event_key~ : String = "",
+  class~ : String = "",
 ) -> @minimoon.Node {
   @minimoon.input(
     value~,
@@ -390,9 +390,9 @@ pub fn sidebar_input(
 ///|
 pub fn[C : @minimoon.IsChildren] sidebar_inset(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "sidebar-inset",

@@ -41,7 +41,7 @@ fn require_success(commands : String, owner : String) -> Unit raise {
 ///|
 /// A step is one fair drain round across all currently ready owners. Empty
 /// command output is not a stability signal: pure state work may emit no JSON.
-fn drain_ready(owners : Array[ReadyOwner], max_steps : Int) -> Unit raise {
+fn drain_ready(owners : Array[ReadyOwner], max_steps : Int32) -> Unit raise {
   guard max_steps > 0 else {
     raise Failure("quiesce max_steps must be positive")
   }
@@ -99,8 +99,8 @@ fn start_page(
 /// Input decoding failures and runtime diagnostics become ordinary test errors.
 pub fn mount(
   page : @minimoon.Page,
-  input? : Map[String, String] = Map([]),
-  layout? : @minimoon.PageLayout = @minimoon.PageLayout::unavailable(),
+  input~ : Map[String, String] = Map([]),
+  layout~ : @minimoon.PageLayout = @minimoon.PageLayout::unavailable(),
 ) -> TestRuntime raise {
   let input = input.copy()
   let runtime = match page.create_runtime(input~, layout~) {
@@ -153,8 +153,8 @@ pub fn[Deps] launch(app : @minimoon.App[Deps]) -> TestApp[Deps] raise {
 pub fn[Deps] TestApp::mount(
   self : TestApp[Deps],
   factory : (Deps) -> @minimoon.Page,
-  input? : Map[String, String] = Map([]),
-  layout? : @minimoon.PageLayout = @minimoon.PageLayout::unavailable(),
+  input~ : Map[String, String] = Map([]),
+  layout~ : @minimoon.PageLayout = @minimoon.PageLayout::unavailable(),
 ) -> TestRuntime raise {
   guard !self.disposed.val else {
     raise Failure("cannot mount a page on a disposed TestApp")
@@ -184,7 +184,7 @@ pub fn[Deps] TestApp::mount(
 /// Drain current ready work; an App-owned page settles the entire TestApp.
 pub fn TestRuntime::quiesce(
   self : TestRuntime,
-  max_steps? : Int = 1024,
+  max_steps~ : Int32 = 1024,
 ) -> Unit raise {
   (self.settle)(max_steps)
 }
@@ -192,7 +192,7 @@ pub fn TestRuntime::quiesce(
 ///|
 pub fn[Deps] TestApp::quiesce(
   self : TestApp[Deps],
-  max_steps? : Int = 1024,
+  max_steps~ : Int32 = 1024,
 ) -> Unit raise {
   let owners : Array[ReadyOwner] = [
     {

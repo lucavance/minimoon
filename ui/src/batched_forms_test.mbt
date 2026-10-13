@@ -26,7 +26,7 @@ test "multiple ToggleGroup merges same-frame option taps" {
   let _ = runtime.mount()
   let dispatched = runtime.dispatch_batch(form_batch(["group/a", "group/b"]))
   assert_false(dispatched.contains("RuntimeError"))
-  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").length(), 3)
+  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").count(), 3)
 }
 
 ///|
@@ -106,10 +106,10 @@ test "controlled ToggleGroup reads parent state after each batch request" {
     form_batch(["group/a", "group/b", "group/a"]),
   )
   assert_false(dispatched.contains("RuntimeError"))
-  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").length(), 2)
+  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").count(), 2)
   let dispatched = runtime.dispatch_batch(form_batch(["group/b", "group/b"]))
   assert_false(dispatched.contains("RuntimeError"))
-  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").length(), 2)
+  assert_eq(runtime.snapshot().split("\"ariaSelected\":true").count(), 2)
 }
 
 ///|

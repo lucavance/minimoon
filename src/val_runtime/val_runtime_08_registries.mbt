@@ -15,7 +15,7 @@ priv struct StateStore {
 ///|
 struct StateRegistry {
   slots : Ref[@slotmap.SlotMap[StateStore]]
-  live : Ref[Int]
+  live : Ref[Int32]
 }
 
 ///|

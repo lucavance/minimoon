@@ -7,7 +7,7 @@ pub struct PageProgram[Model, Msg] {
   route : String
   title : String
   initial : Model
-  component_owner_id : Int
+  component_owner_id : Int32
   component : @runtime.Component[Model, Msg]
   view : (Events[Msg], Model) -> @ui.Node
   contract_tree : Json
@@ -35,10 +35,10 @@ priv struct RenderCandidate[Msg] {
 }
 
 ///|
-let next_component_owner_id : Ref[Int] = Ref(1)
+let next_component_owner_id : Ref[Int32] = Ref(1)
 
 ///|
-fn allocate_component_owner_id() -> Int {
+fn allocate_component_owner_id() -> Int32 {
   let owner_id = next_component_owner_id.val
   next_component_owner_id.val = owner_id + 1
   owner_id
@@ -56,7 +56,7 @@ fn[Model, Msg] render_candidate(
   view : (Events[Msg], Model) -> @ui.Node,
   model : Model,
   root_subscriptions : ((Model) -> Subscriptions[Msg])?,
-  owner_id : Int,
+  owner_id : Int32,
   normalization_cache : Map[String, NormalizedCacheEntry],
 ) -> Result[RenderCandidate[Msg], String] {
   let registry = events_for_owner(owner_id)
@@ -116,9 +116,9 @@ pub fn[Model, Msg] page_program(
   update~ : @runtime.Update[Model, Msg],
   view~ : (Events[Msg], Model) -> @ui.Node,
   projection_guard? : @runtime.ProjectionGuard[Model],
-  capabilities? : Array[MiniappCapability] = [],
-  lifecycle? : Array[PageLifecycleEvent[Msg]] = [],
-  inputs? : Array[PageInput[Msg]] = [],
+  capabilities~ : Array[MiniappCapability] = [],
+  lifecycle~ : Array[PageLifecycleEvent[Msg]] = [],
+  inputs~ : Array[PageInput[Msg]] = [],
   init? : Msg,
   refresh? : Msg,
   subscriptions? : (Model) -> Subscriptions[Msg],
@@ -220,9 +220,9 @@ pub fn[Model, Msg] simple_page_program(
   update~ : @runtime.PureUpdate[Model, Msg],
   view~ : (Events[Msg], Model) -> @ui.Node,
   projection_guard? : @runtime.ProjectionGuard[Model],
-  capabilities? : Array[MiniappCapability] = [],
-  lifecycle? : Array[PageLifecycleEvent[Msg]] = [],
-  inputs? : Array[PageInput[Msg]] = [],
+  capabilities~ : Array[MiniappCapability] = [],
+  lifecycle~ : Array[PageLifecycleEvent[Msg]] = [],
+  inputs~ : Array[PageInput[Msg]] = [],
   init? : Msg,
   subscriptions? : (Model) -> Subscriptions[Msg],
 ) -> PageProgram[Model, Msg] {

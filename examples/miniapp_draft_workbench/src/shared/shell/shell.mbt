@@ -58,7 +58,7 @@ pub fn hero(
   title : String,
   subtitle : String,
   section : String,
-  home? : Bool = false,
+  home~ : Bool = false,
 ) -> @minimoon.Node {
   @minimoon.div(
     class=if home { "demo-hero demo-hero-home" } else { "demo-hero" },
@@ -76,9 +76,9 @@ pub fn frame(
   title : String,
   section : String,
   children : Array[@minimoon.Node],
-  scroll_target? : String = "",
+  scroll_target~ : String = "",
   on_scroll? : @minimoon.Emit[@minimoon.ScrollDetail],
-  scroll_key? : String = "",
+  scroll_key~ : String = "",
 ) -> @minimoon.Node {
   let band = navigation_height(layout)
   let viewport = layout.window
@@ -125,7 +125,7 @@ pub fn frame(
 pub fn card(
   title : String,
   children : Array[@minimoon.Node],
-  section? : String = "",
+  section~ : String = "",
 ) -> @minimoon.Node {
   @minimoon.div(
     class="demo-card",

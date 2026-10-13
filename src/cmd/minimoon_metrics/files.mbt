@@ -8,8 +8,8 @@ struct FileMetric {
   area : String?
   role : String
   language : String
-  bytes : Int
-  physical_lines : Int?
+  bytes : Int32
+  physical_lines : Int32?
 } derive(Debug)
 
 ///|
@@ -20,7 +20,7 @@ struct FileLedger {
 }
 
 ///|
-fn physical_lines(content : String) -> Int {
+fn physical_lines(content : String) -> Int32 {
   if content == "" {
     return 0
   }

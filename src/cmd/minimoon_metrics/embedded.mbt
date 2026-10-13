@@ -1,9 +1,9 @@
 ///|
 struct EmbeddedTotals {
-  bytes : Ref[Int]
+  bytes : Ref[Int32]
   lines : Map[String, Bool]
   files : Map[String, Bool]
-  declarations : Ref[Int]
+  declarations : Ref[Int32]
 }
 
 ///|
@@ -42,7 +42,7 @@ fn embedded_add_literal(
 }
 
 ///|
-fn embedded_lexical(left : String, right : String) -> Int {
+fn embedded_lexical(left : String, right : String) -> Int32 {
   left.lexical_compare(right)
 }
 
@@ -118,7 +118,7 @@ fn embedded_metrics_with_inventory(
   }
   let totals = embedded_totals()
   let categories : Map[String, EmbeddedTotals] = Map([])
-  let occupied : Map[String, Array[(Int, Int)]] = Map([])
+  let occupied : Map[String, Array[(Int32, Int32)]] = Map([])
   let entries : Array[Json] = []
   let ordered = inventory.copy()
   ordered.sort_by((left, right) => {

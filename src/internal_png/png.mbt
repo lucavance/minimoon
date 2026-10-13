@@ -1,5 +1,5 @@
 ///|
-fn read_u32(bytes : Bytes, offset : Int) -> UInt {
+fn read_u32(bytes : Bytes, offset : Int32) -> UInt32 {
   (bytes[offset].to_uint() << 24) |
   (bytes[offset + 1].to_uint() << 16) |
   (bytes[offset + 2].to_uint() << 8) |
@@ -7,7 +7,7 @@ fn read_u32(bytes : Bytes, offset : Int) -> UInt {
 }
 
 ///|
-fn chunk_crc(bytes : Bytes, start : Int, end : Int) -> UInt {
+fn chunk_crc(bytes : Bytes, start : Int32, end : Int32) -> UInt32 {
   let mut crc = 0xffffffffU
   for index = start; index < end; index = index + 1 {
     crc = crc ^ bytes[index].to_uint()
@@ -22,7 +22,7 @@ fn chunk_crc(bytes : Bytes, start : Int, end : Int) -> UInt {
 /// Validate the PNG container, dimensions and IHDR fields without decompressing
 /// image pixels. Every chunk is bounds-checked and CRC-checked. This build-time
 /// parser is shared by generation and artifact verification.
-pub fn dimensions(bytes : Bytes) -> (Int, Int)? {
+pub fn dimensions(bytes : Bytes) -> (Int32, Int32)? {
   guard bytes.length() >= 57 &&
     bytes[0:8] == b"\x89PNG\r\n\x1a\n" &&
     bytes[8:16] == b"\x00\x00\x00\x0dIHDR" else {

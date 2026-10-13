@@ -1,9 +1,9 @@
 ///|
 pub fn[C : @minimoon.IsChildren] combobox_chips(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("combobox-chips", id~, class~, style~, children.to_nodes())
 }
@@ -11,9 +11,9 @@ pub fn[C : @minimoon.IsChildren] combobox_chips(
 ///|
 pub fn[C : @minimoon.IsChildren] combobox_collection(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("combobox-collection", id~, class~, style~, children.to_nodes())
 }
@@ -21,9 +21,9 @@ pub fn[C : @minimoon.IsChildren] combobox_collection(
 ///|
 pub fn[C : @minimoon.IsChildren] combobox_group(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("combobox-group", id~, class~, style~, children.to_nodes())
 }
@@ -31,9 +31,9 @@ pub fn[C : @minimoon.IsChildren] combobox_group(
 ///|
 pub fn[C : @minimoon.IsChildren] combobox_label(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("combobox-label", id~, class~, style~, children.to_nodes())
 }
@@ -41,9 +41,9 @@ pub fn[C : @minimoon.IsChildren] combobox_label(
 ///|
 pub fn[C : @minimoon.IsChildren] combobox_list(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("combobox-list", id~, class~, style~, children.to_nodes())
 }
@@ -60,9 +60,9 @@ pub fn combobox_separator() -> @minimoon.Node {
 ///|
 pub fn[C : @minimoon.IsChildren] command_list(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("command-list", id~, class~, style~, children.to_nodes())
 }
@@ -70,9 +70,9 @@ pub fn[C : @minimoon.IsChildren] command_list(
 ///|
 pub fn[C : @minimoon.IsChildren] command_shortcut(
   children : C,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container("command-shortcut", id~, class~, style~, children.to_nodes())
 }
@@ -92,7 +92,7 @@ pub fn[C : @minimoon.IsChildren] command_empty(
 ///|
 pub fn[C : @minimoon.IsChildren] command_group(
   children : C,
-  heading? : String = "",
+  heading~ : String = "",
 ) -> @minimoon.Node {
   ui_container("command-group", [
     @minimoon.text(heading),
@@ -113,7 +113,7 @@ pub fn command_separator() -> @minimoon.Node {
 pub fn[C : @minimoon.IsChildren] command_dialog_trigger(
   scope : CommandScope,
   children : C,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @minimoon.Node {
   @minimoon.button_children(
     event_key=scope.id + "/open",
@@ -127,7 +127,7 @@ pub fn[C : @minimoon.IsChildren] command_dialog_trigger(
 pub fn CommandScope::matches(
   self : CommandScope,
   value : String,
-  keywords? : Array[String] = [],
+  keywords~ : Array[String] = [],
 ) -> Bool {
   !self.should_filter || (self.filter)(value, self.query, keywords)
 }

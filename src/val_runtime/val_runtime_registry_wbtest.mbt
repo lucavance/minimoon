@@ -1,10 +1,10 @@
 ///|
-fn Graph::state_store_count_for_test(self : Graph) -> Int {
+fn Graph::state_store_count_for_test(self : Graph) -> Int32 {
   self.state_registry.live.val
 }
 
 ///|
-fn Graph::subscription_provider_count_for_test(self : Graph) -> Int {
+fn Graph::subscription_provider_count_for_test(self : Graph) -> Int32 {
   self.subscriptions.order.val.length()
 }
 
@@ -75,7 +75,7 @@ test "committed and rejected switch branches reclaim stores and subscriptions" {
     let (source, set_source) = graph.create_input(0)
     let branch = source.switch_by(
       (initial, _input) => {
-        let (state, _) : (Val[Int], Emit[Unit]) = create_state(
+        let (state, _) : (Val[Int32], Emit[Unit]) = create_state(
           0,
           update=(current, _, _) => (current, none),
           subscriptions=(_, _) => {
@@ -170,7 +170,7 @@ test "state command thunks reject missing and disposed ambient graphs" {
 ///|
 test "stale state generations cannot update a replacement branch" {
   let graph = Graph::new()
-  let emitters : Ref[Array[Emit[Int]]] = Ref([])
+  let emitters : Ref[Array[Emit[Int32]]] = Ref([])
   let (branch, set_source) = graph.build(fn() {
     let (source, set_source) = graph.create_input("a")
     let branch = source.switch_by(
@@ -210,7 +210,7 @@ test "bounded enumeration evicts graph stores and subscriptions on commit" {
     let branch = source.enumerate_bounded_by(
       capacity=2,
       build=(initial, _input) => {
-        let (state, _) : (Val[Int], Emit[Unit]) = create_state(
+        let (state, _) : (Val[Int32], Emit[Unit]) = create_state(
           initial,
           update=(current, _, _) => (current, none),
           subscriptions=(_, _) => {

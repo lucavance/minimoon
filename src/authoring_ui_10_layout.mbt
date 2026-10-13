@@ -34,10 +34,10 @@ pub fn keyed_fragment(children : Array[KeyedNode]) -> Node {
 
 ///|
 pub fn[C : IsChildren] div(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
   children : C,
 ) -> Node {
@@ -58,11 +58,11 @@ pub fn[C : IsChildren] div(
 /// modal overlays and menu dismissal layers.
 pub fn[C : IsChildren] tap_view(
   on_tap~ : Cmd,
-  event_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  event_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
   children : C,
 ) -> Node {
@@ -84,10 +84,10 @@ pub fn[C : IsChildren] tap_view(
 
 ///|
 pub fn[C : IsChildren] h1(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
   children : C,
 ) -> Node {
@@ -105,10 +105,10 @@ pub fn[C : IsChildren] h1(
 
 ///|
 pub fn[C : IsChildren] span(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
   children : C,
 ) -> Node {
@@ -126,10 +126,10 @@ pub fn[C : IsChildren] span(
 
 ///|
 pub fn[C : IsChildren] p(
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
   children : C,
 ) -> Node {
@@ -148,16 +148,16 @@ pub fn[C : IsChildren] p(
 ///|
 pub fn image(
   src~ : String,
-  alt? : String = "",
+  alt~ : String = "",
   mode? : ImageMode,
   on_load? : Emit[ImageLoadDetail],
   on_error? : Emit[String],
-  load_key? : String = "",
-  error_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  load_key~ : String = "",
+  error_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
 ) -> Node {
   let attrs = raw_element_attrs(style, data_section, semantics?)

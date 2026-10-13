@@ -21,14 +21,14 @@ struct Slide {
 pub struct Model {
   cards : Array[CardEntry]
   picker_options : Array[String]
-  picker : Int
+  picker : Int32
   slides : Array[Slide]
-  slide : Int
+  slide : Int32
   native_reconciled : Bool
   scroll_top : Double
   scroll_target : String
-  ticks : Int
-  count : Int
+  ticks : Int32
+  count : Int32
   expanded : Bool
   name : String
   focus_status : String
@@ -47,8 +47,8 @@ pub enum Msg {
   ReorderCards
   RemoveSecondary
   RestoreSecondary
-  Picked(Int)
-  Slid(Int)
+  Picked(Int32)
+  Slid(Int32)
   Scrolled(@minimoon.ScrollDetail)
   Jump(String)
   Tick
@@ -135,7 +135,7 @@ fn initial_model() -> Model {
 }
 
 ///|
-fn card_index(cards : Array[CardEntry], key : String) -> Int? {
+fn card_index(cards : Array[CardEntry], key : String) -> Int32? {
   for index, card in cards {
     if card.id == key {
       return Some(index)
@@ -145,7 +145,7 @@ fn card_index(cards : Array[CardEntry], key : String) -> Int? {
 }
 
 ///|
-fn string_index(values : Array[String], expected : String) -> Int? {
+fn string_index(values : Array[String], expected : String) -> Int32? {
   for index, value in values {
     if value == expected {
       return Some(index)
@@ -155,7 +155,7 @@ fn string_index(values : Array[String], expected : String) -> Int? {
 }
 
 ///|
-fn slide_index(slides : Array[Slide], expected : String) -> Int? {
+fn slide_index(slides : Array[Slide], expected : String) -> Int32? {
   for index, slide in slides {
     if slide.id == expected {
       return Some(index)
@@ -276,14 +276,14 @@ async fn[T, E : Error] suspend_probe(
 ///|
 extern "js" fn resume_probe_after(
   resolve : (Unit) -> Unit,
-  milliseconds : Int,
+  milliseconds : Int32,
 ) -> Unit =
   #| (resolve, milliseconds) => { setTimeout(() => resolve(0), milliseconds) }
 
 ///|
 async fn wait_for_probe(
-  milliseconds : Int,
-  schedule : ((Unit) -> Unit, Int) -> Unit,
+  milliseconds : Int32,
+  schedule : ((Unit) -> Unit, Int32) -> Unit,
 ) -> Unit noraise {
   suspend_probe(fn(resolve, _reject : (Failure) -> Unit) {
     schedule(resolve, milliseconds)
@@ -295,7 +295,7 @@ async fn wait_for_probe(
 ///|
 fn async_probe_command(
   emit : @minimoon.Emit[Msg],
-  schedule : ((Unit) -> Unit, Int) -> Unit,
+  schedule : ((Unit) -> Unit, Int32) -> Unit,
 ) -> @minimoon.Cmd {
   @minimoon.batch([
     @minimoon.perform(emit.map(value => PerformProbeCompleted(value)), async fn() noraise {
@@ -632,7 +632,7 @@ fn view(
 fn app(
   context : @minimoon.PageContext,
   name : String,
-  probe_scheduler : ((Unit) -> Unit, Int) -> Unit,
+  probe_scheduler : ((Unit) -> Unit, Int32) -> Unit,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (model, emit) = @minimoon.create_state(
     initial_model(),
@@ -698,7 +698,7 @@ pub fn program(_deps : @application.Deps) -> @minimoon.Page {
 
 ///|
 fn program_with_probe_scheduler(
-  probe_scheduler : ((Unit) -> Unit, Int) -> Unit,
+  probe_scheduler : ((Unit) -> Unit, Int32) -> Unit,
 ) -> @minimoon.Page {
   @minimoon.page_with_input(
     id="runtime_lab",

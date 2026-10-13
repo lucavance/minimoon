@@ -103,14 +103,14 @@ pub(all) enum FormButtonType {
 /// Native button with rich children. The existing string-label button is unchanged.
 pub fn[C : IsChildren] button_children(
   on_tap~ : Cmd,
-  event_key? : String = "",
-  disabled? : Bool = false,
+  event_key~ : String = "",
+  disabled~ : Bool = false,
   form_type? : FormButtonType,
-  name? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  name~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
   children : C,
 ) -> Node {
@@ -145,9 +145,9 @@ pub fn[C : IsChildren] button_children(
 ///|
 pub fn[C : IsChildren] label(
   for_id~ : String,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let children = children.to_nodes()
@@ -163,11 +163,11 @@ pub fn[C : IsChildren] label(
 pub fn[C : IsChildren] form(
   on_submit~ : Emit[Map[String, Json]],
   on_reset? : Cmd,
-  submit_key? : String = "",
-  reset_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  submit_key~ : String = "",
+  reset_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let children = children.to_nodes()
@@ -207,7 +207,7 @@ pub fn[C : IsChildren] form(
 }
 
 ///|
-fn detail_slider(payload : Json) -> Result[Int, DecodeError] {
+fn detail_slider(payload : Json) -> Result[Int32, DecodeError] {
   let fields = match event_detail(payload) {
     Ok(value) => value
     Err(error) => return Err(error)
@@ -227,24 +227,24 @@ fn detail_slider(payload : Json) -> Result[Int, DecodeError] {
 
 ///|
 pub fn slider(
-  value~ : Int,
-  on_change~ : Emit[Int],
-  on_changing? : Emit[Int],
-  min? : Int = 0,
-  max? : Int = 100,
-  step? : Int = 1,
-  disabled? : Bool = false,
-  show_value? : Bool = false,
-  active_color? : String = "",
-  background_color? : String = "",
-  block_color? : String = "",
-  block_size? : Int = 28,
-  name? : String = "",
-  event_key? : String = "",
-  changing_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  value~ : Int32,
+  on_change~ : Emit[Int32],
+  on_changing? : Emit[Int32],
+  min~ : Int32 = 0,
+  max~ : Int32 = 100,
+  step~ : Int32 = 1,
+  disabled~ : Bool = false,
+  show_value~ : Bool = false,
+  active_color~ : String = "",
+  background_color~ : String = "",
+  block_color~ : String = "",
+  block_size~ : Int32 = 28,
+  name~ : String = "",
+  event_key~ : String = "",
+  changing_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   semantics? : Semantics,
 ) -> Node {
   guard min < max &&
@@ -300,15 +300,15 @@ pub fn slider(
 
 ///|
 pub fn progress(
-  percent~ : Int,
-  stroke_width? : Int = 6,
-  show_info? : Bool = false,
-  active? : Bool = false,
-  active_color? : String = "",
-  background_color? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  percent~ : Int32,
+  stroke_width~ : Int32 = 6,
+  show_info~ : Bool = false,
+  active~ : Bool = false,
+  active_color~ : String = "",
+  background_color~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   semantics? : Semantics,
 ) -> Node {
   guard percent >= 0 && percent <= 100 && stroke_width > 0 else {
@@ -326,7 +326,7 @@ pub fn progress(
 
 ///|
 pub struct TouchPoint {
-  identifier : Int
+  identifier : Int32
   client_x : Double
   client_y : Double
   page_x : Double
@@ -384,7 +384,7 @@ fn touch_points(
     return Err(decode_error(name + " must be an array"))
   }
   let points : Array[TouchPoint] = []
-  let ids : Set[Int] = Set([])
+  let ids : Set[Int32] = Set([])
   for value in values {
     match touch_point(value) {
       Ok(point) => {
@@ -428,12 +428,12 @@ pub fn[C : IsChildren] touch_view(
   on_touch_move? : Emit[TouchDetail],
   on_touch_end? : Emit[TouchDetail],
   on_touch_cancel? : Emit[TouchDetail],
-  catch_move? : Bool = false,
-  event_key? : String = "",
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
-  data_section? : String = "",
+  catch_move~ : Bool = false,
+  event_key~ : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  data_section~ : String = "",
   semantics? : Semantics,
   children : C,
 ) -> Node {

@@ -3,7 +3,7 @@
 extern "js" fn run_layout_host_test(
   host_source : String,
   protocol_source : String,
-  abi : Int,
+  abi : Int32,
 ) -> String =
   #|(hostSource, protocolSource, abi) => {
   #|  const saved = new Map(["wx", "Page"].map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)]))

@@ -1,6 +1,6 @@
 ///|
 pub struct FetchModel {
-  epoch : Int
+  epoch : Int32
   label : String
 } derive(Eq)
 
@@ -8,7 +8,7 @@ pub struct FetchModel {
 pub(all) enum FetchMsg {
   Load
   Clear
-  Finished(Int, Result[@minimoon.RequestResult, @minimoon.HostError])
+  Finished(Int32, Result[@minimoon.RequestResult, @minimoon.HostError])
 }
 
 ///|
@@ -21,8 +21,8 @@ pub(all) struct Draft {
 pub struct Deps {
   work : @minimoon.Shared[Workbench]
   send : @minimoon.Emit[WorkMsg]
-  count : @minimoon.Shared[Int]
-  change_count : @minimoon.Emit[Int]
+  count : @minimoon.Shared[Int32]
+  change_count : @minimoon.Emit[Int32]
   fetch : @minimoon.Shared[FetchModel]
   send_fetch : @minimoon.Emit[FetchMsg]
 }
@@ -46,7 +46,7 @@ pub fn program() -> @minimoon.App[Deps] {
       )
       let (count, change_count) = context.create_pure_state(0, update=(
         count,
-        delta : Int,
+        delta : Int32,
       ) => count + delta)
       let (fetch, send_fetch) = context.create_state(
         initial_fetch(),

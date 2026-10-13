@@ -1,8 +1,8 @@
 ///|
-let supported_moon_floor = "0.1.20260920"
+let supported_moon_floor = "0.1.20261012"
 
 ///|
-let supported_moonc_floor = "0.10.14"
+let supported_moonc_floor = "0.10.15"
 
 ///|
 let supported_node_engine = ">=24.20.0"
@@ -14,7 +14,7 @@ let node_lts_floor = "24.20.0"
 let primary_node_version = "26.11.1"
 
 ///|
-let supported_bun_version = "1.4.2"
+let supported_bun_version = "1.4.3"
 
 ///|
 fn moon_identifier_character(char : UInt16) -> Bool {
@@ -52,7 +52,7 @@ fn signature_contains_type(signature : String, name : String) -> Bool {
 fn append_extern_signature_violations(
   violations : Array[String],
   signature : String,
-  line : Int,
+  line : Int32,
 ) -> Unit {
   let declaration = match signature.find("=") {
     Some(end) => signature[0:end].to_owned()
@@ -159,7 +159,7 @@ async fn static_suite(root : String) -> Unit {
   guard installers.length() == 2 &&
     installers.all(line => {
       line.trim() ==
-      "curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.14+7d59c7ec9"
+      "curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.15+943464bfa"
     }) else {
     abort("both CI jobs must install the reviewed official MoonBit binary")
   }
@@ -396,7 +396,7 @@ async fn static_suite(root : String) -> Unit {
     }
   }
   let adapter = @fs.read_file(join(root, allowed)).text()
-  guard adapter.split("\n").length() <= 101 else {
+  guard adapter.split("\n").count() <= 101 else {
     abort("weapp-tailwindcss adapter exceeds 100 lines")
   }
   guard adapter.trim() == @build.adapter_source().trim() else {
@@ -416,7 +416,7 @@ async fn static_suite(root : String) -> Unit {
             !name.has_suffix("_wbtest.mbt") &&
             !name.has_suffix("_bench.mbt") {
             let file = join(path, name)
-            let lines = @fs.read_file(file).text().split("\n").length()
+            let lines = @fs.read_file(file).text().split("\n").count()
             guard lines <= 450 else {
               abort(
                 package_dir +

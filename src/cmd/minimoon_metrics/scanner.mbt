@@ -7,9 +7,9 @@ enum EmbeddedLiteralKind {
 
 ///|
 struct EmbeddedLiteral {
-  start : Int
-  end : Int
-  line : Int
+  start : Int32
+  end : Int32
+  line : Int32
   kind : EmbeddedLiteralKind
   payload : String
 } derive(Debug)
@@ -28,12 +28,12 @@ fn embedded_error(message : String) -> Unit raise {
 }
 
 ///|
-fn scanner_starts(source : String, index : Int, prefix : String) -> Bool {
+fn scanner_starts(source : String, index : Int32, prefix : String) -> Bool {
   index < source.length() && source[index:].has_prefix(prefix)
 }
 
 ///|
-fn scanner_line_end(source : String, index : Int) -> Int {
+fn scanner_line_end(source : String, index : Int32) -> Int32 {
   let mut end = index
   while end < source.length() && source[end] != '\n' {
     end += 1
@@ -45,7 +45,7 @@ fn scanner_line_end(source : String, index : Int) -> Int {
 // Skip interpolated expressions without interpreting them or treating their
 // strings/comments as top-level declarations. Selected JS interpolation is
 // rejected later: dynamic MoonBit expression bytes are not JavaScript literals.
-fn scanner_interpolation_end(source : String, start : Int) -> Int raise {
+fn scanner_interpolation_end(source : String, start : Int32) -> Int32 raise {
   let mut depth = 1
   let mut index = start
   while index < source.length() {
@@ -73,7 +73,11 @@ fn scanner_interpolation_end(source : String, start : Int) -> Int raise {
 }
 
 ///|
-fn scanner_quote_end(source : String, start : Int, quote : UInt16) -> Int raise {
+fn scanner_quote_end(
+  source : String,
+  start : Int32,
+  quote : UInt16,
+) -> Int32 raise {
   let mut index = start
   while index < source.length() {
     if source[index] == quote {
@@ -179,11 +183,11 @@ fn scanner_declaration_name(source : String) -> (String, Bool) {
 fn scanner_add_declaration(
   result : Array[EmbeddedDeclaration],
   source : String,
-  begin : Int,
-  end : Int,
+  begin : Int32,
+  end : Int32,
   literals : Array[EmbeddedLiteral],
-  top_level_declarations : Int,
-  actual_externs : Int,
+  top_level_declarations : Int32,
+  actual_externs : Int32,
 ) -> Unit raise {
   let block = source[begin:end].to_owned()
   let (name, is_extern) = scanner_declaration_name(block)
@@ -209,7 +213,7 @@ fn scanner_identifier_char(char : UInt16) -> Bool {
 }
 
 ///|
-fn scanner_token_at(source : String, index : Int, token : String) -> Bool {
+fn scanner_token_at(source : String, index : Int32, token : String) -> Bool {
   scanner_starts(source, index, token) &&
   (index == 0 || !scanner_identifier_char(source[index - 1])) &&
   (
@@ -219,7 +223,7 @@ fn scanner_token_at(source : String, index : Int, token : String) -> Bool {
 }
 
 ///|
-fn scanner_named_function_at(source : String, index : Int) -> Bool {
+fn scanner_named_function_at(source : String, index : Int32) -> Bool {
   let mut next = index + 2
   let mut brackets = 0
   while next < source.length() {

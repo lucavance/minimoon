@@ -113,10 +113,10 @@ pub(all) enum NavigatorMode {
 ///|
 pub fn[C : IsChildren] navigator(
   target~ : Route,
-  mode? : NavigatorMode = Navigate,
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  mode~ : NavigatorMode = Navigate,
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   children : C,
 ) -> Node {
   let children = children.to_nodes()

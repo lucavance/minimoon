@@ -2,8 +2,8 @@
 pub fn select_option(
   key~ : String,
   label~ : String,
-  disabled? : Bool = false,
-  group? : String = "",
+  disabled~ : Bool = false,
+  group~ : String = "",
 ) -> ChoiceOption {
   choice_option(key~, label~, disabled~, group~)
 }
@@ -12,8 +12,8 @@ pub fn select_option(
 pub fn native_select_option(
   key~ : String,
   label~ : String,
-  disabled? : Bool = false,
-  group? : String = "",
+  disabled~ : Bool = false,
+  group~ : String = "",
 ) -> ChoiceOption {
   choice_option(key~, label~, disabled~, group~)
 }
@@ -30,7 +30,7 @@ pub fn native_select_optgroup(
 pub fn select_value(
   options : Array[ChoiceOption],
   value : String,
-  placeholder? : String = "Select…",
+  placeholder~ : String = "Select…",
 ) -> String {
   for option in options {
     if option.key == value {
@@ -43,9 +43,9 @@ pub fn select_value(
 ///|
 pub fn[C : @minimoon.IsChildren] select_item(
   on_tap~ : @minimoon.Cmd,
-  selected? : Bool = false,
-  disabled? : Bool = false,
-  id? : String = "",
+  selected~ : Bool = false,
+  disabled~ : Bool = false,
+  id~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   @minimoon.tap_view(
@@ -68,10 +68,10 @@ pub fn select_trigger(
   on_tap~ : @minimoon.Cmd,
   value~ : String,
   id~ : String,
-  expanded? : Bool = false,
-  disabled? : Bool = false,
-  invalid? : Bool = false,
-  required? : Bool = false,
+  expanded~ : Bool = false,
+  disabled~ : Bool = false,
+  invalid~ : Bool = false,
+  required~ : Bool = false,
   content? : @minimoon.Node,
 ) -> @minimoon.Node {
   @minimoon.button_children(
@@ -99,16 +99,16 @@ pub fn select_controlled(
   options~ : @minimoon.Val[Array[ChoiceOption]],
   value~ : @minimoon.Val[String],
   on_change~ : @minimoon.Emit[String],
-  placeholder? : String = "Select…",
-  disabled? : Bool = false,
+  placeholder~ : String = "Select…",
+  disabled~ : Bool = false,
   open? : @minimoon.Val[Bool],
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
   on_open_change? : @minimoon.Emit[Bool],
-  invalid? : Bool = false,
-  required? : Bool = false,
-  placement? : @headless.Placement = @headless.BottomStart,
-  side_offset? : Double = 8.0,
-  align_offset? : Double = 0.0,
+  invalid~ : Bool = false,
+  required~ : Bool = false,
+  placement~ : @headless.Placement = @headless.BottomStart,
+  side_offset~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
   render_option? : (ChoiceOption, Bool) -> @minimoon.Node,
   render_value? : (String, Array[ChoiceOption]) -> @minimoon.Node,
   render_content? : (Array[@minimoon.Node]) -> @minimoon.Node,
@@ -232,7 +232,7 @@ pub fn select_controlled(
 ///|
 pub fn select_scroll_up_button(
   on_scroll~ : @minimoon.Cmd,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @minimoon.Node {
   button(on_tap=on_scroll, disabled~, variant=Ghost, label="Scroll up", "↑")
 }
@@ -240,7 +240,7 @@ pub fn select_scroll_up_button(
 ///|
 pub fn select_scroll_down_button(
   on_scroll~ : @minimoon.Cmd,
-  disabled? : Bool = false,
+  disabled~ : Bool = false,
 ) -> @minimoon.Node {
   button(on_tap=on_scroll, disabled~, variant=Ghost, label="Scroll down", "↓")
 }
@@ -266,9 +266,9 @@ pub fn select(
   context : UiContext,
   id~ : String,
   options~ : @minimoon.Val[Array[ChoiceOption]],
-  initial_value? : String = "",
-  placeholder? : String = "Select…",
-  disabled? : Bool = false,
+  initial_value~ : String = "",
+  placeholder~ : String = "Select…",
+  disabled~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (value, update) = @minimoon.create_variable(initial_value)
   select_controlled(
@@ -292,7 +292,7 @@ pub fn input_group_input(
   id~ : String,
   value~ : @minimoon.Val[String],
   on_change~ : @minimoon.Emit[String],
-  options? : InputOptions = input_options(),
+  options~ : InputOptions = input_options(),
 ) -> @minimoon.Val[@minimoon.Node] {
   input_with_focus(id~, value~, on_input=on_change, options~).map(
     input_group_control,
@@ -304,7 +304,7 @@ pub fn input_group_textarea(
   id~ : String,
   value~ : @minimoon.Val[String],
   on_change~ : @minimoon.Emit[String],
-  options? : InputOptions = input_options(),
+  options~ : InputOptions = input_options(),
 ) -> @minimoon.Val[@minimoon.Node] {
   textarea_with_focus(id~, value~, on_input=on_change, options~).map(
     input_group_control,

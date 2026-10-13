@@ -17,18 +17,18 @@ pub struct PageRuntime {
 }
 
 ///|
-pub fn runtime_api_version() -> Int {
+pub fn runtime_api_version() -> Int32 {
   @versions.runtime_api_version()
 }
 
 ///|
 #cfg(target="js")
-extern "js" fn capture_runtime_wake_v12() -> (Int) -> Unit =
+extern "js" fn capture_runtime_wake_v12() -> (Int32) -> Unit =
   #|() => typeof globalThis.__minimoonRuntimeWakeV12 === "function" ? globalThis.__minimoonRuntimeWakeV12 : (_through) => {}
 
 ///|
 #cfg(not(target="js"))
-fn capture_runtime_wake_v12() -> (Int) -> Unit {
+fn capture_runtime_wake_v12() -> (Int32) -> Unit {
   _ => ()
 }
 

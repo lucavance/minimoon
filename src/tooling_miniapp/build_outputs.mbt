@@ -33,7 +33,7 @@ fn output_path_problem(
   source_wxss : String,
   tailwind_input : String,
   config_name : String,
-  source_paths? : Array[String] = ["src"],
+  source_paths~ : Array[String] = ["src"],
 ) -> (String, String)? {
   let tailwind_temporary = join(
     dirname(tailwind_input),

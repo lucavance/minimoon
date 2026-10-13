@@ -2,12 +2,12 @@
 pub fn carousel_controlled(
   id~ : String,
   items~ : @minimoon.Val[Array[Panel]],
-  current~ : @minimoon.Val[Int],
-  on_change~ : @minimoon.Emit[Int],
-  autoplay? : Bool = false,
-  circular? : Bool = false,
-  vertical? : Bool = false,
-  interval? : Int = 5000,
+  current~ : @minimoon.Val[Int32],
+  on_change~ : @minimoon.Emit[Int32],
+  autoplay~ : Bool = false,
+  circular~ : Bool = false,
+  vertical~ : Bool = false,
+  interval~ : Int32 = 5000,
 ) -> @minimoon.Val[@minimoon.Node] {
   let dispatch = carousel_dispatch(
     items.map(items => items.length()),
@@ -61,10 +61,10 @@ pub fn carousel_controlled(
 pub fn carousel(
   id~ : String,
   items~ : @minimoon.Val[Array[Panel]],
-  autoplay? : Bool = false,
-  circular? : Bool = false,
-  vertical? : Bool = false,
-  interval? : Int = 5000,
+  autoplay~ : Bool = false,
+  circular~ : Bool = false,
+  vertical~ : Bool = false,
+  interval~ : Int32 = 5000,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (current, emit) = @minimoon.create_variable(0)
   carousel_controlled(
@@ -82,10 +82,10 @@ pub fn carousel(
 ///|
 pub fn[C : @minimoon.IsChildren] scroll_area(
   children : C,
-  id? : String = "",
-  horizontal? : Bool = false,
-  vertical? : Bool = true,
-  height? : Int = 320,
+  id~ : String = "",
+  horizontal~ : Bool = false,
+  vertical~ : Bool = true,
+  height~ : Int32 = 320,
   on_scroll? : @minimoon.Emit[@minimoon.ScrollDetail],
   on_upper? : @minimoon.Cmd,
   on_lower? : @minimoon.Cmd,
@@ -113,7 +113,7 @@ pub(all) struct NavigationItem {
 ///|
 pub fn navigation_menu(
   items : Array[NavigationItem],
-  id? : String = "",
+  id~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "navigation-menu",
@@ -136,8 +136,8 @@ pub fn sidebar_controlled(
   content~ : @minimoon.Val[@minimoon.Node],
   collapsed~ : @minimoon.Val[Bool],
   on_change~ : @minimoon.Emit[Bool],
-  label? : String = "Navigation",
-  width? : Int = 256,
+  label~ : String = "Navigation",
+  width~ : Int32 = 256,
 ) -> @minimoon.Val[@minimoon.Node] {
   @minimoon.Val::view2(content, collapsed, (content, collapsed) => {
     ui_container(
@@ -172,9 +172,9 @@ pub fn sidebar_controlled(
 pub fn sidebar(
   id~ : String,
   content~ : @minimoon.Val[@minimoon.Node],
-  initially_collapsed? : Bool = false,
-  label? : String = "Navigation",
-  width? : Int = 256,
+  initially_collapsed~ : Bool = false,
+  label~ : String = "Navigation",
+  width~ : Int32 = 256,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (collapsed, emit) = @minimoon.create_variable(initially_collapsed)
   sidebar_controlled(

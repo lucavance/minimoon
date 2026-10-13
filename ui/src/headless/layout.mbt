@@ -29,8 +29,8 @@ pub fn place(
   surface : Bounds,
   viewport : Bounds,
   placement : Placement,
-  gap? : Double = 8.0,
-  align_offset? : Double = 0.0,
+  gap~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
 ) -> Bounds {
   let horizontal = placement is LeftStart ||
     placement is LeftCenter ||
@@ -116,7 +116,7 @@ pub fn place(
 /// Resize one adjacent pair without changing total size or unrelated panes.
 pub fn resize_pair(
   sizes : Array[Double],
-  index : Int,
+  index : Int32,
   delta : Double,
   minimums : Array[Double],
   maximums : Array[Double],
@@ -139,7 +139,7 @@ pub fn resize_pair(
 }
 
 ///|
-pub fn page_count(total : Int, page_size : Int) -> Int {
+pub fn page_count(total : Int32, page_size : Int32) -> Int32 {
   if total <= 0 {
     1
   } else {

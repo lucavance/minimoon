@@ -1,18 +1,18 @@
 ///|
 /// RUI multi-thumb normalization adapted for native touch input (MIT).
 pub struct SliderSpec {
-  min : Int
-  max : Int
-  step : Int
-  min_steps_between : Int
+  min : Int32
+  max : Int32
+  step : Int32
+  min_steps_between : Int32
 } derive(Eq, Debug)
 
 ///|
 pub fn slider_spec(
-  min? : Int = 0,
-  max? : Int = 100,
-  step? : Int = 1,
-  min_steps_between? : Int = 0,
+  min~ : Int32 = 0,
+  max~ : Int32 = 100,
+  step~ : Int32 = 1,
+  min_steps_between~ : Int32 = 0,
 ) -> SliderSpec {
   guard min >= -100000000 &&
     max <= 100000000 &&
@@ -27,7 +27,7 @@ pub fn slider_spec(
 }
 
 ///|
-pub fn SliderSpec::snap(self : SliderSpec, value : Double) -> Int {
+pub fn SliderSpec::snap(self : SliderSpec, value : Double) -> Int32 {
   let value = if value != value {
     self.min.to_double()
   } else {
@@ -43,8 +43,8 @@ pub fn SliderSpec::snap(self : SliderSpec, value : Double) -> Int {
 ///|
 pub fn SliderSpec::normalize(
   self : SliderSpec,
-  values : Array[Int],
-) -> Array[Int] {
+  values : Array[Int32],
+) -> Array[Int32] {
   let values = if values.is_empty() {
     [self.min]
   } else {
@@ -69,10 +69,10 @@ pub fn SliderSpec::normalize(
 ///|
 pub fn SliderSpec::update(
   self : SliderSpec,
-  values : Array[Int],
-  index : Int,
+  values : Array[Int32],
+  index : Int32,
   value : Double,
-) -> Array[Int] {
+) -> Array[Int32] {
   let result = self.normalize(values)
   guard index >= 0 && index < result.length() else { return result }
   let gap = self.min_steps_between * self.step
@@ -87,7 +87,7 @@ pub fn SliderSpec::update(
 }
 
 ///|
-pub fn SliderSpec::fraction(self : SliderSpec, value : Int) -> Double {
+pub fn SliderSpec::fraction(self : SliderSpec, value : Int32) -> Double {
   ((value - self.min).to_double() / (self.max - self.min).to_double()).clamp(
     min=0.0,
     max=1.0,
@@ -97,9 +97,9 @@ pub fn SliderSpec::fraction(self : SliderSpec, value : Int) -> Double {
 ///|
 pub fn SliderSpec::nearest(
   self : SliderSpec,
-  values : Array[Int],
+  values : Array[Int32],
   value : Double,
-) -> Int {
+) -> Int32 {
   let values = self.normalize(values)
   let mut nearest = 0
   let mut distance = (values[0].to_double() - value).abs()

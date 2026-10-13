@@ -1,20 +1,20 @@
 ///|
 /// Multi-thumb slider uses only typed native touch and page-local layout measurement.
 priv struct SliderDrag {
-  token : Int
-  pointer : Int
+  token : Int32
+  pointer : Int32
   x : Double
   y : Double
-  initial : Array[Int]
-  last : Array[Int]
-  index : Int
+  initial : Array[Int32]
+  last : Array[Int32]
+  index : Int32
   bounds : @minimoon.NodeRect?
   ended : Bool
 } derive(Eq)
 
 ///|
 priv struct SliderState {
-  token : Int
+  token : Int32
   drag : SliderDrag?
 } derive(Eq)
 
@@ -25,13 +25,13 @@ priv enum SliderMessage {
   EndDrag(@minimoon.TouchDetail)
   CancelDrag
   CancelDragTouch(@minimoon.TouchDetail)
-  Measured(Int, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
+  Measured(Int32, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
 }
 
 ///|
 fn slider_point(
   points : Array[@minimoon.TouchPoint],
-  identifier : Int,
+  identifier : Int32,
 ) -> @minimoon.TouchPoint? {
   for point in points {
     if point.identifier == identifier {
@@ -65,14 +65,14 @@ fn slider_position(
 pub fn slider_values_controlled(
   context : UiContext,
   id~ : String,
-  values~ : @minimoon.Val[Array[Int]],
-  on_change~ : @minimoon.Emit[Array[Int]],
-  on_commit? : @minimoon.Emit[Array[Int]],
-  spec? : @headless.SliderSpec = @headless.slider_spec(),
-  orientation? : Orientation = Horizontal,
-  direction? : @theme.TextDirection = @theme.Ltr,
-  disabled? : Bool = false,
-  label? : String = "Value",
+  values~ : @minimoon.Val[Array[Int32]],
+  on_change~ : @minimoon.Emit[Array[Int32]],
+  on_commit? : @minimoon.Emit[Array[Int32]],
+  spec~ : @headless.SliderSpec = @headless.slider_spec(),
+  orientation~ : Orientation = Horizontal,
+  direction~ : @theme.TextDirection = @theme.Ltr,
+  disabled~ : Bool = false,
+  label~ : String = "Value",
 ) -> @minimoon.Val[@minimoon.Node] {
   validate_measured_id(id)
   let (state, emit) = @minimoon.create_state_with_input(
@@ -328,14 +328,14 @@ pub fn slider_values_controlled(
 pub fn slider_values(
   context : UiContext,
   id~ : String,
-  default_values~ : Array[Int],
-  spec? : @headless.SliderSpec = @headless.slider_spec(),
-  orientation? : Orientation = Horizontal,
-  direction? : @theme.TextDirection = @theme.Ltr,
-  disabled? : Bool = false,
-  label? : String = "Value",
-  on_value_change? : @minimoon.Emit[Array[Int]],
-  on_value_commit? : @minimoon.Emit[Array[Int]],
+  default_values~ : Array[Int32],
+  spec~ : @headless.SliderSpec = @headless.slider_spec(),
+  orientation~ : Orientation = Horizontal,
+  direction~ : @theme.TextDirection = @theme.Ltr,
+  disabled~ : Bool = false,
+  label~ : String = "Value",
+  on_value_change? : @minimoon.Emit[Array[Int32]],
+  on_value_commit? : @minimoon.Emit[Array[Int32]],
 ) -> @minimoon.Val[@minimoon.Node] {
   let (values, update) = @minimoon.create_variable(
     spec.normalize(default_values),
@@ -363,14 +363,14 @@ pub fn slider_values(
 pub fn slider_controlled(
   context : UiContext,
   id~ : String,
-  value~ : @minimoon.Val[Int],
-  on_change~ : @minimoon.Emit[Int],
-  on_commit? : @minimoon.Emit[Int],
-  spec? : @headless.SliderSpec = @headless.slider_spec(),
-  orientation? : Orientation = Horizontal,
-  direction? : @theme.TextDirection = @theme.Ltr,
-  disabled? : Bool = false,
-  label? : String = "Value",
+  value~ : @minimoon.Val[Int32],
+  on_change~ : @minimoon.Emit[Int32],
+  on_commit? : @minimoon.Emit[Int32],
+  spec~ : @headless.SliderSpec = @headless.slider_spec(),
+  orientation~ : Orientation = Horizontal,
+  direction~ : @theme.TextDirection = @theme.Ltr,
+  disabled~ : Bool = false,
+  label~ : String = "Value",
 ) -> @minimoon.Val[@minimoon.Node] {
   slider_values_controlled(
     context,
@@ -390,14 +390,14 @@ pub fn slider_controlled(
 pub fn slider(
   context : UiContext,
   id~ : String,
-  default_value? : Int = 0,
-  spec? : @headless.SliderSpec = @headless.slider_spec(),
-  orientation? : Orientation = Horizontal,
-  direction? : @theme.TextDirection = @theme.Ltr,
-  disabled? : Bool = false,
-  label? : String = "Value",
-  on_value_change? : @minimoon.Emit[Int],
-  on_value_commit? : @minimoon.Emit[Int],
+  default_value~ : Int32 = 0,
+  spec~ : @headless.SliderSpec = @headless.slider_spec(),
+  orientation~ : Orientation = Horizontal,
+  direction~ : @theme.TextDirection = @theme.Ltr,
+  disabled~ : Bool = false,
+  label~ : String = "Value",
+  on_value_change? : @minimoon.Emit[Int32],
+  on_value_commit? : @minimoon.Emit[Int32],
 ) -> @minimoon.Val[@minimoon.Node] {
   slider_values(
     context,

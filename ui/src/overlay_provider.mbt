@@ -1,7 +1,7 @@
 ///|
 priv enum OverlayRequest {
   Request(Bool, OverlayCloseReason)
-  Apply(Int, Bool, OverlayCloseReason)
+  Apply(Int32, Bool, OverlayCloseReason)
   Hide
   InputChanged
   Toggle
@@ -16,16 +16,16 @@ pub fn[Input : Eq] overlay_provider_controlled_with_input(
   open~ : @minimoon.Val[Bool],
   on_open_change~ : @minimoon.Emit[Bool],
   render~ : (OverlayScope, Input) -> @minimoon.Node,
-  kind? : OverlayKind = DialogSurface,
-  disabled? : Bool = false,
+  kind~ : OverlayKind = DialogSurface,
+  disabled~ : Bool = false,
   modal? : Bool,
-  close_on_overlay? : Bool = true,
-  force_mount? : Bool = false,
-  placement? : @headless.Placement = @headless.BottomStart,
-  side_offset? : Double = 8.0,
-  align_offset? : Double = 0.0,
-  delay_ms? : Int = 0,
-  close_delay_ms? : Int = 0,
+  close_on_overlay~ : Bool = true,
+  force_mount~ : Bool = false,
+  placement~ : @headless.Placement = @headless.BottomStart,
+  side_offset~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
+  delay_ms~ : Int32 = 0,
+  close_delay_ms~ : Int32 = 0,
   on_close? : @minimoon.Emit[OverlayCloseReason],
 ) -> @minimoon.Val[@minimoon.Node] {
   let floating = kind is PopoverSurface ||
@@ -162,16 +162,16 @@ pub fn overlay_provider_controlled(
   open~ : @minimoon.Val[Bool],
   on_open_change~ : @minimoon.Emit[Bool],
   render~ : (OverlayScope) -> @minimoon.Node,
-  kind? : OverlayKind = DialogSurface,
-  disabled? : Bool = false,
+  kind~ : OverlayKind = DialogSurface,
+  disabled~ : Bool = false,
   modal? : Bool,
-  close_on_overlay? : Bool = true,
-  force_mount? : Bool = false,
-  placement? : @headless.Placement = @headless.BottomStart,
-  side_offset? : Double = 8.0,
-  align_offset? : Double = 0.0,
-  delay_ms? : Int = 0,
-  close_delay_ms? : Int = 0,
+  close_on_overlay~ : Bool = true,
+  force_mount~ : Bool = false,
+  placement~ : @headless.Placement = @headless.BottomStart,
+  side_offset~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
+  delay_ms~ : Int32 = 0,
+  close_delay_ms~ : Int32 = 0,
   on_close? : @minimoon.Emit[OverlayCloseReason],
 ) -> @minimoon.Val[@minimoon.Node] {
   overlay_provider_controlled_with_input(
@@ -200,17 +200,17 @@ pub fn overlay_provider(
   context : UiContext,
   id~ : String,
   render~ : (OverlayScope) -> @minimoon.Node,
-  initially_open? : Bool = false,
-  kind? : OverlayKind = DialogSurface,
-  disabled? : Bool = false,
+  initially_open~ : Bool = false,
+  kind~ : OverlayKind = DialogSurface,
+  disabled~ : Bool = false,
   modal? : Bool,
-  close_on_overlay? : Bool = true,
-  force_mount? : Bool = false,
-  placement? : @headless.Placement = @headless.BottomStart,
-  side_offset? : Double = 8.0,
-  align_offset? : Double = 0.0,
-  delay_ms? : Int = 0,
-  close_delay_ms? : Int = 0,
+  close_on_overlay~ : Bool = true,
+  force_mount~ : Bool = false,
+  placement~ : @headless.Placement = @headless.BottomStart,
+  side_offset~ : Double = 8.0,
+  align_offset~ : Double = 0.0,
+  delay_ms~ : Int32 = 0,
+  close_delay_ms~ : Int32 = 0,
   on_close? : @minimoon.Emit[OverlayCloseReason],
   on_open_change? : @minimoon.Emit[Bool],
 ) -> @minimoon.Val[@minimoon.Node] {

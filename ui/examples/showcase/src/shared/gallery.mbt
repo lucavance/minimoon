@@ -29,7 +29,7 @@ pub fn page(
   id : String,
   title : String,
   build : (@ui.UiContext) -> @minimoon.Val[@minimoon.Node],
-  capabilities? : Array[@minimoon.Capability] = [],
+  capabilities~ : Array[@minimoon.Capability] = [],
 ) -> @minimoon.Page {
   @minimoon.page(
     id="ui_" + id,

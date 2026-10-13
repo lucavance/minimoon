@@ -3,8 +3,8 @@
 // Diagnostics belong to the latest attempt rather than the last valid build.
 async fn build_output_snapshot(
   app : String,
-  dist? : String = "dist",
-  source_wxss? : String = "styles/app.wxss",
+  dist~ : String = "dist",
+  source_wxss~ : String = "styles/app.wxss",
 ) -> Array[(String, Bytes)] {
   let entries : Array[(String, Bytes)] = []
   for directory in [dist, "generated"] {

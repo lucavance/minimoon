@@ -2,17 +2,17 @@
 /// One native input owns IME, paste and focus; visible slots do not invent key events.
 pub struct OtpScope {
   value : String
-  length : Int
-  active_index : Int
+  length : Int32
+  active_index : Int32
   disabled : Bool
   invalid : Bool
 } derive(Eq, Debug)
 
 ///|
 pub fn input_otp_slot(
-  value? : String = "",
-  active? : Bool = false,
-  id? : String = "",
+  value~ : String = "",
+  active~ : Bool = false,
+  id~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "input-otp-slot",
@@ -27,12 +27,12 @@ pub fn input_otp_controlled(
   id~ : String,
   value~ : @minimoon.Val[String],
   on_change~ : @minimoon.Emit[String],
-  length? : Int = 6,
-  disabled? : Bool = false,
-  numeric? : Bool = true,
-  separator_after? : Int = -1,
-  invalid? : Bool = false,
-  label? : String = "Verification code",
+  length~ : Int32 = 6,
+  disabled~ : Bool = false,
+  numeric~ : Bool = true,
+  separator_after~ : Int32 = -1,
+  invalid~ : Bool = false,
+  label~ : String = "Verification code",
   accept? : (Char) -> Bool,
   render? : (OtpScope) -> @minimoon.Node,
   on_complete? : @minimoon.Emit[String],
@@ -115,13 +115,13 @@ pub fn input_otp_controlled(
 ///|
 pub fn input_otp(
   id~ : String,
-  initial_value? : String = "",
-  length? : Int = 6,
-  disabled? : Bool = false,
-  numeric? : Bool = true,
-  separator_after? : Int = -1,
-  invalid? : Bool = false,
-  label? : String = "Verification code",
+  initial_value~ : String = "",
+  length~ : Int32 = 6,
+  disabled~ : Bool = false,
+  numeric~ : Bool = true,
+  separator_after~ : Int32 = -1,
+  invalid~ : Bool = false,
+  label~ : String = "Verification code",
   accept? : (Char) -> Bool,
   render? : (OtpScope) -> @minimoon.Node,
   on_complete? : @minimoon.Emit[String],
@@ -146,7 +146,7 @@ pub fn input_otp(
 ///|
 fn normalize_otp(
   value : String,
-  length : Int,
+  length : Int32,
   numeric : Bool,
   accept : ((Char) -> Bool)?,
 ) -> String {

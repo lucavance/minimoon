@@ -15,7 +15,7 @@ test "resource selection is deterministic and transitive" {
   guard @resources.resources([]).assets[0].content is @build_resources.Text(all) else {
     abort("text manifest")
   }
-  assert_eq(all.split("\n").length(), 67)
+  assert_eq(all.split("\n").count(), 67)
 }
 
 ///|

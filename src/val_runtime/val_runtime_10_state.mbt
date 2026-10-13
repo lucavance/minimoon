@@ -96,7 +96,7 @@ pub fn[E : Eq, C : Eq] Val::enumerate_by(
 ///|
 pub fn[E : Eq, C : Eq] Val::enumerate_bounded_by(
   self : Val[E],
-  capacity~ : Int,
+  capacity~ : Int32,
   build~ : (E, Val[E]) -> Val[C],
   by~ : (E) -> String,
 ) -> Val[C] {

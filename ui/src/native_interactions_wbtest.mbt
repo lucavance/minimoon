@@ -25,7 +25,7 @@ fn native_touch(
   x : Double,
   y : Double,
   time : Double,
-  pointer? : Int = 1,
+  pointer~ : Int32 = 1,
 ) -> String {
   let point = Json::object({
     "identifier": Json::number(pointer.to_double()),

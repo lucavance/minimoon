@@ -11,8 +11,8 @@ pub(all) struct ResizablePane {
 pub fn resizable_pane(
   key~ : String,
   content~ : @minimoon.Node,
-  minimum? : Double = 0.0,
-  maximum? : Double = 100.0,
+  minimum~ : Double = 0.0,
+  maximum~ : Double = 100.0,
 ) -> ResizablePane {
   guard key != "" && minimum >= 0.0 && maximum <= 100.0 && minimum <= maximum else {
     abort("resizable pane requires a key and 0 <= minimum <= maximum <= 100")
@@ -81,8 +81,8 @@ fn resize_sizes(
 
 ///|
 priv struct ResizeDrag {
-  pointer : Int
-  index : Int
+  pointer : Int32
+  index : Int32
   keys : Array[String]
   initial : Array[Double]
   start : Double
@@ -93,19 +93,19 @@ priv struct ResizeDrag {
 
 ///|
 priv struct ResizeState {
-  token : Int
+  token : Int32
   drag : ResizeDrag?
 } derive(Eq)
 
 ///|
 priv enum ResizeMsg {
-  StartResize(Int, @minimoon.TouchDetail)
+  StartResize(Int32, @minimoon.TouchDetail)
   MoveResize(@minimoon.TouchDetail)
   EndResize(@minimoon.TouchDetail)
   CancelResize
   CancelResizeTouch(@minimoon.TouchDetail)
-  MeasuredResize(Int, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
-  ResizeStep(Int, Double)
+  MeasuredResize(Int32, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
+  ResizeStep(Int32, Double)
 }
 
 ///|
@@ -140,10 +140,10 @@ pub fn resizable_controlled(
   sizes~ : @minimoon.Val[Array[Double]],
   on_change~ : @minimoon.Emit[Array[Double]],
   on_commit? : @minimoon.Emit[Array[Double]],
-  orientation? : Orientation = Horizontal,
-  direction? : @theme.TextDirection = @theme.Ltr,
-  disabled? : Bool = false,
-  style? : String = "height:320px;",
+  orientation~ : Orientation = Horizontal,
+  direction~ : @theme.TextDirection = @theme.Ltr,
+  disabled~ : Bool = false,
+  style~ : String = "height:320px;",
 ) -> @minimoon.Val[@minimoon.Node] {
   let input = @minimoon.Val::map2(panes, sizes, (panes, sizes) => {
     (panes, resize_sizes(panes, sizes))
@@ -395,11 +395,11 @@ pub fn resizable(
   context : UiContext,
   id~ : String,
   panes~ : @minimoon.Val[Array[ResizablePane]],
-  initial_sizes? : Array[Double] = [],
-  orientation? : Orientation = Horizontal,
-  direction? : @theme.TextDirection = @theme.Ltr,
-  disabled? : Bool = false,
-  style? : String = "height:320px;",
+  initial_sizes~ : Array[Double] = [],
+  orientation~ : Orientation = Horizontal,
+  direction~ : @theme.TextDirection = @theme.Ltr,
+  disabled~ : Bool = false,
+  style~ : String = "height:320px;",
 ) -> @minimoon.Val[@minimoon.Node] {
   let (sizes, change) = @minimoon.create_variable(initial_sizes)
   resizable_controlled(

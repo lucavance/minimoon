@@ -1,6 +1,6 @@
 ///|
 pub struct RequestResult {
-  status_code : Int
+  status_code : Int32
   data : Json
   headers : Map[String, String]
   cookies : Array[String]
@@ -205,7 +205,7 @@ fn http_payload(
   query : Array[Query],
   headers : Map[String, String],
   body : RequestBody?,
-  timeout_ms : Int?,
+  timeout_ms : Int32?,
 ) -> Result[Json, String] {
   guard http_url_valid(url) else {
     return Err(
@@ -304,7 +304,7 @@ fn http_payload(
   fields["method"] = Json::string(verb.wire())
   fields["header"] = Json::object(normalized)
   if timeout_ms is Some(ms) {
-    fields["timeout"] = ms.to_json()
+    fields["timeout"] = Json(ms)
   }
   Ok(Json::object(fields))
 }
@@ -315,11 +315,11 @@ fn http_payload(
 pub fn request(
   url : String,
   resolve : Emit[Result[RequestResult, HostError]],
-  http_method? : HttpMethod = Get,
-  query? : Array[Query] = [],
-  headers? : Map[String, String] = Map([]),
+  http_method~ : HttpMethod = Get,
+  query~ : Array[Query] = [],
+  headers~ : Map[String, String] = Map([]),
   body? : RequestBody,
-  timeout_ms? : Int,
+  timeout_ms? : Int32,
 ) -> Cmd {
   match http_payload(url, http_method, query, headers, body, timeout_ms) {
     Ok(payload) => host_effect(Request, payload, decode_request, resolve)

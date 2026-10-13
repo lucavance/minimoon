@@ -159,13 +159,13 @@ the user explicitly authorizes that action.
   whitespace and trailing commas when the exact formatting is not the behavior
   under test.
 
-- The supported toolchain floor is `moon 0.1.20260920` with `moonc v0.10.14`.
+- The supported toolchain floor is `moon 0.1.20261012` with `moonc v0.10.15`.
   Both CI jobs use the official installer pinned to the complete prebuilt
-  release `0.10.14+7d59c7ec9` (`moon 0.1.20260920`), not latest; Rust is not required.
-  Older MoonBit toolchains must be upgraded for core `0.2.2` and later / UI `0.1.1`.
+  release `0.10.15+943464bfa` (`moon 0.1.20261012`), not latest; Rust is not required.
+  Older MoonBit toolchains must be upgraded for core `0.2.7` / UI `0.1.5`.
   JavaScript tooling
   supports Node `>=24.20.0`; CI validates the 24.20.0 lower boundary and the
-  26.11.1 primary environment, while global `vp 1.1.0` manages Bun `1.4.2`.
+  26.11.1 primary environment, while global `vp 1.1.0` manages Bun `1.4.3`.
   The repository and Starters generated from current source pin Node `26.11.1`
   through `devEngines.runtime`; CI overrides it for lower-bound checks. No `.node-version`
   is committed or generated. Updating the toolchain pin requires review and
@@ -174,9 +174,9 @@ the user explicitly authorizes that action.
   `Json::empty_object()` for empty JSON objects, and `{ () }` for empty blocks.
   The aggregate gate requires `moon check` to be warning-free.
 
-- The current source pair is core `0.2.6` / UI `0.1.4`.
-  Previous registry CLI `0.2.5` generates
-  its original Node `26.10.0`, PostCSS `8.5.28` and weapp-tailwindcss `5.5.11`
+- The current source pair is the candidate core `0.2.7` / UI `0.1.5`.
+  Published registry CLI `0.2.6` generates
+  its original Node `26.11.1`, PostCSS `8.5.29` and weapp-tailwindcss `5.5.12`
   pins. Before the new pair is published, use the source CLI for refreshed
   Starter output. Published archives remain immutable; historical release
   evidence does not establish a host pass for changed artifact fingerprints.
@@ -231,18 +231,19 @@ source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
 
-For the core `0.2.6` / UI `0.1.4` toolchain and dependency refresh, the user
-explicitly authorizes pushing the reviewed candidate after complete local
-candidate checks, then publishing after both CI jobs pass for the frozen commit
-and fingerprint-matched WeChat Developer Tools validation passes for both fixtures.
-Notify the user when CI passes, then
-continue the authorized publication. Keep tracked reports at `release: false`
-and Developer Tools status `pending`; never record an unperformed host pass or
-weaken `verify --release`, `check:all`, or `check:mvp`. This scoped authorization
-is documented in `docs/operations/release_candidate_handoff.md` and does not
-waive package, consumer, source-cleanliness, or version checks. Publish core
-`0.2.6` first, validate fresh registry consumers, then publish UI `0.1.4` with
-its core `0.2.6` dependency from the independently reviewed archive. Core
+The core `0.2.7` / UI `0.1.5` upgrade is authorized for commit and push to
+`main`, followed by CI, after complete local candidate checks. The user will
+perform WeChat Developer Tools validation afterward. Publication requires
+separate authorization and all release gates. The exact braces `3.0.3` advisory
+exception is approved until `2026-11-23T00:00:00Z`; keep complete scanning,
+strict matching and expiry enforcement.
+
+The previously authorized core `0.2.6` / UI `0.1.4` publication completed on
+2026-10-08 after local checks, both CI jobs and exact-fingerprint host validation.
+Keep tracked reports at `release: false` and Developer Tools status `pending`;
+never record an unperformed host pass or weaken `verify --release`, `check:all`,
+or `check:mvp`. Historical release procedures are documented in
+`docs/operations/release_candidate_handoff.md`. Core
 `0.2.5` / UI `0.1.3` were published on 2026-09-30. Prior core
 `0.2.4` / UI `0.1.2`, core `0.2.2` / UI `0.1.1`, and core-only `0.2.3`
 publication records remain historical; this authorization does not extend to

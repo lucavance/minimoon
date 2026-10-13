@@ -8,7 +8,9 @@ enum RuntimeMsg {
 } derive(Eq)
 
 ///|
-fn runtime_component(initial : Int) -> @runtime_core.Component[Int, RuntimeMsg] {
+fn runtime_component(
+  initial : Int32,
+) -> @runtime_core.Component[Int32, RuntimeMsg] {
   @runtime_core.checked_component(
     model=initial,
     update=(model, msg) => {
@@ -247,7 +249,7 @@ enum OwnedEffectMsg {
   StartOwnedEffect
   StartSynchronousOwnedEffect
   OwnedEffectIncrement
-  OwnedEffectAppend(Int)
+  OwnedEffectAppend(Int32)
 } derive(Eq)
 
 ///|
@@ -262,7 +264,7 @@ test "local effects are page-owned, wake after emits, and cancel on dispose" {
   let saved_finish : Ref[(() -> Unit)?] = Ref(None)
   let cancellations = Ref(0)
   let wakes = Ref(0)
-  let wake_sequences : Array[Int] = []
+  let wake_sequences : Array[Int32] = []
   let component = @runtime_core.checked_component(
     model=0,
     update=(model, msg) => {
@@ -414,7 +416,7 @@ test "component context owns cleanup and rejects late writes" {
 
 ///|
 test "command mapping preserves host effects and navigation" {
-  let command : @runtime_core.Cmd[Int] = @runtime_core.cmd_batch([
+  let command : @runtime_core.Cmd[Int32] = @runtime_core.cmd_batch([
     @runtime_core.message(1),
     @runtime_core.navigate_to_cmd("/pages/details/details"),
     @runtime_core.navigate_back_or_redirect_cmd(1, "/pages/home/home"),
@@ -436,9 +438,9 @@ test "command mapping preserves host effects and navigation" {
 
 ///|
 test "command helpers cover local effects and navigation" {
-  let empty_command : @runtime_core.Cmd[Int] = @runtime_core.none()
+  let empty_command : @runtime_core.Cmd[Int32] = @runtime_core.none()
   match
-    @runtime_core.map_cmd(empty_command, (value : Int) => value.to_string()) {
+    @runtime_core.map_cmd(empty_command, (value : Int32) => value.to_string()) {
     CmdNone => ()
     _ => fail("mapped empty command missing")
   }
@@ -470,10 +472,12 @@ test "command helpers cover local effects and navigation" {
       assert_eq(resolve(HostEffectOk("{}")), "host:9")
     _ => fail("mapped host effect missing")
   }
-  let redirect_command : @runtime_core.Cmd[Int] = @runtime_core.redirect_to_cmd(
+  let redirect_command : @runtime_core.Cmd[Int32] = @runtime_core.redirect_to_cmd(
     "/redirect",
   )
-  let back_command : @runtime_core.Cmd[Int] = @runtime_core.navigate_back_cmd(2)
+  let back_command : @runtime_core.Cmd[Int32] = @runtime_core.navigate_back_cmd(
+    2,
+  )
   for
     command in [
       @runtime_core.map_cmd(redirect_command, value => value.to_string()),
@@ -484,13 +488,13 @@ test "command helpers cover local effects and navigation" {
       _ => fail("mapped navigation command missing")
     }
   }
-  let (model, _) : (Int, @runtime_core.Cmd[Unit]) = @runtime_core.with_navigate_to(
+  let (model, _) : (Int32, @runtime_core.Cmd[Unit]) = @runtime_core.with_navigate_to(
     1, "/next",
   )
-  let (redirected, _) : (Int, @runtime_core.Cmd[Unit]) = @runtime_core.with_redirect_to(
+  let (redirected, _) : (Int32, @runtime_core.Cmd[Unit]) = @runtime_core.with_redirect_to(
     2, "/redirect",
   )
-  let (back, _) : (Int, @runtime_core.Cmd[Unit]) = @runtime_core.with_navigate_back(
+  let (back, _) : (Int32, @runtime_core.Cmd[Unit]) = @runtime_core.with_navigate_back(
     3, 1,
   )
   assert_eq(model + redirected + back, 6)

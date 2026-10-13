@@ -15,7 +15,7 @@ fn field(json : Json, key : String) -> Json {
 }
 
 ///|
-fn string(json : Json, key : String, fallback? : String = "") -> String {
+fn string(json : Json, key : String, fallback~ : String = "") -> String {
   match object(json, key).get(key) {
     Some(String(value)) => value
     Some(Null) | None => fallback
@@ -67,7 +67,7 @@ fn fingerprint_bytes(hash : UInt64, bytes : Bytes) -> UInt64 {
 }
 
 ///|
-fn fingerprint_length(hash : UInt64, length : Int) -> UInt64 {
+fn fingerprint_length(hash : UInt64, length : Int32) -> UInt64 {
   let mut current = hash
   let value = length.to_uint64()
   for shift = 0; shift < 64; shift = shift + 8 {
@@ -273,7 +273,7 @@ async fn run(
   command : String,
   args : Array[String],
   cwd : String,
-  timeout_ms? : Int = 30000,
+  timeout_ms~ : Int32 = 30000,
 ) -> (Bool, String) {
   let (code, stdout, stderr) = @async.with_timeout(timeout_ms, () => {
     @toolchain.collect_output(command, args, cwd~)
@@ -300,7 +300,7 @@ async fn run(
 ///|
 fn host_smoke_source(
   page_files : Array[String],
-  inputs? : Array[Json] = [],
+  inputs~ : Array[Json] = [],
 ) -> String {
   @host_js.host_smoke_source(page_files, inputs~)
 }

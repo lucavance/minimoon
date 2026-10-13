@@ -2,17 +2,17 @@
 /// Native span descriptor: use with table_spanning, not the flex table_row API.
 pub struct TableSpanCell {
   content : @minimoon.Node
-  colspan : Int
-  rowspan : Int
+  colspan : Int32
+  rowspan : Int32
   header : Bool
 }
 
 ///|
 pub fn[C : @minimoon.IsChildren] table_span_cell(
   children : C,
-  colspan? : Int = 1,
-  rowspan? : Int = 1,
-  header? : Bool = false,
+  colspan~ : Int32 = 1,
+  rowspan~ : Int32 = 1,
+  header~ : Bool = false,
 ) -> TableSpanCell {
   guard colspan > 0 && rowspan > 0 else {
     abort("table spans must be positive")
@@ -28,8 +28,8 @@ pub fn[C : @minimoon.IsChildren] table_span_cell(
 ///|
 pub fn[C : @minimoon.IsChildren] table_span_head(
   children : C,
-  colspan? : Int = 1,
-  rowspan? : Int = 1,
+  colspan~ : Int32 = 1,
+  rowspan~ : Int32 = 1,
 ) -> TableSpanCell {
   table_span_cell(children, colspan~, rowspan~, header=true)
 }
@@ -41,10 +41,10 @@ pub fn[C : @minimoon.IsChildren] table_span_head(
 /// bounded cell; overflowing content is clipped. Invalid overlap/bounds abort.
 pub fn table_spanning(
   rows~ : Array[Array[TableSpanCell]],
-  columns~ : Int,
-  row_height? : Int = 48,
-  min_width? : Int = 0,
-  id? : String = "",
+  columns~ : Int32,
+  row_height~ : Int32 = 48,
+  min_width~ : Int32 = 0,
+  id~ : String = "",
 ) -> @minimoon.Node {
   guard columns > 0 &&
     columns <= 100 &&

@@ -125,16 +125,16 @@ fn orientation_class(value : Orientation) -> String {
 
 ///|
 pub fn[C : @minimoon.IsChildren] button(
-  on_tap? : @minimoon.Cmd = @minimoon.none,
-  variant? : ButtonVariant = Default,
-  size? : ButtonSize = Default,
-  disabled? : Bool = false,
+  on_tap~ : @minimoon.Cmd = @minimoon.none,
+  variant~ : ButtonVariant = Default,
+  size~ : ButtonSize = Default,
+  disabled~ : Bool = false,
   form_type? : @minimoon.FormButtonType,
-  id? : String = "",
-  event_key? : String = "",
-  class? : String = "",
-  style? : String = "",
-  label? : String = "",
+  id~ : String = "",
+  event_key~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
+  label~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   let variant_name = match variant {
@@ -200,9 +200,9 @@ pub fn[C : @minimoon.IsChildren] direction(
 
 ///|
 pub fn[C : @minimoon.IsChildren] alert(
-  variant? : Tone = Default,
-  id? : String = "",
-  class? : String = "",
+  variant~ : Tone = Default,
+  id~ : String = "",
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -216,8 +216,8 @@ pub fn[C : @minimoon.IsChildren] alert(
 
 ///|
 pub fn[C : @minimoon.IsChildren] aspect_ratio(
-  ratio? : Double = 1.0,
-  class? : String = "",
+  ratio~ : Double = 1.0,
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   guard ratio > 0.0 && ratio < 1000000.0 else {
@@ -235,7 +235,7 @@ pub fn[C : @minimoon.IsChildren] aspect_ratio(
 
 ///|
 pub fn[C : @minimoon.IsChildren] button_group(
-  orientation? : Orientation = Horizontal,
+  orientation~ : Orientation = Horizontal,
   children : C,
 ) -> @minimoon.Node {
   ui_container(

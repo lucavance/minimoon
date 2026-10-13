@@ -9,7 +9,7 @@ pub fn initial_echo() -> EchoModel {
 }
 
 ///|
-pub fn echo_label(echo : EchoModel, revision : Int) -> String {
+pub fn echo_label(echo : EchoModel, revision : Int32) -> String {
   if echo.status != EchoIdle && echo.revision != revision {
     return if echo.status == EchoLoading {
       "发送中；内容已修改，旧响应不会用于当前草稿。"
@@ -29,8 +29,8 @@ pub fn echo_label(echo : EchoModel, revision : Int) -> String {
 ///|
 pub fn finish_echo(
   current : EchoModel,
-  token : Int,
-  revision : Int,
+  token : Int32,
+  revision : Int32,
   result : Result[DraftEcho, Error],
 ) -> EchoModel {
   if current.token != token || current.status != EchoLoading {

@@ -19,7 +19,7 @@ fn patch_test_node(
 }
 
 ///|
-fn patch_test_index(token : Json) -> Int {
+fn patch_test_index(token : Json) -> Int32 {
   match token {
     Number(value, ..) => value.to_int()
     _ => abort("expected numeric tree path token")
@@ -96,12 +96,12 @@ fn patch_test_diff(old_tree : Json, next_tree : Json) -> Array[TreePatchOp] {
 }
 
 ///|
-fn patch_test_numbered_child(index : Int, text : String) -> Json {
+fn patch_test_numbered_child(index : Int32, text : String) -> Json {
   patch_test_node("button", "k:" + index.to_string(), text, [])
 }
 
 ///|
-fn patch_test_numbered_children(count : Int) -> Array[Json] {
+fn patch_test_numbered_children(count : Int32) -> Array[Json] {
   Array::makei(count, index => {
     patch_test_numbered_child(index, index.to_string())
   })

@@ -13,9 +13,9 @@ pub fn disclosure_spec(
   id~ : String,
   label~ : String,
   panel~ : @minimoon.Node,
-  root_class? : String = "",
-  trigger_class? : String = "",
-  panel_class? : String = "",
+  root_class~ : String = "",
+  trigger_class~ : String = "",
+  panel_class~ : String = "",
 ) -> DisclosureSpec {
   guard id != "" else { abort("disclosure id must not be empty") }
   { id, label, panel, root_class, trigger_class, panel_class, }
@@ -70,7 +70,7 @@ pub fn disclosure_controlled(
 ///|
 pub fn disclosure(
   spec : DisclosureSpec,
-  initially_expanded? : Bool = false,
+  initially_expanded~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (expanded, update_expanded) = @minimoon.create_variable(
     initially_expanded,

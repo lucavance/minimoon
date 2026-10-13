@@ -62,8 +62,8 @@ pub fn navigation_menu_item_is_open(scope : NavigationMenuItemScope) -> Bool {
 pub fn[C : @minimoon.IsChildren] navigation_menu_list(
   scope : NavigationMenuScope,
   children : C,
-  class? : String = "",
-  style? : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   ui_container(
     "navigation-menu-list",
@@ -79,9 +79,9 @@ pub fn navigation_menu_item(
   scope : NavigationMenuScope,
   value~ : String,
   render~ : (NavigationMenuItemScope) -> @minimoon.Node,
-  disabled? : Bool = false,
-  class? : String = "",
-  style? : String = "",
+  disabled~ : Bool = false,
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   guard value != "" && !scope.keys.contains(value) else {
     abort("navigation items require unique nonempty values")
@@ -99,8 +99,8 @@ pub fn navigation_menu_item(
 pub fn[C : @minimoon.IsChildren] navigation_menu_trigger(
   scope : NavigationMenuItemScope,
   children : C,
-  disabled? : Bool = false,
-  class? : String = "",
+  disabled~ : Bool = false,
+  class~ : String = "",
   on_tap? : @minimoon.Cmd,
 ) -> @minimoon.Node {
   let disabled = disabled || scope.disabled
@@ -166,8 +166,8 @@ fn navigation_surface(
 pub fn[C : @minimoon.IsChildren] navigation_menu_content(
   scope : NavigationMenuItemScope,
   children : C,
-  class? : String = "",
-  style? : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   if !navigation_menu_item_is_open(scope) {
     return @minimoon.nothing()
@@ -199,8 +199,8 @@ pub fn[C : @minimoon.IsChildren] navigation_menu_content(
 pub fn[C : @minimoon.IsChildren] navigation_menu_viewport(
   scope : NavigationMenuScope,
   children : C,
-  class? : String = "",
-  style? : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   guard scope.chrome.val is None else {
     abort("navigation menu has only one shared viewport")
@@ -219,7 +219,7 @@ pub fn[C : @minimoon.IsChildren] navigation_menu_viewport(
 ///|
 pub fn navigation_menu_indicator(
   scope : NavigationMenuItemScope,
-  class? : String = "",
+  class~ : String = "",
 ) -> @minimoon.Node {
   if !navigation_menu_item_is_open(scope) {
     return @minimoon.nothing()
@@ -237,10 +237,10 @@ pub fn navigation_menu_indicator(
 pub fn[C : @minimoon.IsChildren] navigation_menu_link(
   target~ : @minimoon.Route,
   children : C,
-  active? : Bool = false,
+  active~ : Bool = false,
   scope? : NavigationMenuScope,
-  class? : String = "",
-  style? : String = "",
+  class~ : String = "",
+  style~ : String = "",
   on_tap? : @minimoon.Cmd,
 ) -> @minimoon.Node {
   @minimoon.tap_view(

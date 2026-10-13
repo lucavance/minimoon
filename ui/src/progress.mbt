@@ -1,11 +1,11 @@
 ///|
 pub fn progress(
   value~ : Double,
-  min? : Double = 0.0,
-  max? : Double = 100.0,
-  label? : String = "Progress",
-  indeterminate? : Bool = false,
-  show_value? : Bool = false,
+  min~ : Double = 0.0,
+  max~ : Double = 100.0,
+  label~ : String = "Progress",
+  indeterminate~ : Bool = false,
+  show_value~ : Bool = false,
 ) -> @minimoon.Node {
   guard value == value && value > -1.0e100 && value < 1.0e100 else {
     abort("progress value must be finite")
@@ -33,8 +33,8 @@ pub fn progress(
 ///|
 pub fn progress_indicator(
   value~ : Double,
-  min? : Double = 0.0,
-  max? : Double = 100.0,
+  min~ : Double = 0.0,
+  max~ : Double = 100.0,
 ) -> @minimoon.Node {
   progress(value~, min~, max~)
 }
@@ -42,8 +42,8 @@ pub fn progress_indicator(
 ///|
 pub fn progress_value(
   value~ : Double,
-  min? : Double = 0.0,
-  max? : Double = 100.0,
+  min~ : Double = 0.0,
+  max~ : Double = 100.0,
   text? : String,
 ) -> @minimoon.Node {
   guard min > -1.0e100 && max > min && max < 1.0e100 else {

@@ -23,17 +23,17 @@ pub fn[Input] dialog_spec_with_input(
   title~ : String,
   trigger_label~ : String,
   content~ : (@minimoon.Cmd, Input) -> @minimoon.Node,
-  description? : String = "",
-  close_label? : String = "Close",
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
-  root_class? : String = "",
-  trigger_class? : String = "",
-  overlay_class? : String = "",
-  surface_class? : String = "",
-  title_class? : String = "",
-  description_class? : String = "",
-  close_class? : String = "",
+  description~ : String = "",
+  close_label~ : String = "Close",
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
+  root_class~ : String = "",
+  trigger_class~ : String = "",
+  overlay_class~ : String = "",
+  surface_class~ : String = "",
+  title_class~ : String = "",
+  description_class~ : String = "",
+  close_class~ : String = "",
 ) -> DialogSpecWithInput[Input] {
   guard id != "" else { abort("dialog id must not be empty") }
   guard title != "" else { abort("dialog title must not be empty") }
@@ -193,7 +193,7 @@ pub fn[Input : Eq] dialog_controlled_with_input(
 pub fn[Input : Eq] dialog_with_input(
   spec : DialogSpecWithInput[Input],
   input~ : @minimoon.Val[Input],
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, update_open) = @minimoon.create_variable(initially_open)
   dialog_controlled_with_input(
@@ -215,18 +215,18 @@ pub fn[Input] sheet_spec_with_input(
   title~ : String,
   trigger_label~ : String,
   content~ : (@minimoon.Cmd, Input) -> @minimoon.Node,
-  side? : SheetSide = Right,
-  description? : String = "",
-  close_label? : String = "Close",
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
-  root_class? : String = "",
-  trigger_class? : String = "",
-  overlay_class? : String = "",
-  surface_class? : String = "",
-  title_class? : String = "",
-  description_class? : String = "",
-  close_class? : String = "",
+  side~ : SheetSide = Right,
+  description~ : String = "",
+  close_label~ : String = "Close",
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
+  root_class~ : String = "",
+  trigger_class~ : String = "",
+  overlay_class~ : String = "",
+  surface_class~ : String = "",
+  title_class~ : String = "",
+  description_class~ : String = "",
+  close_class~ : String = "",
 ) -> SheetSpecWithInput[Input] {
   let dialog = dialog_spec_with_input(
     id~,
@@ -262,7 +262,7 @@ pub fn[Input : Eq] sheet_controlled_with_input(
 pub fn[Input : Eq] sheet_with_input(
   spec : SheetSpecWithInput[Input],
   input~ : @minimoon.Val[Input],
-  initially_open? : Bool = false,
+  initially_open~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, update_open) = @minimoon.create_variable(initially_open)
   sheet_controlled_with_input(

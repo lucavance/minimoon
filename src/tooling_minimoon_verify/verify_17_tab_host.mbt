@@ -2,7 +2,7 @@
 async fn native_tab_host_status(
   app_root : String,
   manifest : Json,
-  dist_dir? : String = join(app_root, "dist"),
+  dist_dir~ : String = join(app_root, "dist"),
 ) -> Json {
   let routes = array(manifest, "pages").map(page => "/" + string(page, "route"))
   let tabs : Array[String] = []

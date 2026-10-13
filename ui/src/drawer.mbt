@@ -1,7 +1,7 @@
 ///|
 /// Touch-native adaptation of RUI drawer.mbt at b1291945 (MIT).
 priv struct DrawerDrag {
-  pointer : Int
+  pointer : Int32
   start : Double
   position : Double
   started_at : Double
@@ -12,7 +12,7 @@ priv struct DrawerDrag {
 
 ///|
 priv struct DrawerState {
-  token : Int
+  token : Int32
   drag : DrawerDrag?
 } derive(Eq)
 
@@ -23,7 +23,7 @@ priv enum DrawerMsg {
   End(@minimoon.TouchDetail)
   Cancel
   CancelTouch(@minimoon.TouchDetail)
-  Measured(Int, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
+  Measured(Int32, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
 }
 
 ///|
@@ -80,9 +80,9 @@ pub fn drawer_controlled(
   content~ : @minimoon.Val[@minimoon.Node],
   open~ : @minimoon.Val[Bool],
   on_change~ : @minimoon.Emit[Bool],
-  side? : Side = Bottom,
-  disabled? : Bool = false,
-  close_on_overlay? : Bool = true,
+  side~ : Side = Bottom,
+  disabled~ : Bool = false,
+  close_on_overlay~ : Bool = true,
 ) -> @minimoon.Val[@minimoon.Node] {
   open.switch_by(
     (opened, _) => {
@@ -282,9 +282,9 @@ pub fn drawer(
   title~ : String,
   trigger_label~ : String,
   content~ : @minimoon.Val[@minimoon.Node],
-  side? : Side = Bottom,
-  initially_open? : Bool = false,
-  disabled? : Bool = false,
+  side~ : Side = Bottom,
+  initially_open~ : Bool = false,
+  disabled~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, change) = @minimoon.create_variable(initially_open)
   drawer_controlled(

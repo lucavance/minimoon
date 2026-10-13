@@ -1,8 +1,8 @@
 ///|
 pub struct Model {
-  count : Int
+  count : Int32
   name : String
-  visits : Int
+  visits : Int32
 } derive(Eq)
 
 ///|

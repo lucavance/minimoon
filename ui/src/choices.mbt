@@ -1,14 +1,14 @@
 ///|
 pub fn checkbox_controlled(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
   checked~ : @minimoon.Val[Bool],
   on_change~ : @minimoon.Emit[Bool],
-  label? : String = "",
-  disabled? : Bool = false,
-  indeterminate? : Bool = false,
-  read_only? : Bool = false,
-  invalid? : Bool = false,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  indeterminate~ : Bool = false,
+  read_only~ : Bool = false,
+  invalid~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   checked.map(value => {
     @minimoon.checkbox_group(
@@ -45,14 +45,14 @@ pub fn checkbox_controlled(
 
 ///|
 pub fn checkbox(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
-  initially_checked? : Bool = false,
-  label? : String = "",
-  disabled? : Bool = false,
-  indeterminate? : Bool = false,
-  read_only? : Bool = false,
-  invalid? : Bool = false,
+  initially_checked~ : Bool = false,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  indeterminate~ : Bool = false,
+  read_only~ : Bool = false,
+  invalid~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   checkbox_state(
     name~,
@@ -73,15 +73,15 @@ pub fn checkbox(
 
 ///|
 pub fn switch_controlled(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
   checked~ : @minimoon.Val[Bool],
   on_change~ : @minimoon.Emit[Bool],
-  label? : String = "",
-  disabled? : Bool = false,
-  read_only? : Bool = false,
-  invalid? : Bool = false,
-  size? : Size = Medium,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  read_only~ : Bool = false,
+  invalid~ : Bool = false,
+  size~ : Size = Medium,
 ) -> @minimoon.Val[@minimoon.Node] {
   checked.map(value => {
     @minimoon.switch(
@@ -112,14 +112,14 @@ pub fn switch_controlled(
 
 ///|
 pub fn switch(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
-  initially_checked? : Bool = false,
-  label? : String = "",
-  disabled? : Bool = false,
-  read_only? : Bool = false,
-  invalid? : Bool = false,
-  size? : Size = Medium,
+  initially_checked~ : Bool = false,
+  label~ : String = "",
+  disabled~ : Bool = false,
+  read_only~ : Bool = false,
+  invalid~ : Bool = false,
+  size~ : Size = Medium,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (checked, update) = @minimoon.create_variable(initially_checked)
   switch_controlled(
@@ -137,13 +137,13 @@ pub fn switch(
 
 ///|
 pub fn radio_group_controlled(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
   options~ : @minimoon.Val[Array[ChoiceOption]],
   value~ : @minimoon.Val[String],
   on_change~ : @minimoon.Emit[String],
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   let change = form_dispatch(options, (options, key : String) => {
     if !disabled && options.any(option => option.key == key && !option.disabled) {
@@ -176,12 +176,12 @@ pub fn radio_group_controlled(
 
 ///|
 pub fn radio_group(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
   options~ : @minimoon.Val[Array[ChoiceOption]],
-  initial_value? : String = "",
-  disabled? : Bool = false,
-  orientation? : Orientation = Vertical,
+  initial_value~ : String = "",
+  disabled~ : Bool = false,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (value, update) = @minimoon.create_variable(initial_value)
   radio_group_controlled(
@@ -197,16 +197,16 @@ pub fn radio_group(
 
 ///|
 pub fn native_select_controlled(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
   options~ : @minimoon.Val[Array[ChoiceOption]],
   value~ : @minimoon.Val[String],
   on_change~ : @minimoon.Emit[String],
-  placeholder? : String = "Select…",
-  disabled? : Bool = false,
-  invalid? : Bool = false,
-  required? : Bool = false,
-  size? : Size = Medium,
+  placeholder~ : String = "Select…",
+  disabled~ : Bool = false,
+  invalid~ : Bool = false,
+  required~ : Bool = false,
+  size~ : Size = Medium,
 ) -> @minimoon.Val[@minimoon.Node] {
   let change = form_dispatch(options, (options, key : String) => {
     if !disabled && options.any(option => option.key == key && !option.disabled) {
@@ -258,15 +258,15 @@ pub fn native_select_controlled(
 
 ///|
 pub fn native_select(
-  name? : String = "",
+  name~ : String = "",
   id~ : String,
   options~ : @minimoon.Val[Array[ChoiceOption]],
-  initial_value? : String = "",
-  placeholder? : String = "Select…",
-  disabled? : Bool = false,
-  invalid? : Bool = false,
-  required? : Bool = false,
-  size? : Size = Medium,
+  initial_value~ : String = "",
+  placeholder~ : String = "Select…",
+  disabled~ : Bool = false,
+  invalid~ : Bool = false,
+  required~ : Bool = false,
+  size~ : Size = Medium,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (value, update) = @minimoon.create_variable(initial_value)
   native_select_controlled(
@@ -286,9 +286,9 @@ pub fn native_select(
 ///|
 pub fn[C : @minimoon.IsChildren] radio_group_root(
   on_change~ : @minimoon.Emit[String],
-  name? : String = "",
-  id? : String = "",
-  orientation? : Orientation = Vertical,
+  name~ : String = "",
+  id~ : String = "",
+  orientation~ : Orientation = Vertical,
   children : C,
 ) -> @minimoon.Node {
   @minimoon.radio_group(
@@ -303,10 +303,10 @@ pub fn[C : @minimoon.IsChildren] radio_group_root(
 ///|
 pub fn radio_group_item(
   value~ : String,
-  checked? : Bool = false,
-  disabled? : Bool = false,
-  label? : String = "",
-  id? : String = "",
+  checked~ : Bool = false,
+  disabled~ : Bool = false,
+  label~ : String = "",
+  id~ : String = "",
 ) -> @minimoon.Node {
   @minimoon.radio(
     value~,

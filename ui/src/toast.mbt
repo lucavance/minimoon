@@ -20,7 +20,7 @@ struct Toast {
   id : String
   title : String
   description : String
-  duration_ms : Int
+  duration_ms : Int32
   variant : ToastVariant
   action_label : String
   action : @minimoon.Cmd
@@ -37,12 +37,12 @@ pub impl Eq for Toast with fn equal(a, b) {
 pub fn toast_notice(
   id~ : String,
   title~ : String,
-  description? : String = "",
-  duration_ms? : Int = 5000,
-  variant? : ToastVariant = ToastDefault,
-  action_label? : String = "",
-  action? : @minimoon.Cmd = @minimoon.none,
-  on_close? : @minimoon.Cmd = @minimoon.none,
+  description~ : String = "",
+  duration_ms~ : Int32 = 5000,
+  variant~ : ToastVariant = ToastDefault,
+  action_label~ : String = "",
+  action~ : @minimoon.Cmd = @minimoon.none,
+  on_close~ : @minimoon.Cmd = @minimoon.none,
 ) -> Toast {
   guard id != "" && duration_ms >= 0 else {
     abort("toast requires an ID and nonnegative duration")
@@ -63,8 +63,8 @@ pub fn toast_notice(
 ///|
 priv struct ToastEntry {
   notice : Toast
-  remaining : Int
-  swipe : (Int, Double, Double, Double)?
+  remaining : Int32
+  swipe : (Int32, Double, Double, Double)?
 } derive(Eq)
 
 ///|
@@ -91,7 +91,7 @@ priv struct ToastQueue {
 fn create_toast_queue(
   context : @minimoon.PageContext,
   visible : @minimoon.Val[Bool],
-  limit : Int,
+  limit : Int32,
 ) -> ToastQueue {
   let initial : Array[ToastEntry] = []
   let (entries, emit) = @minimoon.create_state_with_input(
@@ -262,8 +262,8 @@ pub fn dismiss_toast(context : UiContext, id : String) -> @minimoon.Cmd {
 ///|
 pub fn toaster(
   context : UiContext,
-  position? : ToastPosition = ToastBottomRight,
-  rich_colors? : Bool = false,
+  position~ : ToastPosition = ToastBottomRight,
+  rich_colors~ : Bool = false,
 ) -> @minimoon.Val[@minimoon.Node] {
   @minimoon.Val::view2(context.toasts.entries, context.visible, (
     entries,
@@ -333,8 +333,8 @@ pub fn toaster(
 ///|
 pub fn sonner(
   context : UiContext,
-  position? : ToastPosition = ToastBottomRight,
-  rich_colors? : Bool = true,
+  position~ : ToastPosition = ToastBottomRight,
+  rich_colors~ : Bool = true,
 ) -> @minimoon.Val[@minimoon.Node] {
   toaster(context, position~, rich_colors~)
 }

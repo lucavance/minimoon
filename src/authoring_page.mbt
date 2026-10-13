@@ -46,7 +46,7 @@ fn PageLifecycleHook::host_name(self : PageLifecycleHook) -> String {
 pub fn PageContext::every(
   self : PageContext,
   key~ : String,
-  interval_ms~ : Int,
+  interval_ms~ : Int32,
   command~ : Cmd,
 ) -> Sub {
   let _ = self
@@ -222,9 +222,9 @@ fn graph_command_has_runtime_work(command : @val.Cmd) -> Bool {
 fn graph_update(
   graph : @val.Graph,
   message : GraphMessage,
-  epoch : Int,
+  epoch : Int32,
   initialized : Ref[Bool],
-) -> (Int, @runtime.Cmd[GraphMessage]) {
+) -> (Int32, @runtime.Cmd[GraphMessage]) {
   let (command, commands) = match message {
     GraphCommand(command) => {
       graph.begin()
@@ -277,14 +277,14 @@ struct Page {
   route : String
   title : String
   make_preview : (PageLayout) -> (
-    @renderer.PageProgram[Int, GraphMessage],
+    @renderer.PageProgram[Int32, GraphMessage],
     @val.Graph,
     PageLayoutState,
     Ref[Bool],
   )
   make_program : (Map[String, String], PageLayout) -> Result[
     (
-      @renderer.PageProgram[Int, GraphMessage],
+      @renderer.PageProgram[Int32, GraphMessage],
       @val.Graph,
       PageLayoutState,
       Ref[Bool],
@@ -311,7 +311,7 @@ pub fn Page::title(self : Page) -> String {
 ///|
 pub fn Page::initial_tree(
   self : Page,
-  layout? : PageLayout = PageLayout::unavailable(),
+  layout~ : PageLayout = PageLayout::unavailable(),
 ) -> Json {
   let (program, graph, _, _) = (self.make_preview)(layout)
   let value = program.initial_tree()
@@ -346,8 +346,8 @@ pub fn Page::wxml(self : Page) -> String {
 ///|
 pub fn Page::create_runtime(
   self : Page,
-  input? : Map[String, String] = Map([]),
-  layout? : PageLayout = PageLayout::unavailable(),
+  input~ : Map[String, String] = Map([]),
+  layout~ : PageLayout = PageLayout::unavailable(),
 ) -> Result[PageRuntime, DecodeError] {
   let snapshot = input.copy()
   let (program, graph, layout_state, loaded) = match
@@ -545,7 +545,7 @@ pub fn PageRuntime::has_ready_work(self : PageRuntime) -> Bool {
 }
 
 ///|
-pub fn runtime_api_version() -> Int {
+pub fn runtime_api_version() -> Int32 {
   @renderer.runtime_api_version()
 }
 
@@ -672,7 +672,7 @@ pub fn page(
   id~ : String,
   route~ : Route,
   title~ : String,
-  capabilities? : Array[Capability] = [],
+  capabilities~ : Array[Capability] = [],
   build~ : (PageContext) -> Val[Node],
 ) -> Page {
   make_page(id, route, title, capabilities, () => (), _ => Ok(()), (context, _) => {
@@ -691,7 +691,7 @@ pub fn[Model : Eq, Msg] elmish_page(
   model~ : Model,
   update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd),
   view~ : (Model, Emit[Msg]) -> Node,
-  capabilities? : Array[Capability] = [],
+  capabilities~ : Array[Capability] = [],
   init? : (Emit[Msg]) -> Cmd,
   subscriptions? : (PageContext, Model, Emit[Msg]) -> Sub,
 ) -> Page {
@@ -713,7 +713,7 @@ pub fn[Input] page_with_input(
   id~ : String,
   route~ : Route,
   title~ : String,
-  capabilities? : Array[Capability] = [],
+  capabilities~ : Array[Capability] = [],
   preview_input~ : () -> Input,
   decode_input~ : (Map[String, String]) -> Result[Input, DecodeError],
   build~ : (PageContext, Input) -> Val[Node],

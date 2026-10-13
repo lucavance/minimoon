@@ -14,7 +14,7 @@ fn api_explicit_method_violations(
   if !expected.complete || !current.complete {
     return ["explicit method migration contains an incomplete declaration"]
   }
-  let reviewed : Map[String, Int] = Map([])
+  let reviewed : Map[String, Int32] = Map([])
   for declaration in expected.blocks {
     if !declaration.has_prefix("pub fn") || !declaration.contains("::") {
       violations.push(

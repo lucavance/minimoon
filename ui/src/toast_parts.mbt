@@ -40,9 +40,9 @@ pub fn dismiss_all_toasts(context : UiContext) -> @minimoon.Cmd {
 ///|
 pub fn[C : @minimoon.IsChildren] toast_surface(
   children : C,
-  variant? : ToastVariant = ToastDefault,
-  open? : Bool = true,
-  id? : String = "",
+  variant~ : ToastVariant = ToastDefault,
+  open~ : Bool = true,
+  id~ : String = "",
 ) -> @minimoon.Node {
   if open {
     ui_container(
@@ -79,7 +79,7 @@ pub fn[C : @minimoon.IsChildren] toast_action(
 pub fn toast_close(
   context : UiContext,
   id~ : String,
-  label? : String = "Dismiss",
+  label~ : String = "Dismiss",
 ) -> @minimoon.Node {
   @minimoon.button(
     on_tap=dismiss_toast(context, id),

@@ -64,22 +64,22 @@ pub enum Cmd[Msg] {
   CmdNavigateTo(String)
   CmdRedirectTo(String)
   CmdSwitchTab(String)
-  CmdNavigateBack(Int)
-  CmdNavigateBackOrRedirect(Int, String)
+  CmdNavigateBack(Int32)
+  CmdNavigateBackOrRedirect(Int32, String)
 }
 
 ///|
 pub enum RuntimeCommand {
-  ReplaceViewTree(ComponentId, Int, Int, HostPayload)
-  PatchViewTree(ComponentId, Int, Int, HostPayload)
+  ReplaceViewTree(ComponentId, Int32, Int32, HostPayload)
+  PatchViewTree(ComponentId, Int32, Int32, HostPayload)
   RuntimeError(ComponentId, String, String)
   InvokeCapability(ComponentId, EffectRequestId, EffectCapability, HostPayload)
   NavigateTo(String)
   RedirectTo(String)
   SwitchTab(String)
-  NavigateBack(Int)
-  NavigateBackOrRedirect(Int, String)
-  StartSubscription(ComponentId, SubscriptionKey, Int)
+  NavigateBack(Int32)
+  NavigateBackOrRedirect(Int32, String)
+  StartSubscription(ComponentId, SubscriptionKey, Int32)
   StopSubscription(ComponentId, SubscriptionKey)
   CancelEffect(ComponentId, EffectRequestId)
   EmitHostEvent(ComponentId, EventKey, HostPayload)
@@ -89,12 +89,12 @@ pub enum RuntimeCommand {
 
 ///|
 pub struct RuntimeCommandBatchDiagnostics {
-  command_count : Int
-  state_update_count : Int
-  effect_count : Int
-  event_count : Int
-  lifecycle_count : Int
-  payload_size : Int
+  command_count : Int32
+  state_update_count : Int32
+  effect_count : Int32
+  event_count : Int32
+  lifecycle_count : Int32
+  payload_size : Int32
   warning : String
   breakdown : String
   description : String
@@ -117,8 +117,8 @@ pub enum ComponentLifecycleState {
 pub fn replace_view_tree(
   component_id : ComponentId,
   tree : HostPayload,
-  base_revision? : Int = 0,
-  revision? : Int = 1,
+  base_revision~ : Int32 = 0,
+  revision~ : Int32 = 1,
 ) -> RuntimeCommand {
   guard base_revision >= 0 && revision == base_revision + 1 else {
     abort("invalid renderer revision transition")
@@ -130,8 +130,8 @@ pub fn replace_view_tree(
 pub fn patch_view_tree(
   component_id : ComponentId,
   ops : HostPayload,
-  base_revision? : Int = 0,
-  revision? : Int = 1,
+  base_revision~ : Int32 = 0,
+  revision~ : Int32 = 1,
 ) -> RuntimeCommand {
   guard base_revision >= 0 && revision == base_revision + 1 else {
     abort("invalid renderer revision transition")
@@ -164,12 +164,12 @@ pub fn switch_tab_command(url : String) -> RuntimeCommand {
 }
 
 ///|
-fn valid_navigate_back_delta(delta : Int) -> Bool {
+fn valid_navigate_back_delta(delta : Int32) -> Bool {
   delta >= 1
 }
 
 ///|
-fn checked_navigate_back_delta(delta : Int) -> Int {
+fn checked_navigate_back_delta(delta : Int32) -> Int32 {
   guard valid_navigate_back_delta(delta) else {
     abort("MiniApp navigateBack delta must be at least 1")
   }
@@ -177,13 +177,13 @@ fn checked_navigate_back_delta(delta : Int) -> Int {
 }
 
 ///|
-pub fn navigate_back_command(delta : Int) -> RuntimeCommand {
+pub fn navigate_back_command(delta : Int32) -> RuntimeCommand {
   NavigateBack(checked_navigate_back_delta(delta))
 }
 
 ///|
 pub fn navigate_back_or_redirect_command(
-  delta : Int,
+  delta : Int32,
   fallback : String,
 ) -> RuntimeCommand {
   guard fallback != "" else {
@@ -196,7 +196,7 @@ pub fn navigate_back_or_redirect_command(
 pub fn start_subscription_command(
   component_id : ComponentId,
   key : SubscriptionKey,
-  interval_ms : Int,
+  interval_ms : Int32,
 ) -> RuntimeCommand {
   guard key != "" && interval_ms > 0 else { abort("invalid host subscription") }
   StartSubscription(component_id, key, interval_ms)
@@ -233,11 +233,11 @@ pub fn dispose_context(component_id : ComponentId) -> RuntimeCommand {
 pub fn runtime_command_diagnostics(
   commands : Array[RuntimeCommand],
 ) -> RuntimeCommandBatchDiagnostics {
-  let state_update_count : Ref[Int] = Ref(0)
-  let effect_count : Ref[Int] = Ref(0)
-  let event_count : Ref[Int] = Ref(0)
-  let lifecycle_count : Ref[Int] = Ref(0)
-  let payload_size : Ref[Int] = Ref(0)
+  let state_update_count : Ref[Int32] = Ref(0)
+  let effect_count : Ref[Int32] = Ref(0)
+  let event_count : Ref[Int32] = Ref(0)
+  let lifecycle_count : Ref[Int32] = Ref(0)
+  let payload_size : Ref[Int32] = Ref(0)
   for command in commands {
     match command {
       ReplaceViewTree(_, _, _, payload) => {
@@ -390,7 +390,7 @@ pub fn RuntimeCommand::schema_json(self : RuntimeCommand) -> String {
 /// Return the exact encoded byte length without allocating the complete
 /// command JSON. Tree selection uses this to avoid building a rejected
 /// replacement wrapper.
-pub fn RuntimeCommand::schema_json_size(self : RuntimeCommand) -> Int {
+pub fn RuntimeCommand::schema_json_size(self : RuntimeCommand) -> Int32 {
   match self {
     ReplaceViewTree(component_id, base_revision, revision, payload) =>
       "{\"type\":\"ReplaceViewTree\",\"component_id\":".length() +

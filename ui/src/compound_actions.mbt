@@ -1,10 +1,10 @@
 ///|
 pub fn[C : @minimoon.IsChildren] badge_link(
   on_tap~ : @minimoon.Cmd,
-  variant? : Tone = Default,
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
+  variant~ : Tone = Default,
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   button(
@@ -20,9 +20,9 @@ pub fn[C : @minimoon.IsChildren] badge_link(
 ///|
 pub fn[C : @minimoon.IsChildren] breadcrumb_link(
   on_tap~ : @minimoon.Cmd,
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   button(
@@ -38,9 +38,9 @@ pub fn[C : @minimoon.IsChildren] breadcrumb_link(
 ///|
 pub fn[C : @minimoon.IsChildren] bubble_content_link(
   on_tap~ : @minimoon.Cmd,
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   button(
@@ -56,9 +56,9 @@ pub fn[C : @minimoon.IsChildren] bubble_content_link(
 ///|
 pub fn[C : @minimoon.IsChildren] bubble_content_button(
   on_tap~ : @minimoon.Cmd,
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   button(
@@ -74,11 +74,11 @@ pub fn[C : @minimoon.IsChildren] bubble_content_button(
 ///|
 pub fn[C : @minimoon.IsChildren] item_link(
   on_tap~ : @minimoon.Cmd,
-  variant? : Tone = Default,
-  size? : Size = Medium,
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
+  variant~ : Tone = Default,
+  size~ : Size = Medium,
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   button(
@@ -94,10 +94,10 @@ pub fn[C : @minimoon.IsChildren] item_link(
 ///|
 pub fn[C : @minimoon.IsChildren] marker_link(
   on_tap~ : @minimoon.Cmd,
-  variant? : MarkerVariant = PlainMarker,
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
+  variant~ : MarkerVariant = PlainMarker,
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   button(
@@ -112,12 +112,12 @@ pub fn[C : @minimoon.IsChildren] marker_link(
 
 ///|
 pub fn[C : @minimoon.IsChildren] input_group_button(
-  variant? : ButtonVariant = Ghost,
-  size? : ButtonSize = Sm,
+  variant~ : ButtonVariant = Ghost,
+  size~ : ButtonSize = Sm,
   on_tap~ : @minimoon.Cmd,
-  disabled? : Bool = false,
-  id? : String = "",
-  class? : String = "",
+  disabled~ : Bool = false,
+  id~ : String = "",
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   button(
@@ -133,7 +133,7 @@ pub fn[C : @minimoon.IsChildren] input_group_button(
 
 ///|
 pub fn button_group_separator(
-  orientation? : Orientation = Vertical,
+  orientation~ : Orientation = Vertical,
 ) -> @minimoon.Node {
   separator(orientation~)
 }

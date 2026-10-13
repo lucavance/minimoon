@@ -248,7 +248,7 @@ pub fn dropdown_controlled(
 ///|
 pub fn dropdown(
   spec : MenuSpec,
-  initial_state? : MenuState = menu_state(),
+  initial_state~ : MenuState = menu_state(),
 ) -> @minimoon.Val[@minimoon.Node] {
   let (state, update_state) = @minimoon.create_variable(initial_state)
   dropdown_controlled(

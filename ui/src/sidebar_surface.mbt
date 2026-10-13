@@ -21,15 +21,15 @@ pub fn SidebarSurfaceScope::variant(
 pub fn sidebar_surface(
   scope : SidebarScope,
   render~ : (SidebarSurfaceScope) -> @minimoon.Node,
-  side? : SidebarSide = SidebarLeft,
-  variant? : SidebarVariant = SidebarDefault,
-  collapsible? : SidebarCollapsible = SidebarOffcanvas,
-  mobile? : Bool = false,
-  hidden? : Bool = false,
-  aria_label? : String = "Sidebar",
+  side~ : SidebarSide = SidebarLeft,
+  variant~ : SidebarVariant = SidebarDefault,
+  collapsible~ : SidebarCollapsible = SidebarOffcanvas,
+  mobile~ : Bool = false,
+  hidden~ : Bool = false,
+  aria_label~ : String = "Sidebar",
   id? : String,
-  class? : String = "",
-  style? : String = "",
+  class~ : String = "",
+  style~ : String = "",
 ) -> @minimoon.Node {
   if hidden || (mobile && (!scope.state.mobile_open || !scope.visible)) {
     return @minimoon.nothing()
@@ -110,10 +110,10 @@ pub fn sidebar_surface(
 pub fn[C : @minimoon.IsChildren] sidebar_trigger(
   scope : SidebarScope,
   children : C,
-  mobile? : Bool = false,
-  disabled? : Bool = false,
+  mobile~ : Bool = false,
+  disabled~ : Bool = false,
   id? : String,
-  class? : String = "",
+  class~ : String = "",
   on_tap? : @minimoon.Cmd,
 ) -> @minimoon.Node {
   @minimoon.button_children(
@@ -146,9 +146,9 @@ pub fn[C : @minimoon.IsChildren] sidebar_trigger(
 ///|
 pub fn sidebar_rail(
   scope : SidebarSurfaceScope,
-  min_width? : Double = 160.0,
-  max_width? : Double = 512.0,
-  class? : String = "",
+  min_width~ : Double = 160.0,
+  max_width~ : Double = 512.0,
+  class~ : String = "",
 ) -> @minimoon.Node {
   if scope.mobile || scope.collapsible == SidebarFixed {
     return @minimoon.nothing()

@@ -1,7 +1,7 @@
 ///|
 pub struct RuntimeCommandQueue {
   commands : Ref[Array[RuntimeCommand]]
-  suspend_depth : Ref[Int]
+  suspend_depth : Ref[Int32]
   sink : (Array[RuntimeCommand]) -> Unit
 }
 
@@ -31,12 +31,12 @@ pub struct RunningComponent[Model, Msg] {
   view : CommandView[Model, Msg]
   project : CheckedStateProjector[Model]
   projection_guard : ProjectionGuard[Model]?
-  wake_async : (Int) -> Unit
-  next_local_effect_id : Ref[Int]
-  pending_local_effects : Map[Int, () -> Unit]
-  next_local_message_sequence : Ref[Int]
+  wake_async : (Int32) -> Unit
+  next_local_effect_id : Ref[Int32]
+  pending_local_effects : Map[Int32, () -> Unit]
+  next_local_message_sequence : Ref[Int32]
   pending_local_messages : Array[PendingLocalMessage[Msg]]
-  next_effect_request_id : Ref[Int]
+  next_effect_request_id : Ref[Int32]
   pending_effects : Map[EffectRequestId, PendingHostEffect[Msg]]
 }
 
@@ -47,7 +47,7 @@ struct PendingHostEffect[Msg] {
 
 ///|
 struct PendingLocalMessage[Msg] {
-  sequence : Int
+  sequence : Int32
   message : Msg
 }
 
@@ -131,13 +131,13 @@ pub fn[Msg] switch_tab_cmd(url : String) -> Cmd[Msg] {
 }
 
 ///|
-pub fn[Msg] navigate_back_cmd(delta : Int) -> Cmd[Msg] {
+pub fn[Msg] navigate_back_cmd(delta : Int32) -> Cmd[Msg] {
   CmdNavigateBack(checked_navigate_back_delta(delta))
 }
 
 ///|
 pub fn[Msg] navigate_back_or_redirect_cmd(
-  delta : Int,
+  delta : Int32,
   fallback : String,
 ) -> Cmd[Msg] {
   guard fallback != "" else {
@@ -196,7 +196,7 @@ pub fn[Model, Msg] with_redirect_to(
 ///|
 pub fn[Model, Msg] with_navigate_back(
   model : Model,
-  delta : Int,
+  delta : Int32,
 ) -> (Model, Cmd[Msg]) {
   with_cmd(model, navigate_back_cmd(delta))
 }
@@ -236,7 +236,7 @@ pub fn[Model, Msg] Component::run_host(
   self : Component[Model, Msg],
   component_id~ : ComponentId,
   queue~ : RuntimeCommandQueue,
-  wake_async? : (Int) -> Unit = _ => (),
+  wake_async~ : (Int32) -> Unit = _ => (),
 ) -> RunningComponent[Model, Msg] {
   {
     context: ComponentContext::new(component_id, queue),

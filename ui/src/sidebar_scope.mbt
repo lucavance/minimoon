@@ -41,9 +41,9 @@ pub(all) struct SidebarState {
 
 ///|
 pub fn sidebar_state(
-  collapsed? : Bool = false,
-  mobile_open? : Bool = false,
-  width? : Double = 256.0,
+  collapsed~ : Bool = false,
+  mobile_open~ : Bool = false,
+  width~ : Double = 256.0,
 ) -> SidebarState {
   guard width > 0.0 && width - width == 0.0 else {
     abort("sidebar width must be finite and positive")
@@ -53,7 +53,7 @@ pub fn sidebar_state(
 
 ///|
 priv struct SidebarRailDrag {
-  pointer : Int
+  pointer : Int32
   start : Double
   initial : Double
   minimum : Double
@@ -74,7 +74,7 @@ priv struct SidebarTooltip {
 
 ///|
 priv struct SidebarTransient {
-  token : Int
+  token : Int32
   drag : SidebarRailDrag?
   suppress_tap : Bool
   tooltip : SidebarTooltip?
@@ -96,7 +96,10 @@ priv enum SidebarMsg {
   ClearTransient
   ShowTooltip(SidebarTooltip)
   CloseTooltip
-  TooltipMeasured(Int, Result[Array[@minimoon.NodeRect?], @minimoon.HostError])
+  TooltipMeasured(
+    Int32,
+    Result[Array[@minimoon.NodeRect?], @minimoon.HostError]
+  )
 }
 
 ///|

@@ -1,7 +1,7 @@
 ///|
 pub fn[C : @minimoon.IsChildren] avatar(
-  size? : Size = Medium,
-  class? : String = "",
+  size~ : Size = Medium,
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -14,10 +14,10 @@ pub fn[C : @minimoon.IsChildren] avatar(
 ///|
 pub fn avatar_image(
   src~ : String,
-  alt? : String = "",
+  alt~ : String = "",
   on_load? : @minimoon.Emit[@minimoon.ImageLoadDetail],
   on_error? : @minimoon.Emit[String],
-  id? : String = "",
+  id~ : String = "",
 ) -> @minimoon.Node {
   @minimoon.image(
     src~,
@@ -41,9 +41,9 @@ pub(all) enum AvatarImageStatus {
 ///|
 pub fn[C : @minimoon.IsChildren] avatar_with_fallback(
   src~ : @minimoon.Val[String],
-  alt? : String = "",
-  size? : Size = Medium,
-  id? : String = "",
+  alt~ : String = "",
+  size~ : Size = Medium,
+  id~ : String = "",
   on_status_change? : @minimoon.Emit[AvatarImageStatus],
   fallback : C,
 ) -> @minimoon.Val[@minimoon.Node] {
@@ -114,8 +114,8 @@ pub fn[C : @minimoon.IsChildren] avatar_with_fallback(
 
 ///|
 pub fn[C : @minimoon.IsChildren] badge(
-  variant? : Tone = Default,
-  class? : String = "",
+  variant~ : Tone = Default,
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -127,8 +127,8 @@ pub fn[C : @minimoon.IsChildren] badge(
 
 ///|
 pub fn[C : @minimoon.IsChildren] card(
-  size? : Size = Medium,
-  class? : String = "",
+  size~ : Size = Medium,
+  class~ : String = "",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -140,7 +140,7 @@ pub fn[C : @minimoon.IsChildren] card(
 
 ///|
 pub fn[C : @minimoon.IsChildren] breadcrumb(
-  label? : String = "Breadcrumb",
+  label~ : String = "Breadcrumb",
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -170,8 +170,8 @@ pub fn breadcrumb_ellipsis() -> @minimoon.Node {
 
 ///|
 pub fn[C : @minimoon.IsChildren] bubble(
-  variant? : Tone = Secondary,
-  alignment? : Alignment = Start,
+  variant~ : Tone = Secondary,
+  alignment~ : Alignment = Start,
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -189,8 +189,8 @@ pub fn[C : @minimoon.IsChildren] bubble(
 
 ///|
 pub fn[C : @minimoon.IsChildren] item(
-  variant? : Tone = Default,
-  size? : Size = Medium,
+  variant~ : Tone = Default,
+  size~ : Size = Medium,
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -202,7 +202,7 @@ pub fn[C : @minimoon.IsChildren] item(
 
 ///|
 pub fn[C : @minimoon.IsChildren] marker(
-  variant? : MarkerVariant = PlainMarker,
+  variant~ : MarkerVariant = PlainMarker,
   children : C,
 ) -> @minimoon.Node {
   let nodes = children.to_nodes()
@@ -219,7 +219,7 @@ pub fn[C : @minimoon.IsChildren] marker(
 
 ///|
 pub fn[C : @minimoon.IsChildren] message(
-  alignment? : Alignment = Start,
+  alignment~ : Alignment = Start,
   children : C,
 ) -> @minimoon.Node {
   ui_container(
@@ -236,8 +236,8 @@ pub fn[C : @minimoon.IsChildren] message(
 ///|
 pub fn[C : @minimoon.IsChildren] label(
   for_id~ : String,
-  required? : Bool = false,
-  disabled? : Bool = false,
+  required~ : Bool = false,
+  disabled~ : Bool = false,
   children : C,
 ) -> @minimoon.Node {
   let nodes = children.to_nodes().copy()
@@ -253,8 +253,8 @@ pub fn[C : @minimoon.IsChildren] label(
 
 ///|
 pub fn separator(
-  orientation? : Orientation = Horizontal,
-  decorative? : Bool = true,
+  orientation~ : Orientation = Horizontal,
+  decorative~ : Bool = true,
 ) -> @minimoon.Node {
   ui_container(
     "separator",
@@ -273,9 +273,9 @@ pub fn separator(
 
 ///|
 pub fn skeleton(
-  width? : Int = 100,
-  height? : Int = 20,
-  round? : Bool = false,
+  width~ : Int32 = 100,
+  height~ : Int32 = 20,
+  round~ : Bool = false,
 ) -> @minimoon.Node {
   guard width >= 0 && height >= 0 else {
     abort("skeleton dimensions must be nonnegative")
@@ -295,8 +295,8 @@ pub fn skeleton(
 
 ///|
 pub fn spinner(
-  label? : String = "Loading",
-  size? : Size = Medium,
+  label~ : String = "Loading",
+  size~ : Size = Medium,
 ) -> @minimoon.Node {
   ui_container(
     "spinner",

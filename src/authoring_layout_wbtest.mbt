@@ -105,7 +105,7 @@ test "layout is injected before build separately from route input and inert prev
 ///|
 test "hidden layout keeps the latest value and Show merges it with shared state" {
   let application = app(build=context => {
-    context.create_pure_state(0, update=(n, d : Int) => n + d)
+    context.create_pure_state(0, update=(n, d : Int32) => n + d)
   }).create_runtime()
   defer ignore(application.dispose())
   ignore(application.lifecycle("onLaunch", "{}"))
@@ -146,7 +146,7 @@ test "hidden layout keeps the latest value and Show merges it with shared state"
   assert_eq(runtime.has_ready_work(), false)
   assert_eq(runtime.snapshot(), before)
   let shown = runtime.lifecycle("onShow", "{}")
-  assert_eq(shown.split("\"base_revision\":").length(), 2)
+  assert_eq(shown.split("\"base_revision\":").count(), 2)
   assert_true(runtime.snapshot().contains("width:420 shared:7 shows:2"))
   assert_eq(runtime.update_layout(PageLayout::unavailable()), "[]")
   ignore(runtime.dispose())
@@ -199,7 +199,7 @@ test "rejected layout projection rolls back its Val and accepts a later reading"
 ///|
 test "rejected Show rolls back layout shared projection and Show messages together" {
   let application = app(build=context => {
-    context.create_pure_state(0, update=(n, d : Int) => n + d)
+    context.create_pure_state(0, update=(n, d : Int32) => n + d)
   }).create_runtime()
   defer ignore(application.dispose())
   ignore(application.lifecycle("onLaunch", "{}"))
@@ -248,7 +248,7 @@ test "rejected Show rolls back layout shared projection and Show messages togeth
     ToJson::to_json(test_layout(410.0)).stringify(),
   )
   assert_false(recovery.contains("RuntimeError"))
-  assert_eq(recovery.split("\"base_revision\":").length(), 2)
+  assert_eq(recovery.split("\"base_revision\":").count(), 2)
   assert_true(runtime.snapshot().contains("width:410 shared:5 shows:1"))
 }
 

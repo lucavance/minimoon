@@ -1,13 +1,13 @@
 ///|
 priv enum CalendarRequest {
   Choose(@headless.CalendarDate)
-  ShiftMonth(Int)
+  ShiftMonth(Int32)
 }
 
 ///|
 priv enum PaginationRequest {
-  Target(Int)
-  Step(Int)
+  Target(Int32)
+  Step(Int32)
 }
 
 ///|
@@ -16,7 +16,7 @@ priv enum DataTableRequest {
   Select(String)
   Column(String)
   Query(String)
-  PageStep(Int)
+  PageStep(Int32)
 }
 
 ///|

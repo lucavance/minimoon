@@ -8,7 +8,7 @@ fn http_cases() -> Array[String] {
 
 ///|
 fn http_case(
-  index : Int,
+  index : Int32,
   base : String,
   resolve : @minimoon.Emit[Result[@minimoon.RequestResult, @minimoon.HostError]],
 ) -> @minimoon.Cmd {
@@ -23,7 +23,7 @@ fn http_case(
         body=JsonBody(
           Json::object({
             "message": Json::string("Minimoon 测试"),
-            "count": (2).to_json(),
+            "count": Json(2),
           }),
         ),
         timeout_ms=15000,

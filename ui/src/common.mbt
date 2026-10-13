@@ -3,9 +3,9 @@
 fn ui_container(
   kind : String,
   children : Array[@minimoon.Node],
-  id? : String = "",
-  class? : String = "",
-  style? : String = "",
+  id~ : String = "",
+  class~ : String = "",
+  style~ : String = "",
   semantics? : @minimoon.Semantics,
 ) -> @minimoon.Node {
   @minimoon.div(

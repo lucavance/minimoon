@@ -1,12 +1,12 @@
 ///|
-let next_node_id : Ref[Int] = Ref(1)
+let next_node_id : Ref[Int32] = Ref(1)
 
 ///|
-let next_binding_id : Ref[Int] = Ref(1)
+let next_binding_id : Ref[Int32] = Ref(1)
 
 ///|
 struct Node {
-  id : Int
+  id : Int32
   raw : @ui.Node
   bindings : Array[NodeBinding]
 }
@@ -104,9 +104,9 @@ struct Semantics {
   invalid : Bool?
   busy : Bool?
   live : String
-  value_min : Int?
-  value_max : Int?
-  value_now : Int?
+  value_min : Int32?
+  value_max : Int32?
+  value_now : Int32?
   value_text : String
 }
 
@@ -152,26 +152,26 @@ fn SemanticRole::host_name(self : SemanticRole) -> String {
 ///|
 pub fn semantics(
   role? : SemanticRole,
-  label? : String = "",
+  label~ : String = "",
   expanded? : Bool,
   selected? : Bool,
   disabled? : Bool,
   hidden? : Bool,
   checked? : Bool,
   modal? : Bool,
-  controls? : String = "",
-  labelled_by? : String = "",
-  described_by? : String = "",
-  orientation? : String = "",
-  has_popup? : String = "",
+  controls~ : String = "",
+  labelled_by~ : String = "",
+  described_by~ : String = "",
+  orientation~ : String = "",
+  has_popup~ : String = "",
   required? : Bool,
   invalid? : Bool,
   busy? : Bool,
-  live? : String = "",
-  value_min? : Int,
-  value_max? : Int,
-  value_now? : Int,
-  value_text? : String = "",
+  live~ : String = "",
+  value_min? : Int32,
+  value_max? : Int32,
+  value_now? : Int32,
+  value_text~ : String = "",
 ) -> Semantics {
   {
     role: role.map(value => value.host_name()).unwrap_or(""),
@@ -270,7 +270,7 @@ fn raw_bool_attr(attrs : Array[@ui.Attr], name : String, value : Bool) -> Unit {
 }
 
 ///|
-fn raw_int_attr(attrs : Array[@ui.Attr], name : String, value : Int) -> Unit {
+fn raw_int_attr(attrs : Array[@ui.Attr], name : String, value : Int32) -> Unit {
   attrs.push(@ui.attr(name, value.to_string()))
 }
 
@@ -345,7 +345,7 @@ fn append_direct_binding(
 fn event_binding(
   kind : @renderer.PageEventKind,
   decode : (Json) -> Result[Cmd, DecodeError],
-  explicit_key? : String = "",
+  explicit_key~ : String = "",
 ) -> @renderer.PageEvent[Cmd] {
   let id = next_binding_id.val
   next_binding_id.val = id + 1
@@ -426,7 +426,7 @@ fn detail_strings(payload : Json) -> Result[Array[String], DecodeError] {
 }
 
 ///|
-fn event_int32(value : Double) -> Int? {
+fn event_int32(value : Double) -> Int32? {
   if value < 0.0 || value > 2147483647.0 {
     return None
   }
@@ -439,7 +439,7 @@ fn event_int32(value : Double) -> Int? {
 }
 
 ///|
-fn decimal_index(value : String) -> Int? {
+fn decimal_index(value : String) -> Int32? {
   if value == "" {
     return None
   }
@@ -458,7 +458,7 @@ fn decimal_index(value : String) -> Int? {
 }
 
 ///|
-fn detail_index(payload : Json) -> Result[Int, DecodeError] {
+fn detail_index(payload : Json) -> Result[Int32, DecodeError] {
   match event_detail(payload) {
     Ok(detail) =>
       match detail.get("value") {
@@ -479,7 +479,7 @@ fn detail_index(payload : Json) -> Result[Int, DecodeError] {
 }
 
 ///|
-fn detail_current(payload : Json) -> Result[Int, DecodeError] {
+fn detail_current(payload : Json) -> Result[Int32, DecodeError] {
   match event_detail(payload) {
     Ok(detail) =>
       match detail.get("current") {
