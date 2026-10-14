@@ -7,15 +7,87 @@ fn patch_test_node(
   identity : String,
   text : String,
   children : Array[Json],
+  props~ : Json = Json::empty_object(),
 ) -> Json {
   Json::object({
     "kind": Json::string(kind),
     "identity": Json::string(identity),
     "text": Json::string(text),
-    "props": Json::empty_object(),
+    "props": props,
     "events": Json::empty_object(),
     "children": Json::array(children),
   })
+}
+
+///|
+test "control property resets reconstruct the exact tree through keyed moves" {
+  for kind in ["input", "textarea", "checkbox", "switch", "button"] {
+    let populated = Json::object({
+      "value": Json::string("old"),
+      "disabled": Json::boolean(true),
+      "checked": Json::boolean(true),
+      "placeholder": Json::string("old hint"),
+      "maxlength": Json::number(12),
+    })
+    let cleared = Json::object({
+      "value": Json::string(""),
+      "disabled": Json::boolean(false),
+      "checked": Json::boolean(false),
+      "maxlength": Json::number(0),
+    })
+    let omitted = Json::object({ "value": Json::string("") })
+    for
+      (before, after) in [
+        (populated, cleared),
+        (cleared, omitted),
+        (omitted, populated),
+      ] {
+      for reordered in [false, true] {
+        let control = patch_test_node(kind, "k:control", "", [], props=before)
+        let sibling = patch_test_node("text", "k:sibling", "Unchanged", [])
+        let next_control = patch_test_node(
+          kind,
+          "k:control",
+          "",
+          [],
+          props=after,
+        )
+        let old_tree = patch_test_node("fragment", "root", "", [
+          control, sibling,
+        ])
+        let next_tree = patch_test_node(
+          "fragment",
+          "root",
+          "",
+          if reordered {
+            [sibling, next_control]
+          } else {
+            [next_control, sibling]
+          },
+        )
+        let original = old_tree.stringify()
+        let expected = next_tree.stringify()
+        let ops = patch_test_diff(old_tree, next_tree)
+        assert_eq(patch_test_apply(old_tree, ops), next_tree)
+        assert_eq(old_tree.stringify(), original)
+        assert_eq(next_tree.stringify(), expected)
+        if !reordered {
+          assert_eq(ops.length(), 1)
+          match ops[0] {
+            SetTreeField(path, value) => {
+              assert_eq(path, [
+                Json::string("children"),
+                Json::number(0),
+                Json::string("props"),
+              ])
+              assert_eq(value, after)
+            }
+            _ => fail("property reset must not replace the keyed control")
+          }
+        }
+      }
+    }
+  }
 }
 
 ///|
