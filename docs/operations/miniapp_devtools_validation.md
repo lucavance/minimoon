@@ -310,7 +310,7 @@ raw logs outside the repository and never edit evidence JSON manually. Do not
 commit or push a release claim. Fix the source, rebuild, and repeat the entire
 validation whenever the artifact fingerprint changes. Passed evidence remains
 local as well. Follow the
-[release handoff](release_candidate_handoff.md): run `check:all`, then
+[release handoff](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md): run `check:all`, then
 `check:mvp`, and restore candidate reports with `check:candidate` before
 publication or handoff. Require unchanged fingerprints and a clean source
 checkout; candidate restoration does not delete ignored evidence.

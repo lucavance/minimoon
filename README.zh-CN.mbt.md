@@ -154,7 +154,7 @@ UI 是可选依赖；业务后端、凭据和生产请求域名由应用自行�
 
 从[文档索引](docs/README.md)进入
 [架构](docs/architecture.md)、[API 编写指南](docs/guides/api_ergonomics.md)、
-[仓库验证与发布流程](docs/operations/release_candidate_handoff.md)和
+[仓库验证与发布流程](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md)和
 [宿主清单](docs/operations/miniapp_devtools_validation.md)。
 完整仓库门禁与发布证据不是编写第一个应用的前置步骤。
 

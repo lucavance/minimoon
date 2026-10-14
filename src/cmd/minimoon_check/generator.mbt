@@ -234,8 +234,7 @@ let registry_documentation_files : Array[String] = [
   "docs/guides/native_navigation.md", "docs/guides/keyed_children_diff.md", "docs/guides/miniapp_authoring_example.md",
   "docs/guides/miniapp_quickstart.md", "docs/guides/resource_state_design.md", "docs/guides/shared_state.md",
   "docs/guides/subscription_scope.md", "docs/guides/testing_and_components.md", "docs/mvp.md",
-  "docs/operations/dogfood.md", "docs/operations/miniapp_devtools_validation.md",
-  "docs/operations/miniapp_javascript_compatibility.md", "docs/operations/release_candidate_handoff.md",
+  "docs/operations/miniapp_devtools_validation.md", "docs/operations/miniapp_javascript_compatibility.md",
   "docs/positioning.md", "docs/reference/compatibility_and_upgrades.md", "docs/reference/miniapp_fixture_matrix.md",
   "docs/reference/miniapp_host_capabilities.md",
 ]
@@ -327,7 +326,9 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
     required in [
       "moon.mod", "LICENSE", "CHANGELOG.md", "README.mbt.md", "README.md", "README.zh-CN.md",
       "src/README.mbt.md", "src/pkg.generated.mbti", "src/cmd/minimoon/main.mbt",
-      "src/cmd/minimoon/templates.generated.mbt", "docs/guides/shared_state.md",
+      "src/cmd/minimoon/templates.generated.mbt", "docs/guides/miniapp_quickstart.md",
+      "docs/guides/shared_state.md", "docs/reference/compatibility_and_upgrades.md",
+      "docs/operations/miniapp_devtools_validation.md", "docs/operations/miniapp_javascript_compatibility.md",
     ] {
     guard packaged_paths.contains(required) else {
       abort("registry package is missing required path: " + required)

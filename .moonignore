@@ -36,6 +36,8 @@ devtools.evidence.json
 /docs/reference/renderer_protocol.md
 /docs/reference/miniapp_renderer.md
 /docs/reference/compile_model.md
+/docs/operations/release_candidate_handoff.md
+/docs/operations/dogfood.md
 /examples/
 /moon.work
 /package.json

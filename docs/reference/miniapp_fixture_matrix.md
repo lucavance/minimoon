@@ -31,7 +31,7 @@ Its native/JS tests, generated resource checks, candidate report, artifact
 fingerprint and local host evidence are independent of Draft Workbench. Both
 fixtures must pass when the shared core host or UI release is changed; one
 application's evidence cannot authorize the other. The current
-[release procedure](../operations/release_candidate_handoff.md#ordered-local-registry-publication)
+[release procedure](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md#ordered-local-registry-publication)
 requires matching evidence for both fixtures before publication.
 The UI fixture keeps the no-application entry path and no-argument factories;
 like the core fixture, its source configuration requires schema `11`.

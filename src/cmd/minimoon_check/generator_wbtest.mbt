@@ -2,7 +2,8 @@
 test "registry package allowlist accepts only maintained publication roots" {
   for
     path in [
-      "moon.mod", "docs/README.md", "docs/guides/miniapp_quickstart.md", "src/README.mbt.md",
+      "moon.mod", "docs/README.md", "docs/guides/miniapp_quickstart.md", "docs/operations/miniapp_devtools_validation.md",
+      "docs/operations/miniapp_javascript_compatibility.md", "src/README.mbt.md",
       "src/authoring_core.mbt", "src/pkg.generated.mbti", "src/cmd/minimoon/moon.pkg",
       "src/components/styles/minimal_v1.mbt", "src/internal_host_js/host_bridge.mbt",
       "src/testing/testing.mbt", "src/resources/resources.mbt",
@@ -17,6 +18,7 @@ test "registry package allowlist rejects unreviewed roots and packages" {
     path in [
       "AGENTS.md", "package.json", "new-root.md", "docs/project_status.md", "docs/reference/performance_baseline.md",
       "docs/reference/new_reference.md", "docs/code-analysis/README.md", "examples/app/dist/app.js",
+      "docs/operations/release_candidate_handoff.md", "docs/operations/dogfood.md",
       "scripts/new_adapter.mjs", "src/new_package/moon.pkg", "src/cmd/minimoon_check/main.mbt",
       "src/components/new_test.mbt", "src/runtime_core/new_wbtest.mbt", "src/testing/new_bench.mbt",
       "src/testing/fixture.json", "src/tooling_miniapp/nested/source.mbt",

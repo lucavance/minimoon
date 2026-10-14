@@ -83,6 +83,6 @@ Automated validation must pass before handoff. A host-acceptance claim requires
 fingerprint-matching real-host evidence for the exact App Contract v11, runtime
 ABI v13 and renderer protocol v8 Draft Workbench and UI showcase bytes. That
 evidence is a local input and never part of repository or CI state. The
-[core 0.2.7 / UI 0.1.5 release procedure](operations/release_candidate_handoff.md#ordered-local-registry-publication)
+[core 0.2.7 / UI 0.1.5 release procedure](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md#ordered-local-registry-publication)
 requires complete local checks, both CI jobs and fingerprint-matched host
 validation before authorized publication.

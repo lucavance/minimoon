@@ -92,8 +92,8 @@ ceiling and 16 KiB reserve.
 
 - [`operations/miniapp_devtools_validation.md`](operations/miniapp_devtools_validation.md)
 - [`operations/miniapp_javascript_compatibility.md`](operations/miniapp_javascript_compatibility.md)
-- [`operations/release_candidate_handoff.md`](operations/release_candidate_handoff.md)
-- [`operations/dogfood.md`](operations/dogfood.md)
+- [repository release workflow](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md)
+- [dogfood operation](https://github.com/lucavance/minimoon/blob/main/docs/operations/dogfood.md)
 
 Durable third-party attribution remains in `THIRD_PARTY_NOTICES.md` and the
 adapted source files.

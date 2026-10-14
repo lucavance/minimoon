@@ -165,7 +165,7 @@ for priorities rather than treating this README as a task tracker.
 
 Start with the [documentation index](docs/README.md). The
 [architecture](docs/architecture.md), [API ergonomics](docs/guides/api_ergonomics.md),
-[repository validation and release workflow](docs/operations/release_candidate_handoff.md)
+[repository validation and release workflow](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md)
 and [host checklist](docs/operations/miniapp_devtools_validation.md) cover the
 details needed by framework contributors. Full repository gates and release
 evidence are not prerequisites for writing your first application.
