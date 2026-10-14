@@ -259,3 +259,92 @@ and remounting. These scenarios exercise Minimoon's own behavior without copying
 upstream implementation. This review records the test scope, not an independent
 claim that validation passed; the repository gates and exact-fingerprint host
 evidence remain the validation authorities.
+
+## 2026-10-14 follow-up
+
+Reviewed against Minimoon `ff2f777` (core 0.2.7 / UI 0.1.5). The upstream
+review point is
+[`7d5940fed9b1ba795c84582394024233997ec267`](https://github.com/moonbit-community/rabbita/tree/7d5940fed9b1ba795c84582394024233997ec267).
+The [interval from the previous review](https://github.com/moonbit-community/rabbita/compare/0a5836a3d303b7390d7067894ba8471cbd4ffcdf...7d5940fed9b1ba795c84582394024233997ec267)
+contains 61 commits, including merges. Review dates do not replace the original
+Duplix/slotmap, erased-value, HTTP or UI source pins and their license notices.
+
+| Scope | Previous reviewed source | New reviewed source |
+| --- | --- | --- |
+| Rabbita | 0.15.8 | [Manifest](https://github.com/moonbit-community/rabbita/blob/7d5940fed9b1ba795c84582394024233997ec267/rabbita/moon.mod) is 0.16.5; the latest observed GitHub release is [0.16.4](https://github.com/moonbit-community/rabbita/releases/tag/rabbita-v0.16.4) |
+| RUI | 0.1.2 | [Manifest](https://github.com/moonbit-community/rabbita/blob/7d5940fed9b1ba795c84582394024233997ec267/rui/moon.mod) and [GitHub tag](https://github.com/moonbit-community/rabbita/releases/tag/rui-v0.3.6) are 0.3.6; module ownership changed to `moonbit-community/rui` |
+| Warren | 0.3.3 | [Manifest](https://github.com/moonbit-community/rabbita/blob/7d5940fed9b1ba795c84582394024233997ec267/warren/moon.mod) is 0.4.5 |
+
+These are source and GitHub publication observations on the review date, not
+claims of Mooncakes installation availability. Minimoon imports none of these
+modules. Its async dependency is already 0.22.4.
+
+| Upstream change | Local applicability and decision |
+| --- | --- |
+| [Explicit trait methods](https://github.com/moonbit-community/rabbita/commit/f8b477b) and compiler compatibility | Duplix, scope and slotmap implementation diffs contain explicit trait exports, without a substantive graph algorithm change. Preserve Minimoon's page-owned roots, transaction rollback and branch caches; the current toolchain migration handles local compatibility |
+| [Standard typed Promise](https://github.com/moonbit-community/rabbita/blob/7d5940fed9b1ba795c84582394024233997ec267/rabbita/js/async.mbt) and command wrappers | Preserve the typed MiniApp command boundary and existing page disposal, stale-result and reentrant cancellation tests; no browser Promise API migration is required |
+| [Reset omitted DOM properties](https://github.com/moonbit-community/rabbita/commit/9b5d32f) and [correct DOM property names](https://github.com/moonbit-community/rabbita/commit/3d1a64c) | Adopt the behavioral regression requirement. Local normalized `props` replacements and typed WXML bindings use a different mechanism; do not copy DOM `null` resets or browser property names into the MiniApp protocol |
+| [HTTP base URI preservation](https://github.com/moonbit-community/rabbita/commit/4b6322f) | Local requests require absolute HTTPS URLs and use `wx.request`; there is no document base URI to migrate |
+| [Native HTML dialog implementation](https://github.com/moonbit-community/rabbita/blob/7d5940fed9b1ba795c84582394024233997ec267/rui/dialog.mbt), related scope removals and `command_box` rename | Browser-native visibility/focus does not replace Skyline layers. Keep `UiContext`, explicit `Val` state, page-owned layers and existing public names |
+| [Nova styling and Markdown](https://github.com/moonbit-community/rabbita/blob/7d5940fed9b1ba795c84582394024233997ec267/rui/README.mbt.md) | Retain local Vega-v1. Nova, a MiniApp Markdown renderer and Drawer edge gestures need separate application requirements and native-host designs |
+| Warren asset embedding, SSR and embedded minifier | No corresponding MiniApp server deployment requirement; retain the verified CommonJS/Bun build boundary. Vite plugin changes in this interval concern test fixtures |
+
+The RUI 0.3.6 public interface has changed substantially. The existing
+[517-symbol map](../../ui/docs/rui_api_map.json) remains an inventory of RUI
+0.1.1, with the previously documented scoped 0.1.2 review. It is not a full
+0.3.6 compatibility assessment. This follow-up neither re-labels that map nor
+imports new upstream implementations.
+
+### Property-reset regression scope
+
+The renderer replaces a complete normalized `props` field when it changes.
+The host lowers input/textarea changes to individual fields only when no
+property disappears; removal retains complete replacement semantics. Existing
+tests cover selection removal, overlapping writes, focus preservation and
+page-owned cancellation. The follow-up extends that coverage at three boundaries:
+
+- Normalization and diff: optional keys disappear, `false`, zero and empty
+  strings survive, and applying a patch reconstructs the exact next tree
+  without mutating the previous tree, including keyed reorders.
+- Public core/UI components: controlled text clears, checked/disabled values
+  reset, re-enabled inputs accept events, and stable keyed controls retain
+  their current event bindings. Required text values reset to `""`; their
+  public contract is not made optional.
+- Executed host templates: ordinary and App-enabled hosts apply removal,
+  re-addition, mixed whole/leaf writes and structural updates to the same
+  final data tree as the checked protocol, without changing input commands.
+
+These are automated behavior checks, not native focus, IME or widget acceptance.
+The [Developer Tools handoff](../operations/miniapp_devtools_validation.md#property-reset-follow-up)
+maps existing interactions and records scenarios without a dedicated host UI.
+No fixture controls or generated smoke checklists are added by this follow-up.
+Any actual implementation repair that changes artifact bytes requires renewed
+validation for the affected fingerprints.
+
+### Property-reset host handoff
+
+This follow-up adds automated property-reset coverage without adding fixture
+controls. Use the existing interactions below when validating the unchanged
+candidate, together with the [full Developer Tools procedure](../operations/miniapp_devtools_validation.md):
+
+| Existing location | Manual check |
+| --- | --- |
+| Draft Editor title input and body textarea | Enter text, clear it completely, then type again with English and Chinese IME. Values must not return; focus/selection behavior must remain consistent with the typing checklist |
+| Runtime Lab | Run `Reset controlled input` and `Reconcile controlled native values`; verify the existing identity, value and renderer-stat expectations in the full procedure |
+| Runtime Lab local cards | Change switch/textarea state, hide/show and reorder cards, then remove/restore a card; verify retained versus newly created local state and stopped subscriptions |
+| UI Forms | Clear and re-enter input/textarea text, toggle enabled choices and exercise form reset. Disabled examples remain inert; do not infer dynamic re-enabling from a statically enabled control |
+
+Optional input-property removal/re-addition, dynamic disabled-to-enabled
+transitions and mixed whole-property/leaf writes have additional automated
+coverage. These fixtures do not expose dedicated controls for every such
+transition. Do not record those cases as manually passed based on the simulated
+host or the interactions above. In particular, automated data-tree equality
+does not establish native focus, selection, IME or default-property behavior.
+
+Keep the original artifact fingerprints when only tests and these repository
+instructions change. If a reproduced defect requires a production repair,
+rebuild and validate every affected fixture at its new fingerprint. The
+generated smoke checklist itself is fingerprinted and must not be edited to
+describe these extra checks. Record actual host results only through the
+normal local evidence workflow. This detailed handoff remains repository-only;
+the packaged guide links here to preserve the archive's required reserve.

@@ -11,6 +11,14 @@ reviewed `0a5836a3` (RUI 0.1.2): only its module manifest changed since this
 baseline, and the generated interface remains byte-identical. The original
 source pin and 517-symbol inventory remain unchanged.
 
+The [2026-10-14 follow-up](../../docs/reference/rabbita_and_rui_audit.md#2026-10-14-follow-up)
+reviewed `7d5940f` (Rabbita source 0.16.5 / RUI 0.3.6). RUI now has breaking
+HTML-dialog API changes, Nova styling and a Markdown package. The native
+implementation retains its page-owned layers, existing public API and Vega-v1
+theme. The 517-symbol map still describes RUI 0.1.1; it is not evidence of
+complete RUI 0.3.6 parity. Property-reset regression checks follow the relevant
+behavior without importing the browser implementation.
+
 [The machine-readable API map](rui_api_map.json) records each symbol, original interface line, local implementation path, migration classification, and any unresolved capability. `adapted` means a native equivalent, `consolidated` means shared builders/types or explicit state replace several upstream parts, `native_substitution` means a deliberately different host mechanism, and `partial` means a known substantive gap. Classification never promises identical signatures, pixels, or browser behavior.
 
 RUI is MIT-licensed; the pinned source and its third-party notices were reviewed before implementation. The repository’s [third-party notice](../THIRD_PARTY_NOTICES.md) records the retained Rabbita/RUI, shadcn/ui, and React DayPicker attribution. Vega-v1 is a locally owned native theme adaptation, not runtime-loaded upstream CSS.

@@ -24,6 +24,11 @@ checklist. A checklist-only, `app.wxss`, shared-template, or future static-asset
 change is therefore a new host candidate even when application JavaScript is
 unchanged.
 
+## Property-reset follow-up
+
+[Additional property-reset checks](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md#property-reset-host-handoff)
+map existing interactions and automated-only cases.
+
 ## Prepare the exact release
 
 ```bash
