@@ -20,18 +20,35 @@ extern "js" fn run_input_patch_test(
   #|    hostModule.exports.registerMinimoonPage({ minimoon_runtime_version: () => abi, minimoon_runtime_state_abi_version: () => abi }, "test", node("empty", "root"), [])
   #|    const execute = (ops, tree) => {
   #|      const patches = [], advanced = []
+  #|      const original = JSON.stringify({ ops, tree })
+  #|      const data = { test: { tree: structuredClone(tree), commit: 0 } }
+  #|      const resolve = path => path.reduce((value, key) => value[key], data)
+  #|      const assign = (path, value) => { resolve(path.slice(0, -1))[path.at(-1)] = structuredClone(value) }
+  #|      const checked = applyPatch(command(ops), "test", 0, tree)
+  #|      assert(checked, "test command must pass protocol validation")
   #|      page._sh = tree; page._rv = 0; page._st = module.exports.createRendererStats()
   #|      page._fb = reason => { throw new Error(reason) }
-  #|      page._sw = (candidate, generation, done, retry, write) => write(1, () => {})
-  #|      page.setData = patch => { patches.push(patch) }
+  #|      page._sw = (candidate, generation, done, retry, write) => {
+  #|        assert(same(candidate.shadow, checked.shadow), "host candidate differs from protocol shadow")
+  #|        write(1, () => {})
+  #|      }
+  #|      page.setData = patch => {
+  #|        patches.push(patch)
+  #|        for (const [path, value] of Object.entries(patch)) assign(path.replace(/\[(\d+)\]/g, ".$1").split("."), value)
+  #|      }
   #|      page.groupUpdates = callback => callback()
-  #|      page.replaceDataOnPath = (path, value) => advanced.push(set(path, value))
-  #|      page.spliceArrayDataOnPath = (path, index, delete_count, items) => advanced.push({ op: "splice", path, index, delete_count, items })
+  #|      page.replaceDataOnPath = (path, value) => { advanced.push(set(path, value)); assign(path, value) }
+  #|      page.spliceArrayDataOnPath = (path, index, delete_count, items) => {
+  #|        advanced.push({ op: "splice", path, index, delete_count, items })
+  #|        resolve(path).splice(index, delete_count, ...structuredClone(items))
+  #|      }
   #|      page._ap(command(ops), 1, () => {})
   #|      assert(patches.length === 1, "patch must produce one acknowledged host commit")
   #|      const fields = Object.keys(patches[0])
   #|      assert(!fields.some(a => fields.some(b => a !== b && b.startsWith(a + "."))), "setData has overlapping whole-props/leaf paths")
-  #|      return { patch: patches[0], advanced }
+  #|      assert(same(data.test.tree, checked.shadow), "executed host writes differ from protocol target tree")
+  #|      assert(JSON.stringify({ ops, tree }) === original, "host writes mutated the input command or authoritative tree")
+  #|      return { patch: patches[0], advanced, tree: data.test.tree }
   #|    }
   #|    for (const kind of ["input", "textarea"]) {
   #|      const props = { value: "a", focus: false, disabled: false, selectionStart: -1, selectionEnd: -1 }
@@ -70,10 +87,34 @@ extern "js" fn run_input_patch_test(
   #|      const many = Array.from({ length: 17 }, (_, index) => set(["props"], { ...props, value: String(index), focus: index % 2 === 0 }))
   #|      assert(applyPatch(command(many), "test", 0, tree) === null, "expanded writes bypassed the 32-write ceiling")
   #|      assert(applyPatch(command(Array.from({ length: 33 }, () => set(["props"], props))), "test", 0, tree) === null, "no-op writes bypassed the protocol operation ceiling")
+  #|      const populated = { value: "old", focus: false, disabled: true, placeholder: "hint", maxlength: 12, selectionStart: 1, selectionEnd: 3 }
+  #|      const cleared = { ...populated, value: "", disabled: false, maxlength: 0, selectionStart: 0, selectionEnd: 0 }
+  #|      const omitted = { value: "", focus: false, disabled: false }
+  #|      const restored = { ...cleared, value: "restored" }
+  #|      const originalControl = node(kind, "k:editor", populated)
+  #|      for (const values of [[cleared], [cleared, omitted], [omitted, restored], [cleared, omitted, restored, omitted]]) {
+  #|        const result = execute(values.map(value => set(["props"], value)), originalControl)
+  #|        assert(same(result.tree, node(kind, "k:editor", values.at(-1))), kind + ": reset or re-addition retained stale props or lost false/zero/empty values")
+  #|      }
+  #|      const sibling = node("input", "k:sibling", { value: "untouched", focus: true })
+  #|      const controls = { ...node("view", "root"), children: [originalControl, sibling] }
+  #|      const move = { op: "move", path: ["children"], from: 1, to: 0, identity: sibling.identity, item: sibling }
+  #|      const moved = execute([move, set(["children", 1, "props"], omitted), set(["children", 1, "props"], restored)], controls)
+  #|      assert(same(moved.tree, { ...controls, children: [sibling, node(kind, "k:editor", restored)] }), "reordered reset updated the wrong keyed control")
+  #|      const inserted = execute([insert, set(["children", 1, "props"], omitted)], controls)
+  #|      assert(same(inserted.tree, { ...controls, children: [node("text", "notice"), node(kind, "k:editor", omitted), sibling] }), "structural property removal retained stale input props")
   #|    }
   #|    const button = node("button", "action", { disabled: false })
   #|    const update = set(["props"], { disabled: true })
   #|    assert(same(applyPatch(command([update]), "test", 0, button).writes, [update]), "unrelated controls changed their write semantics")
+  #|    for (const kind of ["checkbox", "switch", "button"]) {
+  #|      const active = { checked: true, disabled: true }
+  #|      const reset = { checked: false, disabled: false }
+  #|      for (const values of [[reset], [reset, {}], [{}, active, reset]]) {
+  #|        const result = execute(values.map(value => set(["props"], value)), node(kind, "control", active))
+  #|        assert(same(result.tree.props, values.at(-1)), kind + ": boolean reset or removal did not reach host data")
+  #|      }
+  #|    }
   #|    return ""
   #|  } catch (error) { return String(error && error.stack || error) }
   #|}
