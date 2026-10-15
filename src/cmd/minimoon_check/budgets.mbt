@@ -12,6 +12,12 @@ let registry_archive_operating_limit : Int32 = registry_archive_hard_limit -
   registry_archive_reserve
 
 ///|
+let ui_registry_archive_hard_limit : Int32 = 250 * 1024
+
+///|
+let ui_registry_archive_reserve : Int32 = 16 * 1024
+
+///|
 // Approved Draft Workbench review, 2026-09-10: runtime/aggregate 427,143/461,392 B.
 // Only the core example's fixed ceilings change; framework/Starter/UI gates do not.
 let conformance_runtime_limit : Int32 = 440000

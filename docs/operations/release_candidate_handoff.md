@@ -88,6 +88,27 @@ workspace bindings cannot prove that a version is available in Mooncakes.
 Record the reviewed archive content checksums before publication; ZIP timestamps
 or compression metadata alone are not a source-content change.
 
+The generator suite writes `_build/package-review/core.json` and `ui.json`
+from the actual ZIPs, including the archive SHA-256, complete member inventory,
+per-package compressed and uncompressed sizes, the 20 largest compressed files,
+and operating/hard-limit headroom. Re-run `vp run --no-cache check:candidate`
+to refresh both. These ignored reports also appear in the primary CI job's
+`minimoon-package-review-<commit>` artifact, retained for 14 days when available,
+including after a budget failure. A partial failed run can contain only the
+core report; it does not establish a passed UI package review.
+
+Groups partition file payloads by source-package directory, documentation, or
+root metadata. ZIP headers, directory records and other container overhead are
+reported separately as `zipMetadataBytes`; do not add them to every group or
+treat uncompressed source sizes as ZIP-budget consumption. Reports use sorted
+paths and deterministic tie-breaking, with no timestamps or machine-local
+paths. The inspected member paths must exactly match `moon package --list`;
+missing, duplicate or unexpected members fail the gate. The report is written
+before enforcing the existing budgets: core 328 KiB minus 8 KiB reserve and UI
+250 KiB minus 16 KiB reserve. Negative operating headroom remains a failure.
+This size report is separate from registry resolution, consumer acceptance and
+the fingerprint-bound Developer Tools evidence.
+
 As observed with `moon 0.1.20260907`, packaging a nested module can
 inherit its ancestor repository's `.moonignore`. In this repository the root
 `/ui/` exclusion can make a direct UI package/publish operation produce an

@@ -3,6 +3,8 @@ test "reviewed example and framework byte budgets retain exact inclusive boundar
   assert_eq(registry_archive_hard_limit, 335872)
   assert_eq(registry_archive_reserve, 8192)
   assert_eq(registry_archive_operating_limit, 327680)
+  assert_eq(ui_registry_archive_hard_limit, 256000)
+  assert_eq(ui_registry_archive_reserve, 16384)
   assert_eq(conformance_runtime_limit, 440000)
   assert_eq(conformance_javascript_limit, 480000)
   assert_eq(starter_runtime_limit, 230000)

@@ -307,6 +307,12 @@ fn registry_package_paths(listing : String) -> Array[String] {
 
 ///|
 async fn distribution_package_gate(root : String, temp : String) -> Unit {
+  for label in ["core", "ui"] {
+    let report = join(root, "_build/package-review/" + label + ".json")
+    if @fs.exists(report) {
+      @fs.remove(report)
+    }
+  }
   println("\n==> Registry package allowlist")
   println("$ moon package --frozen --list")
   let (code, stdout, stderr) = @toolchain.collect_output(
@@ -351,6 +357,16 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
   let hard_limit = registry_archive_hard_limit
   let operating_limit = registry_archive_operating_limit
   let reserve_kib = (registry_archive_reserve / 1024).to_string()
+  write_archive_review(
+    root,
+    "core",
+    "lampclaw/minimoon",
+    @versions.product_version(),
+    archive,
+    packaged_paths,
+    hard_limit,
+    registry_archive_reserve,
+  )
   guard byte_budget_allows(archive_size, operating_limit) else {
     abort(
       "registry package must retain at least " +
