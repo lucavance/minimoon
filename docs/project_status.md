@@ -3,12 +3,17 @@
 ## Current upgrade candidate
 
 The current source pair is **core `0.2.7` / UI `0.1.5`**, with UI declaring
-core `0.2.7`. Both are unpublished candidates. Complete local candidate gates,
-coverage, native/JS tests and Node 24 lower-bound checks passed on 2026-10-13 in
-an independent clean checkout. The user authorized commit and push to `main`,
-followed by CI, and will perform WeChat Developer Tools validation afterward.
-Publication requires separate authorization and all release gates. Neither
-remote CI nor new WeChat Developer Tools acceptance is claimed here.
+core `0.2.7`. Both remain candidates awaiting separately authorized publication.
+The toolchain upgrade reached `main` at
+[`ff2f777`](https://github.com/lucavance/minimoon/commit/ff2f77794eaa251f1134a7701c0e866cc3165073);
+both the primary Test and Node 24 LTS compatibility jobs
+[passed for that commit](https://github.com/lucavance/minimoon/actions/runs/38353795415).
+The user also authorized integration, push and CI for the subsequent Rabbita/RUI
+maintenance and package-governance work. The final integrated commit needs its
+own passing CI results; the earlier run does not validate later source changes.
+Use the [main workflow runs](https://github.com/lucavance/minimoon/actions/workflows/test.yml?query=branch%3Amain)
+to inspect the exact source SHA. Publication requires separate authorization
+and all release gates.
 
 The supported MoonBit floor becomes `moon 0.1.20261012` / `moonc 0.10.15`,
 with both CI jobs pinned to `0.10.15+943464bfa`. The candidate updates managed
@@ -20,6 +25,37 @@ Tailwind/CLI `4.3.3`, Acorn `8.19.0`, eslint-scope `9.1.2`, source-map-js overri
 
 Use the source CLI for new Starters until registry availability is recorded.
 The published packages and evidence below retain their original contents.
+
+## Completed maintenance implementation
+
+The 2026-10-14 Rabbita/RUI review led to property-reset, re-enabling and keyed
+control regressions at the normalization, public core/UI and executed-host
+boundaries. Existing lifecycle coverage remains in place. The work required no
+production runtime repair or public API change. The RUI symbol inventory still
+describes its pinned 0.1.1 baseline; newer-source parity is not claimed.
+
+Repository-only release/dogfood runbooks are now excluded from the core archive,
+while required application guides and installed CLI consumer checks remain.
+The generator gate emits actual-ZIP size reports for both modules, checks exact
+member-list parity and retains the existing ceilings/reserves. Reports include
+per-package compressed/uncompressed payloads, container overhead, largest files,
+archive SHA-256 and budget headroom. The primary CI job uploads available
+reports, including budget-failure diagnostics.
+
+Complete local candidate checks, coverage and native/JS tests passed on
+2026-10-15 for this maintenance implementation. Core tests total 502 native
+and 387 JS; independent UI checks total 116 native and 118 JS. Public interfaces,
+the two maintained fixture artifacts and the embedded Starter remain unchanged.
+See the [roadmap](roadmap.md#package-size-governance-implemented) and
+[archive procedure](operations/release_candidate_handoff.md) for scope and report
+semantics. Optional native transition controls, a full newer-RUI comparison,
+Nova, Markdown and Drawer edge gestures remain separate development decisions.
+
+Actual WeChat Developer Tools results, tool versions and timestamps belong only
+in each fixture's ignored, fingerprint-bound evidence. Public tracked reports
+remain reproducible candidates with `release: false` and Developer Tools
+`pending`; that public state does not describe whether valid evidence exists
+on a developer's machine. Changed fingerprints require renewed host validation.
 
 ## Current published package availability
 

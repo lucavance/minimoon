@@ -231,9 +231,11 @@ source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
 
-The core `0.2.7` / UI `0.1.5` upgrade is authorized for commit and push to
-`main`, followed by CI, after complete local candidate checks. The user will
-perform WeChat Developer Tools validation afterward. Publication requires
+The core `0.2.7` / UI `0.1.5` upgrade and current Rabbita/property-reset/package-governance
+follow-up are authorized for commit, integration and push to `main`, followed
+by CI, after complete local candidate checks. Require both CI jobs for the final
+integrated commit. Host evidence remains local and fingerprint-bound; changed
+artifacts require renewed WeChat Developer Tools validation. Publication requires
 separate authorization and all release gates. The exact braces `3.0.3` advisory
 exception is approved until `2026-11-23T00:00:00Z`; keep complete scanning,
 strict matching and expiry enforcement.
