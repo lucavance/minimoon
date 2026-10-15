@@ -13,7 +13,7 @@ Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
 dated feature commitments.
 
-## Current upgrade candidate: core 0.2.7 / UI 0.1.5
+## Current release: core 0.2.7 / UI 0.1.5
 
 Raise the MoonBit floor to `moon 0.1.20261012` / `moonc 0.10.15` and pin both
 CI jobs to official prebuilt release `0.10.15+943464bfa`. Migrate deprecated
@@ -27,10 +27,13 @@ vp `1.1.0`, primary Node `26.11.1`, the Node `24.20.0` lower-bound check,
 async `0.22.4`, x `0.5.5`, Tailwind/CLI `4.3.3`, Acorn `8.19.0`, eslint-scope
 `9.1.2` and source-map-js override `1.2.2`. Use weapp's default JavaScript kernel.
 
-The user authorized complete local candidate validation, reviewed archives,
-integration of the maintenance follow-up into `main`, push and CI validation.
-Publication requires separate authorization and all release gates. Use the
-source CLI until registry availability is recorded. Retain only the exact
+The separately authorized publication completed on 2026-10-15 from frozen
+commit `a74eb76`, after local candidate and release gates, archive review,
+both CI jobs and fingerprint-matched local evidence. Core was published first;
+fresh registry consumers passed before UI publication, and the final pair
+passed new and upgraded consumer checks. Registry CLI `0.2.7` now delivers the
+refreshed Starter. See [project status](project_status.md) for archive hashes
+and availability. Retain only the exact
 braces `3.0.3` advisory exception until `2026-11-23T00:00:00Z`; keep complete
 scanning, strict matching and expiry enforcement. Changed fixture fingerprints
 require renewed real-host validation before a host pass or future release.
@@ -61,8 +64,8 @@ listing while preserving the reviewed hard ceilings and reserves. The primary
 CI job retains available reports even when an archive exceeds its budget. See the
 [release runbook](operations/release_candidate_handoff.md) for report semantics.
 
-Delivery requires CI for the final integrated commit; local
-candidate checks, prior-commit CI and host evidence are distinct inputs.
+Delivery passed CI for the final integrated commit; local
+candidate checks, prior-commit CI and host evidence remain distinct inputs.
 Fingerprint-matching host evidence remains developer-local. Further native
 interaction fixtures and a complete newer-RUI API map are optional follow-ups,
 not unfinished work in this maintenance scope. New host interactions require
@@ -77,9 +80,9 @@ repository, source-generated Starter, CI and environment guidance. Retain
 MoonBit `0.10.14`, async `0.22.4`, x `0.5.5`, Tailwind/CLI `4.3.3`, managed
 Bun `1.4.2`, Node `>=24.20.0` support and the public MoonBit API boundaries.
 
-The released pair is core `0.2.6` / UI `0.1.4`; UI declares core `0.2.6`.
-Previous registry CLI `0.2.5` retains its original pins. Until the new pair is
-available, use the source workflow. Run complete
+That released pair is core `0.2.6` / UI `0.1.4`; UI declares core `0.2.6`.
+Previous registry CLI `0.2.5` retains its original pins. Their immutable
+archives remain historical; current availability is recorded above. Run complete
 candidate checks and independent Starter installation/build checks. Changed
 fixture fingerprints need renewed real-host validation before claiming a pass.
 The historical authorization allowed push after those local checks and publication after both
@@ -267,9 +270,9 @@ and both CI handoff bundles before any separately authorized release. Follow
 the [release runbook](operations/release_candidate_handoff.md), validating core
 registry consumers before publishing its matching UI archive. The `0.2.6` /
 `0.1.4` publication is complete; occupied versions and archives are immutable.
-The current pair and maintenance follow-up are authorized through integration,
-push and CI. A separately authorized publication requires both CI jobs for the
-final frozen commit plus fingerprint-matched host validation. Preserve
+The current pair and maintenance follow-up were published on 2026-10-15.
+Future publications need separate authorization, both CI jobs for the
+final frozen commit and fingerprint-matched host validation. Preserve
 actual-evidence gates and candidate report restoration. Record dates, source
 SHA and registry checks only after they happen. Current availability belongs
 in [project status](project_status.md), not in immutable package contents.

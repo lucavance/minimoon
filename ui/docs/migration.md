@@ -31,8 +31,8 @@ Input and textarea deliberately use the simpler RUI-style controlled shape:
 `input(value~, on_input~, ...) -> Node` and `textarea(...) -> Node` are pure
 builders and can run inside `Val.view`. Use `input_stateful` or
 `textarea_stateful` only when the widget should own its value. The former
-`input_controlled`/`textarea_controlled` names are removed in this unpublished
-candidate. `text_field(state, value, on_input, ...) -> Val[Node]` combines
+`input_controlled`/`textarea_controlled` names are removed from the current
+API. `text_field(state, value, on_input, ...) -> Val[Node]` combines
 application-owned text, reactive validation/options, semantic associations and
 one local focus state. Create it once in the page/component builder, not in
 `view`. `focused` controls native theme presentation; `InputOptions.focus` is

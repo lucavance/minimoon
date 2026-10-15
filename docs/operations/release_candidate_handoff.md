@@ -8,14 +8,15 @@ are recorded in [project status](https://github.com/lucavance/minimoon/blob/main
 Never overwrite an occupied registry version or treat an old host result as
 acceptance of changed artifacts.
 
-Core `0.2.7` / UI `0.1.5` and the current Rabbita/property-reset/package-governance
-follow-up are authorized for commit, integration, push to `main` and CI after
-local checks. Require both CI jobs for the final integrated source commit.
-Actual host evidence stays local and is valid only for its exact fingerprint;
-unchanged fixtures retain matching evidence, while changed bytes need renewed
-WeChat Developer Tools validation. Publication requires separate authorization
-and all gates below. The previous
-core `0.2.6` / UI `0.1.4` publication is complete.
+The separately authorized core `0.2.7` / UI `0.1.5` publication, including the
+Rabbita/property-reset/package-governance follow-up, completed on 2026-10-15
+from frozen commit `a74eb76`. Both CI jobs, local release gates, reviewed
+archives and fresh registry consumers passed. Actual host evidence stays local
+and is valid only for its exact fingerprint; unchanged fixtures retain matching
+evidence, while changed bytes need renewed WeChat Developer Tools validation.
+The procedure below records this completed publication. Occupied versions
+remain immutable, and future publication requires separate authorization and
+all release gates. The previous core `0.2.6` / UI `0.1.4` publication is complete.
 
 Run `vp run --no-cache check:audit` separately from candidate validation. Its
 [source audit policy](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md#source-dependency-audit-policy)

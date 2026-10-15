@@ -1,30 +1,28 @@
 # Project status
 
-## Current upgrade candidate
+## Current release
 
 The current source pair is **core `0.2.7` / UI `0.1.5`**, with UI declaring
-core `0.2.7`. Both remain candidates awaiting separately authorized publication.
-The toolchain upgrade reached `main` at
-[`ff2f777`](https://github.com/lucavance/minimoon/commit/ff2f77794eaa251f1134a7701c0e866cc3165073);
-both the primary Test and Node 24 LTS compatibility jobs
-[passed for that commit](https://github.com/lucavance/minimoon/actions/runs/38353795415).
-The user also authorized integration, push and CI for the subsequent Rabbita/RUI
-maintenance and package-governance work. The final integrated commit needs its
-own passing CI results; the earlier run does not validate later source changes.
-Use the [main workflow runs](https://github.com/lucavance/minimoon/actions/workflows/test.yml?query=branch%3Amain)
-to inspect the exact source SHA. Publication requires separate authorization
-and all release gates.
+core `0.2.7`. Both were published to Mooncakes on **2026-10-15 (Asia/Shanghai)**
+under the user's explicit publication authorization. The frozen source is
+[`a74eb76`](https://github.com/lucavance/minimoon/commit/a74eb76b0b55d571cea263608793d79298fc95a2),
+including the toolchain upgrade and subsequent Rabbita/RUI maintenance and
+package-governance work. Both the primary Test and Node 24 LTS compatibility
+jobs [passed for that exact commit](https://github.com/lucavance/minimoon/actions/runs/38667472450).
+Local candidate and release gates, reviewed package contents and fresh registry
+consumers passed. Future publications require separate authorization and all
+release gates.
 
-The supported MoonBit floor becomes `moon 0.1.20261012` / `moonc 0.10.15`,
-with both CI jobs pinned to `0.10.15+943464bfa`. The candidate updates managed
+The supported MoonBit floor is `moon 0.1.20261012` / `moonc 0.10.15`,
+with both CI jobs pinned to `0.10.15+943464bfa`. The release updates managed
 Bun to `1.4.3`, PostCSS and its override to `8.5.30`, weapp-tailwindcss to
 `5.6.1` and SHA-pinned setup-vp to `1.21.2`. The default weapp JavaScript kernel,
 vp `1.1.0`, primary Node `26.11.1`, Node `>=24.20.0`, async `0.22.4`, x `0.5.5`,
 Tailwind/CLI `4.3.3`, Acorn `8.19.0`, eslint-scope `9.1.2`, source-map-js override
 `1.2.2`, public MoonBit APIs and Contract 11 / ABI 13 / protocol 8 are preserved.
 
-Use the source CLI for new Starters until registry availability is recorded.
-The published packages and evidence below retain their original contents.
+Registry CLI `0.2.7` now generates the refreshed Starter. Earlier published
+packages and evidence below retain their original contents.
 
 ## Completed maintenance implementation
 
@@ -59,25 +57,23 @@ on a developer's machine. Changed fingerprints require renewed host validation.
 
 ## Current published package availability
 
-Core `0.2.6` and UI `0.1.4` were published to Mooncakes on **2026-10-08
-(Asia/Shanghai)**, with UI declaring core `0.2.6`. The pair updates tooling
-to `vp 1.1.0`, primary Node `26.11.1`, Acorn `8.19.0`,
-PostCSS `8.5.29`, weapp-tailwindcss `5.5.12` and SHA-pinned
-`actions/upload-artifact 7.0.2`. MoonBit, async `0.22.4`, x `0.5.5`,
-Tailwind/CLI `4.3.3`, managed Bun `1.4.2` and Node `>=24.20.0` support remain
-unchanged. Registry CLI `0.2.6` generates the new Starter pins; previous CLI
-`0.2.5` retains Node `26.10.0`, PostCSS `8.5.28` and weapp-tailwindcss `5.5.11`.
+Core `0.2.7` and UI `0.1.5` are available from Mooncakes, with UI declaring
+core `0.2.7`. Registry CLI `0.2.7` generates Node `26.11.1`, Bun `1.4.3`,
+PostCSS `8.5.30`, weapp-tailwindcss `5.6.1` and source-map-js override `1.2.2`.
+Previous CLI `0.2.6` retains PostCSS `8.5.29`, weapp-tailwindcss `5.5.12`
+and Bun `1.4.2`; CLI `0.2.5` retains Node `26.10.0`, PostCSS `8.5.28`
+and weapp-tailwindcss `5.5.11`. Published archives remain immutable.
 
 ## Source dependency audit policy
 
 The original unpublished repair kept core `0.2.6` / UI `0.1.4` version metadata.
-The current `0.2.7` / `0.1.5` candidate carries that repair forward: it adds
+The current `0.2.7` / `0.1.5` release carries that repair forward: it adds
 `overrides.source-map-js: "1.2.2"` alongside
 the PostCSS override in the repository and source-generated Starter. This
 removes the two nested `source-map-js 1.2.1` resolutions affected by
 [GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q).
-The published `0.2.6` CLI retains its original Starter template; use the
-source CLI for this repair, or add that override to an existing app and run
+The published `0.2.6` CLI retains its original Starter template; use registry
+CLI `0.2.7` for this repair, or add that override to an existing app and run
 `vp install`, followed by `vp install --frozen-lockfile`.
 
 `vp run --no-cache check:audit` is a small, separate repository gate. It runs the
@@ -115,8 +111,60 @@ vulnerabilities. Other high/critical advisories, a changed advisory or installed
 version, an expired exception, invalid JSON/lock data, inconsistent exit codes,
 stderr, network errors, launch failures and timeouts all fail the gate.
 Lower-severity findings remain visible in the report. This repair is delivered
-as source and an override existing apps can apply. The new local upgrade
-candidate includes it; both occupied versions remain immutable.
+by registry CLI `0.2.7` and an override existing apps can apply. Earlier
+occupied versions remain immutable.
+
+## Core 0.2.7 and UI 0.1.5 publication
+
+The frozen source is
+[`a74eb76b0b55d571cea263608793d79298fc95a2`](https://github.com/lucavance/minimoon/commit/a74eb76b0b55d571cea263608793d79298fc95a2).
+Both CI jobs [passed for that exact commit](https://github.com/lucavance/minimoon/actions/runs/38667472450).
+Before upload, both fixture release verifications, `check:all`, `check:mvp`
+and final `check:candidate` restoration passed with unchanged fingerprints,
+package contents and a clean worktree. Tracked reports retain `release: false`
+and Developer Tools `pending`; fingerprint-bound host evidence stays local.
+
+Core was published first, followed by UI only after core registry consumers
+and independently extracted UI production/consumer checks passed. Both actual
+downloaded ZIPs are byte-identical to the frozen reviewed archives, including
+their complete inventories and every file's contents:
+
+| Package | Download | Bytes / files | Registry and reviewed ZIP SHA-256 |
+| --- | --- | ---: | --- |
+| Core `0.2.7` | [Mooncakes ZIP](https://download.mooncakes.io/user/lampclaw/minimoon/0.2.7.zip) | 318,406 / 182 | `3472c8a31a6303104a7c1ce8fb8d82b8e8b5e5e441863682039645f1767e7aa4` |
+| UI `0.1.5` | [Mooncakes ZIP](https://download.mooncakes.io/user/lampclaw/minimoon_ui/0.1.5.zip) | 119,533 / 78 | `99025fdff56dafab74b00542db847420ad5e6e921d58badcdc98e924a9517d9d` |
+
+Both `moon publish --frozen` attempts stopped before upload because their
+temporary self-check directories needed dependency installation. Version
+vacancy, unchanged contents and dependency versions were rechecked; ordinary
+`moon publish` then passed each full self-check and returned HTTP `200 OK`.
+UI was published outside all Git and Moon workspace ancestors, after checking
+all 78 source files against the reviewed archive. Its source-only self-check
+warned about the test-only import whose tests are excluded from the archive;
+production builds and downstream native/JS consumer checks passed with
+`--deny-warn`.
+
+Fresh registry consumers passed 74 core, 26 pre-publication UI and 58 final
+pair execution steps:
+
+- The installed registry CLI created a Starter with the current pins and
+  source-map-js override. Frozen installation and the README first edit passed.
+  Frozen API/explicit-method consumers, runtime interactions and foreground
+  App subscriptions passed native/JS checks. Custom configuration and nested
+  output paths rebuilt deterministically; missing host evidence correctly
+  failed release verification without changing distributable bytes.
+- The reviewed UI archive built against actual registry core `0.2.7` and its
+  root/headless/theme consumer passed native/JS behavior and resource builds.
+  After publication, the registry-only Showcase passed native/JS checks and
+  deterministic candidate builds. An unknown resource failed without replacing
+  the prior distributables.
+- Real registry CLI/core `0.2.5` and core `0.2.5` / UI `0.1.3` baselines upgraded
+  to the new versions. Business source, MiniApp configuration, source styles
+  and private configuration stayed byte-identical. Materialized manifests
+  confirmed both registry versions and UI's core declaration; frozen installs
+  preserved the updated package manifests and lockfiles.
+
+This repository-only record leaves the immutable published contents unchanged.
 
 ## Core 0.2.6 and UI 0.1.4 publication
 

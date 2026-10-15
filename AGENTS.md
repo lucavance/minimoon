@@ -174,11 +174,11 @@ the user explicitly authorizes that action.
   `Json::empty_object()` for empty JSON objects, and `{ () }` for empty blocks.
   The aggregate gate requires `moon check` to be warning-free.
 
-- The current source pair is the candidate core `0.2.7` / UI `0.1.5`.
-  Published registry CLI `0.2.6` generates
-  its original Node `26.11.1`, PostCSS `8.5.29` and weapp-tailwindcss `5.5.12`
-  pins. Before the new pair is published, use the source CLI for refreshed
-  Starter output. Published archives remain immutable; historical release
+- The current source pair is the published core `0.2.7` / UI `0.1.5`.
+  Registry CLI `0.2.7` generates the current Starter pins and the
+  source-map-js `1.2.2` override. Previous CLI `0.2.6` retains its original
+  Node `26.11.1`, PostCSS `8.5.29` and weapp-tailwindcss `5.5.12` pins.
+  Published archives remain immutable; historical release
   evidence does not establish a host pass for changed artifact fingerprints.
 
 - Avoid committing broad formatting drift from a global `moon fmt`. If you run
@@ -231,12 +231,13 @@ source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
 
-The core `0.2.7` / UI `0.1.5` upgrade and current Rabbita/property-reset/package-governance
-follow-up are authorized for commit, integration and push to `main`, followed
-by CI, after complete local candidate checks. Require both CI jobs for the final
-integrated commit. Host evidence remains local and fingerprint-bound; changed
-artifacts require renewed WeChat Developer Tools validation. Publication requires
-separate authorization and all release gates. The exact braces `3.0.3` advisory
+The explicitly authorized core `0.2.7` / UI `0.1.5` publication completed on
+2026-10-15 from frozen commit `a74eb76b0b55d571cea263608793d79298fc95a2`, including
+the Rabbita/property-reset/package-governance follow-up. Complete local candidate,
+`check:all` and `check:mvp` gates, both CI jobs, archive review and fresh registry
+consumers passed. Host evidence remains local and fingerprint-bound; changed
+artifacts require renewed WeChat Developer Tools validation. Future publication
+requires separate authorization and all release gates. The exact braces `3.0.3` advisory
 exception is approved until `2026-11-23T00:00:00Z`; keep complete scanning,
 strict matching and expiry enforcement.
 
