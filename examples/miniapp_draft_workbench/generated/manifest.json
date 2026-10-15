@@ -2,7 +2,7 @@
   "schemaVersion": 11,
   "adapter": "page_program",
   "runtimeApiVersion": 13,
-  "rendererProtocolVersion": 8,
+  "rendererProtocolVersion": 9,
   "rendererUpdateStrategy": "automatic-diff",
   "hostRegistration": "page-definition-api",
   "runtimeLayout": "application",
@@ -51,7 +51,7 @@
     ]
   },
   "runtimeBytes": {
-    "application": 430212
+    "application": 436672
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -119,7 +119,7 @@
     {
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
-      "rendererProtocolVersion": 8,
+      "rendererProtocolVersion": 9,
       "id": "workbench",
       "route": "pages/workbench/workbench",
       "title": "Minimoon 草稿工作台",
@@ -523,7 +523,7 @@
     {
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
-      "rendererProtocolVersion": 8,
+      "rendererProtocolVersion": 9,
       "id": "drafts",
       "route": "pages/drafts/drafts",
       "title": "草稿",
@@ -852,7 +852,7 @@
     {
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
-      "rendererProtocolVersion": 8,
+      "rendererProtocolVersion": 9,
       "id": "online",
       "route": "pages/online/online",
       "title": "联机",
@@ -1230,7 +1230,7 @@
     {
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
-      "rendererProtocolVersion": 8,
+      "rendererProtocolVersion": 9,
       "id": "more",
       "route": "pages/more/more",
       "title": "更多",
@@ -1774,7 +1774,7 @@
     {
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
-      "rendererProtocolVersion": 8,
+      "rendererProtocolVersion": 9,
       "id": "interaction",
       "route": "pages/interaction/interaction",
       "title": "交互",
@@ -3496,7 +3496,7 @@
     {
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
-      "rendererProtocolVersion": 8,
+      "rendererProtocolVersion": 9,
       "id": "platform",
       "route": "pages/platform/platform",
       "title": "平台",
@@ -4449,7 +4449,7 @@
     {
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
-      "rendererProtocolVersion": 8,
+      "rendererProtocolVersion": 9,
       "id": "request_lifecycle",
       "route": "pages/request_lifecycle/request_lifecycle",
       "title": "请求生命周期",
@@ -5091,7 +5091,7 @@
     {
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
-      "rendererProtocolVersion": 8,
+      "rendererProtocolVersion": 9,
       "id": "runtime_lab",
       "route": "pages/runtime_lab/runtime_lab",
       "title": "状态与渲染实验",
@@ -6196,6 +6196,194 @@
                         "identity": "i:3",
                         "text": "",
                         "props": {
+                          "section": "property-probe",
+                          "className": "demo-card"
+                        },
+                        "events": {},
+                        "children": [
+                          {
+                            "kind": "view",
+                            "identity": "i:0",
+                            "text": "",
+                            "props": {
+                              "className": "demo-card-title"
+                            },
+                            "events": {},
+                            "children": [
+                              {
+                                "kind": "text",
+                                "identity": "i:0",
+                                "text": "属性重置与恢复",
+                                "props": {},
+                                "events": {},
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "view",
+                            "identity": "i:1",
+                            "text": "",
+                            "props": {},
+                            "events": {},
+                            "children": [
+                              {
+                                "kind": "text",
+                                "identity": "i:0",
+                                "text": "phase 0: populated → empty/false/zero → omitted → restored",
+                                "props": {},
+                                "events": {},
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "button",
+                            "identity": "i:2",
+                            "text": "",
+                            "props": {
+                              "disabled": false,
+                              "id": "property-probe-next"
+                            },
+                            "events": {
+                              "tap": "property-probe/next"
+                            },
+                            "children": [
+                              {
+                                "kind": "text",
+                                "identity": "i:0",
+                                "text": "下一阶段 / Next phase",
+                                "props": {},
+                                "events": {},
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "fragment",
+                            "identity": "i:3",
+                            "text": "",
+                            "props": {},
+                            "events": {},
+                            "children": [
+                              {
+                                "kind": "input",
+                                "identity": "k:editor",
+                                "text": "",
+                                "props": {
+                                  "value": "populated",
+                                  "maxlength": 24,
+                                  "password": true,
+                                  "selectionStart": 0,
+                                  "selectionEnd": 0,
+                                  "name": "probe-name",
+                                  "disabled": true,
+                                  "focus": false,
+                                  "placeholder": "restored hint",
+                                  "id": "property-probe-input"
+                                },
+                                "events": {
+                                  "input": "property-probe/input"
+                                },
+                                "children": []
+                              },
+                              {
+                                "kind": "textarea",
+                                "identity": "k:textarea",
+                                "text": "",
+                                "props": {
+                                  "value": "populated",
+                                  "maxlength": 140,
+                                  "disabled": true,
+                                  "focus": false,
+                                  "id": "property-probe-textarea"
+                                },
+                                "events": {
+                                  "input": "v/root/i:1/i:0/i:1/i:3/i:3/k:textarea/input"
+                                },
+                                "children": []
+                              },
+                              {
+                                "kind": "switch",
+                                "identity": "k:switch",
+                                "text": "",
+                                "props": {
+                                  "checked": true,
+                                  "disabled": true,
+                                  "id": "property-probe-switch"
+                                },
+                                "events": {
+                                  "change": "v/root/i:1/i:0/i:1/i:3/i:3/k:switch/change"
+                                },
+                                "children": []
+                              },
+                              {
+                                "kind": "checkbox-group",
+                                "identity": "k:checkbox",
+                                "text": "",
+                                "props": {},
+                                "events": {
+                                  "change": "v/root/i:1/i:0/i:1/i:3/i:3/k:checkbox/change"
+                                },
+                                "children": [
+                                  {
+                                    "kind": "checkbox",
+                                    "identity": "i:0",
+                                    "text": "",
+                                    "props": {
+                                      "value": "probe",
+                                      "checked": true,
+                                      "disabled": true,
+                                      "id": "property-probe-checkbox"
+                                    },
+                                    "events": {},
+                                    "children": [
+                                      {
+                                        "kind": "text",
+                                        "identity": "i:0",
+                                        "text": "Probe",
+                                        "props": {},
+                                        "events": {},
+                                        "children": []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "empty",
+                            "identity": "i:4",
+                            "text": "",
+                            "props": {},
+                            "events": {},
+                            "children": []
+                          },
+                          {
+                            "kind": "view",
+                            "identity": "i:5",
+                            "text": "",
+                            "props": {},
+                            "events": {},
+                            "children": [
+                              {
+                                "kind": "text",
+                                "identity": "i:0",
+                                "text": "当前文本：populated",
+                                "props": {},
+                                "events": {},
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "view",
+                        "identity": "i:4",
+                        "text": "",
+                        "props": {
                           "section": "component-lab",
                           "id": "component-lab",
                           "className": "demo-card"
@@ -6488,7 +6676,7 @@
                       },
                       {
                         "kind": "view",
-                        "identity": "i:4",
+                        "identity": "i:5",
                         "text": "",
                         "props": {
                           "section": "runtime-async",
@@ -6643,7 +6831,7 @@
                       },
                       {
                         "kind": "view",
-                        "identity": "i:5",
+                        "identity": "i:6",
                         "text": "",
                         "props": {
                           "className": "demo-notes"
@@ -6709,7 +6897,7 @@
     {
       "schemaVersion": 11,
       "runtimeApiVersion": 13,
-      "rendererProtocolVersion": 8,
+      "rendererProtocolVersion": 9,
       "id": "draft_editor",
       "route": "pages/draft_editor/draft_editor",
       "title": "草稿编辑",

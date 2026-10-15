@@ -7,8 +7,8 @@
 
 ## 项目状态
 
-当前源码对应核心 `lampclaw/minimoon 0.2.7` 与可选的
-`lampclaw/minimoon_ui 0.1.5`，仍处于 1.0 之前的阶段。
+当前源码对应核心 `lampclaw/minimoon 0.3.0` 与可选的
+`lampclaw/minimoon_ui 0.2.0`，仍处于 1.0 之前的阶段。
 执行下面的固定版本安装前，先在
 [项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)确认版本已在 Mooncakes 可用；
 尚未发布时使用[源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
@@ -39,7 +39,7 @@
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon@0.2.7
+moon install lampclaw/minimoon/cmd/minimoon@0.3.0
 minimoon --version
 minimoon init my-app
 cd my-app
@@ -58,15 +58,16 @@ minimoon verify . --candidate
 解析；无需 `moon.work` 或框架源码目录。此流程不传 `--minimoon-root`。
 `vp install` 安装应用的样式构建工具。
 
-确认 `minimoon --version` 输出 `0.2.7`；如有其他版本，检查 PATH 中的旧 CLI。
+确认 `minimoon --version` 输出 `0.3.0`；如有其他版本，检查 PATH 中的旧 CLI。
 参见[固定版本安装](docs/guides/miniapp_quickstart.md#install-a-specific-version)及
 [已有应用升级步骤](docs/reference/compatibility_and_upgrades.md#upgrade-procedure)。
 开发框架或使用尚未发布的改动时，使用单独的
 [源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
 
-`0.2.7` CLI 使用 `vp 1.1.0`、受管理的 Bun `1.4.3` 和 Node `26.11.1`。
+`0.3.0` CLI 使用 `vp 1.1.0`、受管理的 Bun `1.4.3` 和 Node `26.11.1`。
 [样式配置](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
-包含 PostCSS `8.5.30` 和 weapp-tailwindcss `5.6.1`；公开 MoonBit API 不变。
+包含 PostCSS `8.5.30` 和 weapp-tailwindcss `5.6.1`。核心 `0.3.0` 新增原生行内
+内容 API；升级时需重新生成 renderer protocol `9` 的宿主产物。
 默认 Starter 仍不启用 `application`；需要时按[共享状态指南](docs/guides/shared_state.md)添加。
 迁移已有应用时同时升级 CLI 和应用的核心依赖。
 

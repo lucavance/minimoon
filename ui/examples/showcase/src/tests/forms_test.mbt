@@ -49,6 +49,70 @@ test "forms showcase validation responds to continuous input without losing focu
 }
 
 ///|
+test "property probe restores all phases and preserves enabled editing across preset changes" {
+  let runtime = @testing.mount(@forms.program())
+  defer {
+    let _ = runtime.dispose()
+  }
+  let input = @testing.by_id("ui-property-input")
+  let identity = runtime.get(input).identity()
+  assert_eq(runtime.get(input).prop("value"), Some(Json::string("populated")))
+  for phase in 1..<=3 {
+    let commands = runtime.tap(@testing.by_event_key("forms/property-next"))
+    assert_false(commands.contains("ReplaceViewTree"))
+    assert_eq(runtime.get(input).identity(), identity)
+    assert_eq(
+      runtime.get(input).prop("value"),
+      Some(Json::string(if phase == 3 { "restored" } else { "" })),
+    )
+    assert_eq(
+      runtime.get(input).prop("password"),
+      Some(Json::boolean(phase == 3)),
+    )
+    assert_eq(
+      runtime.get(input).prop("maxlength"),
+      Some(Json::number(if phase == 1 { 0 } else { 140 })),
+    )
+    assert_eq(
+      runtime.get(input).prop("selectionStart"),
+      if phase == 2 {
+        None
+      } else {
+        Some(Json::number(0))
+      },
+    )
+    for id in ["ui-property-checkbox-control", "ui-property-switch"] {
+      assert_eq(
+        runtime.get(@testing.by_id(id)).prop("checked"),
+        Some(Json::boolean(phase == 3)),
+      )
+    }
+    if phase == 2 {
+      let _ = runtime.input(input, "中文🌙")
+      let _ = runtime.tap(@testing.by_event_key("gallery/preset"))
+      let _ = runtime.tap(@testing.by_event_key("gallery/theme"))
+      assert_eq(runtime.get(input).identity(), identity)
+      assert_eq(
+        runtime.get(input).prop("value"),
+        Some(Json::string("中文🌙")),
+      )
+      let _ = runtime.change(
+        @testing.by_id("ui-property-switch"),
+        Json::boolean(true),
+      )
+      assert_eq(
+        runtime
+        .get(@testing.by_id("ui-property-checkbox-control"))
+        .prop("checked"),
+        Some(Json::boolean(true)),
+      )
+      let _ = runtime.input(input, "")
+      assert_eq(runtime.get(input).prop("value"), Some(Json::string("")))
+    }
+  }
+}
+
+///|
 fn echo_runtime() -> @minimoon.PageRuntime {
   let runtime = @forms.program().create_runtime().unwrap()
   let _ = runtime.lifecycle("onLoad", "{}")

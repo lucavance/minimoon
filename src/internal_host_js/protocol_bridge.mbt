@@ -2,25 +2,28 @@
 pub fn shared_protocol_bridge() -> String {
   (
     #|const nodeKinds = new Set(["view", "text", "button", "input", "image", "fragment", "empty", "scroll-view", "textarea", "switch", "checkbox-group", "checkbox", "radio-group", "radio", "picker", "swiper", "swiper-item", "navigator"])
-    #|const nodeFields = new Set(["kind", "identity", "text", "props", "events", "children"])
+    #|const nodeFields = ["kind", "identity", "text", "props", "events", "children"]
     #|const propFields = new Set(["id", "className", "style", "section", "value", "placeholder", "src", "alt", "role", "ariaLabel", "ariaExpanded", "ariaSelected", "ariaDisabled", "ariaHidden", "ariaChecked", "ariaModal", "ariaControls", "ariaLabelledBy", "ariaDescribedBy", "ariaOrientation", "ariaHasPopup", "scrollX", "scrollY", "scrollTop", "scrollLeft", "scrollIntoView", "upperThreshold", "lowerThreshold", "maxlength", "disabled", "focus", "checked", "color", "mode", "range", "current", "autoplay", "circular", "interval", "duration", "itemId", "url", "openType"])
     #|const eventFields = new Set(["tap", "input", "change", "confirm", "focus", "blur", "scroll", "upper", "lower"])
     #|const booleanProps = new Set(["scrollX", "scrollY", "disabled", "focus", "checked", "autoplay", "circular", "ariaExpanded", "ariaSelected", "ariaDisabled", "ariaHidden", "ariaChecked", "ariaModal"])
     #|const numberProps = new Set(["scrollTop", "scrollLeft", "upperThreshold", "lowerThreshold", "maxlength", "current", "interval", "duration"])
-    #|for (const kind of ["label", "form", "slider", "progress"]) nodeKinds.add(kind)
+    #|for (const kind of ["label", "form", "slider", "progress", "inline"]) nodeKinds.add(kind)
     #|propFields.add("vertical"); booleanProps.add("vertical")
     #|for (const key of ["name", "type", "password", "selectionStart", "selectionEnd", "formType", "for", "catchMove", "min", "max", "step", "showValue", "activeColor", "backgroundColor", "blockColor", "blockSize", "percent", "strokeWidth", "showInfo", "active", "ariaRequired", "ariaInvalid", "ariaBusy", "ariaLive", "ariaValueMin", "ariaValueMax", "ariaValueNow", "ariaValueText"]) propFields.add(key)
     #|for (const key of ["submit", "reset", "changing", "load", "error", "longpress", "touchstart", "touchmove", "touchend", "touchcancel"]) eventFields.add(key)
     #|for (const key of ["password", "catchMove", "showValue", "showInfo", "active", "ariaRequired", "ariaInvalid", "ariaBusy"]) booleanProps.add(key)
     #|for (const key of ["selectionStart", "selectionEnd", "min", "max", "step", "blockSize", "percent", "strokeWidth", "ariaValueMin", "ariaValueMax", "ariaValueNow"]) numberProps.add(key)
     #|
+    #|function isRecord(value) {
+    #|  return value !== null && typeof value === "object" && !Array.isArray(value)
+    #|}
     #|function exactKeys(value, keys) {
-    #|  if (!value || typeof value !== "object" || Array.isArray(value)) return false
+    #|  if (!isRecord(value)) return false
     #|  const actual = Object.keys(value)
     #|  return actual.length === keys.length && actual.every((key) => keys.includes(key))
     #|}
     #|function validateProps(props) {
-    #|  if (!props || typeof props !== "object" || Array.isArray(props)) return false
+    #|  if (!isRecord(props)) return false
     #|  for (const [key, value] of Object.entries(props)) {
     #|    if (!propFields.has(key)) return false
     #|    if (booleanProps.has(key) ? typeof value !== "boolean" : key === "scrollTop" || key === "scrollLeft" ? !Number.isFinite(value) : numberProps.has(key) ? !Number.isInteger(value) : key === "range" || (key === "value" && Array.isArray(value)) ? !Array.isArray(value) || !value.every((item) => typeof item === "string") : typeof value !== "string" && !(key === "value" && Number.isInteger(value))) return false
@@ -28,14 +31,16 @@ pub fn shared_protocol_bridge() -> String {
     #|  return true
     #|}
     #|function validateEvents(events) {
-    #|  if (!events || typeof events !== "object" || Array.isArray(events)) return false
+    #|  if (!isRecord(events)) return false
     #|  for (const [key, value] of Object.entries(events)) if (!eventFields.has(key) || typeof value !== "string" || !value) return false
     #|  return true
     #|}
     #|function validateNode(node) {
-    #|  if (!node || typeof node !== "object" || Array.isArray(node) || !nodeKinds.has(node.kind) || typeof node.identity !== "string" || typeof node.text !== "string" || !node.props || typeof node.props !== "object" || Array.isArray(node.props) || !node.events || typeof node.events !== "object" || Array.isArray(node.events) || !Array.isArray(node.children)) return false
-    #|  if (Object.keys(node).some((field) => !nodeFields.has(field)) || Object.keys(node).length !== nodeFields.size || !validateProps(node.props) || !validateEvents(node.events)) return false
-    #|  return node.children.every(validateNode)
+    #|  if (!exactKeys(node, nodeFields) || !nodeKinds.has(node.kind) || typeof node.identity !== "string" || typeof node.text !== "string" || !Array.isArray(node.children) || !validateProps(node.props) || !validateEvents(node.events)) return false
+    #|  return node.children.every(validateNode) && validChildren(node.kind, node.children)
+    #|}
+    #|function validChildren(kind, items) {
+    #|  return kind === "inline" ? items.every(item => ["text", "image"].includes(item.kind)) : !["text", "image"].includes(kind) || !items.length
     #|}
     #|function validatePath(path, children) {
     #|  if (!Array.isArray(path) || path.length === 0 || path.length % 2 === 0) return false
@@ -102,6 +107,7 @@ pub fn shared_protocol_bridge() -> String {
     #|      const candidate = copyPath(shadow, op.path)
     #|      if (!candidate || !Array.isArray(candidate.value)) return null
     #|      candidate.value.splice(op.index, op.delete_count, ...op.items)
+    #|      if (!validChildren(resolvePath(shadow, op.path.slice(0, -1)).kind, candidate.value)) return null
     #|      shadow = candidate.root
     #|      copies += candidate.copies
     #|    } else if (op.op === "move") {
@@ -113,6 +119,7 @@ pub fn shared_protocol_bridge() -> String {
     #|      if (!candidate || !Array.isArray(candidate.value)) return null
     #|      candidate.value.splice(op.from, 1)
     #|      candidate.value.splice(op.to, 0, op.item)
+    #|      if (!validChildren(resolvePath(shadow, op.path.slice(0, -1)).kind, candidate.value)) return null
     #|      shadow = candidate.root
     #|      copies += candidate.copies
     #|    } else return null
@@ -146,7 +153,7 @@ pub fn shared_protocol_bridge() -> String {
     #|function validMeasurementPayload(payload) {
     #|  return exactKeys(payload, ["ids"]) && Array.isArray(payload.ids) && payload.ids.length <= 128 && payload.ids.every(id => typeof id === "string" && /^[A-Za-z0-9_-]+$/.test(id)) && new Set(payload.ids).size === payload.ids.length
     #|}
-    #|function validRequestPayload(options) { return !(Object.keys(options).some(key => !["url", "method", "header", "data", "timeout"].includes(key)) || typeof options.url !== "string" || !/^https:\/\//.test(options.url) || !["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"].includes(options.method) || !options.header || typeof options.header !== "object" || Array.isArray(options.header) || Object.values(options.header).some(value => typeof value !== "string") || ("data" in options && (typeof options.data !== "string" || ["GET", "HEAD"].includes(options.method))) || ("timeout" in options && (!Number.isInteger(options.timeout) || options.timeout <= 0))) }
+    #|function validRequestPayload(options) { return !(Object.keys(options).some(key => !["url", "method", "header", "data", "timeout"].includes(key)) || typeof options.url !== "string" || !/^https:\/\//.test(options.url) || !["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"].includes(options.method) || !isRecord(options.header) || Object.values(options.header).some(value => typeof value !== "string") || ("data" in options && (typeof options.data !== "string" || ["GET", "HEAD"].includes(options.method))) || ("timeout" in options && (!Number.isInteger(options.timeout) || options.timeout <= 0))) }
     #|function measurementNodes(results, ids) {
     #|  if (!Array.isArray(results) || results.length !== ids.length) return { error: "invalid measurement result count" }
     #|  const nodes = []

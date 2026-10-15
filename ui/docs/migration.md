@@ -1,5 +1,50 @@
 # RUI → Minimoon UI migration
 
+## Core 0.3.0 / UI 0.2.0
+
+The source candidate requires `lampclaw/minimoon@0.3.0` and
+`lampclaw/minimoon_ui@0.2.0`. Use a source workspace until registry availability
+is recorded. Existing component calls remain supported. Keep the old
+`rui_api_map.json` as historical RUI 0.1.1 evidence; the new
+`rui_036_api_map.json` covers all 655 consumer-facing root/Markdown symbols at
+`7d5940fed9b1ba795c84582394024233997ec267`. Internal checkbox_view is excluded.
+The offline API gate verifies snapshots, hashes, symbol coverage, duplicates
+and local source/test paths without accessing upstream.
+
+Nova is now the default. For the original visual recipe use
+`@theme.theme(preset=VegaV1)`; for token construction use
+`@theme.tokens(preset=VegaV1)`. Existing `Tokens` fields and custom overrides
+remain valid. Nova uses native hexadecimal neutral/destructive colors, compact
+32px buttons/inputs and scoped component rules; this is native adaptation,
+not browser pixel parity. Touch surfaces such as Drawer handles remain 44px.
+Resources now identify as `lampclaw/minimoon_ui/native-v2`; rebuild the provider
+output for either preset. The showcase switches presets without remounting
+the page or resetting component state.
+The [recipe audit](nova_recipes.md) maps all 64 native component families.
+
+Import `/markdown` explicitly and include its resource feature. It introduces
+the separately pinned cmark 0.4.12 parser only into importing applications.
+Use a unique document `id`, `on_link`/`on_anchor` for application commands,
+and optional custom heading/code renderers. The public `Heading` type does not
+expose parser types. Raw HTML is text, rewritten destinations are sanitized,
+math/Mermaid remain source, and no clipboard capability is added. See the
+[package guide](../src/markdown/README.mbt.md), including its Python build step.
+
+`drawer` and `drawer_controlled` accept `swipe_area` in native pixels, default
+zero. A positive value captures the exterior edge beside an already open
+panel in any of four directions. It uses a 6px directional lock and the
+existing measured drag thresholds; transverse/wrong-way gestures cancel.
+Static edge taps follow `close_on_overlay`. Closed panels have no edge opener.
+
+Core adds opaque `Inline`, `inline_text`, `inline_image` and `inline` for native
+span/text/image flow. Generic `span` retains its previous block behavior.
+Regenerate the entire host: Contract 11 and runtime ABI 13 stay fixed, but
+renderer protocol is now 9. Old protocol 8 artifacts must not be mixed with
+these new nodes. Both fixtures have changed and need fresh, exact-fingerprint
+Developer Tools acceptance. Public tracked summaries remain pending.
+
+
+
 The native package is `lampclaw/minimoon_ui` (import as `@ui`), with `headless`, `theme` and `resources` subpackages. It depends on `lampclaw/minimoon`; applications do not need Rabbita, a DOM runtime, mutable signals, or handwritten bridge JavaScript.
 
 ## Scope and provenance

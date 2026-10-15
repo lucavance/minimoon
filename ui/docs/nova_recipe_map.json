@@ -1,0 +1,2884 @@
+{
+  "schema_version": 1,
+  "commit": "7d5940fed9b1ba795c84582394024233997ec267",
+  "preset": "Nova",
+  "families": [
+    {
+      "family": "accordion",
+      "upstream_path": "rui/accordion.mbt",
+      "upstream_sha256": "27cb9885a12d9f9d3f4445a040eee371aab475593e3c6c94b7ce44f7f7c2c350",
+      "style_declarations": [
+        {
+          "line": 26,
+          "name": "AccordionRootStyle"
+        },
+        {
+          "line": 29,
+          "name": "AccordionItemStyle"
+        },
+        {
+          "line": 32,
+          "name": "AccordionTriggerStyle"
+        },
+        {
+          "line": 35,
+          "name": "AccordionTriggerOpenStyle"
+        },
+        {
+          "line": 38,
+          "name": "AccordionTriggerLabelStyle"
+        },
+        {
+          "line": 41,
+          "name": "AccordionIndicatorBoxStyle"
+        },
+        {
+          "line": 44,
+          "name": "AccordionIndicatorStyle"
+        },
+        {
+          "line": 47,
+          "name": "AccordionIndicatorClosedStyle"
+        },
+        {
+          "line": 50,
+          "name": "AccordionIndicatorOpenStyle"
+        },
+        {
+          "line": 53,
+          "name": "AccordionContentOuterStyle"
+        },
+        {
+          "line": 56,
+          "name": "AccordionContentOpenStyle"
+        },
+        {
+          "line": 59,
+          "name": "AccordionContentClosedStyle"
+        },
+        {
+          "line": 62,
+          "name": "AccordionContentClipStyle"
+        },
+        {
+          "line": 65,
+          "name": "AccordionContentStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.accordion",
+          "path": "ui/src/disclosures.mbt"
+        },
+        {
+          "symbol": "@ui.accordion_controlled",
+          "path": "ui/src/disclosures.mbt"
+        },
+        {
+          "symbol": "@ui.Panel",
+          "path": "ui/src/disclosures.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-accordion"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "alert",
+      "upstream_path": "rui/alert.mbt",
+      "upstream_sha256": "4f65521ebd42e616ddd8516aaf7143e18a1f2dc79f54db1181efda81c8e7f4f4",
+      "style_declarations": [
+        {
+          "line": 14,
+          "name": "AlertBaseStyle"
+        },
+        {
+          "line": 17,
+          "name": "AlertDefaultStyle"
+        },
+        {
+          "line": 20,
+          "name": "AlertDestructiveStyle"
+        },
+        {
+          "line": 23,
+          "name": "AlertTitleStyle"
+        },
+        {
+          "line": 26,
+          "name": "AlertDescriptionStyle"
+        },
+        {
+          "line": 29,
+          "name": "AlertActionStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.alert",
+          "path": "ui/src/foundation.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-alert"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "alert-dialog",
+      "upstream_path": "rui/alert_dialog.mbt",
+      "upstream_sha256": "a97491af6e09ad4fdb060f0d3522b6a7254e7a27b772692c3bb4921e69e2fd74",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "AlertDialogMediaStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.alert_dialog",
+          "path": "ui/src/overlays.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider",
+          "path": "ui/src/overlay_provider.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider_controlled",
+          "path": "ui/src/overlay_provider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-alert-dialog"
+      },
+      "decision": "Typed native surface classes select compact modal padding and radius."
+    },
+    {
+      "family": "aspect-ratio",
+      "upstream_path": "rui/aspect_ratio.mbt",
+      "upstream_sha256": "f34f42f39c258e5394e01d522b7245297b9c583a009a2a31b8bdf4fb4d21ca45",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "AspectRatioStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.aspect_ratio",
+          "path": "ui/src/foundation.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-aspect-ratio"
+      },
+      "decision": "Native measured ratio layout inherits the preset tokens without decorative changes."
+    },
+    {
+      "family": "attachment",
+      "upstream_path": "rui/attachment.mbt",
+      "upstream_sha256": "b7acbe77aa977d7af75d6ce32d31f2fbf80d980998229862b0136676434a7e5a",
+      "style_declarations": [
+        {
+          "line": 54,
+          "name": "AttachmentTitleShimmerStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.attachment",
+          "path": "ui/src/attachment.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-attachment"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "avatar",
+      "upstream_path": "rui/avatar.mbt",
+      "upstream_sha256": "f2952e6b780aa838e2bb7cee6bfa45a44a9cb386362c07909fc2b4357f0cb35b",
+      "style_declarations": [
+        {
+          "line": 61,
+          "name": "AvatarBaseStyle"
+        },
+        {
+          "line": 64,
+          "name": "AvatarDefaultSizeStyle"
+        },
+        {
+          "line": 67,
+          "name": "AvatarSmSizeStyle"
+        },
+        {
+          "line": 70,
+          "name": "AvatarLgSizeStyle"
+        },
+        {
+          "line": 73,
+          "name": "AvatarImageStyle"
+        },
+        {
+          "line": 76,
+          "name": "AvatarFallbackStyle"
+        },
+        {
+          "line": 79,
+          "name": "AvatarBadgeStyle"
+        },
+        {
+          "line": 82,
+          "name": "AvatarGroupStyle"
+        },
+        {
+          "line": 85,
+          "name": "AvatarGroupCountStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.avatar",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-avatar"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "badge",
+      "upstream_path": "rui/badge.mbt",
+      "upstream_sha256": "4ed9eb64df79dc5a38ed7c6df14af2d07d556e4835c8270be99142a73e649538",
+      "style_declarations": [
+        {
+          "line": 18,
+          "name": "BadgeBaseStyle"
+        },
+        {
+          "line": 21,
+          "name": "BadgeDefaultStyle"
+        },
+        {
+          "line": 24,
+          "name": "BadgeSecondaryStyle"
+        },
+        {
+          "line": 27,
+          "name": "BadgeDestructiveStyle"
+        },
+        {
+          "line": 30,
+          "name": "BadgeOutlineStyle"
+        },
+        {
+          "line": 33,
+          "name": "BadgeGhostStyle"
+        },
+        {
+          "line": 36,
+          "name": "BadgeLinkStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.badge",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-badge"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "breadcrumb",
+      "upstream_path": "rui/breadcrumb.mbt",
+      "upstream_sha256": "4f74b565ffe00ae4b3de8ed8dc5dfbac9aa3226447e62140a4e5e93f1a9e63ea",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "BreadcrumbRootStyle"
+        },
+        {
+          "line": 5,
+          "name": "BreadcrumbListStyle"
+        },
+        {
+          "line": 8,
+          "name": "BreadcrumbItemStyle"
+        },
+        {
+          "line": 11,
+          "name": "BreadcrumbLinkStyle"
+        },
+        {
+          "line": 14,
+          "name": "BreadcrumbPageStyle"
+        },
+        {
+          "line": 17,
+          "name": "BreadcrumbSeparatorStyle"
+        },
+        {
+          "line": 20,
+          "name": "BreadcrumbChevronBoxStyle"
+        },
+        {
+          "line": 23,
+          "name": "BreadcrumbChevronStyle"
+        },
+        {
+          "line": 26,
+          "name": "BreadcrumbEllipsisStyle"
+        },
+        {
+          "line": 29,
+          "name": "BreadcrumbDotsStyle"
+        },
+        {
+          "line": 32,
+          "name": "BreadcrumbScreenReaderOnlyStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.breadcrumb",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-breadcrumb"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "bubble",
+      "upstream_path": "rui/bubble.mbt",
+      "upstream_sha256": "f22d7b1308caacc4c793a42cc8e71bca6f38634c03caa2816db6b5185a6ed357",
+      "style_declarations": [
+        {
+          "line": 64,
+          "name": "BubbleContentBaseStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.bubble",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-bubble"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "button",
+      "upstream_path": "rui/button.mbt",
+      "upstream_sha256": "58971c4086f1e5ec37abcbbd17cbf50447f27fb57b25161c6142fc3626dbe195",
+      "style_declarations": [
+        {
+          "line": 36,
+          "name": "ButtonBaseStyle"
+        },
+        {
+          "line": 39,
+          "name": "ButtonDefaultStyle"
+        },
+        {
+          "line": 42,
+          "name": "ButtonOutlineStyle"
+        },
+        {
+          "line": 45,
+          "name": "ButtonSecondaryStyle"
+        },
+        {
+          "line": 48,
+          "name": "ButtonGhostStyle"
+        },
+        {
+          "line": 51,
+          "name": "ButtonDestructiveStyle"
+        },
+        {
+          "line": 54,
+          "name": "ButtonLinkStyle"
+        },
+        {
+          "line": 57,
+          "name": "ButtonSizeDefaultStyle"
+        },
+        {
+          "line": 60,
+          "name": "ButtonSizeXsStyle"
+        },
+        {
+          "line": 63,
+          "name": "ButtonSizeSmStyle"
+        },
+        {
+          "line": 66,
+          "name": "ButtonSizeLgStyle"
+        },
+        {
+          "line": 69,
+          "name": "ButtonSizeIconStyle"
+        },
+        {
+          "line": 72,
+          "name": "ButtonSizeIconXsStyle"
+        },
+        {
+          "line": 75,
+          "name": "ButtonSizeIconSmStyle"
+        },
+        {
+          "line": 78,
+          "name": "ButtonSizeIconLgStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.button",
+          "path": "ui/src/foundation.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-button"
+      },
+      "decision": "32/24/28/36px controls and matching icon sizes; native border reset and destructive subtle colors."
+    },
+    {
+      "family": "button-group",
+      "upstream_path": "rui/button_group.mbt",
+      "upstream_sha256": "c6f5e4c02b3e223fde894ced0b0a86016ae443869afa467ecc0ebf9c80ae8d83",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "ButtonGroupBaseStyle"
+        },
+        {
+          "line": 5,
+          "name": "ButtonGroupVerticalStyle"
+        },
+        {
+          "line": 8,
+          "name": "ButtonGroupHorizontalStyle"
+        },
+        {
+          "line": 11,
+          "name": "ButtonGroupTextStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.button_group",
+          "path": "ui/src/foundation.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-button-group"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "calendar",
+      "upstream_path": "rui/calendar.mbt",
+      "upstream_sha256": "ea739f88b792761683b26ec338733f5eb2043cb848406799a6d586bcedbdc08d",
+      "style_declarations": [
+        {
+          "line": 42,
+          "name": "CalendarRootStyle"
+        },
+        {
+          "line": 45,
+          "name": "CalendarHeaderStyle"
+        },
+        {
+          "line": 48,
+          "name": "CalendarCaptionStyle"
+        },
+        {
+          "line": 51,
+          "name": "CalendarNavStyle"
+        },
+        {
+          "line": 54,
+          "name": "CalendarNavButtonStyle"
+        },
+        {
+          "line": 57,
+          "name": "CalendarGridStyle"
+        },
+        {
+          "line": 60,
+          "name": "CalendarWeekdayStyle"
+        },
+        {
+          "line": 63,
+          "name": "CalendarCellStyle"
+        },
+        {
+          "line": 66,
+          "name": "CalendarCellRangeStartStyle"
+        },
+        {
+          "line": 69,
+          "name": "CalendarCellRangeMiddleStyle"
+        },
+        {
+          "line": 72,
+          "name": "CalendarCellRangeEndStyle"
+        },
+        {
+          "line": 75,
+          "name": "CalendarCellRangeRowStartStyle"
+        },
+        {
+          "line": 78,
+          "name": "CalendarCellRangeRowEndStyle"
+        },
+        {
+          "line": 81,
+          "name": "CalendarDayStyle"
+        },
+        {
+          "line": 84,
+          "name": "CalendarDaySelectedStyle"
+        },
+        {
+          "line": 87,
+          "name": "CalendarDayRangeMiddleStyle"
+        },
+        {
+          "line": 90,
+          "name": "CalendarDayTodayStyle"
+        },
+        {
+          "line": 93,
+          "name": "CalendarDayOutsideStyle"
+        },
+        {
+          "line": 96,
+          "name": "CalendarOutsidePlaceholderStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.calendar",
+          "path": "ui/src/calendar.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-calendar"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "card",
+      "upstream_path": "rui/card.mbt",
+      "upstream_sha256": "d7a85c3a54ac724b08e2e66fbbea3217301e9cc75183b48352f9a60125525c8c",
+      "style_declarations": [
+        {
+          "line": 14,
+          "name": "CardBaseStyle"
+        },
+        {
+          "line": 17,
+          "name": "CardDefaultSizeStyle"
+        },
+        {
+          "line": 20,
+          "name": "CardSmSizeStyle"
+        },
+        {
+          "line": 23,
+          "name": "CardHeaderStyle"
+        },
+        {
+          "line": 26,
+          "name": "CardTitleStyle"
+        },
+        {
+          "line": 29,
+          "name": "CardDescriptionStyle"
+        },
+        {
+          "line": 32,
+          "name": "CardActionStyle"
+        },
+        {
+          "line": 35,
+          "name": "CardContentStyle"
+        },
+        {
+          "line": 38,
+          "name": "CardFooterStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.card",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-card"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "carousel",
+      "upstream_path": "rui/carousel.mbt",
+      "upstream_sha256": "c4608f0ac87f72a929a1c0c54048e90b833ae661205c918fa1fab804a40125ab",
+      "style_declarations": [
+        {
+          "line": 40,
+          "name": "CarouselRootStyle"
+        },
+        {
+          "line": 43,
+          "name": "CarouselScopeStyle"
+        },
+        {
+          "line": 46,
+          "name": "CarouselViewportStyle"
+        },
+        {
+          "line": 49,
+          "name": "CarouselViewportVerticalStyle"
+        },
+        {
+          "line": 52,
+          "name": "CarouselTrackStyle"
+        },
+        {
+          "line": 55,
+          "name": "CarouselTrackHorizontalStyle"
+        },
+        {
+          "line": 58,
+          "name": "CarouselTrackVerticalStyle"
+        },
+        {
+          "line": 61,
+          "name": "CarouselItemStyle"
+        },
+        {
+          "line": 64,
+          "name": "CarouselItemHorizontalStyle"
+        },
+        {
+          "line": 67,
+          "name": "CarouselItemVerticalStyle"
+        },
+        {
+          "line": 70,
+          "name": "CarouselControlStyle"
+        },
+        {
+          "line": 73,
+          "name": "CarouselPreviousHorizontalStyle"
+        },
+        {
+          "line": 76,
+          "name": "CarouselNextHorizontalStyle"
+        },
+        {
+          "line": 79,
+          "name": "CarouselPreviousVerticalStyle"
+        },
+        {
+          "line": 82,
+          "name": "CarouselNextVerticalStyle"
+        },
+        {
+          "line": 85,
+          "name": "CarouselChevronBoxStyle"
+        },
+        {
+          "line": 88,
+          "name": "CarouselChevronStyle"
+        },
+        {
+          "line": 91,
+          "name": "CarouselChevronLeftStyle"
+        },
+        {
+          "line": 94,
+          "name": "CarouselChevronRightStyle"
+        },
+        {
+          "line": 97,
+          "name": "CarouselChevronUpStyle"
+        },
+        {
+          "line": 100,
+          "name": "CarouselChevronDownStyle"
+        },
+        {
+          "line": 103,
+          "name": "CarouselScreenReaderStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.carousel",
+          "path": "ui/src/layout.mbt"
+        },
+        {
+          "symbol": "@ui.carousel_provider",
+          "path": "ui/src/carousel_scope.mbt"
+        },
+        {
+          "symbol": "@ui.carousel_provider_controlled",
+          "path": "ui/src/carousel_scope.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-carousel"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "chart",
+      "upstream_path": "rui/chart.mbt",
+      "upstream_sha256": "0bbd57d31d5d3cfa2809eb14c97764f8aed2c937db89bdf027c92e6e309eb448",
+      "style_declarations": [
+        {
+          "line": 15,
+          "name": "ChartContentsCarrierStyle"
+        },
+        {
+          "line": 18,
+          "name": "ChartLegendContentStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.chart_container",
+          "path": "ui/src/chart.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-chart"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "checkbox",
+      "upstream_path": "rui/checkbox.mbt",
+      "upstream_sha256": "d423e5d50bfd38eeaa5dd9d7540db15f25916b9608717caccd09ae083b4990ae",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.checkbox",
+          "path": "ui/src/choices.mbt"
+        },
+        {
+          "symbol": "@ui.checkbox_controlled",
+          "path": "ui/src/choices.mbt"
+        },
+        {
+          "symbol": "@ui.checkbox_state_controlled",
+          "path": "ui/src/checkbox_state.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-checkbox"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "collapsible",
+      "upstream_path": "rui/collapsible.mbt",
+      "upstream_sha256": "167b3f326df0d3721f938160f21c0f0b11954ab50980791532adcd347bad1934",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "CollapsibleRootStyle"
+        },
+        {
+          "line": 5,
+          "name": "CollapsibleTriggerStyle"
+        },
+        {
+          "line": 8,
+          "name": "CollapsibleTriggerLabelStyle"
+        },
+        {
+          "line": 11,
+          "name": "CollapsibleIndicatorBoxStyle"
+        },
+        {
+          "line": 14,
+          "name": "CollapsibleIndicatorStyle"
+        },
+        {
+          "line": 17,
+          "name": "CollapsibleIndicatorClosedStyle"
+        },
+        {
+          "line": 20,
+          "name": "CollapsibleIndicatorOpenStyle"
+        },
+        {
+          "line": 23,
+          "name": "CollapsibleContentOuterStyle"
+        },
+        {
+          "line": 26,
+          "name": "CollapsibleContentOpenStyle"
+        },
+        {
+          "line": 29,
+          "name": "CollapsibleContentClosedStyle"
+        },
+        {
+          "line": 32,
+          "name": "CollapsibleContentClipStyle"
+        },
+        {
+          "line": 35,
+          "name": "CollapsibleContentStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.collapsible",
+          "path": "ui/src/disclosures.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-collapsible"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "combobox",
+      "upstream_path": "rui/combobox.mbt",
+      "upstream_sha256": "f5cde9f3adb91b65561e48dfda0436ce71845d34982cfa17bb21e77ffd003610",
+      "style_declarations": [
+        {
+          "line": 66,
+          "name": "ComboboxRootStyle"
+        },
+        {
+          "line": 69,
+          "name": "ComboboxControlStyle"
+        },
+        {
+          "line": 72,
+          "name": "ComboboxControlLayoutStyle"
+        },
+        {
+          "line": 75,
+          "name": "ComboboxChipsStyle"
+        },
+        {
+          "line": 79,
+          "name": "ComboboxContentStyle"
+        },
+        {
+          "line": 82,
+          "name": "ComboboxItemStyle"
+        },
+        {
+          "line": 85,
+          "name": "ComboboxInputBaseStyle"
+        },
+        {
+          "line": 88,
+          "name": "ComboboxInputLayoutStyle"
+        },
+        {
+          "line": 91,
+          "name": "ComboboxChipsInputLayoutStyle"
+        },
+        {
+          "line": 94,
+          "name": "ComboboxTriggerIconStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.combobox",
+          "path": "ui/src/search.mbt"
+        },
+        {
+          "symbol": "@ui.combobox_provider",
+          "path": "ui/src/combobox_provider.mbt"
+        },
+        {
+          "symbol": "@ui.combobox_provider_controlled",
+          "path": "ui/src/combobox_provider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-combobox"
+      },
+      "decision": "Compact command/input/popover recipes retain native measurement and filtering."
+    },
+    {
+      "family": "command",
+      "upstream_path": "rui/command.mbt",
+      "upstream_sha256": "78dd036f67c6e717fd8b325479bfb73331a81d3294943865dcbab367cfd52b7e",
+      "style_declarations": [
+        {
+          "line": 45,
+          "name": "CommandRootStyle"
+        },
+        {
+          "line": 48,
+          "name": "CommandDialogRootStyle"
+        },
+        {
+          "line": 51,
+          "name": "CommandDialogStyle"
+        },
+        {
+          "line": 54,
+          "name": "CommandInputWrapperStyle"
+        },
+        {
+          "line": 57,
+          "name": "CommandInputStyle"
+        },
+        {
+          "line": 60,
+          "name": "CommandListStyle"
+        },
+        {
+          "line": 63,
+          "name": "CommandEmptyStyle"
+        },
+        {
+          "line": 66,
+          "name": "CommandGroupStyle"
+        },
+        {
+          "line": 69,
+          "name": "CommandGroupHeadingStyle"
+        },
+        {
+          "line": 72,
+          "name": "CommandItemStyle"
+        },
+        {
+          "line": 75,
+          "name": "CommandItemActiveStyle"
+        },
+        {
+          "line": 78,
+          "name": "CommandSeparatorStyle"
+        },
+        {
+          "line": 81,
+          "name": "CommandShortcutStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.command",
+          "path": "ui/src/search.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-command"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "context-menu",
+      "upstream_path": "rui/context_menu.mbt",
+      "upstream_sha256": "8248249606098e5253eaa0aa6fce100378f06f9d233141b630e7f074cf439b13",
+      "style_declarations": [
+        {
+          "line": 48,
+          "name": "ContextMenuPointStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.context_menu",
+          "path": "ui/src/menus.mbt"
+        },
+        {
+          "symbol": "@ui.dropdown_menu_controlled",
+          "path": "ui/src/menus.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-context-menu"
+      },
+      "decision": "Native long press and compact menu rows replace browser context menus."
+    },
+    {
+      "family": "data-table",
+      "upstream_path": "rui/data_table.mbt",
+      "upstream_sha256": "38e0b16ba69f747afe68ceef071aa17953ec095080b6d7d982e0091ae3a449a9",
+      "style_declarations": [
+        {
+          "line": 47,
+          "name": "DataTableRootStyle"
+        },
+        {
+          "line": 50,
+          "name": "DataTableToolbarStyle"
+        },
+        {
+          "line": 53,
+          "name": "DataTableSearchStyle"
+        },
+        {
+          "line": 56,
+          "name": "DataTableColumnsWrapStyle"
+        },
+        {
+          "line": 59,
+          "name": "DataTableColumnsMenuStyle"
+        },
+        {
+          "line": 62,
+          "name": "DataTableColumnsMenuOpenStyle"
+        },
+        {
+          "line": 65,
+          "name": "DataTableColumnsMenuClosedStyle"
+        },
+        {
+          "line": 68,
+          "name": "DataTableColumnOptionStyle"
+        },
+        {
+          "line": 71,
+          "name": "DataTableSurfaceStyle"
+        },
+        {
+          "line": 74,
+          "name": "DataTableSortButtonStyle"
+        },
+        {
+          "line": 77,
+          "name": "DataTableSortIconStyle"
+        },
+        {
+          "line": 80,
+          "name": "DataTableEmptyStyle"
+        },
+        {
+          "line": 83,
+          "name": "DataTableFooterStyle"
+        },
+        {
+          "line": 86,
+          "name": "DataTableSummaryStyle"
+        },
+        {
+          "line": 89,
+          "name": "DataTablePagerStyle"
+        },
+        {
+          "line": 92,
+          "name": "DataTablePageLabelStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.data_table",
+          "path": "ui/src/data_table.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-table"
+      },
+      "decision": "Compact table cells, native filters, checkbox selection and pagination share recipes."
+    },
+    {
+      "family": "date-picker",
+      "upstream_path": "rui/date_picker.mbt",
+      "upstream_sha256": "4df70a963a8ec46f5967497114474bca0f0a7e1804997cf254ec7e12e524fab1",
+      "style_declarations": [
+        {
+          "line": 96,
+          "name": "DatePickerRootStyle"
+        },
+        {
+          "line": 99,
+          "name": "DatePickerTriggerStyle"
+        },
+        {
+          "line": 102,
+          "name": "DatePickerTriggerLabelStyle"
+        },
+        {
+          "line": 105,
+          "name": "DatePickerPlaceholderStyle"
+        },
+        {
+          "line": 108,
+          "name": "DatePickerContentStyle"
+        },
+        {
+          "line": 111,
+          "name": "DateRangePickerContentStyle"
+        },
+        {
+          "line": 114,
+          "name": "DatePickerContentInnerStyle"
+        },
+        {
+          "line": 117,
+          "name": "DateRangePickerContentInnerStyle"
+        },
+        {
+          "line": 120,
+          "name": "DatePickerPresetsStyle"
+        },
+        {
+          "line": 123,
+          "name": "DatePickerPresetStyle"
+        },
+        {
+          "line": 126,
+          "name": "DatePickerCalendarStyle"
+        },
+        {
+          "line": 129,
+          "name": "DateRangePickerCalendarStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.date_picker",
+          "path": "ui/src/date_picker.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-calendar"
+      },
+      "decision": "Calendar, compact trigger and anchored surface recipes compose the native date picker."
+    },
+    {
+      "family": "dialog",
+      "upstream_path": "rui/dialog.mbt",
+      "upstream_sha256": "0920fe3cec2dc89b62198127dbf7fac4622e707500fb615caf17bb6875b54a3c",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "DialogStyle"
+        },
+        {
+          "line": 71,
+          "name": "DialogCloseIconButtonStyle"
+        },
+        {
+          "line": 74,
+          "name": "DialogDescriptionStyle"
+        },
+        {
+          "line": 77,
+          "name": "DialogTitleStyle"
+        },
+        {
+          "line": 80,
+          "name": "DialogFooterStyle"
+        },
+        {
+          "line": 83,
+          "name": "DialogHeaderStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.dialog",
+          "path": "ui/src/overlays.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider",
+          "path": "ui/src/overlay_provider.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider_controlled",
+          "path": "ui/src/overlay_provider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-dialog"
+      },
+      "decision": "Typed native surface classes select compact dialog padding and radius."
+    },
+    {
+      "family": "direction",
+      "upstream_path": "rui/direction.mbt",
+      "upstream_sha256": "16f0736267095a50c6563dad182d93136aea57b0a29e827f70259cf5a8b3a9f5",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.direction",
+          "path": "ui/src/foundation.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-direction"
+      },
+      "decision": "Direction inherits native logical composition; it has no independent visual skin."
+    },
+    {
+      "family": "drawer",
+      "upstream_path": "rui/drawer.mbt",
+      "upstream_sha256": "ff71094647737901d7423be81ad60b54026498d05679086997e23b4465b9cb0c",
+      "style_declarations": [
+        {
+          "line": 17,
+          "name": "DrawerStyle"
+        },
+        {
+          "line": 20,
+          "name": "DrawerContentStyle"
+        },
+        {
+          "line": 23,
+          "name": "DrawerHeaderStyle"
+        },
+        {
+          "line": 26,
+          "name": "DrawerFooterStyle"
+        },
+        {
+          "line": 29,
+          "name": "DrawerTitleStyle"
+        },
+        {
+          "line": 32,
+          "name": "DrawerDescriptionStyle"
+        },
+        {
+          "line": 35,
+          "name": "DrawerSwipeAreaStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.drawer",
+          "path": "ui/src/drawer.mbt"
+        },
+        {
+          "symbol": "@ui.drawer_controlled",
+          "path": "ui/src/drawer.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider",
+          "path": "ui/src/overlay_provider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-drawer"
+      },
+      "decision": "Compact surface recipe retains a 44px handle and explicit four-sided native gestures."
+    },
+    {
+      "family": "dropdown-menu",
+      "upstream_path": "rui/dropdown_menu.mbt",
+      "upstream_sha256": "9ebc57e385c195331c304714350f7edd4fcd6c460ebc62f690890dc186a0cd83",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.dropdown_menu",
+          "path": "ui/src/menus.mbt"
+        },
+        {
+          "symbol": "@ui.dropdown_menu_controlled",
+          "path": "ui/src/menus.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-menu-item"
+      },
+      "decision": "Compact menu rows compose an anchored native surface."
+    },
+    {
+      "family": "empty",
+      "upstream_path": "rui/empty.mbt",
+      "upstream_sha256": "6762abf2cbbe5c6fcd59e5c02032394742f176eea161fb781395229e0c847dde",
+      "style_declarations": [
+        {
+          "line": 14,
+          "name": "EmptyStyle"
+        },
+        {
+          "line": 17,
+          "name": "EmptyHeaderStyle"
+        },
+        {
+          "line": 20,
+          "name": "EmptyMediaStyle"
+        },
+        {
+          "line": 23,
+          "name": "EmptyMediaIconStyle"
+        },
+        {
+          "line": 26,
+          "name": "EmptyTitleStyle"
+        },
+        {
+          "line": 29,
+          "name": "EmptyDescriptionStyle"
+        },
+        {
+          "line": 32,
+          "name": "EmptyContentStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.empty",
+          "path": "ui/src/compound.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-empty"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "field",
+      "upstream_path": "rui/field.mbt",
+      "upstream_sha256": "16ba5ee8a19f6e823ee0f259a9bee71ce902b1ee369876fe80349d6e91debab3",
+      "style_declarations": [
+        {
+          "line": 47,
+          "name": "FieldLabelStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.field",
+          "path": "ui/src/forms.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-field"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "hover-card",
+      "upstream_path": "rui/hover_card.mbt",
+      "upstream_sha256": "0729c4e8aad9ce89eec6f0552fc734bee1f1323bdbb31e76f8928300edd99817",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "HoverCardRootStyle"
+        },
+        {
+          "line": 5,
+          "name": "HoverCardContentStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.hover_card",
+          "path": "ui/src/overlays.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider",
+          "path": "ui/src/overlay_provider.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider_controlled",
+          "path": "ui/src/overlay_provider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-hover-card"
+      },
+      "decision": "Compact anchored preview uses explicit native activation, without browser hover."
+    },
+    {
+      "family": "input",
+      "upstream_path": "rui/input.mbt",
+      "upstream_sha256": "f76ef4462f2aa6ce062c246976ff0e290d61eb3c09547bc07a399ef0312b1b9b",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "InputBaseStyle"
+        },
+        {
+          "line": 5,
+          "name": "InputInvalidStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.input",
+          "path": "ui/src/inputs.mbt"
+        },
+        {
+          "symbol": "@ui.input_stateful",
+          "path": "ui/src/inputs.mbt"
+        },
+        {
+          "symbol": "@ui.InputOptions",
+          "path": "ui/src/inputs.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-input"
+      },
+      "decision": "32px native input, 16px text and 4/10px padding; native focus/input routing is retained."
+    },
+    {
+      "family": "input-group",
+      "upstream_path": "rui/input_group.mbt",
+      "upstream_sha256": "4047c64498054f5e35c55305f4dd97e4b3b4355cdc50f463600176ff0bea441d",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.input_group",
+          "path": "ui/src/compound_forms.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-input-group"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "input-otp",
+      "upstream_path": "rui/input_otp.mbt",
+      "upstream_sha256": "df30ef1dcce51b1c18e94342db700af4a3fe6a1bb8008b784f1a4137f3f867f5",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.input_otp",
+          "path": "ui/src/input_otp.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-input-otp"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "item",
+      "upstream_path": "rui/item.mbt",
+      "upstream_sha256": "6d13ff9eea1c5b4804b75512602921c86675dfedfcbb2c931971d30f24776c75",
+      "style_declarations": [
+        {
+          "line": 40,
+          "name": "ItemGroupStyle"
+        },
+        {
+          "line": 43,
+          "name": "ItemBaseStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.item",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-item"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "kbd",
+      "upstream_path": "rui/kbd.mbt",
+      "upstream_sha256": "7102e050b1091a977a49ce4b3d4b5d2ccff166070679d51dda32cf3b7197fc27",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "KbdStyle"
+        },
+        {
+          "line": 5,
+          "name": "KbdGroupStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.kbd",
+          "path": "ui/src/compound_content.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-kbd"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "label",
+      "upstream_path": "rui/label.mbt",
+      "upstream_sha256": "198d68e4b79f49276bc385249b770873b9b912445c42983048a0dd474d8f1c0a",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "LabelBaseStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.label",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-label"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "marker",
+      "upstream_path": "rui/marker.mbt",
+      "upstream_sha256": "c27119428e308e7c9af1f87f81be07f77406e5d96fd25ae5f88b3c88387d0257",
+      "style_declarations": [
+        {
+          "line": 15,
+          "name": "MarkerBaseStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.marker",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-marker"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "menubar",
+      "upstream_path": "rui/menubar.mbt",
+      "upstream_sha256": "ddf86e019795013a8be4534c1b280ab16def6c4356bfe12adf48ec12d6690291",
+      "style_declarations": [
+        {
+          "line": 62,
+          "name": "MenubarStyle"
+        },
+        {
+          "line": 65,
+          "name": "MenubarTriggerStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.menubar",
+          "path": "ui/src/menus.mbt"
+        },
+        {
+          "symbol": "@ui.menubar_controlled",
+          "path": "ui/src/menu_parts.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-menubar"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "message",
+      "upstream_path": "rui/message.mbt",
+      "upstream_sha256": "346e57024ab883fa496e5a2a5424cfac0e0bbcad493453fb7481b90d344ceebf",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.message",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-message"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "message-scroller",
+      "upstream_path": "rui/message_scroller.mbt",
+      "upstream_sha256": "59142142a779206eb79760e2aa730164016246299533c812af2227bb523b774b",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.message_scroller",
+          "path": "ui/src/message_scroller.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-message-scroller"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "native-select",
+      "upstream_path": "rui/native_select.mbt",
+      "upstream_sha256": "8a35e81e195b2d310c1add411a65f44825a34ea9c5217cdfe1066d9e82cb1bbf",
+      "style_declarations": [
+        {
+          "line": 14,
+          "name": "NativeSelectWrapperStyle"
+        },
+        {
+          "line": 17,
+          "name": "NativeSelectBaseStyle"
+        },
+        {
+          "line": 20,
+          "name": "NativeSelectDefaultStyle"
+        },
+        {
+          "line": 23,
+          "name": "NativeSelectSmStyle"
+        },
+        {
+          "line": 26,
+          "name": "NativeSelectInvalidStyle"
+        },
+        {
+          "line": 29,
+          "name": "NativeSelectIconStyle"
+        },
+        {
+          "line": 32,
+          "name": "NativeSelectOptionStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.native_select",
+          "path": "ui/src/choices.mbt"
+        },
+        {
+          "symbol": "@ui.native_select_controlled",
+          "path": "ui/src/choices.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-native-select"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "navigation-menu",
+      "upstream_path": "rui/navigation_menu.mbt",
+      "upstream_sha256": "dc4f0421517dff2cf5985849ce66e2e47a6a084be30fbf74b8ece3f40388f9e3",
+      "style_declarations": [
+        {
+          "line": 54,
+          "name": "NavigationMenuRootStyle"
+        },
+        {
+          "line": 57,
+          "name": "NavigationMenuListStyle"
+        },
+        {
+          "line": 60,
+          "name": "NavigationMenuItemStyle"
+        },
+        {
+          "line": 63,
+          "name": "NavigationMenuTriggerStyle"
+        },
+        {
+          "line": 66,
+          "name": "NavigationMenuTriggerOpenStyle"
+        },
+        {
+          "line": 69,
+          "name": "NavigationMenuContentStyle"
+        },
+        {
+          "line": 72,
+          "name": "NavigationMenuViewportContentStyle"
+        },
+        {
+          "line": 75,
+          "name": "NavigationMenuViewportStyle"
+        },
+        {
+          "line": 78,
+          "name": "NavigationMenuLinkStyle"
+        },
+        {
+          "line": 81,
+          "name": "NavigationMenuLinkActiveStyle"
+        },
+        {
+          "line": 84,
+          "name": "NavigationMenuIndicatorStyle"
+        },
+        {
+          "line": 87,
+          "name": "NavigationMenuIndicatorArrowStyle"
+        },
+        {
+          "line": 90,
+          "name": "NavigationMenuChevronBoxStyle"
+        },
+        {
+          "line": 93,
+          "name": "NavigationMenuChevronStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.navigation_menu",
+          "path": "ui/src/layout.mbt"
+        },
+        {
+          "symbol": "@ui.navigation_menu_root",
+          "path": "ui/src/navigation_provider.mbt"
+        },
+        {
+          "symbol": "@ui.navigation_menu_provider_controlled",
+          "path": "ui/src/navigation_provider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-navigation-menu"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "pagination",
+      "upstream_path": "rui/pagination.mbt",
+      "upstream_sha256": "0829298c34ba51ef5876c3aa993bed8307b9aee822bbf6cae6b1c87bb33a286c",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "PaginationRootStyle"
+        },
+        {
+          "line": 5,
+          "name": "PaginationContentStyle"
+        },
+        {
+          "line": 8,
+          "name": "PaginationItemStyle"
+        },
+        {
+          "line": 11,
+          "name": "PaginationLinkResetStyle"
+        },
+        {
+          "line": 14,
+          "name": "PaginationPreviousStyle"
+        },
+        {
+          "line": 17,
+          "name": "PaginationNextStyle"
+        },
+        {
+          "line": 20,
+          "name": "PaginationChevronBoxStyle"
+        },
+        {
+          "line": 23,
+          "name": "PaginationChevronStyle"
+        },
+        {
+          "line": 26,
+          "name": "PaginationChevronPreviousStyle"
+        },
+        {
+          "line": 29,
+          "name": "PaginationChevronNextStyle"
+        },
+        {
+          "line": 32,
+          "name": "PaginationEllipsisStyle"
+        },
+        {
+          "line": 35,
+          "name": "PaginationDotsStyle"
+        },
+        {
+          "line": 38,
+          "name": "PaginationScreenReaderOnlyStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.pagination",
+          "path": "ui/src/data_table.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-pagination"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "popover",
+      "upstream_path": "rui/popover.mbt",
+      "upstream_sha256": "ed3713c1b48fc75d57ab83751405eb1d78ea6ef3f88549d76db1d38c347da549",
+      "style_declarations": [
+        {
+          "line": 29,
+          "name": "PopoverRootStyle"
+        },
+        {
+          "line": 32,
+          "name": "PopoverAnchorStyle"
+        },
+        {
+          "line": 35,
+          "name": "PopoverContentStyle"
+        },
+        {
+          "line": 38,
+          "name": "PopoverHeaderStyle"
+        },
+        {
+          "line": 41,
+          "name": "PopoverTitleStyle"
+        },
+        {
+          "line": 44,
+          "name": "PopoverDescriptionStyle"
+        },
+        {
+          "line": 47,
+          "name": "PopupOpenStyle"
+        },
+        {
+          "line": 50,
+          "name": "PopupClosedStyle"
+        },
+        {
+          "line": 57,
+          "name": "PopupTransition100Style"
+        },
+        {
+          "line": 60,
+          "name": "PopupTransition150Style"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.popover",
+          "path": "ui/src/overlays.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider",
+          "path": "ui/src/overlay_provider.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider_controlled",
+          "path": "ui/src/overlay_provider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-popover"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "progress",
+      "upstream_path": "rui/progress.mbt",
+      "upstream_sha256": "f1edc4011c609a6b11a036253c1d4ab9129aafff9b29f0838940034a279c7a9a",
+      "style_declarations": [
+        {
+          "line": 9,
+          "name": "ProgressBaseStyle"
+        },
+        {
+          "line": 12,
+          "name": "ProgressTrackStyle"
+        },
+        {
+          "line": 15,
+          "name": "ProgressIndicatorStyle"
+        },
+        {
+          "line": 18,
+          "name": "ProgressIndeterminateStyle"
+        },
+        {
+          "line": 45,
+          "name": "ProgressLabelStyle"
+        },
+        {
+          "line": 48,
+          "name": "ProgressValueStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.progress",
+          "path": "ui/src/progress.mbt"
+        },
+        {
+          "symbol": "@ui.progress_indicator",
+          "path": "ui/src/progress.mbt"
+        },
+        {
+          "symbol": "@ui.progress_value",
+          "path": "ui/src/progress.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-progress"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "radio-group",
+      "upstream_path": "rui/radio_group.mbt",
+      "upstream_sha256": "3d8108750c9652ecb365076c4fded357b395a915f0d4c45dea08d6d1aa5e1bf7",
+      "style_declarations": [
+        {
+          "line": 14,
+          "name": "RadioGroupVerticalStyle"
+        },
+        {
+          "line": 17,
+          "name": "RadioGroupHorizontalStyle"
+        },
+        {
+          "line": 20,
+          "name": "RadioGroupItemBaseStyle"
+        },
+        {
+          "line": 23,
+          "name": "RadioGroupItemCheckedStyle"
+        },
+        {
+          "line": 26,
+          "name": "RadioGroupItemUncheckedStyle"
+        },
+        {
+          "line": 29,
+          "name": "RadioGroupItemInvalidStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.radio_group",
+          "path": "ui/src/choices.mbt"
+        },
+        {
+          "symbol": "@ui.radio_group_controlled",
+          "path": "ui/src/choices.mbt"
+        },
+        {
+          "symbol": "@ui.radio_group_root",
+          "path": "ui/src/choices.mbt"
+        },
+        {
+          "symbol": "@ui.radio_group_item",
+          "path": "ui/src/choices.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-radio-group"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "resizable",
+      "upstream_path": "rui/resizable.mbt",
+      "upstream_sha256": "6a5d342a276c1d6952a7d210419a526c0a21d3fd73e7c8bf92217c5df80c090d",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.resizable",
+          "path": "ui/src/resizable.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-resizable"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "scroll-area",
+      "upstream_path": "rui/scroll_area.mbt",
+      "upstream_sha256": "5b888e8bf8a56e13773b408de88526f3320c367df3140b25623656b458dfe60c",
+      "style_declarations": [
+        {
+          "line": 97,
+          "name": "ScrollAreaManagedRootStyle"
+        },
+        {
+          "line": 100,
+          "name": "ScrollAreaManagedViewportStyle"
+        },
+        {
+          "line": 103,
+          "name": "ScrollAreaManagedTrackStyle"
+        },
+        {
+          "line": 106,
+          "name": "ScrollAreaManagedThumbStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.scroll_area",
+          "path": "ui/src/layout.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-scroll-area"
+      },
+      "decision": "Native scroll-view retains platform scrolling and inherits preset tokens."
+    },
+    {
+      "family": "select",
+      "upstream_path": "rui/select.mbt",
+      "upstream_sha256": "47926d0ad444abfaa69c2259a4a3713fc59fe95381d338e67519ee885b0733c9",
+      "style_declarations": [
+        {
+          "line": 63,
+          "name": "SelectRootStyle"
+        },
+        {
+          "line": 66,
+          "name": "SelectTriggerStyle"
+        },
+        {
+          "line": 69,
+          "name": "SelectContentStyle"
+        },
+        {
+          "line": 72,
+          "name": "SelectItemStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.select",
+          "path": "ui/src/selection.mbt"
+        },
+        {
+          "symbol": "@ui.select_controlled",
+          "path": "ui/src/selection.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-select"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "separator",
+      "upstream_path": "rui/separator.mbt",
+      "upstream_sha256": "4dd8b9a80f3ce7a88858521aced87a9dc9692e99b391803d998d2567036fc0a5",
+      "style_declarations": [
+        {
+          "line": 14,
+          "name": "SeparatorBaseStyle"
+        },
+        {
+          "line": 17,
+          "name": "SeparatorHorizontalStyle"
+        },
+        {
+          "line": 20,
+          "name": "SeparatorVerticalStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.separator",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-separator"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "sheet",
+      "upstream_path": "rui/sheet.mbt",
+      "upstream_sha256": "e3453676bc197576542dff6950a43035119a86526cb169e487e03a8ab8da9703",
+      "style_declarations": [
+        {
+          "line": 17,
+          "name": "SheetStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.sheet",
+          "path": "ui/src/overlays.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider",
+          "path": "ui/src/overlay_provider.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider_controlled",
+          "path": "ui/src/overlay_provider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-sheet"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "sidebar",
+      "upstream_path": "rui/sidebar.mbt",
+      "upstream_sha256": "ab5d300c9a2d711be51b32ef7dd8ada0f209dc73df6471e167c83e1398a3ee5a",
+      "style_declarations": [
+        {
+          "line": 99,
+          "name": "SidebarProviderStyle"
+        },
+        {
+          "line": 102,
+          "name": "SidebarShellStyle"
+        },
+        {
+          "line": 105,
+          "name": "SidebarBaseStyle"
+        },
+        {
+          "line": 108,
+          "name": "SidebarDesktopStyle"
+        },
+        {
+          "line": 111,
+          "name": "SidebarMobileLayerStyle"
+        },
+        {
+          "line": 114,
+          "name": "SidebarMobileStyle"
+        },
+        {
+          "line": 117,
+          "name": "SidebarOverlayStyle"
+        },
+        {
+          "line": 120,
+          "name": "SidebarOverlayOpenStyle"
+        },
+        {
+          "line": 123,
+          "name": "SidebarOverlayClosedStyle"
+        },
+        {
+          "line": 126,
+          "name": "SidebarHeaderFooterStyle"
+        },
+        {
+          "line": 129,
+          "name": "SidebarContentStyle"
+        },
+        {
+          "line": 132,
+          "name": "SidebarGroupStyle"
+        },
+        {
+          "line": 135,
+          "name": "SidebarGroupLabelStyle"
+        },
+        {
+          "line": 138,
+          "name": "SidebarGroupActionStyle"
+        },
+        {
+          "line": 141,
+          "name": "SidebarActionSurfaceStyle"
+        },
+        {
+          "line": 144,
+          "name": "SidebarActionSizeStyle"
+        },
+        {
+          "line": 147,
+          "name": "SidebarGroupContentStyle"
+        },
+        {
+          "line": 150,
+          "name": "SidebarMenuStyle"
+        },
+        {
+          "line": 153,
+          "name": "SidebarMenuItemStyle"
+        },
+        {
+          "line": 156,
+          "name": "SidebarMenuButtonStyle"
+        },
+        {
+          "line": 159,
+          "name": "SidebarMenuButtonActiveStyle"
+        },
+        {
+          "line": 162,
+          "name": "SidebarMenuButtonOutlineStyle"
+        },
+        {
+          "line": 165,
+          "name": "SidebarMenuActionStyle"
+        },
+        {
+          "line": 168,
+          "name": "SidebarMenuActionHoverStyle"
+        },
+        {
+          "line": 171,
+          "name": "SidebarRailStyle"
+        },
+        {
+          "line": 174,
+          "name": "SidebarRailLineStyle"
+        },
+        {
+          "line": 177,
+          "name": "SidebarMenuBadgeStyle"
+        },
+        {
+          "line": 180,
+          "name": "SidebarMenuSubStyle"
+        },
+        {
+          "line": 183,
+          "name": "SidebarMenuSubButtonStyle"
+        },
+        {
+          "line": 186,
+          "name": "SidebarInsetStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.sidebar",
+          "path": "ui/src/layout.mbt"
+        },
+        {
+          "symbol": "@ui.sidebar_provider",
+          "path": "ui/src/sidebar_provider.mbt"
+        },
+        {
+          "symbol": "@ui.sidebar_surface",
+          "path": "ui/src/sidebar_surface.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-sidebar"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "skeleton",
+      "upstream_path": "rui/skeleton.mbt",
+      "upstream_sha256": "14f187988debfaee0d2a0a51a3df3e5db606dde788b562a75252dd8cfa69bd78",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "SkeletonBaseStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.skeleton",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-skeleton"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "slider",
+      "upstream_path": "rui/slider.mbt",
+      "upstream_sha256": "112eb959f5b2737ef07e9fd481e4caae3044d58019888aba08a5cca3dc0836ff",
+      "style_declarations": [
+        {
+          "line": 9,
+          "name": "SliderThumbStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.slider",
+          "path": "ui/src/slider.mbt"
+        },
+        {
+          "symbol": "@ui.slider_values_controlled",
+          "path": "ui/src/slider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-slider"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "sonner",
+      "upstream_path": "rui/sonner.mbt",
+      "upstream_sha256": "755f81eb315c517948cc82fb8bfe1bc6190534789c921ac9b9c0f13ba9d0880b",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.sonner",
+          "path": "ui/src/toast.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-toast"
+      },
+      "decision": "The native toast stack shares compact toast surfaces; browser portal behavior is excluded."
+    },
+    {
+      "family": "spinner",
+      "upstream_path": "rui/spinner.mbt",
+      "upstream_sha256": "53708b1f120782d9a57c35754b35749226c0dc13a5c0d7658fe5b30e7c6057e6",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "SpinnerStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.spinner",
+          "path": "ui/src/foundation_display.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-spinner"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "switch",
+      "upstream_path": "rui/switch.mbt",
+      "upstream_sha256": "b8244074532b8ca29e2c24435bcafea386cd17c5777e6ce86dca2012906667a6",
+      "style_declarations": [
+        {
+          "line": 14,
+          "name": "SwitchBaseStyle"
+        },
+        {
+          "line": 17,
+          "name": "SwitchCheckedStyle"
+        },
+        {
+          "line": 20,
+          "name": "SwitchUncheckedStyle"
+        },
+        {
+          "line": 23,
+          "name": "SwitchInvalidStyle"
+        },
+        {
+          "line": 26,
+          "name": "SwitchSizeDefaultStyle"
+        },
+        {
+          "line": 29,
+          "name": "SwitchSizeSmStyle"
+        },
+        {
+          "line": 32,
+          "name": "SwitchThumbStyle"
+        },
+        {
+          "line": 35,
+          "name": "SwitchThumbSizeDefaultStyle"
+        },
+        {
+          "line": 38,
+          "name": "SwitchThumbSizeSmStyle"
+        },
+        {
+          "line": 41,
+          "name": "SwitchThumbCheckedDefaultStyle"
+        },
+        {
+          "line": 44,
+          "name": "SwitchThumbCheckedSmStyle"
+        },
+        {
+          "line": 47,
+          "name": "SwitchThumbUncheckedStyle"
+        },
+        {
+          "line": 50,
+          "name": "SwitchReadOnlyStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.switch",
+          "path": "ui/src/choices.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-switch"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "table",
+      "upstream_path": "rui/table.mbt",
+      "upstream_sha256": "f2ffdcf89a9610abca30231b732489226af31cb3303627562486ce40d8c9077b",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "TableContainerStyle"
+        },
+        {
+          "line": 5,
+          "name": "TableBaseStyle"
+        },
+        {
+          "line": 8,
+          "name": "TableHeaderStyle"
+        },
+        {
+          "line": 11,
+          "name": "TableBodyStyle"
+        },
+        {
+          "line": 14,
+          "name": "TableFooterStyle"
+        },
+        {
+          "line": 17,
+          "name": "TableRowStyle"
+        },
+        {
+          "line": 20,
+          "name": "TableRowSelectedStyle"
+        },
+        {
+          "line": 23,
+          "name": "TableRowExpandedStyle"
+        },
+        {
+          "line": 26,
+          "name": "TableHeadStyle"
+        },
+        {
+          "line": 29,
+          "name": "TableCellStyle"
+        },
+        {
+          "line": 32,
+          "name": "TableCaptionStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.table",
+          "path": "ui/src/data_table.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-table"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "tabs",
+      "upstream_path": "rui/tabs.mbt",
+      "upstream_sha256": "c80e7c1f9f30b6867966e5e737f72cb9c2c2abb98ae2fb5d8ff1403e4c6354b9",
+      "style_declarations": [
+        {
+          "line": 43,
+          "name": "TabsRootStyle"
+        },
+        {
+          "line": 46,
+          "name": "TabsRootHorizontalStyle"
+        },
+        {
+          "line": 49,
+          "name": "TabsRootVerticalStyle"
+        },
+        {
+          "line": 52,
+          "name": "TabsListStyle"
+        },
+        {
+          "line": 55,
+          "name": "TabsListDefaultStyle"
+        },
+        {
+          "line": 58,
+          "name": "TabsListLineStyle"
+        },
+        {
+          "line": 61,
+          "name": "TabsListHorizontalStyle"
+        },
+        {
+          "line": 64,
+          "name": "TabsListVerticalStyle"
+        },
+        {
+          "line": 67,
+          "name": "TabsTriggerStyle"
+        },
+        {
+          "line": 70,
+          "name": "TabsTriggerActiveStyle"
+        },
+        {
+          "line": 73,
+          "name": "TabsTriggerInactiveStyle"
+        },
+        {
+          "line": 76,
+          "name": "TabsContentStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.tabs",
+          "path": "ui/src/disclosures.mbt"
+        },
+        {
+          "symbol": "@ui.tabs_controlled",
+          "path": "ui/src/disclosures.mbt"
+        },
+        {
+          "symbol": "@ui.Panel",
+          "path": "ui/src/disclosures.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-tabs"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "textarea",
+      "upstream_path": "rui/textarea.mbt",
+      "upstream_sha256": "77051476c8d86fad722fe59b57bce158f0792719f25f89224fdc5e786983ecab",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "TextareaBaseStyle"
+        },
+        {
+          "line": 5,
+          "name": "TextareaInvalidStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.textarea",
+          "path": "ui/src/inputs.mbt"
+        },
+        {
+          "symbol": "@ui.textarea_stateful",
+          "path": "ui/src/inputs.mbt"
+        },
+        {
+          "symbol": "@ui.InputOptions",
+          "path": "ui/src/inputs.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-textarea"
+      },
+      "decision": "64px minimum, native multiline behavior and the shared input token recipe."
+    },
+    {
+      "family": "toast",
+      "upstream_path": "rui/toast.mbt",
+      "upstream_sha256": "29b46542ef36754e9e6b7749642cdb60f0274f61b171747a7b9847d6a30c4c5b",
+      "style_declarations": [
+        {
+          "line": 46,
+          "name": "ToastSurfaceStyle"
+        },
+        {
+          "line": 49,
+          "name": "ToastCardShadowStyle"
+        },
+        {
+          "line": 52,
+          "name": "ToastViewportStyle"
+        },
+        {
+          "line": 55,
+          "name": "ToasterViewportStyle"
+        },
+        {
+          "line": 58,
+          "name": "SonnerViewportStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.toast",
+          "path": "ui/src/toast.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-toast"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "toggle",
+      "upstream_path": "rui/toggle.mbt",
+      "upstream_sha256": "67cfaa562805031f5257dee552112571f3e26bc9fd4063e8ac1bc523867ddf0d",
+      "style_declarations": [
+        {
+          "line": 27,
+          "name": "ToggleBaseStyle"
+        },
+        {
+          "line": 30,
+          "name": "ToggleDefaultStyle"
+        },
+        {
+          "line": 33,
+          "name": "ToggleOutlineStyle"
+        },
+        {
+          "line": 36,
+          "name": "TogglePressedStyle"
+        },
+        {
+          "line": 39,
+          "name": "ToggleInvalidStyle"
+        },
+        {
+          "line": 42,
+          "name": "ToggleSizeDefaultStyle"
+        },
+        {
+          "line": 45,
+          "name": "ToggleSizeSmStyle"
+        },
+        {
+          "line": 48,
+          "name": "ToggleSizeLgStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.toggle",
+          "path": "ui/src/toggle.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-toggle"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "toggle-group",
+      "upstream_path": "rui/toggle_group.mbt",
+      "upstream_sha256": "7dc70b3141b47f801d5d622d80709b702d4d9bd4d8dcf29e0247eec95c36262e",
+      "style_declarations": [],
+      "local": [
+        {
+          "symbol": "@ui.toggle_group",
+          "path": "ui/src/toggle.mbt"
+        },
+        {
+          "symbol": "@ui.toggle_group_controlled",
+          "path": "ui/src/toggle.mbt"
+        },
+        {
+          "symbol": "@ui.toggle_group_item",
+          "path": "ui/src/toggle.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-toggle-group"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "tooltip",
+      "upstream_path": "rui/tooltip.mbt",
+      "upstream_sha256": "2dc3270e3c3eff113c37c061fdc69bf39fe59b89879dd80b164223e2559b3ae1",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "TooltipProviderStyle"
+        },
+        {
+          "line": 5,
+          "name": "TooltipRootStyle"
+        },
+        {
+          "line": 8,
+          "name": "TooltipContentStyle"
+        },
+        {
+          "line": 11,
+          "name": "TooltipArrowBaseStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.tooltip",
+          "path": "ui/src/overlays.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider",
+          "path": "ui/src/overlay_provider.mbt"
+        },
+        {
+          "symbol": "@ui.overlay_provider_controlled",
+          "path": "ui/src/overlay_provider.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-tooltip"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    },
+    {
+      "family": "typography",
+      "upstream_path": "rui/typography.mbt",
+      "upstream_sha256": "ea2f0ed8d827ab0b635b603044cc1f30cd1679af3c3a881dee42d7d83e8059cb",
+      "style_declarations": [
+        {
+          "line": 2,
+          "name": "TypographyH1Style"
+        },
+        {
+          "line": 5,
+          "name": "TypographyH2Style"
+        },
+        {
+          "line": 8,
+          "name": "TypographyH3Style"
+        },
+        {
+          "line": 11,
+          "name": "TypographyH4Style"
+        },
+        {
+          "line": 14,
+          "name": "TypographyPStyle"
+        },
+        {
+          "line": 17,
+          "name": "TypographyBlockquoteStyle"
+        },
+        {
+          "line": 20,
+          "name": "TypographyListStyle"
+        },
+        {
+          "line": 23,
+          "name": "TypographyInlineCodeStyle"
+        },
+        {
+          "line": 26,
+          "name": "TypographyLeadStyle"
+        },
+        {
+          "line": 29,
+          "name": "TypographyLargeStyle"
+        },
+        {
+          "line": 32,
+          "name": "TypographySmallStyle"
+        },
+        {
+          "line": 35,
+          "name": "TypographyMutedStyle"
+        }
+      ],
+      "local": [
+        {
+          "symbol": "@ui.typography_blockquote",
+          "path": "ui/src/compound_content.mbt"
+        }
+      ],
+      "native_recipe": {
+        "path": "ui/src/resources/nova.mbt",
+        "selector": ".mmui-typography"
+      },
+      "decision": "Scoped compact spacing, type or radius uses shared native preset tokens; existing state, geometry and platform interactions remain."
+    }
+  ],
+  "tests": [
+    "ui/src/theme/theme_test.mbt",
+    "ui/src/resources/resources_test.mbt",
+    "ui/examples/showcase/src/tests/gallery_test.mbt"
+  ],
+  "host_status": "pending",
+  "policy": "All 64 native families are mapped; selectors may share recipes. The offline gate checks coverage and local references. Upstream source hashes identify the reviewed inputs; visual equivalence requires host inspection and is not established by these runtime tests. Browser-only selectors, DOM geometry, hover and keyboard behavior are not imported."
+}

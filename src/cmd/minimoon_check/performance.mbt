@@ -201,7 +201,7 @@ async fn perf_suite(root : String) -> Unit {
     let app_wxss_size = @fs.read_file(join(root, app_wxss_path))
       .binary()
       .length()
-    guard templates_size <= 20000 else {
+    guard templates_size <= 22000 else {
       abort(templates_path + " exceeds shared WXML budget")
     }
     guard app_wxss_size <= 9500 else {

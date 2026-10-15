@@ -187,6 +187,14 @@ fn[Msg] checked_normalize_node(
             return Err("unsupported MiniApp render tag: " + tag)
           }
           let kind = miniapp_tree_kind(tag)
+          if tag == "inline-text" {
+            guard children is [@ui.Text(value)] else {
+              return Err("MiniApp inline-text requires exactly one text leaf")
+            }
+            return checked_tree_props(tag, attrs, context.events).map(props => {
+              normalized_tree_node("text", identity, value, props, [])
+            })
+          }
           if (
               kind == "input" ||
               kind == "image" ||
@@ -204,8 +212,12 @@ fn[Msg] checked_normalize_node(
           }
           match
             checked_normalize_children(children, path, context, cache_children) {
-            Ok(normalized) =>
+            Ok(normalized) => {
+              if kind == "inline" && !normalized.all(valid_inline_child) {
+                return Err("MiniApp inline accepts only text and image leaves")
+              }
               Ok(normalized_tree_node(kind, identity, "", props, normalized))
+            }
             Err(error) => Err(error)
           }
         }
@@ -331,6 +343,7 @@ pub fn dynamic_templates_wxml() -> String {
   "      <template is=\"minimoon_dynamic_node\" data=\"{{node: child, p: child.props, e: child.events}}\" />\n" +
   "    </block>\n" +
   "  </block>\n" +
+  inline_template_wxml(semantics) +
   "  <text wx:elif=\"{{node.kind === 'text'}}\" id=\"{{p.id}}\" class='{{p.className}}' style=\"{{p.style}}\" aria-label=\"{{p.ariaLabel}}\"" +
   semantics +
   " data-minimoon-section=\"{{p.section}}\" data-minimoon-tap=\"{{e.tap}}\" bindtap=\"__mmDispatchTap\">{{node.text}}</text>\n" +

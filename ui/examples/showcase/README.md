@@ -1,9 +1,14 @@
 # Minimoon UI showcase
 
-This six-page verification application exercises `lampclaw/minimoon_ui 0.1.5`
-with core `lampclaw/minimoon 0.2.7`. It covers all 64 pinned RUI families plus
-Form and Theme, with native substitutions described in the
+This six-page verification application exercises `lampclaw/minimoon_ui 0.2.0`
+with core `lampclaw/minimoon 0.3.0`. It covers all 64 pinned RUI families plus
+Form, Theme and optional Markdown, with native substitutions described in the
 [migration map](../../docs/migration.md).
+
+Switch Nova/Vega on each page without resetting state. Foundation includes
+native Markdown; Forms includes the four-phase property-reset probe; Overlays
+includes four-sided open-Drawer edge gestures. These additions require fresh
+fingerprint-matched Developer Tools acceptance.
 
 The Forms page sends only a non-sensitive title to public
 `https://echo.apifox.com/post`, with a ten-second timeout. Typed echo is not

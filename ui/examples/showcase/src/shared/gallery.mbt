@@ -44,13 +44,20 @@ pub fn page(
     build=page_context => {
       let (dark, toggle_dark) = @minimoon.create_variable(false)
       let (rtl, toggle_rtl) = @minimoon.create_variable(false)
-      let theme = @minimoon.Val::map2(dark, rtl, (dark, rtl) => {
+      let (vega, toggle_preset) = @minimoon.create_variable(false)
+      let theme = @minimoon.Val::map3(dark, rtl, vega, (dark, rtl, vega) => {
         @theme.theme(
+          preset=if vega { @theme.VegaV1 } else { @theme.Nova },
           mode=if dark { @theme.Dark } else { @theme.Light },
           direction=if rtl { @theme.Rtl } else { @theme.Ltr },
         )
       })
       let navigation = @minimoon.div(class="gallery-nav", [
+        @ui.button(
+          on_tap=toggle_preset(value => !value),
+          event_key="gallery/preset",
+          "Nova / Vega",
+        ),
         @ui.button(
           on_tap=toggle_dark(value => !value),
           event_key="gallery/theme",

@@ -67,7 +67,7 @@ fn ci_handoff_check_source() -> String {
     #|      checks: [{ name: "synthetic packaging control", status: "passed" }],
     #|    }))
     #|    write(directory, `${fixture}/generated/release_summary.json`, JSON.stringify({
-    #|      name, schemaVersion: 11, runtimeApiVersion: 13, rendererProtocolVersion: 8, mode: "release",
+    #|      name, schemaVersion: 11, runtimeApiVersion: 13, rendererProtocolVersion: 9, mode: "release",
     #|      automated: { status: "passed", pageCount: name === "miniapp_draft_workbench" ? 9 : 6, artifactFingerprint: fingerprint },
     #|      devtools: { status: "pending", evidence: null },
     #|    }))
@@ -107,7 +107,7 @@ fn ci_handoff_check_source() -> String {
     #|  for (const [field, sourceField, expected] of [
     #|    ["appContract", "schemaVersion", 11],
     #|    ["runtimeAbi", "runtimeApiVersion", 13],
-    #|    ["rendererProtocol", "rendererProtocolVersion", 8],
+    #|    ["rendererProtocol", "rendererProtocolVersion", 9],
     #|  ]) {
     #|    assert.equal(handoff.versions[field], expected, `handoff ${field} must use the current version`)
     #|    for (const source of [manifest, summary, ...manifest.pages]) {
@@ -138,8 +138,8 @@ fn ci_handoff_check_source() -> String {
     #|    assert.equal(handoff.appDirectory, fixture)
     #|    assert.equal(handoff.fixture, name)
     #|    assert.equal(handoff.commit, commit)
-    #|    assert.equal(handoff.versions.minimoon, "0.2.7")
-    #|    assert.equal(handoff.versions.minimoonUi, "0.1.5")
+    #|    assert.equal(handoff.versions.minimoon, "0.3.0")
+    #|    assert.equal(handoff.versions.minimoonUi, "0.2.0")
     #|    const manifest = JSON.parse(fs.readFileSync(path.join(base, "manifest.json"), "utf8"))
     #|    const summary = JSON.parse(fs.readFileSync(path.join(base, "release_summary.json"), "utf8"))
     #|    const checklist = JSON.parse(fs.readFileSync(path.join(base, "smoke_checklist.json"), "utf8"))
@@ -204,8 +204,8 @@ fn ci_handoff_check_source() -> String {
     #|    reject(`${bundle}-untracked-dist`, (dir) => write(dir, `${fixture}/dist/unreviewed.txt`, "unreviewed"), /committed dist files only/)
     #|    reject(`${bundle}-symlink`, (dir) => fs.symlinkSync("app.js", path.join(dir, fixture, "dist/linked.js")), /symlinks/)
     #|  }
-    #|  reject("wrong-pair", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.0"\nimport { "lampclaw/minimoon@0.2.7" }\n'), /reviewed core/)
-    #|  reject("old-ui-core-dependency", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.5"\nimport { "lampclaw/minimoon@0.2.5" }\n'), /UI core 0.2.7 dependency/)
+    #|  reject("wrong-pair", (dir) => write(dir, "ui/moon.mod", 'version = "0.1.0"\nimport { "lampclaw/minimoon@0.3.0" }\n'), /reviewed core/)
+    #|  reject("old-ui-core-dependency", (dir) => write(dir, "ui/moon.mod", 'version = "0.2.0"\nimport { "lampclaw/minimoon@0.2.5" }\n'), /UI core 0.3.0 dependency/)
     #|  reject("wrong-core-version", (dir) => write(dir, "moon.mod", 'version = "0.2.0"\n'), /reviewed core/)
     #|  for (const [fixture, , bundle] of fixtures) {
     #|    reject(`${bundle}-old-core-dependency`, (dir) => write(dir, `${fixture}/moon.mod`, 'import { "lampclaw/minimoon@0.2.0" }\n'), /reviewed core dependency/)

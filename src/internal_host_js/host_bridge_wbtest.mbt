@@ -22,11 +22,6 @@ test "ABI v13 host captures, merges, and drains asynchronous runtime wakes" {
   assert_true(host.contains("try { task = wx[method]"))
   assert_true(host.contains("catch (error) { fail(error); return }"))
   assert_true(protocol.contains("asyncDrains: 0"))
-  assert_true(
-    protocol.contains(
-      "if (!value || typeof value !== \"object\" || Array.isArray(value)) return false",
-    ),
-  )
   assert_false(
     host.contains(
       "module.exports = { registerMinimoonPage, __minimoonRuntimeWakeV12 }",

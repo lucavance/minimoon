@@ -8,8 +8,8 @@ async fn run_ui_tests(
   coverage_target? : String,
 ) -> Unit {
   let args = [
-    "test", "ui/src", "ui/src/headless", "ui/src/theme", "ui/src/resources", "ui/examples/showcase/src/tests",
-    "--target", target, "--deny-warn",
+    "test", "ui/src", "ui/src/headless", "ui/src/theme", "ui/src/resources", "ui/src/markdown",
+    "ui/examples/showcase/src/tests", "--target", target, "--deny-warn",
   ]
   if coverage_target is Some(directory) {
     args.push("--enable-coverage")
@@ -72,6 +72,10 @@ async fn ui_gallery_manifest_check(root : String) -> Unit {
   }
   guard ui_tree_has_section(json_field(pages[2], "initialTree"), "Form") else {
     abort("UI showcase is missing Form auxiliary capability")
+  }
+  guard ui_tree_has_section(json_field(pages[0], "initialTree"), "Markdown") &&
+    ui_tree_has_section(json_field(pages[2], "initialTree"), "Property Reset") else {
+    abort("UI showcase is missing Markdown or Property Reset probes")
   }
   guard json_field(manifest, "resources") is Array(providers) &&
     providers.length() == 1 else {

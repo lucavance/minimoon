@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/resources"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn encode(ResourceBundle) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct ResourceAsset {
+  path : String
+  content : ResourceContent
+} derive(Eq, @debug.Debug)
+pub fn ResourceAsset::equal(Self, Self) -> Bool
+pub fn ResourceAsset::not_equal(Self, Self) -> Bool
+pub fn ResourceAsset::to_repr(Self) -> @debug.Repr
+
+pub(all) struct ResourceBundle {
+  id : String
+  version : String
+  wxss : String
+  assets : Array[ResourceAsset]
+} derive(Eq, @debug.Debug)
+pub fn ResourceBundle::equal(Self, Self) -> Bool
+pub fn ResourceBundle::not_equal(Self, Self) -> Bool
+pub fn ResourceBundle::to_repr(Self) -> @debug.Repr
+
+pub(all) enum ResourceContent {
+  Text(String)
+  Binary(Bytes)
+} derive(Eq, @debug.Debug)
+pub fn ResourceContent::equal(Self, Self) -> Bool
+pub fn ResourceContent::not_equal(Self, Self) -> Bool
+pub fn ResourceContent::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

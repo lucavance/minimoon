@@ -29,6 +29,34 @@ unchanged.
 [Additional property-reset checks](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md#property-reset-host-handoff)
 map existing interactions and automated-only cases.
 
+For core `0.3.0` / UI `0.2.0`, dedicated probes now make those transitions
+directly testable. In Runtime Lab, use **属性重置与恢复**; in UI Forms, use
+**Property Reset**. Advance all four phases: populated/disabled →
+empty/false/zero → optional properties omitted and editing enabled → restored.
+Check input/textarea values, password mode, placeholder, selection, checkbox
+and switch state while controls reorder. In the enabled phase, compose Chinese,
+paste, delete and insert in the middle. Values and native identity must remain
+consistent. Repeat after hiding/showing and UI preset switching.
+
+## Core 0.3.0 / UI 0.2.0 acceptance additions
+
+Both fixture fingerprints change. Validate the entire checklist plus:
+
+- On all six UI pages, compare Nova and explicit VegaV1 in light/dark and
+  LTR/RTL, including disabled, focused, invalid, selected and open overlay
+  states. Counter/form/selection state must survive preset switches.
+- In Foundation's **Markdown**, inspect mixed Chinese/English wrapping,
+  strong/emphasis/strike/code, the inline check image, nested tasks, footnotes,
+  wide-table/code scrolling, and heading/link callbacks. Math, Mermaid and raw
+  HTML remain readable source. Require no unknown span/control errors.
+- In Overlays, open each of the four Drawers. Swipe its exterior edge toward
+  the panel; verify one dismissal, direction lock, cancellation of transverse
+  or reverse motion, unchanged handle behavior, and no opener on a closed
+  panel. A stationary edge tap follows the overlay dismissal policy. Hide or
+  unload during a gesture; late measurement/touch results must have no effect.
+
+Automated assertions and the recipe ledger do not establish a host pass.
+
 ## Prepare the exact release
 
 ```bash

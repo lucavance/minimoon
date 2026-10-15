@@ -44,6 +44,7 @@
     ]
   },
   "devtoolsChecks": [
+    "Runtime Lab Property Reset cycles populated to empty/false/zero to omitted optional props to restored; keyed controls retain identity across reorders, mixed structural changes target the correct control, and enabled input/textarea accept IME, paste and deletion",
     "Four native bottom Tabs stay ordered 工作台/草稿/联机/更多; switching retains state without stack growth",
     "All nine routes keep the fixed dark-blue safe navigation band and shallow curved hero; no clipping, horizontal overflow or capsule overlap on load and resize",
     "Draft Workbench local CRUD: new, title/note validation, save, saved list, edit/delete, cold restart restore; failed reads/writes never claim success or overwrite unknown data",

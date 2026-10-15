@@ -17,7 +17,7 @@ details behind the root package.
 
 ## Normalized tree and diff
 
-Renderer protocol v8 nodes contain kind, identity, text, typed props/events,
+Renderer protocol v9 nodes contain kind, identity, text, typed props/events,
 and children. The diff can emit scalar `set`, array `splice`, keyed `move`, or
 an atomic `ReplaceViewTree`. Private retained identities are stripped before
 the protocol boundary.
@@ -47,6 +47,25 @@ current, request status, and media integer fields accept only exact values in
 wrong JSON types are rejected rather than coerced. Official extra object fields
 remain forward-compatible. A malformed entry changes neither model, commands,
 nor snapshot; predecoding keeps a malformed batch atomic.
+
+## Native inline content
+
+Core `0.3.0` adds opaque `Inline` runs for Skyline span/text/image flow:
+
+```moonbit
+@minimoon.inline([
+  @minimoon.inline_text("Text with "),
+  @minimoon.inline_text("emphasis", style="font-weight:700;"),
+  @minimoon.inline_image(src="/assets/logo.svg", style="width:1em;height:1em;"),
+])
+```
+
+Only `inline_text` and `inline_image` construct runs; block nodes cannot be
+inserted into this flow. Text supports finite semantics and an optional tap
+command. Images retain load/error commands and require a suitable explicit
+size. The generated native branch binds each run directly; it does not recurse
+through a template inside text. Existing `span` remains a general block
+container. Upgrades must regenerate the complete protocol-v9 host output.
 
 ## Ownership and cleanup
 

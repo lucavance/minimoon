@@ -11,7 +11,7 @@ pub fn features() -> Array[String] {
     "navigation-menu", "pagination", "popover", "progress", "radio-group", "resizable",
     "scroll-area", "select", "separator", "sheet", "sidebar", "skeleton", "slider",
     "sonner", "spinner", "switch", "table", "tabs", "textarea", "toast", "toggle",
-    "toggle-group", "tooltip", "typography", "form", "theme",
+    "toggle-group", "tooltip", "typography", "form", "theme", "markdown",
   ]
 }
 
@@ -178,6 +178,9 @@ pub fn resources(requested : Array[String]) -> @build_resources.ResourceBundle {
     "\n" +
     extra_rules() +
     "\n" +
-    attachment_rules()
-  { id: "lampclaw/minimoon_ui/vega-v1", version: "0.1.5", wxss: css, assets, }
+    attachment_rules() +
+    "\n" +
+    nova_rules() +
+    (if selected.contains("markdown") { "\n" + markdown_rules() } else { "" })
+  { id: "lampclaw/minimoon_ui/native-v2", version: "0.2.0", wxss: css, assets, }
 }

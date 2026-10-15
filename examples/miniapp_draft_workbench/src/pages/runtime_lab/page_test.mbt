@@ -396,7 +396,7 @@ test "conformance lab uses ABI v13, shared WXML, and query isolation marker" {
     @runtime_lab.program(deps).contract()
   })
   inspect(contract.contains("\"runtimeApiVersion\":13"), content="true")
-  inspect(contract.contains("\"rendererProtocolVersion\":8"), content="true")
+  inspect(contract.contains("\"rendererProtocolVersion\":9"), content="true")
   let wxml = @application.program().preview(deps => {
     @runtime_lab.program(deps).wxml()
   })

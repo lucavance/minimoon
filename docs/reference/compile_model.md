@@ -60,7 +60,7 @@ Native tooling:
 3. evaluates `app.preview(deps => page.program(deps).contract())` when opted in,
    or `program().contract()` otherwise, using explicit `preview_input()` seeds
    without calling actual input decoders or executing initialization commands;
-4. validates Contract schema `11`, runtime ABI `13`, and renderer protocol `8`;
+4. validates Contract schema `11`, runtime ABI `13`, and renderer protocol `9`;
 5. removes temporary source and target directories on success or failure.
 
 After every contract is valid, one formatted temporary MoonBit executable

@@ -1,0 +1,15 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon_ui/resources"
+
+// Values
+pub fn features() -> Array[String]
+
+pub fn resources(Array[String]) -> @lampclaw/minimoon/resources.ResourceBundle
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

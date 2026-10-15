@@ -303,9 +303,9 @@ pub fn dismiss_all_toasts(UiContext) -> @minimoon.Cmd
 
 pub fn dismiss_toast(UiContext, String) -> @minimoon.Cmd
 
-pub fn drawer(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], side? : Side, initially_open? : Bool, disabled? : Bool) -> @minimoon.Val[@minimoon.Node]
+pub fn drawer(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], side? : Side, initially_open? : Bool, disabled? : Bool, swipe_area? : Int) -> @minimoon.Val[@minimoon.Node]
 
-pub fn drawer_controlled(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], side? : Side, disabled? : Bool, close_on_overlay? : Bool) -> @minimoon.Val[@minimoon.Node]
+pub fn drawer_controlled(UiContext, id~ : String, title~ : String, trigger_label~ : String, content~ : @minimoon.Val[@minimoon.Node], open~ : @minimoon.Val[Bool], on_change~ : @minimoon.Emit[Bool], side? : Side, disabled? : Bool, close_on_overlay? : Bool, swipe_area? : Int) -> @minimoon.Val[@minimoon.Node]
 
 pub fn dropdown_menu(UiContext, id~ : String, trigger_label~ : String, items~ : @minimoon.Val[Array[MenuItem]]) -> @minimoon.Val[@minimoon.Node]
 

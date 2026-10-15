@@ -1,5 +1,5 @@
 ///|
-/// Skyline-safe adaptation of RUI 0.1.1 Vega tokens (MIT). See THIRD_PARTY_NOTICES.md.
+/// Skyline-safe adaptation of RUI tokens (MIT). See THIRD_PARTY_NOTICES.md.
 pub(all) enum ColorMode {
   Light
   Dark
@@ -10,6 +10,19 @@ pub(all) enum TextDirection {
   Ltr
   Rtl
 } derive(Eq, Debug)
+
+///|
+/// Nova is the current compact recipe; VegaV1 preserves the original recipe.
+pub(all) enum Preset {
+  Nova
+  VegaV1
+} derive(Eq, Debug)
+
+///|
+pub extend Preset with Eq::{equal, not_equal}
+
+///|
+pub extend Preset with @debug.Debug::{to_repr}
 
 ///|
 pub(all) struct Tokens {
@@ -25,8 +38,8 @@ pub(all) struct Tokens {
 } derive(Eq, Debug)
 
 ///|
-pub fn tokens(mode~ : ColorMode = Light) -> Tokens {
-  match mode {
+pub fn tokens(mode~ : ColorMode = Light, preset~ : Preset = Nova) -> Tokens {
+  let palette = match mode {
     Light =>
       {
         background: "#ffffff",
@@ -52,10 +65,32 @@ pub fn tokens(mode~ : ColorMode = Light) -> Tokens {
         radius: 10,
       }
   }
+  match preset {
+    VegaV1 => palette
+    Nova =>
+      match mode {
+        Light =>
+          {
+            ..palette,
+            foreground: "#0a0a0a",
+            primary: "#171717",
+            destructive: "#e7000b",
+          }
+        Dark =>
+          {
+            ..palette,
+            background: "#0a0a0a",
+            primary_foreground: "#171717",
+            border: "#ffffff1a",
+            destructive: "#ff6467",
+          }
+      }
+  }
 }
 
 ///|
 pub struct Theme {
+  preset : Preset
   mode : ColorMode
   direction : TextDirection
   tokens : Tokens
@@ -66,8 +101,9 @@ pub fn theme(
   mode~ : ColorMode = Light,
   direction~ : TextDirection = Ltr,
   tokens? : Tokens,
+  preset~ : Preset = Nova,
 ) -> Theme {
-  let palette = tokens.unwrap_or(default_tokens(mode))
+  let palette = tokens.unwrap_or(default_tokens(mode, preset))
   guard palette.radius >= 0 else { abort("theme radius must be nonnegative") }
   for
     color in [
@@ -96,17 +132,22 @@ pub fn theme(
       }
     }
   }
-  { mode, direction, tokens: palette, }
+  { mode, direction, tokens: palette, preset, }
 }
 
 ///|
-fn default_tokens(mode : ColorMode) -> Tokens {
-  tokens(mode~)
+fn default_tokens(mode : ColorMode, preset : Preset) -> Tokens {
+  tokens(mode~, preset~)
 }
 
 ///|
 pub fn Theme::class_name(self : Theme) -> String {
-  "mmui-theme mmui-vega-v1 mmui-" +
+  "mmui-theme " +
+  (match self.preset {
+    Nova => "mmui-nova"
+    VegaV1 => "mmui-vega-v1"
+  }) +
+  " mmui-" +
   (match self.mode {
     Light => "light"
     Dark => "dark"

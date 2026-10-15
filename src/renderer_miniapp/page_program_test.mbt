@@ -173,7 +173,7 @@ test "typed page program owns route, dynamic tree, view, and capabilities" {
     Object(fields) => {
       assert_eq(fields["schemaVersion"], Json::number(11.0, repr="11"))
       assert_eq(fields["runtimeApiVersion"], Json::number(13.0, repr="13"))
-      assert_eq(fields["rendererProtocolVersion"], Json::number(8.0, repr="8"))
+      assert_eq(fields["rendererProtocolVersion"], Json::number(9.0, repr="9"))
       assert_eq(fields["route"], Json::string("pages/profile/profile"))
       assert_eq(fields.contains("events"), false)
     }
@@ -249,7 +249,9 @@ test "recursive WXML passes short aliases without dropping node or event binding
   assert_true(wxml.contains("{{p.ariaValueNow}}"))
   assert_true(wxml.contains("{{e.touchcancel}}"))
   assert_true(wxml.contains("catchtouchmove=\"__mmDispatchTouchMove\""))
-  assert_true(wxml.length() < 20000)
+  // Protocol 9 adds a native inline branch and the same finite semantics on
+  // its text runs. Keep a bounded template size for the expanded node schema.
+  assert_true(wxml.length() < 22000, msg=wxml.length().to_string())
 }
 
 ///|

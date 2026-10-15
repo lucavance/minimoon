@@ -15,6 +15,7 @@ pub fn program() -> @minimoon.Page {
         on_complete=update_otp_status.map(code => _ => "OTP complete: " + code),
       )
       @ui.stack([
+        property_probe(),
         @gallery.sample(
           "Checkbox",
           @ui.checkbox(id="forms-checkbox", label="Accept terms"),

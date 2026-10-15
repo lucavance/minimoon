@@ -57,11 +57,6 @@ test "page bridge uses the application runtime and gates navigation" {
   assert_true(bridge.contains("__minimoonRendererStats"))
   assert_true(bridge.contains("require(\"./minimoon.protocol.js\")"))
   assert_true(protocol.contains("exactKeys"))
-  assert_true(
-    protocol.contains(
-      "if (!value || typeof value !== \"object\" || Array.isArray(value)) return false",
-    ),
-  )
   assert_true(protocol.contains("copyPath"))
   assert_true(protocol.contains("decodeCompactNode"))
   assert_true(bridge.contains("this._sh"))

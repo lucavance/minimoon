@@ -223,7 +223,7 @@ checklist. The sorted, length-framed app-relative paths make checkout location
 irrelevant while ensuring WXSS, shared WXML, future assets, and manual acceptance
 scope cannot drift behind a still-valid evidence record.
 
-App Contract v11 and renderer protocol v8 retain native form/image/slider/progress
+App Contract v11 and renderer protocol v9 retain native form/image/slider/progress
 controls, precise touch payloads, and build-resource descriptors to the v7
 focus/blur/confirm and dialog/menu baseline. Runtime ABI v13 retains the
 page-owned local-effect wake/drain contract

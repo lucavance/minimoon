@@ -3,6 +3,7 @@ pub fn program() -> @minimoon.Page {
   @gallery.page("foundation", "基础展示 / Foundation — 20 components", _ => {
     let (count, increment) = @minimoon.create_variable(0)
     @ui.stack([
+      markdown_sample(),
       @gallery.display(
         "Alert",
         @ui.alert([

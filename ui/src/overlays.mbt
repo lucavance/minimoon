@@ -49,6 +49,20 @@ fn rect_bounds(rect : @minimoon.NodeRect) -> @headless.Bounds {
 }
 
 ///|
+fn surface_class(kind : OverlayKind) -> String {
+  let name = match kind {
+    DialogSurface => "dialog"
+    AlertSurface => "alert-dialog"
+    SheetSurface(_) => "sheet"
+    PopoverSurface => "popover"
+    PreviewSurface => "hover-card"
+    TooltipSurface => "tooltip"
+    ContextSurface => "context-menu"
+  }
+  "mmui-" + name
+}
+
+///|
 /// One controlled native overlay; content stays reactive while open.
 pub fn overlay_controlled(
   context : UiContext,
@@ -131,6 +145,7 @@ pub fn overlay_controlled(
           ui_container(
             "surface",
             id=id + "-surface",
+            class=surface_class(kind),
             style=surface_style(kind, bounds),
             semantics=@minimoon.semantics(
               role=if kind is AlertSurface {

@@ -3,7 +3,7 @@ test "resource selection is deterministic and transitive" {
   let first = @resources.resources(["form", "date-picker", "form"])
   let second = @resources.resources(["date-picker", "form"])
   assert_eq(first, second)
-  assert_eq(@resources.features().length(), 66)
+  assert_eq(@resources.features().length(), 67)
   guard first.assets[0].content is @build_resources.Text(manifest) else {
     abort("text manifest")
   }
@@ -15,7 +15,7 @@ test "resource selection is deterministic and transitive" {
   guard @resources.resources([]).assets[0].content is @build_resources.Text(all) else {
     abort("text manifest")
   }
-  assert_eq(all.split("\n").count(), 67)
+  assert_eq(all.split("\n").count(), 68)
 }
 
 ///|
@@ -36,4 +36,16 @@ test "SVG resources use explicit size and do not introduce browser CSS" {
   assert_false(resources.wxss.contains("oklch("))
   assert_false(resources.wxss.contains("color-mix("))
   assert_false(resources.wxss.contains(":hover"))
+}
+
+///|
+test "native-v2 bundles both preset scopes and opts into Markdown styles explicitly" {
+  let basic = @resources.resources(["button"])
+  let markdown = @resources.resources(["button", "markdown"])
+  assert_eq(basic.id, "lampclaw/minimoon_ui/native-v2")
+  assert_true(basic.wxss.contains(".mmui-vega-v1"))
+  assert_true(basic.wxss.contains(".mmui-nova .mmui-button{min-height:32px"))
+  assert_false(basic.wxss.contains(".mmui-markdown-p"))
+  assert_true(markdown.wxss.contains(".mmui-markdown-p"))
+  assert_true(markdown.wxss.contains(".mmui-markdown-table"))
 }

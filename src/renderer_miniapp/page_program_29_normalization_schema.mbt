@@ -179,6 +179,8 @@ fn event_attr_kind(name : String) -> PageEventKind? {
 
 ///|
 fn supported_tree_tag(tag : String) -> Bool {
+  tag == "inline" ||
+  tag == "inline-text" ||
   tag == "div" ||
   tag == "view" ||
   tag == "h1" ||

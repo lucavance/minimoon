@@ -9,5 +9,9 @@ import {
 supported_targets = "js"
 
 import {
+  "lampclaw/minimoon/testing",
+} for "test"
+
+import {
   "moonbitlang/async",
 } for "wbtest"

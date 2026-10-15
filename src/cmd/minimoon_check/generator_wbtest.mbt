@@ -49,6 +49,8 @@ test "UI archive accepts source packages and notices but excludes fixtures and s
     path in [
       "moon.mod", "LICENSE", "THIRD_PARTY_NOTICES.md", "README.mbt.md", "README.md",
       "CHANGELOG.md", "src/pkg.generated.mbti", "src/resources/resources.mbt", "src/headless/moon.pkg",
+      "src/markdown/moon.pkg", "src/markdown/markdown.mbt", "src/markdown/pkg.generated.mbti",
+      "src/markdown/README.mbt.md",
     ] {
     assert_true(ui_registry_path_allowed(path))
   }
@@ -56,7 +58,8 @@ test "UI archive accepts source packages and notices but excludes fixtures and s
     path in [
       "docs/migration.md", "examples/gallery/moon.mod", "src/test_test.mbt", "src/feature_wbtest.mbt",
       "src/adapter.js", "src/private.json", "package.json", ".env", "src/unreviewed/moon.pkg",
-      "src/../private.mbt", "src/theme/nested/new.mbt",
+      "src/../private.mbt", "src/theme/nested/new.mbt", "src/markdown/markdown_test.mbt",
+      "src/markdown/parser.js", "src/markdown/nested/source.mbt", "src/markdown/new-guide.md",
     ] {
     assert_false(ui_registry_path_allowed(path))
   }

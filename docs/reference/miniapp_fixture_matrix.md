@@ -24,8 +24,8 @@ See the [workbench guide](https://github.com/lucavance/minimoon/blob/main/exampl
 ## Independent UI fixture
 
 [`ui/examples/showcase`](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
-is the separate six-page release fixture for `lampclaw/minimoon_ui 0.1.5`
-with core `0.2.7`. It covers 64 RUI families plus Form and Theme: foundation,
+is the separate six-page release fixture for `lampclaw/minimoon_ui 0.2.0`
+with core `0.3.0`. It covers 64 RUI families plus Form and Theme: foundation,
 overlay/disclosure, forms, data/date, layout/navigation and feedback behavior.
 Its native/JS tests, generated resource checks, candidate report, artifact
 fingerprint and local host evidence are independent of Draft Workbench. Both
@@ -48,7 +48,7 @@ implicit `application` entry or UI dependency.
 The fixture and generated starter must pass:
 
 - warning-free JS-target compilation and tests
-- App Contract v11 / runtime ABI v13 / renderer protocol v8 validation
+- App Contract v11 / runtime ABI v13 / renderer protocol v9 validation
 - one application-wide runtime/shared host pair with page-aware dispatch
 - deterministic release generation and embedded-template drift checks
 - generated JavaScript parsing and Page Definition API registration

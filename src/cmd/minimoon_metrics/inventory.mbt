@@ -40,6 +40,29 @@ fn embedded_inventory(
   fn exclude(file, name, reason) {
     entries.push(embedded_entry(file, name, "excluded", Excluded, reason~))
   }
+  let inline_test = "src/internal_host_js/inline_wbtest.mbt"
+  if sources.any(source => source.0 == inline_test) {
+    add(inline_test, "extern:test_inline_protocol", "test", RawLiterals)
+  }
+  // New files can be absent from tracked-only metrics during development.
+  // Each selected declaration still has an exact, audited classification.
+  for
+    entry in [
+      ("ui/src/resources/nova.mbt", "fn:nova_rules", "WXSS"),
+      ("ui/src/resources/markdown.mbt", "fn:markdown_rules", "WXSS"),
+      (
+        "ui/examples/showcase/src/pages/foundation/markdown_sample.mbt", "fn:markdown_sample",
+        "Markdown reading fixture; HTML and Mermaid are displayed as source",
+      ),
+      (
+        "ui/src/markdown/markdown_test.mbt", "test:CommonMark and extensions render native text images tables and tasks",
+        "Markdown parser fixture; HTML is text, not executable JavaScript",
+      ),
+    ] {
+    if sources.any(source => source.0 == entry.0) {
+      exclude(entry.0, entry.1, entry.2)
+    }
+  }
   for
     entry in [
       ("src/authoring_app_driver.mbt", "capture_app_wake", "production"),

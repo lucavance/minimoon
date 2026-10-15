@@ -4,7 +4,7 @@
 
 - App Contract schema: 11
 - runtime API/state ABI: 13
-- renderer protocol: 8
+- renderer protocol: 9
 - generated runtime module format: CommonJS
 
 The application runtime exports version/state-ABI queries, page-aware create,
@@ -38,16 +38,22 @@ Props and events have finite allowlists. Authoring-retention identity never
 appears in this protocol. Cache, routes, subscriptions, and the active tree
 change atomically; rejected candidates cannot poison the accepted cache.
 
-Protocol v8 carries finite semantic props: `role`, `ariaLabel`, `ariaExpanded`,
+Protocol v9 carries finite semantic props: `role`, `ariaLabel`, `ariaExpanded`,
 `ariaSelected`, `ariaDisabled`, `ariaHidden`, `ariaChecked`, `ariaModal`,
 `ariaControls`, `ariaLabelledBy`, `ariaDescribedBy`, `ariaOrientation`, and
 `ariaHasPopup`. Boolean semantic states stay booleans through normalization and
 host validation. Focus, blur, and confirm remain finite event keys.
 
+Protocol v9 adds `inline`: its children must be leaf `text` or `image` nodes.
+Text and image nodes must have no children. Full-tree decoding and structural
+patch validation enforce this constraint before accepting a candidate. Invalid
+insertion/move operations leave the accepted shadow and revision unchanged.
+Existing general `span` authoring still normalizes to `view`.
+
 ## Renderer commands
 
 `ReplaceViewTree(component_id, base_revision, revision, tree)` carries the
-complete tree. `PatchViewTree(..., ops)` carries protocol-v8 operations:
+complete tree. `PatchViewTree(..., ops)` carries protocol-v9 operations:
 
 - `set`: replace `text`, `props`, or `events`;
 - `splice`: change a children range;
@@ -100,7 +106,7 @@ onUnload: invalidate generation -> lifecycle/dispose -> clear owned resources
 ```
 
 Verification requires generated App Contract v11, runtime ABI v13, and renderer
-protocol v8 artifacts. Both App and no-App configurations require schema `11`;
+protocol v9 artifacts. Both App and no-App configurations require schema `11`;
 schema `8` and `9` are migration errors. Unsafe routes, missing packages/programs, forbidden JavaScript,
 invalid shared artifacts, or host simulation failures are rejected.
 

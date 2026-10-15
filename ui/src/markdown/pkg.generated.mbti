@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon_ui/markdown"
+
+import {
+  "lampclaw/minimoon",
+}
+
+// Values
+pub fn markdown(String, id~ : String, on_link? : @minimoon.Emit[String], on_anchor? : @minimoon.Emit[String], transform_link? : (String) -> String, render_heading? : (Heading, @minimoon.Node) -> @minimoon.Node, render_codeblock? : (String, String) -> @minimoon.Node, heading_anchors? : Bool) -> @minimoon.Node
+
+// Errors
+
+// Types and methods
+pub(all) struct Heading {
+  level : Int
+  id : String
+  text : String
+}
+
+// Type aliases
+
+// Traits

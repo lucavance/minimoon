@@ -1,11 +1,14 @@
 # Minimoon UI
 
 Native, touch-first Skyline components for Minimoon. Module
-`lampclaw/minimoon_ui 0.1.5` declares core `lampclaw/minimoon 0.2.7`.
-The public component API is unchanged.
+`lampclaw/minimoon_ui 0.2.0` declares core `lampclaw/minimoon 0.3.0`.
+This is an unpublished candidate. Existing calls remain supported; Nova is now
+the default visual recipe. Use `theme(preset=VegaV1)` to retain the old recipe.
 
-The fixed reference is RUI 0.1.1 in Rabbita 0.15.6, commit
-`b1291945fd0201a0b5b39513b88585d6122db7bc`. The library uses public Minimoon
+The current reference is RUI 0.3.6 at Rabbita commit
+`7d5940fed9b1ba795c84582394024233997ec267`. The historical 517-symbol
+RUI 0.1.1 map remains unchanged alongside the new 655-symbol root/Markdown map.
+The library uses public Minimoon
 nodes and Val composition, not Rabbita's browser runtime. The MIT notice and
 upstream visual-recipe attribution are retained in [LICENSE](LICENSE) and
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). See the module's
@@ -14,7 +17,7 @@ upstream visual-recipe attribution are retained in [LICENSE](LICENSE) and
 ## Install
 
 Use `moon 0.1.20261012` / `moonc v0.10.15` or newer and the matching core CLI
-`0.2.7`. Current source uses global `vp 1.1.0`, Node `26.11.1` and Bun `1.4.3`;
+`0.3.0`. Current source uses global `vp 1.1.0`, Node `26.11.1` and Bun `1.4.3`;
 Node `>=24.20.0` remains supported and CI checks the lower boundary. Follow
 the [environment setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/miniapp_quickstart.md#prerequisites);
 no separate Bun installation or local `vite-plus` dependency is needed.
@@ -27,8 +30,8 @@ Add both modules to the application's TOML-style `moon.mod`:
 
 ```moonbit
 import {
-  "lampclaw/minimoon@0.2.7",
-  "lampclaw/minimoon_ui@0.1.5",
+  "lampclaw/minimoon@0.3.0",
+  "lampclaw/minimoon_ui@0.2.0",
 }
 ```
 
@@ -78,8 +81,8 @@ deterministic, but selecting one feature does not produce only its selectors.
 
 ## Upgrade an existing UI application
 
-Upgrade the CLI and your direct core dependency to `0.2.7`, and UI to `0.1.5`.
-UI also declares core `0.2.7`. Set
+Upgrade the CLI and your direct core dependency to `0.3.0`, and UI to `0.2.0`.
+UI also declares core `0.3.0`. Set
 Node `26.11.1` in `devEngines.runtime` while retaining `engines.node: ">=24.20.0"` and Bun
 `1.4.3` in `devEngines.packageManager`. Update
 an existing style `package.json` to weapp-tailwindcss `5.6.1`, keeping Tailwind
@@ -140,7 +143,9 @@ Timers pause while the page is hidden and are reclaimed on disposal.
 
 - Default package: component builders, controlled APIs and compound providers.
 - `/headless`: date selection, placement, slider and resize algorithms.
-- `/theme`: typed Light/Dark palettes, Ltr/Rtl direction and Vega tokens.
+- `/theme`: typed Light/Dark palettes, Ltr/Rtl direction and Nova/VegaV1 presets.
+- `/markdown`: optional CommonMark, tables/tasks/strikethrough/footnotes, native
+  inline flow and callback links/anchors. See [Markdown](src/markdown/README.mbt.md).
 - `/resources`: build-only WXSS/SVG provider and feature inventory.
 
 Pass a reactive Theme to `root(theme=...)` to switch theme or direction.
@@ -211,12 +216,12 @@ publish directly from this repository's `ui/` directory or run
 can inherit the root `.moonignore` `/ui/` exclusion and produce an empty archive. The repository gate packages an
 isolated source copy and validates its actual ZIP, required files and consumers.
 
-The checked source archive is `_build/publish/lampclaw-minimoon_ui-0.1.5.zip`.
+The checked source archive is `_build/publish/lampclaw-minimoon_ui-0.2.0.zip`.
 Publish its reviewed contents from an independent directory after registry
-core `0.2.7` and fresh consumers pass. Previously published UI archives remain
+core `0.3.0` and fresh consumers pass. Previously published UI archives remain
 immutable; confirm that the new version is unoccupied before upload.
 
-For core `0.2.7` and UI `0.1.5`, the release checklist requires complete
+For core `0.3.0` and UI `0.2.0`, the release checklist requires complete
 candidate checks, both CI jobs, fingerprint-matched host validation and fresh
 registry consumers. Developer Tools evidence stays local and tracked reports
 remain in candidate state. Follow the

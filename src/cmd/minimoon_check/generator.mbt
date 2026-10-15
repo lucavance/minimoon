@@ -732,8 +732,8 @@ async fn generator_suite(root : String) -> Unit {
     guard @fs.read_file(join(app, "dist/minimoon.templates.wxml"))
       .binary()
       .length() <=
-      20000 else {
-      abort("starter shared WXML exceeds 20000-byte budget")
+      22000 else {
+      abort("starter shared WXML exceeds 22000-byte protocol 9 budget")
     }
     guard @fs.read_file(join(app, "dist/app.wxss")).binary().length() <= 9500 else {
       abort("starter application WXSS exceeds 9500-byte budget")

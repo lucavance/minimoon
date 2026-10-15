@@ -1,9 +1,14 @@
 # Release candidate handoff
 
 This workflow keeps deterministic Linux validation, real Skyline acceptance
-and explicit local registry publication distinct. The current source pair is
-core `lampclaw/minimoon@0.2.7` and UI `lampclaw/minimoon_ui@0.1.5`;
-UI declares core `0.2.7`. Actual published versions and historical checkpoints
+and explicit local registry publication distinct. The current source candidate
+is core `lampclaw/minimoon@0.3.0` and UI `lampclaw/minimoon_ui@0.2.0`;
+UI declares core `0.3.0`. It uses Contract 11 / ABI 13 / renderer protocol 9.
+Both changed fixtures require fresh fingerprint-matched Developer Tools
+validation. Push/publication of this future pair has not been authorized.
+The ordered publication examples later in this document describe the completed
+0.2.7 / 0.1.5 release; substitute only separately reviewed future versions.
+Actual published versions and historical checkpoints
 are recorded in [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 Never overwrite an occupied registry version or treat an old host result as
 acceptance of changed artifacts.
@@ -123,8 +128,8 @@ or use `moon -C ui publish`.
 The UI archive gate instead copies source into a temporary independent Git
 root, runs the real `moon package`, checks the archive allowlist and required
 files, and compiles consumers from the extracted package. Its reviewed output
-is `_build/publish/lampclaw-minimoon_ui-0.1.5.zip`. The core candidate archive is
-`_build/publish/lampclaw-minimoon-0.2.7.zip`. UI publication must use that checked
+is `_build/publish/lampclaw-minimoon_ui-0.2.0.zip`. The core candidate archive is
+`_build/publish/lampclaw-minimoon-0.3.0.zip`. UI publication must use that checked
 archive extracted outside all Git and Moon workspace ancestors, after registry
 core is available and consumers pass. A successful archive gate does not itself
 publish either module. Previously published archives remain immutable.
@@ -141,10 +146,11 @@ Do not create version tags or a GitHub Release as part of this workflow.
 
 These are framework-maintainer gates, separate from a user's application build.
 `check:docs` validates links, mirrored READMEs, current facts, onboarding examples
-and generated reports; `check:api` locks the core 0.2 root/HTTP/resources surface and
-compiles the current consumer. Optional core components/styles/testing and the
-independent UI root/headless/theme/resources packages have additive snapshots.
-The frozen 0.1 consumer is historical, not a source-compatibility promise.
+and generated reports; `check:api` locks the core 0.3 root/HTTP/resources surface,
+keeps additive core components/styles/testing snapshots, and compiles the frozen
+core 0.2 consumer against the unpacked archive. UI 0.2 locks root/headless/theme/
+resources/markdown snapshots and checks the pinned RUI symbol and Nova recipe
+ledgers. The frozen core 0.1 consumer is historical.
 
 `check:coverage` is independent of `check:candidate`. The latter also checks
 warning-free compilation, generated stability, host simulation, performance and

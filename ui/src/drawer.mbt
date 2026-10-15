@@ -8,6 +8,9 @@ priv struct DrawerDrag {
   timestamp : Double
   size : Double?
   ended : Bool
+  edge : Bool
+  cross_start : Double
+  locked : Bool
 } derive(Eq)
 
 ///|
@@ -19,6 +22,7 @@ priv struct DrawerState {
 ///|
 priv enum DrawerMsg {
   Start(@minimoon.TouchDetail)
+  StartEdge(@minimoon.TouchDetail)
   Move(@minimoon.TouchDetail)
   End(@minimoon.TouchDetail)
   Cancel
@@ -36,6 +40,9 @@ fn drawer_axis(side : Side, point : @minimoon.TouchPoint) -> Double {
 
 ///|
 fn drawer_distance(side : Side, drag : DrawerDrag) -> Double {
+  if drag.edge && !drag.locked {
+    return 0.0
+  }
   let sign = if side == Left || side == Top { -1.0 } else { 1.0 }
   ((drag.position - drag.start) * sign).max(0.0)
 }
@@ -83,7 +90,9 @@ pub fn drawer_controlled(
   side~ : Side = Bottom,
   disabled~ : Bool = false,
   close_on_overlay~ : Bool = true,
+  swipe_area~ : Int32 = 0,
 ) -> @minimoon.Val[@minimoon.Node] {
+  guard swipe_area >= 0 else { abort("drawer swipe_area must be nonnegative") }
   open.switch_by(
     (opened, _) => {
       if !opened {
@@ -103,7 +112,7 @@ pub fn drawer_controlled(
                 @minimoon.no_cmd(state)
               }
             Cancel => @minimoon.no_cmd({ token: state.token + 1, drag: None, })
-            Start(detail) => {
+            Start(detail) | StartEdge(detail) => {
               guard !disabled &&
                 state.drag is None &&
                 detail.changed_touches.length() == 1 else {
@@ -122,6 +131,9 @@ pub fn drawer_controlled(
                     timestamp: detail.timestamp,
                     size: None,
                     ended: false,
+                    edge: msg is StartEdge(_),
+                    cross_start: drawer_cross_axis(side, point),
+                    locked: !(msg is StartEdge(_)),
                   }),
                 },
                 @minimoon.measure_nodes(
@@ -178,6 +190,32 @@ pub fn drawer_controlled(
                 timestamp: detail.timestamp,
                 ended,
               }
+              let drag = if drag.edge && !drag.locked {
+                let along = drawer_signed_distance(side, drag)
+                let across = (drawer_cross_axis(side, point) - drag.cross_start).abs()
+                if (across >= 6.0 && across >= along.abs()) || along <= -6.0 {
+                  return @minimoon.no_cmd({
+                    token: state.token + 1,
+                    drag: None,
+                  })
+                }
+                if along >= 6.0 && along > across {
+                  { ..drag, locked: true, }
+                } else if ended {
+                  return (
+                    { token: state.token + 1, drag: None, },
+                    if close_on_overlay {
+                      on_change(false)
+                    } else {
+                      @minimoon.none
+                    },
+                  )
+                } else {
+                  drag
+                }
+              } else {
+                drag
+              }
               if ended && drag.size is Some(_) {
                 (
                   { ..state, drag: None, },
@@ -224,6 +262,7 @@ pub fn drawer_controlled(
               class="mmui-surface",
               id=id + "-surface",
               style=surface_style(SheetSurface(side), None) +
+                (if swipe_area > 0 { "overflow:visible;" } else { "" }) +
                 "transform:translate" +
                 axis +
                 "(" +
@@ -234,32 +273,7 @@ pub fn drawer_controlled(
                 modal=true,
                 labelled_by=id + "-title",
               ),
-              [
-                @minimoon.touch_view(
-                  id=id + "-handle",
-                  class="mmui-drawer-handle",
-                  style="min-width:44px;min-height:44px;",
-                  catch_move=true,
-                  on_touch_start=emit.map(value => DrawerMsg::Start(value)),
-                  on_touch_move=emit.map(value => Move(value)),
-                  on_touch_end=emit.map(value => DrawerMsg::End(value)),
-                  on_touch_cancel=emit.map(value => CancelTouch(value)),
-                  event_key=id + "/drag",
-                  semantics=@minimoon.semantics(label="Drag to close"),
-                  @minimoon.text("—"),
-                ),
-                @minimoon.h1(
-                  id=id + "-title",
-                  class="mmui-surface-title",
-                  title,
-                ),
-                content,
-                @minimoon.button(
-                  on_tap=on_change(false),
-                  event_key=id + "/close",
-                  "Close",
-                ),
-              ],
+              drawer_body(id, title, content, emit, on_change, side, swipe_area),
             ),
           ])
         } else {
@@ -285,6 +299,7 @@ pub fn drawer(
   side~ : Side = Bottom,
   initially_open~ : Bool = false,
   disabled~ : Bool = false,
+  swipe_area~ : Int32 = 0,
 ) -> @minimoon.Val[@minimoon.Node] {
   let (open, change) = @minimoon.create_variable(initially_open)
   drawer_controlled(
@@ -297,5 +312,6 @@ pub fn drawer(
     open~,
     on_change=change.map(value => _ => value),
     disabled~,
+    swipe_area~,
   )
 }

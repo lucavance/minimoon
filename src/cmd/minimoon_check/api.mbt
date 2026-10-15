@@ -171,7 +171,7 @@ fn api_product_series(version : String) -> String? {
 fn api_baseline_series(version : String) -> String? {
   match api_product_series(version) {
     Some(series) =>
-      if series == "0.1" || series == "0.2" {
+      if series == "0.1" || series == "0.2" || series == "0.3" {
         Some(series)
       } else {
         None
@@ -248,7 +248,7 @@ async fn api_suite(root : String) -> Unit {
       "testing", "src/testing/pkg.generated.mbti", "testing.mbti", "additive", false,
     ),
   ]
-  if product_series == "0.2" {
+  if product_series == "0.2" || product_series == "0.3" {
     package_snapshots.push(
       ("http", "src/http/pkg.generated.mbti", "http.mbti", "exact", true),
     )
@@ -270,12 +270,20 @@ async fn api_suite(root : String) -> Unit {
     require_file(root, source)
     let baseline_path = baseline_dir + "/" + snapshot
     require_file(root, baseline_path)
-    let violations = api_explicit_method_violations(
-      @fs.read_file(join(root, baseline_path)).text(),
-      @fs.read_file(join(root, source)).text(),
-      api_reviewed_explicit_methods(root, label),
-      exact,
-    )
+    let violations = if product_series == "0.3" {
+      api_compatibility_violations(
+        @fs.read_file(join(root, baseline_path)).text(),
+        @fs.read_file(join(root, source)).text(),
+        exact,
+      )
+    } else {
+      api_explicit_method_violations(
+        @fs.read_file(join(root, baseline_path)).text(),
+        @fs.read_file(join(root, source)).text(),
+        api_reviewed_explicit_methods(root, label),
+        exact,
+      )
+    }
     guard violations.is_empty() else {
       abort(label + " public API is incompatible: " + violations.join("; "))
     }

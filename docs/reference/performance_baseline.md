@@ -20,7 +20,7 @@ has a `minimoon.app.js` entry helper.
 | shared protocol | 10,000 bytes |
 | compact initial trees | 41,000 bytes |
 | each page JavaScript bridge | 2,048 bytes |
-| shared `minimoon.templates.wxml` | 20,000 bytes |
+| shared `minimoon.templates.wxml` | 22,000 bytes |
 | global `app.wxss` | 9,500 bytes |
 | each page WXML | 1,024 bytes |
 | each page WXSS | exactly 0 bytes |
@@ -41,6 +41,13 @@ comparison, the earlier 2026-09-08 authoring calibration used
 aggregate JavaScript bytes, including the 3,464-byte application helper.
 Against that review's ceilings, headroom was respectively 12,023, 376, 508,
 40,697, and 34,879 bytes.
+
+## Core 0.3.0 inline schema budget
+
+Core 0.3.0 protocol 9 adds the native inline span branch and finite text-run
+semantics. Its shared WXML ceiling is 22,000 bytes (formerly 20,000), applied
+equally to fixtures and the generated Starter. This is a schema expansion;
+archive ceilings/reserves and renderer patch-operation limits are unchanged.
 
 ## Approved Draft Workbench example budget review
 

@@ -57,6 +57,12 @@ pub fn[C : IsChildren] h1(id? : String, class? : String, style? : String, data_s
 
 pub fn image(src~ : String, alt? : String, mode? : ImageMode, on_load? : Emit[ImageLoadDetail], on_error? : Emit[String], load_key? : String, error_key? : String, id? : String, class? : String, style? : String, data_section? : String, semantics? : Semantics) -> Node
 
+pub fn inline(Array[Inline], id? : String, class? : String, style? : String, semantics? : Semantics) -> Node
+
+pub fn inline_image(src~ : String, alt? : String, mode? : ImageMode, id? : String, class? : String, style? : String, on_load? : Emit[ImageLoadDetail], on_error? : Emit[String], load_key? : String, error_key? : String) -> Inline
+
+pub fn inline_text(String, id? : String, class? : String, style? : String, semantics? : Semantics, on_tap? : Cmd, event_key? : String) -> Inline
+
 pub fn input(value~ : String, on_input~ : Emit[String], input_type? : InputType, maxlength? : Int, password? : Bool, selection_start? : Int, selection_end? : Int, name? : String, event_key? : String, disabled? : Bool, focus? : Bool, on_confirm? : Emit[String], confirm_key? : String, on_focus? : Emit[FocusDetail], focus_key? : String, on_blur? : Emit[InputBlurDetail], blur_key? : String, id? : String, class? : String, style? : String, data_section? : String, placeholder? : String, semantics? : Semantics) -> Node
 
 pub fn keyed(String, Node) -> KeyedNode
@@ -286,6 +292,8 @@ pub(all) enum ImageMode {
 pub fn ImageMode::equal(Self, Self) -> Bool
 pub fn ImageMode::not_equal(Self, Self) -> Bool
 pub fn ImageMode::to_repr(Self) -> @debug.Repr
+
+type Inline
 
 pub struct InputBlurDetail {
   value : String

@@ -5,6 +5,20 @@ defined by `moon.mod`; it does not use Git version tags. Registry availability
 is recorded in the repository's
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 
+## [0.2.0] — candidate
+
+- Require core `lampclaw/minimoon@0.3.0` and renderer protocol 9.
+- Default to the native Nova recipe; retain `theme(preset=VegaV1)` and existing
+  token fields/custom overrides. Use resource ID `lampclaw/minimoon_ui/native-v2`.
+- Add optional `/markdown`, pinned to cmark `0.4.12`, with native inline flow,
+  tables, tasks, strikethrough, footnotes, callback links/anchors and custom
+  heading/code renderers. HTML is text; math/Mermaid remain source.
+- Add opt-in `swipe_area` to both Drawer builders, capturing only the exterior
+  edge of an open panel. Preserve default behavior with `swipe_area=0`.
+- Add the complete pinned RUI 0.3.6 consumer API inventory (655 symbols),
+  offline validation and showcase acceptance probes. Host validation is pending.
+
+<!-- minimoon:historical:start -->
 ## [0.1.5]
 
 - Declare core `lampclaw/minimoon@0.2.7` and version the native resource bundle
@@ -91,3 +105,5 @@ is recorded in the repository's
   Existing core optional components and minimal themes remain independent.
 - A release requires separate, exact-fingerprint Skyline acceptance for the
   core fixture and UI showcase. Automated candidate checks are not host evidence.
+
+<!-- minimoon:historical:end -->

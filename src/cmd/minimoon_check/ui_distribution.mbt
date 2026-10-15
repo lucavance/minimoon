@@ -2,11 +2,14 @@
 fn ui_registry_path_allowed(path : String) -> Bool {
   if [
       "moon.mod", "LICENSE", "THIRD_PARTY_NOTICES.md", "README.mbt.md", "README.md",
-      "CHANGELOG.md",
+      "CHANGELOG.md", "src/markdown/README.mbt.md",
     ].contains(path) {
     return true
   }
-  for directory in ["src", "src/headless", "src/theme", "src/resources"] {
+  for
+    directory in [
+      "src", "src/headless", "src/theme", "src/resources", "src/markdown",
+    ] {
     let prefix = directory + "/"
     if path.has_prefix(prefix) {
       let filename = path[prefix.length():]
@@ -95,7 +98,8 @@ async fn ui_distribution_package_gate(
   for
     required in [
       "moon.mod", "LICENSE", "THIRD_PARTY_NOTICES.md", "README.mbt.md", "README.md",
-      "CHANGELOG.md", "src/pkg.generated.mbti", "src/resources/moon.pkg",
+      "CHANGELOG.md", "src/pkg.generated.mbti", "src/resources/moon.pkg", "src/markdown/moon.pkg",
+      "src/markdown/pkg.generated.mbti", "src/markdown/README.mbt.md",
     ] {
     guard paths.contains(required) else {
       abort("UI registry package is missing " + required)
@@ -137,7 +141,7 @@ async fn ui_distribution_package_gate(
     "\",\n}\n",
   )
   write_ui_consumer_file(
-    consumer, "src/pages/home/moon.pkg", "import {\n  \"lampclaw/minimoon\",\n  \"lampclaw/minimoon_ui\" @ui,\n  \"lampclaw/minimoon_ui/theme\",\n  \"lampclaw/minimoon_ui/headless\",\n}\n\nsupported_targets = \"js+native\"\n",
+    consumer, "src/pages/home/moon.pkg", "import {\n  \"lampclaw/minimoon\",\n  \"lampclaw/minimoon_ui\" @ui,\n  \"lampclaw/minimoon_ui/theme\",\n  \"lampclaw/minimoon_ui/headless\",\n  \"lampclaw/minimoon_ui/markdown\",\n}\n\nsupported_targets = \"js+native\"\n",
   )
   write_ui_consumer_file(
     consumer,
@@ -152,6 +156,9 @@ async fn ui_distribution_package_gate(
       #|      class=@theme.theme().class_name(), style=@theme.theme().style(), [
       #|        @ui.button(on_tap=emit(1), event_key="increment", "Count " + model.to_string()),
       #|        @minimoon.p(@headless.page_count(31, 10).to_string()),
+      #|        @minimoon.inline([@minimoon.inline_text("Native flow"), @minimoon.inline_image(src="/logo.svg", alt="logo")]),
+      #|        @minimoon.div(class=@theme.theme(preset=VegaV1).class_name(), "Explicit Vega compatibility"),
+      #|        @markdown.markdown("# Packaged Markdown\n\n**Strong** [link](https://example.com)", id="packaged-markdown", on_link=@minimoon.Emit(_ => @minimoon.none)),
       #|      ],
       #|    ),
       #|  )
@@ -162,7 +169,7 @@ async fn ui_distribution_package_gate(
   write_ui_consumer_file(
     consumer,
     "miniapp.minimoon.json",
-    ui_consumer_config(["button"]).stringify(indent=2) + "\n",
+    ui_consumer_config(["button", "markdown"]).stringify(indent=2) + "\n",
   )
   write_ui_consumer_file(
     consumer, "styles/tailwind.css", "@import \"tailwindcss\";\n@source \"../src/**/*.mbt\";\n",
@@ -212,6 +219,9 @@ async fn ui_distribution_package_gate(
     abort("UI provider descriptor missing from manifest")
   }
   require_text(consumer, "dist/app.wxss", "mmui-button")
+  require_text(consumer, "dist/app.wxss", "mmui-markdown-p")
+  require_text(consumer, "dist/app.wxss", "mmui-nova")
+  require_text(consumer, "dist/app.wxss", "mmui-vega-v1")
   write_ui_consumer_file(
     consumer,
     "miniapp.minimoon.json",
@@ -231,7 +241,7 @@ async fn ui_distribution_package_gate(
   write_ui_consumer_file(
     consumer,
     "miniapp.minimoon.json",
-    ui_consumer_config(["button"]).stringify(indent=2) + "\n",
+    ui_consumer_config(["button", "markdown"]).stringify(indent=2) + "\n",
   )
   run(
     root,

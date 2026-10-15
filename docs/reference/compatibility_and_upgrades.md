@@ -1,7 +1,7 @@
 # Compatibility and upgrades
 
 Minimoon is pre-1.0. This policy defines the compatibility guarantees maintained
-for core `0.2.7` and optional UI `0.1.5`, including the versioned transition
+for core `0.3.0` and optional UI `0.2.0`, including the versioned transition
 from the frozen core 0.1 consumer baseline.
 
 ## Compatibility surfaces
@@ -11,10 +11,11 @@ Applications import `lampclaw/minimoon` and may opt into
 surfaces. Internal package names, normalized trees, host commands, and
 generated helper functions are not public APIs.
 
-The checked core 0.2 baseline locks the root, HTTP and build-resource interfaces
+The checked core 0.3 baseline locks the root, HTTP and build-resource interfaces
 exactly, while `components`, `components/styles` and `testing` permit additive
-declarations. The UI 0.1 baseline independently permits additive declarations
-in its root, `headless`, `theme` and `resources` packages. Changing a required
+declarations. The UI 0.2 baseline locks its root, `headless`, `theme`, `resources` and
+optional `markdown` interfaces. Historical core 0.2 consumers remain compiled
+against the new archive; historical interface snapshots stay immutable. Changing a required
 declaration or a locked boundary requires a separately reviewed versioned
 baseline and migration notes; updating snapshots is not a compatibility fix.
 
@@ -24,7 +25,7 @@ Generated applications have three versioned boundaries:
 | --- | ---: | --- |
 | App Contract | 11 | requires schema 11 with or without `application`; older source schemas require migration |
 | runtime ABI | 13 | runtime and host files must be generated together |
-| renderer protocol | 8 | renderer commands and host decoder must match |
+| renderer protocol | 9 | renderer commands and host decoder must match |
 
 Generated files from different builds or versions must never be mixed. CommonJS
 is the verified MiniApp host format; ESM is not an implied upgrade.
@@ -51,10 +52,11 @@ is the verified MiniApp host format; ESM is not an implied upgrade.
 | `0.2.4` | `0.1.2` | Previous published source pair; runtime, verification and Slider fixes; UI declares core `0.2.4` |
 | `0.2.5` | `0.1.3` | Previous published pair; stable Vite+ and dependency refresh; UI declares core `0.2.5` |
 | `0.2.6` | `0.1.4` | Previous published pair; tooling and stylesheet refresh; UI declares core `0.2.6` |
-| `0.2.7` | `0.1.5` | Local candidate; MoonBit 0.10.15 and build dependency refresh; unchanged public APIs; UI declares core `0.2.7` |
+| `0.2.7` | `0.1.5` | Published pair; MoonBit 0.10.15 and dependency refresh; UI declares core `0.2.7` |
+| `0.3.0` | `0.2.0` | Source candidate; native inline / protocol 9, Nova/Vega, optional Markdown and Drawer edges; UI declares core `0.3.0` |
 
 Previously published archives and their dependency declarations remain immutable.
-Upgrade the CLI and direct core dependency to `0.2.7`, and optional UI to `0.1.5`.
+Upgrade the CLI and direct core dependency to `0.3.0`, and optional UI to `0.2.0`.
 See [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
 for actual publication and consumer results. This matrix does not establish
 real-host acceptance or certify every future `0.2.x` / `0.1.x` combination.
@@ -64,10 +66,11 @@ consumer gates for another pair.
 
 ## Toolchain compatibility
 
-Core `0.2.7` and UI `0.1.5` require at least `moon 0.1.20261012` with
+Core `0.3.0` and UI `0.2.0` require at least `moon 0.1.20261012` with
 `moonc v0.10.15`. Both CI jobs use the official installer pinned to the complete
 prebuilt release `0.10.15+943464bfa` (`moon 0.1.20261012`), not latest;
-Rust is not required. This raises the previous MoonBit minimum: older compilers
+Rust is not required. This retains the minimum introduced by core `0.2.7` /
+UI `0.1.5`: older compilers
 are not supported for the new source syntax. The direct dependencies are
 `moonbitlang/async@0.22.4` and `moonbitlang/x@0.5.5`.
 
@@ -103,7 +106,7 @@ Export existing public equality, debug and JSON conversion methods, retaining
 private application types. Review generated `.mbti` files and compile consumers.
 The repository keeps frozen core/UI baselines and checks the reviewed explicit
 signatures separately; arbitrary snapshot regeneration is not compatibility evidence. The checked API
-contracts and App Contract `11` / ABI `13` / renderer protocol `8` remain the
+contracts and App Contract `11` / ABI `13` / renderer protocol `9` remain the
 compatibility boundaries. The 0.10.15 update replaces deprecated built-in
 `value.to_json()` calls with `Json(value)` and iterator `length()` with `count()`;
 array and string lengths retain their existing meaning. Generated sources
@@ -128,17 +131,17 @@ The root `/ui/` rule makes direct `cd ui` publication (including
 `moon -C ui publish`) unsafe: it can produce an empty ZIP despite source being
 present. The UI archive gate packages an isolated source copy under its own Git
 root and validates the actual archive, required files and consumers. The checked
-ZIP is `_build/publish/lampclaw-minimoon_ui-0.1.5.zip`.
+ZIP is `_build/publish/lampclaw-minimoon_ui-0.2.0.zip`.
 
-Publish core `0.2.7` first, validate registry consumers, then publish the reviewed
-UI `0.1.5` archive from an independent directory. Validate the complete registry
+Publish core `0.3.0` first, validate registry consumers, then publish the reviewed
+UI `0.2.0` archive from an independent directory. Validate the complete registry
 pair and upgrades from core `0.2.5` / UI `0.1.3`; follow the
 [release procedure](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md#ordered-local-registry-publication).
 Packaging checks do not prove registry availability or a host pass.
 
 Use the exact application style versions for the selected CLI:
 
-| Dependency | Published CLI `0.2.6` | Candidate CLI `0.2.7` |
+| Dependency | Published CLI `0.2.6` | Candidate CLI `0.3.0` |
 | --- | --- | --- |
 | `@tailwindcss/cli` and `tailwindcss` | `4.3.3` | `4.3.3` |
 | `postcss`, including `overrides.postcss` | `8.5.29` | `8.5.30` |
@@ -173,17 +176,26 @@ the internal launcher preserves that selection.
 
 ## Upgrade procedure
 
+For the unpublished core 0.3.0 / UI 0.2.0 candidate, use the source CLI and
+workspace until publication is recorded. Nova is the new default; explicitly
+choose `theme(preset=VegaV1)` for the old recipe. Import optional `/markdown`
+and request its resource feature only where needed. Drawer edge capture is
+opt-in through `swipe_area`; existing calls stay valid. See the
+[UI migration guide](https://github.com/lucavance/minimoon/blob/main/ui/docs/migration.md#core-030--ui-020).
+Regenerate all host output for protocol 9 and revalidate both changed fixtures.
+
+
 1. Read the [core changelog](../../CHANGELOG.md), the
    [UI changelog](https://github.com/lucavance/minimoon/blob/main/ui/CHANGELOG.md)
    when applicable, and [publication status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
    Use the source workflow if the target versions are not available yet.
 2. Use the MoonBit minimum above and global `vp 1.1.0`.
    After registry availability is recorded, install
-   `moon install lampclaw/minimoon/cmd/minimoon@0.2.7`; until then follow the
+   `moon install lampclaw/minimoon/cmd/minimoon@0.3.0`; until then follow the
    [source workflow](../guides/miniapp_quickstart.md#create-from-the-current-source)
-   instead. Check PATH and confirm `minimoon --version` reports `0.2.7`.
-3. Update the application's direct dependency to `lampclaw/minimoon@0.2.7` and,
-   if used, `lampclaw/minimoon_ui@0.1.5`. Update direct async/x imports to the
+   instead. Check PATH and confirm `minimoon --version` reports `0.3.0`.
+3. Update the application's direct dependency to `lampclaw/minimoon@0.3.0` and,
+   if used, `lampclaw/minimoon_ui@0.2.0`. Update direct async/x imports to the
    reviewed versions above when the application declares them. Run `moon update`
    and confirm the resolved versions without unintended workspace overrides.
 4. Update an existing application's `package.json` to the current style
@@ -214,21 +226,21 @@ Rollback means restoring the CLI, module and JavaScript dependency versions,
 lockfile and complete generated artifact set together. Restoring only one helper
 file is unsupported. A published module version cannot be overwritten.
 
-## Core 0.2 and optional UI 0.1
+## Migrating from core 0.1
 
-The new UI module is independently named `lampclaw/minimoon_ui`; it depends on
-core 0.2.7, not on Rabbita. Existing optional components and both minimal themes
-remain available. The frozen 0.1 consumer is historical source, not a required
-compatibility gate against the current core. The maintained consumer targets
-the current 0.2 API; migrate source calls and exhaustive enum matches before
-rebuilding.
+The independent `lampclaw/minimoon_ui@0.2.0` module depends on core `0.3.0`.
+Existing optional core components remain available. Nova is the UI default;
+explicit `VegaV1` retains the old visual recipe. The frozen core 0.1 consumer
+is historical source. The maintained frozen core 0.2 consumer is compiled
+against the 0.3 archive to check source compatibility; migrate older calls and
+exhaustive enum matches before rebuilding.
 
 Upgrade an application contract's `schemaVersion` to `11` and regenerate the
 entire output. Old schema `8`, `9` and `10` are rejected, including no-App projects.
 The optional application package exports `Deps` and `program() -> App[Deps]`;
 all opted-in page factories receive those dependencies. `PageContext` is opaque.
 See [shared-state migration](../guides/shared_state.md). Do not mix old renderer
-output with current host files; runtime ABI is `13`, renderer protocol stays `8`.
+output with current host files; runtime ABI is `13`, renderer protocol advances to `9`.
 
 `page_with_input` now requires `preview_input: () -> Input`; its builder receives
 an ordinary immutable input, not `Val[Input]`. The actual decoder runs before

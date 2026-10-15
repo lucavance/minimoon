@@ -121,6 +121,7 @@ pub fn program() -> @minimoon.Page {
           @ui.drawer(
             context,
             id="overlay-drawer-bottom",
+            swipe_area=32,
             title="Bottom drawer",
             trigger_label="Open bottom drawer",
             content~,
@@ -128,6 +129,7 @@ pub fn program() -> @minimoon.Page {
           @ui.drawer(
             context,
             id="overlay-drawer-left",
+            swipe_area=32,
             title="Left drawer",
             trigger_label="Open left drawer",
             content~,
@@ -136,6 +138,7 @@ pub fn program() -> @minimoon.Page {
           @ui.drawer(
             context,
             id="overlay-drawer-top",
+            swipe_area=32,
             title="Top drawer",
             trigger_label="Open top drawer",
             content~,
@@ -144,6 +147,7 @@ pub fn program() -> @minimoon.Page {
           @ui.drawer(
             context,
             id="overlay-drawer-right",
+            swipe_area=32,
             title="Right drawer",
             trigger_label="Open right drawer",
             content~,

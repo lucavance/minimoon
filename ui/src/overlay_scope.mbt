@@ -102,7 +102,7 @@ pub fn[C : @minimoon.IsChildren] overlay_content(
   let surface = ui_container(
     "surface",
     id=scope.id + "-surface",
-    class~,
+    class=surface_class(scope.kind) + " " + class,
     style=surface_style(scope.kind, scope.bounds) +
       (if displayed { "" } else { "display:none;" }) +
       style,

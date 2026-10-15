@@ -92,7 +92,7 @@ Model 按值使用，update 返回新值；不要原地修改 selector 获得的
 
 Without `application`, factories remain `program() -> Page`. Both application
 modes require source schema `11`; older configurations must migrate. Output
-uses App Contract v11, runtime ABI v13 and renderer protocol v8. Rebuild all
+uses App Contract v11, runtime ABI v13 and renderer protocol v9. Rebuild all
 artifacts together; do not mix old host/runtime bytes. Product versions are not
 automatically advanced by these technical compatibility numbers.
 

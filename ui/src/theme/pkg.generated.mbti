@@ -6,9 +6,9 @@ import {
 }
 
 // Values
-pub fn theme(mode? : ColorMode, direction? : TextDirection, tokens? : Tokens) -> Theme
+pub fn theme(mode? : ColorMode, direction? : TextDirection, tokens? : Tokens, preset? : Preset) -> Theme
 
-pub fn tokens(mode? : ColorMode) -> Tokens
+pub fn tokens(mode? : ColorMode, preset? : Preset) -> Tokens
 
 // Errors
 
@@ -21,6 +21,14 @@ pub fn ColorMode::equal(Self, Self) -> Bool
 pub fn ColorMode::not_equal(Self, Self) -> Bool
 pub fn ColorMode::to_repr(Self) -> @debug.Repr
 
+pub(all) enum Preset {
+  Nova
+  VegaV1
+} derive(Eq, @debug.Debug)
+pub fn Preset::equal(Self, Self) -> Bool
+pub fn Preset::not_equal(Self, Self) -> Bool
+pub fn Preset::to_repr(Self) -> @debug.Repr
+
 pub(all) enum TextDirection {
   Ltr
   Rtl
@@ -30,6 +38,7 @@ pub fn TextDirection::not_equal(Self, Self) -> Bool
 pub fn TextDirection::to_repr(Self) -> @debug.Repr
 
 pub struct Theme {
+  preset : Preset
   mode : ColorMode
   direction : TextDirection
   tokens : Tokens

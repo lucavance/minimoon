@@ -287,6 +287,8 @@ fn escape_miniapp_class_name(class_name : String) -> String {
 ///|
 fn miniapp_tree_kind(tag : String) -> String {
   match tag {
+    "inline" => "inline"
+    "inline-text" => "text"
     // Element containers stay recursive views. Only @ui.Text becomes a leaf
     // `text` node, so generated WXML never nests block/template nodes inside
     // a MiniApp <text> element.

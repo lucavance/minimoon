@@ -4,6 +4,17 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
+## [0.3.0] — candidate
+
+- Add opaque `Inline`, `inline_text`, `inline_image` and `inline` for native
+  Skyline span/text/image flow. Existing `span` and `text` keep their behavior.
+- Advance renderer protocol to 9 and validate inline child constraints in
+  normalization, compact decoding and atomic host patch application.
+- Keep Contract 11 and runtime ABI 13. Rebuild all generated host files together;
+  protocol 8 hosts cannot consume the new inline node kind.
+- Add dedicated four-phase property/reset/keyed-update host probes and pair
+  with independent UI `0.2.0`. Toolchain/dependency audit policy is unchanged.
+
 ## [0.2.7]
 
 - Require `moon 0.1.20261012` / `moonc 0.10.15`; migrate deprecated JSON

@@ -566,6 +566,7 @@ fn view(
   instance : String,
   layout : @minimoon.PageLayout,
   notes : @minimoon.Node,
+  properties : @minimoon.Node,
 ) -> @minimoon.Node {
   let content = @shell.frame(
     layout,
@@ -615,6 +616,7 @@ fn view(
         ]),
         dynamic_section(emit, model),
         control_section(emit, model),
+        properties,
         component_section(emit, model, nodes),
         async_section(emit, model),
         notes,
@@ -679,9 +681,16 @@ fn app(
     "keyed 重排只移动 C，输入焦点与选区不变。", "重置仅 scalar set；结构同步保留逻辑选项。",
     "观察渲染统计：无重试、超时或调度失败。",
   ])
-  model.view4(card_nodes, context.layout(), notes, (model, nodes, layout, notes) => {
-    view(model, emit, nodes, name, layout, notes)
+  let properties = property_probe()
+  let combined = @minimoon.Val::map2(notes, properties, (notes, properties) => {
+    (notes, properties)
   })
+  model.view4(card_nodes, context.layout(), combined, (
+    model,
+    nodes,
+    layout,
+    combined,
+  ) => view(model, emit, nodes, name, layout, combined.0, combined.1))
 }
 
 ///|

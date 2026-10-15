@@ -1,6 +1,6 @@
 ///|
 pub fn product_version() -> String {
-  "0.2.7"
+  "0.3.0"
 }
 
 ///|
@@ -15,5 +15,5 @@ pub fn runtime_api_version() -> Int32 {
 
 ///|
 pub fn renderer_protocol_version() -> Int32 {
-  8
+  9
 }

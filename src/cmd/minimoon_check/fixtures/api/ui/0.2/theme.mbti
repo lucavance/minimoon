@@ -1,0 +1,69 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon_ui/theme"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn theme(mode? : ColorMode, direction? : TextDirection, tokens? : Tokens, preset? : Preset) -> Theme
+
+pub fn tokens(mode? : ColorMode, preset? : Preset) -> Tokens
+
+// Errors
+
+// Types and methods
+pub(all) enum ColorMode {
+  Light
+  Dark
+} derive(Eq, @debug.Debug)
+pub fn ColorMode::equal(Self, Self) -> Bool
+pub fn ColorMode::not_equal(Self, Self) -> Bool
+pub fn ColorMode::to_repr(Self) -> @debug.Repr
+
+pub(all) enum Preset {
+  Nova
+  VegaV1
+} derive(Eq, @debug.Debug)
+pub fn Preset::equal(Self, Self) -> Bool
+pub fn Preset::not_equal(Self, Self) -> Bool
+pub fn Preset::to_repr(Self) -> @debug.Repr
+
+pub(all) enum TextDirection {
+  Ltr
+  Rtl
+} derive(Eq, @debug.Debug)
+pub fn TextDirection::equal(Self, Self) -> Bool
+pub fn TextDirection::not_equal(Self, Self) -> Bool
+pub fn TextDirection::to_repr(Self) -> @debug.Repr
+
+pub struct Theme {
+  preset : Preset
+  mode : ColorMode
+  direction : TextDirection
+  tokens : Tokens
+} derive(Eq, @debug.Debug)
+pub fn Theme::class_name(Self) -> String
+pub fn Theme::equal(Self, Self) -> Bool
+pub fn Theme::not_equal(Self, Self) -> Bool
+pub fn Theme::style(Self) -> String
+pub fn Theme::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Tokens {
+  background : String
+  foreground : String
+  primary : String
+  primary_foreground : String
+  muted : String
+  muted_foreground : String
+  border : String
+  destructive : String
+  radius : Int
+} derive(Eq, @debug.Debug)
+pub fn Tokens::equal(Self, Self) -> Bool
+pub fn Tokens::not_equal(Self, Self) -> Bool
+pub fn Tokens::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

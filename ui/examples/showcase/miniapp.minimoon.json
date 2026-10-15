@@ -11,6 +11,10 @@
     { "package": "src/pages/feedback" }
   ],
   "devtoolsChecks": [
+    "Foundation Markdown flows Chinese and English inline text, emphasis, links, images and code; tables and code scroll horizontally; nested tasks, strikethrough, footnotes and namespaced anchor callbacks work; raw HTML and math/Mermaid remain text",
+    "All pages switch Nova/Vega, light/dark and LTR/RTL without losing entered text or local state",
+    "Forms Property Reset runs populated, empty/false/zero, omitted selection props, restored; keyed reorder and mixed structural updates target the same controls; enabled input/textarea accept IME, paste and deletion",
+    "All four open Drawers close from the 32px exterior edge toward the panel; cross-axis moves cancel, static edge taps follow overlay policy, hide/unload/late measurements do not close a newer panel; closed screen edges do not open drawers",
     "Forms Project name belongs to the real native Form: short text blocks submission, busy disables repeat submits, and public echo.apifox.com/post returns typed echo only (not persistent storage); Reset and unload reject late replies",
     "All six category pages open and the 64 component headings are present",
     "Every page switches light/dark themes and LTR/RTL direction without resetting component state",

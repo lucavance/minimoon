@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "status": "passed",
   "release": false,
-  "artifactFingerprint": "fnv1a64-relpath-v2:121c88b2e5772504",
+  "artifactFingerprint": "fnv1a64-relpath-v2:ab56af4a8c968508",
   "checks": [
     {
       "name": "build-resources",
@@ -55,9 +55,9 @@
       "detail": "app.json omits system navigation fields that custom Skyline pages ignore"
     },
     {
-      "name": "renderer-v8-host",
+      "name": "renderer-v9-host",
       "status": "passed",
-      "detail": "renderer protocol v8 uses Skyline, glass-easel, and Page Definition API registration"
+      "detail": "renderer protocol v9 uses Skyline, glass-easel, and Page Definition API registration"
     },
     {
       "name": "page-order",

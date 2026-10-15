@@ -115,10 +115,10 @@ jobs:
           set -euo pipefail
           core_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' moon.mod)"
           ui_version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' ui/moon.mod)"
-          # Freeze the reviewed patch pair and UI's matching core dependency.
-          if [ "$core_version" != "0.2.7" ] || [ "$ui_version" != "0.1.5" ] ||
-             ! grep -Fq '"lampclaw/minimoon@0.2.7"' ui/moon.mod; then
-            echo "CI handoff requires the reviewed core 0.2.7 / UI 0.1.5 pair and UI core 0.2.7 dependency" >&2
+          # Freeze the reviewed candidate pair and UI's matching core dependency.
+          if [ "$core_version" != "0.3.0" ] || [ "$ui_version" != "0.2.0" ] ||
+             ! grep -Fq '"lampclaw/minimoon@0.3.0"' ui/moon.mod; then
+            echo "CI handoff requires the reviewed core 0.3.0 / UI 0.2.0 pair and UI core 0.3.0 dependency" >&2
             exit 1
           fi
           moon_version="$(moon version --all)"
@@ -149,18 +149,18 @@ jobs:
               --slurpfile manifest "$fixture/generated/manifest.json" \
               --slurpfile app_config "$fixture/dist/app.json" \
               --slurpfile checklist "$fixture/generated/smoke_checklist.json" \
-              '.mode == "release" and .name == $name and .schemaVersion == 11 and .runtimeApiVersion == 13 and .rendererProtocolVersion == 8 and
+              '.mode == "release" and .name == $name and .schemaVersion == 11 and .runtimeApiVersion == 13 and .rendererProtocolVersion == 9 and
                .automated.status == "passed" and .automated.pageCount == $page_count and .automated.artifactFingerprint == $fingerprint and
                .devtools.status == "pending" and .devtools.evidence == null and .devtools.artifactFingerprint == null and (.devtools | keys) == ["evidence", "status"] and
-               $manifest[0].name == $name and $manifest[0].schemaVersion == 11 and $manifest[0].runtimeApiVersion == 13 and $manifest[0].rendererProtocolVersion == 8 and
+               $manifest[0].name == $name and $manifest[0].schemaVersion == 11 and $manifest[0].runtimeApiVersion == 13 and $manifest[0].rendererProtocolVersion == 9 and
                $manifest[0].pageBridgeEncoding == "shared-compact-node-v1" and
-               ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 11 and .runtimeApiVersion == 13 and .rendererProtocolVersion == 8) and
+               ($manifest[0].pages | length) == $page_count and all($manifest[0].pages[]; .schemaVersion == 11 and .runtimeApiVersion == 13 and .rendererProtocolVersion == 9) and
                ($bundle != "core" or (
                  [$manifest[0].pages[].route] == ["pages/workbench/workbench", "pages/drafts/drafts", "pages/online/online", "pages/more/more", "pages/interaction/interaction", "pages/platform/platform", "pages/request_lifecycle/request_lifecycle", "pages/runtime_lab/runtime_lab", "pages/draft_editor/draft_editor"] and
                  [$manifest[0].tabBar.list[].pagePath] == ["pages/workbench/workbench", "pages/drafts/drafts", "pages/online/online", "pages/more/more"] and
                  $manifest[0].tabBar == $app_config[0].tabBar)) and
                ($bundle != "ui" or any($manifest[0].resources[]; .package == "lampclaw/minimoon_ui/resources" and .version == $ui_version)) and
-               $checklist[0].runtimeApiVersion == 13 and $checklist[0].rendererProtocolVersion == 8 and
+               $checklist[0].runtimeApiVersion == 13 and $checklist[0].rendererProtocolVersion == 9 and
                $checklist[0].pages == [$manifest[0].pages[].route] and ($checklist[0].checks | length > 0)' \
               "$fixture/generated/release_summary.json" >/dev/null || {
               echo "CI handoff requires matching versions, pages, fingerprints, and pending private-evidence-free summaries" >&2

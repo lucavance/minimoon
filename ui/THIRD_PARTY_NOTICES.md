@@ -1,5 +1,20 @@
 # Minimoon UI provenance
 
+The current native recipe and public capability review is pinned to RUI 0.3.6
+at Rabbita commit `7d5940fed9b1ba795c84582394024233997ec267`:
+https://github.com/moonbit-community/rabbita/tree/7d5940fed9b1ba795c84582394024233997ec267/rui
+The retained upstream MIT license accompanies the offline interface snapshots
+in `docs/upstream/rui-0.3.6/LICENSE`. Nova recipes are adapted to finite native
+WXSS, hexadecimal colors, page-owned layers and touch controls; browser DOM,
+CSS anchors, `:has`, hover/keyboard and top-layer mechanics are not imported.
+
+Optional Markdown uses `moonbit-community/cmark@0.4.12` (Apache-2.0), source
+https://github.com/moonbit-community/cmark.mbt/tree/a505474dbde0fbd86f7e3757f33b8673e4255518
+This is a declared external dependency, not vendored source. Its entity-table
+build step uses Python 3; the generated MiniApp runtime is MoonBit JavaScript.
+The native renderer is independently implemented, with public callback and
+Heading types rather than a browser renderer or exposed cmark AST.
+
 This module adapts public component capabilities and visual recipes from RUI 0.1.1,
 Rabbita 0.15.6 commit b1291945fd0201a0b5b39513b88585d6122db7bc (2026-09-05).
 Source: https://github.com/moonbit-community/rabbita/tree/b1291945fd0201a0b5b39513b88585d6122db7bc/rui

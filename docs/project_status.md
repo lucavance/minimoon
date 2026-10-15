@@ -1,6 +1,26 @@
 # Project status
 
-## Current release
+## Current source candidate: core 0.3.0 / UI 0.2.0
+
+Current source develops `lampclaw/minimoon@0.3.0` and independent
+`lampclaw/minimoon_ui@0.2.0`, which declares core `0.3.0`. These versions are
+not recorded as published. Use the source workspace for this candidate.
+
+The planned RUI follow-up is implemented in source: a pinned 655-symbol RUI
+0.3.6 inventory with offline completeness/hash checks; dedicated native property
+reset probes; typed native inline nodes; Nova as the default with explicit
+VegaV1; optional cmark-backed Markdown; and opt-in four-sided open-Drawer edge
+gestures. See [migration guidance](../ui/docs/migration.md#core-030--ui-020).
+Contract 11 and runtime ABI 13 remain; renderer protocol advances to 9.
+Regenerate the full host output and validate both changed fixture fingerprints.
+
+The new fixtures retain candidate reports and Developer Tools `pending`.
+The previous publication and its host results below are historical. A new
+push/publication needs its own authorization, exact-commit CI and fresh
+fingerprint-matched host validation; no old result establishes a pass here.
+
+<!-- minimoon:historical:start -->
+## Published release: core 0.2.7 / UI 0.1.5
 
 The current source pair is **core `0.2.7` / UI `0.1.5`**, with UI declaring
 core `0.2.7`. Both were published to Mooncakes on **2026-10-15 (Asia/Shanghai)**
@@ -55,6 +75,8 @@ remain reproducible candidates with `release: false` and Developer Tools
 `pending`; that public state does not describe whether valid evidence exists
 on a developer's machine. Changed fingerprints require renewed host validation.
 
+
+<!-- minimoon:historical:end -->
 ## Current published package availability
 
 Core `0.2.7` and UI `0.1.5` are available from Mooncakes, with UI declaring
@@ -114,6 +136,7 @@ Lower-severity findings remain visible in the report. This repair is delivered
 by registry CLI `0.2.7` and an override existing apps can apply. Earlier
 occupied versions remain immutable.
 
+<!-- minimoon:historical:start -->
 ## Core 0.2.7 and UI 0.1.5 publication
 
 The frozen source is
@@ -670,6 +693,8 @@ browser-host substitutions. Native/JS tests establish behavior; exact-artifact
 Skyline validation remains separate and fingerprint-bound. The current package
 pair requires its own host acceptance; historical publication exceptions do not establish it.
 
+
+<!-- minimoon:historical:end -->
 ## Evidence state
 
 The public repository deliberately records only reproducible candidate state.

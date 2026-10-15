@@ -7,7 +7,7 @@ async fn write_fingerprint_fixture(root : String, app_source : String) -> Unit {
         #|{
         #|  "schemaVersion": 8,
         #|  "runtimeApiVersion": 10,
-        #|  "rendererProtocolVersion": 8,
+        #|  "rendererProtocolVersion": 9,
         #|  "pages": [{ "route": "pages/home/home" }]
         #|}
         #|

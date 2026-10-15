@@ -64,3 +64,4 @@ tooltip
 typography
 form
 theme
+markdown

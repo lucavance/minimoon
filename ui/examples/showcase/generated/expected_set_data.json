@@ -4,9 +4,9 @@
     "identity": "root",
     "text": "",
     "props": {
-      "style": "--mmui-background:#ffffff;--mmui-foreground:#171717;--mmui-primary:#262626;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#dc2626;--mmui-radius:10px;",
+      "style": "--mmui-background:#ffffff;--mmui-foreground:#0a0a0a;--mmui-primary:#171717;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#e7000b;--mmui-radius:10px;",
       "section": "layer-root",
-      "className": "mmui-theme mmui-vega-v1 mmui-light mmui-ltr"
+      "className": "mmui-theme mmui-nova mmui-light mmui-ltr"
     },
     "events": {},
     "children": [
@@ -95,6 +95,30 @@
                       "className": "mmui-button mmui-button-default mmui-button-default"
                     },
                     "events": {
+                      "tap": "gallery/preset"
+                    },
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Nova / Vega",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "button",
+                    "identity": "i:1",
+                    "text": "",
+                    "props": {
+                      "role": "button",
+                      "ariaDisabled": false,
+                      "disabled": false,
+                      "className": "mmui-button mmui-button-default mmui-button-default"
+                    },
+                    "events": {
                       "tap": "gallery/theme"
                     },
                     "children": [
@@ -110,7 +134,7 @@
                   },
                   {
                     "kind": "button",
-                    "identity": "i:1",
+                    "identity": "i:2",
                     "text": "",
                     "props": {
                       "role": "button",
@@ -134,7 +158,7 @@
                   },
                   {
                     "kind": "view",
-                    "identity": "i:2",
+                    "identity": "i:3",
                     "text": "",
                     "props": {
                       "className": "gallery-nav"
@@ -430,12 +454,812 @@
                                                                                             "events": {},
                                                                                             "children": [
                                                                                               {
-                                                                                                "kind": "empty",
+                                                                                                "kind": "fragment",
                                                                                                 "identity": "i:0",
                                                                                                 "text": "",
                                                                                                 "props": {},
                                                                                                 "events": {},
-                                                                                                "children": []
+                                                                                                "children": [
+                                                                                                  {
+                                                                                                    "kind": "empty",
+                                                                                                    "identity": "i:0",
+                                                                                                    "text": "",
+                                                                                                    "props": {},
+                                                                                                    "events": {},
+                                                                                                    "children": []
+                                                                                                  },
+                                                                                                  {
+                                                                                                    "kind": "view",
+                                                                                                    "identity": "i:1",
+                                                                                                    "text": "",
+                                                                                                    "props": {
+                                                                                                      "section": "Markdown"
+                                                                                                    },
+                                                                                                    "events": {},
+                                                                                                    "children": [
+                                                                                                      {
+                                                                                                        "kind": "view",
+                                                                                                        "identity": "i:0",
+                                                                                                        "text": "",
+                                                                                                        "props": {
+                                                                                                          "id": "foundation-markdown",
+                                                                                                          "className": "mmui-markdown"
+                                                                                                        },
+                                                                                                        "events": {},
+                                                                                                        "children": [
+                                                                                                          {
+                                                                                                            "kind": "view",
+                                                                                                            "identity": "i:0",
+                                                                                                            "text": "",
+                                                                                                            "props": {
+                                                                                                              "role": "heading",
+                                                                                                              "id": "foundation-markdown-md-h-6e-61-74-69-76-65-2d-6d-61-72-6b-64-6f-77-6e-",
+                                                                                                              "className": "mmui-markdown-h2"
+                                                                                                            },
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "inline",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {},
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "Native Markdown",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          },
+                                                                                                          {
+                                                                                                            "kind": "view",
+                                                                                                            "identity": "i:1",
+                                                                                                            "text": "",
+                                                                                                            "props": {
+                                                                                                              "className": "mmui-markdown-p"
+                                                                                                            },
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "inline",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {},
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "English 与中文 ",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:1",
+                                                                                                                    "text": "strong",
+                                                                                                                    "props": {
+                                                                                                                      "style": "font-weight:700;"
+                                                                                                                    },
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:2",
+                                                                                                                    "text": "、",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:3",
+                                                                                                                    "text": "emphasis",
+                                                                                                                    "props": {
+                                                                                                                      "style": "font-style:italic;"
+                                                                                                                    },
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:4",
+                                                                                                                    "text": "、",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:5",
+                                                                                                                    "text": "strikethrough",
+                                                                                                                    "props": {
+                                                                                                                      "style": "text-decoration:line-through;"
+                                                                                                                    },
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:6",
+                                                                                                                    "text": " and ",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:7",
+                                                                                                                    "text": "inline code",
+                                                                                                                    "props": {
+                                                                                                                      "className": "mmui-markdown-code"
+                                                                                                                    },
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:8",
+                                                                                                                    "text": " flow on the same line.",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          },
+                                                                                                          {
+                                                                                                            "kind": "view",
+                                                                                                            "identity": "i:2",
+                                                                                                            "text": "",
+                                                                                                            "props": {
+                                                                                                              "className": "mmui-markdown-p"
+                                                                                                            },
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "inline",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {},
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "Inline image: ",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "image",
+                                                                                                                    "identity": "i:1",
+                                                                                                                    "text": "",
+                                                                                                                    "props": {
+                                                                                                                      "src": "/assets/mmui/check-light.svg",
+                                                                                                                      "alt": "check",
+                                                                                                                      "className": "mmui-markdown-image"
+                                                                                                                    },
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:2",
+                                                                                                                    "text": " with text after the image.",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          },
+                                                                                                          {
+                                                                                                            "kind": "view",
+                                                                                                            "identity": "i:3",
+                                                                                                            "text": "",
+                                                                                                            "props": {
+                                                                                                              "className": "mmui-markdown-p"
+                                                                                                            },
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "inline",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {},
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "Callback link",
+                                                                                                                    "props": {
+                                                                                                                      "className": "mmui-markdown-link"
+                                                                                                                    },
+                                                                                                                    "events": {
+                                                                                                                      "tap": "v/root/i:0/i:0/i:3/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:1/i:0/i:3/i:0/i:0/tap"
+                                                                                                                    },
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:1",
+                                                                                                                    "text": " · ",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:2",
+                                                                                                                    "text": "Heading anchor",
+                                                                                                                    "props": {
+                                                                                                                      "className": "mmui-markdown-link"
+                                                                                                                    },
+                                                                                                                    "events": {
+                                                                                                                      "tap": "v/root/i:0/i:0/i:3/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:1/i:0/i:3/i:0/i:2/tap"
+                                                                                                                    },
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:3",
+                                                                                                                    "text": " · note",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:4",
+                                                                                                                    "text": "[^one]",
+                                                                                                                    "props": {
+                                                                                                                      "style": "font-size:12px;",
+                                                                                                                      "className": "mmui-markdown-link"
+                                                                                                                    },
+                                                                                                                    "events": {
+                                                                                                                      "tap": "v/root/i:0/i:0/i:3/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:0/i:1/i:0/i:3/i:0/i:4/tap"
+                                                                                                                    },
+                                                                                                                    "children": []
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          },
+                                                                                                          {
+                                                                                                            "kind": "view",
+                                                                                                            "identity": "i:4",
+                                                                                                            "text": "",
+                                                                                                            "props": {},
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "view",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {
+                                                                                                                  "className": "mmui-markdown-list-item"
+                                                                                                                },
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "☑",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "view",
+                                                                                                                    "identity": "i:1",
+                                                                                                                    "text": "",
+                                                                                                                    "props": {
+                                                                                                                      "className": "mmui-markdown-list-content"
+                                                                                                                    },
+                                                                                                                    "events": {},
+                                                                                                                    "children": [
+                                                                                                                      {
+                                                                                                                        "kind": "view",
+                                                                                                                        "identity": "i:0",
+                                                                                                                        "text": "",
+                                                                                                                        "props": {
+                                                                                                                          "className": "mmui-markdown-p"
+                                                                                                                        },
+                                                                                                                        "events": {},
+                                                                                                                        "children": [
+                                                                                                                          {
+                                                                                                                            "kind": "inline",
+                                                                                                                            "identity": "i:0",
+                                                                                                                            "text": "",
+                                                                                                                            "props": {},
+                                                                                                                            "events": {},
+                                                                                                                            "children": [
+                                                                                                                              {
+                                                                                                                                "kind": "text",
+                                                                                                                                "identity": "i:0",
+                                                                                                                                "text": "Native inline text",
+                                                                                                                                "props": {},
+                                                                                                                                "events": {},
+                                                                                                                                "children": []
+                                                                                                                              }
+                                                                                                                            ]
+                                                                                                                          }
+                                                                                                                        ]
+                                                                                                                      }
+                                                                                                                    ]
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              },
+                                                                                                              {
+                                                                                                                "kind": "view",
+                                                                                                                "identity": "i:1",
+                                                                                                                "text": "",
+                                                                                                                "props": {
+                                                                                                                  "className": "mmui-markdown-list-item"
+                                                                                                                },
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "☐",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "view",
+                                                                                                                    "identity": "i:1",
+                                                                                                                    "text": "",
+                                                                                                                    "props": {
+                                                                                                                      "className": "mmui-markdown-list-content"
+                                                                                                                    },
+                                                                                                                    "events": {},
+                                                                                                                    "children": [
+                                                                                                                      {
+                                                                                                                        "kind": "view",
+                                                                                                                        "identity": "i:0",
+                                                                                                                        "text": "",
+                                                                                                                        "props": {
+                                                                                                                          "className": "mmui-markdown-p"
+                                                                                                                        },
+                                                                                                                        "events": {},
+                                                                                                                        "children": [
+                                                                                                                          {
+                                                                                                                            "kind": "inline",
+                                                                                                                            "identity": "i:0",
+                                                                                                                            "text": "",
+                                                                                                                            "props": {},
+                                                                                                                            "events": {},
+                                                                                                                            "children": [
+                                                                                                                              {
+                                                                                                                                "kind": "text",
+                                                                                                                                "identity": "i:0",
+                                                                                                                                "text": "Nested task",
+                                                                                                                                "props": {},
+                                                                                                                                "events": {},
+                                                                                                                                "children": []
+                                                                                                                              }
+                                                                                                                            ]
+                                                                                                                          }
+                                                                                                                        ]
+                                                                                                                      }
+                                                                                                                    ]
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          },
+                                                                                                          {
+                                                                                                            "kind": "scroll-view",
+                                                                                                            "identity": "i:5",
+                                                                                                            "text": "",
+                                                                                                            "props": {
+                                                                                                              "scrollX": true,
+                                                                                                              "scrollY": false,
+                                                                                                              "scrollTop": 0,
+                                                                                                              "scrollLeft": 0,
+                                                                                                              "upperThreshold": 50,
+                                                                                                              "lowerThreshold": 50,
+                                                                                                              "className": "mmui-markdown-scroll"
+                                                                                                            },
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "view",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {
+                                                                                                                  "role": "table",
+                                                                                                                  "className": "mmui-markdown-table"
+                                                                                                                },
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "view",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "",
+                                                                                                                    "props": {
+                                                                                                                      "role": "row",
+                                                                                                                      "className": "mmui-markdown-row"
+                                                                                                                    },
+                                                                                                                    "events": {},
+                                                                                                                    "children": [
+                                                                                                                      {
+                                                                                                                        "kind": "view",
+                                                                                                                        "identity": "i:0",
+                                                                                                                        "text": "",
+                                                                                                                        "props": {
+                                                                                                                          "style": "text-align:left;",
+                                                                                                                          "role": "columnheader",
+                                                                                                                          "className": "mmui-markdown-cell mmui-markdown-header"
+                                                                                                                        },
+                                                                                                                        "events": {},
+                                                                                                                        "children": [
+                                                                                                                          {
+                                                                                                                            "kind": "inline",
+                                                                                                                            "identity": "i:0",
+                                                                                                                            "text": "",
+                                                                                                                            "props": {},
+                                                                                                                            "events": {},
+                                                                                                                            "children": [
+                                                                                                                              {
+                                                                                                                                "kind": "text",
+                                                                                                                                "identity": "i:0",
+                                                                                                                                "text": "Feature",
+                                                                                                                                "props": {},
+                                                                                                                                "events": {},
+                                                                                                                                "children": []
+                                                                                                                              }
+                                                                                                                            ]
+                                                                                                                          }
+                                                                                                                        ]
+                                                                                                                      },
+                                                                                                                      {
+                                                                                                                        "kind": "view",
+                                                                                                                        "identity": "i:1",
+                                                                                                                        "text": "",
+                                                                                                                        "props": {
+                                                                                                                          "style": "text-align:right;",
+                                                                                                                          "role": "columnheader",
+                                                                                                                          "className": "mmui-markdown-cell mmui-markdown-header"
+                                                                                                                        },
+                                                                                                                        "events": {},
+                                                                                                                        "children": [
+                                                                                                                          {
+                                                                                                                            "kind": "inline",
+                                                                                                                            "identity": "i:0",
+                                                                                                                            "text": "",
+                                                                                                                            "props": {},
+                                                                                                                            "events": {},
+                                                                                                                            "children": [
+                                                                                                                              {
+                                                                                                                                "kind": "text",
+                                                                                                                                "identity": "i:0",
+                                                                                                                                "text": "Result",
+                                                                                                                                "props": {},
+                                                                                                                                "events": {},
+                                                                                                                                "children": []
+                                                                                                                              }
+                                                                                                                            ]
+                                                                                                                          }
+                                                                                                                        ]
+                                                                                                                      }
+                                                                                                                    ]
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "view",
+                                                                                                                    "identity": "i:1",
+                                                                                                                    "text": "",
+                                                                                                                    "props": {
+                                                                                                                      "role": "row",
+                                                                                                                      "className": "mmui-markdown-row"
+                                                                                                                    },
+                                                                                                                    "events": {},
+                                                                                                                    "children": [
+                                                                                                                      {
+                                                                                                                        "kind": "view",
+                                                                                                                        "identity": "i:0",
+                                                                                                                        "text": "",
+                                                                                                                        "props": {
+                                                                                                                          "style": "text-align:left;",
+                                                                                                                          "role": "cell",
+                                                                                                                          "className": "mmui-markdown-cell"
+                                                                                                                        },
+                                                                                                                        "events": {},
+                                                                                                                        "children": [
+                                                                                                                          {
+                                                                                                                            "kind": "inline",
+                                                                                                                            "identity": "i:0",
+                                                                                                                            "text": "",
+                                                                                                                            "props": {},
+                                                                                                                            "events": {},
+                                                                                                                            "children": [
+                                                                                                                              {
+                                                                                                                                "kind": "text",
+                                                                                                                                "identity": "i:0",
+                                                                                                                                "text": "Wide table",
+                                                                                                                                "props": {},
+                                                                                                                                "events": {},
+                                                                                                                                "children": []
+                                                                                                                              }
+                                                                                                                            ]
+                                                                                                                          }
+                                                                                                                        ]
+                                                                                                                      },
+                                                                                                                      {
+                                                                                                                        "kind": "view",
+                                                                                                                        "identity": "i:1",
+                                                                                                                        "text": "",
+                                                                                                                        "props": {
+                                                                                                                          "style": "text-align:right;",
+                                                                                                                          "role": "cell",
+                                                                                                                          "className": "mmui-markdown-cell"
+                                                                                                                        },
+                                                                                                                        "events": {},
+                                                                                                                        "children": [
+                                                                                                                          {
+                                                                                                                            "kind": "inline",
+                                                                                                                            "identity": "i:0",
+                                                                                                                            "text": "",
+                                                                                                                            "props": {},
+                                                                                                                            "events": {},
+                                                                                                                            "children": [
+                                                                                                                              {
+                                                                                                                                "kind": "text",
+                                                                                                                                "identity": "i:0",
+                                                                                                                                "text": "Scroll horizontally",
+                                                                                                                                "props": {},
+                                                                                                                                "events": {},
+                                                                                                                                "children": []
+                                                                                                                              }
+                                                                                                                            ]
+                                                                                                                          }
+                                                                                                                        ]
+                                                                                                                      }
+                                                                                                                    ]
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          },
+                                                                                                          {
+                                                                                                            "kind": "scroll-view",
+                                                                                                            "identity": "i:6",
+                                                                                                            "text": "",
+                                                                                                            "props": {
+                                                                                                              "scrollX": true,
+                                                                                                              "scrollY": false,
+                                                                                                              "scrollTop": 0,
+                                                                                                              "scrollLeft": 0,
+                                                                                                              "upperThreshold": 50,
+                                                                                                              "lowerThreshold": 50,
+                                                                                                              "className": "mmui-markdown-scroll"
+                                                                                                            },
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "view",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {
+                                                                                                                  "className": "mmui-markdown-codeblock"
+                                                                                                                },
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "graph LR; A-->B",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          },
+                                                                                                          {
+                                                                                                            "kind": "view",
+                                                                                                            "identity": "i:7",
+                                                                                                            "text": "",
+                                                                                                            "props": {
+                                                                                                              "className": "mmui-markdown-p"
+                                                                                                            },
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "inline",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {},
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "Math source: ",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:1",
+                                                                                                                    "text": "$a^2+b^2=c^2$",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:2",
+                                                                                                                    "text": ".",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          },
+                                                                                                          {
+                                                                                                            "kind": "view",
+                                                                                                            "identity": "i:8",
+                                                                                                            "text": "",
+                                                                                                            "props": {
+                                                                                                              "className": "mmui-markdown-p"
+                                                                                                            },
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "inline",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {},
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "<b>",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:1",
+                                                                                                                    "text": "Raw HTML remains text",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "text",
+                                                                                                                    "identity": "i:2",
+                                                                                                                    "text": "</b>",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": []
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          },
+                                                                                                          {
+                                                                                                            "kind": "view",
+                                                                                                            "identity": "i:9",
+                                                                                                            "text": "",
+                                                                                                            "props": {
+                                                                                                              "className": "mmui-markdown-footnotes"
+                                                                                                            },
+                                                                                                            "events": {},
+                                                                                                            "children": [
+                                                                                                              {
+                                                                                                                "kind": "view",
+                                                                                                                "identity": "i:0",
+                                                                                                                "text": "",
+                                                                                                                "props": {
+                                                                                                                  "id": "foundation-markdown-md-f-5e-6f-6e-65-"
+                                                                                                                },
+                                                                                                                "events": {},
+                                                                                                                "children": [
+                                                                                                                  {
+                                                                                                                    "kind": "inline",
+                                                                                                                    "identity": "i:0",
+                                                                                                                    "text": "",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": [
+                                                                                                                      {
+                                                                                                                        "kind": "text",
+                                                                                                                        "identity": "i:0",
+                                                                                                                        "text": "^one. ",
+                                                                                                                        "props": {},
+                                                                                                                        "events": {},
+                                                                                                                        "children": []
+                                                                                                                      }
+                                                                                                                    ]
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                    "kind": "view",
+                                                                                                                    "identity": "i:1",
+                                                                                                                    "text": "",
+                                                                                                                    "props": {},
+                                                                                                                    "events": {},
+                                                                                                                    "children": [
+                                                                                                                      {
+                                                                                                                        "kind": "view",
+                                                                                                                        "identity": "i:0",
+                                                                                                                        "text": "",
+                                                                                                                        "props": {
+                                                                                                                          "className": "mmui-markdown-p"
+                                                                                                                        },
+                                                                                                                        "events": {},
+                                                                                                                        "children": [
+                                                                                                                          {
+                                                                                                                            "kind": "inline",
+                                                                                                                            "identity": "i:0",
+                                                                                                                            "text": "",
+                                                                                                                            "props": {},
+                                                                                                                            "events": {},
+                                                                                                                            "children": [
+                                                                                                                              {
+                                                                                                                                "kind": "text",
+                                                                                                                                "identity": "i:0",
+                                                                                                                                "text": "Footnotes use document-local anchors.",
+                                                                                                                                "props": {},
+                                                                                                                                "events": {},
+                                                                                                                                "children": []
+                                                                                                                              }
+                                                                                                                            ]
+                                                                                                                          }
+                                                                                                                        ]
+                                                                                                                      }
+                                                                                                                    ]
+                                                                                                                  }
+                                                                                                                ]
+                                                                                                              }
+                                                                                                            ]
+                                                                                                          }
+                                                                                                        ]
+                                                                                                      },
+                                                                                                      {
+                                                                                                        "kind": "view",
+                                                                                                        "identity": "i:1",
+                                                                                                        "text": "",
+                                                                                                        "props": {
+                                                                                                          "id": "markdown-target"
+                                                                                                        },
+                                                                                                        "events": {},
+                                                                                                        "children": [
+                                                                                                          {
+                                                                                                            "kind": "text",
+                                                                                                            "identity": "i:0",
+                                                                                                            "text": "Tap a link or footnote",
+                                                                                                            "props": {},
+                                                                                                            "events": {},
+                                                                                                            "children": []
+                                                                                                          }
+                                                                                                        ]
+                                                                                                      }
+                                                                                                    ]
+                                                                                                  }
+                                                                                                ]
                                                                                               },
                                                                                               {
                                                                                                 "kind": "view",
@@ -2753,9 +3577,9 @@
     "identity": "root",
     "text": "",
     "props": {
-      "style": "--mmui-background:#ffffff;--mmui-foreground:#171717;--mmui-primary:#262626;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#dc2626;--mmui-radius:10px;",
+      "style": "--mmui-background:#ffffff;--mmui-foreground:#0a0a0a;--mmui-primary:#171717;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#e7000b;--mmui-radius:10px;",
       "section": "layer-root",
-      "className": "mmui-theme mmui-vega-v1 mmui-light mmui-ltr"
+      "className": "mmui-theme mmui-nova mmui-light mmui-ltr"
     },
     "events": {},
     "children": [
@@ -2844,6 +3668,30 @@
                       "className": "mmui-button mmui-button-default mmui-button-default"
                     },
                     "events": {
+                      "tap": "gallery/preset"
+                    },
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Nova / Vega",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "button",
+                    "identity": "i:1",
+                    "text": "",
+                    "props": {
+                      "role": "button",
+                      "ariaDisabled": false,
+                      "disabled": false,
+                      "className": "mmui-button mmui-button-default mmui-button-default"
+                    },
+                    "events": {
                       "tap": "gallery/theme"
                     },
                     "children": [
@@ -2859,7 +3707,7 @@
                   },
                   {
                     "kind": "button",
-                    "identity": "i:1",
+                    "identity": "i:2",
                     "text": "",
                     "props": {
                       "role": "button",
@@ -2883,7 +3731,7 @@
                   },
                   {
                     "kind": "view",
-                    "identity": "i:2",
+                    "identity": "i:3",
                     "text": "",
                     "props": {
                       "className": "gallery-nav"
@@ -4986,9 +5834,9 @@
     "identity": "root",
     "text": "",
     "props": {
-      "style": "--mmui-background:#ffffff;--mmui-foreground:#171717;--mmui-primary:#262626;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#dc2626;--mmui-radius:10px;",
+      "style": "--mmui-background:#ffffff;--mmui-foreground:#0a0a0a;--mmui-primary:#171717;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#e7000b;--mmui-radius:10px;",
       "section": "layer-root",
-      "className": "mmui-theme mmui-vega-v1 mmui-light mmui-ltr"
+      "className": "mmui-theme mmui-nova mmui-light mmui-ltr"
     },
     "events": {},
     "children": [
@@ -5077,6 +5925,30 @@
                       "className": "mmui-button mmui-button-default mmui-button-default"
                     },
                     "events": {
+                      "tap": "gallery/preset"
+                    },
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Nova / Vega",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "button",
+                    "identity": "i:1",
+                    "text": "",
+                    "props": {
+                      "role": "button",
+                      "ariaDisabled": false,
+                      "disabled": false,
+                      "className": "mmui-button mmui-button-default mmui-button-default"
+                    },
+                    "events": {
                       "tap": "gallery/theme"
                     },
                     "children": [
@@ -5092,7 +5964,7 @@
                   },
                   {
                     "kind": "button",
-                    "identity": "i:1",
+                    "identity": "i:2",
                     "text": "",
                     "props": {
                       "role": "button",
@@ -5116,7 +5988,7 @@
                   },
                   {
                     "kind": "view",
-                    "identity": "i:2",
+                    "identity": "i:3",
                     "text": "",
                     "props": {
                       "className": "gallery-nav"
@@ -5370,12 +6242,239 @@
                                                                     "events": {},
                                                                     "children": [
                                                                       {
-                                                                        "kind": "empty",
+                                                                        "kind": "fragment",
                                                                         "identity": "i:0",
                                                                         "text": "",
                                                                         "props": {},
                                                                         "events": {},
-                                                                        "children": []
+                                                                        "children": [
+                                                                          {
+                                                                            "kind": "empty",
+                                                                            "identity": "i:0",
+                                                                            "text": "",
+                                                                            "props": {},
+                                                                            "events": {},
+                                                                            "children": []
+                                                                          },
+                                                                          {
+                                                                            "kind": "view",
+                                                                            "identity": "i:1",
+                                                                            "text": "",
+                                                                            "props": {
+                                                                              "section": "Property Reset"
+                                                                            },
+                                                                            "events": {},
+                                                                            "children": [
+                                                                              {
+                                                                                "kind": "view",
+                                                                                "identity": "i:0",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "section": "mmui-typography-h2",
+                                                                                  "role": "heading",
+                                                                                  "className": "mmui-typography-h2"
+                                                                                },
+                                                                                "events": {},
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "Property Reset",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "view",
+                                                                                "identity": "i:1",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "section": "mmui-typography-p",
+                                                                                  "className": "mmui-typography-p"
+                                                                                },
+                                                                                "events": {},
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "phase 0: populated → empty/false/zero → omitted → restored",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "button",
+                                                                                "identity": "i:2",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "role": "button",
+                                                                                  "ariaDisabled": false,
+                                                                                  "disabled": false,
+                                                                                  "id": "ui-property-next",
+                                                                                  "className": "mmui-button mmui-button-default mmui-button-default"
+                                                                                },
+                                                                                "events": {
+                                                                                  "tap": "forms/property-next"
+                                                                                },
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "Next property phase",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "fragment",
+                                                                                "identity": "i:3",
+                                                                                "text": "",
+                                                                                "props": {},
+                                                                                "events": {},
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "input",
+                                                                                    "identity": "k:input",
+                                                                                    "text": "",
+                                                                                    "props": {
+                                                                                      "value": "populated",
+                                                                                      "type": "text",
+                                                                                      "maxlength": 140,
+                                                                                      "password": true,
+                                                                                      "selectionStart": 0,
+                                                                                      "selectionEnd": 0,
+                                                                                      "disabled": true,
+                                                                                      "focus": false,
+                                                                                      "placeholder": "restored hint",
+                                                                                      "id": "ui-property-input",
+                                                                                      "className": "mmui-input"
+                                                                                    },
+                                                                                    "events": {
+                                                                                      "input": "ui-property-input/input"
+                                                                                    },
+                                                                                    "children": []
+                                                                                  },
+                                                                                  {
+                                                                                    "kind": "textarea",
+                                                                                    "identity": "k:textarea",
+                                                                                    "text": "",
+                                                                                    "props": {
+                                                                                      "value": "populated",
+                                                                                      "placeholder": "restored hint",
+                                                                                      "maxlength": 140,
+                                                                                      "disabled": true,
+                                                                                      "focus": false,
+                                                                                      "id": "ui-property-textarea",
+                                                                                      "className": "mmui-textarea"
+                                                                                    },
+                                                                                    "events": {
+                                                                                      "input": "ui-property-textarea/input"
+                                                                                    },
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "checkbox-group",
+                                                                                "identity": "i:4",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "id": "ui-property-checkbox",
+                                                                                  "className": "mmui-checkbox"
+                                                                                },
+                                                                                "events": {
+                                                                                  "change": "ui-property-checkbox/change"
+                                                                                },
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "checkbox",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "",
+                                                                                    "props": {
+                                                                                      "value": "ui-property-checkbox",
+                                                                                      "checked": true,
+                                                                                      "disabled": true,
+                                                                                      "id": "ui-property-checkbox-control"
+                                                                                    },
+                                                                                    "events": {},
+                                                                                    "children": [
+                                                                                      {
+                                                                                        "kind": "text",
+                                                                                        "identity": "i:0",
+                                                                                        "text": "Reset checkbox",
+                                                                                        "props": {},
+                                                                                        "events": {},
+                                                                                        "children": []
+                                                                                      }
+                                                                                    ]
+                                                                                  },
+                                                                                  {
+                                                                                    "kind": "empty",
+                                                                                    "identity": "i:1",
+                                                                                    "text": "",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              {
+                                                                                "kind": "switch",
+                                                                                "identity": "i:5",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "role": "switch",
+                                                                                  "ariaLabel": "Reset switch",
+                                                                                  "ariaDisabled": true,
+                                                                                  "ariaChecked": true,
+                                                                                  "ariaInvalid": false,
+                                                                                  "checked": true,
+                                                                                  "disabled": true,
+                                                                                  "id": "ui-property-switch",
+                                                                                  "className": "mmui-switch mmui-medium"
+                                                                                },
+                                                                                "events": {
+                                                                                  "change": "ui-property-switch/change"
+                                                                                },
+                                                                                "children": []
+                                                                              },
+                                                                              {
+                                                                                "kind": "empty",
+                                                                                "identity": "i:6",
+                                                                                "text": "",
+                                                                                "props": {},
+                                                                                "events": {},
+                                                                                "children": []
+                                                                              },
+                                                                              {
+                                                                                "kind": "view",
+                                                                                "identity": "i:7",
+                                                                                "text": "",
+                                                                                "props": {
+                                                                                  "section": "mmui-typography-small",
+                                                                                  "className": "mmui-typography-small"
+                                                                                },
+                                                                                "events": {},
+                                                                                "children": [
+                                                                                  {
+                                                                                    "kind": "text",
+                                                                                    "identity": "i:0",
+                                                                                    "text": "Value: populated",
+                                                                                    "props": {},
+                                                                                    "events": {},
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              }
+                                                                            ]
+                                                                          }
+                                                                        ]
                                                                       },
                                                                       {
                                                                         "kind": "view",
@@ -7414,9 +8513,9 @@
     "identity": "root",
     "text": "",
     "props": {
-      "style": "--mmui-background:#ffffff;--mmui-foreground:#171717;--mmui-primary:#262626;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#dc2626;--mmui-radius:10px;",
+      "style": "--mmui-background:#ffffff;--mmui-foreground:#0a0a0a;--mmui-primary:#171717;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#e7000b;--mmui-radius:10px;",
       "section": "layer-root",
-      "className": "mmui-theme mmui-vega-v1 mmui-light mmui-ltr"
+      "className": "mmui-theme mmui-nova mmui-light mmui-ltr"
     },
     "events": {},
     "children": [
@@ -7505,6 +8604,30 @@
                       "className": "mmui-button mmui-button-default mmui-button-default"
                     },
                     "events": {
+                      "tap": "gallery/preset"
+                    },
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Nova / Vega",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "button",
+                    "identity": "i:1",
+                    "text": "",
+                    "props": {
+                      "role": "button",
+                      "ariaDisabled": false,
+                      "disabled": false,
+                      "className": "mmui-button mmui-button-default mmui-button-default"
+                    },
+                    "events": {
                       "tap": "gallery/theme"
                     },
                     "children": [
@@ -7520,7 +8643,7 @@
                   },
                   {
                     "kind": "button",
-                    "identity": "i:1",
+                    "identity": "i:2",
                     "text": "",
                     "props": {
                       "role": "button",
@@ -7544,7 +8667,7 @@
                   },
                   {
                     "kind": "view",
-                    "identity": "i:2",
+                    "identity": "i:3",
                     "text": "",
                     "props": {
                       "className": "gallery-nav"
@@ -14105,9 +15228,9 @@
     "identity": "root",
     "text": "",
     "props": {
-      "style": "--mmui-background:#ffffff;--mmui-foreground:#171717;--mmui-primary:#262626;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#dc2626;--mmui-radius:10px;",
+      "style": "--mmui-background:#ffffff;--mmui-foreground:#0a0a0a;--mmui-primary:#171717;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#e7000b;--mmui-radius:10px;",
       "section": "layer-root",
-      "className": "mmui-theme mmui-vega-v1 mmui-light mmui-ltr"
+      "className": "mmui-theme mmui-nova mmui-light mmui-ltr"
     },
     "events": {},
     "children": [
@@ -14196,6 +15319,30 @@
                       "className": "mmui-button mmui-button-default mmui-button-default"
                     },
                     "events": {
+                      "tap": "gallery/preset"
+                    },
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Nova / Vega",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "button",
+                    "identity": "i:1",
+                    "text": "",
+                    "props": {
+                      "role": "button",
+                      "ariaDisabled": false,
+                      "disabled": false,
+                      "className": "mmui-button mmui-button-default mmui-button-default"
+                    },
+                    "events": {
                       "tap": "gallery/theme"
                     },
                     "children": [
@@ -14211,7 +15358,7 @@
                   },
                   {
                     "kind": "button",
-                    "identity": "i:1",
+                    "identity": "i:2",
                     "text": "",
                     "props": {
                       "role": "button",
@@ -14235,7 +15382,7 @@
                   },
                   {
                     "kind": "view",
-                    "identity": "i:2",
+                    "identity": "i:3",
                     "text": "",
                     "props": {
                       "className": "gallery-nav"
@@ -16920,9 +18067,9 @@
     "identity": "root",
     "text": "",
     "props": {
-      "style": "--mmui-background:#ffffff;--mmui-foreground:#171717;--mmui-primary:#262626;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#dc2626;--mmui-radius:10px;",
+      "style": "--mmui-background:#ffffff;--mmui-foreground:#0a0a0a;--mmui-primary:#171717;--mmui-primary-foreground:#fafafa;--mmui-muted:#f5f5f5;--mmui-muted-foreground:#737373;--mmui-border:#e5e5e5;--mmui-destructive:#e7000b;--mmui-radius:10px;",
       "section": "layer-root",
-      "className": "mmui-theme mmui-vega-v1 mmui-light mmui-ltr"
+      "className": "mmui-theme mmui-nova mmui-light mmui-ltr"
     },
     "events": {},
     "children": [
@@ -17011,6 +18158,30 @@
                       "className": "mmui-button mmui-button-default mmui-button-default"
                     },
                     "events": {
+                      "tap": "gallery/preset"
+                    },
+                    "children": [
+                      {
+                        "kind": "text",
+                        "identity": "i:0",
+                        "text": "Nova / Vega",
+                        "props": {},
+                        "events": {},
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "button",
+                    "identity": "i:1",
+                    "text": "",
+                    "props": {
+                      "role": "button",
+                      "ariaDisabled": false,
+                      "disabled": false,
+                      "className": "mmui-button mmui-button-default mmui-button-default"
+                    },
+                    "events": {
                       "tap": "gallery/theme"
                     },
                     "children": [
@@ -17026,7 +18197,7 @@
                   },
                   {
                     "kind": "button",
-                    "identity": "i:1",
+                    "identity": "i:2",
                     "text": "",
                     "props": {
                       "role": "button",
@@ -17050,7 +18221,7 @@
                   },
                   {
                     "kind": "view",
-                    "identity": "i:2",
+                    "identity": "i:3",
                     "text": "",
                     "props": {
                       "className": "gallery-nav"
