@@ -1,11 +1,16 @@
 # Release candidate handoff
 
 This workflow keeps deterministic Linux validation, real Skyline acceptance
-and explicit local registry publication distinct. The current source candidate
+and explicit local registry publication distinct. The current published pair
 is core `lampclaw/minimoon@0.3.0` and UI `lampclaw/minimoon_ui@0.2.0`;
 UI declares core `0.3.0`. It uses Contract 11 / ABI 13 / renderer protocol 9.
-Both changed fixtures require fresh fingerprint-matched Developer Tools
-validation. Push/publication of this future pair has not been authorized.
+The user-authorized publication completed on 2026-10-16 from frozen commit
+`7d54538`, merged and pushed to `main`, after both CI jobs, local release gates,
+matching local host evidence and archive review passed. Core was published
+first, its fresh registry consumers passed, and UI was published from the
+independent reviewed extraction. Final pair consumers and archive comparisons
+passed. Changed fingerprints require renewed Developer Tools validation;
+future publication requires separate authorization.
 The ordered publication examples later in this document describe the completed
 0.2.7 / 0.1.5 release; substitute only separately reviewed future versions.
 Actual published versions and historical checkpoints

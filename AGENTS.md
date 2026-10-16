@@ -174,10 +174,9 @@ the user explicitly authorizes that action.
   `Json::empty_object()` for empty JSON objects, and `{ () }` for empty blocks.
   The aggregate gate requires `moon check` to be warning-free.
 
-- The current source pair is candidate core `0.3.0` / UI `0.2.0`, with
-  renderer protocol 9 and unchanged Contract 11 / runtime ABI 13. The current
-  published pair remains core `0.2.7` / UI `0.1.5`.
-  Registry CLI `0.2.7` generates the current Starter pins and the
+- The current source and published pair is core `0.3.0` / UI `0.2.0`, with
+  renderer protocol 9 and unchanged Contract 11 / runtime ABI 13.
+  Registry CLI `0.3.0` generates the current Starter pins and the
   source-map-js `1.2.2` override. Previous CLI `0.2.6` retains its original
   Node `26.11.1`, PostCSS `8.5.29` and weapp-tailwindcss `5.5.12` pins.
   Published archives remain immutable; historical release
@@ -233,7 +232,16 @@ source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
 
-The explicitly authorized core `0.2.7` / UI `0.1.5` publication completed on
+The explicitly authorized core `0.3.0` / UI `0.2.0` publication completed on
+2026-10-16 from frozen commit `7d54538aa5c373413ece96a82db8212a339ce982`, merged
+and pushed to `main`. Both CI jobs, local candidate and release gates, exact
+archive comparisons and fresh registry consumers passed. Core was published
+first, followed by the independently extracted UI with its registry core
+`0.3.0` dependency. Published packages are immutable; actual host evidence
+remains local and fingerprint-bound. Future publications need separate
+authorization and all release gates.
+
+The previously authorized core `0.2.7` / UI `0.1.5` publication completed on
 2026-10-15 from frozen commit `a74eb76b0b55d571cea263608793d79298fc95a2`, including
 the Rabbita/property-reset/package-governance follow-up. Complete local candidate,
 `check:all` and `check:mvp` gates, both CI jobs, archive review and fresh registry

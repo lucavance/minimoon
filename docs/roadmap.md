@@ -4,17 +4,16 @@
 
 Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Once availability is recorded in project status, application
-authors use `moon install lampclaw/minimoon/cmd/minimoon@0.2.7` and
+authors use `moon install lampclaw/minimoon/cmd/minimoon@0.3.0` and
 `minimoon init my-app`. Source installation remains available for framework
-development and unpublished candidates. The current source candidate is core
-`0.3.0` / UI `0.2.0`, with UI declaring core `0.3.0`. The published pair
-remains core `0.2.7` / UI `0.1.5`.
+development and unpublished candidates. The current source and published pair
+is core `0.3.0` / UI `0.2.0`, with UI declaring core `0.3.0`.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
 dated feature commitments.
 
-## RUI 0.3.6 follow-up: core 0.3.0 / UI 0.2.0 candidate
+## RUI 0.3.6 follow-up: core 0.3.0 / UI 0.2.0 released
 
 The five planned follow-ups now have source implementations: the full pinned
 root/Markdown inventory and offline gate, dedicated property-reset host probes,
@@ -28,8 +27,10 @@ hover/keyboard mechanics stay outside the runtime. Markdown does not include
 math/Mermaid engines or clipboard controls. Edge gestures are off by default
 and do not open a closed Drawer.
 
-Remaining release work is exact-fingerprint WeChat Developer Tools acceptance
-for both rebuilt fixtures, then separately authorized push/CI/publication.
+The authorized publication completed on 2026-10-16 from frozen commit
+`7d54538` after local candidate/release gates, both main CI jobs, matching
+local host evidence, archive review and fresh registry consumer checks.
+See [project status](project_status.md) for registry links and content hashes.
 Future optional transition APIs remain a separate product decision.
 
 <!-- minimoon:historical:start -->

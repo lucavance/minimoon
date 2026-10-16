@@ -1,23 +1,69 @@
 # Project status
 
-## Current source candidate: core 0.3.0 / UI 0.2.0
+## Published release: core 0.3.0 / UI 0.2.0
 
-Current source develops `lampclaw/minimoon@0.3.0` and independent
-`lampclaw/minimoon_ui@0.2.0`, which declares core `0.3.0`. These versions are
-not recorded as published. Use the source workspace for this candidate.
+Core `lampclaw/minimoon@0.3.0` and independent `lampclaw/minimoon_ui@0.2.0`
+were published on **2026-10-16 (Asia/Shanghai)** under the user's explicit
+authorization. UI declares core `0.3.0`. The frozen source is
+[`7d54538`](https://github.com/lucavance/minimoon/commit/7d54538aa5c373413ece96a82db8212a339ce982),
+fast-forwarded to `main`; both primary Test and Node 24 LTS compatibility
+jobs [passed on main](https://github.com/lucavance/minimoon/actions/runs/38885034735).
 
-The planned RUI follow-up is implemented in source: a pinned 655-symbol RUI
+The released RUI follow-up includes a pinned 655-symbol RUI
 0.3.6 inventory with offline completeness/hash checks; dedicated native property
 reset probes; typed native inline nodes; Nova as the default with explicit
 VegaV1; optional cmark-backed Markdown; and opt-in four-sided open-Drawer edge
 gestures. See [migration guidance](../ui/docs/migration.md#core-030--ui-020).
 Contract 11 and runtime ABI 13 remain; renderer protocol advances to 9.
-Regenerate the full host output and validate both changed fixture fingerprints.
+Applications upgrading from protocol 8 must regenerate the full host output
+and validate their changed artifacts.
 
-The new fixtures retain candidate reports and Developer Tools `pending`.
-The previous publication and its host results below are historical. A new
-push/publication needs its own authorization, exact-commit CI and fresh
-fingerprint-matched host validation; no old result establishes a pass here.
+Both fixture release verifications, `check:all`, `check:mvp` and final
+`check:candidate` restoration passed with matching developer-local host
+evidence, unchanged fingerprints and a clean worktree. Tracked reports retain
+`release: false` and Developer Tools `pending`; actual evidence remains local.
+Future publications require separate authorization and all release gates.
+
+Core was published first. Fresh registry consumers passed before UI was
+published from its independently reviewed extraction outside every Git and
+Moon workspace ancestor. The downloaded archives are byte-identical to the
+reviewed ZIPs, including every member and all source bytes:
+
+| Package | Download | Bytes / files | Registry and reviewed ZIP SHA-256 |
+| --- | --- | ---: | --- |
+| Core `0.3.0` | [Mooncakes ZIP](https://download.mooncakes.io/user/lampclaw/minimoon/0.3.0.zip) | 321,587 / 184 | `678da1859f08107a7fb61f49a1c0af88a713914f8048e2413ba7230c29fe6b7c` |
+| UI `0.2.0` | [Mooncakes ZIP](https://download.mooncakes.io/user/lampclaw/minimoon_ui/0.2.0.zip) | 131,430 / 87 | `388d5657b9c5a74fd5b212cd5fdf1bd75710404f3b0b177425b497c4d62068a9` |
+
+Both `moon publish --frozen` attempts stopped before upload because the
+temporary extracted self-check required dependency installation. Ordinary
+`moon publish` completed the full self-check with unchanged reviewed contents.
+UI's first upload connection failed; registry metadata and download GET both
+confirmed the version remained absent before retrying the same archive.
+Both final publication commands returned HTTP `200 OK`. The source-only UI
+self-check reported unused test imports in root and Markdown because test
+files are excluded; production builds and downstream native/JS consumers
+passed with `--deny-warn`.
+
+Fresh registry acceptance passed 74 core, 27 pre-publication UI and 58 final
+pair execution steps:
+
+- Registry CLI `0.3.0` created a fresh Starter with the reviewed tooling pins.
+  Frozen installation, the README first edit, frozen core API consumers,
+  shared App state and foreground subscriptions passed. Custom configuration
+  and nested output paths rebuilt deterministically; missing host evidence
+  correctly rejected release verification without altering output.
+- The extracted UI built against registry core `0.3.0`. Root/headless/theme,
+  Nova/Vega, native Inline and Markdown link callbacks passed native/JS
+  checks, resource builds and deterministic candidate verification.
+- The published pair's registry-only Showcase passed native/JS tests and
+  deterministic builds. Unknown resources failed without replacing prior
+  output. Core `0.2.5` and core `0.2.5` / UI `0.1.3` applications upgraded to
+  the new versions while preserving business source, MiniApp configuration,
+  source styles and private settings. Materialized manifests confirmed both
+  published versions and UI's core declaration; frozen installs preserved
+  package manifests and lockfiles.
+
+This repository-only record does not change either immutable published package.
 
 <!-- minimoon:historical:start -->
 ## Published release: core 0.2.7 / UI 0.1.5
@@ -79,9 +125,10 @@ on a developer's machine. Changed fingerprints require renewed host validation.
 <!-- minimoon:historical:end -->
 ## Current published package availability
 
-Core `0.2.7` and UI `0.1.5` are available from Mooncakes, with UI declaring
-core `0.2.7`. Registry CLI `0.2.7` generates Node `26.11.1`, Bun `1.4.3`,
+Core `0.3.0` and UI `0.2.0` are available from Mooncakes, with UI declaring
+core `0.3.0`. Registry CLI `0.3.0` generates Node `26.11.1`, Bun `1.4.3`,
 PostCSS `8.5.30`, weapp-tailwindcss `5.6.1` and source-map-js override `1.2.2`.
+CLI `0.2.7` retains those tooling pins with its earlier framework version.
 Previous CLI `0.2.6` retains PostCSS `8.5.29`, weapp-tailwindcss `5.5.12`
 and Bun `1.4.2`; CLI `0.2.5` retains Node `26.10.0`, PostCSS `8.5.28`
 and weapp-tailwindcss `5.5.11`. Published archives remain immutable.
@@ -89,7 +136,8 @@ and weapp-tailwindcss `5.5.11`. Published archives remain immutable.
 ## Source dependency audit policy
 
 The original unpublished repair kept core `0.2.6` / UI `0.1.4` version metadata.
-The current `0.2.7` / `0.1.5` release carries that repair forward: it adds
+The published `0.3.0` / `0.2.0` pair retains the repair delivered in
+`0.2.7` / `0.1.5`: it adds
 `overrides.source-map-js: "1.2.2"` alongside
 the PostCSS override in the repository and source-generated Starter. This
 removes the two nested `source-map-js 1.2.1` resolutions affected by
