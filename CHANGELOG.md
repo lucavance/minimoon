@@ -4,6 +4,15 @@ Changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The product version is defined by `moon.mod`; Minimoon versions do not use Git
 tags.
 
+## [Unreleased]
+
+- Fix source CLI development watching for custom configurations, Tailwind inputs,
+  local CSS/WXSS, directory changes, build-time edits and failure recovery.
+- Add observation-only Page/Val update, App queue and core/UI/Markdown size
+  reports to the existing performance gate and CI artifacts; preserve budgets.
+- Synchronize current development guidance and reject stale planning claims.
+  These changes are not included in the published `0.3.0` / UI `0.2.0` archives.
+
 ## [0.3.0] — candidate
 
 - Add opaque `Inline`, `inline_text`, `inline_image` and `inline` for native

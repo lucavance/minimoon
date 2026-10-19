@@ -16,6 +16,43 @@ pub fn PreparedBuild::app_root(self : PreparedBuild) -> String {
 }
 
 ///|
+/// Native development inputs and outputs, validated by the build path policy.
+pub struct WatchLayout {
+  config : String
+  app_root : String
+  tailwind_input : String
+  dist : String
+  source_wxss : String
+  tailwind_temporary : String
+}
+
+///|
+pub async fn watch_layout(config_path : String) -> WatchLayout {
+  let prepared = prepare_build(config_path)
+  {
+    config: Path::basename(prepared.config_file).to_owned(),
+    app_root: prepared.app_root,
+    tailwind_input: prepared.tailwind_input,
+    dist: prepared.dist,
+    source_wxss: prepared.source_wxss,
+    tailwind_temporary: join(
+      dirname(prepared.tailwind_input),
+      ".minimoon-tailwind-input.css",
+    ),
+  }
+}
+
+///|
+pub fn WatchLayout::accepts(self : WatchLayout, path : String) -> Bool {
+  if path == self.config || path == self.tailwind_input {
+    return true
+  }
+  !contains_path(self.dist, path) &&
+  path != self.source_wxss &&
+  path != self.tailwind_temporary
+}
+
+///|
 fn contains_path(parent : String, child : String) -> Bool {
   parent == child || child.has_prefix(parent + "/")
 }

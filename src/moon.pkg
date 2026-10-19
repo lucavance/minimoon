@@ -9,3 +9,7 @@ import {
 }
 
 supported_targets = "js+native"
+
+import {
+  "moonbitlang/core/bench",
+} for "wbtest"

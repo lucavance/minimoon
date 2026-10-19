@@ -110,6 +110,17 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Upload performance observations
+        if: ${{ always() && hashFiles('_build/perf/*.json', '_build/perf/*.txt') != '' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: minimoon-performance-${{ github.sha }}
+          path: |
+            _build/perf/*.json
+            _build/perf/*.txt
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Prepare WeChat Developer Tools handoffs
         run: |
           set -euo pipefail

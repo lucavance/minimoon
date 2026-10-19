@@ -65,6 +65,21 @@ pair execution steps:
 
 This repository-only record does not change either immutable published package.
 
+## Unreleased maintenance iteration
+
+The source CLI repairs development watching for selected configurations,
+custom style inputs, directory changes and edits arriving during builds. A
+temporary Starter subprocess regression exercises recovery and output isolation.
+Registry CLI `0.3.0` remains the published baseline; install the current source
+to use these repairs.
+
+Repository performance checks now record actual Page/Val updates, bounded App
+message bursts and deterministic core/basic-UI/Markdown consumer size deltas.
+The new measurements are observations; existing budgets and release gates stay
+in force. Read the [report guide](reference/performance_baseline.md#maintenance-observation-reports)
+and [roadmap](roadmap.md#near-term-priorities) before choosing the next runtime
+optimization. This iteration does not change application APIs or protocol versions.
+
 <!-- minimoon:historical:start -->
 ## Published release: core 0.2.7 / UI 0.1.5
 

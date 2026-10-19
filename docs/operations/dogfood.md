@@ -44,13 +44,15 @@ three host paths:
 
 The canonical nine-route Draft Workbench fixture owns core release evidence; the
 independent six-page `ui/examples/showcase` owns UI release evidence. A paired
-core/UI host-acceptance claim requires both. The current release targets core
-`0.2.7` and UI `0.1.5` under the
+core/UI host-acceptance claim requires both. The current published pair is core
+`0.3.0` and UI `0.2.0` under the
 [release procedure](release_candidate_handoff.md#ordered-local-registry-publication).
 Dogfood results are application feedback, not evidence for either fixture, and
 must never be copied into or used to edit their evidence JSON manually. Record
-whether the dogfood consumer resolves core `0.2.7` alone or the core `0.2.7` /
-UI `0.1.5` pair, including any development workspace override.
+whether the dogfood consumer resolves core `0.3.0` alone or the core `0.3.0` /
+UI `0.2.0` pair, including any development workspace override. Source-only
+maintenance changes require recording the checkout commit as well as the
+unchanged module version.
 
 ## Observation record
 
@@ -64,7 +66,7 @@ runs without exposing application data:
 - renderer work statistics or lifecycle counters when available;
 - smallest reproducible application shape and numbered reproduction steps;
 - expected and actual behavior;
-- whether the problem reproduces in Conformance or the independent UI showcase;
+- whether the problem reproduces in Draft Workbench or the independent UI showcase;
 - current workaround and its cost, or an explicit statement that none exists;
 - confirmation that AppIDs, credentials, private paths, user data, screenshots,
   logs, and generated snippets were reviewed and redacted before submission.

@@ -48,6 +48,10 @@ fn embedded_inventory(
   // Each selected declaration still has an exact, audited classification.
   for
     entry in [
+      (
+        "src/cmd/minimoon_check/performance_consumers.mbt", "fn:performance_consumers",
+        "MoonBit performance consumer source and package metadata, not JavaScript",
+      ),
       ("ui/src/resources/nova.mbt", "fn:nova_rules", "WXSS"),
       ("ui/src/resources/markdown.mbt", "fn:markdown_rules", "WXSS"),
       (

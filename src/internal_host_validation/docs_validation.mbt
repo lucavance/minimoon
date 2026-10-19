@@ -239,7 +239,31 @@ pub fn docs_check_source() -> String {
     #|    ...versionReferenceProblems(source, active, expected),
     #|    ...currentConfigProblems(source, active, expected),
     #|    ...schemaMigrationProblems(source, active, expected),
+    #|    ...planningProblems(source, active),
     #|  ]
+    #|}
+    #|
+    #|function planningProblems(source, content) {
+    #|  const problems = []
+    #|  const plain = content.replace(/[`*_]/g, "")
+    #|  if (source === "docs/roadmap.md") {
+    #|    const deferred = plain.match(/^## Deferred\s*\n([\s\S]*?)(?=^## |$(?![\s\S]))/m)?.[1] ?? ""
+    #|    for (const feature of [/Nova\s+as\s+an\s+optional\s+native\s+theme/i, /Markdown\s+rendered\s+to\s+MiniApp\s+nodes/i, /Drawer\s+edge\s+gestures/i]) {
+    #|      if (feature.test(deferred)) problems.push(`${source}: released capability is still deferred: ${feature.source}`)
+    #|    }
+    #|  }
+    #|  const versions = { core: productVersion, ui: currentUiVersions["lampclaw/minimoon_ui"] }
+    #|  if (source === "docs/operations/dogfood.md") {
+    #|    for (const match of plain.matchAll(/\b(core|UI)\s+(\d+\.\d+\.\d+)\b/gi)) {
+    #|      if (match[2] !== versions[match[1].toLowerCase()]) problems.push(`${source}: stale current dogfood version: ${match[0]}`)
+    #|    }
+    #|  }
+    #|  if (source === "docs/reference/compatibility_and_upgrades.md") {
+    #|    for (const match of plain.matchAll(/\b(Core|UI)\s+(\d+\.\d+)\s+(?:patches|changes)\b/g)) {
+    #|      if (match[2] !== versions[match[1].toLowerCase()].split(".").slice(0, 2).join(".")) problems.push(`${source}: stale current compatibility line: ${match[0]}`)
+    #|    }
+    #|  }
+    #|  return problems
     #|}
     #|
     #|function versionReferenceProblems(source, content, expected) {
@@ -445,6 +469,9 @@ pub fn docs_check_source() -> String {
     #|  const markedHistory = `${historicalStart}\n${legacyExample}\n${historicalEnd}`
     #|  const currentExample = `App Contract ${contractVersion}; runtime ABI ${runtimeVersion}\n\`\`\`json\n{"schemaVersion":${contractVersion},"name":"current","pages":[]}\n\`\`\``
     #|  const cases = [
+    #|    ...["Nova as an optional native theme", "Markdown rendered to MiniApp nodes", "Drawer edge gestures"].map(feature => ["released deferred feature", currentReferenceProblems("docs/roadmap.md", `## Deferred\n\n- ${feature}\n`, expected), "released capability is still deferred"]),
+    #|    ["stale dogfood guidance", currentReferenceProblems("docs/operations/dogfood.md", "Current core `0.0.1` and UI `0.0.1`", expected), "stale current dogfood version"],
+    #|    ["stale compatibility guidance", currentReferenceProblems("docs/reference/compatibility_and_upgrades.md", "Core 0.1 patches must preserve APIs", expected), "stale current compatibility line"],
     #|    ["missing English", bilingualProblems("fixture.md", "# 标题 / Title\n\n## 章节 / Section\n\n只有中文。\n"), "missing its English translation"],
     #|    ["stale symbol", missingSymbolProblems("fixture.md", "fn present() {}", ["missing"]), "stale source symbol"],
     #|    ["tampered Mermaid", diagramSourceProblems("fixture.mmd", "graph TD\n", "graph LR\n"), "Mermaid source drift"],
@@ -491,6 +518,9 @@ pub fn docs_check_source() -> String {
     #|    if (!problems.some((problem) => problem.includes(expected))) throw new Error(`documentation self-test did not reject ${name}`)
     #|  }
     #|  const accepted = [
+    #|    ["historical deferred feature", currentReferenceProblems("docs/roadmap.md", `${historicalStart}\n## Deferred\n- Drawer edge gestures\n${historicalEnd}`, expected)],
+    #|    ["completed and future features", currentReferenceProblems("docs/roadmap.md", "## Completed\n- Drawer edge gestures\n## Deferred\n- Markdown math/Mermaid engines\n", expected)],
+    #|    ["historical dogfood version", currentReferenceProblems("docs/operations/dogfood.md", `${historicalStart}\ncore 0.0.1 and UI 0.0.1\n${historicalEnd}\ncore ${productVersion}`, expected)],
     #|    ["current UI requires the fixed core", moduleVersionProblems("ui/moon.mod", 'import { "lampclaw/minimoon@0.3.0" }', { "lampclaw/minimoon": uiCoreDependency })],
     #|    ["current UI documentation matches the reviewed pair", moduleVersionProblems("ui/README.mbt.md", `lampclaw/minimoon@${productVersion} and lampclaw/minimoon_ui@0.2.0`, currentUiVersions)],
     #|    ["current core with independently versioned UI", moduleVersionProblems("README.mbt.md", `lampclaw/minimoon@${productVersion} and lampclaw/minimoon_ui@0.2.0`, currentUiVersions)],

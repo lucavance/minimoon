@@ -198,6 +198,15 @@ From the app directory, `minimoon dev .` watches source changes and rebuilds;
 keep using Developer Tools for the preview. It does not start a browser server.
 Stop the watcher before a separate manual build.
 
+Unreleased/source-only: `minimoon dev path/to/custom.json` watches the selected
+configuration, its `tailwindInput`, and app-local CSS/WXSS imports as well as
+MoonBit and package inputs. It updates output exclusions when configuration
+changes, recovers after invalid edits or deleted inputs, and queues edits made
+during a build. Watching starts before the first build; generated outputs do
+not trigger rebuilds. Dependencies and styles outside the application directory
+are outside this watch scope. Install from current source for these fixes;
+the registry CLI `0.3.0` archive is unchanged.
+
 With the `0.3.0` CLI, an ordinary build failure keeps the previous `dist/` and
 private project settings; inspect the current diagnostics before retrying.
 A verification failure after a successful build keeps the new output for diagnosis.

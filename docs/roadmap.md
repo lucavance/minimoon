@@ -2,6 +2,25 @@
 
 ## Near-term priorities
 
+### Current iteration: maintenance and performance observations (Unreleased)
+
+The source CLI now follows the selected configuration, custom Tailwind input and
+app-local CSS/WXSS, refreshes validated output exclusions after configuration
+changes, and retains edits arriving during builds. A real subprocess regression
+checks recovery and prevents generated-output rebuild loops. These fixes are
+source-only; the immutable registry CLI `0.3.0` does not include them.
+
+`check:perf` adds actual Page/Val updates, App message bursts, and deterministic
+core/basic-UI/Markdown consumer size comparisons. CI retains the reports for
+review. New measurements are observations with no added timing or UI runtime
+ceiling; all existing budgets remain enforced. See the
+[measurement guide](reference/performance_baseline.md#maintenance-observation-reports).
+Use repeated results to prioritize queue or serialization work in the next
+iteration; make a runtime change only with a reproduced bottleneck and a
+separate compatibility and host-validation review.
+
+### Completed baseline
+
 Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Once availability is recorded in project status, application
 authors use `moon install lampclaw/minimoon/cmd/minimoon@0.3.0` and
@@ -293,9 +312,9 @@ is local and Git-ignored, just like the core fixture's evidence above.
 Freeze synchronized documentation, reviewed package contents, the source commit
 and both CI handoff bundles before any separately authorized release. Follow
 the [release runbook](operations/release_candidate_handoff.md), validating core
-registry consumers before publishing its matching UI archive. The `0.2.6` /
-`0.1.4` publication is complete; occupied versions and archives are immutable.
-The current pair and maintenance follow-up were published on 2026-10-15.
+registry consumers before publishing its matching UI archive. The current core
+`0.3.0` / UI `0.2.0` publication completed on 2026-10-16; occupied versions and
+archives are immutable. The maintenance iteration above is unpublished.
 Future publications need separate authorization, both CI jobs for the
 final frozen commit and fingerprint-matched host validation. Preserve
 actual-evidence gates and candidate report restoration. Record dates, source
@@ -304,9 +323,9 @@ in [project status](project_status.md), not in immutable package contents.
 
 ## Deferred
 
-- Nova as an optional native theme, Markdown rendered to MiniApp nodes and
-  Drawer edge gestures; each needs concrete application requirements, a
-  native interaction design and separate compatibility/host validation.
+- Optional transition APIs, Markdown math/Mermaid engines and clipboard
+  controls, and gestures that open a closed Drawer require separate product
+  requirements and native host validation.
 - ESM output; CommonJS remains the verified host boundary.
 - Additional render targets.
 - Backend-owned payment completion.

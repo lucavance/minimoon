@@ -4,7 +4,7 @@ fn bridge_benchmark_source() -> String {
 }
 
 ///|
-async fn performance_reports(root : String) -> Unit {
+async fn performance_reports(root : String, metadata : Json) -> Unit {
   let report_dir = join(root, "_build/perf")
   if !@fs.exists(report_dir) {
     @fs.mkdir(report_dir, permission=0o755, recursive=true)
@@ -20,8 +20,8 @@ async fn performance_reports(root : String) -> Unit {
     abort("moon version failed: " + version_stderr.text())
   }
   let bench_args = [
-    "bench", "src/renderer_miniapp", "src/internal_duplix", "--target", "js", "--release",
-    "--deny-warn", "--no-parallelize",
+    "bench", "src/renderer_miniapp", "src/internal_duplix", "src/authoring_performance_wbtest.mbt",
+    "--target", "js", "--release", "--deny-warn", "--no-parallelize",
   ]
   let (bench_code, bench_stdout, bench_stderr) = @toolchain.collect_output(
     "moon",
@@ -29,14 +29,6 @@ async fn performance_reports(root : String) -> Unit {
     cwd=root,
   ) catch {
     err => abort("failed to start JS release benchmarks: \{err}")
-  }
-  guard bench_code == 0 else {
-    abort(
-      "JS release benchmarks failed\nstdout: " +
-      bench_stdout.text() +
-      "\nstderr: " +
-      bench_stderr.text(),
-    )
   }
   let benchmark_report = "command: moon " +
     bench_args.join(" ") +
@@ -52,6 +44,27 @@ async fn performance_reports(root : String) -> Unit {
     permission=0o644,
   )
   println(benchmark_report)
+  guard bench_code == 0 else {
+    abort(
+      "JS release benchmarks failed; see _build/perf/moonbit_js_release_bench.txt",
+    )
+  }
+  let observations : Array[Json] = []
+  for line in bench_stdout.text().split("\n") {
+    if line.has_prefix("MINIMOON_PERF ") {
+      observations.push(@json.parse(line["MINIMOON_PERF ".length():]))
+    }
+  }
+  validate_performance_observations(observations)
+  write_performance_report(
+    root,
+    "runtime_observations.json",
+    Json::object({
+      "metadata": metadata,
+      "status": Json::string("passed"),
+      "scenarios": Json::array(observations),
+    }),
+  )
 
   let bridge_script = join(report_dir, "bridge_benchmark.cjs")
   @fs.write_file(
@@ -74,6 +87,11 @@ async fn performance_reports(root : String) -> Unit {
   ) catch {
     err => abort("failed to start generated bridge benchmark: \{err}")
   }
+  write_ui_consumer_file(
+    root,
+    "_build/perf/bridge_benchmark.txt",
+    bridge_stdout.text() + bridge_stderr.text(),
+  )
   guard bridge_code == 0 else {
     abort(
       "generated bridge benchmark failed\nstdout: " +
@@ -85,6 +103,7 @@ async fn performance_reports(root : String) -> Unit {
   let bridge_report = @json.parse(bridge_stdout.text()) catch {
     err => abort("generated bridge benchmark emitted invalid JSON: \{err}")
   }
+  write_performance_report(root, "bridge_benchmark.json", bridge_report)
   let results = match json_field(bridge_report, "results") {
     Array(values) => values
     _ => abort("generated bridge benchmark results must be an array")
@@ -133,6 +152,23 @@ async fn performance_reports(root : String) -> Unit {
 
 ///|
 async fn perf_suite(root : String) -> Unit {
+  let metadata = performance_metadata(root)
+  // A new attempt must not upload an earlier run's successful observations.
+  for
+    name in [
+      "runtime_observations.json", "consumer_sizes.json", "bridge_benchmark.json",
+      "moonbit_js_release_bench.txt", "bridge_benchmark.txt",
+    ] {
+    let file = join(root, "_build/perf/" + name)
+    if @fs.exists(file) {
+      @fs.remove(file)
+    }
+  }
+  write_performance_report(
+    root,
+    "run.json",
+    Json::object({ "metadata": metadata, "status": Json::string("running") }),
+  )
   build_examples(root, "release")
   let page_limits : Array[(String, Int32)] = [(".js", 2048), (".wxml", 1024)]
   for app in example_apps {
@@ -269,5 +305,11 @@ async fn perf_suite(root : String) -> Unit {
       abort(app + " exceeds aggregate JavaScript performance budget")
     }
   }
-  performance_reports(root)
+  performance_reports(root, metadata)
+  performance_consumers(root, metadata)
+  write_performance_report(
+    root,
+    "run.json",
+    Json::object({ "metadata": metadata, "status": Json::string("passed") }),
+  )
 }

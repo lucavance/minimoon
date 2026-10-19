@@ -38,7 +38,7 @@ maintained in
 
 - [`project_status.md`](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md) — current checkpoint and next-phase priorities
 - [`positioning.md`](positioning.md) — product boundary and success criterion
-- [`mvp.md`](mvp.md) — core 0.2 and UI 0.1 product capability baseline
+- [`mvp.md`](mvp.md) — core 0.3 and UI 0.2 product capability baseline
 - [`architecture.md`](architecture.md) — runtime ownership and transaction path
 - [`roadmap.md`](https://github.com/lucavance/minimoon/blob/main/docs/roadmap.md) — active and deferred work
 

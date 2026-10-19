@@ -85,7 +85,11 @@ async fn docs_suite(root : String) -> Unit {
       "documentation validator self-test passed",
     ) else {
     cleanup_check_temporary(temp)
-    abort("documentation validator negative cases did not pass")
+    abort(
+      "documentation validator negative cases did not pass\n" +
+      self_stdout.text() +
+      self_stderr.text(),
+    )
   }
   for fixture in ["examples/miniapp_draft_workbench", "ui/examples/showcase"] {
     let report = read_json(root, fixture + "/generated/verify_report.json")
