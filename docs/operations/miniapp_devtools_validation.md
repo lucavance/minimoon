@@ -24,6 +24,24 @@ checklist. A checklist-only, `app.wxss`, shared-template, or future static-asset
 change is therefore a new host candidate even when application JavaScript is
 unchanged.
 
+## Query follow-up (Unreleased)
+
+In core Runtime Lab, find **列表查询（本地模拟）**. Wait for five rows, load all
+23, and confirm Load more disables. Type a search without confirming: rows must
+stay unchanged; confirm with both the Search button and keyboard. Search for
+`不存在` to check the empty result, then clear and confirm.
+
+Load two pages and refresh: retain rows while pending, then replace with five.
+Use **下一次响应失败** before refresh or Load more; keep old rows on failure,
+retry successfully, and verify a failed refresh blocks appending. Confirm `慢速`,
+then immediately confirm `草稿 2`: the late slow result must not replace the new
+search. Close/reopen the query and unload the page during a slow request; old
+callbacks must not affect the new scope. Require a clean console. This demo
+uses local data and does not establish a live-network pass.
+
+New core artifact fingerprints require fresh host evidence; retain UI evidence
+only if its fingerprint is unchanged. Automated checks do not record a host pass.
+
 ## Property-reset follow-up
 
 [Additional property-reset checks](https://github.com/lucavance/minimoon/blob/main/docs/reference/rabbita_and_rui_audit.md#property-reset-host-handoff)

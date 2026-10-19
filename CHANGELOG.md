@@ -6,6 +6,8 @@ tags.
 
 ## [Unreleased]
 
+- Add optional `lampclaw/minimoon/query` for scope-owned cursor pagination,
+  confirmed search, refresh and exact-operation retry, with a Runtime Lab demo.
 - Fix source CLI development watching for custom configurations, Tailwind inputs,
   local CSS/WXSS, directory changes, build-time edits and failure recovery.
 - Add observation-only Page/Val update, App queue and core/UI/Markdown size

@@ -1,0 +1,7 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon/query",
+  "lampclaw/minimoon/testing",
+} for "test"
+
+supported_targets = "js+native"

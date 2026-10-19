@@ -1,0 +1,51 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "lampclaw/minimoon/query"
+
+import {
+  "lampclaw/minimoon",
+  "moonbitlang/core/immut/vector",
+}
+
+// Values
+pub fn[Q : Eq, T, Cursor] create_infinite_query(Q, (Q, Cursor?, @minimoon.Emit[Result[QueryPage[T, Cursor], Error]]) -> @minimoon.Cmd) -> (@minimoon.Val[QueryState[Q, T]], @minimoon.Emit[QueryAction[Q]])
+
+// Errors
+
+// Types and methods
+pub(all) enum QueryAction[Q] {
+  SetQuery(Q)
+  Refresh
+  LoadMore
+  Retry
+}
+
+pub(all) struct QueryPage[T, Cursor] {
+  items : Array[T]
+  next_cursor : Cursor?
+}
+
+pub(all) enum QueryPhase {
+  Idle
+  Loading
+  Refreshing
+  LoadingMore
+} derive(Eq)
+pub fn QueryPhase::equal(Self, Self) -> Bool
+pub fn QueryPhase::not_equal(Self, Self) -> Bool
+
+pub struct QueryState[Q, T] {
+  query : Q
+  items : @vector.Vector[T]
+  phase : QueryPhase
+  has_loaded : Bool
+  has_more : Bool
+  can_load_more : Bool
+  error : Error?
+}
+pub fn[Q : Eq, T : Eq] QueryState::equal(Self[Q, T], Self[Q, T]) -> Bool
+pub fn[Q : Eq, T : Eq] QueryState::not_equal(Self[Q, T], Self[Q, T]) -> Bool
+pub impl[Q : Eq, T : Eq] Eq for QueryState[Q, T]
+
+// Type aliases
+
+// Traits

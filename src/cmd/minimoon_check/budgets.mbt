@@ -18,12 +18,12 @@ let ui_registry_archive_hard_limit : Int32 = 250 * 1024
 let ui_registry_archive_reserve : Int32 = 16 * 1024
 
 ///|
-// Approved Draft Workbench review, 2026-09-10: runtime/aggregate 427,143/461,392 B.
-// Only the core example's fixed ceilings change; framework/Starter/UI gates do not.
-let conformance_runtime_limit : Int32 = 440000
+// Approved query follow-up, 2026-10-19: runtime/aggregate 453,892/488,620 B.
+// The +17,220 B feature/demo delta changes only these two example ceilings.
+let conformance_runtime_limit : Int32 = 464000
 
 ///|
-let conformance_javascript_limit : Int32 = 480000
+let conformance_javascript_limit : Int32 = 500000
 
 ///|
 // Independent starter follow-up: optimized runtime/aggregate 226,205/253,966 B.

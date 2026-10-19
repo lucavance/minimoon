@@ -682,9 +682,11 @@ fn app(
     "观察渲染统计：无重试、超时或调度失败。",
   ])
   let properties = property_probe()
-  let combined = @minimoon.Val::map2(notes, properties, (notes, properties) => {
-    (notes, properties)
-  })
+  let combined = @minimoon.Val::map3(notes, properties, query_probe(), (
+    notes,
+    properties,
+    query,
+  ) => (notes, @minimoon.fragment([properties, query])))
   model.view4(card_nodes, context.layout(), combined, (
     model,
     nodes,

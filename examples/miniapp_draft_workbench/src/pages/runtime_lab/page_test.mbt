@@ -334,6 +334,21 @@ test "lab isolates focused keyed reorder from the resident page tick" {
 }
 
 ///|
+fn timeout_request_id(commands : String, milliseconds : Int32) -> String raise {
+  guard @json.parse(commands) is Array(commands) else { fail("commands") }
+  for command in commands {
+    if command is Object(fields) &&
+      fields.get("capability") == Some(Json::string("minimoon.timeout")) &&
+      fields.get("payload") is Some(Object(payload)) &&
+      payload.get("ms") == Some(Json(milliseconds)) &&
+      fields.get("request_id") is Some(String(id)) {
+      return id
+    }
+  }
+  fail("missing timeout")
+}
+
+///|
 test "lab delay probe uses a cancellable 600ms host timeout" {
   let runtime_app = @application.program().create_runtime()
   defer ignore(runtime_app.dispose())
@@ -352,12 +367,12 @@ test "lab delay probe uses a cancellable 600ms host timeout" {
     content="true",
   )
   inspect(started.contains("\"payload\":{\"ms\":600}"), content="true")
-  inspect(started.contains("\"request_id\":\"runtime_lab:0\""), content="true")
+  let request_id = timeout_request_id(started, 600)
   inspect(
     runtime.snapshot().contains("delay probe:running:600ms"),
     content="true",
   )
-  let completed = runtime.resolve_effect("runtime_lab:0", "success", "{}")
+  let completed = runtime.resolve_effect(request_id, "success", "{}")
   inspect(completed.contains("PatchViewTree"), content="true")
   inspect(
     runtime.snapshot().contains("delay probe:completed:600ms"),
@@ -371,14 +386,13 @@ test "lab delay probe uses a cancellable 600ms host timeout" {
     .unwrap()
   let _ = disposing.lifecycle("onLoad", "{}")
   let _ = disposing.mount()
-  let _ = disposing.dispatch("dynamic/start-delay", "{}")
+  let pending = timeout_request_id(
+    disposing.dispatch("dynamic/start-delay", "{}"),
+    600,
+  )
   let disposed = disposing.dispose()
   inspect(disposed.contains("CancelEffect"), content="true")
-  inspect(
-    disposed.split("\"type\":\"CancelEffect\"").count() == 2,
-    content="true",
-  )
-  inspect(disposed.contains("\"request_id\":\"runtime_lab:0\""), content="true")
+  assert_true(disposed.contains("\"request_id\":\"" + pending + "\""))
 }
 
 ///|

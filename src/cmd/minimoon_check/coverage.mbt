@@ -58,6 +58,66 @@ fn parse_coverage_summary(
 }
 
 ///|
+fn parse_coverage_total(output : String) -> (Int32, Int32) {
+  let totals = output
+    .split("\n")
+    .filter_map(raw_line => {
+      let line = raw_line.trim().to_owned()
+      if line.has_prefix("Total: ") {
+        Some(line["Total: ".length():].to_owned())
+      } else {
+        None
+      }
+    })
+    .collect()
+  guard totals.length() == 1 else {
+    abort("MoonBit coverage summary must contain exactly one total")
+  }
+  let ratio = totals[0].split("/").collect()
+  guard ratio.length() == 2 else {
+    abort("unexpected MoonBit coverage total: " + totals[0])
+  }
+  (
+    coverage_integer(ratio[0].to_owned(), "total covered count"),
+    coverage_integer(ratio[1].to_owned(), "total point count"),
+  )
+}
+
+///|
+async fn coverage_summary(
+  root : String,
+  coverage_root : String,
+  package_name? : String,
+) -> String {
+  let args = ["-f", "summary", "--source-paths", root, "--ignore-missing-files"]
+  if package_name is Some(package_name) {
+    args.push("-p")
+    args.push(package_name)
+  }
+  println("$ moon_cove_report " + args.join(" "))
+  let (code, stdout, stderr) = @toolchain.collect_output(
+    "moon_cove_report",
+    args,
+    cwd=coverage_root,
+  ) catch {
+    err => abort("failed to start MoonBit coverage analysis: \{err}")
+  }
+  guard code == 0 else {
+    abort(
+      "MoonBit coverage analysis failed\nstdout: " +
+      stdout.text() +
+      "\nstderr: " +
+      stderr.text(),
+    )
+  }
+  let coverage_errors = stderr.text().trim().to_owned()
+  guard coverage_errors == "" else {
+    abort("MoonBit coverage analysis reported errors: " + coverage_errors)
+  }
+  stdout.text()
+}
+
+///|
 fn is_coverage_production_source(path : String) -> Bool {
   path.has_prefix("src/") &&
   !path.has_prefix("src/cmd/") &&
@@ -129,28 +189,7 @@ async fn coverage_suite(root : String) -> Unit {
   run_ui_tests(root, "js", coverage_target=target_dir)
   println("\n==> analyze MoonBit production coverage")
   let coverage_root = join(root, target_dir)
-  let args = ["-f", "summary", "--source-paths", root, "--ignore-missing-files"]
-  println("$ moon_cove_report " + args.join(" "))
-  let (code, stdout, stderr) = @toolchain.collect_output(
-    "moon_cove_report",
-    args,
-    cwd=coverage_root,
-  ) catch {
-    err => abort("failed to start MoonBit coverage analysis: \{err}")
-  }
-  guard code == 0 else {
-    abort(
-      "MoonBit coverage analysis failed\nstdout: " +
-      stdout.text() +
-      "\nstderr: " +
-      stderr.text(),
-    )
-  }
-  let output = stdout.text()
-  let coverage_errors = stderr.text().trim().to_owned()
-  guard coverage_errors == "" else {
-    abort("MoonBit coverage analysis reported errors: " + coverage_errors)
-  }
+  let output = coverage_summary(root, coverage_root)
   let entries = parse_coverage_summary(root, output)
   let complete_report_path = join(coverage_root, "coverage.xml")
   run(
@@ -177,6 +216,16 @@ async fn coverage_suite(root : String) -> Unit {
     production_total.val,
     80,
   )
+  // Summary omits fully covered files. The package total includes all points,
+  // and query behavior tests live in a separate package, outside this total.
+  let (query_covered, query_total) = parse_coverage_total(
+    coverage_summary(
+      root,
+      coverage_root,
+      package_name="lampclaw/minimoon/query",
+    ),
+  )
+  require_coverage("optional query package", query_covered, query_total, 80)
   require_coverage_group(entries, "root public package", 80, path => {
     is_coverage_production_source(path) &&
     path.has_prefix("src/") &&

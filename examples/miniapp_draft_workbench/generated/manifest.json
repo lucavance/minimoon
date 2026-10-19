@@ -51,7 +51,7 @@
     ]
   },
   "runtimeBytes": {
-    "application": 436672
+    "application": 453892
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -6192,13 +6192,10 @@
                         ]
                       },
                       {
-                        "kind": "view",
+                        "kind": "fragment",
                         "identity": "i:3",
                         "text": "",
-                        "props": {
-                          "section": "property-probe",
-                          "className": "demo-card"
-                        },
+                        "props": {},
                         "events": {},
                         "children": [
                           {
@@ -6206,17 +6203,186 @@
                             "identity": "i:0",
                             "text": "",
                             "props": {
-                              "className": "demo-card-title"
+                              "section": "property-probe",
+                              "className": "demo-card"
                             },
                             "events": {},
                             "children": [
                               {
-                                "kind": "text",
+                                "kind": "view",
                                 "identity": "i:0",
-                                "text": "属性重置与恢复",
+                                "text": "",
+                                "props": {
+                                  "className": "demo-card-title"
+                                },
+                                "events": {},
+                                "children": [
+                                  {
+                                    "kind": "text",
+                                    "identity": "i:0",
+                                    "text": "属性重置与恢复",
+                                    "props": {},
+                                    "events": {},
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "view",
+                                "identity": "i:1",
+                                "text": "",
+                                "props": {},
+                                "events": {},
+                                "children": [
+                                  {
+                                    "kind": "text",
+                                    "identity": "i:0",
+                                    "text": "phase 0: populated → empty/false/zero → omitted → restored",
+                                    "props": {},
+                                    "events": {},
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "button",
+                                "identity": "i:2",
+                                "text": "",
+                                "props": {
+                                  "disabled": false,
+                                  "id": "property-probe-next"
+                                },
+                                "events": {
+                                  "tap": "property-probe/next"
+                                },
+                                "children": [
+                                  {
+                                    "kind": "text",
+                                    "identity": "i:0",
+                                    "text": "下一阶段 / Next phase",
+                                    "props": {},
+                                    "events": {},
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "fragment",
+                                "identity": "i:3",
+                                "text": "",
+                                "props": {},
+                                "events": {},
+                                "children": [
+                                  {
+                                    "kind": "input",
+                                    "identity": "k:editor",
+                                    "text": "",
+                                    "props": {
+                                      "value": "populated",
+                                      "maxlength": 24,
+                                      "password": true,
+                                      "selectionStart": 0,
+                                      "selectionEnd": 0,
+                                      "name": "probe-name",
+                                      "disabled": true,
+                                      "focus": false,
+                                      "placeholder": "restored hint",
+                                      "id": "property-probe-input"
+                                    },
+                                    "events": {
+                                      "input": "property-probe/input"
+                                    },
+                                    "children": []
+                                  },
+                                  {
+                                    "kind": "textarea",
+                                    "identity": "k:textarea",
+                                    "text": "",
+                                    "props": {
+                                      "value": "populated",
+                                      "maxlength": 140,
+                                      "disabled": true,
+                                      "focus": false,
+                                      "id": "property-probe-textarea"
+                                    },
+                                    "events": {
+                                      "input": "v/root/i:1/i:0/i:1/i:3/i:0/i:3/k:textarea/input"
+                                    },
+                                    "children": []
+                                  },
+                                  {
+                                    "kind": "switch",
+                                    "identity": "k:switch",
+                                    "text": "",
+                                    "props": {
+                                      "checked": true,
+                                      "disabled": true,
+                                      "id": "property-probe-switch"
+                                    },
+                                    "events": {
+                                      "change": "v/root/i:1/i:0/i:1/i:3/i:0/i:3/k:switch/change"
+                                    },
+                                    "children": []
+                                  },
+                                  {
+                                    "kind": "checkbox-group",
+                                    "identity": "k:checkbox",
+                                    "text": "",
+                                    "props": {},
+                                    "events": {
+                                      "change": "v/root/i:1/i:0/i:1/i:3/i:0/i:3/k:checkbox/change"
+                                    },
+                                    "children": [
+                                      {
+                                        "kind": "checkbox",
+                                        "identity": "i:0",
+                                        "text": "",
+                                        "props": {
+                                          "value": "probe",
+                                          "checked": true,
+                                          "disabled": true,
+                                          "id": "property-probe-checkbox"
+                                        },
+                                        "events": {},
+                                        "children": [
+                                          {
+                                            "kind": "text",
+                                            "identity": "i:0",
+                                            "text": "Probe",
+                                            "props": {},
+                                            "events": {},
+                                            "children": []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "empty",
+                                "identity": "i:4",
+                                "text": "",
                                 "props": {},
                                 "events": {},
                                 "children": []
+                              },
+                              {
+                                "kind": "view",
+                                "identity": "i:5",
+                                "text": "",
+                                "props": {},
+                                "events": {},
+                                "children": [
+                                  {
+                                    "kind": "text",
+                                    "identity": "i:0",
+                                    "text": "当前文本：populated",
+                                    "props": {},
+                                    "events": {},
+                                    "children": []
+                                  }
+                                ]
                               }
                             ]
                           },
@@ -6224,156 +6390,220 @@
                             "kind": "view",
                             "identity": "i:1",
                             "text": "",
-                            "props": {},
-                            "events": {},
-                            "children": [
-                              {
-                                "kind": "text",
-                                "identity": "i:0",
-                                "text": "phase 0: populated → empty/false/zero → omitted → restored",
-                                "props": {},
-                                "events": {},
-                                "children": []
-                              }
-                            ]
-                          },
-                          {
-                            "kind": "button",
-                            "identity": "i:2",
-                            "text": "",
                             "props": {
-                              "disabled": false,
-                              "id": "property-probe-next"
+                              "section": "query-probe",
+                              "className": "demo-card"
                             },
-                            "events": {
-                              "tap": "property-probe/next"
-                            },
-                            "children": [
-                              {
-                                "kind": "text",
-                                "identity": "i:0",
-                                "text": "下一阶段 / Next phase",
-                                "props": {},
-                                "events": {},
-                                "children": []
-                              }
-                            ]
-                          },
-                          {
-                            "kind": "fragment",
-                            "identity": "i:3",
-                            "text": "",
-                            "props": {},
                             "events": {},
                             "children": [
                               {
-                                "kind": "input",
-                                "identity": "k:editor",
+                                "kind": "view",
+                                "identity": "i:0",
                                 "text": "",
                                 "props": {
-                                  "value": "populated",
-                                  "maxlength": 24,
-                                  "password": true,
-                                  "selectionStart": 0,
-                                  "selectionEnd": 0,
-                                  "name": "probe-name",
-                                  "disabled": true,
-                                  "focus": false,
-                                  "placeholder": "restored hint",
-                                  "id": "property-probe-input"
+                                  "className": "demo-card-title"
                                 },
-                                "events": {
-                                  "input": "property-probe/input"
-                                },
-                                "children": []
+                                "events": {},
+                                "children": [
+                                  {
+                                    "kind": "text",
+                                    "identity": "i:0",
+                                    "text": "列表查询（本地模拟）",
+                                    "props": {},
+                                    "events": {},
+                                    "children": []
+                                  }
+                                ]
                               },
                               {
-                                "kind": "textarea",
-                                "identity": "k:textarea",
-                                "text": "",
-                                "props": {
-                                  "value": "populated",
-                                  "maxlength": 140,
-                                  "disabled": true,
-                                  "focus": false,
-                                  "id": "property-probe-textarea"
-                                },
-                                "events": {
-                                  "input": "v/root/i:1/i:0/i:1/i:3/i:3/k:textarea/input"
-                                },
-                                "children": []
-                              },
-                              {
-                                "kind": "switch",
-                                "identity": "k:switch",
-                                "text": "",
-                                "props": {
-                                  "checked": true,
-                                  "disabled": true,
-                                  "id": "property-probe-switch"
-                                },
-                                "events": {
-                                  "change": "v/root/i:1/i:0/i:1/i:3/i:3/k:switch/change"
-                                },
-                                "children": []
-                              },
-                              {
-                                "kind": "checkbox-group",
-                                "identity": "k:checkbox",
+                                "kind": "view",
+                                "identity": "i:1",
                                 "text": "",
                                 "props": {},
+                                "events": {},
+                                "children": [
+                                  {
+                                    "kind": "text",
+                                    "identity": "i:0",
+                                    "text": "23 条草稿，每次加载 5 条；确认后搜索。关闭查询会释放局部状态。",
+                                    "props": {},
+                                    "events": {},
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "button",
+                                "identity": "i:2",
+                                "text": "",
+                                "props": {
+                                  "disabled": false,
+                                  "id": "query-toggle"
+                                },
                                 "events": {
-                                  "change": "v/root/i:1/i:0/i:1/i:3/i:3/k:checkbox/change"
+                                  "tap": "v/root/i:1/i:0/i:1/i:3/i:1/i:2/tap"
                                 },
                                 "children": [
                                   {
-                                    "kind": "checkbox",
+                                    "kind": "text",
+                                    "identity": "i:0",
+                                    "text": "关闭查询",
+                                    "props": {},
+                                    "events": {},
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "view",
+                                "identity": "i:3",
+                                "text": "",
+                                "props": {},
+                                "events": {},
+                                "children": [
+                                  {
+                                    "kind": "input",
                                     "identity": "i:0",
                                     "text": "",
                                     "props": {
-                                      "value": "probe",
-                                      "checked": true,
-                                      "disabled": true,
-                                      "id": "property-probe-checkbox"
+                                      "value": "",
+                                      "disabled": false,
+                                      "focus": false,
+                                      "placeholder": "搜索草稿；输入 慢速 测试延迟响应",
+                                      "id": "query-search"
+                                    },
+                                    "events": {
+                                      "input": "v/root/i:1/i:0/i:1/i:3/i:1/i:3/i:0/input",
+                                      "confirm": "v/root/i:1/i:0/i:1/i:3/i:1/i:3/i:0/confirm"
+                                    },
+                                    "children": []
+                                  },
+                                  {
+                                    "kind": "button",
+                                    "identity": "i:1",
+                                    "text": "",
+                                    "props": {
+                                      "disabled": false,
+                                      "id": "query-submit"
+                                    },
+                                    "events": {
+                                      "tap": "v/root/i:1/i:0/i:1/i:3/i:1/i:3/i:1/tap"
+                                    },
+                                    "children": [
+                                      {
+                                        "kind": "text",
+                                        "identity": "i:0",
+                                        "text": "搜索",
+                                        "props": {},
+                                        "events": {},
+                                        "children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "button",
+                                    "identity": "i:2",
+                                    "text": "",
+                                    "props": {
+                                      "disabled": false,
+                                      "id": "query-refresh"
+                                    },
+                                    "events": {
+                                      "tap": "v/root/i:1/i:0/i:1/i:3/i:1/i:3/i:2/tap"
+                                    },
+                                    "children": [
+                                      {
+                                        "kind": "text",
+                                        "identity": "i:0",
+                                        "text": "刷新",
+                                        "props": {},
+                                        "events": {},
+                                        "children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "button",
+                                    "identity": "i:3",
+                                    "text": "",
+                                    "props": {
+                                      "disabled": false,
+                                      "id": "query-fail"
+                                    },
+                                    "events": {
+                                      "tap": "v/root/i:1/i:0/i:1/i:3/i:1/i:3/i:3/tap"
+                                    },
+                                    "children": [
+                                      {
+                                        "kind": "text",
+                                        "identity": "i:0",
+                                        "text": "下一次响应失败",
+                                        "props": {},
+                                        "events": {},
+                                        "children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "view",
+                                    "identity": "i:4",
+                                    "text": "",
+                                    "props": {
+                                      "id": "query-status"
                                     },
                                     "events": {},
                                     "children": [
                                       {
                                         "kind": "text",
                                         "identity": "i:0",
-                                        "text": "Probe",
+                                        "text": "正在加载…",
                                         "props": {},
                                         "events": {},
                                         "children": []
                                       }
                                     ]
+                                  },
+                                  {
+                                    "kind": "view",
+                                    "identity": "i:5",
+                                    "text": "",
+                                    "props": {
+                                      "id": "query-results"
+                                    },
+                                    "events": {},
+                                    "children": []
+                                  },
+                                  {
+                                    "kind": "button",
+                                    "identity": "i:6",
+                                    "text": "",
+                                    "props": {
+                                      "disabled": true,
+                                      "id": "query-more"
+                                    },
+                                    "events": {
+                                      "tap": "v/root/i:1/i:0/i:1/i:3/i:1/i:3/i:6/tap"
+                                    },
+                                    "children": [
+                                      {
+                                        "kind": "text",
+                                        "identity": "i:0",
+                                        "text": "加载更多",
+                                        "props": {},
+                                        "events": {},
+                                        "children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "empty",
+                                    "identity": "i:7",
+                                    "text": "",
+                                    "props": {},
+                                    "events": {},
+                                    "children": []
                                   }
                                 ]
-                              }
-                            ]
-                          },
-                          {
-                            "kind": "empty",
-                            "identity": "i:4",
-                            "text": "",
-                            "props": {},
-                            "events": {},
-                            "children": []
-                          },
-                          {
-                            "kind": "view",
-                            "identity": "i:5",
-                            "text": "",
-                            "props": {},
-                            "events": {},
-                            "children": [
-                              {
-                                "kind": "text",
-                                "identity": "i:0",
-                                "text": "当前文本：populated",
-                                "props": {},
-                                "events": {},
-                                "children": []
                               }
                             ]
                           }

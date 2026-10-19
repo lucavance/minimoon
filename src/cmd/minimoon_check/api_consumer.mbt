@@ -61,11 +61,26 @@ async fn frozen_api_consumer_gate(root : String) -> Unit {
     "-q", archive, "-d", package_root,
   ])
   copy_frozen_api_consumer(root, consumer)
+  let query_consumer = join(temp, "query-consumer")
+  @fs.mkdir(join(query_consumer, "src"), permission=0o755, recursive=true)
+  for path in ["moon.mod", "src/moon.pkg", "src/query_test.mbt"] {
+    @fs.write_file(
+      join(query_consumer, path),
+      @fs.read_file(
+        join(
+          root,
+          "src/cmd/minimoon_check/fixtures/api/consumers/query/" + path,
+        ),
+      ).text(),
+      create_mode=CreateOrTruncate,
+      permission=0o644,
+    )
+  }
   run(
     root,
     "Bind frozen consumer to unpacked registry candidate",
     "moon",
-    ["work", "init", "package", "consumer"],
+    ["work", "init", "package", "consumer", "query-consumer"],
     cwd=temp,
   )
   for target in ["js", "native"] {
@@ -89,6 +104,13 @@ async fn frozen_api_consumer_gate(root : String) -> Unit {
       "moon",
       ["test", "--target", target, "--deny-warn"],
       cwd=consumer,
+    )
+    run(
+      root,
+      "Run packaged query consumer (" + target + ")",
+      "moon",
+      ["test", "--target", target, "--deny-warn"],
+      cwd=query_consumer,
     )
   }
   @fs.rmdir(temp, recursive=true)

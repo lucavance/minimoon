@@ -42,6 +42,7 @@
     "Runtime Lab focused keyed input retains value, focus, cursor and selection while only another identity moves; controlled reset uses scalar sets only",
     "Runtime Lab structural reconciliation retains the keyed input while siblings move; picker range/selection and swiper children/current change together without changing the visible logical item",
     "Runtime Lab delay, perform success and attempt failure complete without another touch and remain silent after immediate unload",
+    "Runtime Lab local query loads 23 rows in pages of five, searches only on confirmation, retains rows during refresh and failures, retries the failed operation, rejects stale slow responses, and discards callbacks after scope closure or page unload",
     "Runtime Lab keyed local-state isolation, reorder, removal and fresh restore; a second same-route instance is independent",
     "Repeat affected public API scenarios in Skyline simulator, device preview and debugging; urlCheck bypass is not production-domain or full HTTPS validation; require a clean console and no post-dispose updates",
     "Request Lifecycle owns the complete shared counter/request laboratory; 3000 updates remain lossless, hidden observers catch up, Clear invalidates old App replies",

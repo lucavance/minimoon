@@ -52,6 +52,7 @@ devtools.evidence.json
 /src/internal_host_validation/
 /src/internal_components_behavior_test/
 /src/internal_component_styles_behavior_test/
+/src/internal_query_behavior_test/
 **/*_bench.mbt
 **/*_test.mbt
 **/*_wbtest.mbt

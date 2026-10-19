@@ -241,7 +241,7 @@ let registry_documentation_files : Array[String] = [
 
 ///|
 let registry_source_directories : Array[String] = [
-  "src/http", "src", "src/cmd/minimoon", "src/components", "src/components/styles",
+  "src/http", "src/query", "src", "src/cmd/minimoon", "src/components", "src/components/styles",
   "src/internal_any", "src/internal_duplix", "src/internal_host_js", "src/internal_slotmap",
   "src/internal_versions", "src/internal_toolchain", "src/renderer_miniapp", "src/resources",
   "src/runtime_core", "src/internal_png", "src/testing", "src/tooling_miniapp", "src/tooling_minimoon_build",

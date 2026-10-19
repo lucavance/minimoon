@@ -1,0 +1,9 @@
+import {
+  "lampclaw/minimoon",
+  "lampclaw/minimoon/query",
+  "lampclaw/minimoon/http",
+  "lampclaw/minimoon/testing",
+  "moonbitlang/core/json",
+} for "test"
+
+supported_targets = "js+native"

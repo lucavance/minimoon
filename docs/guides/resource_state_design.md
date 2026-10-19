@@ -36,9 +36,9 @@ profile.view(status => render_profile(status))
 
 There is no `Resource` handle or hidden `reload` method. Consequently the
 helper has no overlapping generations: it represents construction-time work,
-not a request cache or a retry controller. Model retry, refresh, stale data,
-permission, unavailable, and cache policy as ordinary application messages and
-state when the product needs them.
+not a request cache or a retry controller. For cursor lists, the optional query
+package below supplies refresh/retry state. Other policies remain ordinary
+application messages and state.
 
 `Status[T]` implements `Enumerate`, so a dynamic status view can retain a scope
 per `pending`, `loaded`, or `failed` tag. Remember that the builder's initial
@@ -48,3 +48,49 @@ Creating a resource inside a candidate dynamic branch is transactional. A
 rejected projection discards its initial command; an accepted projection starts
 it only after commit. Reading the returned `Val` never starts additional work,
 and racing callbacks cannot overwrite its first committed terminal result.
+
+## Paginated queries (Unreleased)
+
+Current source provides `lampclaw/minimoon/query`; published `0.3.0` does not.
+Create it once in a page or local component builder:
+
+```moonbit
+let (state, emit) = @query.create_infinite_query("", (text, _cursor : Int?, done) => {
+  // Replace this local result with an HTTP or other command.
+  done(Ok({ items: [text], next_cursor: None }))
+})
+state.view(state => @minimoon.div([
+  @minimoon.p(state.items.to_array().join(",")),
+  @minimoon.button(on_tap=emit(@query.Refresh), "Refresh"),
+  @minimoon.button(
+    disabled=!state.can_load_more,
+    on_tap=emit(@query.LoadMore),
+    "Load more",
+  ),
+]))
+```
+
+The loader returns a `Cmd`; side effects belong inside that command. Adapt HTTP
+`expect_json` with `done.map(...)` to produce `QueryPage { items, next_cursor }`.
+Initial cursor `None` requests the first page; response cursor `None` ends the
+list. Empty pages may still have a cursor. Items retain server order and duplicates.
+Calling `done` copies the array into an immutable vector. Treat queries, cursors
+and individual items as immutable too.
+
+`SetQuery(new_query)` clears data and starts the first page; equal queries are
+ignored. Keep draft input in ordinary local state and send SetQuery on button
+or keyboard confirmation. `Refresh` retains existing rows, replacing all pages
+on success. Repeated refresh/load-more commands while busy are ignored; a refresh
+can supersede an append, and a changed query can supersede any request.
+
+`QueryState` exposes query, items, phase, has_loaded, has_more, can_load_more and
+the original Error. Idle can contain an error. has_loaded distinguishes an empty
+success from an initial failure. A failed append retains its cursor and rows;
+`Retry` repeats that append. A failed refresh retains rows but blocks appending
+until a refresh succeeds. Retry without a failure is a no-op. Error equality
+uses identity and retains the original typed error.
+
+Only the current request's first committed completion wins. Stale/duplicate
+responses and disposed-scope callbacks are ignored. Rollback does not consume a
+completion. Supersession invalidates results; transport cancellation remains
+page-owned. No cache, automatic retry, debounce or cross-page ownership is added.

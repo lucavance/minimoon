@@ -1,0 +1,6 @@
+import {
+  "lampclaw/minimoon",
+  "moonbitlang/core/immut/vector",
+}
+
+supported_targets = "js+native"

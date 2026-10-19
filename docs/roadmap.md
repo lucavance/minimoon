@@ -2,6 +2,19 @@
 
 ## Near-term priorities
 
+### List queries (Unreleased)
+
+The optional `lampclaw/minimoon/query` package adds page/component-owned cursor
+pagination, confirmed search, refresh with retained content, and retry of the
+failed operation. Runtime Lab contains a deterministic local-service demo.
+The API is source-only, with no Contract, ABI or renderer protocol change;
+existing registry archives remain immutable. New fixture bytes require fresh
+Developer Tools evidence. See [query behavior](guides/resource_state_design.md#paginated-queries-unreleased).
+
+The next functional rounds are form state/validation/submission, followed by
+media selection/upload/progress/recovery. Detail and accept each round separately;
+application-wide query caches and automatic search debounce remain outside this round.
+
 ### Current iteration: maintenance and performance observations (Unreleased)
 
 The source CLI now follows the selected configuration, custom Tailwind input and

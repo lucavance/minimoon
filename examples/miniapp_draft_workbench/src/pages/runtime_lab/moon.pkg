@@ -2,6 +2,7 @@ import {
   "lampclaw/miniapp_draft_workbench/shared/shell",
   "lampclaw/miniapp_draft_workbench/app" @application,
   "lampclaw/minimoon",
+  "lampclaw/minimoon/query",
   "lampclaw/miniapp_draft_workbench/components/toggle_card" @card,
   "moonbitlang/core/immut/vector",
 }
@@ -10,8 +11,10 @@ supported_targets = "js"
 
 import {
   "lampclaw/minimoon/testing",
+  "moonbitlang/core/json",
 } for "test"
 
 import {
   "moonbitlang/async",
+  "lampclaw/minimoon/testing",
 } for "wbtest"

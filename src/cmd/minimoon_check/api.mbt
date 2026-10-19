@@ -259,6 +259,11 @@ async fn api_suite(root : String) -> Unit {
       ),
     )
   }
+  if product_series == "0.3" {
+    package_snapshots.push(
+      ("query", "src/query/pkg.generated.mbti", "query.mbti", "exact", true),
+    )
+  }
   for entry in package_snapshots {
     let (label, source, snapshot, policy, exact) = entry
     let package_entry = json_field(packages, label)

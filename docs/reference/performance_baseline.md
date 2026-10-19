@@ -53,7 +53,7 @@ has a `minimoon.app.js` entry helper.
 
 | Artifact | Ceiling |
 | --- | ---: |
-| Draft Workbench application runtime | 440,000 bytes |
+| Draft Workbench application runtime | 464,000 bytes |
 | generated starter runtime | 230,000 bytes |
 | App-enabled shared host | 19,000 bytes |
 | no-App shared host (including starter) | 18,000 bytes |
@@ -70,7 +70,7 @@ all page bridges, and `minimoon.app.js` when application ownership is enabled:
 
 | Application | Ceiling |
 | --- | ---: |
-| committed Draft Workbench fixture | 480,000 bytes |
+| committed Draft Workbench fixture | 500,000 bytes |
 | generated starter | 258,000 bytes |
 
 Release generation minifies the host and runtime syntax. For historical
@@ -81,6 +81,23 @@ comparison, the earlier 2026-09-08 authoring calibration used
 aggregate JavaScript bytes, including the 3,464-byte application helper.
 Against that review's ceilings, headroom was respectively 12,023, 376, 508,
 40,697, and 34,879 bytes.
+
+## Query fixture budget review (Unreleased)
+
+The 2026-10-19 review explicitly approves only the core fixture runtime and
+aggregate JavaScript ceilings at 464,000 and 500,000 bytes. Under the pinned
+MoonBit/vp/Node/Bun toolchain, commit `16f775e` measured 436,672 runtime bytes
+and 471,400 aggregate bytes. The query module plus Runtime Lab panel measures
+453,892 and 488,620: a 17,220-byte increase, leaving 10,108 and 11,380 bytes.
+Appending each page through persistent vector push avoids 6,588 bytes of newly
+linked bulk-concat machinery. Search, refresh, retry, rollback and lifecycle
+tests cover the resulting implementation.
+
+The prior 440,000/480,000 ceilings had insufficient room for this addition.
+Registry archive limits/reserves, Starter, UI, shared-host and protocol budgets
+are unchanged. These figures describe the complete query-enabled fixture, not
+the cost paid by applications that do not import query. Preserve the existing
+consumer size comparisons and exact inclusive-boundary regression tests.
 
 ## Core 0.3.0 inline schema budget
 
