@@ -44,7 +44,7 @@ three host paths:
 
 The canonical nine-route Draft Workbench fixture owns core release evidence; the
 independent six-page `ui/examples/showcase` owns UI release evidence. A paired
-core/UI host-acceptance claim requires both. The current candidate pair is core
+core/UI host-acceptance claim requires both. The current published pair is core
 `0.3.1` and UI `0.2.0` under the
 [release procedure](release_candidate_handoff.md#ordered-local-registry-publication).
 Dogfood results are application feedback, not evidence for either fixture, and

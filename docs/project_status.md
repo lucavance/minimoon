@@ -1,14 +1,42 @@
 # Project status
 
-## Release candidate: core 0.3.1 / UI 0.2.0
+## Published release: core 0.3.1 / UI 0.2.0
 
-Core-only `lampclaw/minimoon@0.3.1` publication was authorized on 2026-10-20.
-The candidate adds optional scope-owned paginated queries and fixes CLI
-development watching. Existing public interfaces and Contract 11 / runtime
-ABI 13 / renderer protocol 9 remain unchanged. UI stays at its published
-`0.2.0`, retaining its original core `0.3.0` dependency declaration.
-Publication and fresh registry acceptance are pending; use source until
-registry availability is recorded below.
+Core `lampclaw/minimoon@0.3.1` was published on **2026-10-20 (Asia/Shanghai)**
+under the user's explicit authorization. UI remains the existing published
+`lampclaw/minimoon_ui@0.2.0`, with its original core `0.3.0` declaration;
+this was a core-only publication. The frozen source is
+[`bd6a465cef1e8ef57ad708a9e054e214e4f0b504`](https://github.com/lucavance/minimoon/commit/bd6a465cef1e8ef57ad708a9e054e214e4f0b504),
+and both primary Test and Node 24 LTS compatibility jobs [passed](https://github.com/lucavance/minimoon/actions/runs/39411442242).
+
+The release adds optional scope-owned cursor pagination, confirmed search,
+refresh and exact-operation retry through `/query`, and repairs CLI development
+watching. Existing interfaces, Contract 11, runtime ABI 13 and renderer
+protocol 9 are preserved. Repository performance observations remain advisory.
+
+Native/JS tests, coverage, dependency audit under the existing policy, candidate
+checks, both fixture release verifications, `check:all` and `check:mvp` passed.
+Existing local evidence matched both unchanged artifact fingerprints after
+version synchronization. Final candidate restoration passed; public reports
+keep `release: false` and Developer Tools `pending`. Actual evidence is
+local and Git-ignored.
+
+The downloaded [core archive](https://download.mooncakes.io/user/lampclaw/minimoon/0.3.1.zip)
+matches the reviewed archive, complete inventory and source bytes: **327569 bytes / 188 files**, SHA-256 `ca6b2874556aa4bfba503d643b3cf44b0c2a97819544340d53fb488fde6f5af6`.
+UI's archive remains identical to its previously published `0.2.0` ZIP.
+
+The frozen publish attempt stopped before upload because the isolated
+self-check needed dependencies. Ordinary `moon publish` completed the
+normal self-check with unchanged source and archive bytes and returned
+HTTP `200 OK`.
+
+Fresh registry consumers passed for the new CLI/Starter, the README first edit,
+frozen core APIs, query/HTTP behavior on native and JS, App foreground
+subscriptions, custom configuration and nested output, deterministic rebuilds,
+missing-evidence rejection, existing UI/Markdown/resources and older application
+upgrades preserving business source and private settings. Registry consumers
+used no local framework override. Future publications require separate
+authorization and all release gates.
 
 ## Published release: core 0.3.0 / UI 0.2.0
 
@@ -75,13 +103,13 @@ pair execution steps:
 
 This repository-only record does not change either immutable published package.
 
-## Core 0.3.1 candidate maintenance
+## Core 0.3.1 maintenance
 
 The source CLI repairs development watching for selected configurations,
 custom style inputs, directory changes and edits arriving during builds. A
 temporary Starter subprocess regression exercises recovery and output isolation.
-Registry CLI `0.3.0` remains the published baseline until `0.3.1` availability
-is recorded; install the current source to use these repairs and optional queries.
+Registry CLI `0.3.1` includes these repairs and optional queries; the immutable
+`0.3.0` archive retains its original behavior.
 
 Repository performance checks now record actual Page/Val updates, bounded App
 message bursts and deterministic core/basic-UI/Markdown consumer size deltas.
@@ -151,8 +179,8 @@ on a developer's machine. Changed fingerprints require renewed host validation.
 <!-- minimoon:historical:end -->
 ## Current published package availability
 
-Core `0.3.0` and UI `0.2.0` are available from Mooncakes, with UI declaring
-core `0.3.0`. Registry CLI `0.3.0` generates Node `26.11.1`, Bun `1.4.3`,
+Core `0.3.1` and UI `0.2.0` are available from Mooncakes, with UI retaining
+its core `0.3.0` declaration. Registry CLI `0.3.1` generates Node `26.11.1`, Bun `1.4.3`,
 PostCSS `8.5.30`, weapp-tailwindcss `5.6.1` and source-map-js override `1.2.2`.
 CLI `0.2.7` retains those tooling pins with its earlier framework version.
 Previous CLI `0.2.6` retains PostCSS `8.5.29`, weapp-tailwindcss `5.5.12`

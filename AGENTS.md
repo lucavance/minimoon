@@ -174,10 +174,9 @@ the user explicitly authorizes that action.
   `Json::empty_object()` for empty JSON objects, and `{ () }` for empty blocks.
   The aggregate gate requires `moon check` to be warning-free.
 
-- The current source candidate is core `0.3.1` / UI `0.2.0`; the published
-  baseline is core `0.3.0` / UI `0.2.0`, with
+- The current source and published pair is core `0.3.1` / UI `0.2.0`, with
   renderer protocol 9 and unchanged Contract 11 / runtime ABI 13.
-  Registry CLI `0.3.0` generates the current Starter pins and the
+  Registry CLI `0.3.1` generates the current Starter pins and the
   source-map-js `1.2.2` override. Previous CLI `0.2.6` retains its original
   Node `26.11.1`, PostCSS `8.5.29` and weapp-tailwindcss `5.5.12` pins.
   Published archives remain immutable; historical release
@@ -232,6 +231,13 @@ tracked reports return to the public candidate state. Require unchanged
 source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
+
+The explicitly authorized core-only `0.3.1` publication completed on 2026-10-20
+from frozen commit `bd6a465cef1e8ef57ad708a9e054e214e4f0b504`. Both CI jobs, local candidate
+and release gates, archive comparisons and fresh registry consumers passed. UI
+remains `0.2.0` with its original core `0.3.0` dependency. Source changes preserved
+both accepted fingerprints; evidence remains local and Git-ignored. Future
+publications require separate authorization and all release gates.
 
 The explicitly authorized core `0.3.0` / UI `0.2.0` publication completed on
 2026-10-16 from frozen commit `7d54538aa5c373413ece96a82db8212a339ce982`, merged

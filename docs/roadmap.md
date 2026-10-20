@@ -2,7 +2,7 @@
 
 ## Near-term priorities
 
-### List queries (core 0.3.1 candidate)
+### List queries (core 0.3.1 released)
 
 The optional `lampclaw/minimoon/query` package adds page/component-owned cursor
 pagination, confirmed search, refresh with retained content, and retry of the
@@ -15,7 +15,7 @@ The next functional rounds are form state/validation/submission, followed by
 media selection/upload/progress/recovery. Detail and accept each round separately;
 application-wide query caches and automatic search debounce remain outside this round.
 
-### Maintenance and performance observations (core 0.3.1 candidate)
+### Maintenance and performance observations (core 0.3.1 released)
 
 The source CLI now follows the selected configuration, custom Tailwind input and
 app-local CSS/WXSS, refreshes validated output exclusions after configuration
@@ -35,11 +35,11 @@ separate compatibility and host-validation review.
 ### Completed baseline
 
 Keep registry-based Starter onboarding and English/Chinese documentation
-consistent. Once availability is recorded in project status, application
-authors use `moon install lampclaw/minimoon/cmd/minimoon@0.3.0` and
+consistent. Application authors use
+`moon install lampclaw/minimoon/cmd/minimoon@0.3.1` and
 `minimoon init my-app`. Source installation remains available for framework
-development and unpublished candidates. The current source candidate is core `0.3.1` / UI `0.2.0`; the published
-baseline is core `0.3.0` / UI `0.2.0`. UI retains its core `0.3.0` declaration.
+development and unpublished candidates. The current source and published pair
+is core `0.3.1` / UI `0.2.0`. UI retains its core `0.3.0` declaration.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
@@ -325,9 +325,11 @@ is local and Git-ignored, just like the core fixture's evidence above.
 Freeze synchronized documentation, reviewed package contents, the source commit
 and both CI handoff bundles before any separately authorized release. Follow
 the [release runbook](operations/release_candidate_handoff.md), validating core
-registry consumers before publishing its matching UI archive. The current core
+registry consumers before publishing its matching UI archive. The previous core
 `0.3.0` / UI `0.2.0` publication completed on 2026-10-16; occupied versions and
-archives are immutable. The core `0.3.1` candidate above is not yet published.
+archives are immutable. Core-only `0.3.1` was published on 2026-10-20 after all
+release gates; UI remains the existing `0.2.0`. See project status for the frozen
+source and CI.
 Future publications need separate authorization, both CI jobs for the
 final frozen commit and fingerprint-matched host validation. Preserve
 actual-evidence gates and candidate report restoration. Record dates, source

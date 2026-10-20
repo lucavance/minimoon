@@ -1,16 +1,18 @@
 # Release candidate handoff
 
-The user authorized core-only `0.3.1` publication on 2026-10-20. The candidate
-adds optional paginated queries and CLI watch repairs while preserving
-Contract 11 / ABI 13 / protocol 9. UI remains the immutable published `0.2.0`
-with its original core `0.3.0` declaration. Validate fresh core and combined
-registry consumers; do not republish UI. The core candidate archive is
-`_build/publish/lampclaw-minimoon-0.3.1.zip`. All CI, archive, clean-worktree
-and fingerprint-bound host gates below remain required.
+The user-authorized core-only `0.3.1` publication completed on 2026-10-20
+from frozen commit `bd6a465cef1e8ef57ad708a9e054e214e4f0b504` after all local/CI gates,
+archive review and fresh registry consumers passed. It adds optional paginated
+queries and CLI watch repairs while preserving Contract 11 / ABI 13 / protocol 9.
+UI remains the immutable published `0.2.0` with its original core `0.3.0`
+declaration and was not republished. The core archive is
+`_build/publish/lampclaw-minimoon-0.3.1.zip`; its registry checksum matches
+the reviewed ZIP. See project status for the publication receipt. Future
+publications require separate authorization and all gates below.
 
 This workflow keeps deterministic Linux validation, real Skyline acceptance
-and explicit local registry publication distinct. The current published pair
-is core `lampclaw/minimoon@0.3.0` and UI `lampclaw/minimoon_ui@0.2.0`;
+and explicit local registry publication distinct. The previous published pair
+was core `lampclaw/minimoon@0.3.0` and UI `lampclaw/minimoon_ui@0.2.0`;
 UI declares core `0.3.0`. It uses Contract 11 / ABI 13 / renderer protocol 9.
 The user-authorized publication completed on 2026-10-16 from frozen commit
 `7d54538`, merged and pushed to `main`, after both CI jobs, local release gates,
