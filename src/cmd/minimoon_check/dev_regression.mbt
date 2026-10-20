@@ -28,7 +28,19 @@ async fn dev_regression_gate(root : String, executable : String) -> Unit {
   fields["distDir"] = Json::string("output/mini app")
   fields["sourceWxss"] = Json::string("styles/compiled.wxss")
   let selected = "custom app.json"
-  write_ui_consumer_file(app, selected, config.stringify())
+  // One complete editor save avoids truncate/write events straddling a build;
+  // queued source edits are checked separately during the initial build.
+  let write_config = async fn(content : String) {
+    let staged = join(app, "configuration.pending")
+    @fs.write_file(
+      staged,
+      content,
+      create_mode=CreateOrTruncate,
+      permission=0o600,
+    )
+    @fs.rename(staged, join(app, selected))
+  }
+  write_config(config.stringify())
   @fs.remove(join(app, "miniapp.minimoon.json"))
   let input = @fs.read_file(join(app, "styles/tailwind.css")).text() +
     "\n@import \"./palette.css\";\n"
@@ -90,13 +102,13 @@ async fn dev_regression_gate(root : String, executable : String) -> Unit {
     )
     finish("ready")
     require_text(app, "output/mini app/app.wxss", "#345678")
-    write_ui_consumer_file(app, selected, "{ broken")
+    write_config("{ broken")
     finish("failed")
     fields["distDir"] = Json::string("dist")
     fields["sourceWxss"] = Json::string("styles/app.wxss")
     fields["tailwindInput"] = Json::string("styles/next.input")
     write_ui_consumer_file(app, "styles/next.input", input)
-    write_ui_consumer_file(app, selected, config.stringify())
+    write_config(config.stringify())
     finish("ready")
     quiet()
     write_ui_consumer_file(
@@ -132,7 +144,7 @@ async fn dev_regression_gate(root : String, executable : String) -> Unit {
     quiet()
     @fs.remove(join(app, selected))
     finish("failed")
-    write_ui_consumer_file(app, selected, config.stringify())
+    write_config(config.stringify())
     finish("ready")
     quiet()
   })

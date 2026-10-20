@@ -6,7 +6,7 @@ ceilings and their byte calibration, not transient benchmark samples.
 
 ## Maintenance observation reports
 
-Unreleased repository tooling extends `vp run --no-cache check:perf` (also part
+Core 0.3.1 repository tooling extends `vp run --no-cache check:perf` (also part
 of `check:candidate`). Read `_build/perf/run.json` first: only `status: passed`
 means the entire attempt completed. Metadata records the commit, working-tree
 changes and MoonBit/vp/managed JavaScript environment. CI uploads available JSON
@@ -82,7 +82,7 @@ aggregate JavaScript bytes, including the 3,464-byte application helper.
 Against that review's ceilings, headroom was respectively 12,023, 376, 508,
 40,697, and 34,879 bytes.
 
-## Query fixture budget review (Unreleased)
+## Query fixture budget review (core 0.3.1)
 
 The 2026-10-19 review explicitly approves only the core fixture runtime and
 aggregate JavaScript ceilings at 464,000 and 500,000 bytes. Under the pinned

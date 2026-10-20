@@ -1,5 +1,13 @@
 # Release candidate handoff
 
+The user authorized core-only `0.3.1` publication on 2026-10-20. The candidate
+adds optional paginated queries and CLI watch repairs while preserving
+Contract 11 / ABI 13 / protocol 9. UI remains the immutable published `0.2.0`
+with its original core `0.3.0` declaration. Validate fresh core and combined
+registry consumers; do not republish UI. The core candidate archive is
+`_build/publish/lampclaw-minimoon-0.3.1.zip`. All CI, archive, clean-worktree
+and fingerprint-bound host gates below remain required.
+
 This workflow keeps deterministic Linux validation, real Skyline acceptance
 and explicit local registry publication distinct. The current published pair
 is core `lampclaw/minimoon@0.3.0` and UI `lampclaw/minimoon_ui@0.2.0`;
@@ -134,7 +142,7 @@ The UI archive gate instead copies source into a temporary independent Git
 root, runs the real `moon package`, checks the archive allowlist and required
 files, and compiles consumers from the extracted package. Its reviewed output
 is `_build/publish/lampclaw-minimoon_ui-0.2.0.zip`. The core candidate archive is
-`_build/publish/lampclaw-minimoon-0.3.0.zip`. UI publication must use that checked
+`_build/publish/lampclaw-minimoon-0.3.1.zip`. UI publication must use that checked
 archive extracted outside all Git and Moon workspace ancestors, after registry
 core is available and consumers pass. A successful archive gate does not itself
 publish either module. Previously published archives remain immutable.

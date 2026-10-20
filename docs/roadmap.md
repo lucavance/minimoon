@@ -2,26 +2,26 @@
 
 ## Near-term priorities
 
-### List queries (Unreleased)
+### List queries (core 0.3.1 candidate)
 
 The optional `lampclaw/minimoon/query` package adds page/component-owned cursor
 pagination, confirmed search, refresh with retained content, and retry of the
 failed operation. Runtime Lab contains a deterministic local-service demo.
-The API is source-only, with no Contract, ABI or renderer protocol change;
+The API is additive, with no Contract, ABI or renderer protocol change;
 existing registry archives remain immutable. New fixture bytes require fresh
-Developer Tools evidence. See [query behavior](guides/resource_state_design.md#paginated-queries-unreleased).
+Developer Tools evidence. See [query behavior](guides/resource_state_design.md#paginated-queries-since-031).
 
 The next functional rounds are form state/validation/submission, followed by
 media selection/upload/progress/recovery. Detail and accept each round separately;
 application-wide query caches and automatic search debounce remain outside this round.
 
-### Current iteration: maintenance and performance observations (Unreleased)
+### Maintenance and performance observations (core 0.3.1 candidate)
 
 The source CLI now follows the selected configuration, custom Tailwind input and
 app-local CSS/WXSS, refreshes validated output exclusions after configuration
 changes, and retains edits arriving during builds. A real subprocess regression
-checks recovery and prevents generated-output rebuild loops. These fixes are
-source-only; the immutable registry CLI `0.3.0` does not include them.
+checks recovery and prevents generated-output rebuild loops. These fixes ship in core `0.3.1`; the immutable registry CLI `0.3.0`
+does not include them.
 
 `check:perf` adds actual Page/Val updates, App message bursts, and deterministic
 core/basic-UI/Markdown consumer size comparisons. CI retains the reports for
@@ -38,8 +38,8 @@ Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Once availability is recorded in project status, application
 authors use `moon install lampclaw/minimoon/cmd/minimoon@0.3.0` and
 `minimoon init my-app`. Source installation remains available for framework
-development and unpublished candidates. The current source and published pair
-is core `0.3.0` / UI `0.2.0`, with UI declaring core `0.3.0`.
+development and unpublished candidates. The current source candidate is core `0.3.1` / UI `0.2.0`; the published
+baseline is core `0.3.0` / UI `0.2.0`. UI retains its core `0.3.0` declaration.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
@@ -327,7 +327,7 @@ and both CI handoff bundles before any separately authorized release. Follow
 the [release runbook](operations/release_candidate_handoff.md), validating core
 registry consumers before publishing its matching UI archive. The current core
 `0.3.0` / UI `0.2.0` publication completed on 2026-10-16; occupied versions and
-archives are immutable. The maintenance iteration above is unpublished.
+archives are immutable. The core `0.3.1` candidate above is not yet published.
 Future publications need separate authorization, both CI jobs for the
 final frozen commit and fingerprint-matched host validation. Preserve
 actual-evidence gates and candidate report restoration. Record dates, source

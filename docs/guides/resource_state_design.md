@@ -49,9 +49,10 @@ rejected projection discards its initial command; an accepted projection starts
 it only after commit. Reading the returned `Val` never starts additional work,
 and racing callbacks cannot overwrite its first committed terminal result.
 
-## Paginated queries (Unreleased)
+## Paginated queries (since 0.3.1)
 
-Current source provides `lampclaw/minimoon/query`; published `0.3.0` does not.
+Core `0.3.1` adds optional `lampclaw/minimoon/query`; see
+[availability](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 Create it once in a page or local component builder:
 
 ```moonbit

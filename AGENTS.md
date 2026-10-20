@@ -174,7 +174,8 @@ the user explicitly authorizes that action.
   `Json::empty_object()` for empty JSON objects, and `{ () }` for empty blocks.
   The aggregate gate requires `moon check` to be warning-free.
 
-- The current source and published pair is core `0.3.0` / UI `0.2.0`, with
+- The current source candidate is core `0.3.1` / UI `0.2.0`; the published
+  baseline is core `0.3.0` / UI `0.2.0`, with
   renderer protocol 9 and unchanged Contract 11 / runtime ABI 13.
   Registry CLI `0.3.0` generates the current Starter pins and the
   source-map-js `1.2.2` override. Previous CLI `0.2.6` retains its original

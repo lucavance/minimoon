@@ -6,14 +6,16 @@ tags.
 
 ## [Unreleased]
 
+## [0.3.1] — candidate
+
 - Add optional `lampclaw/minimoon/query` for scope-owned cursor pagination,
   confirmed search, refresh and exact-operation retry, with a Runtime Lab demo.
 - Fix source CLI development watching for custom configurations, Tailwind inputs,
   local CSS/WXSS, directory changes, build-time edits and failure recovery.
 - Add observation-only Page/Val update, App queue and core/UI/Markdown size
   reports to the existing performance gate and CI artifacts; preserve budgets.
-- Synchronize current development guidance and reject stale planning claims.
-  These changes are not included in the published `0.3.0` / UI `0.2.0` archives.
+- Update development guidance. Core-only release; UI stays `0.2.0`.
+- Preserve existing APIs, Contract 11, ABI 13 and protocol 9.
 
 ## [0.3.0] — candidate
 
