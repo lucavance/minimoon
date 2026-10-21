@@ -522,6 +522,14 @@ test "Skyline page config uses custom navigation without dead system title" {
 }
 
 ///|
+test "Skyline content sized scroll views reserve layout space" {
+  let app = app_json(["pages/markdown/markdown"])
+  let skyline = field(field(app, "rendererOptions"), "skyline")
+  assert_true(field(skyline, "enableScrollViewAutoSize") is True)
+  assert_true(field(skyline, "disableABTest") is True)
+}
+
+///|
 test "project config preserves the verified CommonJS host boundary" {
   let app = app_json(["pages/home/home"])
   assert_false(object(app, "app config").contains("window"))

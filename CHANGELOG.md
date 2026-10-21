@@ -6,8 +6,8 @@ tags.
 
 ## [Unreleased]
 
-- Pin primary CI to MoonBit `0.10.16+b1a0e846e`, test the `0.10.15` minimum,
-  preserve interfaces during checks, and add the approved 1 KiB to Starter limits.
+- Align MoonBit CI, preserve interfaces on check, and raise Starter limits 1 KiB.
+- Fix Markdown overlap with Skyline scroll sizing.
 
 ## [0.3.1] — candidate
 

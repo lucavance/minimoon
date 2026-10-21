@@ -63,10 +63,11 @@ Both fixture fingerprints change. Validate the entire checklist plus:
 - On all six UI pages, compare Nova and explicit VegaV1 in light/dark and
   LTR/RTL, including disabled, focused, invalid, selected and open overlay
   states. Counter/form/selection state must survive preset switches.
-- In Foundation's **Markdown**, inspect mixed Chinese/English wrapping,
-  strong/emphasis/strike/code, the inline check image, nested tasks, footnotes,
-  wide-table/code scrolling, and heading/link callbacks. Math, Mermaid and raw
-  HTML remain readable source. Require no unknown span/control errors.
+- In Foundation's **Markdown**, check mixed-language wrapping, inline styles
+  and images, tasks, footnotes and link/heading callbacks. Below `Nested task`,
+  tables, Mermaid, math and raw HTML must remain readable without overlap,
+  including after horizontal scrolling and theme/preset changes. Require no
+  unknown span/control errors.
 - In Overlays, open each of the four Drawers. Swipe its exterior edge toward
   the panel; verify one dismissal, direction lock, cancellation of transverse
   or reverse motion, unchanged handle behavior, and no opener on a closed

@@ -12,7 +12,8 @@
   "lazyCodeLoading": "requiredComponents",
   "rendererOptions": {
     "skyline": {
-      "disableABTest": true
+      "disableABTest": true,
+      "enableScrollViewAutoSize": true
     }
   }
 }

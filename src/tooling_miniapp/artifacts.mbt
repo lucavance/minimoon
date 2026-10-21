@@ -111,7 +111,10 @@ fn app_json(routes : Array[String], tab_bar~ : Json = Json::null()) -> Json {
     "componentFramework": Json::string("glass-easel"),
     "lazyCodeLoading": Json::string("requiredComponents"),
     "rendererOptions": Json::object({
-      "skyline": Json::object({ "disableABTest": Json::boolean(true) }),
+      "skyline": Json::object({
+        "disableABTest": Json::boolean(true),
+        "enableScrollViewAutoSize": Json::boolean(true),
+      }),
     }),
   }
   if tab_bar is Object(_) {

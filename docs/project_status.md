@@ -1,5 +1,13 @@
 # Project status
 
+## Skyline Markdown layout follow-up (unreleased)
+
+Generated apps enable `rendererOptions.skyline.enableScrollViewAutoSize` so
+horizontal scroll views reserve their content height. This addresses the
+Foundation Markdown table/code overlap below the nested task. The regression
+test rejects a generated config without this option. Both fixture fingerprints
+change; renewed Developer Tools validation is required before merging the branch.
+
 ## MoonBit toolchain alignment (unreleased)
 
 Current source pins primary and Node 24 CI to `0.10.16+b1a0e846e`
