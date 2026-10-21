@@ -160,8 +160,12 @@ the user explicitly authorizes that action.
   under test.
 
 - The supported toolchain floor is `moon 0.1.20261012` with `moonc v0.10.15`.
-  Both CI jobs use the official installer pinned to the complete prebuilt
-  release `0.10.15+943464bfa` (`moon 0.1.20261012`), not latest; Rust is not required.
+  The primary and Node 24 CI jobs pin official prebuilt release
+  `0.10.16+b1a0e846e` (`moon 0.1.20261016`). The separate MoonBit minimum
+  compatibility job pins `0.10.15+943464bfa`. Rust is not required.
+  On 0.10.16, `moon check` writes `.mbti` files by default. Use `--no-mbti`
+  for read-only checks; 0.10.15 does not support that flag. Repository check
+  helpers detect support, and `moon info` remains the explicit interface step.
   Older MoonBit toolchains must be upgraded for core `0.2.7` / UI `0.1.5`.
   JavaScript tooling
   supports Node `>=24.20.0`; CI validates the 24.20.0 lower boundary and the
@@ -207,9 +211,14 @@ git diff --check
 git status --short --branch
 ```
 
-After `moon info`, review every `.mbti` change. When no source change should
-affect the public package surface, `git diff --name-only -- '*.mbti'` must be
-empty. In a clean verification checkout, `git diff --exit-code` must also pass.
+After `moon info`, review every `.mbti` change. Outside a reviewed toolchain
+representation migration, changes without a public API change must leave
+`git diff --name-only -- '*.mbti'` empty. MoonBit 0.10.16 emits builtin `Int32`
+where 0.10.15 emitted its `Int` alias; only that spelling change is accepted,
+with frozen API comparisons and consumers on both toolchains. Generate canonical
+interfaces with the primary compiler. The minimum job checks and compiles
+consumers without rewriting them. In a clean verification checkout,
+`git diff --exit-code` must also pass.
 
 The final repository review must confirm:
 
@@ -231,6 +240,10 @@ tracked reports return to the public candidate state. Require unchanged
 source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
+
+Future frozen candidates require all three CI jobs: `Test`, `Node 24 LTS
+compatibility`, and `MoonBit minimum compatibility`. Historical two-job results
+below belong to their original releases.
 
 The explicitly authorized core-only `0.3.1` publication completed on 2026-10-20
 from frozen commit `bd6a465cef1e8ef57ad708a9e054e214e4f0b504`. Both CI jobs, local candidate

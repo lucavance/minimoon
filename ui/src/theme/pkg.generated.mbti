@@ -58,7 +58,7 @@ pub(all) struct Tokens {
   muted_foreground : String
   border : String
   destructive : String
-  radius : Int
+  radius : Int32
 } derive(Eq, @debug.Debug)
 pub fn Tokens::equal(Self, Self) -> Bool
 pub fn Tokens::not_equal(Self, Self) -> Bool

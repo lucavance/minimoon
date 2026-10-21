@@ -32,7 +32,7 @@ jobs:
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.15+943464bfa
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.16+b1a0e846e
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Vite+ (26.11.1)
@@ -289,7 +289,7 @@ jobs:
 
       - name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.15+943464bfa
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.16+b1a0e846e
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Setup Vite+ (24.20.0)
@@ -321,4 +321,48 @@ jobs:
             echo "CI requires a clean tracked and untracked worktree" >&2
             exit 1
           fi
+          git diff --exit-code
+
+  moon-floor-compat:
+    name: MoonBit minimum compatibility
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      VP_NODE_VERSION: 26.11.1
+      VP_PACKAGE_MANAGER: bun@1.4.3
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.15+943464bfa
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Setup Vite+ (26.11.1)
+        uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
+        with:
+          version: 1.1.0
+          node-version: 26.11.1
+          run-install: false
+          cache: true
+
+      - name: Install toolchains and dependencies
+        run: |
+          vp --version
+          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.3"'
+          vp install --frozen-lockfile
+          moon update
+
+      - name: Validate minimum MoonBit compatibility
+        run: vp run --no-cache minimoon check --suite toolchain-floor
+
+      - name: Final source cleanliness
+        run: |
+          test -z "$(git status --porcelain --untracked-files=all)"
           git diff --exit-code

@@ -1,5 +1,25 @@
 # Project status
 
+## MoonBit toolchain alignment (unreleased)
+
+Current source pins primary and Node 24 CI to `0.10.16+b1a0e846e`
+(`moon 0.1.20261016`) and adds a separate `0.10.15+943464bfa` compatibility
+job. The supported minimum remains `moon 0.1.20261012` / `moonc v0.10.15`.
+Repository checks detect `--no-mbti` support and preserve interfaces. Primary
+`moon info` emits builtin `Int32` instead of its `Int` alias; frozen comparisons
+accept only that spelling change, and minimum-version consumers compile the source.
+Source-generated Starter guidance includes
+this distinction. These changes follow the immutable core `0.3.1` release below.
+The updated bundled JSON parser increases Starter runtime size by 925 bytes.
+The approved 1 KiB calibration sets Starter runtime and aggregate ceilings to
+231,024 and 259,024 bytes. See the performance baseline for the measurements.
+Local checks on 2026-10-21 passed on both compilers: core native/JS tests,
+UI tests and frozen API consumers. Primary coverage and the complete candidate
+gate passed, as did Node 24 JS tests and generator/package checks.
+All three CI jobs must pass for the validation branch commit before handoff.
+Renewed Developer Tools acceptance remains pending for both changed fixture
+fingerprints; historical host evidence does not cover them.
+
 ## Published release: core 0.3.1 / UI 0.2.0
 
 Core `lampclaw/minimoon@0.3.1` was published on **2026-10-20 (Asia/Shanghai)**
@@ -774,8 +794,9 @@ The supported toolchain floor is `moon 0.1.20261012` with `moonc v0.10.15`;
 global `vp 1.1.0` manages Bun `1.4.3` and the Node runtime. Current source
 dependencies are `moonbitlang/async 0.22.4`, `moonbitlang/x 0.5.5`, and
 `weapp-tailwindcss 5.6.1`, PostCSS `8.5.30` and Acorn `8.19.0`.
-Both CI jobs use the official installer for prebuilt release `0.10.15+943464bfa`
-(`moon 0.1.20261012`), not latest, without Rust.
+Primary and Node 24 CI pin official prebuilt `0.10.16+b1a0e846e`
+(`moon 0.1.20261016`); the minimum compatibility job pins `0.10.15+943464bfa`.
+All three jobs are required for future candidates. No Rust is required.
 Older MoonBit installations must be upgraded for these releases.
 JavaScript tooling supports Node `>=24.20.0`; CI validates the Node 24.20.0
 lower boundary and Node 26.11.1 primary environment, installing the committed

@@ -28,13 +28,13 @@ pub fn[Msg] message(Msg) -> Cmd[Msg]
 
 pub fn mount_context(String) -> RuntimeCommand
 
-pub fn[Msg] navigate_back_cmd(Int) -> Cmd[Msg]
+pub fn[Msg] navigate_back_cmd(Int32) -> Cmd[Msg]
 
-pub fn navigate_back_command(Int) -> RuntimeCommand
+pub fn navigate_back_command(Int32) -> RuntimeCommand
 
-pub fn[Msg] navigate_back_or_redirect_cmd(Int, String) -> Cmd[Msg]
+pub fn[Msg] navigate_back_or_redirect_cmd(Int32, String) -> Cmd[Msg]
 
-pub fn navigate_back_or_redirect_command(Int, String) -> RuntimeCommand
+pub fn navigate_back_or_redirect_command(Int32, String) -> RuntimeCommand
 
 pub fn[Msg] navigate_to_cmd(String) -> Cmd[Msg]
 
@@ -46,13 +46,13 @@ pub fn[Model, Msg] no_cmd_update(Model) -> (Model, Cmd[Msg])
 
 pub fn[Msg] none() -> Cmd[Msg]
 
-pub fn patch_view_tree(String, String, base_revision? : Int, revision? : Int) -> RuntimeCommand
+pub fn patch_view_tree(String, String, base_revision? : Int32, revision? : Int32) -> RuntimeCommand
 
 pub fn[Msg] redirect_to_cmd(String) -> Cmd[Msg]
 
 pub fn redirect_to_command(String) -> RuntimeCommand
 
-pub fn replace_view_tree(String, String, base_revision? : Int, revision? : Int) -> RuntimeCommand
+pub fn replace_view_tree(String, String, base_revision? : Int32, revision? : Int32) -> RuntimeCommand
 
 pub fn runtime_command_diagnostics(Array[RuntimeCommand]) -> RuntimeCommandBatchDiagnostics
 
@@ -60,7 +60,7 @@ pub fn runtime_commands_json(Array[RuntimeCommand]) -> String
 
 pub fn runtime_error(String, String, String) -> RuntimeCommand
 
-pub fn start_subscription_command(String, String, Int) -> RuntimeCommand
+pub fn start_subscription_command(String, String, Int32) -> RuntimeCommand
 
 pub fn stop_subscription_command(String, String) -> RuntimeCommand
 
@@ -74,7 +74,7 @@ pub fn[Model, Msg] with_cmd_update(Cmd[Msg], Model) -> (Model, Cmd[Msg])
 
 pub fn[Model, Msg] with_cmds(Model, Array[Cmd[Msg]]) -> (Model, Cmd[Msg])
 
-pub fn[Model, Msg] with_navigate_back(Model, Int) -> (Model, Cmd[Msg])
+pub fn[Model, Msg] with_navigate_back(Model, Int32) -> (Model, Cmd[Msg])
 
 pub fn[Model, Msg] with_navigate_to(Model, String) -> (Model, Cmd[Msg])
 
@@ -92,8 +92,8 @@ pub enum Cmd[Msg] {
   CmdNavigateTo(String)
   CmdRedirectTo(String)
   CmdSwitchTab(String)
-  CmdNavigateBack(Int)
-  CmdNavigateBackOrRedirect(Int, String)
+  CmdNavigateBack(Int32)
+  CmdNavigateBackOrRedirect(Int32, String)
 }
 
 pub struct Component[Model, Msg] {
@@ -104,7 +104,7 @@ pub struct Component[Model, Msg] {
   projection_guard : ((Model, Model) -> Bool)?
 }
 pub fn[Model, Msg] Component::render(Self[Model, Msg]) -> @ui_dsl.Node
-pub fn[Model, Msg] Component::run_host(Self[Model, Msg], component_id~ : String, queue~ : RuntimeCommandQueue, wake_async? : (Int) -> Unit) -> RunningComponent[Model, Msg]
+pub fn[Model, Msg] Component::run_host(Self[Model, Msg], component_id~ : String, queue~ : RuntimeCommandQueue, wake_async? : (Int32) -> Unit) -> RunningComponent[Model, Msg]
 pub fn[Model, Msg] Component::with_model(Self[Model, Msg], Model) -> Self[Model, Msg]
 
 pub struct ComponentContext {
@@ -175,39 +175,39 @@ pub struct RunningComponent[Model, Msg] {
   view : (Model, (Msg) -> Cmd[Msg]) -> @ui_dsl.Node
   project : (Model) -> Result[String, String]
   projection_guard : ((Model, Model) -> Bool)?
-  wake_async : (Int) -> Unit
-  next_local_effect_id : @ref.Ref[Int]
-  pending_local_effects : Map[Int, () -> Unit]
-  next_local_message_sequence : @ref.Ref[Int]
+  wake_async : (Int32) -> Unit
+  next_local_effect_id : @ref.Ref[Int32]
+  pending_local_effects : Map[Int32, () -> Unit]
+  next_local_message_sequence : @ref.Ref[Int32]
   pending_local_messages : Array[PendingLocalMessage[Msg]]
-  next_effect_request_id : @ref.Ref[Int]
+  next_effect_request_id : @ref.Ref[Int32]
   pending_effects : Map[String, PendingHostEffect[Msg]]
 }
 pub fn[Model, Msg] RunningComponent::context(Self[Model, Msg]) -> ComponentContext
 pub fn[Model, Msg] RunningComponent::dispatch(Self[Model, Msg], Msg) -> ContextWriteResult
 pub fn[Model, Msg] RunningComponent::dispose(Self[Model, Msg]) -> ContextWriteResult
-pub fn[Model, Msg] RunningComponent::drain_local_messages(Self[Model, Msg], through~ : Int) -> ContextWriteResult
+pub fn[Model, Msg] RunningComponent::drain_local_messages(Self[Model, Msg], through~ : Int32) -> ContextWriteResult
 pub fn[Model, Msg] RunningComponent::model(Self[Model, Msg]) -> Model
 pub fn[Model, Msg] RunningComponent::mount(Self[Model, Msg]) -> ContextWriteResult
-pub fn[Model, Msg] RunningComponent::pending_effect_count(Self[Model, Msg]) -> Int
-pub fn[Model, Msg] RunningComponent::pending_local_effect_count(Self[Model, Msg]) -> Int
-pub fn[Model, Msg] RunningComponent::pending_local_message_count(Self[Model, Msg]) -> Int
+pub fn[Model, Msg] RunningComponent::pending_effect_count(Self[Model, Msg]) -> Int32
+pub fn[Model, Msg] RunningComponent::pending_local_effect_count(Self[Model, Msg]) -> Int32
+pub fn[Model, Msg] RunningComponent::pending_local_message_count(Self[Model, Msg]) -> Int32
 pub fn[Model, Msg] RunningComponent::render(Self[Model, Msg]) -> @ui_dsl.Node
 pub fn[Model, Msg] RunningComponent::render_to_string(Self[Model, Msg]) -> String
 pub fn[Model, Msg] RunningComponent::resolve_host_effect(Self[Model, Msg], String, HostEffectOutcome) -> EffectResolveResult
 pub fn[Model, Msg] RunningComponent::transition(Self[Model, Msg], (Model) -> Model) -> ContextWriteResult
 
 pub enum RuntimeCommand {
-  ReplaceViewTree(String, Int, Int, String)
-  PatchViewTree(String, Int, Int, String)
+  ReplaceViewTree(String, Int32, Int32, String)
+  PatchViewTree(String, Int32, Int32, String)
   RuntimeError(String, String, String)
   InvokeCapability(String, String, String, String)
   NavigateTo(String)
   RedirectTo(String)
   SwitchTab(String)
-  NavigateBack(Int)
-  NavigateBackOrRedirect(Int, String)
-  StartSubscription(String, String, Int)
+  NavigateBack(Int32)
+  NavigateBackOrRedirect(Int32, String)
+  StartSubscription(String, String, Int32)
   StopSubscription(String, String)
   CancelEffect(String, String)
   EmitHostEvent(String, String, String)
@@ -216,15 +216,15 @@ pub enum RuntimeCommand {
 }
 pub fn RuntimeCommand::describe(Self) -> String
 pub fn RuntimeCommand::schema_json(Self) -> String
-pub fn RuntimeCommand::schema_json_size(Self) -> Int
+pub fn RuntimeCommand::schema_json_size(Self) -> Int32
 
 pub struct RuntimeCommandBatchDiagnostics {
-  command_count : Int
-  state_update_count : Int
-  effect_count : Int
-  event_count : Int
-  lifecycle_count : Int
-  payload_size : Int
+  command_count : Int32
+  state_update_count : Int32
+  effect_count : Int32
+  event_count : Int32
+  lifecycle_count : Int32
+  payload_size : Int32
   warning : String
   breakdown : String
   description : String
@@ -233,7 +233,7 @@ pub fn RuntimeCommandBatchDiagnostics::describe(Self) -> String
 
 pub struct RuntimeCommandQueue {
   commands : @ref.Ref[Array[RuntimeCommand]]
-  suspend_depth : @ref.Ref[Int]
+  suspend_depth : @ref.Ref[Int32]
   sink : (Array[RuntimeCommand]) -> Unit
 }
 pub fn RuntimeCommandQueue::batch(Self, () -> Unit) -> Unit
@@ -241,7 +241,7 @@ pub fn RuntimeCommandQueue::begin_batch(Self) -> Unit
 pub fn RuntimeCommandQueue::end_batch(Self) -> Unit
 pub fn RuntimeCommandQueue::flush(Self) -> Unit
 pub fn RuntimeCommandQueue::new((Array[RuntimeCommand]) -> Unit) -> Self
-pub fn RuntimeCommandQueue::pending_count(Self) -> Int
+pub fn RuntimeCommandQueue::pending_count(Self) -> Int32
 pub fn RuntimeCommandQueue::push(Self, RuntimeCommand) -> Unit
 
 // Type aliases

@@ -12,7 +12,7 @@ pub fn markdown(String, id~ : String, on_link? : @minimoon.Emit[String], on_anch
 
 // Types and methods
 pub(all) struct Heading {
-  level : Int
+  level : Int32
   id : String
   text : String
 }

@@ -2,7 +2,7 @@
 package "lampclaw/minimoon/internal_png"
 
 // Values
-pub fn dimensions(Bytes) -> (Int, Int)?
+pub fn dimensions(Bytes) -> (Int32, Int32)?
 
 // Errors
 

@@ -11,9 +11,9 @@ pub fn action(String, String, @minimoon.Cmd, disabled? : Bool) -> @minimoon.Node
 
 pub fn confirmation(@app.Workbench, @minimoon.Emit[@app.WorkMsg]) -> @minimoon.Node
 
-pub fn echo_panel(@app.EchoModel, Int) -> @minimoon.Node
+pub fn echo_panel(@app.EchoModel, Int32) -> @minimoon.Node
 
-pub fn editor(String, mode? : String, id? : Int) -> @minimoon.Cmd
+pub fn editor(String, mode? : String, id? : Int32) -> @minimoon.Cmd
 
 pub fn status(@app.Workbench, @minimoon.Emit[@app.WorkMsg]) -> @minimoon.Node
 

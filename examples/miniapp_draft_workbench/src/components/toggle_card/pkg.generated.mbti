@@ -10,7 +10,7 @@ pub fn card(@minimoon.PageContext, String, @minimoon.Val[Props]) -> @minimoon.Va
 
 pub fn initial_model() -> Model
 
-pub fn props(id~ : String, title~ : String, pulse_step~ : Int, tone~ : String) -> Props
+pub fn props(id~ : String, title~ : String, pulse_step~ : Int32, tone~ : String) -> Props
 
 pub fn update_model(Model, Props, Msg) -> Model
 
@@ -20,7 +20,7 @@ pub fn update_model(Model, Props, Msg) -> Model
 pub struct Model {
   enabled : Bool
   note : String
-  pulses : Int
+  pulses : Int32
 } derive(Eq)
 pub fn Model::equal(Self, Self) -> Bool
 pub fn Model::not_equal(Self, Self) -> Bool
@@ -34,7 +34,7 @@ pub(all) enum Msg {
 pub struct Props {
   id : String
   title : String
-  pulse_step : Int
+  pulse_step : Int32
   tone : String
 } derive(Eq)
 pub fn Props::equal(Self, Self) -> Bool

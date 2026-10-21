@@ -6,17 +6,17 @@ import {
 }
 
 // Values
-pub fn calendar_date(year~ : Int, month~ : Int, day~ : Int) -> CalendarDate
+pub fn calendar_date(year~ : Int32, month~ : Int32, day~ : Int32) -> CalendarDate
 
-pub fn days_in_month(Int, Int) -> Int
+pub fn days_in_month(Int32, Int32) -> Int32
 
-pub fn page_count(Int, Int) -> Int
+pub fn page_count(Int32, Int32) -> Int32
 
 pub fn place(Bounds, Bounds, Bounds, Placement, gap? : Double, align_offset? : Double) -> Bounds
 
-pub fn resize_pair(Array[Double], Int, Double, Array[Double], Array[Double]) -> Array[Double]
+pub fn resize_pair(Array[Double], Int32, Double, Array[Double], Array[Double]) -> Array[Double]
 
-pub fn slider_spec(min? : Int, max? : Int, step? : Int, min_steps_between? : Int) -> SliderSpec
+pub fn slider_spec(min? : Int32, max? : Int32, step? : Int32, min_steps_between? : Int32) -> SliderSpec
 
 // Errors
 
@@ -32,18 +32,18 @@ pub fn Bounds::not_equal(Self, Self) -> Bool
 pub fn Bounds::to_repr(Self) -> @debug.Repr
 
 pub struct CalendarDate {
-  year : Int
-  month : Int
-  day : Int
+  year : Int32
+  month : Int32
+  day : Int32
 } derive(Eq, @debug.Debug)
-pub fn CalendarDate::add_days(Self, Int) -> Self
-pub fn CalendarDate::add_months(Self, Int) -> Self
+pub fn CalendarDate::add_days(Self, Int32) -> Self
+pub fn CalendarDate::add_months(Self, Int32) -> Self
 pub fn CalendarDate::equal(Self, Self) -> Bool
 pub fn CalendarDate::iso(Self) -> String
 pub fn CalendarDate::not_equal(Self, Self) -> Bool
-pub fn CalendarDate::ordinal(Self) -> Int
+pub fn CalendarDate::ordinal(Self) -> Int32
 pub fn CalendarDate::to_repr(Self) -> @debug.Repr
-pub fn CalendarDate::weekday(Self) -> Int
+pub fn CalendarDate::weekday(Self) -> Int32
 
 pub(all) enum DateSelection {
   Single(CalendarDate?)
@@ -75,19 +75,19 @@ pub fn Placement::not_equal(Self, Self) -> Bool
 pub fn Placement::to_repr(Self) -> @debug.Repr
 
 pub struct SliderSpec {
-  min : Int
-  max : Int
-  step : Int
-  min_steps_between : Int
+  min : Int32
+  max : Int32
+  step : Int32
+  min_steps_between : Int32
 } derive(Eq, @debug.Debug)
 pub fn SliderSpec::equal(Self, Self) -> Bool
-pub fn SliderSpec::fraction(Self, Int) -> Double
-pub fn SliderSpec::nearest(Self, Array[Int], Double) -> Int
-pub fn SliderSpec::normalize(Self, Array[Int]) -> Array[Int]
+pub fn SliderSpec::fraction(Self, Int32) -> Double
+pub fn SliderSpec::nearest(Self, Array[Int32], Double) -> Int32
+pub fn SliderSpec::normalize(Self, Array[Int32]) -> Array[Int32]
 pub fn SliderSpec::not_equal(Self, Self) -> Bool
-pub fn SliderSpec::snap(Self, Double) -> Int
+pub fn SliderSpec::snap(Self, Double) -> Int32
 pub fn SliderSpec::to_repr(Self) -> @debug.Repr
-pub fn SliderSpec::update(Self, Array[Int], Int, Double) -> Array[Int]
+pub fn SliderSpec::update(Self, Array[Int32], Int32, Double) -> Array[Int32]
 
 // Type aliases
 

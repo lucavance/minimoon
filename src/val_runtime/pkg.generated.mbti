@@ -27,19 +27,19 @@ pub fn[Model : Eq] create_variable(Model) -> (Val[Model], Emit[(Model) -> Model]
 
 pub fn decode_error(String) -> DecodeError
 
-pub fn delay(Cmd, Int) -> Cmd
+pub fn delay(Cmd, Int32) -> Cmd
 
 pub fn effect(async () -> Unit noraise) -> Cmd
 
-pub fn every(String, Int, Cmd) -> Sub
+pub fn every(String, Int32, Cmd) -> Sub
 
 pub fn host_effect(String, String, (HostOutcome) -> Cmd) -> Cmd
 
 pub fn lifecycle(String, (Json) -> Result[Cmd, DecodeError]) -> Sub
 
-pub fn navigate_back(Int) -> Cmd
+pub fn navigate_back(Int32) -> Cmd
 
-pub fn navigate_back_or_redirect(Int, String) -> Cmd
+pub fn navigate_back_or_redirect(Int32, String) -> Cmd
 
 pub fn navigate_to(String) -> Cmd
 
@@ -76,8 +76,8 @@ pub fn Application::graph(Self) -> Graph
 pub fn Application::is_disposed(Self) -> Bool
 pub fn Application::new() -> Self
 pub fn Application::next(Self) -> Cmd?
-pub fn Application::page_count(Self) -> Int
-pub fn Application::pending_count(Self) -> Int
+pub fn Application::page_count(Self) -> Int32
+pub fn Application::pending_count(Self) -> Int32
 pub fn Application::publish(Self) -> Unit
 pub fn Application::set_wake(Self, () -> Unit) -> Unit
 pub fn Application::start(Self) -> Unit
@@ -92,8 +92,8 @@ pub(all) enum Cmd {
   CmdNavigateTo(String)
   CmdRedirectTo(String)
   CmdSwitchTab(String)
-  CmdNavigateBack(Int)
-  CmdNavigateBackOrRedirect(Int, String)
+  CmdNavigateBack(Int32)
+  CmdNavigateBackOrRedirect(Int32, String)
 }
 
 pub struct DecodeError {
@@ -109,8 +109,8 @@ pub struct Graph {
   generation : GraphGeneration
   root_scope : @internal_duplix.RootScope
   transaction_active : @ref.Ref[Bool]
-  revision : @ref.Ref[Int]
-  pending_changes : @ref.Ref[Int]
+  revision : @ref.Ref[Int32]
+  pending_changes : @ref.Ref[Int32]
   commits : @ref.Ref[Array[() -> Unit]]
   rollbacks : @ref.Ref[Array[() -> Unit]]
   state_registry : StateRegistry
@@ -127,7 +127,7 @@ pub struct Graph {
 pub fn Graph::attach_shared_runtime(Self, () -> Unit, () -> Unit) -> Unit
 pub fn Graph::begin(Self) -> Unit
 pub fn[A] Graph::build(Self, () -> A) -> A
-pub fn Graph::candidate_revision(Self) -> Int
+pub fn Graph::candidate_revision(Self) -> Int32
 pub fn Graph::commit(Self) -> Unit
 pub fn[Model : Eq] Graph::create_input(Self, Model) -> (Val[Model], Emit[Model])
 pub fn Graph::current_subscriptions(Self) -> Sub
@@ -173,7 +173,7 @@ pub impl[T : Eq] Eq for Status[T]
 pub(all) enum Sub {
   SubNone
   SubBatch(Array[Sub])
-  SubEvery(String, Int, Cmd)
+  SubEvery(String, Int32, Cmd)
   SubLifecycle(String, (Json) -> Result[Cmd, DecodeError])
 }
 
@@ -184,7 +184,7 @@ pub fn[K : Hash + Eq, V : Eq, C : Eq] Val::assoc(Self[@vector.Vector[(K, V)]], (
 pub fn[K : Hash + Eq, V : Eq, C : Eq] Val::assoc_by(Self[@vector.Vector[V]], (K, Self[V]) -> Self[C], by~ : (V) -> K) -> Self[@vector.Vector[C]]
 pub fn[A] Val::constant(A) -> Self[A]
 pub fn[E : @internal_duplix.Enumerate + Eq, C : Eq] Val::enumerate(Self[E], (E, Self[E]) -> Self[C]) -> Self[C]
-pub fn[E : Eq, C : Eq] Val::enumerate_bounded_by(Self[E], capacity~ : Int, build~ : (E, Self[E]) -> Self[C], by~ : (E) -> String) -> Self[C]
+pub fn[E : Eq, C : Eq] Val::enumerate_bounded_by(Self[E], capacity~ : Int32, build~ : (E, Self[E]) -> Self[C], by~ : (E) -> String) -> Self[C]
 pub fn[E : Eq, C : Eq] Val::enumerate_by(Self[E], (E, Self[E]) -> Self[C], by~ : (E) -> String) -> Self[C]
 pub fn[A : Eq, B] Val::map(Self[A], (A) -> B) -> Self[B]
 pub fn[A : Eq, B : Eq, C] Val::map2(Self[A], Self[B], (A, B) -> C) -> Self[C]

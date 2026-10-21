@@ -54,7 +54,7 @@ has a `minimoon.app.js` entry helper.
 | Artifact | Ceiling |
 | --- | ---: |
 | Draft Workbench application runtime | 464,000 bytes |
-| generated starter runtime | 230,000 bytes |
+| generated starter runtime | 231,024 bytes |
 | App-enabled shared host | 19,000 bytes |
 | no-App shared host (including starter) | 18,000 bytes |
 | shared protocol | 10,000 bytes |
@@ -71,7 +71,7 @@ all page bridges, and `minimoon.app.js` when application ownership is enabled:
 | Application | Ceiling |
 | --- | ---: |
 | committed Draft Workbench fixture | 500,000 bytes |
-| generated starter | 258,000 bytes |
+| generated starter | 259,024 bytes |
 
 Release generation minifies the host and runtime syntax. For historical
 comparison, the earlier 2026-09-08 authoring calibration used
@@ -81,6 +81,21 @@ comparison, the earlier 2026-09-08 authoring calibration used
 aggregate JavaScript bytes, including the 3,464-byte application helper.
 Against that review's ceilings, headroom was respectively 12,023, 376, 508,
 40,697, and 34,879 bytes.
+
+## MoonBit 0.10.16 alignment (unreleased)
+
+The same Starter source produced 229,671 runtime bytes with
+`0.10.15+943464bfa` and 230,596 with `0.10.16+b1a0e846e`, using Bun `1.4.3`.
+The newer bundled JSON parser adds code; the unmodified runtime exceeds the
+230,000-byte ceiling. Aggregate JavaScript increases from 257,911 to 258,836
+bytes, exceeding its 258,000-byte ceiling.
+
+The explicitly approved 2026-10-21 calibration increases only the Starter
+runtime and aggregate ceilings by 1 KiB, to 231,024 and 259,024 bytes. This
+leaves 428 and 188 bytes of margin. Registry archives, reserves, maintained
+fixtures, UI and host budgets retain their existing limits. The runtime source,
+wire format and minification pipeline are unchanged; regenerated fixture
+fingerprints still require renewed Developer Tools acceptance.
 
 ## Query fixture budget review (core 0.3.1)
 

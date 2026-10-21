@@ -8,13 +8,10 @@ or `setData` is needed.
 
 ## Project status
 
-This source documents core `lampclaw/minimoon 0.3.1` and optional
-`lampclaw/minimoon_ui 0.2.0`, both pre-1.0. Check
+Core `lampclaw/minimoon 0.3.1` and optional `lampclaw/minimoon_ui 0.2.0`
+are published, both pre-1.0. See
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
-for registry availability before following the fixed-version installation below.
-Until that version is available, use the [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
-
-Registry availability is separate from candidate validation.
+for release evidence and subsequent source changes.
 
 ## What you can build
 
@@ -28,9 +25,9 @@ Use `moon 0.1.20261012` / `moonc v0.10.15` or newer, Node `>=24.20.0`,
 global `vp 1.1.0` for current source and WeChat Developer Tools with Skyline support.
 `vp` manages Node and Bun `1.4.3`; a separate Bun installation is unnecessary.
 Git is needed for the optional source development workflow.
-Both CI jobs pin `0.10.15+943464bfa` (`moon 0.1.20261012`).
-Upgrade older MoonBit installations before using this source or these packages.
-Current source selects Node `26.11.1`; CI covers Node 24.20.0 and 26.11.1.
+Primary and Node 24 CI pin `0.10.16+b1a0e846e` (`moon 0.1.20261016`).
+A separate job tests the `0.10.15+943464bfa` minimum. Current source selects
+Node `26.11.1`; CI also covers Node `24.20.0`.
 See [environment setup](docs/guides/miniapp_quickstart.md#prerequisites) for
 version checks and the pinned CI toolchain.
 

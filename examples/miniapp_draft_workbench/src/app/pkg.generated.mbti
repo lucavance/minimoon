@@ -11,11 +11,11 @@ pub fn dirty(Buffer) -> Bool
 
 pub fn echo_base_url() -> String
 
-pub fn echo_label(EchoModel, Int) -> String
+pub fn echo_label(EchoModel, Int32) -> String
 
 pub fn echo_request(Draft, @minimoon.Emit[Result[DraftEcho, Error]]) -> @minimoon.Cmd
 
-pub fn finish_echo(EchoModel, Int, Int, Result[DraftEcho, Error]) -> EchoModel
+pub fn finish_echo(EchoModel, Int32, Int32, Result[DraftEcho, Error]) -> EchoModel
 
 pub fn initial_echo() -> EchoModel
 
@@ -37,10 +37,10 @@ pub fn validate(Draft) -> Result[Draft, String]
 
 // Types and methods
 pub(all) struct Buffer {
-  id : Int?
+  id : Int32?
   draft : Draft
   saved : Draft
-  revision : Int
+  revision : Int32
 } derive(Eq)
 pub fn Buffer::equal(Self, Self) -> Bool
 pub fn Buffer::not_equal(Self, Self) -> Bool
@@ -48,8 +48,8 @@ pub fn Buffer::not_equal(Self, Self) -> Bool
 pub struct Deps {
   work : @minimoon.Shared[Workbench]
   send : @minimoon.Emit[WorkMsg]
-  count : @minimoon.Shared[Int]
-  change_count : @minimoon.Emit[Int]
+  count : @minimoon.Shared[Int32]
+  change_count : @minimoon.Emit[Int32]
   fetch : @minimoon.Shared[FetchModel]
   send_fetch : @minimoon.Emit[FetchMsg]
 }
@@ -69,8 +69,8 @@ pub(all) struct DraftEcho {
 pub fn DraftEcho::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 
 pub(all) struct EchoModel {
-  token : Int
-  revision : Int
+  token : Int32
+  revision : Int32
   submitted : Draft
   status : EchoStatus
 } derive(Eq)
@@ -88,7 +88,7 @@ pub fn EchoStatus::equal(Self, Self) -> Bool
 pub fn EchoStatus::not_equal(Self, Self) -> Bool
 
 pub struct FetchModel {
-  epoch : Int
+  epoch : Int32
   label : String
 } derive(Eq)
 pub fn FetchModel::equal(Self, Self) -> Bool
@@ -97,13 +97,13 @@ pub fn FetchModel::not_equal(Self, Self) -> Bool
 pub(all) enum FetchMsg {
   Load
   Clear
-  Finished(Int, Result[@minimoon.RequestResult, @minimoon.HostError])
+  Finished(Int32, Result[@minimoon.RequestResult, @minimoon.HostError])
 }
 
 pub(all) enum Intent {
   New
-  Open(Int)
-  Delete(Int)
+  Open(Int32)
+  Delete(Int32)
   ClearAll
   Initialize
 } derive(Eq)
@@ -111,17 +111,17 @@ pub fn Intent::equal(Self, Self) -> Bool
 pub fn Intent::not_equal(Self, Self) -> Bool
 
 pub(all) struct PendingWrite {
-  token : Int
+  token : Int32
   store : Store
   intent : Intent?
   buffer : Buffer
-  saved_id : Int?
+  saved_id : Int32?
 } derive(Eq)
 pub fn PendingWrite::equal(Self, Self) -> Bool
 pub fn PendingWrite::not_equal(Self, Self) -> Bool
 
 pub(all) struct Record {
-  id : Int
+  id : Int32
   draft : Draft
 } derive(Eq, ToJson, @json.FromJson)
 pub fn Record::equal(Self, Self) -> Bool
@@ -139,8 +139,8 @@ pub fn StorageState::equal(Self, Self) -> Bool
 pub fn StorageState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Store {
-  version : Int
-  next_id : Int
+  version : Int32
+  next_id : Int32
   records : Array[Record]
 } derive(Eq, ToJson, @json.FromJson)
 pub fn Store::equal(Self, Self) -> Bool
@@ -150,23 +150,23 @@ pub fn Store::to_json(Self) -> Json
 
 pub(all) enum WorkMsg {
   Reload
-  Restored(Int, Result[@minimoon.StorageResult, @minimoon.HostError])
+  Restored(Int32, Result[@minimoon.StorageResult, @minimoon.HostError])
   Title(String)
   Note(String)
   Choose(Intent)
   Confirm
   Cancel
   Save
-  Written(Int, Result[Unit, @minimoon.HostError])
+  Written(Int32, Result[Unit, @minimoon.HostError])
   Send
-  EchoFinished(Int, Result[DraftEcho, Error])
+  EchoFinished(Int32, Result[DraftEcho, Error])
 }
 
 pub(all) struct Workbench {
   store : Store
   buffer : Buffer
   storage : StorageState
-  epoch : Int
+  epoch : Int32
   pending : PendingWrite?
   confirm : Intent?
   opening : Intent?

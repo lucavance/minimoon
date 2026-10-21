@@ -24,7 +24,7 @@ pub fn[A] transaction((() -> Unit, () -> Unit) -> Unit, () -> A) -> A
 
 // Types and methods
 type DirtyFlag
-pub fn DirtyFlag::compare(Self, Self) -> Int
+pub fn DirtyFlag::compare(Self, Self) -> Int32
 pub fn DirtyFlag::equal(Self, Self) -> Bool
 pub fn DirtyFlag::not_equal(Self, Self) -> Bool
 pub fn DirtyFlag::op_ge(Self, Self) -> Bool
@@ -38,9 +38,9 @@ type Node[T]
 pub fn[K : Hash + Eq, V : Eq, C : Eq] Node::assoc(Self[@vector.Vector[(K, V)]], (K, Self[V]) -> Self[C]) -> Self[@vector.Vector[C]]
 pub fn[K : Hash + Eq, V : Eq, C : Eq] Node::assoc_by(Self[@vector.Vector[V]], (K, Self[V]) -> Self[C], by~ : (V) -> K) -> Self[@vector.Vector[C]]
 pub fn[A : Eq, B : Eq] Node::bind(Self[A], (A) -> Self[B]) -> Self[B]
-pub fn[T] Node::compare(Self[T], Self[T]) -> Int
+pub fn[T] Node::compare(Self[T], Self[T]) -> Int32
 pub fn[E : Enumerate + Eq, A : Eq] Node::enumerate(Self[E], (E, Self[E]) -> Self[A]) -> Self[A]
-pub fn[E : Eq, A : Eq] Node::enumerate_bounded_by(Self[E], capacity~ : Int, (E, Self[E]) -> Self[A], by~ : (E) -> String) -> Self[A]
+pub fn[E : Eq, A : Eq] Node::enumerate_bounded_by(Self[E], capacity~ : Int32, (E, Self[E]) -> Self[A], by~ : (E) -> String) -> Self[A]
 pub fn[E : Eq, A : Eq] Node::enumerate_by(Self[E], (E, Self[E]) -> Self[A], by~ : (E) -> String) -> Self[A]
 pub fn[T] Node::equal(Self[T], Self[T]) -> Bool
 pub fn[A : Eq, B] Node::map(Self[A], (A) -> B) -> Self[B]

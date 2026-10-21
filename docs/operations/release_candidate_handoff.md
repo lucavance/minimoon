@@ -150,7 +150,8 @@ core is available and consumers pass. A successful archive gate does not itself
 publish either module. Previously published archives remain immutable.
 
 After review, commit and push the complete candidate to `main`, then require
-both the primary `Test` job and `Node 24 LTS compatibility` job to pass for that
+the `Test`, `Node 24 LTS compatibility`, and `MoonBit minimum compatibility`
+jobs to pass for that
 exact commit. Freeze the source SHA, toolchain versions, package contents and
 both artifact fingerprints. A newer source commit requires its own CI result.
 Notify the user with the successful CI link. For an explicitly authorized

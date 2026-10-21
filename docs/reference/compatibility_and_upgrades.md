@@ -68,12 +68,15 @@ consumer gates for another pair.
 ## Toolchain compatibility
 
 Core `0.3.1` and UI `0.2.0` require at least `moon 0.1.20261012` with
-`moonc v0.10.15`. Both CI jobs use the official installer pinned to the complete
-prebuilt release `0.10.15+943464bfa` (`moon 0.1.20261012`), not latest;
-Rust is not required. This retains the minimum introduced by core `0.2.7` /
-UI `0.1.5`: older compilers
-are not supported for the new source syntax. The direct dependencies are
+`moonc v0.10.15`. Primary and Node 24 CI pin official prebuilt
+`0.10.16+b1a0e846e` (`moon 0.1.20261016`); a separate job tests the
+`0.10.15+943464bfa` minimum. No Rust is required. Direct dependencies are
 `moonbitlang/async@0.22.4` and `moonbitlang/x@0.5.5`.
+
+MoonBit 0.10.16 writes `.mbti` files during `moon check`. Use `--no-mbti` for
+read-only checks on that version; 0.10.15 does not accept the flag. Repository
+checks detect support; `moon info` emits canonical interfaces with builtin
+`Int32` spelling. Frozen API comparisons accept only this alias change.
 
 Repository and generated-starter JavaScript tooling support Node `>=24.20.0`,
 with current CI coverage at the 24.20.0 lower boundary and in the 26.11.1 primary
@@ -83,10 +86,8 @@ The Node minimum has not changed.
 Update CI, the package consumer gate, starter guidance and compatibility notes
 together when changing these constraints.
 
-Published registry CLI `0.2.6` retains its released pins (table below). Registry
-CLI `0.3.0` provides the current Starter pins. The Unreleased watcher fixes and
-repository performance observations require the current source checkout; they
-are not part of any published archive.
+Registry CLI `0.3.1` includes the watcher fixes and current Starter pins.
+Earlier archives retain their released contents (table below).
 
 Blackbox tests and cross-package references use declared package aliases:
 `@minimoon.page(...)`, `@minimoon.ScrollDetail`, or `@ui` in UI tests.

@@ -52,7 +52,7 @@ pub enum Selector {
 type TestApp[Deps]
 pub fn[Deps] TestApp::dispose(Self[Deps]) -> Unit
 pub fn[Deps] TestApp::mount(Self[Deps], (Deps) -> @minimoon.Page, input? : Map[String, String], layout? : @minimoon.PageLayout) -> TestRuntime raise
-pub fn[Deps] TestApp::quiesce(Self[Deps], max_steps? : Int) -> Unit raise
+pub fn[Deps] TestApp::quiesce(Self[Deps], max_steps? : Int32) -> Unit raise
 
 type TestNode
 pub fn TestNode::children(Self) -> Array[Self]
@@ -66,11 +66,11 @@ pub fn TestNode::text_content(Self) -> String
 
 type TestRuntime
 pub fn TestRuntime::blur_input(Self, Selector, String) -> String
-pub fn TestRuntime::blur_textarea(Self, Selector, String, Int) -> String
+pub fn TestRuntime::blur_textarea(Self, Selector, String, Int32) -> String
 pub fn TestRuntime::change(Self, Selector, Json) -> String
 pub fn TestRuntime::confirm(Self, Selector, String) -> String
 pub fn TestRuntime::dispose(Self) -> String
-pub fn TestRuntime::focus(Self, Selector, String, Int) -> String
+pub fn TestRuntime::focus(Self, Selector, String, Int32) -> String
 pub fn TestRuntime::get(Self, Selector) -> TestNode
 pub fn TestRuntime::input(Self, Selector, String) -> String
 pub fn TestRuntime::lifecycle(Self, String, payload? : Json) -> String
@@ -78,7 +78,7 @@ pub fn TestRuntime::lower(Self, Selector) -> String
 pub fn TestRuntime::page_id(Self) -> String
 pub fn TestRuntime::query(Self, Selector) -> TestNode?
 pub fn TestRuntime::query_all(Self, Selector) -> Array[TestNode]
-pub fn TestRuntime::quiesce(Self, max_steps? : Int) -> Unit raise
+pub fn TestRuntime::quiesce(Self, max_steps? : Int32) -> Unit raise
 pub fn TestRuntime::scroll(Self, Selector, scroll_left~ : Double, scroll_top~ : Double, scroll_height~ : Double, scroll_width~ : Double, delta_x~ : Double, delta_y~ : Double) -> String
 pub fn TestRuntime::snapshot(Self) -> String
 pub fn TestRuntime::tap(Self, Selector) -> String
@@ -90,10 +90,10 @@ pub fn TestRuntime::within(Self, Selector) -> TestScope
 
 type TestScope
 pub fn TestScope::blur_input(Self, Selector, String) -> String
-pub fn TestScope::blur_textarea(Self, Selector, String, Int) -> String
+pub fn TestScope::blur_textarea(Self, Selector, String, Int32) -> String
 pub fn TestScope::change(Self, Selector, Json) -> String
 pub fn TestScope::confirm(Self, Selector, String) -> String
-pub fn TestScope::focus(Self, Selector, String, Int) -> String
+pub fn TestScope::focus(Self, Selector, String, Int32) -> String
 pub fn TestScope::get(Self, Selector) -> TestNode
 pub fn TestScope::input(Self, Selector, String) -> String
 pub fn TestScope::lower(Self, Selector) -> String

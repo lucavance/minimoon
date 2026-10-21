@@ -19,9 +19,9 @@ pub fn event_detail_value(Json) -> String
 
 pub fn[Msg] events() -> Events[Msg]
 
-pub fn[Msg] events_for_owner(Int) -> Events[Msg]
+pub fn[Msg] events_for_owner(Int32) -> Events[Msg]
 
-pub fn[Msg] every(key~ : String, interval_ms~ : Int, msg~ : Msg) -> HostSubscription[Msg]
+pub fn[Msg] every(key~ : String, interval_ms~ : Int32, msg~ : Msg) -> HostSubscription[Msg]
 
 pub fn[Msg] input_value_event(String, (String) -> Msg) -> PageEvent[Msg]
 
@@ -49,7 +49,7 @@ pub fn[Model, Msg] page_program(id~ : String, route~ : String, title~ : String, 
 
 pub fn render_page_wxml(String, @ui_dsl.Node) -> String
 
-pub fn runtime_api_version() -> Int
+pub fn runtime_api_version() -> Int32
 
 pub fn[Model, Msg] simple_page_program(id~ : String, route~ : String, title~ : String, model~ : Model, update~ : (Model, Msg) -> Model, view~ : (Events[Msg], Model) -> @ui_dsl.Node, projection_guard? : (Model, Model) -> Bool, capabilities? : Array[MiniappCapability], lifecycle? : Array[PageLifecycleEvent[Msg]], inputs? : Array[PageInput[Msg]], init? : Msg, subscriptions? : (Model) -> Subscriptions[Msg]) -> PageProgram[Model, Msg]
 
@@ -63,7 +63,7 @@ pub fn[Msg] tap_event(String, Msg) -> PageEvent[Msg]
 
 // Types and methods
 pub struct Events[Msg] {
-  owner_id : Int
+  owner_id : Int32
   entries : @ref.Ref[Array[PageEvent[Msg]]]
   entry_keys : @ref.Ref[@set.Set[String]]
   entry_index : @ref.Ref[Map[String, PageEvent[Msg]]]
@@ -76,8 +76,8 @@ pub struct Events[Msg] {
   candidate_rollbacks : @ref.Ref[Array[() -> Unit]]
 }
 pub fn[Msg] Events::change_bool(Self[Msg], String, (Bool) -> Msg) -> PageEvent[Msg]
-pub fn[Msg] Events::change_current(Self[Msg], String, (Int) -> Msg) -> PageEvent[Msg]
-pub fn[Msg] Events::change_index(Self[Msg], String, (Int) -> Msg) -> PageEvent[Msg]
+pub fn[Msg] Events::change_current(Self[Msg], String, (Int32) -> Msg) -> PageEvent[Msg]
+pub fn[Msg] Events::change_index(Self[Msg], String, (Int32) -> Msg) -> PageEvent[Msg]
 pub fn[Msg] Events::change_string(Self[Msg], String, (String) -> Msg) -> PageEvent[Msg]
 pub fn[Msg] Events::change_strings(Self[Msg], String, (Array[String]) -> Msg) -> PageEvent[Msg]
 pub fn[Msg] Events::custom(Self[Msg], String, PageEventKind, (Json) -> Result[Msg, MiniappDecodeError]) -> PageEvent[Msg]
@@ -88,14 +88,14 @@ pub fn[Msg] Events::input_value(Self[Msg], String, (String) -> Msg) -> PageEvent
 pub fn[Msg] Events::on_candidate_commit(Self[Msg], () -> Unit) -> Unit
 pub fn[Msg] Events::on_candidate_rollback(Self[Msg], () -> Unit) -> Unit
 pub fn[Msg] Events::on_scope_cleanup(Self[Msg], String, () -> Unit) -> Unit
-pub fn[Msg] Events::owner_id(Self[Msg]) -> Int
+pub fn[Msg] Events::owner_id(Self[Msg]) -> Int32
 pub fn[Msg] Events::reject(Self[Msg], String) -> Unit
 pub fn[Msg] Events::scroll(Self[Msg], String, (MiniappScrollDetail) -> Msg) -> PageEvent[Msg]
 pub fn[Msg] Events::tap(Self[Msg], String, Msg) -> PageEvent[Msg]
 
 pub struct HostSubscription[Msg] {
   key : String
-  interval_ms : Int
+  interval_ms : Int32
   msg : Msg
 }
 
@@ -186,7 +186,7 @@ pub struct PageProgram[Model, Msg] {
   route : String
   title : String
   initial : Model
-  component_owner_id : Int
+  component_owner_id : Int32
   component : @runtime_core.Component[Model, Msg]
   view : (Events[Msg], Model) -> @ui_dsl.Node
   contract_tree : Json

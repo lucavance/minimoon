@@ -19,7 +19,7 @@ fn ci_handoff_check_source() -> String {
     #|const packagers = scripts("Prepare WeChat Developer Tools handoffs")
     #|const cleanChecks = scripts("Final source cleanliness")
     #|assert.equal(packagers.length, 1, "both fixture handoffs need one reviewed packager")
-    #|assert.equal(cleanChecks.length, 2, "both CI jobs need final cleanliness checks")
+    #|assert.equal(cleanChecks.length, 3, "all three CI jobs need final cleanliness checks")
     #|assert.match(workflow, /name: minimoon-devtools-\$\{\{ github.sha \}\}\n\s+path: _build\/devtools-handoff\/core\//)
     #|assert.match(workflow, /name: minimoon-ui-devtools-\$\{\{ github.sha \}\}\n\s+path: _build\/devtools-handoff\/ui\//)
     #|const temporary = fs.mkdtempSync(path.join(os.tmpdir(), "minimoon-ci-handoff-"))

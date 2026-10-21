@@ -7,13 +7,13 @@ import {
 }
 
 // Values
-pub fn delete(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int) -> Request
+pub fn delete(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int32) -> Request
 
-pub fn get(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int) -> Request
+pub fn get(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int32) -> Request
 
-pub fn post(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int) -> RequestWithBody
+pub fn post(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int32) -> RequestWithBody
 
-pub fn put(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int) -> RequestWithBody
+pub fn put(String, query? : Array[@minimoon.Query], headers? : Map[String, String], timeout_ms? : Int32) -> RequestWithBody
 
 // Errors
 pub(all) suberror HttpError {

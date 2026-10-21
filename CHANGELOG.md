@@ -6,6 +6,9 @@ tags.
 
 ## [Unreleased]
 
+- Pin primary CI to MoonBit `0.10.16+b1a0e846e`, test the `0.10.15` minimum,
+  preserve interfaces during checks, and add the approved 1 KiB to Starter limits.
+
 ## [0.3.1] — candidate
 
 - Add optional `lampclaw/minimoon/query` for scope-owned cursor pagination,

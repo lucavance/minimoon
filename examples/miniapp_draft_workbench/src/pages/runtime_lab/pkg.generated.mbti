@@ -23,14 +23,14 @@ pub fn Item::not_equal(Self, Self) -> Bool
 pub struct Model {
   cards : Array[CardEntry]
   picker_options : Array[String]
-  picker : Int
+  picker : Int32
   slides : Array[Slide]
-  slide : Int
+  slide : Int32
   native_reconciled : Bool
   scroll_top : Double
   scroll_target : String
-  ticks : Int
-  count : Int
+  ticks : Int32
+  count : Int32
   expanded : Bool
   name : String
   focus_status : String
@@ -50,8 +50,8 @@ pub enum Msg {
   ReorderCards
   RemoveSecondary
   RestoreSecondary
-  Picked(Int)
-  Slid(Int)
+  Picked(Int32)
+  Slid(Int32)
   Scrolled(@minimoon.ScrollDetail)
   Jump(String)
   Tick

@@ -2,6 +2,14 @@
 
 ## Near-term priorities
 
+### MoonBit toolchain alignment (unreleased)
+
+Pin primary and Node 24 CI to `0.10.16+b1a0e846e` and validate the retained
+`0.10.15+943464bfa` minimum independently. Keep source checks read-only with
+capability-detected `--no-mbti`; review interfaces through `moon info`.
+Validate packaged consumers, Starter generation and both fixture fingerprints
+before a new release. Changed fingerprints require renewed host acceptance.
+
 ### List queries (core 0.3.1 released)
 
 The optional `lampclaw/minimoon/query` package adds page/component-owned cursor
@@ -330,7 +338,7 @@ registry consumers before publishing its matching UI archive. The previous core
 archives are immutable. Core-only `0.3.1` was published on 2026-10-20 after all
 release gates; UI remains the existing `0.2.0`. See project status for the frozen
 source and CI.
-Future publications need separate authorization, both CI jobs for the
+Future publications need separate authorization, all three CI jobs for the
 final frozen commit and fingerprint-matched host validation. Preserve
 actual-evidence gates and candidate report restoration. Record dates, source
 SHA and registry checks only after they happen. Current availability belongs

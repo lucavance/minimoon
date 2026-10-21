@@ -37,7 +37,7 @@ pub fn[Model : Eq] create_variable(Model) -> (Val[Model], Emit[(Model) -> Model]
 
 pub fn decode_error(String) -> DecodeError
 
-pub fn delay(Cmd, Int) -> Cmd
+pub fn delay(Cmd, Int32) -> Cmd
 
 pub fn[C : IsChildren] div(id? : String, class? : String, style? : String, data_section? : String, semantics? : Semantics, C) -> Node
 
@@ -63,7 +63,7 @@ pub fn inline_image(src~ : String, alt? : String, mode? : ImageMode, id? : Strin
 
 pub fn inline_text(String, id? : String, class? : String, style? : String, semantics? : Semantics, on_tap? : Cmd, event_key? : String) -> Inline
 
-pub fn input(value~ : String, on_input~ : Emit[String], input_type? : InputType, maxlength? : Int, password? : Bool, selection_start? : Int, selection_end? : Int, name? : String, event_key? : String, disabled? : Bool, focus? : Bool, on_confirm? : Emit[String], confirm_key? : String, on_focus? : Emit[FocusDetail], focus_key? : String, on_blur? : Emit[InputBlurDetail], blur_key? : String, id? : String, class? : String, style? : String, data_section? : String, placeholder? : String, semantics? : Semantics) -> Node
+pub fn input(value~ : String, on_input~ : Emit[String], input_type? : InputType, maxlength? : Int32, password? : Bool, selection_start? : Int32, selection_end? : Int32, name? : String, event_key? : String, disabled? : Bool, focus? : Bool, on_confirm? : Emit[String], confirm_key? : String, on_focus? : Emit[FocusDetail], focus_key? : String, on_blur? : Emit[InputBlurDetail], blur_key? : String, id? : String, class? : String, style? : String, data_section? : String, placeholder? : String, semantics? : Semantics) -> Node
 
 pub fn keyed(String, Node) -> KeyedNode
 
@@ -79,9 +79,9 @@ pub fn login(Emit[Result[LoginResult, HostError]]) -> Cmd
 
 pub fn measure_nodes(Array[String], Emit[Result[Array[NodeRect?], HostError]]) -> Cmd
 
-pub fn navigate_back(delta? : Int) -> Cmd
+pub fn navigate_back(delta? : Int32) -> Cmd
 
-pub fn navigate_back_or(fallback~ : Route, delta? : Int) -> Cmd
+pub fn navigate_back_or(fallback~ : Route, delta? : Int32) -> Cmd
 
 pub fn navigate_to(Route) -> Cmd
 
@@ -105,11 +105,11 @@ pub fn[C : IsChildren] picker_date(name? : String, value~ : String, on_change~ :
 
 pub fn[C : IsChildren] picker_region(name? : String, value~ : Array[String], on_change~ : Emit[Array[String]], disabled? : Bool, event_key? : String, id? : String, class? : String, style? : String, C) -> Node
 
-pub fn[C : IsChildren] picker_selector(name? : String, options~ : Array[String], selected~ : Int, on_change~ : Emit[Int], event_key? : String, disabled? : Bool, id? : String, class? : String, style? : String, C) -> Node
+pub fn[C : IsChildren] picker_selector(name? : String, options~ : Array[String], selected~ : Int32, on_change~ : Emit[Int32], event_key? : String, disabled? : Bool, id? : String, class? : String, style? : String, C) -> Node
 
 pub fn[C : IsChildren] picker_time(name? : String, value~ : String, on_change~ : Emit[String], disabled? : Bool, event_key? : String, id? : String, class? : String, style? : String, C) -> Node
 
-pub fn progress(percent~ : Int, stroke_width? : Int, show_info? : Bool, active? : Bool, active_color? : String, background_color? : String, id? : String, class? : String, style? : String, semantics? : Semantics) -> Node
+pub fn progress(percent~ : Int32, stroke_width? : Int32, show_info? : Bool, active? : Bool, active_color? : String, background_color? : String, id? : String, class? : String, style? : String, semantics? : Semantics) -> Node
 
 pub fn query(String, String) -> Query
 
@@ -119,27 +119,27 @@ pub fn[C : IsChildren] radio_group(name? : String, on_change~ : Emit[String], ev
 
 pub fn redirect_to(Route) -> Cmd
 
-pub fn request(String, Emit[Result[RequestResult, HostError]], http_method? : HttpMethod, query? : Array[Query], headers? : Map[String, String], body? : RequestBody, timeout_ms? : Int) -> Cmd
+pub fn request(String, Emit[Result[RequestResult, HostError]], http_method? : HttpMethod, query? : Array[Query], headers? : Map[String, String], body? : RequestBody, timeout_ms? : Int32) -> Cmd
 
 pub fn request_payment(PaymentParams, Emit[Result[Unit, HostError]]) -> Cmd
 
 pub fn route(String) -> Route
 
-pub fn runtime_api_version() -> Int
+pub fn runtime_api_version() -> Int32
 
-pub fn[C : IsChildren] scroll_view(scroll_x? : Bool, scroll_y? : Bool, scroll_top? : Int, scroll_left? : Int, scroll_top_px? : Double, scroll_left_px? : Double, scroll_into_view? : String, upper_threshold? : Int, lower_threshold? : Int, on_scroll? : Emit[ScrollDetail], scroll_key? : String, on_upper? : Cmd, upper_key? : String, on_lower? : Cmd, lower_key? : String, id? : String, class? : String, style? : String, data_section? : String, C) -> Node
+pub fn[C : IsChildren] scroll_view(scroll_x? : Bool, scroll_y? : Bool, scroll_top? : Int32, scroll_left? : Int32, scroll_top_px? : Double, scroll_left_px? : Double, scroll_into_view? : String, upper_threshold? : Int32, lower_threshold? : Int32, on_scroll? : Emit[ScrollDetail], scroll_key? : String, on_upper? : Cmd, upper_key? : String, on_lower? : Cmd, lower_key? : String, id? : String, class? : String, style? : String, data_section? : String, C) -> Node
 
-pub fn semantics(role? : SemanticRole, label? : String, expanded? : Bool, selected? : Bool, disabled? : Bool, hidden? : Bool, checked? : Bool, modal? : Bool, controls? : String, labelled_by? : String, described_by? : String, orientation? : String, has_popup? : String, required? : Bool, invalid? : Bool, busy? : Bool, live? : String, value_min? : Int, value_max? : Int, value_now? : Int, value_text? : String) -> Semantics
+pub fn semantics(role? : SemanticRole, label? : String, expanded? : Bool, selected? : Bool, disabled? : Bool, hidden? : Bool, checked? : Bool, modal? : Bool, controls? : String, labelled_by? : String, described_by? : String, orientation? : String, has_popup? : String, required? : Bool, invalid? : Bool, busy? : Bool, live? : String, value_min? : Int32, value_max? : Int32, value_now? : Int32, value_text? : String) -> Semantics
 
 pub fn set_storage(String, Json, Emit[Result[Unit, HostError]]) -> Cmd
 
 pub fn show_toast(String, Emit[Result[Unit, HostError]]) -> Cmd
 
-pub fn slider(value~ : Int, on_change~ : Emit[Int], on_changing? : Emit[Int], min? : Int, max? : Int, step? : Int, disabled? : Bool, show_value? : Bool, active_color? : String, background_color? : String, block_color? : String, block_size? : Int, name? : String, event_key? : String, changing_key? : String, id? : String, class? : String, style? : String, semantics? : Semantics) -> Node
+pub fn slider(value~ : Int32, on_change~ : Emit[Int32], on_changing? : Emit[Int32], min? : Int32, max? : Int32, step? : Int32, disabled? : Bool, show_value? : Bool, active_color? : String, background_color? : String, block_color? : String, block_size? : Int32, name? : String, event_key? : String, changing_key? : String, id? : String, class? : String, style? : String, semantics? : Semantics) -> Node
 
 pub fn[C : IsChildren] span(id? : String, class? : String, style? : String, data_section? : String, semantics? : Semantics, C) -> Node
 
-pub fn[C : IsChildren] swiper(current? : Int, vertical? : Bool, autoplay? : Bool, circular? : Bool, interval? : Int, duration? : Int, on_change? : Emit[Int], event_key? : String, id? : String, class? : String, style? : String, C) -> Node
+pub fn[C : IsChildren] swiper(current? : Int32, vertical? : Bool, autoplay? : Bool, circular? : Bool, interval? : Int32, duration? : Int32, on_change? : Emit[Int32], event_key? : String, id? : String, class? : String, style? : String, C) -> Node
 
 pub fn[C : IsChildren] swiper_item(item_id? : String, id? : String, class? : String, style? : String, C) -> Node
 
@@ -151,7 +151,7 @@ pub fn[C : IsChildren] tap_view(on_tap~ : Cmd, event_key? : String, id? : String
 
 pub fn text(String) -> Node
 
-pub fn textarea(name? : String, value~ : String, on_input~ : Emit[String], input_key? : String, placeholder? : String, maxlength? : Int, disabled? : Bool, focus? : Bool, on_confirm? : Emit[String], confirm_key? : String, on_focus? : Emit[FocusDetail], focus_key? : String, on_blur? : Emit[TextareaBlurDetail], blur_key? : String, id? : String, class? : String, style? : String, data_section? : String, semantics? : Semantics) -> Node
+pub fn textarea(name? : String, value~ : String, on_input~ : Emit[String], input_key? : String, placeholder? : String, maxlength? : Int32, disabled? : Bool, focus? : Bool, on_confirm? : Emit[String], confirm_key? : String, on_focus? : Emit[FocusDetail], focus_key? : String, on_blur? : Emit[TextareaBlurDetail], blur_key? : String, id? : String, class? : String, style? : String, data_section? : String, semantics? : Semantics) -> Node
 
 pub fn[C : IsChildren] touch_view(on_tap? : Cmd, on_long_press? : Emit[TouchDetail], on_touch_start? : Emit[TouchDetail], on_touch_move? : Emit[TouchDetail], on_touch_end? : Emit[TouchDetail], on_touch_cancel? : Emit[TouchDetail], catch_move? : Bool, event_key? : String, id? : String, class? : String, style? : String, data_section? : String, semantics? : Semantics, C) -> Node
 
@@ -171,7 +171,7 @@ type AppContext
 pub fn[Model : Eq, Msg] AppContext::create_pure_state(Self, Model, update~ : (Model, Msg) -> Model) -> (Shared[Model], Emit[Msg])
 pub fn[Model : Eq, Msg] AppContext::create_state(Self, Model, update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd), subscriptions? : (Model, Emit[Msg]) -> Sub) -> (Shared[Model], Emit[Msg])
 pub fn[Model : Eq, Msg] AppContext::create_state_with_init(Self, init~ : (Emit[Msg]) -> (Model, Cmd), update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd), subscriptions? : (Model, Emit[Msg]) -> Sub) -> (Shared[Model], Emit[Msg])
-pub fn AppContext::every(Self, key~ : String, interval_ms~ : Int, command~ : Cmd) -> Sub
+pub fn AppContext::every(Self, key~ : String, interval_ms~ : Int32, command~ : Cmd) -> Sub
 pub fn AppContext::lifecycle(Self, AppLifecycleHook, (Json) -> Result[Cmd, DecodeError]) -> Sub
 pub fn AppContext::on_hide(Self, Cmd) -> Sub
 pub fn AppContext::on_launch(Self, Cmd) -> Sub
@@ -233,7 +233,7 @@ pub fn[A, B] Emit::map(Self[A], (B) -> A) -> Self[B]
 
 pub struct FocusDetail {
   value : String
-  height : Int
+  height : Int32
 }
 
 pub(all) enum FormButtonType {
@@ -338,10 +338,10 @@ pub struct LoginResult {
 
 pub struct MediaFile {
   temp_file_path : String
-  size : Int?
+  size : Int32?
   file_type : String?
-  width : Int?
-  height : Int?
+  width : Int32?
+  height : Int32?
   duration : Double?
   thumb_temp_file_path : String?
 }
@@ -385,7 +385,7 @@ pub fn Page::wxml(Self) -> String
 
 type PageContext
 pub fn[T : Eq] PageContext::bind(Self, Shared[T]) -> Val[T]
-pub fn PageContext::every(Self, key~ : String, interval_ms~ : Int, command~ : Cmd) -> Sub
+pub fn PageContext::every(Self, key~ : String, interval_ms~ : Int32, command~ : Cmd) -> Sub
 pub fn PageContext::layout(Self) -> Val[PageLayout]
 pub fn PageContext::lifecycle(Self, PageLifecycleHook, (Json) -> Result[Cmd, DecodeError]) -> Sub
 pub fn PageContext::on_hide(Self, Cmd) -> Sub
@@ -454,7 +454,7 @@ pub(all) enum RequestBody {
 }
 
 pub struct RequestResult {
-  status_code : Int
+  status_code : Int32
   data : Json
   headers : Map[String, String]
   cookies : Array[String]
@@ -542,7 +542,7 @@ pub fn Sub::none() -> Self
 
 pub struct TextareaBlurDetail {
   value : String
-  cursor : Int
+  cursor : Int32
 }
 
 pub struct TouchDetail {
@@ -555,7 +555,7 @@ pub fn TouchDetail::not_equal(Self, Self) -> Bool
 pub fn TouchDetail::to_repr(Self) -> @debug.Repr
 
 pub struct TouchPoint {
-  identifier : Int
+  identifier : Int32
   client_x : Double
   client_y : Double
   page_x : Double
@@ -570,7 +570,7 @@ pub fn[K : Hash + Eq, V : Eq, C : Eq] Val::assoc(Self[@vector.Vector[(K, V)]], (
 pub fn[K : Hash + Eq, V : Eq, C : Eq] Val::assoc_by(Self[@vector.Vector[V]], (K, Self[V]) -> Self[C], by~ : (V) -> K) -> Self[@vector.Vector[C]]
 pub fn[A] Val::constant(A) -> Self[A]
 pub fn[E : Enumerate + Eq, C : Eq] Val::enumerate(Self[E], (E, Self[E]) -> Self[C]) -> Self[C]
-pub fn[E : Eq, C : Eq] Val::enumerate_bounded_by(Self[E], capacity~ : Int, build~ : (E, Self[E]) -> Self[C], by~ : (E) -> String) -> Self[C]
+pub fn[E : Eq, C : Eq] Val::enumerate_bounded_by(Self[E], capacity~ : Int32, build~ : (E, Self[E]) -> Self[C], by~ : (E) -> String) -> Self[C]
 pub fn[E : Eq, C : Eq] Val::enumerate_by(Self[E], (E, Self[E]) -> Self[C], by~ : (E) -> String) -> Self[C]
 pub fn[A : Eq, B] Val::map(Self[A], (A) -> B) -> Self[B]
 pub fn[A : Eq, B : Eq, C] Val::map2(Self[A], Self[B], (A, B) -> C) -> Self[C]

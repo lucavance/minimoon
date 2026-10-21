@@ -17,6 +17,7 @@ async fn run(
   display_args? : Array[String],
 ) -> Unit {
   let working_dir = cwd.unwrap_or(root)
+  let args = moon_command_arguments(command, args, working_dir, env?)
   println("\n==> " + label)
   println("$ " + command + " " + display_args.unwrap_or(args).join(" "))
   let code = @toolchain.run(command, args, cwd=working_dir, extra_env?=env) catch {
@@ -33,6 +34,7 @@ async fn require_command_failure(
   cwd : String,
   needle : String,
 ) -> Unit {
+  let args = moon_command_arguments(command, args, cwd)
   println("\n==> " + label)
   println("$ " + command + " " + args.join(" "))
   let (code, stdout, stderr) = @toolchain.collect_output(command, args, cwd~) catch {

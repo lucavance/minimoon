@@ -44,6 +44,7 @@ fn api_flush_interface_block(
 
 ///|
 fn api_interface_snapshot(source : String) -> ApiInterfaceSnapshot {
+  let source = api_integer_alias(source)
   let blocks : Array[String] = []
   let lines : Array[String] = []
   let mut delimiter_depth = 0
@@ -209,8 +210,10 @@ fn api_manifest_violations(
 }
 
 ///|
-async fn api_suite(root : String) -> Unit {
-  run(root, "MoonBit public API generation", "moon", ["info"])
+async fn api_suite(root : String, refresh~ : Bool = true) -> Unit {
+  if refresh {
+    run(root, "MoonBit public API generation", "moon", ["info"])
+  }
   let product_version = @versions.product_version()
   let product_series = match api_baseline_series(product_version) {
     Some(series) => series

@@ -7,8 +7,8 @@ test "reviewed example and framework byte budgets retain exact inclusive boundar
   assert_eq(ui_registry_archive_reserve, 16384)
   assert_eq(conformance_runtime_limit, 464000)
   assert_eq(conformance_javascript_limit, 500000)
-  assert_eq(starter_runtime_limit, 230000)
-  assert_eq(starter_javascript_limit, 258000)
+  assert_eq(starter_runtime_limit, 231024)
+  assert_eq(starter_javascript_limit, 259024)
   assert_eq(page_host_limit, 18000)
   assert_eq(application_host_limit, 19000)
   for

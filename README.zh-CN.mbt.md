@@ -7,13 +7,10 @@
 
 ## 项目状态
 
-当前源码对应核心 `lampclaw/minimoon 0.3.1` 与可选的
-`lampclaw/minimoon_ui 0.2.0`，仍处于 1.0 之前的阶段。
-执行下面的固定版本安装前，先在
-[项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)确认版本已在 Mooncakes 可用；
-尚未发布时使用[源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
-
-候选验证与注册表可用性分别记录。
+核心 `lampclaw/minimoon 0.3.1` 与可选的 `lampclaw/minimoon_ui 0.2.0`
+均已发布，仍处于 1.0 之前的阶段。
+[项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
+记录发布证据与后续源码变更。
 
 ## 已实现的主要能力
 
@@ -27,9 +24,9 @@
 全局 `vp 1.1.0`（当前源码环境），以及支持 Skyline 的微信开发者工具。
 `vp` 管理 Node 和内部使用的 Bun `1.4.3`，无需单独安装 Bun。
 可选的源码开发流程还需要 Git。
-两个 CI 任务固定使用 `0.10.15+943464bfa`（`moon 0.1.20261012`）。
-使用本次源码和包之前，请升级更早的 MoonBit 工具链。
-当前源码选择 Node `26.11.1`；CI 覆盖 Node 24.20.0 与 26.11.1。
+主测试和 Node 24 CI 固定使用 `0.10.16+b1a0e846e`（`moon 0.1.20261016`），
+独立任务验证最低版本 `0.10.15+943464bfa`。
+当前源码选择 Node `26.11.1`；CI 同时覆盖 Node `24.20.0`。
 [环境说明](docs/guides/miniapp_quickstart.md#prerequisites)包含版本检查与 CI 固定工具链。
 
 ## 创建第一个应用

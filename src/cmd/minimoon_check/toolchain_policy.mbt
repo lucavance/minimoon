@@ -99,18 +99,18 @@ async fn vp_toolchain_policy(root : String) -> Unit {
     .split("\n")
     .filter(line => line.contains("uses: voidzero-dev/setup-vp@"))
     .collect()
-  guard installers.length() == 2 &&
+  guard installers.length() == 3 &&
     installers.all(line => {
       line.contains(
         "voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af",
       )
     }) else {
-    abort("both CI jobs must pin the reviewed setup-vp action")
+    abort("all three CI jobs must pin the reviewed setup-vp action")
   }
   for setting in ["version: 1.1.0", "run-install: false"] {
     guard workflow.split("\n").filter(line => line.trim() == setting).count() ==
-      2 else {
-      abort("both CI jobs must explicitly set " + setting)
+      3 else {
+      abort("all three CI jobs must explicitly set " + setting)
     }
   }
   for
