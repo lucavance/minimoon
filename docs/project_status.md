@@ -1,5 +1,18 @@
 # Project status
 
+## Toolchain and dependency refresh (2026-10-22, unreleased)
+
+Source now selects vp `1.3.0`, Node `26.12.1`, PostCSS `8.5.31`,
+weapp-tailwindcss `5.6.3`, async `0.22.5`, x `0.5.6` and explicit UI ucd `0.5.2`.
+Bun remains `1.4.3`; public API, product versions and size budgets are unchanged.
+Primary MoonBit uses moon/moonrun `0.1.20261020` (`2284bd2`) with
+moonc `0.10.16+b1a0e846e`. CI verifies binary/core archive SHA-256 values
+before extraction and asserts all three exact tool versions, since the same
+compiler release URL can receive newer moon/moonrun binaries.
+CI covers primary Node plus `24.20.0` and `24.22.1`, and the retained MoonBit floor.
+Published archives keep their original dependencies and Starter pins.
+Both fixtures require fingerprint-bound Developer Tools acceptance before merge.
+
 ## Skyline Markdown layout follow-up (unreleased)
 
 Generated apps enable `rendererOptions.skyline.enableScrollViewAutoSize` so
@@ -799,18 +812,18 @@ consumer and generated-host checks are separate from core's starter contract.
 ## Toolchain validation
 
 The supported toolchain floor is `moon 0.1.20261012` with `moonc v0.10.15`;
-global `vp 1.1.0` manages Bun `1.4.3` and the Node runtime. Current source
-dependencies are `moonbitlang/async 0.22.4`, `moonbitlang/x 0.5.5`, and
-`weapp-tailwindcss 5.6.1`, PostCSS `8.5.30` and Acorn `8.19.0`.
+global `vp 1.3.0` manages Bun `1.4.3` and the Node runtime. Current source
+dependencies are `moonbitlang/async 0.22.5`, `moonbitlang/x 0.5.6`, UI ucd `0.5.2`,
+`weapp-tailwindcss 5.6.3`, PostCSS `8.5.31` and Acorn `8.19.0`.
 Primary and Node 24 CI pin official prebuilt `0.10.16+b1a0e846e`
-(`moon 0.1.20261016`); the minimum compatibility job pins `0.10.15+943464bfa`.
-All three jobs are required for future candidates. No Rust is required.
+(`moon 0.1.20261020`); the minimum compatibility job pins `0.10.15+943464bfa`.
+All four checks are required for future candidates. No Rust is required.
 Older MoonBit installations must be upgraded for these releases.
 JavaScript tooling supports Node `>=24.20.0`; CI validates the Node 24.20.0
-lower boundary and Node 26.11.1 primary environment, installing the committed
+lower boundary, Node 24.22.1 and Node 26.12.1 primary environment, installing the committed
 JavaScript lockfile. The repository and Starters generated from current source
-select Node `26.11.1` through `devEngines.runtime`; CI explicitly overrides the
-lower-bound job.
+select Node `26.12.1` through `devEngines.runtime`; CI explicitly overrides the
+Node 24 matrix.
 Acceptance tasks use `vp run --no-cache`. Toolchain configuration is not itself
 a passing CI result;
 the release checkpoint must identify the successful run for the frozen SHA.

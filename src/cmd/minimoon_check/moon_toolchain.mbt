@@ -38,18 +38,18 @@ async fn moon_command_arguments(
 fn moon_ci_installers_valid(workflow : String) -> Bool {
   let jobs : Map[String, String] = Map([])
   let mut job = ""
-  let installer = "curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- "
+  let setting = "MOON_RELEASE: "
   for line in workflow.split("\n") {
     if line.has_prefix("  ") && !line.has_prefix("   ") && line.has_suffix(":") {
       let name = line.trim()
       job = name[0:name.length() - 1].to_owned()
     }
-    if line.contains("cli.moonbitlang.com/install/unix.sh") {
+    if line.contains(setting) {
       let command = line.trim()
-      if !command.has_prefix(installer) || jobs.contains(job) {
+      if !command.has_prefix(setting) || jobs.contains(job) {
         return false
       }
-      jobs[job] = command[installer.length():].to_owned()
+      jobs[job] = command[setting.length():].to_owned()
     }
   }
   jobs.length() == 3 &&

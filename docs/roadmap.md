@@ -2,6 +2,14 @@
 
 ## Near-term priorities
 
+### Toolchain and dependency refresh (unreleased)
+
+Align source and Starter pins to vp `1.3.0`, Node `26.12.1`, PostCSS `8.5.31`,
+weapp-tailwindcss `5.6.3`, async `0.22.5`, x `0.5.6` and UI ucd `0.5.2`.
+Verify MoonBit archives and the complete `0.1.20261020`/`0.10.16` tool identity.
+Retain both compatibility floors and add Node `24.22.1` coverage.
+Validate both fixture fingerprints on the branch before merging.
+
 ### MoonBit toolchain alignment (unreleased)
 
 Pin primary and Node 24 CI to `0.10.16+b1a0e846e` and validate the retained

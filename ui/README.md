@@ -17,7 +17,7 @@ upstream visual-recipe attribution are retained in [LICENSE](LICENSE) and
 ## Install
 
 Use `moon 0.1.20261012` / `moonc v0.10.15` or newer and the matching core CLI
-`0.3.0`. Current source uses global `vp 1.1.0`, Node `26.11.1` and Bun `1.4.3`;
+`0.3.0`. Current source uses global `vp 1.3.0`, Node `26.12.1` and Bun `1.4.3`;
 Node `>=24.20.0` remains supported and CI checks the lower boundary. Follow
 the [environment setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/miniapp_quickstart.md#prerequisites);
 no separate Bun installation or local `vite-plus` dependency is needed.
@@ -83,10 +83,10 @@ deterministic, but selecting one feature does not produce only its selectors.
 
 Upgrade the CLI and your direct core dependency to `0.3.0`, and UI to `0.2.0`.
 UI also declares core `0.3.0`. Set
-Node `26.11.1` in `devEngines.runtime` while retaining `engines.node: ">=24.20.0"` and Bun
+Node `26.12.1` in `devEngines.runtime` while retaining `engines.node: ">=24.20.0"` and Bun
 `1.4.3` in `devEngines.packageManager`. Update
-an existing style `package.json` to weapp-tailwindcss `5.6.1`, keeping Tailwind
-`4.3.3` and using PostCSS `8.5.30` with its matching override; run `vp install`
+an existing style `package.json` to weapp-tailwindcss `5.6.3`, keeping Tailwind
+`4.3.3` and using PostCSS `8.5.31` with its matching override; run `vp install`
 to refresh the lockfile. Previous CLI/core `0.2.5` / UI `0.1.3` archives remain immutable.
 `minimoon build` does not rewrite that manifest. Use explicit package
 qualifiers and public trait extensions where required by the new MoonBit

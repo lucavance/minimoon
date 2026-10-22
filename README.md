@@ -22,20 +22,18 @@ for release evidence and subsequent source changes.
 ## Before you start
 
 Use `moon 0.1.20261012` / `moonc v0.10.15` or newer, Node `>=24.20.0`,
-global `vp 1.1.0` for current source and WeChat Developer Tools with Skyline support.
+global `vp 1.3.0` for current source and WeChat Developer Tools with Skyline support.
 `vp` manages Node and Bun `1.4.3`; a separate Bun installation is unnecessary.
 Git is needed for the optional source development workflow.
-Primary and Node 24 CI pin `0.10.16+b1a0e846e` (`moon 0.1.20261016`).
+Primary and Node 24 CI pin `0.10.16+b1a0e846e` (`moon 0.1.20261020`).
 A separate job tests the `0.10.15+943464bfa` minimum. Current source selects
-Node `26.11.1`; CI also covers Node `24.20.0`.
+Node `26.12.1`; CI also covers Node `24.20.0` and `24.22.1`.
 See [environment setup](docs/guides/miniapp_quickstart.md#prerequisites) for
 version checks and the pinned CI toolchain.
 
 ## Create your first app
 
-Start in a development directory outside any existing Moon workspace, with
-enough free space. Complete the linked environment setup, then run these
-commands in a terminal with MoonBit and `vp` available:
+After environment setup, run these commands outside an existing Moon workspace:
 
 <!-- minimoon:onboarding:start -->
 ```bash
@@ -54,10 +52,9 @@ After candidate verification passes, open WeChat Developer Tools and import
 **`my-app/dist/`**. Apply the [host settings](docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools)
 before running the MiniApp.
 
-Use a new or empty `my-app/`. The app's `moon.mod` declares its core dependency,
-resolved from Mooncakes; no `moon.work` or framework checkout is needed.
-Do not pass `--minimoon-root` for this setup. `vp install` installs the app's
-style build tools.
+Use a new or empty `my-app/`. Its `moon.mod` resolves core from Mooncakes;
+no checkout, `moon.work` or `--minimoon-root` is needed. `vp install` installs
+the style build tools.
 
 Confirm `minimoon --version` reports `0.3.1`; check PATH if another installed CLI
 is selected. See [fixed-version installation](docs/guides/miniapp_quickstart.md#install-a-specific-version)
@@ -65,9 +62,8 @@ and [upgrading an existing app](docs/reference/compatibility_and_upgrades.md#upg
 To develop the framework or use unpublished changes, follow the separate
 [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
 
-The `0.3.1` CLI uses `vp 1.1.0`, managed Bun `1.4.3` and Node `26.11.1`.
-The [style pins](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
-include PostCSS `8.5.30` and weapp-tailwindcss `5.6.1`. Core `0.3.1` retains typed
+Source [style pins](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
+include PostCSS `8.5.31` and weapp-tailwindcss `5.6.3`. Core `0.3.1` retains typed
 native inline content; regenerate host output for renderer protocol `9`.
 The default Starter still has no `application` entry; follow
 [shared state](docs/guides/shared_state.md) to add one.
@@ -154,10 +150,8 @@ Minimoon targets WeChat Skyline, not browser DOM compatibility or a general
 cross-platform renderer. UI is optional, and applications supply their own
 backends, credentials and production request domains.
 
-The near-term focus is a reliable onboarding path and release preparation.
-Dynamic account/workspace scopes and additional targets remain deferred, not
-promised features or dates. Follow the [Roadmap](https://github.com/lucavance/minimoon/blob/main/docs/roadmap.md)
-for priorities rather than treating this README as a task tracker.
+See the [Roadmap](https://github.com/lucavance/minimoon/blob/main/docs/roadmap.md)
+for priorities. Dynamic account/workspace scopes and additional targets remain deferred.
 
 ## Contributing and internals
 

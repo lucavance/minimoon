@@ -1,6 +1,6 @@
 ///|
 test "CI assigns exact MoonBit releases to primary and minimum jobs" {
-  let command = "          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- "
+  let command = "      MOON_RELEASE: "
   let workflow = "jobs:\n  test:\n" +
     command +
     primary_moon_release +

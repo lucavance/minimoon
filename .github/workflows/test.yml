@@ -17,8 +17,13 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      VP_NODE_VERSION: 26.11.1
+      VP_NODE_VERSION: 26.12.1
       VP_PACKAGE_MANAGER: bun@1.4.3
+      MOON_RELEASE: 0.10.16+b1a0e846e
+      MOON_VERSION: 0.1.20261020 (2284bd2 2026-10-20)
+      MOONC_VERSION: v0.10.16+b1a0e846e (2026-10-16)
+      MOON_ARCHIVE_SHA256: 84ae424cd31bc485d2cf4d3736534e52f2f265ceafb562a187b9ab26d9566212
+      MOON_CORE_SHA256: e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0
 
     defaults:
       run:
@@ -30,16 +35,36 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup MoonBit
+      - &setup-moonbit
+        name: Setup MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.16+b1a0e846e
-          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+          set -euo pipefail
+          export MOON_HOME="$RUNNER_TEMP/minimoon-moon"
+          archive_version="${MOON_RELEASE//+/%2B}"
+          curl -fsSL --retry 3 "https://cli.moonbitlang.com/binaries/$archive_version/moonbit-linux-x86_64.tar.gz" -o "$RUNNER_TEMP/moonbit.tar.gz"
+          curl -fsSL --retry 3 "https://cli.moonbitlang.com/cores/core-$archive_version.tar.gz" -o "$RUNNER_TEMP/core.tar.gz"
+          printf '%s  %s\n' "$MOON_ARCHIVE_SHA256" "$RUNNER_TEMP/moonbit.tar.gz" "$MOON_CORE_SHA256" "$RUNNER_TEMP/core.tar.gz" | sha256sum --check --strict
+          mkdir -p "$MOON_HOME"
+          tar xf "$RUNNER_TEMP/moonbit.tar.gz" -C "$MOON_HOME"
+          tar xf "$RUNNER_TEMP/core.tar.gz" -C "$MOON_HOME/lib"
+          ln -sfn moon "$MOON_HOME/bin/moonx"
+          chmod +x "$MOON_HOME"/bin/* "$MOON_HOME/bin/internal/tcc"
+          export PATH="$MOON_HOME/bin:$PATH"
+          version_output="$(moon version --all)"
+          printf '%s\n' "$version_output"
+          test "$(awk '$1 == "moon" { $NF=""; sub(/ $/, ""); print }' <<< "$version_output")" = "moon $MOON_VERSION"
+          test "$(awk '$1 == "moonc" { $NF=""; sub(/ $/, ""); print }' <<< "$version_output")" = "moonc $MOONC_VERSION"
+          test "$(awk '$1 == "moonrun" { $NF=""; sub(/ $/, ""); print }' <<< "$version_output")" = "moonrun $MOON_VERSION"
+          moon -C "$MOON_HOME/lib/core" bundle --warn-list -a --all
+          moon -C "$MOON_HOME/lib/core" bundle --warn-list -a --target wasm-gc --quiet
+          echo "$MOON_HOME/bin" >> "$GITHUB_PATH"
+          echo "MOON_HOME=$MOON_HOME" >> "$GITHUB_ENV"
 
-      - name: Setup Vite+ (26.11.1)
+      - name: Setup Vite+ (26.12.1)
         uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
-          version: 1.1.0
-          node-version: 26.11.1
+          version: 1.3.0
+          node-version: 26.12.1
           run-install: false
           cache: true
 
@@ -272,12 +297,21 @@ jobs:
           retention-days: 14
 
   node-lts-compat:
-    name: Node 24 LTS compatibility
+    name: Node 24 LTS compatibility (${{ matrix.node }})
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [24.20.0, 24.22.1]
     env:
-      VP_NODE_VERSION: 24.20.0
+      VP_NODE_VERSION: ${{ matrix.node }}
       VP_PACKAGE_MANAGER: bun@1.4.3
+      MOON_RELEASE: 0.10.16+b1a0e846e
+      MOON_VERSION: 0.1.20261020 (2284bd2 2026-10-20)
+      MOONC_VERSION: v0.10.16+b1a0e846e (2026-10-16)
+      MOON_ARCHIVE_SHA256: 84ae424cd31bc485d2cf4d3736534e52f2f265ceafb562a187b9ab26d9566212
+      MOON_CORE_SHA256: e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0
 
     defaults:
       run:
@@ -287,16 +321,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Setup MoonBit
-        run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.16+b1a0e846e
-          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - *setup-moonbit
 
-      - name: Setup Vite+ (24.20.0)
+      - name: Setup Vite+ (${{ matrix.node }})
         uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
-          version: 1.1.0
-          node-version: 24.20.0
+          version: 1.3.0
+          node-version: ${{ matrix.node }}
           run-install: false
           cache: true
 
@@ -328,8 +359,13 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      VP_NODE_VERSION: 26.11.1
+      VP_NODE_VERSION: 26.12.1
       VP_PACKAGE_MANAGER: bun@1.4.3
+      MOON_RELEASE: 0.10.15+943464bfa
+      MOON_VERSION: 0.1.20261012 (748b63c 2026-10-12)
+      MOONC_VERSION: v0.10.15+943464bfa (2026-10-12)
+      MOON_ARCHIVE_SHA256: 24b93a5409d2a4fb8e3d1b84b473f27b63476cef4418094764df96cb26b03c09
+      MOON_CORE_SHA256: 96d30f4dbcc6a9e1736ef26fbdd0e8fb0e97cb01d50e55d2a0072208b8061ae5
 
     defaults:
       run:
@@ -339,16 +375,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Setup MoonBit
-        run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 0.10.15+943464bfa
-          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - *setup-moonbit
 
-      - name: Setup Vite+ (26.11.1)
+      - name: Setup Vite+ (26.12.1)
         uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
-          version: 1.1.0
-          node-version: 26.11.1
+          version: 1.3.0
+          node-version: 26.12.1
           run-install: false
           cache: true
 

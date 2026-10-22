@@ -107,7 +107,7 @@ async fn vp_toolchain_policy(root : String) -> Unit {
     }) else {
     abort("all three CI jobs must pin the reviewed setup-vp action")
   }
-  for setting in ["version: 1.1.0", "run-install: false"] {
+  for setting in ["version: 1.3.0", "run-install: false"] {
     guard workflow.split("\n").filter(line => line.trim() == setting).count() ==
       3 else {
       abort("all three CI jobs must explicitly set " + setting)
@@ -115,8 +115,11 @@ async fn vp_toolchain_policy(root : String) -> Unit {
   }
   for
     token in [
-      "version: 1.1.0", "vp install --frozen-lockfile", "vp env current --json",
-      "vp run --no-cache check:coverage", "vp run --no-cache check:candidate",
+      "version: 1.3.0", "vp install --frozen-lockfile", "vp env current --json",
+      "vp run --no-cache check:coverage", "vp run --no-cache check:candidate", "sha256sum --check --strict",
+      "&setup-moonbit", "*setup-moonbit", "MOON_VERSION: 0.1.20261020 (2284bd2 2026-10-20)",
+      "MOONC_VERSION: v0.10.16+b1a0e846e (2026-10-16)", "\"moon $MOON_VERSION\"",
+      "\"moonrun $MOON_VERSION\"", "\"moonc $MOONC_VERSION\"",
     ] {
     require_text(root, workflow_path, token)
   }

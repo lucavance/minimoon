@@ -27,9 +27,9 @@
     "@tailwindcss/cli": "4.3.3",
     "acorn": "8.19.0",
     "eslint-scope": "9.1.2",
-    "postcss": "8.5.30",
+    "postcss": "8.5.31",
     "tailwindcss": "4.3.3",
-    "weapp-tailwindcss": "5.6.1"
+    "weapp-tailwindcss": "5.6.3"
   },
   "devEngines": {
     "packageManager": {
@@ -39,12 +39,12 @@
     },
     "runtime": {
       "name": "node",
-      "version": "26.11.1",
+      "version": "26.12.1",
       "onFail": "download"
     }
   },
   "overrides": {
-    "postcss": "8.5.30",
+    "postcss": "8.5.31",
     "source-map-js": "1.2.2"
   }
 }

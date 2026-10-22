@@ -69,9 +69,12 @@ consumer gates for another pair.
 
 Core `0.3.1` and UI `0.2.0` require at least `moon 0.1.20261012` with
 `moonc v0.10.15`. Primary and Node 24 CI pin official prebuilt
-`0.10.16+b1a0e846e` (`moon 0.1.20261016`); a separate job tests the
+`0.10.16+b1a0e846e` (`moon`/`moonrun 0.1.20261020`, commit `2284bd2`);
+CI verifies both archive SHA-256 values and all three exact tool versions. A separate job tests the
 `0.10.15+943464bfa` minimum. No Rust is required. Direct dependencies are
-`moonbitlang/async@0.22.4` and `moonbitlang/x@0.5.5`.
+`moonbitlang/async@0.22.5` and `moonbitlang/x@0.5.6`.
+UI explicitly constrains `moonbit-community/ucd@0.5.2` for cmark/charclass;
+cmark `0.4.12`, casefold `0.1.7` and charclass `0.1.4` are unchanged.
 
 MoonBit 0.10.16 writes `.mbti` files during `moon check`. Use `--no-mbti` for
 read-only checks on that version; 0.10.15 does not accept the flag. Repository
@@ -79,15 +82,15 @@ checks detect support; `moon info` emits canonical interfaces with builtin
 `Int32` spelling. Frozen API comparisons accept only this alias change.
 
 Repository and generated-starter JavaScript tooling support Node `>=24.20.0`,
-with current CI coverage at the 24.20.0 lower boundary and in the 26.11.1 primary
-environment. Current source uses global `vp 1.1.0` to manage pinned Bun `1.4.3`;
-`devEngines.runtime` selects Node `26.11.1` without adding `.node-version`.
+with CI coverage at the 24.20.0 lower boundary, 24.22.1 LTS and 26.12.1 primary
+environment. Current source uses global `vp 1.3.0` to manage pinned Bun `1.4.3`;
+`devEngines.runtime` selects Node `26.12.1` without adding `.node-version`.
 The Node minimum has not changed.
 Update CI, the package consumer gate, starter guidance and compatibility notes
 together when changing these constraints.
 
-Registry CLI `0.3.1` includes the watcher fixes and current Starter pins.
-Earlier archives retain their released contents (table below).
+Registry CLI `0.3.1` includes the watcher fixes and its original Starter pins.
+Published archives retain their released contents (table below).
 
 Blackbox tests and cross-package references use declared package aliases:
 `@minimoon.page(...)`, `@minimoon.ScrollDetail`, or `@ui` in UI tests.
@@ -144,14 +147,14 @@ Packaging checks do not prove registry availability or a host pass.
 
 Use the exact application style versions for the selected CLI:
 
-| Dependency | Published CLI `0.2.6` | Candidate CLI `0.3.0` |
+| Dependency | Published CLI `0.3.1` | Current source CLI |
 | --- | --- | --- |
 | `@tailwindcss/cli` and `tailwindcss` | `4.3.3` | `4.3.3` |
-| `postcss`, including `overrides.postcss` | `8.5.29` | `8.5.30` |
-| `weapp-tailwindcss` | `5.5.12` | `5.6.1` |
-| `devEngines.packageManager` | Bun `1.4.2` | Bun `1.4.3` |
-| `devEngines.runtime` | Node `26.11.1` | Node `26.11.1` |
-| `overrides.source-map-js` | not declared | `1.2.2` |
+| `postcss`, including `overrides.postcss` | `8.5.30` | `8.5.31` |
+| `weapp-tailwindcss` | `5.6.1` | `5.6.3` |
+| `devEngines.packageManager` | Bun `1.4.3` | Bun `1.4.3` |
+| `devEngines.runtime` | Node `26.11.1` | Node `26.12.1` |
+| `overrides.source-map-js` | `1.2.2` | `1.2.2` |
 
 Unpublished source also generates `overrides.source-map-js: "1.2.2"` to
 remove vulnerable nested resolutions. The registry `0.2.6` CLI retains its
@@ -160,7 +163,7 @@ original template. Existing apps can add this override and reinstall; see the
 for the remaining `braces` advisory and temporary exception.
 
 Only the repository needs `acorn 8.19.0` and `eslint-scope 9.1.2` for validation.
-Use `vp 1.1.0` for source and the published baseline. Follow the
+Use `vp 1.3.0` for current source. Follow the
 [quickstart](../guides/miniapp_quickstart.md#prerequisites); separate Bun and
 local `vite-plus`, Vite or Vitest packages are unnecessary. The
 missing-local-`vite-plus` notice is expected.
@@ -191,7 +194,7 @@ and regenerate all host output for protocol 9.
    [UI changelog](https://github.com/lucavance/minimoon/blob/main/ui/CHANGELOG.md)
    when applicable, and [publication status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
    Use the source workflow if the target versions are not available yet.
-2. Use the MoonBit minimum above and global `vp 1.1.0`.
+2. Use the MoonBit minimum above and global `vp 1.3.0`.
    After registry availability is recorded, install
    `moon install lampclaw/minimoon/cmd/minimoon@0.3.1`; until then follow the
    [source workflow](../guides/miniapp_quickstart.md#create-from-the-current-source)
@@ -202,7 +205,7 @@ and regenerate all host output for protocol 9.
    and confirm the resolved versions without unintended workspace overrides.
 4. Update an existing application's `package.json` to the current style
    versions above, retain `engines.node: ">=24.20.0"` and the PostCSS override, and set
-   `devEngines.runtime` to `{ "name": "node", "version": "26.11.1" }` alongside
+   `devEngines.runtime` to `{ "name": "node", "version": "26.12.1" }` alongside
    `devEngines.packageManager: { "name": "bun", "version": "1.4.3" }`. Run
    `vp install` to update its lockfile. Rebuilding does not rewrite an existing
    manifest. Subsequent reproducible installs use `vp install --frozen-lockfile`.

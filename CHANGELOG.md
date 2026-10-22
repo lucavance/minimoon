@@ -6,6 +6,7 @@ tags.
 
 ## [Unreleased]
 
+- Refresh vp, Node, MoonBit tools and dependencies; checksum-pin CI archives.
 - Align MoonBit CI, preserve interfaces on check, and raise Starter limits 1 KiB.
 - Fix Markdown overlap with Skyline scroll sizing.
 

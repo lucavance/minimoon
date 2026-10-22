@@ -4,7 +4,7 @@ version = "0.2.0"
 
 import {
   "lampclaw/minimoon@0.3.1",
-  "moonbitlang/async@0.22.4",
+  "moonbitlang/async@0.22.5",
 }
 
 readme = "README.md"

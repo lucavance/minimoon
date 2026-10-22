@@ -17,7 +17,7 @@ vp run minimoon verify examples/miniapp_draft_workbench --candidate
 ```
 
 当前 `0.3.1` 源码使用 Vite+ CLI `1.1.0` 和已固定的
-`moonbitlang/async 0.22.4`。使用上述仓库 CLI 或确认发布后的
+`moonbitlang/async 0.22.5`。使用上述仓库 CLI 或确认发布后的
 `0.3.1` Registry CLI，不能混用旧工具生成的文件。
 运行前准备 `moon 0.1.20261012`／`moonc v0.10.15`、Node `>=24.20.0` 和 Bun `1.4.3`。
 

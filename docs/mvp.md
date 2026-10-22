@@ -84,5 +84,5 @@ fingerprint-matching real-host evidence for the exact App Contract v11, runtime
 ABI v13 and renderer protocol v9 Draft Workbench and UI showcase bytes. That
 evidence is a local input and never part of repository or CI state. The
 [release procedure](https://github.com/lucavance/minimoon/blob/main/docs/operations/release_candidate_handoff.md#ordered-local-registry-publication)
-requires complete local checks, all three CI jobs and fingerprint-matched host
+requires complete local checks, all four CI checks and fingerprint-matched host
 validation before authorized publication.

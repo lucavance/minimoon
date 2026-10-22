@@ -5,7 +5,7 @@ let supported_node_engine = ">=24.20.0"
 let node_lts_floor = "24.20.0"
 
 ///|
-let primary_node_version = "26.11.1"
+let primary_node_version = "26.12.1"
 
 ///|
 let supported_bun_version = "1.4.3"
@@ -170,7 +170,7 @@ async fn static_suite(root : String) -> Unit {
   require_text(
     root,
     ".github/workflows/test.yml",
-    "node-version: " + node_lts_floor,
+    "node: [" + node_lts_floor + ", 24.22.1]",
   )
   require_text(root, ".github/workflows/test.yml", "node-lts-compat:")
   require_text(root, ".github/workflows/test.yml", "Node 24 LTS compatibility")

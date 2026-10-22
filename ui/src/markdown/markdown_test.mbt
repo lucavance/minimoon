@@ -62,6 +62,25 @@ test "CommonMark and extensions render native text images tables and tasks" {
 }
 
 ///|
+test "Unicode punctuation combining marks entities and folded references survive parsing" {
+  let runtime = @testing.mount(
+    document(
+      "“*你好*” **café** &#x1F642; [Straße]\n\n[STRASSE]: https://example.com/unicode",
+    ),
+  )
+  defer {
+    let _ = runtime.dispose()
+  }
+  let content = runtime.tree().text_content()
+  for expected in ["“你好”", "café", "🙂", "Straße"] {
+    assert_true(content.contains(expected), msg=expected)
+  }
+  assert_false(content.contains("*"))
+  assert_false(content.contains("[Straße]"))
+  assert_false(content.contains("&#x1F642;"))
+}
+
+///|
 test "link callbacks sanitize rewritten destinations and namespace anchor targets" {
   let page = @minimoon.page(
     id="links",
