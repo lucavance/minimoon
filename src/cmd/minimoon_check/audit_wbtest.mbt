@@ -19,7 +19,7 @@ fn audit_test_lock(records : Array[String]) -> String {
 ///|
 fn audit_test_report(
   name~ : String = "braces",
-  url~ : String = dependency_audit_exception_url,
+  url~ : String = "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
   severity~ : String = "high",
 ) -> String {
   let packages : Map[String, Json] = Map([])
@@ -33,39 +33,49 @@ fn audit_test_report(
 }
 
 ///|
-test "audit accepts only the temporary braces exception" {
+test "audit blocks the withdrawn braces advisory if it reappears" {
   let lock = audit_test_lock(["braces@3.0.3", "@scope/tool@1.2.3"])
-  let decision = evaluate_dependency_audit(
-    1,
-    audit_test_report(),
-    "",
-    lock,
-    dependency_audit_exception_deadline_ms - 1UL,
-  )
-  assert_eq(decision.status, "accepted_exception")
-  assert_eq(dependency_audit_lock_packages(lock).0, ["3.0.3"])
-  let summary = dependency_audit_summary(decision, Some(1))
-  assert_eq(json_string(summary, "status"), "accepted_exception")
-  assert_true(
-    json_string(summary, "reason").contains("not a vulnerability fix"),
+  let decision = evaluate_dependency_audit(1, audit_test_report(), "", lock)
+  assert_eq(decision.status, "failed")
+  assert_eq(
+    json_string(dependency_audit_summary(decision, Some(1)), "status"),
+    "failed",
   )
 }
 
 ///|
-test "audit rejects changed advisory, versions, criticals and command errors" {
+test "audit rejects high and critical advisories and command errors" {
   let lock = audit_test_lock(["braces@3.0.3", "other@1.0.0"])
   for
     (name, url, severity, code, stderr) in [
-      ("other", dependency_audit_exception_url, "high", 1, ""),
+      (
+        "other", "https://github.com/advisories/GHSA-aaaa-bbbb-cccc", "high", 1,
+        "",
+      ),
       (
         "braces", "https://github.com/advisories/GHSA-aaaa-bbbb-cccc", "high", 1,
         "",
       ),
-      ("braces", dependency_audit_exception_url, "critical", 1, ""),
-      ("braces", dependency_audit_exception_url, "urgent", 1, ""),
-      ("braces", dependency_audit_exception_url, "high", 1, "network error"),
-      ("braces", dependency_audit_exception_url, "high", 0, ""),
-      ("braces", dependency_audit_exception_url, "high", 2, ""),
+      (
+        "braces", "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm", "critical",
+        1, "",
+      ),
+      (
+        "braces", "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm", "urgent",
+        1, "",
+      ),
+      (
+        "braces", "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm", "high", 1,
+        "network error",
+      ),
+      (
+        "braces", "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm", "high", 0,
+        "",
+      ),
+      (
+        "braces", "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm", "high", 2,
+        "",
+      ),
     ] {
     assert_eq(
       evaluate_dependency_audit(
@@ -73,42 +83,21 @@ test "audit rejects changed advisory, versions, criticals and command errors" {
         audit_test_report(name~, url~, severity~),
         stderr,
         lock,
-        0UL,
       ).status,
       "failed",
     )
   }
-  assert_eq(
-    evaluate_dependency_audit(
-      1,
-      audit_test_report(),
-      "",
-      audit_test_lock(["braces@3.0.3", "braces@3.0.2"]),
-      0UL,
-    ).status,
-    "failed",
-  )
 }
 
 ///|
-test "audit keeps informational findings clean and enforces expiry" {
+test "audit keeps informational findings clean and rejects nonzero exit" {
   let lock = audit_test_lock(["braces@3.0.3"])
-  assert_eq(evaluate_dependency_audit(0, "{}", "", lock, 0UL).status, "clean")
-  assert_eq(evaluate_dependency_audit(1, "{}", "", lock, 0UL).status, "failed")
+  assert_eq(evaluate_dependency_audit(0, "{}", "", lock).status, "clean")
+  assert_eq(evaluate_dependency_audit(1, "{}", "", lock).status, "failed")
   for severity in ["info", "low", "moderate"] {
     assert_eq(
-      evaluate_dependency_audit(0, audit_test_report(severity~), "", lock, 0UL).status,
+      evaluate_dependency_audit(0, audit_test_report(severity~), "", lock).status,
       "clean",
-    )
-  }
-  for
-    now in [
-      dependency_audit_exception_deadline_ms,
-      dependency_audit_exception_deadline_ms + 1UL,
-    ] {
-    assert_eq(
-      evaluate_dependency_audit(1, audit_test_report(), "", lock, now).status,
-      "failed",
     )
   }
 }
@@ -127,19 +116,13 @@ test "audit rejects malformed reports and locks" {
       audit_test_report(name="missing", severity="low"),
       audit_test_report(url="", severity="low"),
     ] {
-    assert_eq(
-      evaluate_dependency_audit(0, report, "", lock, 0UL).status,
-      "failed",
-    )
+    assert_eq(evaluate_dependency_audit(0, report, "", lock).status, "failed")
   }
   for
     bad_lock in [
       "", "{}", "{\"packages\":{}}", "{\"packages\":{\"x\":[]}}", "{\"packages\":{\"braces\":[\"braces@3.0.3\"]}}",
     ] {
-    assert_eq(
-      evaluate_dependency_audit(0, "{}", "", bad_lock, 0UL).status,
-      "failed",
-    )
+    assert_eq(evaluate_dependency_audit(0, "{}", "", bad_lock).status, "failed")
   }
   assert_eq(
     dependency_audit_record_identity("@scope/tool@1.2.3"),

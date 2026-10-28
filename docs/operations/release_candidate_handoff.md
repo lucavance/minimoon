@@ -40,7 +40,8 @@ all release gates. The previous core `0.2.6` / UI `0.1.4` publication is complet
 
 Run `vp run --no-cache check:audit` separately from candidate validation. Its
 [source audit policy](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md#source-dependency-audit-policy)
-documents the remaining advisory, exact temporary exception and UTC deadline.
+documents the current no-exception policy and the historical braces advisory
+withdrawal.
 
 ## Scoped publication exception
 
@@ -149,9 +150,8 @@ archive extracted outside all Git and Moon workspace ancestors, after registry
 core is available and consumers pass. A successful archive gate does not itself
 publish either module. Previously published archives remain immutable.
 
-After review, commit and push the complete candidate to `main`, then require
-the `Test`, `Node 24 LTS compatibility`, and `MoonBit minimum compatibility`
-jobs to pass for that
+After review, commit and push the complete candidate to the validation branch,
+then require the `Test` job to pass for that
 exact commit. Freeze the source SHA, toolchain versions, package contents and
 both artifact fingerprints. A newer source commit requires its own CI result.
 Notify the user with the successful CI link. For an explicitly authorized
@@ -307,7 +307,7 @@ never modify an occupied registry version.
    toolchain versions and both fingerprints. Run `vp run --no-cache check:candidate`,
    then `git diff --exit-code` and `git status --porcelain --untracked-files=all`;
    require a clean worktree and unchanged package contents. A source change
-   requires a new candidate and CI run. Notify the user when both jobs pass.
+   requires a new candidate and CI run. Notify the user when the Test job passes.
 2. Publish core from the clean validation checkout:
 
 ```bash

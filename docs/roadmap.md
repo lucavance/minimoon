@@ -4,16 +4,15 @@
 
 ### Toolchain and dependency refresh (unreleased)
 
-Align source and Starter pins to vp `1.3.0`, Node `26.12.1`, PostCSS `8.5.31`,
+Align source and Starter pins to vp `1.4.0`, Node `26.12.1`, PostCSS `8.5.32`,
 weapp-tailwindcss `5.6.3`, async `0.22.5`, x `0.5.6` and UI ucd `0.5.2`.
-Verify MoonBit archives and the complete `0.1.20261020`/`0.10.16` tool identity.
-Retain both compatibility floors and add Node `24.22.1` coverage.
+Verify the current MoonBit `0.1.20261023`/`0.10.17+d971670cd` identity and its
+archive hashes. Use Node `26.12.1` only; older compatibility jobs are removed.
 Validate both fixture fingerprints on the branch before merging.
 
 ### MoonBit toolchain alignment (unreleased)
 
-Pin primary and Node 24 CI to `0.10.16+b1a0e846e` and validate the retained
-`0.10.15+943464bfa` minimum independently. Keep source checks read-only with
+Pin CI to `0.10.17+d971670cd` and keep source checks read-only with
 capability-detected `--no-mbti`; review interfaces through `moon info`.
 Validate packaged consumers, Starter generation and both fixture fingerprints
 before a new release. Changed fingerprints require renewed host acceptance.
@@ -102,9 +101,10 @@ both CI jobs and fingerprint-matched local evidence. Core was published first;
 fresh registry consumers passed before UI publication, and the final pair
 passed new and upgraded consumer checks. Registry CLI `0.2.7` now delivers the
 refreshed Starter. See [project status](project_status.md) for archive hashes
-and availability. Retain only the exact
-braces `3.0.3` advisory exception until `2026-11-23T00:00:00Z`; keep complete
-scanning, strict matching and expiry enforcement. Changed fixture fingerprints
+and availability. At that release, the exact braces `3.0.3` exception was
+approved until `2026-11-23T00:00:00Z`. That historical approval is superseded by
+the current [source audit policy](project_status.md#source-dependency-audit-policy).
+Changed fixture fingerprints
 require renewed real-host validation before a host pass or future release.
 
 ## Rabbita/RUI maintenance follow-up (implemented)
@@ -346,8 +346,8 @@ registry consumers before publishing its matching UI archive. The previous core
 archives are immutable. Core-only `0.3.1` was published on 2026-10-20 after all
 release gates; UI remains the existing `0.2.0`. See project status for the frozen
 source and CI.
-Future publications need separate authorization, all three CI jobs for the
-final frozen commit and fingerprint-matched host validation. Preserve
+Future publications need separate authorization, the Test CI job for the final
+frozen commit and fingerprint-matched host validation. Preserve
 actual-evidence gates and candidate report restoration. Record dates, source
 SHA and registry checks only after they happen. Current availability belongs
 in [project status](project_status.md), not in immutable package contents.

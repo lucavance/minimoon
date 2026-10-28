@@ -29,7 +29,7 @@ async fn prepare_environment(
       "Minimoon requires vp-managed Bun. Unset VP_BYPASS and run `vp env on bun`.",
     )
   }
-  child_env["VP_BUN_VERSION"] = "1.4.3"
+  child_env["VP_BUN_VERSION"] = "1.4.4"
   // An inherited shim-wrapper marker would reuse a parent's injected tool path
   // instead of resolving this invocation's explicit backend version.
   child_env.remove("VP_SHIM_WRAPPER")
@@ -42,7 +42,7 @@ async fn prepare_environment(
   ) catch {
     err =>
       raise Failure::Failure(
-        "Unable to start vp: \{err}. Install Vite+ CLI 1.3.0 and make sure `vp` is available on PATH.",
+        "Unable to start vp: \{err}. Install Vite+ CLI 1.4.0 and make sure `vp` is available on PATH.",
       )
   }
   guard code == 0 else {
@@ -54,10 +54,10 @@ async fn prepare_environment(
   guard current is Object(fields) &&
     fields.get("package_manager") is Some(Object(manager)) &&
     manager.get("name") is Some(String("bun")) &&
-    manager.get("version") is Some(String("1.4.3")) &&
+    manager.get("version") is Some(String("1.4.4")) &&
     manager.get("mode") is Some(String("managed")) else {
     raise Failure::Failure(
-      "Minimoon requires vp-managed Bun 1.4.3. Run `vp env on bun` and retry.",
+      "Minimoon requires vp-managed Bun 1.4.4. Run `vp env on bun` and retry.",
     )
   }
   (false, child_env)

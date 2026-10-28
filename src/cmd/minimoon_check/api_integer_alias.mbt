@@ -1,6 +1,6 @@
 ///|
-// 0.10.16 prints the existing builtin Int alias as Int32. Only type-position
-// tokens are normalized: strings, qualified names and declarations stay exact.
+// The current compiler prints the existing builtin Int alias as Int32. Only
+// type-position tokens are normalized: strings, qualified names and declarations stay exact.
 // A local type or generic binding with either name disables this normalization.
 fn api_integer_alias(source : String) -> String {
   let tokens : Array[(Int32, Int32)] = []

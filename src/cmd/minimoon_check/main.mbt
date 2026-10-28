@@ -6,7 +6,6 @@ async fn run_suite(root : String, suite : String) -> Unit {
     "docs" => docs_suite(root)
     "metrics" => metrics_suite(root)
     "quality" => quality_suite(root)
-    "toolchain-floor" => moon_floor_suite(root)
     "api" => api_suite(root)
     "codegen" => codegen_suite(root)
     "generator" => generator_suite(root)

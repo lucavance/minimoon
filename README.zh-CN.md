@@ -20,13 +20,11 @@
 
 ## 开始之前
 
-准备 `moon 0.1.20261012`／`moonc v0.10.15` 或更新版本、Node `>=24.20.0`、
-全局 `vp 1.3.0`（当前源码环境），以及支持 Skyline 的微信开发者工具。
-`vp` 管理 Node 和内部使用的 Bun `1.4.3`，无需单独安装 Bun。
+准备 `moon 0.1.20261023`／`moonc v0.10.17+d971670cd`、Node `>=26.12.1`、
+全局 `vp 1.4.0`（当前源码环境），以及支持 Skyline 的微信开发者工具。
+`vp` 管理 Node 和内部使用的 Bun `1.4.4`，无需单独安装 Bun。
 可选的源码开发流程还需要 Git。
-主测试和 Node 24 CI 固定使用 `0.10.16+b1a0e846e`（`moon 0.1.20261020`），
-独立任务验证最低版本 `0.10.15+943464bfa`。
-当前源码选择 Node `26.12.1`；CI 同时覆盖 Node `24.20.0` 和 `24.22.1`。
+CI 仅固定使用当前 MoonBit 版本和 Node `26.12.1`；旧版兼容任务不再维护。
 [环境说明](docs/guides/miniapp_quickstart.md#prerequisites)包含版本检查与 CI 固定工具链。
 
 ## 创建第一个应用
@@ -61,7 +59,7 @@ minimoon verify . --candidate
 [源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
 
 源码的[样式配置](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
-包含 PostCSS `8.5.31` 和 weapp-tailwindcss `5.6.3`。核心 `0.3.1` 保留原生行内
+包含 PostCSS `8.5.32` 和 weapp-tailwindcss `5.6.3`。核心 `0.3.1` 保留原生行内
 内容 API；升级时需重新生成 renderer protocol `9` 的宿主产物。
 默认 Starter 仍不启用 `application`；需要时按[共享状态指南](docs/guides/shared_state.md)添加。
 迁移已有应用时同时升级 CLI 和应用的核心依赖。

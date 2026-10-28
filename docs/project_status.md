@@ -1,15 +1,16 @@
 # Project status
 
-## Toolchain and dependency refresh (2026-10-22, unreleased)
+## Toolchain and dependency refresh (2026-10-28, unreleased)
 
-Source now selects vp `1.3.0`, Node `26.12.1`, PostCSS `8.5.31`,
+Source now selects vp `1.4.0`, Node `26.12.1`, PostCSS `8.5.32`,
 weapp-tailwindcss `5.6.3`, async `0.22.5`, x `0.5.6` and explicit UI ucd `0.5.2`.
-Bun remains `1.4.3`; public API, product versions and size budgets are unchanged.
-Primary MoonBit uses moon/moonrun `0.1.20261020` (`2284bd2`) with
-moonc `0.10.16+b1a0e846e`. CI verifies binary/core archive SHA-256 values
+Bun is `1.4.4`; public API, product versions and size budgets are unchanged.
+Primary MoonBit uses moon/moonrun `0.1.20261023` (`3778465`) with
+moonc `0.10.17+d971670cd`. CI verifies binary/core archive SHA-256 values
 before extraction and asserts all three exact tool versions, since the same
 compiler release URL can receive newer moon/moonrun binaries.
-CI covers primary Node plus `24.20.0` and `24.22.1`, and the retained MoonBit floor.
+CI runs Node `26.12.1` only; the current JavaScript requirement is
+Node `>=26.12.1`. Older Node and MoonBit compatibility jobs are not maintained.
 Published archives keep their original dependencies and Starter pins.
 Both fixtures require fingerprint-bound Developer Tools acceptance before merge.
 
@@ -23,21 +24,16 @@ change; renewed Developer Tools validation is required before merging the branch
 
 ## MoonBit toolchain alignment (unreleased)
 
-Current source pins primary and Node 24 CI to `0.10.16+b1a0e846e`
-(`moon 0.1.20261016`) and adds a separate `0.10.15+943464bfa` compatibility
-job. The supported minimum remains `moon 0.1.20261012` / `moonc v0.10.15`.
-Repository checks detect `--no-mbti` support and preserve interfaces. Primary
-`moon info` emits builtin `Int32` instead of its `Int` alias; frozen comparisons
-accept only that spelling change, and minimum-version consumers compile the source.
-Source-generated Starter guidance includes
-this distinction. These changes follow the immutable core `0.3.1` release below.
+Current source pins `moon 0.1.20261023` / `moonc v0.10.17+d971670cd` and uses
+`--no-mbti` for read-only checks; `moon info` remains the canonical interface
+step. There is no lower-version compatibility job. These changes follow the
+immutable core `0.3.1` release below.
 The updated bundled JSON parser increases Starter runtime size by 925 bytes.
 The approved 1 KiB calibration sets Starter runtime and aggregate ceilings to
 231,024 and 259,024 bytes. See the performance baseline for the measurements.
-Local checks on 2026-10-21 passed on both compilers: core native/JS tests,
-UI tests and frozen API consumers. Primary coverage and the complete candidate
-gate passed, as did Node 24 JS tests and generator/package checks.
-All three CI jobs must pass for the validation branch commit before handoff.
+Local checks on the validation branch cover core native/JS tests, UI tests,
+frozen API consumers, coverage and generator/package checks. The single Test CI
+job must pass for the validation branch commit before handoff.
 Renewed Developer Tools acceptance remains pending for both changed fixture
 fingerprints; historical host evidence does not cover them.
 
@@ -245,39 +241,23 @@ CLI `0.2.7` for this repair, or add that override to an existing app and run
 pinned, vp-managed Bun audit, evaluates its raw JSON against all lockfile
 resolutions, and retains `audit.json`, `stderr.log` and `summary.json` under
 Git-ignored `_build/dependency-audit/`. CI runs the gate after MoonBit setup,
-blocks on failure, and uploads the reports even when the audit fails. Both
-jobs use `ubuntu-24.04` to keep the host image fixed.
+blocks on failure, and uploads the reports even when the audit fails. The Test
+job uses `ubuntu-24.04` to keep the host image fixed.
 
-One high-severity advisory remains:
-[`braces` GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm).
-No patched registry version was available when the policy was approved on
-2026-10-08. The user approved a temporary exception only for this exact
-advisory URL, severity `high`, and installed `braces 3.0.3` at every lockfile
-location. After reassessment on **2026-10-13**, the user approved renewal through
-**2026-11-22 UTC**, failing starting at **2026-11-23T00:00:00Z** (08:00 Asia/Shanghai).
-Production uses the current clock; no CLI or
-environment option extends the deadline.
+The former `braces` exception is historical. GitHub withdrew
+[`GHSA-vfj7-8cjw-p6xm`](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) on
+**2026-10-23** because the report was not practically exploitable. Earlier
+release records retain the fact that `braces 3.0.3` was temporarily accepted
+under the then-current advisory assessment; that historical exception does not
+establish a current source or archive security result.
 
-This exception accepts a known vulnerability; it is not a fix or a clean
-security audit. Deeply nested brace patterns can exhaust the recursive
-compile/expand walkers' JavaScript call stack, including patterns below the
-default character limit. The reviewed path is build-time tooling: the one-shot Tailwind
-build and weapp CSS processing use developer-controlled sources and fixed
-patterns, including `**/*.css`. Static tracing found no MiniApp event or
-network payload path into the vulnerable brace-expansion call. Keep build
-patterns and plugins reviewed and reject untrusted build inputs; another
-input path requires reassessment. Track the
-[upstream issue](https://github.com/micromatch/braces/issues/70) and replace
-the exception with a reviewed patched release as soon as one is available.
-
-The summary distinguishes `clean`, `accepted_exception` and `failed`.
-An accepted exception prints its deadline and never reports zero
-vulnerabilities. Other high/critical advisories, a changed advisory or installed
-version, an expired exception, invalid JSON/lock data, inconsistent exit codes,
-stderr, network errors, launch failures and timeouts all fail the gate.
-Lower-severity findings remain visible in the report. This repair is delivered
-by registry CLI `0.2.7` and an override existing apps can apply. Earlier
-occupied versions remain immutable.
+The current audit has no exception. It blocks every high or critical advisory,
+requires the advisory output and lockfile resolutions to agree, and keeps
+lower-severity findings visible in the report. Invalid JSON or lock data,
+inconsistent exit codes, stderr, network errors, launch failures and timeouts
+also fail the gate. The source-map override repair above shipped in registry
+CLI `0.2.7`; the current audit-policy change is unpublished source work.
+Earlier occupied versions remain immutable.
 
 <!-- minimoon:historical:start -->
 ## Core 0.2.7 and UI 0.1.5 publication
@@ -809,24 +789,17 @@ The independent UI module has a six-page showcase covering all 64 pinned RUI
 families, Form and Theme. Its native resource provider, API snapshots, archive
 consumer and generated-host checks are separate from core's starter contract.
 
-## Toolchain validation
+## Historical toolchain configuration (2026-10-22)
 
-The supported toolchain floor is `moon 0.1.20261012` with `moonc v0.10.15`;
-global `vp 1.3.0` manages Bun `1.4.3` and the Node runtime. Current source
-dependencies are `moonbitlang/async 0.22.5`, `moonbitlang/x 0.5.6`, UI ucd `0.5.2`,
-`weapp-tailwindcss 5.6.3`, PostCSS `8.5.31` and Acorn `8.19.0`.
-Primary and Node 24 CI pin official prebuilt `0.10.16+b1a0e846e`
-(`moon 0.1.20261020`); the minimum compatibility job pins `0.10.15+943464bfa`.
-All four checks are required for future candidates. No Rust is required.
-Older MoonBit installations must be upgraded for these releases.
-JavaScript tooling supports Node `>=24.20.0`; CI validates the Node 24.20.0
-lower boundary, Node 24.22.1 and Node 26.12.1 primary environment, installing the committed
-JavaScript lockfile. The repository and Starters generated from current source
-select Node `26.12.1` through `devEngines.runtime`; CI explicitly overrides the
-Node 24 matrix.
-Acceptance tasks use `vp run --no-cache`. Toolchain configuration is not itself
-a passing CI result;
-the release checkpoint must identify the successful run for the frozen SHA.
+That source configuration used a `moon 0.1.20261012` / `moonc v0.10.15` floor,
+global `vp 1.3.0`, Bun `1.4.3` and PostCSS `8.5.31`. Primary and Node 24 CI
+pinned `0.10.16+b1a0e846e` (`moon 0.1.20261020`); the minimum job pinned
+`0.10.15+943464bfa`. The planned four checks covered Node `24.20.0`, `24.22.1`
+and primary `26.12.1`, with the minimum MoonBit job separate. This historical
+configuration is superseded by the current
+[toolchain requirements](reference/compatibility_and_upgrades.md#toolchain-compatibility).
+Configuration alone does not establish a passing CI result; a release
+checkpoint must identify the successful run for its frozen SHA.
 
 ## RUI native migration
 

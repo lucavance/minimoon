@@ -25,7 +25,7 @@ async test "vp preserves Bun version cwd environment and literal arguments witho
   assert_eq(
     @json.parse(stdout.text()),
     Json::object({
-      "version": Json::string("1.4.3"),
+      "version": Json::string("1.4.4"),
       "cwd": Json::string(root),
       "env": Json::string("inherited probe value"),
       "args": Json::array(args.map(Json::string)),
@@ -65,7 +65,7 @@ async test "vp backend pin overrides legacy manifests and inherited shim selecti
     extra_env={ "VP_BUN_VERSION": "0.0.1", "VP_SHIM_WRAPPER": "1" },
   )
   assert_eq(code, 0)
-  assert_eq(stdout.text().trim(), "1.4.3")
+  assert_eq(stdout.text().trim(), "1.4.4")
 }
 
 ///|

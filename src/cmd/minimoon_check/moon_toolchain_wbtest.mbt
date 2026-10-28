@@ -1,38 +1,4 @@
 ///|
-test "CI assigns exact MoonBit releases to primary and minimum jobs" {
-  let command = "      MOON_RELEASE: "
-  let workflow = "jobs:\n  test:\n" +
-    command +
-    primary_moon_release +
-    "\n  node-lts-compat:\n" +
-    command +
-    primary_moon_release +
-    "\n  moon-floor-compat:\n" +
-    command +
-    moon_floor_release +
-    "\n"
-  assert_true(moon_ci_installers_valid(workflow))
-  assert_false(
-    moon_ci_installers_valid(
-      workflow.replace_all(old=primary_moon_release, new="latest"),
-    ),
-  )
-  assert_false(
-    moon_ci_installers_valid(
-      workflow.replace_all(old=moon_floor_release, new=primary_moon_release),
-    ),
-  )
-  assert_false(
-    moon_ci_installers_valid(
-      workflow.replace_all(old="moon-floor-compat:", new="unrelated:"),
-    ),
-  )
-  assert_false(
-    moon_ci_installers_valid(workflow + command + moon_floor_release + "\n"),
-  )
-}
-
-///|
 async test "source checks preserve interface bytes while moon info updates them" {
   let root = @env.current_dir().unwrap()
   let base = create_check_temporary(

@@ -21,13 +21,12 @@ for release evidence and subsequent source changes.
 
 ## Before you start
 
-Use `moon 0.1.20261012` / `moonc v0.10.15` or newer, Node `>=24.20.0`,
-global `vp 1.3.0` for current source and WeChat Developer Tools with Skyline support.
-`vp` manages Node and Bun `1.4.3`; a separate Bun installation is unnecessary.
+Use `moon 0.1.20261023` / `moonc v0.10.17+d971670cd`, Node `>=26.12.1`,
+global `vp 1.4.0` for current source and WeChat Developer Tools with Skyline support.
+`vp` manages Node and Bun `1.4.4`; a separate Bun installation is unnecessary.
 Git is needed for the optional source development workflow.
-Primary and Node 24 CI pin `0.10.16+b1a0e846e` (`moon 0.1.20261020`).
-A separate job tests the `0.10.15+943464bfa` minimum. Current source selects
-Node `26.12.1`; CI also covers Node `24.20.0` and `24.22.1`.
+CI pins the current MoonBit release and Node `26.12.1` only; older compatibility
+jobs are not maintained.
 See [environment setup](docs/guides/miniapp_quickstart.md#prerequisites) for
 version checks and the pinned CI toolchain.
 
@@ -63,7 +62,7 @@ To develop the framework or use unpublished changes, follow the separate
 [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
 
 Source [style pins](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
-include PostCSS `8.5.31` and weapp-tailwindcss `5.6.3`. Core `0.3.1` retains typed
+include PostCSS `8.5.32` and weapp-tailwindcss `5.6.3`. Core `0.3.1` retains typed
 native inline content; regenerate host output for renderer protocol `9`.
 The default Starter still has no `application` entry; follow
 [shared state](docs/guides/shared_state.md) to add one.

@@ -82,7 +82,12 @@ aggregate JavaScript bytes, including the 3,464-byte application helper.
 Against that review's ceilings, headroom was respectively 12,023, 376, 508,
 40,697, and 34,879 bytes.
 
-## MoonBit 0.10.16 alignment (unreleased)
+## Historical MoonBit 0.10.16 calibration
+
+Current source uses `moon 0.1.20261023` / `moonc v0.10.17+d971670cd`,
+vp `1.4.0`, Node `>=26.12.1` and Bun `1.4.4`. The measurements below retain
+the earlier 0.10.16 calibration as a historical budget record; they do not
+define current compatibility requirements.
 
 The same Starter source produced 229,671 runtime bytes with
 `0.10.15+943464bfa` and 230,596 with `0.10.16+b1a0e846e`, using Bun `1.4.3`.

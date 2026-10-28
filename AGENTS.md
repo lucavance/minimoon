@@ -115,7 +115,7 @@ Before starting a task:
 4. Inspect the relevant source, tests, generated artifacts, and documentation
    before proposing or implementing a change.
 
-Install global `vp 1.3.0` and initialize its managed environment
+Install global `vp 1.4.0` and initialize its managed environment
 as documented in `docs/guides/miniapp_quickstart.md`. For a fresh checkout,
 prepare the pinned environment with:
 
@@ -159,22 +159,16 @@ the user explicitly authorizes that action.
   whitespace and trailing commas when the exact formatting is not the behavior
   under test.
 
-- The supported toolchain floor is `moon 0.1.20261012` with `moonc v0.10.15`.
-  The primary and Node 24 CI jobs pin official prebuilt release
-  `0.10.16+b1a0e846e` (`moon`/`moonrun 0.1.20261020`, commit `2284bd2`).
-  CI checks both archive SHA-256 values and all three exact tool versions.
-  The separate MoonBit minimum
-  compatibility job pins `0.10.15+943464bfa`. Rust is not required.
-  On 0.10.16, `moon check` writes `.mbti` files by default. Use `--no-mbti`
-  for read-only checks; 0.10.15 does not support that flag. Repository check
-  helpers detect support, and `moon info` remains the explicit interface step.
-  Older MoonBit toolchains must be upgraded for core `0.2.7` / UI `0.1.5`.
-  JavaScript tooling
-  supports Node `>=24.20.0`; CI validates 24.20.0, 24.22.1 and the
-  26.12.1 primary environment, while global `vp 1.3.0` manages Bun `1.4.3`.
-  The repository and Starters generated from current source pin Node `26.12.1`
-  through `devEngines.runtime`; CI overrides it for lower-bound checks. No `.node-version`
-  is committed or generated. Updating the toolchain pin requires review and
+- The current toolchain is `moon 0.1.20261023` with `moonc v0.10.17+d971670cd`
+  and `moonrun 0.1.20261023`. CI pins that official prebuilt release and checks
+  both archive SHA-256 values and all exact tool versions. The repository targets
+  this current MoonBit release; older compatibility jobs are not maintained.
+  `moon check` writes `.mbti` files by default, so read-only checks use
+  `--no-mbti`; `moon info` remains the explicit interface step. Rust is not
+  required. JavaScript tooling requires Node `>=26.12.1`; global `vp 1.4.0`
+  manages Bun `1.4.4`. The repository and Starters generated from current source
+  pin Node `26.12.1` through `devEngines.runtime`. No `.node-version` is
+  committed or generated. Updating the toolchain pin requires review and
   regeneration/validation of affected artifacts.
   Empty `{}` expressions are ambiguous: use `Map([])` for empty maps,
   `Json::empty_object()` for empty JSON objects, and `{ () }` for empty blocks.
@@ -183,7 +177,7 @@ the user explicitly authorizes that action.
 - The current source and published pair is core `0.3.1` / UI `0.2.0`, with
   renderer protocol 9 and unchanged Contract 11 / runtime ABI 13.
   Current source uses async `0.22.5`, x `0.5.6` and explicit UI ucd `0.5.2`.
-  Source Starter pins are PostCSS `8.5.31` and weapp-tailwindcss `5.6.3`.
+  Source Starter pins are PostCSS `8.5.32` and weapp-tailwindcss `5.6.3`.
   Registry CLI `0.3.1` retains Node `26.11.1`, PostCSS `8.5.30`,
   weapp-tailwindcss `5.6.1` and source-map-js override `1.2.2`.
   Previous CLI `0.2.6` retains its original
@@ -218,11 +212,10 @@ git status --short --branch
 
 After `moon info`, review every `.mbti` change. Outside a reviewed toolchain
 representation migration, changes without a public API change must leave
-`git diff --name-only -- '*.mbti'` empty. MoonBit 0.10.16 emits builtin `Int32`
-where 0.10.15 emitted its `Int` alias; only that spelling change is accepted,
-with frozen API comparisons and consumers on both toolchains. Generate canonical
-interfaces with the primary compiler. The minimum job checks and compiles
-consumers without rewriting them. In a clean verification checkout,
+`git diff --name-only -- '*.mbti'` empty. The current compiler may emit builtin
+`Int32` in generated interfaces; frozen API comparisons review that spelling
+explicitly. Generate canonical interfaces with the current compiler. In a clean
+verification checkout,
 `git diff --exit-code` must also pass.
 
 The final repository review must confirm:
@@ -246,9 +239,9 @@ source, package contents and both fingerprints, then a clean worktree; changed
 fingerprints require renewed host validation. Repeat candidate restoration
 before staging any later repository changes.
 
-Future frozen candidates require all four CI checks: `Test`, both Node 24 LTS
-matrix entries, and `MoonBit minimum compatibility`. Historical two-job results
-below belong to their original releases.
+Future frozen candidates require the `Test` CI job and its local repository
+gates. Historical compatibility-job results below belong to their original
+releases.
 
 The explicitly authorized core-only `0.3.1` publication completed on 2026-10-20
 from frozen commit `bd6a465cef1e8ef57ad708a9e054e214e4f0b504`. Both CI jobs, local candidate
@@ -272,9 +265,10 @@ the Rabbita/property-reset/package-governance follow-up. Complete local candidat
 `check:all` and `check:mvp` gates, both CI jobs, archive review and fresh registry
 consumers passed. Host evidence remains local and fingerprint-bound; changed
 artifacts require renewed WeChat Developer Tools validation. Future publication
-requires separate authorization and all release gates. The exact braces `3.0.3` advisory
-exception is approved until `2026-11-23T00:00:00Z`; keep complete scanning,
-strict matching and expiry enforcement.
+requires separate authorization and all release gates. At that release, the
+exact braces `3.0.3` exception was approved until `2026-11-23T00:00:00Z`.
+That historical approval is superseded by the current no-exception
+[source audit policy](docs/project_status.md#source-dependency-audit-policy).
 
 The previously authorized core `0.2.6` / UI `0.1.4` publication completed on
 2026-10-08 after local checks, both CI jobs and exact-fingerprint host validation.

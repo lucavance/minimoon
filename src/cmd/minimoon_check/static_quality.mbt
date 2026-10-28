@@ -1,14 +1,11 @@
 ///|
-let supported_node_engine = ">=24.20.0"
-
-///|
-let node_lts_floor = "24.20.0"
+let supported_node_engine = ">=26.12.1"
 
 ///|
 let primary_node_version = "26.12.1"
 
 ///|
-let supported_bun_version = "1.4.3"
+let supported_bun_version = "1.4.4"
 
 ///|
 fn moon_identifier_character(char : UInt16) -> Bool {
@@ -126,35 +123,10 @@ async fn static_suite(root : String) -> Unit {
     require_file(root, path)
   }
   require_text(
-    root,
-    ".github/workflows/test.yml",
-    "version_at_least \"" + supported_moon_floor + "\" \"$installed_moon\"",
+    root, ".github/workflows/test.yml", "MOON_RELEASE: 0.10.17+d971670cd",
   )
   require_text(
-    root,
-    ".github/workflows/test.yml",
-    "supported floor " + supported_moon_floor,
-  )
-  require_text(
-    root,
-    ".github/workflows/test.yml",
-    "version_at_least \"" + supported_moonc_floor + "\" \"$installed_moonc\"",
-  )
-  require_text(
-    root,
-    ".github/workflows/test.yml",
-    "supported floor " + supported_moonc_floor,
-  )
-  guard moon_ci_installers_valid(
-    @fs.read_file(join(root, ".github/workflows/test.yml")).text(),
-  ) else {
-    abort("CI jobs must pin their reviewed primary or minimum MoonBit release")
-  }
-  require_text(
-    root, ".github/workflows/test.yml", "MoonBit minimum compatibility",
-  )
-  require_text(
-    root, ".github/workflows/test.yml", "vp run --no-cache minimoon check --suite toolchain-floor",
+    root, ".github/workflows/test.yml", "MOONC_VERSION: v0.10.17+d971670cd (2026-10-23)",
   )
   for
     token in [
@@ -167,16 +139,10 @@ async fn static_suite(root : String) -> Unit {
     ".github/workflows/test.yml",
     "node-version: " + primary_node_version,
   )
-  require_text(
-    root,
-    ".github/workflows/test.yml",
-    "node: [" + node_lts_floor + ", 24.22.1]",
-  )
-  require_text(root, ".github/workflows/test.yml", "node-lts-compat:")
-  require_text(root, ".github/workflows/test.yml", "Node 24 LTS compatibility")
   require_text(root, ".github/workflows/test.yml", "moon test --target js")
+  // The aggregate candidate gate includes generator and packaged consumers.
   require_text(
-    root, ".github/workflows/test.yml", "vp run --no-cache minimoon check --suite generator",
+    root, ".github/workflows/test.yml", "vp run --no-cache check:candidate",
   )
   forbid_text(root, ".github/workflows/test.yml", "node-version-file")
   guard !@fs.exists(join(root, ".node-version")) else {
@@ -226,12 +192,6 @@ async fn static_suite(root : String) -> Unit {
   }
   vp_toolchain_policy(root)
   ci_handoff_gate(root)
-  forbid_text(
-    root, ".github/workflows/test.yml", "version_at_least \"0.10.6\" \"$installed_moonc\"",
-  )
-  forbid_text(
-    root, ".github/workflows/test.yml", "moonc $installed_moonc is below the supported floor 0.10.6",
-  )
   for
     path in [
       "AGENTS.md", "README.mbt.md", "README.zh-CN.mbt.md", "docs/guides/miniapp_quickstart.md",
@@ -239,10 +199,7 @@ async fn static_suite(root : String) -> Unit {
     ] {
     for
       token in [
-        "moon " + supported_moon_floor,
-        "moonc v" + supported_moonc_floor,
-        supported_node_engine,
-        supported_bun_version,
+        "0.1.20261023", "0.10.17+d971670cd", supported_node_engine, supported_bun_version,
       ] {
       require_text(root, path, token)
     }

@@ -1,14 +1,4 @@
 ///|
-// A reviewed build-input exception, not a vulnerability fix.
-let dependency_audit_exception_url = "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm"
-
-///|
-let dependency_audit_exception_deadline = "2026-11-23T00:00:00Z"
-
-///|
-let dependency_audit_exception_deadline_ms : UInt64 = 1795392000000UL
-
-///|
 struct DependencyAuditDecision {
   status : String
   reason : String
@@ -25,9 +15,7 @@ fn dependency_audit_record_identity(record : String) -> (String, String)? {
 }
 
 ///|
-fn dependency_audit_lock_packages(
-  source : String,
-) -> (Array[String], Map[String, Bool]) raise {
+fn dependency_audit_lock_packages(source : String) -> Map[String, Bool] raise {
   let lock = @json5.parse(source)
   guard lock is Object(fields) &&
     fields.get("lockfileVersion") == Some(Json::number(1)) &&
@@ -36,20 +24,15 @@ fn dependency_audit_lock_packages(
     !packages.is_empty() else {
     raise Failure("unsupported or empty bun.lock")
   }
-  let versions : Array[String] = []
   let names : Map[String, Bool] = Map([])
   for path, value in packages {
     guard value is Array([String(record), String(_), Object(_), String(_), ..]) &&
-      dependency_audit_record_identity(record) is Some((name, version)) else {
+      dependency_audit_record_identity(record) is Some((name, _)) else {
       raise Failure("invalid bun.lock package: " + path)
     }
     names[name] = true
-    if name == "braces" && !versions.contains(version) {
-      versions.push(version)
-    }
   }
-  versions.sort()
-  (versions, names)
+  names
 }
 
 ///|
@@ -58,18 +41,16 @@ fn evaluate_dependency_audit(
   stdout : String,
   stderr : String,
   lock_source : String,
-  now_ms : UInt64,
 ) -> DependencyAuditDecision {
   fn inspect() -> DependencyAuditDecision raise {
     guard (exit_code == 0 || exit_code == 1) && stderr == "" else {
       raise Failure("audit command failed (exit \{exit_code}); see stderr.log")
     }
-    let (versions, names) = dependency_audit_lock_packages(lock_source)
+    let names = dependency_audit_lock_packages(lock_source)
     let report = @json.parse(stdout)
     guard report is Object(packages) else {
       raise Failure("Bun audit JSON must be an object")
     }
-    let mut accepted = 0
     for name, value in packages {
       guard names.contains(name) &&
         value is Array(entries) &&
@@ -85,23 +66,10 @@ fn evaluate_dependency_audit(
         }
         match severity {
           "info" | "low" | "moderate" => ()
-          "high" => {
-            guard name == "braces" && url == dependency_audit_exception_url else {
-              raise Failure("blocking high advisory: " + name + " " + url)
-            }
-            guard versions == ["3.0.3"] else {
-              raise Failure(
-                "braces exception requires all resolved versions to be 3.0.3",
-              )
-            }
-            guard now_ms < dependency_audit_exception_deadline_ms else {
-              raise Failure(
-                "braces exception expired at " +
-                dependency_audit_exception_deadline,
-              )
-            }
-            accepted = accepted + 1
-          }
+          "high" | "critical" =>
+            raise Failure(
+              "blocking " + severity + " advisory: " + name + " " + url,
+            )
           _ =>
             raise Failure(
               "blocking or unknown severity: " + name + " " + severity,
@@ -109,19 +77,10 @@ fn evaluate_dependency_audit(
         }
       }
     }
-    guard exit_code == (if accepted > 0 { 1 } else { 0 }) else {
+    guard exit_code == 0 else {
       raise Failure("audit exit code disagrees with high/critical findings")
     }
-    if accepted > 0 {
-      {
-        status: "accepted_exception",
-        reason: "Known high braces advisory accepted until " +
-        dependency_audit_exception_deadline +
-        "; this is not a vulnerability fix",
-      }
-    } else {
-      { status: "clean", reason: "No high or critical advisory reported", }
-    }
+    { status: "clean", reason: "No high or critical advisory reported", }
   }
   inspect() catch {
     err => { status: "failed", reason: "\{err}", }
@@ -140,9 +99,6 @@ fn dependency_audit_summary(
       Some(code) => Json::number(code.to_double())
       None => Json::null()
     },
-    "exceptionAdvisory": Json::string(dependency_audit_exception_url),
-    "exceptionPackage": Json::string("braces"),
-    "exceptionDeadline": Json::string(dependency_audit_exception_deadline),
   })
 }
 
@@ -200,7 +156,7 @@ async fn audit_suite(root : String) -> Unit {
     stdout = output.text()
     stderr = error.text()
     let lock = @fs.read_file(join(root, "bun.lock")).text()
-    evaluate_dependency_audit(code, stdout, stderr, lock, @env.now())
+    evaluate_dependency_audit(code, stdout, stderr, lock)
   } catch {
     err =>
       { status: "failed", reason: "audit command or bun.lock failed: \{err}", }

@@ -18,12 +18,12 @@ jobs:
     timeout-minutes: 45
     env:
       VP_NODE_VERSION: 26.12.1
-      VP_PACKAGE_MANAGER: bun@1.4.3
-      MOON_RELEASE: 0.10.16+b1a0e846e
-      MOON_VERSION: 0.1.20261020 (2284bd2 2026-10-20)
-      MOONC_VERSION: v0.10.16+b1a0e846e (2026-10-16)
-      MOON_ARCHIVE_SHA256: 84ae424cd31bc485d2cf4d3736534e52f2f265ceafb562a187b9ab26d9566212
-      MOON_CORE_SHA256: e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0
+      VP_PACKAGE_MANAGER: bun@1.4.4
+      MOON_RELEASE: 0.10.17+d971670cd
+      MOON_VERSION: 0.1.20261023 (3778465 2026-10-23)
+      MOONC_VERSION: v0.10.17+d971670cd (2026-10-23)
+      MOON_ARCHIVE_SHA256: d0a96eaf91c77cfcdd7b7df75390c5a1a95d0b8a328b1a5ed6fee050cfbf8d50
+      MOON_CORE_SHA256: 2d837ecbef5933c09726d63682a7695123d622e6aee13525fbc98c4b49433714
 
     defaults:
       run:
@@ -35,8 +35,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - &setup-moonbit
-        name: Setup MoonBit
+      - name: Setup MoonBit
         run: |
           set -euo pipefail
           export MOON_HOME="$RUNNER_TEMP/minimoon-moon"
@@ -61,9 +60,9 @@ jobs:
           echo "MOON_HOME=$MOON_HOME" >> "$GITHUB_ENV"
 
       - name: Setup Vite+ (26.12.1)
-        uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
+        uses: voidzero-dev/setup-vp@cab1ab9eaff52d4857875f4f2c016e36af8f2c76 # v1.22.0
         with:
-          version: 1.3.0
+          version: 1.4.0
           node-version: 26.12.1
           run-install: false
           cache: true
@@ -71,7 +70,7 @@ jobs:
       - name: Install JS tooling
         run: |
           vp --version
-          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.3"'
+          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.4"'
           vp install --frozen-lockfile
 
       - name: MoonBit environment
@@ -79,19 +78,6 @@ jobs:
           moon update
           version_output="$(moon version --all)"
           printf '%s\n' "$version_output"
-          installed_moon="$(printf '%s\n' "$version_output" | awk '$1 == "moon" { print $2; exit }')"
-          installed_moonc="$(printf '%s\n' "$version_output" | awk '$1 == "moonc" { sub(/^v/, "", $2); split($2, parts, "+"); print parts[1]; exit }')"
-          version_at_least() {
-            [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n 1)" = "$1" ]
-          }
-          version_at_least "0.1.20261012" "$installed_moon" || {
-            echo "moon $installed_moon is below the supported floor 0.1.20261012" >&2
-            exit 1
-          }
-          version_at_least "0.10.15" "$installed_moonc" || {
-            echo "moonc $installed_moonc is below the supported floor 0.10.15" >&2
-            exit 1
-          }
 
       - name: Dependency advisory scan
         id: dependency-audit
@@ -295,107 +281,3 @@ jobs:
           path: _build/devtools-handoff/ui/
           if-no-files-found: error
           retention-days: 14
-
-  node-lts-compat:
-    name: Node 24 LTS compatibility (${{ matrix.node }})
-    runs-on: ubuntu-24.04
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [24.20.0, 24.22.1]
-    env:
-      VP_NODE_VERSION: ${{ matrix.node }}
-      VP_PACKAGE_MANAGER: bun@1.4.3
-      MOON_RELEASE: 0.10.16+b1a0e846e
-      MOON_VERSION: 0.1.20261020 (2284bd2 2026-10-20)
-      MOONC_VERSION: v0.10.16+b1a0e846e (2026-10-16)
-      MOON_ARCHIVE_SHA256: 84ae424cd31bc485d2cf4d3736534e52f2f265ceafb562a187b9ab26d9566212
-      MOON_CORE_SHA256: e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0
-
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - *setup-moonbit
-
-      - name: Setup Vite+ (${{ matrix.node }})
-        uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
-        with:
-          version: 1.3.0
-          node-version: ${{ matrix.node }}
-          run-install: false
-          cache: true
-
-      - name: Install toolchains and dependencies
-        run: |
-          vp --version
-          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.3"'
-          vp install --frozen-lockfile
-          moon update
-
-      - name: Validate Node 24 compatibility surface
-        run: |
-          moon test --target js
-          vp run --no-cache minimoon check --suite generator
-          git diff --check
-
-      - name: Final source cleanliness
-        run: |
-          source_status="$(git status --porcelain --untracked-files=all)"
-          if [ -n "$source_status" ]; then
-            printf '%s\n' "$source_status"
-            echo "CI requires a clean tracked and untracked worktree" >&2
-            exit 1
-          fi
-          git diff --exit-code
-
-  moon-floor-compat:
-    name: MoonBit minimum compatibility
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    env:
-      VP_NODE_VERSION: 26.12.1
-      VP_PACKAGE_MANAGER: bun@1.4.3
-      MOON_RELEASE: 0.10.15+943464bfa
-      MOON_VERSION: 0.1.20261012 (748b63c 2026-10-12)
-      MOONC_VERSION: v0.10.15+943464bfa (2026-10-12)
-      MOON_ARCHIVE_SHA256: 24b93a5409d2a4fb8e3d1b84b473f27b63476cef4418094764df96cb26b03c09
-      MOON_CORE_SHA256: 96d30f4dbcc6a9e1736ef26fbdd0e8fb0e97cb01d50e55d2a0072208b8061ae5
-
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - *setup-moonbit
-
-      - name: Setup Vite+ (26.12.1)
-        uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
-        with:
-          version: 1.3.0
-          node-version: 26.12.1
-          run-install: false
-          cache: true
-
-      - name: Install toolchains and dependencies
-        run: |
-          vp --version
-          vp env current --json | jq -e --arg node "$VP_NODE_VERSION" '.node.version == $node and .package_manager.name == "bun" and .package_manager.version == "1.4.3"'
-          vp install --frozen-lockfile
-          moon update
-
-      - name: Validate minimum MoonBit compatibility
-        run: vp run --no-cache minimoon check --suite toolchain-floor
-
-      - name: Final source cleanliness
-        run: |
-          test -z "$(git status --porcelain --untracked-files=all)"
-          git diff --exit-code
