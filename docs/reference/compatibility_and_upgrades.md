@@ -1,7 +1,7 @@
 # Compatibility and upgrades
 
 Minimoon is pre-1.0. This policy defines the compatibility guarantees maintained
-for core `0.3.1` and optional UI `0.2.0`, including the versioned transition
+for core `0.3.2` and optional UI `0.2.0`, including the versioned transition
 from the frozen core 0.1 consumer baseline.
 
 ## Compatibility surfaces
@@ -54,10 +54,11 @@ is the verified MiniApp host format; ESM is not an implied upgrade.
 | `0.2.6` | `0.1.4` | Previous published pair; tooling and stylesheet refresh; UI declares core `0.2.6` |
 | `0.2.7` | `0.1.5` | Published pair; MoonBit 0.10.15 and dependency refresh; UI declares core `0.2.7` |
 | `0.3.0` | `0.2.0` | Published pair; native inline / protocol 9, Nova/Vega, optional Markdown and Drawer edges; UI declares core `0.3.0` |
-| `0.3.1` | `0.2.0` | Core-only candidate: queries and watch fixes; UI retains core `0.3.0` |
+| `0.3.1` | `0.2.0` | Published core-only release: queries and watch fixes; UI retains core `0.3.0` |
+| `0.3.2` | `0.2.0` | Core-only candidate: current toolchain, Starter pins and Skyline scroll sizing; UI retains core `0.3.0` |
 
 Previously published archives and their dependency declarations remain immutable.
-Upgrade the CLI and direct core dependency to `0.3.1`, and optional UI to `0.2.0`.
+Upgrade the CLI and direct core dependency to `0.3.2`, and optional UI to `0.2.0`.
 See [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
 for actual publication and consumer results. This matrix does not establish
 real-host acceptance or certify every future `0.3.x` / `0.2.x` combination.
@@ -67,14 +68,14 @@ consumer gates for another pair.
 
 ## Toolchain compatibility
 
-Current source, carrying core `0.3.1` / UI `0.2.0` version metadata, targets
+Current source, carrying core `0.3.2` / UI `0.2.0` version metadata, targets
 `moon 0.1.20261023` with
 `moonc v0.10.17+d971670cd` and `moonrun 0.1.20261023`. CI pins the official
 prebuilt release, verifies both archive SHA-256 values and all exact tool
 versions, and does not maintain older MoonBit compatibility jobs. No Rust is
 required. Direct dependencies are
 `moonbitlang/async@0.22.5` and `moonbitlang/x@0.5.6`.
-UI explicitly constrains `moonbit-community/ucd@0.5.2` for cmark/charclass;
+Source UI metadata explicitly constrains `moonbit-community/ucd@0.5.2` for cmark/charclass;
 cmark `0.4.12`, casefold `0.1.7` and charclass `0.1.4` are unchanged.
 
 The current MoonBit compiler writes `.mbti` files during `moon check`. Use
@@ -146,7 +147,7 @@ Packaging checks do not prove registry availability or a host pass.
 
 Use the exact application style versions for the selected CLI:
 
-| Dependency | Published CLI `0.3.1` | Current source CLI |
+| Dependency | Published CLI `0.3.1` | Core `0.3.2` CLI |
 | --- | --- | --- |
 | `@tailwindcss/cli` and `tailwindcss` | `4.3.3` | `4.3.3` |
 | `postcss`, including `overrides.postcss` | `8.5.30` | `8.5.32` |
@@ -182,8 +183,8 @@ The internal launcher uses the current Node 26.12.1 environment.
 
 ## Upgrade procedure
 
-Core 0.3.1 adds optional `/query` pagination, confirmed search, refresh and retry;
-existing APIs and protocols stay unchanged. UI remains 0.2.0 with its original
+Core 0.3.2 fixes Skyline scroll sizing and refreshes the CLI, Starter and
+toolchain. Existing APIs and protocols stay unchanged. UI remains 0.2.0 with its original
 core 0.3.0 declaration. Use source until publication is recorded.
 
 For upgrades from core 0.2, follow the
@@ -196,10 +197,10 @@ and regenerate all host output for protocol 9.
    Use the source workflow if the target versions are not available yet.
 2. Use the current MoonBit release above and global `vp 1.4.0`.
    After registry availability is recorded, install
-   `moon install lampclaw/minimoon/cmd/minimoon@0.3.1`; until then follow the
+   `moon install lampclaw/minimoon/cmd/minimoon@0.3.2`; until then follow the
    [source workflow](../guides/miniapp_quickstart.md#create-from-the-current-source)
-   instead. Check PATH and confirm `minimoon --version` reports `0.3.1`.
-3. Update the application's direct dependency to `lampclaw/minimoon@0.3.1` and,
+   instead. Check PATH and confirm `minimoon --version` reports `0.3.2`.
+3. Update the application's direct dependency to `lampclaw/minimoon@0.3.2` and,
    if used, `lampclaw/minimoon_ui@0.2.0`. Update direct async/x imports to the
    reviewed versions above when the application declares them. Run `moon update`
    and confirm the resolved versions without unintended workspace overrides.

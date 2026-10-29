@@ -1,5 +1,10 @@
 # Release candidate handoff
 
+The user authorized core-only `0.3.2` publication on 2026-10-29. Use the current
+core version in the gates below, publish only core, and validate fresh registry
+consumers with the existing UI `0.2.0`. UI's core `0.3.0` declaration is unchanged.
+Publication is pending; the previous release records below remain historical.
+
 The user-authorized core-only `0.3.1` publication completed on 2026-10-20
 from frozen commit `bd6a465cef1e8ef57ad708a9e054e214e4f0b504` after all local/CI gates,
 archive review and fresh registry consumers passed. It adds optional paginated
@@ -145,7 +150,7 @@ The UI archive gate instead copies source into a temporary independent Git
 root, runs the real `moon package`, checks the archive allowlist and required
 files, and compiles consumers from the extracted package. Its reviewed output
 is `_build/publish/lampclaw-minimoon_ui-0.2.0.zip`. The core candidate archive is
-`_build/publish/lampclaw-minimoon-0.3.1.zip`. UI publication must use that checked
+`_build/publish/lampclaw-minimoon-0.3.2.zip`. UI publication must use that checked
 archive extracted outside all Git and Moon workspace ancestors, after registry
 core is available and consumers pass. A successful archive gate does not itself
 publish either module. Previously published archives remain immutable.

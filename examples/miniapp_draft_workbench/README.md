@@ -1,6 +1,6 @@
 # Minimoon 草稿工作台
 
-Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.3.1` 公共 API 的轻量示例：
+Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.3.2` 公共 API 的轻量示例：
 **四个原生 Tab、一个编辑器、四个能力实验室，共九条路由**。
 它同时承担核心框架 conformance 验收，不是账号系统或云笔记服务。
 
@@ -16,9 +16,9 @@ Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.3.1` 公共 API �
 vp run minimoon verify examples/miniapp_draft_workbench --candidate
 ```
 
-当前 `0.3.1` 源码使用 Vite+ CLI `1.4.0` 和已固定的
+当前 `0.3.2` 源码使用 Vite+ CLI `1.4.0` 和已固定的
 `moonbitlang/async 0.22.5`。使用上述仓库 CLI 或确认发布后的
-`0.3.1` Registry CLI，不能混用旧工具生成的文件。
+`0.3.2` Registry CLI，不能混用旧工具生成的文件。
 运行前准备 `moon 0.1.20261023`／`moonc v0.10.17+d971670cd`、Node `>=26.12.1` 和 Bun `1.4.4`。
 
 导入 **`examples/miniapp_draft_workbench/dist/`**，不要导入源码目录。
@@ -93,7 +93,7 @@ MoonBit 自有资源，不依赖 UI 模块、远程素材或手写 JavaScript。
 当前未发布源码在“状态与渲染”的“列表查询（本地模拟）”中演示可选 query 包：
 23 条模拟草稿、确认搜索、刷新、连续追加及失败重试。输入“慢速”可检查旧响应隔离；
 “下一次响应失败”用于验收刷新和追加失败，关闭／重开可验收局部组件释放。
-该演示随核心 `0.3.1` 提供；注册表可用性以项目状态记录为准。
+该演示随核心 `0.3.2` 提供；注册表可用性以项目状态记录为准。
 
 自动化覆盖存储损坏／失败／重复操作、跨页缓冲、请求乱序／重复回调／解码失败、
 Page 与 App 所有权，以及原有控件和渲染实验。
@@ -107,5 +107,5 @@ UI Showcase 表单回显，共 12 项；
 `generated/verify_report.json` 与 `release_summary.json` 是公开 candidate 记录；
 `devtools.evidence.json` 私人且被 Git 忽略。新名称、九路由和新产物必须重新验收，
 不能沿用旧核心证据。本轮共享宿主修复也改变了 UI 产物，UI Showcase 必须另行复验。
-当前源码版本为核心 `0.3.1`；候选产物、宿主验证和注册表可用性分别核验。
+当前源码版本为核心 `0.3.2`；候选产物、宿主验证和注册表可用性分别核验。
 不宣称生产请求域名或完整 HTTPS/TLS 验证，验证命令本身不会发布包。

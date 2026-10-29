@@ -1,6 +1,6 @@
 ///|
 pub fn product_version() -> String {
-  "0.3.1"
+  "0.3.2"
 }
 
 ///|

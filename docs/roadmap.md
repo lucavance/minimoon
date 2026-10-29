@@ -2,15 +2,16 @@
 
 ## Near-term priorities
 
-### Toolchain and dependency refresh (unreleased)
+### Core 0.3.2 publication candidate
 
 Align source and Starter pins to vp `1.4.0`, Node `26.12.1`, PostCSS `8.5.32`,
 weapp-tailwindcss `5.6.3`, async `0.22.5`, x `0.5.6` and UI ucd `0.5.2`.
 Verify the current MoonBit `0.1.20261023`/`0.10.17+d971670cd` identity and its
 archive hashes. Use Node `26.12.1` only; older compatibility jobs are removed.
-Validate both fixture fingerprints on the branch before merging.
+Publish core only after its frozen CI, local release gates and exact-fingerprint
+host validation pass. UI remains the existing `0.2.0`.
 
-### MoonBit toolchain alignment (unreleased)
+### MoonBit toolchain alignment (core 0.3.2)
 
 Pin CI to `0.10.17+d971670cd` and keep source checks read-only with
 capability-detected `--no-mbti`; review interfaces through `moon info`.
@@ -51,10 +52,9 @@ separate compatibility and host-validation review.
 
 Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Application authors use
-`moon install lampclaw/minimoon/cmd/minimoon@0.3.1` and
+`moon install lampclaw/minimoon/cmd/minimoon@0.3.2` and
 `minimoon init my-app`. Source installation remains available for framework
-development and unpublished candidates. The current source and published pair
-is core `0.3.1` / UI `0.2.0`. UI retains its core `0.3.0` declaration.
+development and unpublished candidates. The source candidate is core `0.3.2` / UI `0.2.0`. UI retains its core `0.3.0` declaration.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not

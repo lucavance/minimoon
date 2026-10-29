@@ -138,7 +138,7 @@ fn ci_handoff_check_source() -> String {
     #|    assert.equal(handoff.appDirectory, fixture)
     #|    assert.equal(handoff.fixture, name)
     #|    assert.equal(handoff.commit, commit)
-    #|    assert.equal(handoff.versions.minimoon, "0.3.1")
+    #|    assert.equal(handoff.versions.minimoon, "0.3.2")
     #|    assert.equal(handoff.versions.minimoonUi, "0.2.0")
     #|    const manifest = JSON.parse(fs.readFileSync(path.join(base, "manifest.json"), "utf8"))
     #|    const summary = JSON.parse(fs.readFileSync(path.join(base, "release_summary.json"), "utf8"))

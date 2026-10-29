@@ -1,41 +1,23 @@
 # Project status
 
-## Toolchain and dependency refresh (2026-10-28, unreleased)
+## Core 0.3.2 publication candidate (2026-10-29)
 
-Source now selects vp `1.4.0`, Node `26.12.1`, PostCSS `8.5.32`,
-weapp-tailwindcss `5.6.3`, async `0.22.5`, x `0.5.6` and explicit UI ucd `0.5.2`.
-Bun is `1.4.4`; public API, product versions and size budgets are unchanged.
-Primary MoonBit uses moon/moonrun `0.1.20261023` (`3778465`) with
-moonc `0.10.17+d971670cd`. CI verifies binary/core archive SHA-256 values
-before extraction and asserts all three exact tool versions, since the same
-compiler release URL can receive newer moon/moonrun binaries.
-CI runs Node `26.12.1` only; the current JavaScript requirement is
-Node `>=26.12.1`. Older Node and MoonBit compatibility jobs are not maintained.
-Published archives keep their original dependencies and Starter pins.
-Both fixtures require fingerprint-bound Developer Tools acceptance before merge.
+The user authorized core-only `lampclaw/minimoon@0.3.2`. Publication is pending
+the frozen candidate, CI, local release gates and registry verification.
+UI remains the immutable published `0.2.0`, declaring core `0.3.0`.
 
-## Skyline Markdown layout follow-up (unreleased)
-
-Generated apps enable `rendererOptions.skyline.enableScrollViewAutoSize` so
-horizontal scroll views reserve their content height. This addresses the
-Foundation Markdown table/code overlap below the nested task. The regression
-test rejects a generated config without this option. Both fixture fingerprints
-change; renewed Developer Tools validation is required before merging the branch.
-
-## MoonBit toolchain alignment (unreleased)
-
-Current source pins `moon 0.1.20261023` / `moonc v0.10.17+d971670cd` and uses
-`--no-mbti` for read-only checks; `moon info` remains the canonical interface
-step. There is no lower-version compatibility job. These changes follow the
-immutable core `0.3.1` release below.
-The updated bundled JSON parser increases Starter runtime size by 925 bytes.
-The approved 1 KiB calibration sets Starter runtime and aggregate ceilings to
-231,024 and 259,024 bytes. See the performance baseline for the measurements.
-Local checks on the validation branch cover core native/JS tests, UI tests,
-frozen API consumers, coverage and generator/package checks. The single Test CI
-job must pass for the validation branch commit before handoff.
-Renewed Developer Tools acceptance remains pending for both changed fixture
-fingerprints; historical host evidence does not cover them.
+This candidate includes Skyline scroll-view auto sizing to fix Markdown
+table/code overlap, and the reviewed toolchain/dependency refresh: moon/moonrun
+`0.1.20261023` (`3778465`), moonc `0.10.17+d971670cd`, vp `1.4.0`,
+Node `>=26.12.1` (pinned `26.12.1`), Bun `1.4.4`, PostCSS `8.5.32`,
+weapp-tailwindcss `5.6.3`, async `0.22.5` and x `0.5.6`.
+Source UI metadata explicitly constrains ucd `0.5.2`; it is not republished.
+CI checksum-pins the exact MoonBit release and runs only the Test job.
+Read-only checks use `--no-mbti`; `moon info` owns canonical interfaces.
+Public APIs, Contract 11 / ABI 13 / renderer protocol 9 and reviewed budgets
+are unchanged. The prior 1 KiB Starter calibration remains documented in the
+performance baseline. Published archives retain their original contents.
+Actual host evidence stays local and must match both candidate fingerprints.
 
 ## Published release: core 0.3.1 / UI 0.2.0
 

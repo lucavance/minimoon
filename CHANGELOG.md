@@ -6,9 +6,19 @@ tags.
 
 ## [Unreleased]
 
-- Refresh vp, Node, MoonBit tools and dependencies; checksum-pin CI archives.
-- Align MoonBit CI, preserve interfaces on check, and raise Starter limits 1 KiB.
-- Fix Markdown overlap with Skyline scroll sizing.
+## [0.3.2] — candidate
+
+- Fix Markdown table/code overlap by enabling Skyline scroll-view auto sizing.
+- Target MoonBit `0.10.17+d971670cd` (`moon 0.1.20261023`), Node `>=26.12.1`,
+  global vp `1.4.0` and managed Bun `1.4.4`; retire older compatibility jobs.
+- Refresh async `0.22.5`, x `0.5.6`, Starter PostCSS `8.5.32` and
+  weapp-tailwindcss `5.6.3`; preserve source-map-js override `1.2.2`.
+- Preserve interfaces during checks and checksum-pin the exact CI toolchain.
+  Retain the reviewed 1 KiB Starter size calibration.
+- Remove the former braces advisory exception after its withdrawal; audits
+  block every high/critical finding. Historical release records remain intact.
+- Preserve public APIs, Contract 11, ABI 13 and protocol 9. Core-only release;
+  UI remains `0.2.0` with its original core `0.3.0` dependency.
 
 ## [0.3.1] — candidate
 

@@ -8,10 +8,10 @@ or `setData` is needed.
 
 ## Project status
 
-Core `lampclaw/minimoon 0.3.1` and optional `lampclaw/minimoon_ui 0.2.0`
-are published, both pre-1.0. See
+Core `lampclaw/minimoon 0.3.2` and optional `lampclaw/minimoon_ui 0.2.0`
+are pre-1.0. See
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
-for release evidence and subsequent source changes.
+for registry availability and release evidence.
 
 ## What you can build
 
@@ -36,7 +36,7 @@ After environment setup, run these commands outside an existing Moon workspace:
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon@0.3.1
+moon install lampclaw/minimoon/cmd/minimoon@0.3.2
 minimoon --version
 minimoon init my-app
 cd my-app
@@ -55,14 +55,14 @@ Use a new or empty `my-app/`. Its `moon.mod` resolves core from Mooncakes;
 no checkout, `moon.work` or `--minimoon-root` is needed. `vp install` installs
 the style build tools.
 
-Confirm `minimoon --version` reports `0.3.1`; check PATH if another installed CLI
+Confirm `minimoon --version` reports `0.3.2`; check PATH if another installed CLI
 is selected. See [fixed-version installation](docs/guides/miniapp_quickstart.md#install-a-specific-version)
 and [upgrading an existing app](docs/reference/compatibility_and_upgrades.md#upgrade-procedure).
 To develop the framework or use unpublished changes, follow the separate
 [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
 
 Source [style pins](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
-include PostCSS `8.5.32` and weapp-tailwindcss `5.6.3`. Core `0.3.1` retains typed
+include PostCSS `8.5.32` and weapp-tailwindcss `5.6.3`. Core `0.3.2` retains typed
 native inline content; regenerate host output for renderer protocol `9`.
 The default Starter still has no `application` entry; follow
 [shared state](docs/guides/shared_state.md) to add one.

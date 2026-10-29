@@ -1,6 +1,6 @@
 # Native tabs and page layout
 
-Core `0.3.1` uses Contract 11 and runtime ABI 13 for native bottom navigation
+Core `0.3.2` uses Contract 11 and runtime ABI 13 for native bottom navigation
 and synchronous page layout. Renderer protocol advances to 9. Regenerate the entire
 application after migrating.
 
