@@ -22,6 +22,7 @@ project.private.config.json
 devtools.evidence.json
 
 # Repository-only resources and tests do not belong in the UI registry archive.
+/README.zh-CN.mbt.md
 /examples/
 /docs/
 **/*_bench.mbt

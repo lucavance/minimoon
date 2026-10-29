@@ -101,8 +101,9 @@ pub fn docs_check_source() -> String {
     #|
     #|function fixtureReadmeProblems(source, content, inventory) {
     #|  const problems = []
+    #|  const readme = source.includes(".zh-CN.") ? "README.zh-CN.md" : "README.md"
     #|  for (const fixture of inventory) {
-    #|    const row = content.split("\n").find(line => line.startsWith("|") && line.includes(fixture.directory + "/README.md"))
+    #|    const row = content.split("\n").find(line => line.startsWith("|") && line.includes(fixture.directory + "/" + readme))
     #|    if (!row) {
     #|      problems.push(source + ": missing fixture overview: " + fixture.directory)
     #|      continue
@@ -138,6 +139,29 @@ pub fn docs_check_source() -> String {
     #|
     #|function normalizedMoonSnippet(code) {
     #|  return code.replace(/@minimoon\./g, "").replace(/\s+/g, "").replace(/,(?=[}\])])/g, "")
+    #|}
+    #|
+    #|function readmeLanguageProblems(source, content, sibling) {
+    #|  const introduction = content.split(/^## /m, 1)[0]
+    #|  return introduction.includes("](" + sibling + ")") ? [] : [source + ": missing README language link: " + sibling]
+    #|}
+    #|
+    #|function previewProblems(source, content, directories) {
+    #|  const start = "<!-- minimoon:preview:start -->"
+    #|  const end = "<!-- minimoon:preview:end -->"
+    #|  if (content.split(start).length !== 2 || content.split(end).length !== 2 || content.indexOf(end) < content.indexOf(start)) {
+    #|    return [source + ": missing, duplicate or malformed preview block"]
+    #|  }
+    #|  const block = content.slice(content.indexOf(start) + start.length, content.indexOf(end))
+    #|  const paths = [...new Set([...block.matchAll(/\x60([^\x60\n]*\/dist\/?)\x60/g)].map(match => match[1].trim()))].sort()
+    #|  const expected = directories.map(directory => directory + "/dist/").sort()
+    #|  return JSON.stringify(paths) === JSON.stringify(expected) ? [] : [source + ": incorrect example import directories; expected " + expected.join(", ")]
+    #|}
+    #|
+    #|function rebuildProblems(source, content, directory) {
+    #|  const block = markedCode(source, content, "rebuild", "bash")
+    #|  const expected = "vp run minimoon verify " + directory + " --candidate"
+    #|  return [...block.problems, ...(block.code.trim().replace(/\s+/g, " ") === expected ? [] : [source + ": example rebuild command differs from " + expected])]
     #|}
     #|
     #|function onboardingParityProblems(source, reference, content) {
@@ -417,11 +441,24 @@ pub fn docs_check_source() -> String {
     #|  const marked = "<!-- minimoon:onboarding:start -->\n" + fence + "bash\nmoon install lampclaw/minimoon/cmd/minimoon\nminimoon init my-app\n" + fence + "\n<!-- minimoon:onboarding:end -->"
     #|  const counter = "<!-- minimoon:counter:start -->\n" + fence + "moonbit\nfn demo() { () }\n" + fence + "\n<!-- minimoon:counter:end -->"
     #|  const doc = marked + "\n" + counter
+    #|  const tick = String.fromCharCode(96)
+    #|  const preview = "<!-- minimoon:preview:start -->\nImport **" + tick + "examples/core/dist/" + tick + "**.\n<!-- minimoon:preview:end -->"
+    #|  const rebuild = "<!-- minimoon:rebuild:start -->\n" + fence + "bash\nvp run minimoon verify examples/core --candidate\n" + fence + "\n<!-- minimoon:rebuild:end -->"
     #|  const oldSchema = Number(contractVersion) - 1
     #|  const migration = "Schema 8 and 9 configurations must migrate to " + contractVersion + ";"
     #|  const badMigration = "Schema 8 and 9 configurations must migrate to " + oldSchema + ";"
     #|  const cases = [
     #|    ["mirror drift", mirroredTextProblems("readme", "current", "old"), "mirror drift"],
+    #|    ["missing translation link", readmeLanguageProblems("readme", "# Example\n", "README.zh-CN.md"), "language link"],
+    #|    ["language link below introduction", readmeLanguageProblems("readme", "# Example\n## More\n[中文](README.zh-CN.md)", "README.zh-CN.md"), "language link"],
+    #|    ["missing preview", previewProblems("readme", "# Example", ["examples/core"]), "preview block"],
+    #|    ["duplicate preview", previewProblems("readme", preview + preview, ["examples/core"]), "preview block"],
+    #|    ["reversed preview", previewProblems("readme", "<!-- minimoon:preview:end --><!-- minimoon:preview:start -->", []), "preview block"],
+    #|    ["incorrect import", previewProblems("readme", preview.replace("examples/core/dist/", "ui/wrong/dist/"), ["examples/core"]), "import directories"],
+    #|    ["missing import", previewProblems("readme", preview, ["examples/core", "ui/showcase"]), "import directories"],
+    #|    ["unexpected import", previewProblems("readme", preview, []), "import directories"],
+    #|    ["rebuild drift", rebuildProblems("readme", rebuild.replace("--candidate", "--release"), "examples/core"), "rebuild command"],
+    #|    ["missing rebuild", rebuildProblems("readme", "", "examples/core"), "missing or duplicate"],
     #|    ["page count", fixtureIndexProblems("index", index.replace("| 7 |", "| 4 |"), inventory), "page/Tab count"],
     #|    ["Tab count", fixtureIndexProblems("index", index.replace("| 4 |", "| 3 |"), inventory), "page/Tab count"],
     #|    ["Tab label", fixtureIndexProblems("index", index.replace("平台", "能力"), inventory), "Tab labels"],
@@ -443,6 +480,11 @@ pub fn docs_check_source() -> String {
     #|  const history = "<!-- minimoon:historical:start -->\n" + badMigration + "\nCapability Probe\n<!-- minimoon:historical:end -->"
     #|  const accepted = [
     #|    mirroredTextProblems("readme", "same", "same"),
+    #|    readmeLanguageProblems("readme", "# Example\n[中文](README.zh-CN.md)\n## Try", "README.zh-CN.md"),
+    #|    previewProblems("readme", preview, ["examples/core"]),
+    #|    previewProblems("readme", preview.replace("Import", "直接导入"), ["examples/core"]),
+    #|    rebuildProblems("readme", rebuild, "examples/core"),
+    #|    rebuildProblems("readme", rebuild.replace("verify examples", "verify   examples"), "examples/core"),
     #|    fixtureIndexProblems("index", index, inventory),
     #|    fixtureReadmeProblems("readme", overview, inventory),
     #|    schemaMigrationProblems("ui", migration, expected),
@@ -879,11 +921,13 @@ pub fn docs_check_source() -> String {
     #|for (const source of ["README.mbt.md", "README.zh-CN.mbt.md"]) {
     #|  for (const problem of moduleVersionProblems(source, read(source), moduleVersions)) fail(problem)
     #|}
-    #|for (const problem of moduleVersionProblems("ui/README.mbt.md", read("ui/README.mbt.md"), currentUiVersions)) fail(problem)
+    #|for (const source of ["ui/README.mbt.md", "ui/README.zh-CN.mbt.md"]) {
+    #|  for (const problem of moduleVersionProblems(source, read(source), currentUiVersions)) fail(problem)
+    #|}
     #|for (const fixture of fixtures) {
     #|  for (const problem of moduleVersionProblems(fixture.directory + "/moon.mod", read(fixture.directory + "/moon.mod"), { "lampclaw/minimoon": productVersion })) fail(problem)
     #|}
-    #|for (const [source, mirror] of [["README.mbt.md", "README.md"], ["README.zh-CN.mbt.md", "README.zh-CN.md"], ["ui/README.mbt.md", "ui/README.md"]]) {
+    #|for (const [source, mirror] of [["README.mbt.md", "README.md"], ["README.zh-CN.mbt.md", "README.zh-CN.md"], ["ui/README.mbt.md", "ui/README.md"], ["ui/README.zh-CN.mbt.md", "ui/README.zh-CN.md"]]) {
     #|  for (const problem of mirroredTextProblems(mirror, read(source), fs.existsSync(absolute(mirror)) ? read(mirror) : "")) fail(problem)
     #|}
     #|const fixtureInventory = fixtures.map(fixture => {
@@ -892,6 +936,25 @@ pub fn docs_check_source() -> String {
     #|    pages: config.pages.length, tabs: (config.tabBar?.list || []).map(tab => tab.text) }
     #|})
     #|for (const problem of fixtureIndexProblems("examples/README.md", read("examples/README.md"), fixtureInventory)) fail(problem)
+    #|const translatedInventory = fixtureInventory.map(fixture => ({ ...fixture, link: fixture.link.replace("README.md", "README.zh-CN.md") }))
+    #|for (const problem of fixtureIndexProblems("examples/README.zh-CN.md", read("examples/README.zh-CN.md"), translatedInventory)) fail(problem)
+    #|const fixtureDirectories = fixtures.map(fixture => fixture.directory)
+    #|const readmeGroups = [
+    #|  { directory: "", previews: fixtureDirectories },
+    #|  { directory: "ui/", previews: ["ui/examples/showcase"], rebuild: "ui/examples/showcase" },
+    #|  { directory: "examples/", previews: fixtureDirectories },
+    #|  ...fixtures.map(fixture => ({ directory: fixture.directory + "/", previews: [fixture.directory], rebuild: fixture.directory })),
+    #|]
+    #|for (const group of readmeGroups) {
+    #|  for (const [filename, sibling] of [["README.md", "README.zh-CN.md"], ["README.zh-CN.md", "README.md"]]) {
+    #|    const source = group.directory + filename
+    #|    if (!markdownSet.has(source)) { fail(source + ": missing bilingual README"); continue }
+    #|    const content = read(source)
+    #|    for (const problem of readmeLanguageProblems(source, content, sibling)) fail(problem)
+    #|    for (const problem of previewProblems(source, content, group.previews)) fail(problem)
+    #|    if (group.rebuild) for (const problem of rebuildProblems(source, content, group.rebuild)) fail(problem)
+    #|  }
+    #|}
     #|const primaryReadme = read("README.mbt.md")
     #|for (const readme of ["README.mbt.md", "README.zh-CN.mbt.md"]) {
     #|  const content = normalized(readme)

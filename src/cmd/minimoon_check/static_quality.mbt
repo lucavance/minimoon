@@ -243,6 +243,7 @@ async fn static_suite(root : String) -> Unit {
   require_same_text(root, "README.mbt.md", "README.md")
   require_same_text(root, "README.zh-CN.mbt.md", "README.zh-CN.md")
   require_same_text(root, "ui/README.mbt.md", "ui/README.md")
+  require_same_text(root, "ui/README.zh-CN.mbt.md", "ui/README.zh-CN.md")
   for path in repository_moonbit_sources(root) {
     let source = @fs.read_file(join(root, path)).text()
     let violations = moon_source_boundary_violations(source)

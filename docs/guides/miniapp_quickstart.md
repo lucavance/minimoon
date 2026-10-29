@@ -18,8 +18,9 @@ release process first. [Back to README](../../README.md).
 - A suitable WeChat MiniApp account/AppID for host preview. Automated CLI
   checks do not establish account or device-preview eligibility.
 
-This guide targets core `0.3.2` / UI `0.2.0`. Use the
-[source CLI](#create-from-the-current-source) until publication is recorded.
+This guide targets core `0.3.2` / UI `0.2.0`; registry availability is recorded in
+[project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
+Use the [source CLI](#create-from-the-current-source) for development changes.
 Previous registry CLI `0.2.5` keeps its released pins; see the
 [compatibility table](../reference/compatibility_and_upgrades.md#toolchain-compatibility).
 
@@ -137,8 +138,10 @@ in the [UI guide](https://github.com/lucavance/minimoon/blob/main/ui/README.md).
 
 ## Open in WeChat Developer Tools
 
-From `my-app/`, the candidate verification above creates release-mode files.
-Import **`my-app/dist/`** unchanged, not `my-app/` or the framework repository.
+These settings apply to both committed examples and applications you build.
+Import the application's `dist/` directory unchanged, rather than its source
+directory or the framework repository. For the Starter above, candidate
+verification creates release-mode files in **`my-app/dist/`**.
 
 Check the Developer Tools settings:
 
@@ -147,13 +150,13 @@ Check the Developer Tools settings:
   `setting.es6=true`, `setting.enhance=true`, `setting.minified=true`.
 - Online minimum base library **3.17.0** or newer.
 
-For your AppID, copy `dist/project.private.config.example.json` to
+Within the chosen application directory, copy `dist/project.private.config.example.json` to
 `dist/project.private.config.json` **only if the private file does not already
 exist**, then edit that private copy. Never overwrite existing local settings
 or commit the AppID/private file. Rebuilds preserve it and exclude it from
 artifact fingerprints. Do not change generated public files to store secrets.
 
-On a cold launch, expect:
+For the Starter, on a cold launch expect:
 
 1. **Hello Minimoon**, counter **0**, a name input and **Open details**.
 2. Tap **+1**; the counter becomes **1**.

@@ -24,7 +24,7 @@ checklist. A checklist-only, `app.wxss`, shared-template, or future static-asset
 change is therefore a new host candidate even when application JavaScript is
 unchanged.
 
-## Query follow-up (Unreleased)
+## Query follow-up
 
 In core Runtime Lab, find **列表查询（本地模拟）**. Wait for five rows, load all
 23, and confirm Load more disables. Type a search without confirming: rows must

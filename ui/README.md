@@ -1,9 +1,14 @@
 # Minimoon UI
 
+[中文](README.zh-CN.md)
+
 Native, touch-first Skyline components for Minimoon. Module
 `lampclaw/minimoon_ui 0.2.0` declares core `lampclaw/minimoon 0.3.0`.
-This is an unpublished candidate. Existing calls remain supported; Nova is now
-the default visual recipe. Use `theme(preset=VegaV1)` to retain the old recipe.
+Registry availability and release receipts are recorded in
+[project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
+Current source has its own toolchain pins; published archives remain immutable.
+Existing calls remain supported; Nova is the default visual recipe.
+Use `theme(preset=VegaV1)` to retain the old recipe.
 
 The current reference is RUI 0.3.6 at Rabbita commit
 `7d5940fed9b1ba795c84582394024233997ec267`. The historical 517-symbol
@@ -13,6 +18,20 @@ nodes and Val composition, not Rabbita's browser runtime. The MIT notice and
 upstream visual-recipe attribution are retained in [LICENSE](LICENSE) and
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). See the module's
 [changelog](CHANGELOG.md) for versioned changes.
+
+## Try the showcase
+
+<!-- minimoon:preview:start -->
+Download or clone the repository and import **`ui/examples/showcase/dist/`**
+directly into WeChat Developer Tools. Opening committed output needs no MoonBit,
+Node or build step. The [six-page showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md)
+covers all 64 component families plus Form and Theme.
+<!-- minimoon:preview:end -->
+
+Use Skyline, base library **3.17.0** or newer, with ES6 transformation, enhanced
+compilation and minification enabled. Configure your AppID only in the local
+private file using the [host settings](https://github.com/lucavance/minimoon/blob/main/docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools).
+To modify source or add UI to your own application, prepare the environment below.
 
 ## Install
 
@@ -24,8 +43,8 @@ the [environment setup](https://github.com/lucavance/minimoon/blob/main/docs/gui
 no separate Bun installation or local `vite-plus` dependency is needed.
 First confirm registry availability in
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
-Before publication, use an explicit source workspace instead of assuming these
-versions are downloadable.
+Use an explicit source workspace for development changes that are not in the
+published archive.
 
 Add both modules to the application's TOML-style `moon.mod`:
 
@@ -187,18 +206,21 @@ Skyline artifacts into WeChat Developer Tools, validate the checklist and keep
 local fingerprint-bound evidence ignored. No release, publication or host pass
 is implied by the module version.
 
-Build the release-mode candidate from the repository root:
+After editing the showcase source, rebuild and verify from the repository root:
 
-```sh
-vp run minimoon build ui/examples/showcase
+<!-- minimoon:rebuild:start -->
+```bash
 vp run minimoon verify ui/examples/showcase --candidate
 ```
+<!-- minimoon:rebuild:end -->
 
-Import `ui/examples/showcase/dist` unchanged into Developer Tools with Skyline
+This command builds release-mode output before candidate verification.
+
+Import `ui/examples/showcase/dist/` unchanged into Developer Tools with Skyline
 and a minimum online base library of 3.17.0. Follow every check in the showcase's
 `miniapp.minimoon.json`, including multiple-value controls, delayed surfaces,
-mobile sidebar gestures and page lifecycle. Core's Draft Workbench fixture needs
-its own new fingerprint-bound validation because the shared host bytes changed.
+mobile sidebar gestures and page lifecycle. Revalidate every affected fixture
+when shared host bytes change; core and UI evidence remain independent.
 
 The API map covers 428 upstream functions and 89 types. Native substitution is
 intentional: Carousel uses fixed native swiper slides; MessageScroller uses

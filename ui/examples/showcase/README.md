@@ -1,44 +1,62 @@
-# Minimoon UI showcase
+# Minimoon UI Showcase
 
-This six-page verification application exercises `lampclaw/minimoon_ui 0.2.0`
+[中文](README.zh-CN.md)
+
+This six-page example and verification application exercises `lampclaw/minimoon_ui 0.2.0`
 with core `lampclaw/minimoon 0.3.2`. It covers all 64 pinned RUI families plus
 Form, Theme and optional Markdown, with native substitutions described in the
 [migration map](../../docs/migration.md).
 
+## Import and try
+
+<!-- minimoon:preview:start -->
+Download or clone this repository and import **`ui/examples/showcase/dist/`**
+directly into WeChat Developer Tools. Import the output directory, not the source.
+The committed output needs no MoonBit, Node or build step to open.
+<!-- minimoon:preview:end -->
+
+Use Skyline, base library **3.17.0** or newer, and `setting.es6=true`,
+`setting.enhance=true`, `setting.minified=true`. Configure your AppID only in the
+ignored private file using the [host settings](../../../docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools).
+Alternatively, download the matching commit's CI `minimoon-ui-devtools-<commit>`
+bundle. It is independent of core's `minimoon-devtools-<commit>` artifact; verify
+both file and ZIP checksums before importing its unchanged `dist/`.
+
+## Pages and interactions
+
 Switch Nova/Vega on each page without resetting state. Foundation includes
 native Markdown; Forms includes the four-phase property-reset probe; Overlays
-includes four-sided open-Drawer edge gestures. These additions require fresh
-fingerprint-matched Developer Tools acceptance.
+includes four-sided open-Drawer edge gestures.
 
 The Forms page sends only a non-sensitive title to public
 `https://echo.apifox.com/post`, with a ten-second timeout. Typed echo is not
 persistent storage. `vp run check:http-live` includes this form alongside the
-core example's HTTP scenarios; it is a transport-shim check, not WeChat evidence.
-Changes to this endpoint invalidate prior host evidence and require validation
-against the current fixture fingerprint.
+core example's HTTP scenarios; it uses a transport shim rather than WeChat host
+execution. Changing the endpoint requires acceptance of the new artifact fingerprint.
 
-From the repository root:
+## Modify and rebuild
 
+Prepare the [development environment](../../../docs/guides/miniapp_quickstart.md#prerequisites),
+edit the example's source, then run from the repository root:
+
+<!-- minimoon:rebuild:start -->
 ```bash
-vp run minimoon build ui/examples/showcase --mode release
 vp run minimoon verify ui/examples/showcase --candidate
 ```
+<!-- minimoon:rebuild:end -->
 
-Import the unchanged `dist/` into WeChat Developer Tools. The generated
-`smoke_checklist.json` includes every application-specific check declared in
-`miniapp.minimoon.json`. Validate all six pages in the Skyline simulator,
-physical-device preview and device debugging, with ES6 transformation, enhanced
-compilation and minification enabled and an online minimum base library of
-3.17.0 or newer.
+This builds release-mode output before automated candidate verification.
+Reimport or recompile the same directory afterwards; keep `dist/` as generated output.
 
-The CI artifact `minimoon-ui-devtools-<commit>` is independent of the core
-`minimoon-devtools-<commit>` artifact. Check both file and ZIP hashes before
-import. Follow the
-[validation runbook](../../../docs/operations/miniapp_devtools_validation.md)
+## Maintainer validation and boundaries
+
+The generated `smoke_checklist.json` includes every application-specific check
+in `miniapp.minimoon.json`. Validate all six pages in the Skyline simulator,
+physical-device preview and device debugging, using the host settings above.
+Follow the [validation runbook](../../../docs/operations/miniapp_devtools_validation.md)
 and [release handoff](../../../docs/operations/release_candidate_handoff.md).
 
-Candidate reports deliberately leave real-host validation pending. The UI
-showcase owns its own ignored, fingerprint-bound evidence; never substitute
-the core Conformance application's evidence. A verification command rebuilds
-artifacts, so confirm the fingerprint remains the exact one tested and repeat
-host acceptance if it changes.
+Candidate reports leave real-host validation pending. UI Showcase owns its own
+ignored, fingerprint-bound evidence; never substitute Draft Workbench's evidence.
+Verification rebuilds artifacts. Reuse evidence only when the fingerprint is
+unchanged, and repeat host acceptance for every affected fixture when it changes.

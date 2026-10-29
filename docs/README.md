@@ -1,9 +1,16 @@
 # Minimoon documentation
 
-This directory contains the active maintainer documentation for Minimoon.
+This directory contains the active application and maintainer documentation for Minimoon.
 The canonical source is the current `lucavance/minimoon` repository.
 
 ## Start here
+
+To try existing examples first, [download or clone the repository and import their
+committed `dist/` directories](https://github.com/lucavance/minimoon/blob/main/examples/README.md).
+No MoonBit, Node or build step is needed for that preview; follow the
+[host settings](guides/miniapp_quickstart.md#open-in-wechat-developer-tools).
+The [Chinese example index](https://github.com/lucavance/minimoon/blob/main/examples/README.zh-CN.md)
+provides the same steps. Technical guides below are in English unless labelled bilingual.
 
 New application authors should begin with the [quickstart](guides/miniapp_quickstart.md):
 confirm availability in [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md), install the registry

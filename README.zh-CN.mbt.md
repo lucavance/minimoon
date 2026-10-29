@@ -18,14 +18,29 @@
 - 使用类型化 HTTP 与可选的应用级共享状态构建有数据交互的应用。
 - 通过可选的 Minimoon UI 编写原生、触控优先的界面；Starter 只依赖核心。
 
+## 示例选择
+
+<!-- minimoon:preview:start -->
+下载或克隆本仓库后，将以下已提交的目录直接导入微信开发者工具即可体验。
+打开现有产物无需安装 MoonBit、Node 或执行构建命令。
+
+| 示例 | 用途 | 导入目录，相对仓库根目录 |
+| --- | --- | --- |
+| [草稿工作台](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_draft_workbench/README.zh-CN.md) | 本地草稿、联机回显与生命周期：9 个页面、4 个原生 Tab — 工作台 / 草稿 / 联机 / 更多 | `examples/miniapp_draft_workbench/dist/` |
+| [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.zh-CN.md) | 通过 6 个页面体验原生 UI 组件 | `ui/examples/showcase/dist/` |
+<!-- minimoon:preview:end -->
+
+启用 Skyline，使用基础库 **3.17.0** 或更新版本，并开启 ES6 转换、增强编译和压缩
+（`setting.es6=true`、`setting.enhance=true`、`setting.minified=true`）。
+按[开发者工具设置](docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools)（英文）
+在本地私有配置中填写自己的 AppID。修改源码或创建自己的 Starter 时，再准备以下开发环境。
+
 ## 开始之前
 
 准备 `moon 0.1.20261023`／`moonc v0.10.17+d971670cd`、Node `>=26.12.1`、
 全局 `vp 1.4.0`（当前源码环境），以及支持 Skyline 的微信开发者工具。
 `vp` 管理 Node 和内部使用的 Bun `1.4.4`，无需单独安装 Bun。
-可选的源码开发流程还需要 Git。
-CI 仅固定使用当前 MoonBit 版本和 Node `26.12.1`；旧版兼容任务不再维护。
-[环境说明](docs/guides/miniapp_quickstart.md#prerequisites)包含版本检查与 CI 固定工具链。
+[环境说明](docs/guides/miniapp_quickstart.md#prerequisites)（英文）包含版本检查与可选的 Git 源码流程。
 
 ## 创建第一个应用
 
@@ -57,17 +72,6 @@ minimoon verify . --candidate
 [已有应用升级步骤](docs/reference/compatibility_and_upgrades.md#upgrade-procedure)。
 开发框架或使用尚未发布的改动时，使用单独的
 [源码流程](docs/guides/miniapp_quickstart.md#create-from-the-current-source)。
-
-源码的[样式配置](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
-包含 PostCSS `8.5.32` 和 weapp-tailwindcss `5.6.3`。核心 `0.3.2` 保留原生行内
-内容 API；升级时需重新生成 renderer protocol `9` 的宿主产物。
-默认 Starter 仍不启用 `application`；需要时按[共享状态指南](docs/guides/shared_state.md)添加。
-迁移已有应用时同时升级 CLI 和应用的核心依赖。
-
-启用 Skyline、ES6 转 ES5、增强编译与压缩（`setting.es6=true`、
-`setting.enhance=true`、`setting.minified=true`），线上最低基础库为 **3.17.0**。
-自己的 AppID 只写入 Git 忽略的私有配置，见
-[开发者工具设置](docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools)。
 
 你应看到 **Hello Minimoon**、初始值为 **0** 的计数器、名称输入框与 **Open details**。
 点击 **+1** 后变为 **1**，进入 Details 后可以返回。
@@ -121,19 +125,7 @@ Starter 已在页面的 `moon.pkg` 导入 `lampclaw/minimoon`。
 2. [类型化 HTTP](docs/guides/http.md)
 3. [导航与布局](docs/guides/native_navigation.md)
 4. [应用级共享状态](docs/guides/shared_state.md)
-5. [可选 Minimoon UI](https://github.com/lucavance/minimoon/blob/main/ui/README.md)
-
-## 示例选择
-
-| 示例 | 用途 |
-| --- | --- |
-| `minimoon init` 创建的 Starter | 开始自己的双页应用 |
-| [草稿工作台](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_draft_workbench/README.md) | 本地草稿、联机回显与生命周期：9 个页面、4 个原生 Tab — 工作台 / 草稿 / 联机 / 更多 |
-| [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md) | 通过 6 个页面体验原生 UI 组件 |
-
-草稿工作台的平台实验室集中演示 HTTP 场景。在框架仓库运行
-`vp run check:http-live` 可验证这些场景、编辑器卸载后的 App 草稿回显及
-UI 表单回显，共 12 项；使用真实公共 Apifox Echo API，但不是微信宿主测试。
+5. [可选 Minimoon UI](https://github.com/lucavance/minimoon/blob/main/ui/README.zh-CN.md)
 
 ## 当前边界与下一步
 

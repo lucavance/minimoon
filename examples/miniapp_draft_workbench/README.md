@@ -1,111 +1,143 @@
-# Minimoon 草稿工作台
+# Minimoon Draft Workbench
 
-Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.3.2` 公共 API 的轻量示例：
-**四个原生 Tab、一个编辑器、四个能力实验室，共九条路由**。
-它同时承担核心框架 conformance 验收，不是账号系统或云笔记服务。
+[中文](README.zh-CN.md)
 
-原工程 `miniapp_conformance_app` 已迁移为 `miniapp_draft_workbench`，
-模块为 `lampclaw/miniapp_draft_workbench`；旧目录和路由不提供兼容别名。
-独立 [UI Showcase](../../ui/examples/showcase/README.md) 和 Starter 不属于这次业务改造。
+Minimoon Draft Workbench uses the public core `lampclaw/minimoon 0.3.2` API:
+**four native Tabs, one editor and four capability laboratories, nine routes in total**.
+It also provides core conformance coverage; it is not an account system or cloud notes service.
 
-## 构建与打开
+The former `miniapp_conformance_app` project is now `miniapp_draft_workbench`,
+with module `lampclaw/miniapp_draft_workbench`; old directories and routes have no aliases.
+The independent [UI Showcase](../../ui/examples/showcase/README.md) and Starter are separate.
 
-在仓库根目录运行：
+## Import and try
 
+<!-- minimoon:preview:start -->
+Download or clone this repository and import **`examples/miniapp_draft_workbench/dist/`**
+directly into WeChat Developer Tools. Import the output directory, not the source.
+The committed output needs no MoonBit, Node or build step to open.
+<!-- minimoon:preview:end -->
+
+Use Skyline, base library **3.17.0** or newer, and `setting.es6=true`,
+`setting.enhance=true`, `setting.minified=true`. Configure your AppID only in the
+ignored private file using the [host settings](../../docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools).
+Alternatively, download the matching commit's CI `minimoon-devtools-<commit>`
+bundle, verify its checksums, and import its unchanged `dist/`.
+
+The interface uses a fixed deep-blue navigation bar, safe-area calculations and a
+shallow curved hero. It uses core components and MoonBit-owned resources without
+the UI module, remote visual assets or handwritten JavaScript.
+
+## Pages
+
+| Page | Source package, relative to src | Responsibility |
+| --- | --- | --- |
+| 工作台 / Workbench | pages/workbench | Counts, summary, create and resume editing |
+| 草稿 / Drafts | pages/drafts | Saved drafts, reopen and confirmed deletion |
+| 联机 / Online | pages/online | App request state, typed echo and retry |
+| 更多 / More | pages/more | Data management, demo guide and laboratories |
+| 草稿编辑 / Draft editor | pages/draft_editor | Create, edit by ID, resume, manual save and page-owned echo |
+| 交互与组件 / Interaction | pages/interaction | Native controls, local components, Disclosure/Accordion/Tabs, layers and menus |
+| 平台与 HTTP / Platform | pages/platform | Login, isolated storage, location, media, prompts and ten public HTTP scenarios |
+| 请求生命周期 / Request lifecycle | pages/request_lifecycle | Shared counts, delayed requests, hide and unload comparisons |
+| 状态与渲染 / Runtime Lab | pages/runtime_lab | Keyed identity, focus, structure synchronization, async work, disposal and isolation |
+
+Every page receives App `Deps`; pages do not import other pages' production
+implementations. `app` owns typed business state, `components/workbench` composes
+public views, and `shared/shell` owns layout. Routes use `pages/<name>/<name>`.
+The editor requires a nonempty `from`; `mode` is new/edit/resume, and edit also
+requires a positive integer id.
+
+## Three complete flows
+
+1. **Local drafts**: create → validate → save → list → edit/delete → restart and restore.
+   Trimmed titles are required, up to 80 Unicode characters; bodies allow 2000,
+   with at most 50 drafts. Storage uses the isolated `minimoon-draft-workbench-v1`
+   key and sorts the most recently saved first. Only a successful write updates
+   saved state. Saving blocks duplicate saves, deletion and clearing, while new
+   input remains editable and unsaved. Unknown read errors or corrupt/unknown
+   versions are retryable and never overwritten automatically; initialization
+   requires confirmation before replacing existing data.
+2. **Online echo**: edit → send in background → loading → typed echo → retry on failure.
+   The default is public `https://echo.apifox.com/post`, with a ten-second timeout.
+   Send only non-sensitive demo content. **Echo is not cloud storage** and changes
+   neither editor nor local data. Requests carry a content version; an old response
+   cannot replace new content after edits, switches, deletion or clearing.
+3. **Cross-page state and lifetime**: App holds one editing buffer for this run;
+   all four Tabs share its state. Creating or switching drafts confirms discarding
+   unsaved changes. The editor's background send belongs to App, so the Online
+   page receives its result after navigation. The page-owned send under 技术说明
+   is canceled on editor unload. **Hide is not unload**: switching Tabs cannot
+   validate unloading, and App lifetime does not continue after process exit.
+
+Unsaved input lasts only for this App run; restart restores saved drafts only.
+Clearing affects the workbench key, not Platform laboratory storage. There are no
+accounts, cloud storage, autosave, collaboration or persistent request histories.
+
+`echo_base_url()` in `src/app/workbench_echo.mbt` provides the shared default for
+draft requests, lifecycle requests, the initial Platform address and business-page
+hints. Platform's editable address affects only its own requests, not background
+draft sends or UI Showcase. There is no automatic endpoint switching or hidden
+retry; public-service failures are displayed without pretending a save succeeded.
+
+## Three-minute demonstration
+
+- Start offline. Create “周末计划” with body “去公园走走”, save it and reopen it
+  from Drafts. Edit and save, then restart to confirm persistence. Create another
+  draft, delete it and restart to confirm deletion.
+- Go online, open the retained draft, send in background and immediately switch
+  to Online to observe the result. A fast request may already be complete; use
+  the laboratory's public delayed endpoint for slow-request ownership comparisons.
+- Send again and immediately change the title; echo must not overwrite input.
+  Expand 技术说明, send the page-owned request and return; inspect Network for
+  cancellation and absence of late updates. Send offline to check failure feedback,
+  then reconnect and retry.
+
+Report public-service failures honestly; local flows can still be demonstrated
+independently. See the [host checklist](../../docs/operations/miniapp_devtools_validation.md).
+
+## Modify and rebuild
+
+Prepare the [development environment](../../docs/guides/miniapp_quickstart.md#prerequisites),
+edit `src/`, then run from the repository root:
+
+<!-- minimoon:rebuild:start -->
 ```bash
 vp run minimoon verify examples/miniapp_draft_workbench --candidate
 ```
+<!-- minimoon:rebuild:end -->
 
-当前 `0.3.2` 源码使用 Vite+ CLI `1.4.0` 和已固定的
-`moonbitlang/async 0.22.5`。使用上述仓库 CLI 或确认发布后的
-`0.3.2` Registry CLI，不能混用旧工具生成的文件。
-运行前准备 `moon 0.1.20261023`／`moonc v0.10.17+d971670cd`、Node `>=26.12.1` 和 Bun `1.4.4`。
+This builds release-mode output before automated candidate verification. Reimport
+or recompile the same directory afterwards. Source development uses
+`moon 0.1.20261023` / `moonc v0.10.17+d971670cd`, global `vp 1.4.0`,
+Node `>=26.12.1`, managed Bun `1.4.4` and `moonbitlang/async 0.22.5`.
+Use a matching CLI rather than mixing old generated files; registry availability
+is recorded in [project status](../../docs/project_status.md).
 
-导入 **`examples/miniapp_draft_workbench/dist/`**，不要导入源码目录。
-沿用 Skyline、基础库至少 3.17.0，以及
-`setting.es6=true`、`setting.enhance=true`、`setting.minified=true`。
-仅在忽略的私人配置中填写 AppID。也可下载同一提交的 CI
-`minimoon-devtools-<commit>` 交付包，核对校验和后导入其中的 `dist/`。
+## Maintainer validation and boundaries
 
-界面沿用深蓝固定导航、安全区计算和浅弧形 Hero；使用现有核心组件和
-MoonBit 自有资源，不依赖 UI 模块、远程素材或手写 JavaScript。
+Runtime Lab's 列表查询（本地模拟） demonstrates the optional query package using
+23 simulated drafts, confirmed search, refresh, appending and retry. Search for
+“慢速” to check old-response isolation; 下一次响应失败 exercises refresh and
+append failures, and closing/reopening checks local component disposal. This demo
+ships with the core query package; registry availability belongs in project status.
 
-## 页面分工
+Automation covers storage corruption/failure/duplicate operations, cross-page
+buffers, out-of-order/duplicate callbacks, decoding failures, App/Page ownership,
+and the existing control/render laboratories. Input regressions check successive
+title/body edits, Chinese text, deletion and actual host writes. In the simulator
+and on devices, check continuous English input, Chinese composition, paste,
+deletion, middle insertion and switching fields: the cursor must remain stable,
+and title text/placeholders must not be vertically clipped.
 
-| 页面 | 源码包（相对 src） | 职责 |
-| --- | --- | --- |
-| 工作台 | pages/workbench | 数量、当前摘要、新建与继续编辑 |
-| 草稿 | pages/drafts | 已保存列表、再次编辑、确认删除 |
-| 联机 | pages/online | App 请求状态、类型化回显、失败重试 |
-| 更多 | pages/more | 数据管理、演示指南、实验室入口 |
-| 草稿编辑 | pages/draft_editor | 新建／按 ID 编辑／继续编辑、手动保存、本页试发 |
-| 交互与组件 | pages/interaction | 原生控件、局部组件、Disclosure/Accordion/Tabs、弹层与菜单 |
-| 平台与 HTTP | pages/platform | 登录、独立存储、位置、媒体、提示及十种公共 HTTP 场景 |
-| 请求生命周期 | pages/request_lifecycle | 共享计数、延迟请求、隐藏与卸载对照 |
-| 状态与渲染 | pages/runtime_lab | keyed 身份、焦点、结构同步、异步、释放与实例隔离 |
+`vp run check:http-live` covers ten Platform HTTP scenarios, the App draft echo
+after editor unload, and UI Showcase's form echo: 12 public-API cases using a
+transport shim, rather than real WeChat host evidence.
 
-所有页面接收 App 的 `Deps`；页面不导入另一个页面的生产实现。
-`app` 拥有类型化业务状态，`components/workbench` 组合公共视图，
-`shared/shell` 负责布局。路由为 `pages/<名称>/<名称>`。
-编辑器要求非空 `from`；`mode` 为 new/edit/resume，edit 还要求正整数 id。
-
-## 三条闭环
-
-1. **本地草稿**：新建 → 校验 → 保存 → 列表 → 编辑／删除 → 重启恢复。
-   标题去除首尾空白后必填，最多 80 个 Unicode 字符；正文最多 2000 个，最多 50 条。
-   使用独立版本化键 `minimoon-draft-workbench-v1`，最近保存的排在前面。
-   写入成功才更新已保存集合；失败不误报成功。写入期间不能重复保存、删除或清空，
-   但可以继续输入；新输入仍标记未保存。未知读取错误、坏数据或未知版本不自动覆盖，
-   可重试；初始化需要确认覆盖原数据。
-2. **联机回显**：编辑 → 后台发送 → 加载 → 类型化回显 → 失败重试。
-   默认 POST 到公开 `https://echo.apifox.com/post`，10 秒超时。
-   只发送非敏感示例内容。**回显不等于云端保存**，不修改编辑器或本地数据。
-   请求关联内容版本，修改、切换、删除或清空后旧响应不能替代新内容。
-3. **跨页与生命周期**：App 持有一份编辑缓冲，返回后可继续编辑；
-   四 Tab 展示同一状态来源。新建或切换其他草稿前确认丢弃未保存修改。
-   编辑器“后台发送”归 App 所有，离开后联机页自动显示结果；
-   展开“技术说明”中的“本页试发”归 Page 所有，卸载时取消。
-   **隐藏不等于卸载**，切 Tab 不能代替卸载验收；App 存活不代表进程退出后还能请求。
-
-未保存输入仅在本次 App 运行内保留；重启只恢复已保存草稿。
-清空只覆盖工作台专用键，不清除平台实验室存储。没有账号、云存储、
-自动保存、多人协作或持久化请求历史。
-
-核心示例的默认服务集中在 `src/app/workbench_echo.mbt` 的 `echo_base_url()`，
-草稿请求、生命周期请求、平台初始地址及业务页面提示共用它。
-平台实验室允许手动修改自己的地址；这不会改变草稿后台发送或 UI Showcase 的接口。
-没有自动切换服务或隐藏重试，公共服务不可达时显示失败，不伪装成保存成功。
-
-## 三分钟演示
-
-- 先断网，在工作台新建“周末计划”，正文“去公园走走”；保存并从草稿列表重新打开，
-  修改后保存。重启确认数据存在，再新建一条并删除，重启确认删除生效。
-- 联网，打开保留的草稿，点击“后台发送”，立即进入联机页观察结果主动出现。
-  请求足够快时可能已经完成，这是正常成功；慢请求所有权对比使用实验室的公共延迟接口。
-- 再发送并立刻修改标题，确认回显不会覆盖输入；展开技术说明，试发后返回，
-  检查 Network 中的取消和无迟到更新。断网发送验证失败反馈，恢复网络后重试。
-
-不要为演示伪造成功。公共服务不可达时记录联机未通过，本地闭环仍可独立演示。
-完整清单见 [微信宿主验收](../../docs/operations/miniapp_devtools_validation.md)。
-
-## 验证与边界
-
-当前未发布源码在“状态与渲染”的“列表查询（本地模拟）”中演示可选 query 包：
-23 条模拟草稿、确认搜索、刷新、连续追加及失败重试。输入“慢速”可检查旧响应隔离；
-“下一次响应失败”用于验收刷新和追加失败，关闭／重开可验收局部组件释放。
-该演示随核心 `0.3.2` 提供；注册表可用性以项目状态记录为准。
-
-自动化覆盖存储损坏／失败／重复操作、跨页缓冲、请求乱序／重复回调／解码失败、
-Page 与 App 所有权，以及原有控件和渲染实验。
-新增回归检查标题和正文逐次输入、中文内容及删除时的实际宿主写入路径。
-仍需在模拟器和真机检查连续英文输入、中文输入法组词、粘贴、删除、
-中间插入及两框切换，确认光标不跳走，标题文字和占位文字上下均不遮挡。
-`vp run check:http-live` 验证十种平台 HTTP 场景、编辑器卸载后的 App 草稿回显及
-UI Showcase 表单回显，共 12 项；
-使用真实公共 API，但传输适配仍是脚本，不等于真实微信宿主。
-
-`generated/verify_report.json` 与 `release_summary.json` 是公开 candidate 记录；
-`devtools.evidence.json` 私人且被 Git 忽略。新名称、九路由和新产物必须重新验收，
-不能沿用旧核心证据。本轮共享宿主修复也改变了 UI 产物，UI Showcase 必须另行复验。
-当前源码版本为核心 `0.3.2`；候选产物、宿主验证和注册表可用性分别核验。
-不宣称生产请求域名或完整 HTTPS/TLS 验证，验证命令本身不会发布包。
+`generated/verify_report.json` and `release_summary.json` are public candidate
+records; `devtools.evidence.json` is private and Git-ignored. Evidence applies only
+to its exact artifact fingerprint. Changed generated bytes require revalidation
+of affected fixtures; core and UI evidence remain independent. Source core is
+`0.3.2`; candidate output, host acceptance and registry availability are checked
+separately. This does not establish production request-domain or complete
+HTTPS/TLS validation, and verification commands do not publish packages.

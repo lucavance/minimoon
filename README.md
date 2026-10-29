@@ -19,16 +19,31 @@ for registry availability and release evidence.
 - HTTP-backed applications with typed requests and optional application-owned shared state.
 - Native, touch-first interfaces using the optional Minimoon UI library; the starter needs only core.
 
+## Examples
+
+<!-- minimoon:preview:start -->
+Download or clone this repository, then import either committed directory into
+WeChat Developer Tools. Previewing these files needs no MoonBit, Node or build step.
+
+| Example | Use it for | Import directory, relative to the repository root |
+| --- | --- | --- |
+| [Draft Workbench](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_draft_workbench/README.md) | Local drafts, typed echo and lifecycle: 9 pages, 4 native Tabs — 工作台 / 草稿 / 联机 / 更多 | `examples/miniapp_draft_workbench/dist/` |
+| [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md) | Exploring native UI components across 6 pages | `ui/examples/showcase/dist/` |
+<!-- minimoon:preview:end -->
+
+Use Skyline, base library **3.17.0** or newer, and enable ES6 transformation,
+enhanced compilation and minification (`setting.es6=true`, `setting.enhance=true`,
+`setting.minified=true`). Configure your AppID in the local private file using the
+[host settings](docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools).
+To edit source or create your own Starter, prepare the development environment below.
+
 ## Before you start
 
 Use `moon 0.1.20261023` / `moonc v0.10.17+d971670cd`, Node `>=26.12.1`,
 global `vp 1.4.0` for current source and WeChat Developer Tools with Skyline support.
 `vp` manages Node and Bun `1.4.4`; a separate Bun installation is unnecessary.
-Git is needed for the optional source development workflow.
-CI pins the current MoonBit release and Node `26.12.1` only; older compatibility
-jobs are not maintained.
 See [environment setup](docs/guides/miniapp_quickstart.md#prerequisites) for
-version checks and the pinned CI toolchain.
+version checks and the optional Git-based source workflow.
 
 ## Create your first app
 
@@ -60,19 +75,6 @@ is selected. See [fixed-version installation](docs/guides/miniapp_quickstart.md#
 and [upgrading an existing app](docs/reference/compatibility_and_upgrades.md#upgrade-procedure).
 To develop the framework or use unpublished changes, follow the separate
 [source workflow](docs/guides/miniapp_quickstart.md#create-from-the-current-source).
-
-Source [style pins](docs/reference/compatibility_and_upgrades.md#toolchain-compatibility)
-include PostCSS `8.5.32` and weapp-tailwindcss `5.6.3`. Core `0.3.2` retains typed
-native inline content; regenerate host output for renderer protocol `9`.
-The default Starter still has no `application` entry; follow
-[shared state](docs/guides/shared_state.md) to add one.
-Upgrade both the CLI and the application dependency when migrating an existing app.
-
-Enable Skyline, ES6-to-ES5 transformation, enhanced compilation and minification
-(`setting.es6=true`, `setting.enhance=true`, `setting.minified=true`);
-use an online minimum base library of **3.17.0**.
-For your AppID, edit only the ignored private configuration described in the
-[quickstart](docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools).
 
 You should see **Hello Minimoon**, a counter starting at **0**, a name input and
 **Open details**. Tap **+1**: the counter becomes **1**. Open Details and return.
@@ -129,19 +131,6 @@ components are ordinary functions, not a mandatory object hierarchy.
 3. [Navigation and layout](docs/guides/native_navigation.md)
 4. [Application-owned shared state](docs/guides/shared_state.md)
 5. [Optional Minimoon UI](https://github.com/lucavance/minimoon/blob/main/ui/README.md)
-
-## Examples
-
-| Example | Use it for |
-| --- | --- |
-| Starter, created by `minimoon init` | Starting your own two-page application |
-| [Draft Workbench](https://github.com/lucavance/minimoon/blob/main/examples/miniapp_draft_workbench/README.md) | Local drafts, typed echo and lifecycle: 9 pages, 4 native Tabs — 工作台 / 草稿 / 联机 / 更多 |
-| [UI Showcase](https://github.com/lucavance/minimoon/blob/main/ui/examples/showcase/README.md) | Exploring native UI components across 6 pages |
-
-Draft Workbench's Platform laboratory owns the HTTP scenarios. From the framework
-checkout, `vp run check:http-live` checks those scenarios, a typed draft echo
-after editor unload, and the UI Form echo against public Apifox Echo (12 cases);
-it is not a WeChat host test.
 
 ## Boundaries and next steps
 

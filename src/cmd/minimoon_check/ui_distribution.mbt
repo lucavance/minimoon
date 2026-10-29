@@ -2,7 +2,7 @@
 fn ui_registry_path_allowed(path : String) -> Bool {
   if [
       "moon.mod", "LICENSE", "THIRD_PARTY_NOTICES.md", "README.mbt.md", "README.md",
-      "CHANGELOG.md", "src/markdown/README.mbt.md",
+      "README.zh-CN.md", "CHANGELOG.md", "src/markdown/README.mbt.md",
     ].contains(path) {
     return true
   }
@@ -98,8 +98,8 @@ async fn ui_distribution_package_gate(
   for
     required in [
       "moon.mod", "LICENSE", "THIRD_PARTY_NOTICES.md", "README.mbt.md", "README.md",
-      "CHANGELOG.md", "src/pkg.generated.mbti", "src/resources/moon.pkg", "src/markdown/moon.pkg",
-      "src/markdown/pkg.generated.mbti", "src/markdown/README.mbt.md",
+      "README.zh-CN.md", "CHANGELOG.md", "src/pkg.generated.mbti", "src/resources/moon.pkg",
+      "src/markdown/moon.pkg", "src/markdown/pkg.generated.mbti", "src/markdown/README.mbt.md",
     ] {
     guard paths.contains(required) else {
       abort("UI registry package is missing " + required)
