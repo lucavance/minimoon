@@ -174,7 +174,7 @@ the user explicitly authorizes that action.
   `Json::empty_object()` for empty JSON objects, and `{ () }` for empty blocks.
   The aggregate gate requires `moon check` to be warning-free.
 
-- The current source candidate is core `0.3.2` / UI `0.2.0`, with
+- The current source and published pair is core `0.3.2` / UI `0.2.0`, with
   renderer protocol 9 and unchanged Contract 11 / runtime ABI 13.
   Current source uses async `0.22.5`, x `0.5.6` and explicit UI ucd `0.5.2`.
   Source Starter pins are PostCSS `8.5.32` and weapp-tailwindcss `5.6.3`.
@@ -243,9 +243,12 @@ Future frozen candidates require the `Test` CI job and its local repository
 gates. Historical compatibility-job results below belong to their original
 releases.
 
-The user explicitly authorized core-only `0.3.2` publication on 2026-10-29,
-subject to all release gates and unchanged accepted fixture fingerprints.
+The explicitly authorized core-only `0.3.2` publication completed on 2026-10-29
+from frozen commit `0b0b2f22258319d017bc3f38d105f06171b982d5`. Test CI, local
+candidate/release gates, archive parity and fresh registry consumers passed.
 UI remains the published `0.2.0` with its original core `0.3.0` dependency.
+See `docs/project_status.md` for the receipt. Future publications require
+separate authorization and all release gates.
 
 The explicitly authorized core-only `0.3.1` publication completed on 2026-10-20
 from frozen commit `bd6a465cef1e8ef57ad708a9e054e214e4f0b504`. Both CI jobs, local candidate

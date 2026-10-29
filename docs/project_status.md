@@ -1,12 +1,14 @@
 # Project status
 
-## Core 0.3.2 publication candidate (2026-10-29)
+## Published release: core 0.3.2 / UI 0.2.0
 
-The user authorized core-only `lampclaw/minimoon@0.3.2`. Publication is pending
-the frozen candidate, CI, local release gates and registry verification.
-UI remains the immutable published `0.2.0`, declaring core `0.3.0`.
+Core `lampclaw/minimoon@0.3.2` was published on **2026-10-29 (Asia/Shanghai)**
+under the user's explicit authorization. UI remains the immutable published
+`0.2.0`, declaring core `0.3.0`; it was not republished. The frozen source is
+[`0b0b2f22258319d017bc3f38d105f06171b982d5`](https://github.com/lucavance/minimoon/commit/0b0b2f22258319d017bc3f38d105f06171b982d5),
+and its Test CI job [passed](https://github.com/lucavance/minimoon/actions/runs/40800251828).
 
-This candidate includes Skyline scroll-view auto sizing to fix Markdown
+This release includes Skyline scroll-view auto sizing to fix Markdown
 table/code overlap, and the reviewed toolchain/dependency refresh: moon/moonrun
 `0.1.20261023` (`3778465`), moonc `0.10.17+d971670cd`, vp `1.4.0`,
 Node `>=26.12.1` (pinned `26.12.1`), Bun `1.4.4`, PostCSS `8.5.32`,
@@ -17,7 +19,30 @@ Read-only checks use `--no-mbti`; `moon info` owns canonical interfaces.
 Public APIs, Contract 11 / ABI 13 / renderer protocol 9 and reviewed budgets
 are unchanged. The prior 1 KiB Starter calibration remains documented in the
 performance baseline. Published archives retain their original contents.
-Actual host evidence stays local and must match both candidate fingerprints.
+Native/JS tests, coverage, candidate checks, fingerprint-bound local
+`check:all` and `check:mvp` gates passed. Final candidate restoration passed;
+public reports retain `release: false` and Developer Tools `pending`. Actual
+host evidence remains local and Git-ignored.
+
+The downloaded [core archive](https://download.mooncakes.io/user/lampclaw/minimoon/0.3.2.zip)
+matches the reviewed frozen candidate: **327,382 bytes / 188 files**, with
+every file checked byte for byte. Its SHA-256 is
+`a609e1738108729013b455193ce89fd20ea3872bb44a296e945c6cd2007b6498`.
+The existing UI `0.2.0` ZIP still has
+SHA-256 `388d5657b9c5a74fd5b212cd5fdf1bd75710404f3b0b177425b497c4d62068a9`.
+
+The frozen publish attempt stopped before upload because the extracted
+self-check needed dependency installation. Ordinary `moon publish` completed
+the normal self-check with unchanged source and archive bytes and returned
+HTTP `200 OK`.
+
+Fresh registry-only acceptance passed for CLI installation, Starter creation,
+the README first edit, native/JS core/query/UI behavior, missing-evidence
+rejection, an App foreground timer with custom configuration and nested output,
+UI/Markdown/native resources, unknown-resource rejection and deterministic
+rebuilds. Upgrading a registry CLI `0.2.5` Starter preserved business source,
+configuration, styles and private settings. No consumer used a local framework
+override. Future publications require separate authorization and all gates.
 
 ## Published release: core 0.3.1 / UI 0.2.0
 
@@ -198,8 +223,10 @@ on a developer's machine. Changed fingerprints require renewed host validation.
 <!-- minimoon:historical:end -->
 ## Current published package availability
 
-Core `0.3.1` and UI `0.2.0` are available from Mooncakes, with UI retaining
-its core `0.3.0` declaration. Registry CLI `0.3.1` generates Node `26.11.1`, Bun `1.4.3`,
+Core `0.3.2` and UI `0.2.0` are available from Mooncakes, with UI retaining
+its core `0.3.0` declaration. Registry CLI `0.3.2` generates Node `26.12.1`,
+Bun `1.4.4`, PostCSS `8.5.32`, weapp-tailwindcss `5.6.3` and source-map-js
+override `1.2.2`. Previous CLI `0.3.1` retains Node `26.11.1`, Bun `1.4.3`,
 PostCSS `8.5.30`, weapp-tailwindcss `5.6.1` and source-map-js override `1.2.2`.
 CLI `0.2.7` retains those tooling pins with its earlier framework version.
 Previous CLI `0.2.6` retains PostCSS `8.5.29`, weapp-tailwindcss `5.5.12`

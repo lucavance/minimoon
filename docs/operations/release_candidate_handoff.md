@@ -1,9 +1,11 @@
 # Release candidate handoff
 
-The user authorized core-only `0.3.2` publication on 2026-10-29. Use the current
-core version in the gates below, publish only core, and validate fresh registry
-consumers with the existing UI `0.2.0`. UI's core `0.3.0` declaration is unchanged.
-Publication is pending; the previous release records below remain historical.
+The explicitly authorized core-only `0.3.2` publication completed on 2026-10-29
+from frozen commit `0b0b2f22258319d017bc3f38d105f06171b982d5`, after Test CI,
+local candidate/release gates, archive parity and fresh registry consumers passed.
+UI remains the immutable `0.2.0` with its original core `0.3.0` declaration.
+See project status for the receipt; earlier release records below are historical.
+Future publication requires separate authorization and all release gates.
 
 The user-authorized core-only `0.3.1` publication completed on 2026-10-20
 from frozen commit `bd6a465cef1e8ef57ad708a9e054e214e4f0b504` after all local/CI gates,

@@ -2,14 +2,14 @@
 
 ## Near-term priorities
 
-### Core 0.3.2 publication candidate
+### Core 0.3.2 released
 
-Align source and Starter pins to vp `1.4.0`, Node `26.12.1`, PostCSS `8.5.32`,
+Source and Starter use vp `1.4.0`, Node `26.12.1`, PostCSS `8.5.32`,
 weapp-tailwindcss `5.6.3`, async `0.22.5`, x `0.5.6` and UI ucd `0.5.2`.
-Verify the current MoonBit `0.1.20261023`/`0.10.17+d971670cd` identity and its
-archive hashes. Use Node `26.12.1` only; older compatibility jobs are removed.
-Publish core only after its frozen CI, local release gates and exact-fingerprint
-host validation pass. UI remains the existing `0.2.0`.
+CI verifies the MoonBit `0.1.20261023`/`0.10.17+d971670cd` identity and archive
+hashes. It uses Node `26.12.1` only; older compatibility jobs are removed.
+Core-only publication completed on 2026-10-29 after frozen CI, local release
+gates and registry acceptance. UI remains the existing `0.2.0`.
 
 ### MoonBit toolchain alignment (core 0.3.2)
 
@@ -54,7 +54,8 @@ Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Application authors use
 `moon install lampclaw/minimoon/cmd/minimoon@0.3.2` and
 `minimoon init my-app`. Source installation remains available for framework
-development and unpublished candidates. The source candidate is core `0.3.2` / UI `0.2.0`. UI retains its core `0.3.0` declaration.
+development and unpublished candidates. The current source and published pair
+is core `0.3.2` / UI `0.2.0`. UI retains its core `0.3.0` declaration.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not
@@ -344,8 +345,8 @@ the [release runbook](operations/release_candidate_handoff.md), validating core
 registry consumers before publishing its matching UI archive. The previous core
 `0.3.0` / UI `0.2.0` publication completed on 2026-10-16; occupied versions and
 archives are immutable. Core-only `0.3.1` was published on 2026-10-20 after all
-release gates; UI remains the existing `0.2.0`. See project status for the frozen
-source and CI.
+release gates. Core-only `0.3.2` followed on 2026-10-29; UI remains `0.2.0`.
+See project status for the frozen source, CI and registry receipt.
 Future publications need separate authorization, the Test CI job for the final
 frozen commit and fingerprint-matched host validation. Preserve
 actual-evidence gates and candidate report restoration. Record dates, source
