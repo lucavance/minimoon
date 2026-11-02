@@ -22,11 +22,11 @@
 >
 > Every conclusion comes from the current Minimoon source, tests, and generated artifacts. The MIT-licensed bilingual documentation in the reference repository supplied only an organizational and diagram-delivery pattern; this suite copies neither its domain content nor implementation code.
 
-本专题及高清图是维护者资料，保留在源码仓库中，并通过 `.moonignore` 排除在核心 Moon registry archive 之外；核心包硬上限为 328 KiB，另保留 8 KiB 余量。UI 包独立维持 250 KiB 硬上限和 16 KiB 余量。这不会影响应用依赖或生成的小程序字节。
+本专题及高清图是维护者资料，保留在源码仓库中，并通过 `.moonignore` 排除在核心 Moon registry archive 之外。核心和 UI 包继续记录实际体积，已取消项目自设的字节上限和预留量。这不会影响应用依赖或生成的小程序字节。
 
 > **English:**
 >
-> This suite and its high-resolution assets are maintainer material kept in the source repository. `.moonignore` excludes them from the core Moon registry archive, with its 328 KiB hard ceiling and 8 KiB reserve. UI independently retains a 250 KiB hard ceiling and 16 KiB reserve. They do not affect application dependencies or generated MiniApp bytes.
+> This suite and its high-resolution assets are maintainer material kept in the source repository. `.moonignore` excludes them from the core Moon registry archive. Core/UI package sizes remain measured, with project-imposed ceilings and reserves removed. They do not affect application dependencies or generated MiniApp bytes.
 
 ## 2. 当前仓库形态 / Current Repository Shape
 
@@ -36,11 +36,11 @@
 >
 > The current source is divided into MoonBit packages for the public authoring API, transactional graph and `Val` runtime, renderer, resident runtime, host templates, and generation and verification tooling. One maintained Conformance application provides release-level coverage, while a separate starter is embedded by `minimoon init`.
 
-仓库形态直接由当前源码描述，产物预算由自动检查从当前生成文件计算；本文不保存会随日常维护失效的文件数、行数、提交数或静态字节快照。
+仓库形态直接由当前源码描述，产物体积由自动检查从当前生成文件计算；本文不保存会随日常维护失效的文件数、行数、提交数或静态字节快照。
 
 > **English:**
 >
-> The current source describes the repository shape directly, while automated checks calculate artifact budgets from current generated files. This document does not preserve file counts, line counts, commit counts, or static byte snapshots that would drift during routine maintenance.
+> The current source describes the repository shape directly, while automated checks measure current generated artifacts. This document does not preserve file counts, line counts, commit counts, or static byte snapshots that would drift during routine maintenance.
 
 ## 3. 一页代码图 / One-Page Code Graph
 

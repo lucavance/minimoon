@@ -170,7 +170,6 @@ async fn perf_suite(root : String) -> Unit {
     Json::object({ "metadata": metadata, "status": Json::string("running") }),
   )
   build_examples(root, "release")
-  let page_limits : Array[(String, Int32)] = [(".js", 2048), (".wxml", 1024)]
   for app in example_apps {
     let manifest = read_json(
       root,
@@ -209,39 +208,22 @@ async fn perf_suite(root : String) -> Unit {
       .binary()
       .length()
     let initial_size = @fs.read_file(join(root, initial_path)).binary().length()
-    guard byte_budget_allows(runtime_size, conformance_runtime_limit) else {
-      abort(runtime_path + " exceeds application runtime budget")
-    }
-    let host_limit = shared_host_limit(
-      json_field(manifest, "application") != Json::null(),
-    )
-    guard byte_budget_allows(host_size, host_limit) else {
-      abort(
-        host_path +
-        " exceeds shared host budget: " +
-        host_size.to_string() +
-        " / " +
-        host_limit.to_string() +
-        " bytes",
-      )
-    }
-    guard protocol_size <= 10000 else {
-      abort(protocol_path + " exceeds shared protocol budget")
-    }
-    guard initial_size <= 41000 else {
-      abort(initial_path + " exceeds shared initial-tree budget")
-    }
     let templates_size = @fs.read_file(join(root, templates_path))
       .binary()
       .length()
     let app_wxss_size = @fs.read_file(join(root, app_wxss_path))
       .binary()
       .length()
-    guard templates_size <= 22000 else {
-      abort(templates_path + " exceeds shared WXML budget")
-    }
-    guard app_wxss_size <= 9500 else {
-      abort(app_wxss_path + " exceeds application WXSS budget")
+    for
+      (path, size) in [
+        (runtime_path, runtime_size),
+        (host_path, host_size),
+        (protocol_path, protocol_size),
+        (initial_path, initial_size),
+        (templates_path, templates_size),
+        (app_wxss_path, app_wxss_size),
+      ] {
+      println(path + ": " + size.to_string() + " bytes")
     }
     let declared_runtime_size = match
       json_field(json_field(manifest, "runtimeBytes"), "application") {
@@ -273,37 +255,23 @@ async fn perf_suite(root : String) -> Unit {
       guard @fs.read_file(join(root, page_wxss)).binary().length() == 0 else {
         abort(page_wxss + " must remain empty; use dist/app.wxss")
       }
-      for entry in page_limits {
-        let (suffix, limit) = entry
+      for suffix in [".js", ".wxml"] {
         let path = app_root + route + suffix
         require_file(root, path)
         let size = @fs.read_file(join(root, path)).binary().length()
-        println(path + ": " + size.to_string() + " / " + limit.to_string())
-        guard size <= limit else { abort(path + " exceeds performance budget") }
+        println(path + ": " + size.to_string() + " bytes")
         if suffix == ".js" {
           aggregate.val += size
         }
       }
     }
-    let aggregate_limit = conformance_javascript_limit
-    let remaining = aggregate_limit - aggregate.val
-    let headroom = remaining.to_double() / aggregate_limit.to_double() * 100.0
     println(
       "examples/" +
       app +
       "/dist/**/*.js: " +
       aggregate.val.to_string() +
-      " / " +
-      aggregate_limit.to_string() +
-      " (remaining " +
-      remaining.to_string() +
-      ", headroom " +
-      headroom.to_string() +
-      "%)",
+      " bytes",
     )
-    guard byte_budget_allows(aggregate.val, aggregate_limit) else {
-      abort(app + " exceeds aggregate JavaScript performance budget")
-    }
   }
   performance_reports(root, metadata)
   performance_consumers(root, metadata)

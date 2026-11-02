@@ -7,9 +7,8 @@ Current source targets `moon` / `moonrun 0.1.20261028` (`e1e1f15`) and
 both archive SHA-256 values and checks all three exact tool versions.
 Starter guidance and source compatibility checks use the same versions.
 Dependencies, public APIs and Contract 11 / ABI 13 / renderer protocol 9
-retain their current values. The reviewed Starter runtime and aggregate
-JavaScript ceilings each increase by 4 KiB for a measured 3,875-byte compiler
-delta; all other budgets are unchanged. See the
+retain their current values. Starter runtime and aggregate JavaScript each grow
+by 3,875 bytes in the same-source compiler comparison. See the
 [same-source measurements](reference/performance_baseline.md#moonbit-01018-source-calibration).
 Core `0.3.2` / UI `0.2.0` version metadata is unchanged; the published archives
 and release records below retain their original toolchains and contents.
@@ -17,6 +16,18 @@ and release records below retain their original toolchains and contents.
 Both maintained release fixtures have new artifact fingerprints and require
 renewed fingerprint-bound Developer Tools acceptance. Tracked verification
 reports keep `release: false`, with Developer Tools status `pending`.
+
+Local compiler reproduction identifies SWC `1.4.14` producing invalid label
+jumps in the upgraded UI runtime; the original and Babel-plus-Terser outputs
+parse successfully. Generated project settings, verification and CI handoff
+now require Babel with `swc=false` and `disableSWC=true`. The reported
+`app.js` module error may be secondary; the Developer Tools console must still
+be retested. The official Skyline auto-size option remains enabled.
+
+At the user's request, core/UI ZIP and generated-artifact size ceilings and
+reserves have been removed. Exact sizes, hashes, inventories and consumer
+comparisons remain reported. Platform limits and functional/release gates
+still apply; see the [size policy](reference/performance_baseline.md#artifact-size-policy-2026-11-02).
 
 ## Published release: core 0.3.2 / UI 0.2.0
 
@@ -175,8 +186,8 @@ Registry CLI `0.3.1` includes these repairs and optional queries; the immutable
 
 Repository performance checks now record actual Page/Val updates, bounded App
 message bursts and deterministic core/basic-UI/Markdown consumer size deltas.
-The new measurements are observations; existing budgets and release gates stay
-in force. Read the [report guide](reference/performance_baseline.md#maintenance-observation-reports)
+The new measurements are observations; functional and release gates stay
+in force. Project-imposed size budgets were subsequently removed. Read the [report guide](reference/performance_baseline.md#maintenance-observation-reports)
 and [roadmap](roadmap.md#near-term-priorities) before choosing the next runtime
 optimization. Existing application APIs and protocol versions are unchanged;
 the new optional `/query` package adds scope-owned pagination, refresh and retry.

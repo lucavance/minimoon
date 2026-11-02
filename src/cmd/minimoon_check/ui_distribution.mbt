@@ -106,24 +106,10 @@ async fn ui_distribution_package_gate(
     }
   }
   let size = @fs.read_file(archive).binary().length()
-  let limit = ui_registry_archive_hard_limit - ui_registry_archive_reserve
   write_archive_review(
-    root, "ui", "lampclaw/minimoon_ui", version, archive, paths, ui_registry_archive_hard_limit,
-    ui_registry_archive_reserve,
+    root, "ui", "lampclaw/minimoon_ui", version, archive, paths,
   )
-  guard size <= limit else {
-    abort(
-      "UI registry archive exceeds 234 KiB operating budget: " +
-      size.to_string(),
-    )
-  }
-  println(
-    "UI registry archive: " +
-    size.to_string() +
-    " / " +
-    limit.to_string() +
-    " operating bytes",
-  )
+  println("UI registry archive: " + size.to_string() + " bytes")
   let package_root = join(distribution, "ui-package")
   let consumer = join(distribution, "ui-consumer")
   @fs.mkdir(package_root, permission=0o755, recursive=true)

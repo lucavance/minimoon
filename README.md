@@ -33,7 +33,8 @@ WeChat Developer Tools. Previewing these files needs no MoonBit, Node or build s
 
 Use Skyline, base library **3.17.0** or newer, and enable ES6 transformation,
 enhanced compilation and minification (`setting.es6=true`, `setting.enhance=true`,
-`setting.minified=true`). Configure your AppID in the local private file using the
+`setting.minified=true`), with Babel selected (`setting.swc=false`,
+`setting.disableSWC=true`). Configure your AppID in the local private file using the
 [host settings](docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools).
 To edit source or create your own Starter, prepare the development environment below.
 

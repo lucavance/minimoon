@@ -8,8 +8,9 @@ Current source and CI target `moon` / `moonrun 0.1.20261028` (`e1e1f15`) and
 `moonc v0.10.18+6c83a7f62`, with checksum-pinned official toolchain and core
 archives. Source checks use `--no-mbti`; `moon info` owns canonical interfaces.
 Keep the existing dependency versions, public APIs and protocol versions.
-The reviewed Starter runtime and aggregate JavaScript ceilings each increase
-by 4 KiB for the measured compiler delta; all other budgets are unchanged.
+Artifact sizes are reported without project-imposed ceilings or reserves.
+Pin Developer Tools to Babel with SWC disabled to avoid invalid label jumps in
+the upgraded UI runtime; verify the same settings in CI handoff artifacts.
 See the [same-source measurements](reference/performance_baseline.md#moonbit-01018-source-calibration).
 Validate packaged consumers, Starter generation and both fixture fingerprints.
 Changed fingerprints require renewed host acceptance.
@@ -55,7 +56,8 @@ does not include them.
 `check:perf` adds actual Page/Val updates, App message bursts, and deterministic
 core/basic-UI/Markdown consumer size comparisons. CI retains the reports for
 review. New measurements are observations with no added timing or UI runtime
-ceiling; all existing budgets remain enforced. See the
+ceiling. Project-imposed artifact size budgets have since been removed; behavior
+and deterministic-output checks remain required. See the
 [measurement guide](reference/performance_baseline.md#maintenance-observation-reports).
 Use repeated results to prioritize queue or serialization work in the next
 iteration; make a runtime change only with a reproduced bottleneck and a
@@ -143,10 +145,10 @@ such a repair requires validation of the new affected fingerprints.
 Repository release and dogfood runbooks stay outside the core archive; retain
 the required application guides and installed CLI consumer checks. The
 generator gate now emits deterministic core/UI archive reports with per-package
-payload sizes, ZIP metadata overhead, largest files, SHA-256 and budget
-headroom. It enforces exact agreement between actual ZIP members and the package
-listing while preserving the reviewed hard ceilings and reserves. The primary
-CI job retains available reports even when an archive exceeds its budget. See the
+payload sizes, ZIP metadata overhead, largest files and SHA-256. It enforces
+exact agreement between actual ZIP members and the package listing. Size
+ceilings and reserves have been removed; the primary CI job retains available
+reports after failed gates. See the
 [release runbook](operations/release_candidate_handoff.md) for report semantics.
 
 Delivery passed CI for the final integrated commit; local
@@ -262,7 +264,7 @@ Hide, and explicit disposal invalidates stale delivery. See
 [shared state](guides/shared_state.md) for ownership, migration and acceptance.
 Dynamic account/workspace scopes remain deferred; business request epochs
 invalidate responses after logout or reset. Generated-byte changes require a
-separate byte-budget review and exact-artifact Skyline validation before a host
+size-delta review and exact-artifact Skyline validation before a host
 acceptance claim.
 
 ## 0.1.0 first non-prerelease release

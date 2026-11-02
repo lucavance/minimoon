@@ -31,7 +31,8 @@
 <!-- minimoon:preview:end -->
 
 启用 Skyline，使用基础库 **3.17.0** 或更新版本，并开启 ES6 转换、增强编译和压缩
-（`setting.es6=true`、`setting.enhance=true`、`setting.minified=true`）。
+（`setting.es6=true`、`setting.enhance=true`、`setting.minified=true`），
+选择 Babel（`setting.swc=false`、`setting.disableSWC=true`）。
 按[开发者工具设置](docs/guides/miniapp_quickstart.md#open-in-wechat-developer-tools)（英文）
 在本地私有配置中填写自己的 AppID。修改源码或创建自己的 Starter 时，再准备以下开发环境。
 

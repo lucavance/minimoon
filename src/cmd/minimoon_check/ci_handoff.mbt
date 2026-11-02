@@ -140,6 +140,8 @@ fn ci_handoff_check_source() -> String {
     #|    assert.equal(handoff.commit, commit)
     #|    assert.equal(handoff.versions.minimoon, "0.3.2")
     #|    assert.equal(handoff.versions.minimoonUi, "0.2.0")
+    #|    assert.equal(handoff.projectSettings.swc, false)
+    #|    assert.equal(handoff.projectSettings.disableSWC, true)
     #|    const manifest = JSON.parse(fs.readFileSync(path.join(base, "manifest.json"), "utf8"))
     #|    const summary = JSON.parse(fs.readFileSync(path.join(base, "release_summary.json"), "utf8"))
     #|    const checklist = JSON.parse(fs.readFileSync(path.join(base, "smoke_checklist.json"), "utf8"))
@@ -195,6 +197,9 @@ fn ci_handoff_check_source() -> String {
     #|    reject(`${bundle}-private-evidence`, (dir) => editJson(dir, summary, (value) => { value.devtools.evidence = "private-input" }), /private-evidence-free/)
     #|    reject(`${bundle}-evidence-fingerprint`, (dir) => editJson(dir, summary, (value) => { value.devtools.artifactFingerprint = "private-fingerprint" }), /private-evidence-free/)
     #|    reject(`${bundle}-appid`, (dir) => editJson(dir, `${fixture}/dist/project.config.json`, (value) => { value.appid = `wx${"1".repeat(16)}` }), /placeholder AppID/)
+    #|    for (const [field, invalid] of [["swc", true], ["disableSWC", false], ["swc", null], ["disableSWC", null]]) {
+    #|      reject(`${bundle}-${field}-${invalid}`, (dir) => editJson(dir, `${fixture}/dist/project.config.json`, (value) => { value.setting[field] = invalid }), /reviewed Developer Tools settings/)
+    #|    }
     #|    reject(`${bundle}-template-appid`, (dir) => editJson(dir, `${fixture}/dist/project.private.config.example.json`, (value) => { value.appid = `wx${"1".repeat(16)}` }), /public private-config example/)
     #|    reject(`${bundle}-template-extra`, (dir) => editJson(dir, `${fixture}/dist/project.private.config.example.json`, (value) => { value.privateMetadata = "not-public" }), /public private-config example/)
     #|    reject(`${bundle}-private-file`, (dir) => {

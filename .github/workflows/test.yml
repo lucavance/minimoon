@@ -188,7 +188,7 @@ jobs:
               echo "CI handoff requires matching versions, pages, fingerprints, and pending private-evidence-free summaries" >&2
               exit 1
             }
-            jq -e '.appid == "touristappid" and .setting.es6 == true and .setting.enhance == true and .setting.minified == true and .setting.skylineRenderEnable == true' \
+            jq -e '.appid == "touristappid" and .setting.es6 == true and .setting.enhance == true and .setting.minified == true and .setting.swc == false and .setting.disableSWC == true and .setting.skylineRenderEnable == true' \
               "$fixture/dist/project.config.json" >/dev/null || {
               echo "CI handoff requires public placeholder AppID and reviewed Developer Tools settings" >&2
               exit 1
@@ -236,7 +236,7 @@ jobs:
                 versions: {minimoon: $coreVersion, minimoonUi: $uiVersion,
                   appContract: $manifest[0].schemaVersion, runtimeAbi: $manifest[0].runtimeApiVersion, rendererProtocol: $manifest[0].rendererProtocolVersion},
                 toolchain: {moon: $moon, node: $node, bun: $bun, vp: $vp}, runner: $runner, importDirectory: "dist/",
-                projectSettings: {renderer: "skyline", es6: true, enhance: true, minified: true, minimumBaseLibrary: "3.17.0"},
+                projectSettings: {renderer: "skyline", es6: true, enhance: true, minified: true, swc: false, disableSWC: true, minimumBaseLibrary: "3.17.0"},
                 evidenceStatus: "pending-manual-devtools-validation"}' > "$handoff_dir/HANDOFF.json"
             if grep -ERq 'wx[[:xdigit:]]{16}|BEGIN ([A-Z ]+ )?PRIVATE KEY' "$handoff_dir"; then
               echo "CI handoff rejects real AppIDs and credential material" >&2

@@ -960,6 +960,7 @@ pub fn docs_check_source() -> String {
     #|  const content = normalized(readme)
     #|  for (const token of [
     #|    productVersion, "3.17.0", "setting.es6=true", "setting.enhance=true", "setting.minified=true",
+    #|    "setting.swc=false", "setting.disableSWC=true",
     #|    "docs/README.md", "docs/guides/miniapp_quickstart.md", "docs/project_status.md", "docs/roadmap.md",
     #|    "docs/architecture.md", "docs/operations/release_candidate_handoff.md", "docs/guides/http.md",
     #|    "docs/guides/shared_state.md", "docs/guides/native_navigation.md",
@@ -971,7 +972,7 @@ pub fn docs_check_source() -> String {
     #|  for (const problem of onboardingParityProblems(readme, primaryReadme, read(readme))) fail(problem)
     #|  for (const problem of fixtureReadmeProblems(readme, read(readme), fixtureInventory)) fail(problem)
     #|  for (const problem of currentFixtureProseProblems(readme, read(readme))) fail(problem)
-    #|  for (const stale of ["setting.es6=false", "setting.enhance=false", "setting.minified=false"]) {
+    #|  for (const stale of ["setting.es6=false", "setting.enhance=false", "setting.minified=false", "setting.swc=true", "setting.disableSWC=false"]) {
     #|    if (content.includes(stale)) fail(readme + ": stale Developer Tools setting: " + stale)
     #|  }
     #|}

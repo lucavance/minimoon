@@ -142,7 +142,7 @@ flowchart TB
 | 调整 diff / Change diff | `tree_diff_*`, protocol bridge | native/js diff tests, host smoke, COW benchmark |
 | 调整高频事件策略 / Change high-frequency events | host `_ed/_pu`, scheduler smoke | deterministic delayed ack, 100k pressure, device metrics |
 | 新增 `wx.*` capability | `authoring_commands`, host `_iv` | declaration audit, success/fail/unavailable, unload cancel |
-| 改构建输出 / Change artifact layout | tooling generator + verifier | drift, archive consumer, budgets, DevTools evidence |
+| 改构建输出 / Change artifact layout | tooling generator + verifier | drift, archive consumer, size measurements, DevTools evidence |
 | 改 CLI ergonomics / Change CLI ergonomics | `cmd/minimoon`, build/verify APIs | argparse cases, path diagnostics, no duplicated logic |
 
 ## 6. 不应成为扩展点的符号 / Symbols That Must Not Become Extension Points

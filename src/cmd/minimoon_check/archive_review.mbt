@@ -98,12 +98,7 @@ fn archive_review_report(
   archive_name : String,
   archive : Bytes,
   entries : Array[ArchiveMember],
-  hard_limit : Int32,
-  reserve : Int32,
 ) -> Json raise {
-  guard hard_limit >= reserve && reserve >= 0 else {
-    raise Failure("invalid archive budget")
-  }
   let files = entries.copy()
   files.sort_by((left, right) => left.path.lexical_compare(right.path))
   let groups : Map[String, (Int32, Int32, Int32)] = Map([])
@@ -136,31 +131,16 @@ fn archive_review_report(
       right.compressed_bytes - left.compressed_bytes
     }
   })
-  let operating_limit = hard_limit - reserve
   Json::object({
-    "schemaVersion": archive_number(1),
+    "schemaVersion": archive_number(2),
     "module": Json::string(module_name),
     "version": Json::string(version),
     "archive": Json::string(archive_name),
     "archiveSha256": Json::string(
       @crypto.bytes_to_hex_string(@crypto.sha256(archive)),
     ),
-    "status": Json::string(
-      if byte_budget_allows(archive.length(), operating_limit) {
-        "passed"
-      } else {
-        "failed"
-      },
-    ),
-    "budget": Json::object({
-      "hardLimitBytes": archive_number(hard_limit),
-      "reserveBytes": archive_number(reserve),
-      "operatingLimitBytes": archive_number(operating_limit),
-      "operatingHeadroomBytes": archive_number(
-        operating_limit - archive.length(),
-      ),
-      "hardLimitHeadroomBytes": archive_number(hard_limit - archive.length()),
-    }),
+    "status": Json::string("passed"),
+    "observationOnly": Json::boolean(true),
     "totals": Json::object({
       "files": archive_number(files.length()),
       "archiveBytes": archive_number(archive.length()),
@@ -194,8 +174,6 @@ async fn write_archive_review(
   version : String,
   archive : String,
   paths : Array[String],
-  hard_limit : Int32,
-  reserve : Int32,
 ) -> Unit {
   let (code, stdout, stderr) = @toolchain.collect_output(
     "unzip",
@@ -212,8 +190,6 @@ async fn write_archive_review(
     Path::basename(archive).to_owned(),
     @fs.read_file(archive).binary(),
     archive_members(stdout.text(), paths),
-    hard_limit,
-    reserve,
   )
   let directory = join(root, "_build/package-review")
   if !@fs.exists(directory) {

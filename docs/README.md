@@ -54,9 +54,8 @@ maintained in
 Chinese and English paragraphs are interleaved in one document so architecture,
 source excerpts, and diagrams stay reviewable as a single artifact. This
 maintainer suite and its high-resolution assets are source-repository material;
-they are intentionally excluded from the core registry archive, whose reviewed
-hard ceiling is 328 KiB with an 8 KiB reserve. UI has a separate 250 KiB hard
-ceiling and 16 KiB reserve.
+they are intentionally excluded from the core registry archive. Core/UI package
+sizes are measured without project-imposed ceilings or reserves.
 
 - [`code-analysis/README.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/README.md) — current-source reading map and provenance
 - [`code-analysis/01-SYSTEM-ARCHITECTURE.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/01-SYSTEM-ARCHITECTURE.md) — layers, ownership, and event path
@@ -66,7 +65,7 @@ ceiling and 16 KiB reserve.
 - [`code-analysis/05-RUNTIME-AND-HOST-SCHEDULER.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/05-RUNTIME-AND-HOST-SCHEDULER.md) — runtime lifecycle, queues, acknowledgement, and protocol
 - [`code-analysis/06-BUILD-VERIFY-AND-RELEASE.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/06-BUILD-VERIFY-AND-RELEASE.md) — contracts, generated artifacts, gates, and evidence
 - [`code-analysis/07-SYMBOL-INDEX.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/07-SYMBOL-INDEX.md) — source-reading and symbol index
-- [`code-analysis/08-RISKS-TESTING-AND-PERFORMANCE.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/08-RISKS-TESTING-AND-PERFORMANCE.md) — coverage, stress, budgets, and open risks
+- [`code-analysis/08-RISKS-TESTING-AND-PERFORMANCE.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/08-RISKS-TESTING-AND-PERFORMANCE.md) — coverage, stress, measurements, and open risks
 - [`code-analysis/assets/diagrams/README.md`](https://github.com/lucavance/minimoon/blob/main/docs/code-analysis/assets/diagrams/README.md) — 21 reproducible SVG, 3× PNG, and Mermaid sources
 
 ## Guides

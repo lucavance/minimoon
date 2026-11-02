@@ -31,7 +31,7 @@ async fn generated_checks(
       "devtools-host-boundary",
       devtools_compile_ok,
       if devtools_compile_ok {
-        "generated CommonJS uses the verified WeChat ES6-to-ES5, enhanced compilation, and minification boundary"
+        "generated CommonJS uses WeChat Babel ES6-to-ES5, enhanced compilation, and minification with SWC disabled"
       } else {
         devtools_compile_detail
       },

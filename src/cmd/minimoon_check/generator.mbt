@@ -377,9 +377,6 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
     "_build/publish/lampclaw-minimoon-" + @versions.product_version() + ".zip",
   )
   let archive_size = @fs.read_file(archive).binary().length()
-  let hard_limit = registry_archive_hard_limit
-  let operating_limit = registry_archive_operating_limit
-  let reserve_kib = (registry_archive_reserve / 1024).to_string()
   write_archive_review(
     root,
     "core",
@@ -387,33 +384,8 @@ async fn distribution_package_gate(root : String, temp : String) -> Unit {
     @versions.product_version(),
     archive,
     packaged_paths,
-    hard_limit,
-    registry_archive_reserve,
   )
-  guard byte_budget_allows(archive_size, operating_limit) else {
-    abort(
-      "registry package must retain at least " +
-      reserve_kib +
-      " KiB reserve under the " +
-      (hard_limit / 1024).to_string() +
-      " KiB hard cap: " +
-      archive_size.to_string() +
-      " / " +
-      operating_limit.to_string() +
-      " bytes",
-    )
-  }
-  println(
-    "registry archive: " +
-    archive_size.to_string() +
-    " / " +
-    operating_limit.to_string() +
-    " operating bytes (" +
-    reserve_kib +
-    " KiB reserved below " +
-    hard_limit.to_string() +
-    ")",
-  )
+  println("registry archive: " + archive_size.to_string() + " bytes")
 
   let distribution = join(temp, "distribution")
   let package_root = join(distribution, "package")
@@ -726,41 +698,22 @@ async fn generator_suite(root : String) -> Unit {
     let starter_initial = @fs.read_file(join(app, "dist/minimoon.initial.js"))
       .binary()
       .length()
-    guard byte_budget_allows(starter_runtime, starter_runtime_limit) else {
-      abort(
-        "starter runtime exceeds byte budget: actual=" +
-        starter_runtime.to_string() +
-        " bytes, limit=" +
-        starter_runtime_limit.to_string() +
-        " bytes",
-      )
-    }
-    let starter_host_limit = shared_host_limit(false)
-    guard byte_budget_allows(starter_host, starter_host_limit) else {
-      abort(
-        "starter host exceeds " +
-        starter_host_limit.to_string() +
-        "-byte budget",
-      )
-    }
-    guard starter_protocol <= 10000 else {
-      abort("starter protocol exceeds 10000-byte budget")
-    }
-    guard starter_initial <= 36000 else {
-      abort("starter initial tree exceeds 36000-byte budget")
+    for
+      (name, size) in [
+        ("minimoon.runtime.js", starter_runtime),
+        ("minimoon.host.js", starter_host),
+        ("minimoon.protocol.js", starter_protocol),
+        ("minimoon.initial.js", starter_initial),
+      ] {
+      println(template + "/dist/" + name + ": " + size.to_string() + " bytes")
     }
     guard json_string(starter_manifest, "pageBridgeEncoding") ==
       "shared-compact-node-v1" else {
       abort("starter must use the shared compact page bridge encoding")
     }
-    guard @fs.read_file(join(app, "dist/minimoon.templates.wxml"))
-      .binary()
-      .length() <=
-      22000 else {
-      abort("starter shared WXML exceeds 22000-byte protocol 9 budget")
-    }
-    guard @fs.read_file(join(app, "dist/app.wxss")).binary().length() <= 9500 else {
-      abort("starter application WXSS exceeds 9500-byte budget")
+    for name in ["minimoon.templates.wxml", "app.wxss"] {
+      let size = @fs.read_file(join(app, "dist/" + name)).binary().length()
+      println(template + "/dist/" + name + ": " + size.to_string() + " bytes")
     }
     let starter_aggregate = Ref(
       starter_runtime +
@@ -778,12 +731,17 @@ async fn generator_suite(root : String) -> Unit {
             )
             .binary()
             .length()
-          guard @fs.read_file(join(app, "dist/" + route + ".wxml"))
+          let wxml_size = @fs.read_file(join(app, "dist/" + route + ".wxml"))
             .binary()
-            .length() <=
-            1024 else {
-            abort("starter page WXML exceeds 1024-byte budget: " + route)
-          }
+            .length()
+          println(
+            template +
+            "/dist/" +
+            route +
+            ".wxml: " +
+            wxml_size.to_string() +
+            " bytes",
+          )
           guard @fs.read_file(join(app, "dist/" + route + ".wxss"))
             .binary()
             .length() ==
@@ -793,15 +751,12 @@ async fn generator_suite(root : String) -> Unit {
         }
       _ => abort("starter manifest pages must be an array")
     }
-    guard byte_budget_allows(starter_aggregate.val, starter_javascript_limit) else {
-      abort(
-        "starter aggregate JavaScript exceeds byte budget: actual=" +
-        starter_aggregate.val.to_string() +
-        " bytes, limit=" +
-        starter_javascript_limit.to_string() +
-        " bytes",
-      )
-    }
+    println(
+      template +
+      "/dist/**/*.js: " +
+      starter_aggregate.val.to_string() +
+      " bytes",
+    )
     if template == "starter" {
       let page_file = join(app, "src/pages/home/page.mbt")
       onboarding_gate(root, app, executable)

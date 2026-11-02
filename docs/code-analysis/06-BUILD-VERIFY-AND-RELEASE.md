@@ -184,7 +184,7 @@ flowchart TB
     Source[source + contract]
     Candidate[build release candidate]
     Static[MoonBit check, fmt, tests, coverage]
-    Generated[syntax, globals, host smoke, layout, budgets]
+    Generated[syntax, globals, host smoke, layout]
     Fingerprint[artifact fingerprint]
     Handoff[CI handoff archive]
     DevTools[manual Developer Tools checklist]
@@ -239,11 +239,11 @@ fingerprint 同时包含相对路径和内容，避免“相同字节被移动�
 
 ## 5. Verifier 检查什么 / What the Verifier Checks
 
-verifier 检查文件完整性、App Contract/ABI/protocol 版本、Skyline 配置、`setting.es6/enhance/minified=true`、CommonJS 语法、禁止的语法与 globals、共享 WXML/WXSS layout、host smoke、capability 声明、artifact budgets、报告一致性和 evidence fingerprint。
+verifier 检查文件完整性、App Contract/ABI/protocol 版本、Skyline 配置、`setting.es6/enhance/minified=true`、`setting.swc=false`、`setting.disableSWC=true`、CommonJS 语法、禁止的语法与 globals、共享 WXML/WXSS layout、host smoke、capability 声明、报告一致性和 evidence fingerprint。产物体积由 generator/performance 检查记录，不设项目字节上限。
 
 > **English:**
 >
-> The verifier checks file completeness, App Contract/ABI/protocol versions, Skyline configuration, `setting.es6/enhance/minified=true`, CommonJS syntax, forbidden syntax and globals, shared WXML/WXSS layout, host smoke behavior, capability declarations, artifact budgets, report consistency, and evidence fingerprint.
+> The verifier checks file completeness, App Contract/ABI/protocol versions, Skyline configuration, `setting.es6/enhance/minified=true`, `setting.swc=false`, `setting.disableSWC=true`, CommonJS syntax, forbidden syntax and globals, shared WXML/WXSS layout, host smoke behavior, capability declarations, report consistency, and evidence fingerprint. Generator/performance checks record artifact sizes without project byte ceilings.
 
 > **源码 / Source:** [`src/tooling_minimoon_verify/verify_10_generated.mbt`](../../src/tooling_minimoon_verify/verify_10_generated.mbt) · symbol: `generated_checks`
 
@@ -255,7 +255,7 @@ checks.push(
     "devtools-host-boundary",
     devtools_compile_ok,
     if devtools_compile_ok {
-      "generated CommonJS uses the verified WeChat ES6-to-ES5, enhanced compilation, and minification boundary"
+      "generated CommonJS uses WeChat Babel ES6-to-ES5, enhanced compilation, and minification with SWC disabled"
     } else {
       devtools_compile_detail
     },

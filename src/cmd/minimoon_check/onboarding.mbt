@@ -106,7 +106,7 @@ async fn onboarding_gate(
     ["verify", ".", "--candidate"],
     cwd=app,
   )
-  // Restore the original fixture before the existing scaffolding/budget probes.
+  // Restore the original fixture before the existing scaffolding probes.
   write_ui_consumer_file(app, home_path, original)
   @fs.remove(join(app, first_edit_test))
   run(

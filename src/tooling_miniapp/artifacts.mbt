@@ -134,6 +134,8 @@ fn project_config(name : String, appid : String) -> Json {
       "urlCheck": Json::boolean(false),
       "es6": Json::boolean(true),
       "enhance": Json::boolean(true),
+      "swc": Json::boolean(false),
+      "disableSWC": Json::boolean(true),
       "postcss": Json::boolean(true),
       "minified": Json::boolean(true),
       "skylineRenderEnable": Json::boolean(true),

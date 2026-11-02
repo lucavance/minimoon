@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "status": "passed",
   "release": false,
-  "artifactFingerprint": "fnv1a64-relpath-v2:c4db6b859097cf13",
+  "artifactFingerprint": "fnv1a64-relpath-v2:ffd13fb7f74c15ae",
   "checks": [
     {
       "name": "build-resources",
@@ -22,7 +22,7 @@
     {
       "name": "devtools-host-boundary",
       "status": "passed",
-      "detail": "generated CommonJS uses the verified WeChat ES6-to-ES5, enhanced compilation, and minification boundary"
+      "detail": "generated CommonJS uses WeChat Babel ES6-to-ES5, enhanced compilation, and minification with SWC disabled"
     },
     {
       "name": "shared-page-artifacts",

@@ -10,7 +10,7 @@ compilation, and code minification enabled.
 | Stage | Typical first error | Interpretation |
 | --- | --- | --- |
 | Parse | `invalid file: minimoon.host.js` / `Unexpected token` | unsupported syntax escaped generation |
-| Package | Developer Tools asks whether to compile ES6+ to ES5 | confirm the generated project still has all three verified compilation flags enabled |
+| Package | Developer Tools asks whether to compile ES6+ to ES5 | confirm the generated Babel compilation settings |
 | Module initialization | blank page and a missing global such as `TextEncoder` | syntax loaded, but linked runtime code assumed a browser API absent in MiniProgram |
 | Registration/render | Page exists but remains blank or times out | inspect the first scheduler, runtime, or WXML error and renderer stats |
 
@@ -45,7 +45,9 @@ Generated `project.config.json` must contain:
   "setting": {
     "es6": true,
     "enhance": true,
-    "minified": true
+    "minified": true,
+    "swc": false,
+    "disableSWC": true
   }
 }
 ```
@@ -55,6 +57,43 @@ configuration and confirm Developer Tools did not replace it with a local
 override. The generated CommonJS must still pass Minimoon's direct syntax and
 host-global audit before this tool-version-dependent deployment transform runs.
 Capture the first unsupported expression if compilation still fails.
+
+### `Undefined label` followed by `app.js is not defined`
+
+The MoonBit `0.10.18` upgrade changes the linked UI runtime's control-flow
+shape without changing the UI MoonBit source. A local reproduction using the
+official `miniprogram-ci@2.1.31` compiler dependencies gives:
+
+| UI runtime | Original | Babel 7.21.4 + Terser 4.8.0 | SWC 1.4.14, ES5/minified |
+| --- | --- | --- | --- |
+| MoonBit 0.10.17 | parses | parses | parses |
+| MoonBit 0.10.18 | parses | parses | invalid `break e` |
+
+SWC moves a toast touch-handler loop body into a helper, then emits a labelled
+break outside that label's scope. The parser rejects the whole runtime before
+module initialization. An `app.js is not defined` error can follow because
+application loading never completes; check the first console error before
+diagnosing a missing file. The desktop tool's embedded compiler version has
+not been established by this reproduction.
+
+Direct syntax checks and host simulation run before WeChat's downstream
+transform, so their success alone cannot detect this corruption. Generated
+configuration, verification and CI handoff now require the two SWC settings
+above, retaining ES5 transformation, enhanced compilation and minification.
+Babel-transformed artifacts still need actual Developer Tools acceptance.
+Rebuild, clear Developer Tools caches and confirm the imported distribution's
+`project.config.json` selects Babel. Keep local AppID configuration intact.
+
+### Skyline auto-size configuration warning
+
+`rendererOptions.skyline.enableScrollViewAutoSize` is an
+[official option](https://developers.weixin.qq.com/miniprogram/dev/framework/runtime/skyline/wxss.html#开启-scroll-view-自动撑开)
+that reserves Markdown layout space (base library 3.7.2 / WeChat 8.0.54 minimum).
+Base library `3.17.2` meets the project's `3.17.0+` requirement. Generated
+configuration uses `skyline`, not `kskyline`. Preserve the option; if the warning
+persists, check the imported `app.json` and the tool's configuration validator
+separately from the JavaScript parse failure. The warning's desktop cause has
+not been reproduced locally.
 
 ## Missing `TextEncoder`
 
@@ -112,15 +151,15 @@ be reflected in order.
 
 6. Fix the maintained owner, not only the generated fixture.
 7. Add an executable negative control, rebuild twice, and check deterministic
-   bytes and ceilings.
+   bytes and size reports.
 
 ## Regression coverage
 
 Current gates cover compatibility-transform idempotence, exact UTF-8 cases,
 host execution with `globalThis.TextEncoder` absent, ECMAScript/global audits,
 direct Page registration, ordered event batching, render acknowledgement and
-timeout recovery, deterministic release generation, and a 424,000-byte
-aggregate JavaScript ceiling.
+timeout recovery and deterministic release generation. Artifact sizes are
+reported without project-imposed ceilings.
 
 Run the repository gates in the prescribed order, then follow
 [`miniapp_devtools_validation.md`](miniapp_devtools_validation.md). Import the

@@ -7,6 +7,8 @@
     "urlCheck": false,
     "es6": true,
     "enhance": true,
+    "swc": false,
+    "disableSWC": true,
     "postcss": true,
     "minified": true,
     "skylineRenderEnable": true

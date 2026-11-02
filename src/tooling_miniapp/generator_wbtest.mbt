@@ -110,6 +110,8 @@ test "generated project configuration uses the verified host JavaScript boundary
   let config = project_config("fixture", "touristappid").stringify()
   assert_true(config.contains("\"es6\":true"))
   assert_true(config.contains("\"enhance\":true"))
+  assert_true(config.contains("\"swc\":false"))
+  assert_true(config.contains("\"disableSWC\":true"))
   assert_true(config.contains("\"minified\":true"))
 }
 
@@ -547,6 +549,8 @@ test "project config preserves the verified CommonJS host boundary" {
     True => ()
     _ => fail("generated project must enable Developer Tools minification")
   }
+  assert_true(field(setting, "swc") is False)
+  assert_true(field(setting, "disableSWC") is True)
   let config = private_project_config_example()
   assert_eq(string(config, "appid"), "xxxxx-your-wechat-miniapp-appid")
   assert_eq(string(config, "libVersion"), "3.17.0")

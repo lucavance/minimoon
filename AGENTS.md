@@ -189,6 +189,10 @@ the user explicitly authorizes that action.
   `moon fmt` or `moon info`, inspect the diff and keep only changes that belong
   to the current task, including expected `.mbti` updates.
 
+- Artifact sizes are observations: do not add repository ceilings or reserves
+  for core/UI archives or generated MiniApp artifacts. Keep exact size reports,
+  archive integrity and consumer checks. External platform limits still apply.
+
 - GitHub Linguist may mark true committed MiniApp build output as generated:
   `examples/*/dist/**` and `examples/*/generated/**`. Do not mark maintained
   files as generated to inflate MoonBit language statistics.
@@ -300,6 +304,8 @@ Skyline behavior, or the MiniApp bridge. Follow
 - Keep ES6-to-ES5 transformation, enhanced compilation, and code minification
   enabled (`setting.es6=true`, `setting.enhance=true`,
   `setting.minified=true`).
+- Use Babel with SWC disabled (`setting.swc=false`, `setting.disableSWC=true`)
+  to avoid invalid label jumps from the SWC compiler.
 - Use Skyline and configure an online minimum base library of 3.17.0 or newer.
 - Test the interactions affected by the change and require a clean console.
 - Evidence is valid only for its exact artifact fingerprint. Never copy

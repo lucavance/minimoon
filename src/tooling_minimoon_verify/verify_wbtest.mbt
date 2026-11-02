@@ -168,47 +168,39 @@ test "Skyline page configs require custom navigation" {
 }
 
 ///|
-test "verified host boundary requires both WeChat transforms and minification enabled" {
-  let enabled = Json::object({
-    "setting": Json::object({
-      "es6": Json::boolean(true),
-      "enhance": Json::boolean(true),
-      "minified": Json::boolean(true),
-    }),
-  })
-  let es6_only = Json::object({
-    "setting": Json::object({
-      "es6": Json::boolean(true),
-      "enhance": Json::boolean(false),
-      "minified": Json::boolean(true),
-    }),
-  })
-  let enhance_only = Json::object({
-    "setting": Json::object({
-      "es6": Json::boolean(false),
-      "enhance": Json::boolean(true),
-      "minified": Json::boolean(true),
-    }),
-  })
-  let disabled = Json::object({
-    "setting": Json::object({
-      "es6": Json::boolean(false),
-      "enhance": Json::boolean(false),
-      "minified": Json::boolean(true),
-    }),
-  })
-  let not_minified = Json::object({
-    "setting": Json::object({
-      "es6": Json::boolean(true),
-      "enhance": Json::boolean(true),
-      "minified": Json::boolean(false),
-    }),
-  })
-  assert_true(valid_devtools_host_project_config(enabled))
-  assert_false(valid_devtools_host_project_config(es6_only))
-  assert_false(valid_devtools_host_project_config(enhance_only))
-  assert_false(valid_devtools_host_project_config(disabled))
-  assert_false(valid_devtools_host_project_config(not_minified))
+test "host boundary rejects SWC and missing or invalid compilation settings" {
+  let settings = {
+    "es6": Json::boolean(true),
+    "enhance": Json::boolean(true),
+    "minified": Json::boolean(true),
+    "swc": Json::boolean(false),
+    "disableSWC": Json::boolean(true),
+  }
+  let project = Json::object({ "setting": Json::object(settings) })
+  assert_true(valid_devtools_host_project_config(project))
+  for
+    (name, expected) in [
+      ("es6", true),
+      ("enhance", true),
+      ("minified", true),
+      ("swc", false),
+      ("disableSWC", true),
+    ] {
+    for
+      invalid in [
+        Json::boolean(!expected),
+        Json::null(),
+        Json::string(expected.to_string()),
+        Json::number(1.0),
+      ] {
+      settings[name] = invalid
+      assert_false(valid_devtools_host_project_config(project))
+    }
+    settings.remove(name)
+    assert_false(valid_devtools_host_project_config(project))
+    settings[name] = Json::boolean(expected)
+    assert_true(valid_devtools_host_project_config(project))
+  }
 }
 
 ///|

@@ -148,6 +148,8 @@ Check the Developer Tools settings:
 - Skyline renderer.
 - ES6-to-ES5 transformation, enhanced compilation and minification enabled:
   `setting.es6=true`, `setting.enhance=true`, `setting.minified=true`.
+  Select Babel with `setting.swc=false` and `setting.disableSWC=true` to avoid
+  SWC label-jump corruption in the generated UI runtime.
 - Online minimum base library **3.17.0** or newer.
 
 Within the chosen application directory, copy `dist/project.private.config.example.json` to

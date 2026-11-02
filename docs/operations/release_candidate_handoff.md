@@ -123,22 +123,24 @@ or compression metadata alone are not a source-content change.
 
 The generator suite writes `_build/package-review/core.json` and `ui.json`
 from the actual ZIPs, including the archive SHA-256, complete member inventory,
-per-package compressed and uncompressed sizes, the 20 largest compressed files,
-and operating/hard-limit headroom. Re-run `vp run --no-cache check:candidate`
+per-package compressed and uncompressed sizes, and the 20 largest compressed
+files. Schema 2 sets `observationOnly: true` and removes the former `budget`
+object. `status: passed` means inventory and byte accounting succeeded;
+artifact size has no project-imposed ceiling. Re-run `vp run --no-cache check:candidate`
 to refresh both. These ignored reports also appear in the primary CI job's
 `minimoon-package-review-<commit>` artifact, retained for 14 days when available,
-including after a budget failure. A partial failed run can contain only the
+including after a failed gate. A partial failed run can contain only the
 core report; it does not establish a passed UI package review.
 
 Groups partition file payloads by source-package directory, documentation, or
 root metadata. ZIP headers, directory records and other container overhead are
 reported separately as `zipMetadataBytes`; do not add them to every group or
-treat uncompressed source sizes as ZIP-budget consumption. Reports use sorted
+treat uncompressed source sizes as compressed ZIP consumption. Reports use sorted
 paths and deterministic tie-breaking, with no timestamps or machine-local
 paths. The inspected member paths must exactly match `moon package --list`;
-missing, duplicate or unexpected members fail the gate. The report is written
-before enforcing the existing budgets: core 328 KiB minus 8 KiB reserve and UI
-250 KiB minus 16 KiB reserve. Negative operating headroom remains a failure.
+missing, duplicate or unexpected members fail the gate. Core/UI size ceilings
+and reserves were repository policy and have been removed; Mooncakes and WeChat
+still apply their own service limits.
 This size report is separate from registry resolution, consumer acceptance and
 the fingerprint-bound Developer Tools evidence.
 
@@ -181,8 +183,7 @@ package consumers. All these automated checks are distinct from `check:all` and
 `check:mvp`, which additionally require the two fixtures' local host evidence.
 
 Archive checks use `moon package --frozen --list` and inspect the actual ZIPs.
-Core has a 328 KiB hard ceiling with an 8 KiB reserve; UI has a separate 250 KiB
-ceiling with a 16 KiB reserve. These are repository budgets, not registry limits.
+Core/UI package sizes are reported without repository size ceilings or reserves.
 Only `scripts/bridge/weapp_tailwindcss_adapter.mjs` is maintained standalone
 JavaScript; host code is MoonBit-owned and committed MiniApp JavaScript is generated.
 

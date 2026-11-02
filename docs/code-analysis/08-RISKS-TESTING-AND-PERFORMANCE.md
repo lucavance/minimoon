@@ -4,11 +4,11 @@
 
 ## 1. 当前质量结论 / Current Quality Conclusion
 
-Minimoon 0.1.1 已有完整的自动 candidate gate：MoonBit native/js tests、coverage floors、生成稳定性、host simulation、性能 work counters、体积预算、archive consumer 和 CI handoff。它能高置信度发现确定性回归，但不能替代微信真实渲染线程、真机内存和调试链路延迟。
+Minimoon 已有完整的自动 candidate gate：MoonBit native/js tests、coverage floors、生成稳定性、host simulation、性能 work counters、体积测量、archive consumer 和 CI handoff。它能高置信度发现确定性回归，但不能替代微信真实渲染线程、真机内存和调试链路延迟。
 
 > **English:**
 >
-> Minimoon 0.1.1 has a complete automated candidate gate: MoonBit native/JS tests, coverage floors, generation stability, host simulation, performance work counters, size budgets, archive consumers, and CI handoff. It detects deterministic regressions with high confidence but cannot replace WeChat’s real rendering thread, physical-device memory, or debugging-path latency.
+> Minimoon has a complete automated candidate gate: MoonBit native/JS tests, coverage floors, generation stability, host simulation, performance work counters, size measurements, archive consumers, and CI handoff. It detects deterministic regressions with high confidence but cannot replace WeChat’s real rendering thread, physical-device memory, or debugging-path latency.
 
 ```mermaid
 flowchart TB
@@ -17,7 +17,7 @@ flowchart TB
     Coverage[coverage floors<br/>覆盖率下限]
     Generation[deterministic generation<br/>确定性生成]
     Host[generated host simulation<br/>宿主模拟]
-    Perf[work counters + benchmarks + byte budgets]
+    Perf[work counters + benchmarks + size reports]
     Archive[registry archive consumer]
     Candidate[CI candidate handoff]
     DevTools[WeChat Developer Tools]
@@ -113,58 +113,21 @@ function createRendererStats() {
 >
 > When a physical device appears to jump, capture these counters and the operation sequence instead of relying only on visual perception. If tap counts, batch order, and final model are correct while acknowledgement latency and queue depth grow, the issue is more likely delayed host visibility. If received count is already low, investigate event binding or the WeChat debugging path.
 
-## 5. 体积预算与当前余量 / Byte Budgets and Current Headroom
+## 5. 体积测量 / Artifact Size Measurements
 
-2026-09-08 先前 authoring 历史校准的 Conformance JavaScript 为 418,121/453,000 bytes，保留 34,879 bytes 余量；runtime 为 387,977/400,000 bytes，启用 App 的 host 为 15,624/16,000 bytes，initial trees 为 303/41,000 bytes。未启用 App 的 host 为 14,976/15,000 bytes。该次评审仅调整 Conformance runtime 和核心发布 ZIP 预算，aggregate、host、starter 与 UI 门槛当时保持不变。依据见[历史 authoring 评审](../reference/performance_baseline.md#approved-authoring-budget-review)；原生导航与布局的 host 上限见[后续预算评审](../reference/performance_baseline.md#approved-native-navigation-and-layout-budget-review)；当前核心 ZIP 上限为 328 KiB，保留 8 KiB 余量，依据见 [2026-09-21 vp 工具预算评审](../reference/performance_baseline.md#approved-vp-tooling-archive-budget-review)。
-
-> **English:**
->
-> The earlier 2026-09-08 authoring calibration measured 418,121/453,000 Conformance JavaScript bytes, leaving 34,879 bytes. Runtime was 387,977/400,000 bytes, App-enabled host was 15,624/16,000 bytes, and initial trees were 303/41,000 bytes. The no-App host was 14,976/15,000 bytes. That review changed only the Conformance runtime and core registry ZIP budgets; aggregate, host, starter, and UI ceilings were unchanged at that time. See the [historical authoring review](../reference/performance_baseline.md#approved-authoring-budget-review); native navigation/layout host ceilings are in the [subsequent budget review](../reference/performance_baseline.md#approved-native-navigation-and-layout-budget-review). The [2026-09-21 vp tooling review](../reference/performance_baseline.md#approved-vp-tooling-archive-budget-review) sets the current core ZIP hard ceiling to 328 KiB with an unchanged 8 KiB reserve.
-
-> **源码 / Source:** [`src/cmd/minimoon_check/performance.mbt`](../../src/cmd/minimoon_check/performance.mbt) · symbol: `perf_suite` artifact budgets
-
-```moonbit
-guard byte_budget_allows(runtime_size, conformance_runtime_limit) else {
-  abort(runtime_path + " exceeds application runtime budget")
-}
-let host_limit = shared_host_limit(
-  json_field(manifest, "application") != Json::null(),
-)
-guard byte_budget_allows(host_size, host_limit) else {
-  abort(
-    host_path +
-    " exceeds shared host budget: " +
-    host_size.to_string() +
-    " / " +
-    host_limit.to_string() +
-    " bytes",
-  )
-}
-guard protocol_size <= 10000 else {
-  abort(protocol_path + " exceeds shared protocol budget")
-}
-guard initial_size <= 41000 else {
-  abort(initial_path + " exceeds shared initial-tree budget")
-}
-
-let aggregate_limit = conformance_javascript_limit
-let remaining = aggregate_limit - aggregate.val
-guard byte_budget_allows(aggregate.val, aggregate_limit) else {
-  abort(app + " exceeds aggregate JavaScript performance budget")
-}
-```
-
-新增公共 API 即使源码很小，也可能让整个泛型实现进入 application runtime。评审应同时查看 release bundle delta、符号来源和 starter/conformance 双重 ceiling；直接提高 ceiling 会掩盖链接边界退化。
+2026-11-02 按用户要求取消项目自设的核心/UI ZIP、Starter、示例 runtime、host、protocol、initial trees、JavaScript 总量及 WXML/WXSS 字节上限和预留量。这些限制不是 Mooncakes 或微信硬性规定。平台自身的限制继续由对应工具执行，详见[体积策略](../reference/performance_baseline.md#artifact-size-policy-2026-11-02)。
 
 > **English:**
 >
-> A small public API addition can cause an entire generic implementation to enter the application runtime. Review must inspect release-bundle delta, symbol ownership, and both starter and Conformance ceilings. Raising the ceiling directly would hide linkage-boundary degradation.
+> At the user's request, the project removed its core/UI ZIP, Starter, fixture runtime, host, protocol, initial-tree, aggregate JavaScript and WXML/WXSS byte ceilings and reserves on 2026-11-02. These were repository policies, not Mooncakes or WeChat requirements. Platform tools still enforce their own limits; see the [size policy](../reference/performance_baseline.md#artifact-size-policy-2026-11-02).
 
-当前 vp 工具迁移只调整核心发布 ZIP 上限；UI、生成 runtime 与其他性能门槛保持不变，最终发布字节以打包门禁重新测量为准。
+> **源码 / Source:** [`src/cmd/minimoon_check/performance.mbt`](../../src/cmd/minimoon_check/performance.mbt) · symbol: `perf_suite` artifact measurements
+
+generator/performance 检查继续打印实际字节数。`_build/package-review/core.json` 和 `ui.json` 记录 ZIP 哈希、完整清单、压缩/未压缩体积与容器开销；`_build/perf/consumer_sizes.json` 记录 core/UI/Markdown 同构应用的体积差异。新增 API 的评审仍应查看 bundle delta 和符号来源。归档完整性、确定性生成、性能行为和真实宿主验证仍是验收要求。
 
 > **English:**
 >
-> The [2026-09-21 vp tooling review](../reference/performance_baseline.md#approved-vp-tooling-archive-budget-review) sets the current core ZIP hard ceiling to 328 KiB with an unchanged 8 KiB reserve. UI, generated runtime and other performance thresholds remain unchanged; the package gate remeasures the final archive.
+> Generator/performance checks still print exact bytes. `_build/package-review/core.json` and `ui.json` record ZIP hashes, complete inventories, compressed/uncompressed sizes and container overhead; `_build/perf/consumer_sizes.json` compares isomorphic core/UI/Markdown applications. Review API additions through bundle deltas and symbol ownership. Archive integrity, deterministic generation, performance behavior and real-host validation remain acceptance requirements.
 
 ## 6. 性能 gate 的边界 / Boundaries of Performance Gates
 
@@ -191,7 +154,7 @@ quadrantChart
     quadrant-2 Guard continuously / 持续防护
     quadrant-3 Observe / 观察
     quadrant-4 Plan / 规划
-    Byte ceiling: [0.84, 0.78]
+    Downstream compiler: [0.84, 0.78]
     Device ack variance: [0.82, 0.63]
     Pre-1.0 API churn: [0.62, 0.72]
     Toolchain byte drift: [0.32, 0.82]
@@ -203,11 +166,11 @@ quadrantChart
 
 [SVG](assets/diagrams/svg/08-RISKS-TESTING-AND-PERFORMANCE-2.svg) · [PNG 3×](assets/diagrams/png/08-RISKS-TESTING-AND-PERFORMANCE-2.png) · [Mermaid](assets/diagrams/source/08-RISKS-TESTING-AND-PERFORMANCE-2.mmd)
 
-最高优先级是守住字节余量并继续收集真机 acknowledgement 数据。其次是 pre-1.0 API 变更成本和 MoonBit 工具链导致的生成字节漂移。CommonJS 当前是已验证边界，迁移 ESM 不是无风险清理任务。
+最高优先级是验证微信二次编译兼容性并继续收集真机 acknowledgement 数据。其次是 pre-1.0 API 变更成本和 MoonBit 工具链导致的生成字节漂移。CommonJS 当前是已验证边界，迁移 ESM 不是无风险清理任务。
 
 > **English:**
 >
-> The highest priority is preserving byte headroom while collecting more physical-device acknowledgement data. Next are pre-1.0 API change costs and generated-byte drift caused by the MoonBit toolchain. CommonJS is the currently validated boundary; migrating to ESM is not a risk-free cleanup task.
+> The highest priority is validating WeChat's downstream compilation while collecting more physical-device acknowledgement data. Next are pre-1.0 API change costs and generated-byte drift caused by the MoonBit toolchain. CommonJS is the currently validated boundary; migrating to ESM is not a risk-free cleanup task.
 
 ## 8. 仍需人工或长期闭环的项目 / Items Requiring Human or Long-Term Closure
 

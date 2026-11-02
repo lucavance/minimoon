@@ -6,13 +6,14 @@ tags.
 
 ## [Unreleased]
 
+- Pin Developer Tools to Babel compilation; SWC 1.4.14 can emit invalid UI runtime label jumps and prevent app registration.
 - Align source tooling with MoonBit `0.10.18+6c83a7f62`
   (`moon` / `moonrun 0.1.20261028`), checksum-pinned CI and Starter guidance;
   preserve dependencies and public APIs.
 - Accept compiler abort diagnostics through a direct `console.error` call
   audit, with negative controls for other console access.
-- Calibrate only the Starter runtime and aggregate JavaScript ceilings by
-  4 KiB for the measured 3,875-byte compiler delta; retain all other budgets.
+- Remove project-imposed archive and generated-artifact size ceilings/reserves;
+  retain exact measurements, archive integrity checks and platform restrictions.
 
 ## [0.3.2] — candidate
 

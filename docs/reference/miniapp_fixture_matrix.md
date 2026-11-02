@@ -60,7 +60,7 @@ The fixture and generated starter must pass:
   request abort on unload, and ignored late success
 - coalesced async drain, timeout cancellation, exact keyed-move focus, and
   same-identity scalar-only controlled-reset probes
-- release fingerprint/report validation and fixed artifact budgets
+- release fingerprint/report validation and artifact size measurements
 
 ```bash
 minimoon check --suite codegen

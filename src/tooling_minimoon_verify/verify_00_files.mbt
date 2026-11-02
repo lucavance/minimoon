@@ -215,7 +215,9 @@ fn transform_setting(config : Json, name : String) -> Bool? {
 fn valid_devtools_host_project_config(config : Json) -> Bool {
   transform_setting(config, "es6") == Some(true) &&
   transform_setting(config, "enhance") == Some(true) &&
-  transform_setting(config, "minified") == Some(true)
+  transform_setting(config, "minified") == Some(true) &&
+  transform_setting(config, "swc") == Some(false) &&
+  transform_setting(config, "disableSWC") == Some(true)
 }
 
 ///|
@@ -262,7 +264,7 @@ async fn check_devtools_host_project_config(
       false,
       "MMN2002: " +
       project_file +
-      " must set setting.es6=true, setting.enhance=true, and setting.minified=true for the verified Developer Tools compilation boundary",
+      " must set setting.es6=true, setting.enhance=true, setting.minified=true, setting.swc=false, and setting.disableSWC=true for the Babel compilation boundary; SWC can emit invalid label jumps",
     )
   }
   (true, "")

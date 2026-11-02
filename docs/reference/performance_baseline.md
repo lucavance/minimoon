@@ -1,8 +1,28 @@
-# Performance and artifact budgets
+# Performance and artifact measurements
 
 Run-specific timings belong in ignored `_build/perf/` reports. Fixture status
-and fingerprints belong in generated reports. This document owns deterministic
-ceilings and their byte calibration, not transient benchmark samples.
+and fingerprints belong in generated reports. This document owns the size
+measurement policy and historical calibrations, not transient benchmark samples.
+
+## Artifact size policy (2026-11-02)
+
+Artifact byte counts are observations. Core/UI registry ZIPs, Starter and
+maintained fixture runtimes, hosts, protocol helpers, initial trees, aggregate
+JavaScript, WXML and WXSS have no project-imposed size ceiling or reserve.
+The former limits were repository policy, not Mooncakes or WeChat requirements;
+the user explicitly requested their removal. External service limits still
+apply through the platform's own packaging and publication checks.
+The native tab-bar PNG limit remains 40 KiB, as required by the
+[WeChat app configuration](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#tabBar).
+
+`check:candidate` continues to report artifact sizes and verify ZIP inventory,
+byte accounting, hashes, allowlists, consumer builds and deterministic output.
+Benchmark correctness, work counters, bridge speedups and fingerprint-bound
+Developer Tools acceptance remain required. Page WXSS must still be empty
+because styles belong in the shared `app.wxss`; that is a layout invariant.
+
+All ceiling and reserve decisions recorded below are historical and superseded
+by this policy. They do not constrain new source changes.
 
 ## Maintenance observation reports
 
@@ -40,38 +60,23 @@ Missing scenarios, invalid reports, failed commands and nondeterministic bytes
 fail the gate. New timing and consumer size observations have no hard ceiling.
 Compare repeated samples under the same toolchain, fixture shape and machine
 before choosing a runtime optimization; a single noisy CI sample is not a
-regression verdict. Existing deterministic budgets and release gates below
-remain unchanged. The metadata's commit plus working-tree state distinguishes
+regression verdict. Deterministic correctness and release gates remain required.
+The metadata's commit plus working-tree state distinguishes
 source observations from immutable registry packages.
 
-## Release layout and byte ceilings
+## Release layout and size reporting
 
 Each application has one runtime, one host, one protocol/COW helper, one compact
 initial-tree module, one shared recursive WXML file, one global WXSS file, and
 small indexed page registration/template stubs. An opted-in application also
 has a `minimoon.app.js` entry helper.
 
-| Artifact | Ceiling |
-| --- | ---: |
-| Draft Workbench application runtime | 464,000 bytes |
-| generated starter runtime | 235,120 bytes |
-| App-enabled shared host | 19,000 bytes |
-| no-App shared host (including starter) | 18,000 bytes |
-| shared protocol | 10,000 bytes |
-| compact initial trees | 41,000 bytes |
-| each page JavaScript bridge | 2,048 bytes |
-| shared `minimoon.templates.wxml` | 22,000 bytes |
-| global `app.wxss` | 9,500 bytes |
-| each page WXML | 1,024 bytes |
-| each page WXSS | exactly 0 bytes |
-
 Aggregate JavaScript includes `app.js`, runtime, host, protocol, initial trees,
-all page bridges, and `minimoon.app.js` when application ownership is enabled:
-
-| Application | Ceiling |
-| --- | ---: |
-| committed Draft Workbench fixture | 500,000 bytes |
-| generated starter | 263,120 bytes |
+all page bridges, and `minimoon.app.js` when application ownership is enabled.
+The generator and performance gates print exact bytes for these artifacts,
+shared WXML/global WXSS and page WXML. Core/UI ZIP reports in
+`_build/package-review/` retain compressed/uncompressed sizes and member details;
+`_build/perf/consumer_sizes.json` retains comparable core/UI/Markdown totals.
 
 Release generation minifies the host and runtime syntax. For historical
 comparison, the earlier 2026-09-08 authoring calibration used
@@ -95,15 +100,14 @@ constant. The newer compiler emits abort diagnostics through direct
 | Runtime JavaScript | 230,596 B | 234,471 B | 3,875 B |
 | Aggregate JavaScript | 258,836 B | 262,711 B | 3,875 B |
 
-All other Starter JavaScript files retain their sizes. The explicitly approved
-calibration adds 4 KiB only to the Starter runtime and aggregate ceilings:
+All other Starter JavaScript files retain their sizes. Before the size policy
+above, the explicitly approved calibration added 4 KiB to the two Starter ceilings:
 231,024 to 235,120 bytes and 259,024 to 263,120 bytes, respectively. This
-leaves 649 and 409 bytes of margin. Inclusive boundary checks remain enforced.
-Registry archive limits and reserves, core fixture, UI, shared-host, protocol,
-WXML and WXSS budgets are unchanged.
+left 649 and 409 bytes of margin. Those ceilings and their boundary checks have
+since been removed along with the other project-imposed artifact size limits.
 
 The core release fixture measures 462,030 runtime and 496,758 aggregate
-JavaScript bytes, within its existing 464,000 and 500,000 ceilings. Both
+JavaScript bytes. Both
 maintained fixtures have changed artifact fingerprints and require renewed
 Developer Tools acceptance; automated candidate reports retain host status
 `pending`.
@@ -245,7 +249,7 @@ are unchanged. The no-App host ceiling also applies to the starter; its
 runtime/aggregate ceilings receive the separate follow-up review below.
 One byte over any applicable ceiling still fails.
 Constants and inclusive-boundary tests remain in
-[`budgets.mbt`](../../src/cmd/minimoon_check/budgets.mbt) and its white-box tests.
+the [historical budget definitions](https://github.com/lucavance/minimoon/blob/65d802e3bf0f3f7639c1381ec7f0afc06d2df9b4/src/cmd/minimoon_check/budgets.mbt) and their white-box tests.
 
 ### Independent starter follow-up review
 
@@ -297,7 +301,7 @@ These are repository budgets, not registry service limits.
 No aggregate-JavaScript, starter, host, protocol, UI, coverage, scheduler or
 timing gate was relaxed by that authoring review. Package allowlists and
 exclusions were unchanged. The constants and inclusive one-byte boundary tests live
-in [`budgets.mbt`](../../src/cmd/minimoon_check/budgets.mbt) and its white-box
+in the [historical budget definitions](https://github.com/lucavance/minimoon/blob/65d802e3bf0f3f7639c1381ec7f0afc06d2df9b4/src/cmd/minimoon_check/budgets.mbt) and their white-box
 tests; further increases require another explicit review.
 
 ## Approved application-state budget review
@@ -328,7 +332,7 @@ No package allowlist, package exclusion, coverage threshold, scheduler bound,
 timing check, starter ceiling or UI archive ceiling is relaxed. UI runtime and
 aggregate sizes are observations, not additional byte gates introduced here.
 The constants, host-mode selection and inclusive-boundary tests live in
-[`budgets.mbt`](../../src/cmd/minimoon_check/budgets.mbt) and its white-box tests.
+the [historical budget definitions](https://github.com/lucavance/minimoon/blob/65d802e3bf0f3f7639c1381ec7f0afc06d2df9b4/src/cmd/minimoon_check/budgets.mbt) and their white-box tests.
 A one-byte overrun still fails; subsequent increases require another review.
 
 ## Approved HTTP budget review
