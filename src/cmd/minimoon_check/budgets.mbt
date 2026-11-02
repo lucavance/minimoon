@@ -26,12 +26,12 @@ let conformance_runtime_limit : Int32 = 464000
 let conformance_javascript_limit : Int32 = 500000
 
 ///|
-// Approved MoonBit 0.10.16 calibration, 2026-10-21: +925 B from bundled JSON.
-// Add 1 KiB to each Starter ceiling; measured runtime/aggregate 230,596/258,836 B.
-let starter_runtime_limit : Int32 = 231024
+// Approved MoonBit 0.10.18 calibration, 2026-11-02: +3,875 B with abort diagnostics.
+// Add 4 KiB to each Starter ceiling; measured runtime/aggregate 234,471/262,711 B.
+let starter_runtime_limit : Int32 = 235120
 
 ///|
-let starter_javascript_limit : Int32 = 259024
+let starter_javascript_limit : Int32 = 263120
 
 ///|
 // Native navigation/layout calibration: no-App 17,501 B; App 18,276 B.

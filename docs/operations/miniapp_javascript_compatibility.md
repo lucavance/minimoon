@@ -76,6 +76,11 @@ audit changes, and real-host validation.
 
 ## Scheduler and blank-page diagnosis
 
+MoonBit `0.10.18` emits direct `console.error(message)` calls for `abort`
+diagnostics before panicking. The runtime audit accepts this call shape and
+rejects other console methods, computed access, object or method aliases and
+assignments. This preserves compiler diagnostics without adding browser APIs.
+
 The host permits one render in flight and waits for a commit-sentinel
 `setData` callback. A missing callback performs one snapshot retry after three
 seconds, then fails closed. Inspect:

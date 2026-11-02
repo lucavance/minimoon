@@ -39,7 +39,7 @@ To edit source or create your own Starter, prepare the development environment b
 
 ## Before you start
 
-Use `moon 0.1.20261023` / `moonc v0.10.17+d971670cd`, Node `>=26.12.1`,
+Use `moon 0.1.20261028` / `moonc v0.10.18+6c83a7f62`, Node `>=26.12.1`,
 global `vp 1.4.0` for current source and WeChat Developer Tools with Skyline support.
 `vp` manages Node and Bun `1.4.4`; a separate Bun installation is unnecessary.
 See [environment setup](docs/guides/miniapp_quickstart.md#prerequisites) for

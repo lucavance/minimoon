@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "status": "passed",
   "release": false,
-  "artifactFingerprint": "fnv1a64-relpath-v2:9f9f3af4f1958477",
+  "artifactFingerprint": "fnv1a64-relpath-v2:503f0b552ebe96ba",
   "checks": [
     {
       "name": "build-resources",

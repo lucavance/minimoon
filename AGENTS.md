@@ -159,8 +159,8 @@ the user explicitly authorizes that action.
   whitespace and trailing commas when the exact formatting is not the behavior
   under test.
 
-- The current toolchain is `moon 0.1.20261023` with `moonc v0.10.17+d971670cd`
-  and `moonrun 0.1.20261023`. CI pins that official prebuilt release and checks
+- The current toolchain is `moon 0.1.20261028` with `moonc v0.10.18+6c83a7f62`
+  and `moonrun 0.1.20261028`. CI pins that official prebuilt release and checks
   both archive SHA-256 values and all exact tool versions. The repository targets
   this current MoonBit release; older compatibility jobs are not maintained.
   `moon check` writes `.mbti` files by default, so read-only checks use

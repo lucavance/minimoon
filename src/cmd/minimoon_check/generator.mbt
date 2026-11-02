@@ -40,7 +40,7 @@ fn javascript_audit_source() -> String {
     #|  runtime: new Set([
     #|    "Array", "ArrayBuffer", "BigInt", "DataView", "Error", "JSON",
     #|    "Map", "Math", "Number", "Object", "Set", "String", "Uint8Array",
-    #|    "Uint32Array", "exports", "globalThis", "setTimeout", "undefined",
+    #|    "Uint32Array", "console", "exports", "globalThis", "setTimeout", "undefined",
     #|  ]),
     #|  host: new Set([
     #|    "Array", "Date", "Error", "JSON", "Map", "Math", "Number", "Object", "Page", "Set",
@@ -79,10 +79,21 @@ fn javascript_audit_source() -> String {
     #|  const unexpected = globals.filter((name) => !allowed[kind].has(name))
     #|  if (unexpected.length) throw new Error(`${file}: unexpected ${kind} globals: ${unexpected.join(", ")}`)
     #|
+    #|  // MoonBit 0.10.18 abort diagnostics call console.error before panicking.
+    #|  // Permit only that direct call shape, without exposing the console object.
+    #|  const consoleReferences = new Set(kind === "runtime"
+    #|    ? scopes.globalScope.through.filter((reference) => reference.identifier.name === "console").map((reference) => reference.identifier)
+    #|    : [])
+    #|  const diagnosticReferences = new Set()
     #|  const globalThisProperties = new Set()
     #|  const visit = (value) => {
     #|    if (!value || typeof value !== "object") return
     #|    if (Array.isArray(value)) { for (const child of value) visit(child); return }
+    #|    if (value.type === "CallExpression" && value.callee?.type === "MemberExpression"
+    #|        && !value.callee.computed && value.callee.property?.name === "error"
+    #|        && consoleReferences.has(value.callee.object)) {
+    #|      diagnosticReferences.add(value.callee.object)
+    #|    }
     #|    if (value.type === "MemberExpression" && value.object?.type === "Identifier" && value.object.name === "globalThis") {
     #|      const property = memberName(value)
     #|      if (property === null) throw new Error(`${file}: dynamic globalThis property access is forbidden`)
@@ -93,13 +104,25 @@ fn javascript_audit_source() -> String {
     #|    }
     #|  }
     #|  visit(ast)
+    #|  if ([...consoleReferences].some((reference) => !diagnosticReferences.has(reference))) {
+    #|    throw new Error(`${file}: runtime console is limited to direct console.error calls`)
+    #|  }
     #|  const unexpectedProperties = [...globalThisProperties].filter((name) => !allowedGlobalThisProperties[kind].has(name)).sort()
     #|  if (unexpectedProperties.length) throw new Error(`${file}: unexpected globalThis properties: ${unexpectedProperties.join(", ")}`)
     #|  return { globals, globalThisProperties: [...globalThisProperties].sort() }
     #|}
     #|
     #|inspect("exports.value=Array.from([])", "runtime", "<positive-control>")
-    #|for (const unsafe of ["new WebSocket('wss://invalid')", "new TextEncoder()"] ) {
+    #|inspect("function abort(message) { console.error(message); throw new Error() }", "runtime", "<abort-diagnostic-control>")
+    #|inspect("function local(console) { console.log('local value') }", "runtime", "<local-console-control>")
+    #|for (const unsafe of [
+    #|  "new WebSocket('wss://invalid')", "new TextEncoder()",
+    #|  "console.log('unexpected')", "console.warn('unexpected')",
+    #|  "exports.logger = console", "exports.logger = console.error",
+    #|  "console.error = function() {}", "console['error']('unexpected')",
+    #|  "console[exports.method]('unexpected')", "console.error.call(null, 'unexpected')",
+    #|  "globalThis.console.error('unexpected')",
+    #|]) {
     #|  let rejected = false
     #|  try { inspect(unsafe, "runtime", "<negative-control>") } catch { rejected = true }
     #|  if (!rejected) throw new Error(`host-global audit accepted unsafe source: ${unsafe}`)

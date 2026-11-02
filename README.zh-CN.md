@@ -37,7 +37,7 @@
 
 ## 开始之前
 
-准备 `moon 0.1.20261023`／`moonc v0.10.17+d971670cd`、Node `>=26.12.1`、
+准备 `moon 0.1.20261028`／`moonc v0.10.18+6c83a7f62`、Node `>=26.12.1`、
 全局 `vp 1.4.0`（当前源码环境），以及支持 Skyline 的微信开发者工具。
 `vp` 管理 Node 和内部使用的 Bun `1.4.4`，无需单独安装 Bun。
 [环境说明](docs/guides/miniapp_quickstart.md#prerequisites)（英文）包含版本检查与可选的 Git 源码流程。

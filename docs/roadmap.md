@@ -2,21 +2,34 @@
 
 ## Near-term priorities
 
+### MoonBit 2026-10-28 source alignment
+
+Current source and CI target `moon` / `moonrun 0.1.20261028` (`e1e1f15`) and
+`moonc v0.10.18+6c83a7f62`, with checksum-pinned official toolchain and core
+archives. Source checks use `--no-mbti`; `moon info` owns canonical interfaces.
+Keep the existing dependency versions, public APIs and protocol versions.
+The reviewed Starter runtime and aggregate JavaScript ceilings each increase
+by 4 KiB for the measured compiler delta; all other budgets are unchanged.
+See the [same-source measurements](reference/performance_baseline.md#moonbit-01018-source-calibration).
+Validate packaged consumers, Starter generation and both fixture fingerprints.
+Changed fingerprints require renewed host acceptance.
+The core `0.3.2` / UI `0.2.0` metadata and published archives are unchanged.
+
 ### Core 0.3.2 released
 
-Source and Starter use vp `1.4.0`, Node `26.12.1`, PostCSS `8.5.32`,
+The released source and Starter use vp `1.4.0`, Node `26.12.1`, PostCSS `8.5.32`,
 weapp-tailwindcss `5.6.3`, async `0.22.5`, x `0.5.6` and UI ucd `0.5.2`.
-CI verifies the MoonBit `0.1.20261023`/`0.10.17+d971670cd` identity and archive
-hashes. It uses Node `26.12.1` only; older compatibility jobs are removed.
+Release CI verified the MoonBit `0.1.20261023`/`0.10.17+d971670cd` identity and
+archive hashes. It used Node `26.12.1` only; older compatibility jobs were removed.
 Core-only publication completed on 2026-10-29 after frozen CI, local release
 gates and registry acceptance. UI remains the existing `0.2.0`.
 
 ### MoonBit toolchain alignment (core 0.3.2)
 
-Pin CI to `0.10.17+d971670cd` and keep source checks read-only with
-capability-detected `--no-mbti`; review interfaces through `moon info`.
-Validate packaged consumers, Starter generation and both fixture fingerprints
-before a new release. Changed fingerprints require renewed host acceptance.
+The release pinned CI to `0.10.17+d971670cd` and kept source checks read-only
+with capability-detected `--no-mbti`; interfaces were reviewed through
+`moon info`. Packaged consumers, Starter generation and both fixture
+fingerprints were validated before publication.
 
 ### List queries (core 0.3.1 released)
 

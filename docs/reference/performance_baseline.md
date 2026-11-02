@@ -54,7 +54,7 @@ has a `minimoon.app.js` entry helper.
 | Artifact | Ceiling |
 | --- | ---: |
 | Draft Workbench application runtime | 464,000 bytes |
-| generated starter runtime | 231,024 bytes |
+| generated starter runtime | 235,120 bytes |
 | App-enabled shared host | 19,000 bytes |
 | no-App shared host (including starter) | 18,000 bytes |
 | shared protocol | 10,000 bytes |
@@ -71,7 +71,7 @@ all page bridges, and `minimoon.app.js` when application ownership is enabled:
 | Application | Ceiling |
 | --- | ---: |
 | committed Draft Workbench fixture | 500,000 bytes |
-| generated starter | 259,024 bytes |
+| generated starter | 263,120 bytes |
 
 Release generation minifies the host and runtime syntax. For historical
 comparison, the earlier 2026-09-08 authoring calibration used
@@ -82,9 +82,35 @@ aggregate JavaScript bytes, including the 3,464-byte application helper.
 Against that review's ceilings, headroom was respectively 12,023, 376, 508,
 40,697, and 34,879 bytes.
 
+## MoonBit 0.10.18 source calibration
+
+The 2026-11-02 review compares the same two-page Starter source with official
+MoonBit `0.10.17+d971670cd` and `0.10.18+6c83a7f62`, holding Node `26.12.1`,
+Bun `1.4.4`, dependencies, generated runtime source and minification flags
+constant. The newer compiler emits abort diagnostics through direct
+`console.error` calls; the generated runtime contains 79 such calls.
+
+| Starter measurement | MoonBit 0.10.17 | MoonBit 0.10.18 | Increase |
+| --- | ---: | ---: | ---: |
+| Runtime JavaScript | 230,596 B | 234,471 B | 3,875 B |
+| Aggregate JavaScript | 258,836 B | 262,711 B | 3,875 B |
+
+All other Starter JavaScript files retain their sizes. The explicitly approved
+calibration adds 4 KiB only to the Starter runtime and aggregate ceilings:
+231,024 to 235,120 bytes and 259,024 to 263,120 bytes, respectively. This
+leaves 649 and 409 bytes of margin. Inclusive boundary checks remain enforced.
+Registry archive limits and reserves, core fixture, UI, shared-host, protocol,
+WXML and WXSS budgets are unchanged.
+
+The core release fixture measures 462,030 runtime and 496,758 aggregate
+JavaScript bytes, within its existing 464,000 and 500,000 ceilings. Both
+maintained fixtures have changed artifact fingerprints and require renewed
+Developer Tools acceptance; automated candidate reports retain host status
+`pending`.
+
 ## Historical MoonBit 0.10.16 calibration
 
-Current source uses `moon 0.1.20261023` / `moonc v0.10.17+d971670cd`,
+Current source uses `moon 0.1.20261028` / `moonc v0.10.18+6c83a7f62`,
 vp `1.4.0`, Node `>=26.12.1` and Bun `1.4.4`. The measurements below retain
 the earlier 0.10.16 calibration as a historical budget record; they do not
 define current compatibility requirements.

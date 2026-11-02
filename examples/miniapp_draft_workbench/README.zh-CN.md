@@ -97,7 +97,7 @@ vp run minimoon verify examples/miniapp_draft_workbench --candidate
 <!-- minimoon:rebuild:end -->
 
 该命令会先构建 release 模式产物，再执行自动化候选验证；完成后重新导入或编译同一目录。
-源码环境使用 `moon 0.1.20261023`／`moonc v0.10.17+d971670cd`、全局 `vp 1.4.0`、
+源码环境使用 `moon 0.1.20261028`／`moonc v0.10.18+6c83a7f62`、全局 `vp 1.4.0`、
 Node `>=26.12.1`、受管理的 Bun `1.4.4` 和 `moonbitlang/async 0.22.5`。
 使用匹配的 CLI，不混用旧工具生成的文件；注册表可用性见[项目状态](../../docs/project_status.md)。
 

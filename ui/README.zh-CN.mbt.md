@@ -29,7 +29,7 @@
 
 ## 安装
 
-当前源码使用 `moon 0.1.20261023`／`moonc v0.10.17+d971670cd`、源码 CLI、
+当前源码使用 `moon 0.1.20261028`／`moonc v0.10.18+6c83a7f62`、源码 CLI、
 全局 `vp 1.4.0`、Node `26.12.1` 和 Bun `1.4.4`，要求 Node `>=26.12.1`。
 已发布归档保留发布时的要求，见[兼容表](https://github.com/lucavance/minimoon/blob/main/docs/reference/compatibility_and_upgrades.md#packaging-and-javascript-dependencies)（英文）。
 按[环境说明](https://github.com/lucavance/minimoon/blob/main/docs/guides/miniapp_quickstart.md#prerequisites)（英文）准备环境，

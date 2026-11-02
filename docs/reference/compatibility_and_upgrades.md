@@ -69,8 +69,8 @@ consumer gates for another pair.
 ## Toolchain compatibility
 
 Current source, carrying core `0.3.2` / UI `0.2.0` version metadata, targets
-`moon 0.1.20261023` with
-`moonc v0.10.17+d971670cd` and `moonrun 0.1.20261023`. CI pins the official
+`moon 0.1.20261028` with
+`moonc v0.10.18+6c83a7f62` and `moonrun 0.1.20261028`. CI pins the official
 prebuilt release, verifies both archive SHA-256 values and all exact tool
 versions, and does not maintain older MoonBit compatibility jobs. No Rust is
 required. Direct dependencies are

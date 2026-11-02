@@ -1,4 +1,13 @@
 ///|
+async test "runtime global audit permits compiler abort diagnostics and rejects console escapes" {
+  let (code, stdout, stderr) = @toolchain.collect_output(
+    "vp",
+    @toolchain.bun_args(["--eval", javascript_audit_source()]),
+  )
+  assert_eq(code, 0, msg=stdout.text() + stderr.text())
+}
+
+///|
 test "registry package allowlist accepts only maintained publication roots" {
   for
     path in [

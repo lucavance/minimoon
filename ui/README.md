@@ -35,7 +35,7 @@ To modify source or add UI to your own application, prepare the environment belo
 
 ## Install
 
-Current source uses `moon 0.1.20261023` / `moonc v0.10.17+d971670cd`, the source
+Current source uses `moon 0.1.20261028` / `moonc v0.10.18+6c83a7f62`, the source
 CLI, global `vp 1.4.0`, Node `26.12.1` and Bun `1.4.4`; Node `>=26.12.1` is
 required. Published archives retain their released requirements; see the
 [compatibility table](https://github.com/lucavance/minimoon/blob/main/docs/reference/compatibility_and_upgrades.md#packaging-and-javascript-dependencies). Follow

@@ -1,5 +1,23 @@
 # Project status
 
+## Current source toolchain (2026-11-02)
+
+Current source targets `moon` / `moonrun 0.1.20261028` (`e1e1f15`) and
+`moonc v0.10.18+6c83a7f62`. CI pins that official prebuilt release, verifies
+both archive SHA-256 values and checks all three exact tool versions.
+Starter guidance and source compatibility checks use the same versions.
+Dependencies, public APIs and Contract 11 / ABI 13 / renderer protocol 9
+retain their current values. The reviewed Starter runtime and aggregate
+JavaScript ceilings each increase by 4 KiB for a measured 3,875-byte compiler
+delta; all other budgets are unchanged. See the
+[same-source measurements](reference/performance_baseline.md#moonbit-01018-source-calibration).
+Core `0.3.2` / UI `0.2.0` version metadata is unchanged; the published archives
+and release records below retain their original toolchains and contents.
+
+Both maintained release fixtures have new artifact fingerprints and require
+renewed fingerprint-bound Developer Tools acceptance. Tracked verification
+reports keep `release: false`, with Developer Tools status `pending`.
+
 ## Published release: core 0.3.2 / UI 0.2.0
 
 Core `lampclaw/minimoon@0.3.2` was published on **2026-10-29 (Asia/Shanghai)**

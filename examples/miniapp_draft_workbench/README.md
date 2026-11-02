@@ -109,7 +109,7 @@ vp run minimoon verify examples/miniapp_draft_workbench --candidate
 
 This builds release-mode output before automated candidate verification. Reimport
 or recompile the same directory afterwards. Source development uses
-`moon 0.1.20261023` / `moonc v0.10.17+d971670cd`, global `vp 1.4.0`,
+`moon 0.1.20261028` / `moonc v0.10.18+6c83a7f62`, global `vp 1.4.0`,
 Node `>=26.12.1`, managed Bun `1.4.4` and `moonbitlang/async 0.22.5`.
 Use a matching CLI rather than mixing old generated files; registry availability
 is recorded in [project status](../../docs/project_status.md).

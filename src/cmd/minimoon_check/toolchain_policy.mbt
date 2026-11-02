@@ -117,7 +117,7 @@ async fn vp_toolchain_policy(root : String) -> Unit {
     token in [
       "version: 1.4.0", "vp install --frozen-lockfile", "vp env current --json",
       "vp run --no-cache check:coverage", "vp run --no-cache check:candidate", "sha256sum --check --strict",
-      "name: Setup MoonBit", "MOON_VERSION: 0.1.20261023 (3778465 2026-10-23)", "MOONC_VERSION: v0.10.17+d971670cd (2026-10-23)",
+      "name: Setup MoonBit", "MOON_VERSION: 0.1.20261028 (e1e1f15 2026-10-28)", "MOONC_VERSION: v0.10.18+6c83a7f62 (2026-10-28)",
       "\"moon $MOON_VERSION\"", "\"moonrun $MOON_VERSION\"", "\"moonc $MOONC_VERSION\"",
     ] {
     require_text(root, workflow_path, token)

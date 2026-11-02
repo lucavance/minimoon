@@ -6,6 +6,14 @@ tags.
 
 ## [Unreleased]
 
+- Align source tooling with MoonBit `0.10.18+6c83a7f62`
+  (`moon` / `moonrun 0.1.20261028`), checksum-pinned CI and Starter guidance;
+  preserve dependencies and public APIs.
+- Accept compiler abort diagnostics through a direct `console.error` call
+  audit, with negative controls for other console access.
+- Calibrate only the Starter runtime and aggregate JavaScript ceilings by
+  4 KiB for the measured 3,875-byte compiler delta; retain all other budgets.
+
 ## [0.3.2] — candidate
 
 - Fix Markdown table/code overlap by enabling Skyline scroll-view auto sizing.
