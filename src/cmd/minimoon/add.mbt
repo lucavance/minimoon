@@ -193,10 +193,10 @@ async fn run_add_page(
 fn component_source(name : String) -> String {
   let _ = name
   "///|\n" +
-  "pub struct Props {\n  label : String\n  event_key : String\n} derive(Eq)\n\n" +
+  "#derive(Eq)\npub struct Props {\n  label : String\n  event_key : String\n}\n\n" +
   "///|\npub extend Props with Eq::{equal, not_equal}\n\n" +
   "///|\n" +
-  "pub struct Model {\n  value : Int\n} derive(Eq)\n\n" +
+  "#derive(Eq)\npub struct Model {\n  value : Int\n}\n\n" +
   "///|\npub extend Model with Eq::{equal, not_equal}\n\n" +
   "///|\n" +
   "pub enum Msg {\n  Increment\n}\n\n" +

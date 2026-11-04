@@ -5,6 +5,11 @@ defined by `moon.mod`; it does not use Git version tags. Registry availability
 is recorded in the repository's
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
 
+## [Unreleased]
+
+- Refresh the optional Markdown parser to cmark `0.4.13` and validate with the
+  current core toolchain, preserving public UI APIs and its core `0.3.0` floor.
+
 ## [0.2.0] — candidate
 
 - Require core `lampclaw/minimoon@0.3.0` and renderer protocol 9.

@@ -1,5 +1,6 @@
 ///|
 /// Multi-thumb slider uses only typed native touch and page-local layout measurement.
+#derive(Eq)
 priv struct SliderDrag {
   token : Int32
   pointer : Int32
@@ -10,13 +11,14 @@ priv struct SliderDrag {
   index : Int32
   bounds : @minimoon.NodeRect?
   ended : Bool
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct SliderState {
   token : Int32
   drag : SliderDrag?
-} derive(Eq)
+}
 
 ///|
 priv enum SliderMessage {

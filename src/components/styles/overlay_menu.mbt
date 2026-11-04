@@ -46,12 +46,13 @@ pub fn dialog_controlled(
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SheetSide {
   Top
   Right
   Bottom
   Left
-} derive(Eq, Debug)
+}
 
 ///|
 fn SheetSide::headless(self : SheetSide) -> @headless.SheetSide {
@@ -275,12 +276,13 @@ pub fn menu_submenu(
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum MenuPlacement {
   BottomStart
   BottomEnd
   TopStart
   TopEnd
-} derive(Eq, Debug)
+}
 
 ///|
 fn MenuPlacement::headless(self : MenuPlacement) -> @headless.MenuPlacement {

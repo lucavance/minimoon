@@ -49,6 +49,7 @@ pub impl IsChildren for String with fn to_nodes(self) {
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SemanticRole {
   GenericRole
   ButtonRole
@@ -83,7 +84,7 @@ pub(all) enum SemanticRole {
   RowRole
   CellRole
   ColumnHeaderRole
-} derive(Eq, Debug)
+}
 
 ///|
 struct Semantics {

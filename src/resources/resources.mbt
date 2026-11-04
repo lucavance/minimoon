@@ -1,25 +1,28 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum ResourceContent {
   Text(String)
   Binary(Bytes)
-} derive(Eq, Debug)
+}
 
 ///|
 /// A build asset. Text uses SVG/txt paths and binary assets use PNG paths.
 /// Paths are relative to dist and must live below assets/.
+#derive(Eq, Debug)
 pub(all) struct ResourceAsset {
   path : String
   content : ResourceContent
-} derive(Eq, Debug)
+}
 
 ///|
 /// Build-time resources, never included in the application runtime implicitly.
+#derive(Eq, Debug)
 pub(all) struct ResourceBundle {
   id : String
   version : String
   wxss : String
   assets : Array[ResourceAsset]
-} derive(Eq, Debug)
+}
 
 ///|
 /// Serialize a typed provider result for the native build probe.

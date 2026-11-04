@@ -1,14 +1,16 @@
 ///|
 /// A rectangle in logical px, relative to the screen's top-left corner.
+#derive(Eq, Debug, ToJson)
 pub(all) struct LayoutRect {
   left : Double
   top : Double
   width : Double
   height : Double
-} derive(Eq, Debug, ToJson)
+}
 
 ///|
 /// Synchronous window information. The safe area may be unavailable.
+#derive(Eq, Debug, ToJson)
 pub(all) struct WindowMetrics {
   window_width : Double
   window_height : Double
@@ -17,14 +19,15 @@ pub(all) struct WindowMetrics {
   screen_top : Double
   status_bar_height : Double
   safe_area : LayoutRect?
-} derive(Eq, Debug, ToJson)
+}
 
 ///|
 /// Page-owned layout facts, separate from immutable route input.
+#derive(Eq, Debug, ToJson)
 pub(all) struct PageLayout {
   window : WindowMetrics?
   menu_button : LayoutRect?
-} derive(Eq, Debug, ToJson)
+}
 
 ///|
 pub fn PageLayout::unavailable() -> PageLayout {

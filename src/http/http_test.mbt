@@ -1,13 +1,15 @@
 ///|
+#derive(Debug, Eq, ToJson, @json.FromJson)
 priv struct User {
   name : String
   count : Int32
-} derive(Debug, Eq, ToJson, @json.FromJson)
+}
 
 ///|
+#derive(@json.FromJson)
 priv struct Users {
   users : Array[User]
-} derive(@json.FromJson)
+}
 
 ///|
 fn[T] capture(

@@ -78,6 +78,7 @@ fn decode_request(value : Json) -> Result[RequestResult, HostError] {
 }
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum HttpMethod {
   Get
   Post
@@ -85,7 +86,7 @@ pub(all) enum HttpMethod {
   Delete
   Head
   Options
-} derive(Debug, Eq)
+}
 
 ///|
 pub(all) enum RequestBody {

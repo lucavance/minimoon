@@ -32,11 +32,12 @@ pub fn avatar_image(
 
 ///|
 /// RUI image lifecycle is scoped by source; late events from an old source are inert.
+#derive(Eq, Debug)
 pub(all) enum AvatarImageStatus {
   AvatarLoading
   AvatarLoaded
   AvatarError
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn[C : @minimoon.IsChildren] avatar_with_fallback(

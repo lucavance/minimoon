@@ -1,9 +1,10 @@
 ///|
+#derive(Eq)
 priv struct PropertyResetState {
   phase : Int32
   text : String
   checked : Bool
-} derive(Eq)
+}
 
 ///|
 fn reset_control_node(

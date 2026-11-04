@@ -1,9 +1,10 @@
 ///|
+#derive(Debug, Eq)
 struct ArchiveMember {
   path : String
   uncompressed_bytes : Int32
   compressed_bytes : Int32
-} derive(Debug, Eq)
+}
 
 ///|
 // Info-ZIP is already required by the distribution gates. Read its actual

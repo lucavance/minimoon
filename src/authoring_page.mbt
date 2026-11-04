@@ -21,6 +21,7 @@ struct PageContext {
 }
 
 ///|
+#derive(Eq)
 pub(all) enum PageLifecycleHook {
   Load
   Show
@@ -28,7 +29,7 @@ pub(all) enum PageLifecycleHook {
   Unload
   PullDownRefresh
   ReachBottom
-} derive(Eq)
+}
 
 ///|
 fn PageLifecycleHook::host_name(self : PageLifecycleHook) -> String {

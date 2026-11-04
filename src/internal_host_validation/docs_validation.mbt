@@ -845,8 +845,8 @@ pub fn docs_check_source() -> String {
     #|}
     #|if (diagramManifest) {
     #|  if (diagramManifest.schemaVersion !== 1) fail("code-analysis diagram manifest schema must be 1")
-    #|  if (diagramManifest.renderer !== "@mermaid-js/mermaid-cli" || diagramManifest.rendererVersion !== "11.17.0") {
-    #|    fail("code-analysis diagram renderer is not pinned to Mermaid CLI 11.17.0")
+    #|  if (diagramManifest.renderer !== "@mermaid-js/mermaid-cli" || diagramManifest.rendererVersion !== "11.17.1") {
+    #|    fail("code-analysis diagram renderer is not pinned to Mermaid CLI 11.17.1")
     #|  }
     #|  if (diagramManifest.scale !== 3 || diagramManifest.diagramCount !== 21 || !Array.isArray(diagramManifest.diagrams)) {
     #|    fail("code-analysis diagram manifest count or scale is invalid")

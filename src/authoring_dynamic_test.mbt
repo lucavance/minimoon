@@ -1,8 +1,9 @@
 ///|
+#derive(Eq)
 priv struct SwitchInput {
   tag : String
   value : Int32
-} derive(Eq)
+}
 
 ///|
 priv enum SwitchParentMessage {
@@ -250,10 +251,11 @@ test "dynamic branch init runs after commit and preserves graph invalidation" {
 }
 
 ///|
+#derive(Eq)
 priv struct EnumerateInput {
   tag : String
   value : Int32
-} derive(Eq)
+}
 
 ///|
 priv enum EnumerateParentMessage {

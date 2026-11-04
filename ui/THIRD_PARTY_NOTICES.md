@@ -8,8 +8,10 @@ in `docs/upstream/rui-0.3.6/LICENSE`. Nova recipes are adapted to finite native
 WXSS, hexadecimal colors, page-owned layers and touch controls; browser DOM,
 CSS anchors, `:has`, hover/keyboard and top-layer mechanics are not imported.
 
-Optional Markdown uses `moonbit-community/cmark@0.4.12` (Apache-2.0), source
-https://github.com/moonbit-community/cmark.mbt/tree/a505474dbde0fbd86f7e3757f33b8673e4255518
+Optional Markdown uses `moonbit-community/cmark@0.4.13` (Apache-2.0, with the
+retained ISC notice for cmarkit). The reviewed immutable registry source is
+https://download.mooncakes.io/user/moonbit-community/cmark/0.4.13.zip
+(SHA-256 `cdf40f3109826d5c87a771a73c2254edcacfd898844a76dc3617dbe5d1906b08`).
 This is a declared external dependency, not vendored source. Its entity-table
 build step uses Python 3; the generated MiniApp runtime is MoonBit JavaScript.
 The native renderer is independently implemented, with public callback and

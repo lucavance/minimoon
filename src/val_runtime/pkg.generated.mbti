@@ -5,6 +5,7 @@ import {
   "lampclaw/minimoon/internal_duplix",
   "lampclaw/minimoon/internal_slotmap",
   "moonbitlang/core/immut/vector",
+  "moonbitlang/core/json",
   "moonbitlang/core/ref",
 }
 
@@ -35,7 +36,7 @@ pub fn every(String, Int32, Cmd) -> Sub
 
 pub fn host_effect(String, String, (HostOutcome) -> Cmd) -> Cmd
 
-pub fn lifecycle(String, (Json) -> Result[Cmd, DecodeError]) -> Sub
+pub fn lifecycle(String, (@json.Json) -> Result[Cmd, DecodeError]) -> Sub
 
 pub fn navigate_back(Int32) -> Cmd
 
@@ -141,7 +142,8 @@ pub fn[T : Eq, U : Eq] Graph::select_shared(Self, Shared[T], (T) -> U) -> Val[U]
 pub fn Graph::set_shared_visible(Self, Bool) -> Unit
 pub fn Graph::take_initial_command(Self) -> Cmd
 
-type GraphGeneration derive(Eq)
+#derive(Eq)
+type GraphGeneration
 pub fn GraphGeneration::equal(Self, Self) -> Bool
 pub fn GraphGeneration::not_equal(Self, Self) -> Bool
 
@@ -174,7 +176,7 @@ pub(all) enum Sub {
   SubNone
   SubBatch(Array[Sub])
   SubEvery(String, Int32, Cmd)
-  SubLifecycle(String, (Json) -> Result[Cmd, DecodeError])
+  SubLifecycle(String, (@json.Json) -> Result[Cmd, DecodeError])
 }
 
 type SubscriptionRegistry

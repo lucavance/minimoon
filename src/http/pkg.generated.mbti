@@ -30,7 +30,7 @@ pub fn[T : @json.FromJson] Request::expect_json(Self, @minimoon.Emit[Result[T, E
 
 type RequestWithBody
 pub fn[T : @json.FromJson] RequestWithBody::expect_json(Self, @minimoon.Emit[Result[T, Error]]) -> @minimoon.Cmd
-pub fn[T : ToJson] RequestWithBody::with_json(Self, T) -> Request
+pub fn[T : @json.ToJson] RequestWithBody::with_json(Self, T) -> Request
 pub fn RequestWithBody::with_text(Self, String) -> Request
 
 // Type aliases

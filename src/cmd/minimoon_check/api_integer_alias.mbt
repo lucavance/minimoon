@@ -1,8 +1,5 @@
 ///|
-// The current compiler prints the existing builtin Int alias as Int32. Only
-// type-position tokens are normalized: strings, qualified names and declarations stay exact.
-// A local type or generic binding with either name disables this normalization.
-fn api_integer_alias(source : String) -> String {
+fn api_interface_tokens(source : String) -> Array[(Int32, Int32)] {
   let tokens : Array[(Int32, Int32)] = []
   let mut index = 0
   while index < source.length() {
@@ -12,7 +9,12 @@ fn api_integer_alias(source : String) -> String {
     if char == ' ' || char == '\n' || char == '\r' || char == '\t' {
       continue
     }
-    if char == '"' {
+    if char == '/' && index < source.length() && source[index] == '/' {
+      while index < source.length() && source[index] != '\n' {
+        index += 1
+      }
+      continue
+    } else if char == '"' {
       while index < source.length() {
         let next = source[index]
         index += 1
@@ -29,14 +31,30 @@ fn api_integer_alias(source : String) -> String {
     }
     tokens.push((start, index))
   }
-  let token = fn(i : Int32) {
-    if i < 0 || i >= tokens.length() {
-      ""
-    } else {
-      let (start, end) = tokens[i]
-      source[start:end].to_owned()
-    }
+  tokens
+}
+
+///|
+fn api_interface_token(
+  source : String,
+  tokens : Array[(Int32, Int32)],
+  index : Int32,
+) -> String {
+  if index < 0 || index >= tokens.length() {
+    ""
+  } else {
+    let (start, end) = tokens[index]
+    source[start:end].to_owned()
   }
+}
+
+///|
+// The current compiler prints the existing builtin Int alias as Int32. Only
+// type-position tokens are normalized: strings, qualified names and declarations stay exact.
+// A local type or generic binding with either name disables this normalization.
+fn api_integer_alias(source : String) -> String {
+  let tokens = api_interface_tokens(source)
+  let token = fn(i : Int32) { api_interface_token(source, tokens, i) }
   let mut generic = false
   for i in 0..<tokens.length() {
     let current = token(i)

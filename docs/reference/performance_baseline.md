@@ -114,8 +114,9 @@ Developer Tools acceptance; automated candidate reports retain host status
 
 ## Historical MoonBit 0.10.16 calibration
 
-Current source uses `moon 0.1.20261028` / `moonc v0.10.18+6c83a7f62`,
-vp `1.4.0`, Node `>=26.12.1` and Bun `1.4.4`. The measurements below retain
+Current source uses `moon 0.1.20261102` / `moonc v0.10.19+bee578715`,
+vp `1.5.0`, managed Node `26.13.0` (minimum `>=26.12.1`) and Bun `1.4.4`.
+The measurements below retain
 the earlier 0.10.16 calibration as a historical budget record; they do not
 define current compatibility requirements.
 

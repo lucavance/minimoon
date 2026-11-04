@@ -1,5 +1,6 @@
 ///|
-struct GraphGeneration(@slotmap.Id) derive(Eq)
+#derive(Eq)
+struct GraphGeneration(@slotmap.Id)
 
 ///|
 priv struct StateAddress {

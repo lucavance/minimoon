@@ -4,6 +4,7 @@ package "lampclaw/minimoon"
 import {
   "moonbitlang/core/debug",
   "moonbitlang/core/immut/vector",
+  "moonbitlang/core/json",
 }
 
 // Values
@@ -45,7 +46,7 @@ pub fn effect(async () -> Unit noraise) -> Cmd
 
 pub fn[Model : Eq, Msg] elmish_page(id~ : String, route~ : Route, title~ : String, model~ : Model, update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd), view~ : (Model, Emit[Msg]) -> Node, capabilities? : Array[Capability], init? : (Emit[Msg]) -> Cmd, subscriptions? : (PageContext, Model, Emit[Msg]) -> Sub) -> Page
 
-pub fn[C : IsChildren] form(on_submit~ : Emit[Map[String, Json]], on_reset? : Cmd, submit_key? : String, reset_key? : String, id? : String, class? : String, style? : String, C) -> Node
+pub fn[C : IsChildren] form(on_submit~ : Emit[Map[String, @json.Json]], on_reset? : Cmd, submit_key? : String, reset_key? : String, id? : String, class? : String, style? : String, C) -> Node
 
 pub fn fragment(Array[Node]) -> Node
 
@@ -131,7 +132,7 @@ pub fn[C : IsChildren] scroll_view(scroll_x? : Bool, scroll_y? : Bool, scroll_to
 
 pub fn semantics(role? : SemanticRole, label? : String, expanded? : Bool, selected? : Bool, disabled? : Bool, hidden? : Bool, checked? : Bool, modal? : Bool, controls? : String, labelled_by? : String, described_by? : String, orientation? : String, has_popup? : String, required? : Bool, invalid? : Bool, busy? : Bool, live? : String, value_min? : Int32, value_max? : Int32, value_now? : Int32, value_text? : String) -> Semantics
 
-pub fn set_storage(String, Json, Emit[Result[Unit, HostError]]) -> Cmd
+pub fn set_storage(String, @json.Json, Emit[Result[Unit, HostError]]) -> Cmd
 
 pub fn show_toast(String, Emit[Result[Unit, HostError]]) -> Cmd
 
@@ -172,16 +173,17 @@ pub fn[Model : Eq, Msg] AppContext::create_pure_state(Self, Model, update~ : (Mo
 pub fn[Model : Eq, Msg] AppContext::create_state(Self, Model, update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd), subscriptions? : (Model, Emit[Msg]) -> Sub) -> (Shared[Model], Emit[Msg])
 pub fn[Model : Eq, Msg] AppContext::create_state_with_init(Self, init~ : (Emit[Msg]) -> (Model, Cmd), update~ : (Model, Msg, Emit[Msg]) -> (Model, Cmd), subscriptions? : (Model, Emit[Msg]) -> Sub) -> (Shared[Model], Emit[Msg])
 pub fn AppContext::every(Self, key~ : String, interval_ms~ : Int32, command~ : Cmd) -> Sub
-pub fn AppContext::lifecycle(Self, AppLifecycleHook, (Json) -> Result[Cmd, DecodeError]) -> Sub
+pub fn AppContext::lifecycle(Self, AppLifecycleHook, (@json.Json) -> Result[Cmd, DecodeError]) -> Sub
 pub fn AppContext::on_hide(Self, Cmd) -> Sub
 pub fn AppContext::on_launch(Self, Cmd) -> Sub
 pub fn AppContext::on_show(Self, Cmd) -> Sub
 
+#derive(Eq)
 pub(all) enum AppLifecycleHook {
   Launch
   Show
   Hide
-} derive(Eq)
+}
 pub fn AppLifecycleHook::equal(Self, Self) -> Bool
 pub fn AppLifecycleHook::not_equal(Self, Self) -> Bool
 
@@ -196,6 +198,7 @@ pub fn[Deps] AppRuntime::lifecycle(Self[Deps], String, String) -> String
 pub fn[Deps] AppRuntime::resolve_effect(Self[Deps], String, String, String) -> String
 pub fn[Deps] AppRuntime::subscription(Self[Deps], String) -> String
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Capability {
   Login
   GetStorage
@@ -210,7 +213,7 @@ pub(all) enum Capability {
   SwitchTab
   NavigateBack
   MeasureNodes
-} derive(Eq, @debug.Debug)
+}
 pub fn Capability::equal(Self, Self) -> Bool
 pub fn Capability::name(Self) -> String
 pub fn Capability::not_equal(Self, Self) -> Bool
@@ -236,10 +239,11 @@ pub struct FocusDetail {
   height : Int32
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) enum FormButtonType {
   SubmitForm
   ResetForm
-} derive(Eq, @debug.Debug)
+}
 pub fn FormButtonType::equal(Self, Self) -> Bool
 pub fn FormButtonType::not_equal(Self, Self) -> Bool
 pub fn FormButtonType::to_repr(Self) -> @debug.Repr
@@ -249,18 +253,20 @@ pub struct HostError {
   kind : HostErrorKind
   message : String
   code : String?
-  raw : Json
+  raw : @json.Json
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) enum HostErrorKind {
   Failed
   Unavailable
   InvalidPayload
-} derive(Eq, @debug.Debug)
+}
 pub fn HostErrorKind::equal(Self, Self) -> Bool
 pub fn HostErrorKind::not_equal(Self, Self) -> Bool
 pub fn HostErrorKind::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum HttpMethod {
   Get
   Post
@@ -268,19 +274,21 @@ pub(all) enum HttpMethod {
   Delete
   Head
   Options
-} derive(Eq, @debug.Debug)
+}
 pub fn HttpMethod::equal(Self, Self) -> Bool
 pub fn HttpMethod::not_equal(Self, Self) -> Bool
 pub fn HttpMethod::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct ImageLoadDetail {
   width : Double
   height : Double
-} derive(Eq, @debug.Debug)
+}
 pub fn ImageLoadDetail::equal(Self, Self) -> Bool
 pub fn ImageLoadDetail::not_equal(Self, Self) -> Bool
 pub fn ImageLoadDetail::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum ImageMode {
   ScaleToFill
   AspectFit
@@ -288,7 +296,7 @@ pub(all) enum ImageMode {
   WidthFix
   HeightFix
   ImageCenter
-} derive(Eq, @debug.Debug)
+}
 pub fn ImageMode::equal(Self, Self) -> Bool
 pub fn ImageMode::not_equal(Self, Self) -> Bool
 pub fn ImageMode::to_repr(Self) -> @debug.Repr
@@ -299,27 +307,29 @@ pub struct InputBlurDetail {
   value : String
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) enum InputType {
   TextInput
   NumberInput
   DigitInput
   IdCardInput
-} derive(Eq, @debug.Debug)
+}
 pub fn InputType::equal(Self, Self) -> Bool
 pub fn InputType::not_equal(Self, Self) -> Bool
 pub fn InputType::to_repr(Self) -> @debug.Repr
 
 type KeyedNode
 
+#derive(Eq, @debug.Debug, @json.ToJson)
 pub(all) struct LayoutRect {
   left : Double
   top : Double
   width : Double
   height : Double
-} derive(Eq, ToJson, @debug.Debug)
+}
 pub fn LayoutRect::equal(Self, Self) -> Bool
 pub fn LayoutRect::not_equal(Self, Self) -> Bool
-pub fn LayoutRect::to_json(Self) -> Json
+pub fn LayoutRect::to_json(Self) -> @json.Json
 pub fn LayoutRect::to_repr(Self) -> @debug.Repr
 
 pub struct LocationResult {
@@ -346,10 +356,11 @@ pub struct MediaFile {
   thumb_temp_file_path : String?
 }
 
+#derive(Eq)
 pub(all) enum NavigatorMode {
   Navigate
   Redirect
-} derive(Eq)
+}
 pub fn NavigatorMode::equal(Self, Self) -> Bool
 pub fn NavigatorMode::not_equal(Self, Self) -> Bool
 
@@ -360,6 +371,7 @@ pub fn Node::to_nodes(Self) -> Array[Self]
 pub impl IsChildren for Node
 pub impl Eq for Node
 
+#derive(Eq, @debug.Debug)
 pub struct NodeRect {
   id : String
   left : Double
@@ -368,17 +380,17 @@ pub struct NodeRect {
   bottom : Double
   width : Double
   height : Double
-} derive(Eq, @debug.Debug)
+}
 pub fn NodeRect::equal(Self, Self) -> Bool
 pub fn NodeRect::not_equal(Self, Self) -> Bool
 pub fn NodeRect::to_repr(Self) -> @debug.Repr
 
 type Page
 pub fn Page::contract(Self) -> String
-pub fn Page::contract_json(Self) -> Json
+pub fn Page::contract_json(Self) -> @json.Json
 pub fn Page::create_runtime(Self, input? : Map[String, String], layout? : PageLayout) -> Result[PageRuntime, DecodeError]
 pub fn Page::id(Self) -> String
-pub fn Page::initial_tree(Self, layout? : PageLayout) -> Json
+pub fn Page::initial_tree(Self, layout? : PageLayout) -> @json.Json
 pub fn Page::route(Self) -> String
 pub fn Page::title(Self) -> String
 pub fn Page::wxml(Self) -> String
@@ -387,7 +399,7 @@ type PageContext
 pub fn[T : Eq] PageContext::bind(Self, Shared[T]) -> Val[T]
 pub fn PageContext::every(Self, key~ : String, interval_ms~ : Int32, command~ : Cmd) -> Sub
 pub fn PageContext::layout(Self) -> Val[PageLayout]
-pub fn PageContext::lifecycle(Self, PageLifecycleHook, (Json) -> Result[Cmd, DecodeError]) -> Sub
+pub fn PageContext::lifecycle(Self, PageLifecycleHook, (@json.Json) -> Result[Cmd, DecodeError]) -> Sub
 pub fn PageContext::on_hide(Self, Cmd) -> Sub
 pub fn PageContext::on_load(Self, Cmd) -> Sub
 pub fn PageContext::on_pull_down_refresh(Self, Cmd) -> Sub
@@ -396,17 +408,19 @@ pub fn PageContext::on_show(Self, Cmd) -> Sub
 pub fn PageContext::on_unload(Self, Cmd) -> Sub
 pub fn[T : Eq, U : Eq] PageContext::select(Self, Shared[T], (T) -> U) -> Val[U]
 
+#derive(Eq, @debug.Debug, @json.ToJson)
 pub(all) struct PageLayout {
   window : WindowMetrics?
   menu_button : LayoutRect?
-} derive(Eq, ToJson, @debug.Debug)
+}
 pub fn PageLayout::equal(Self, Self) -> Bool
-pub fn PageLayout::from_json(Json) -> Self
+pub fn PageLayout::from_json(@json.Json) -> Self
 pub fn PageLayout::not_equal(Self, Self) -> Bool
-pub fn PageLayout::to_json(Self) -> Json
+pub fn PageLayout::to_json(Self) -> @json.Json
 pub fn PageLayout::to_repr(Self) -> @debug.Repr
 pub fn PageLayout::unavailable() -> Self
 
+#derive(Eq)
 pub(all) enum PageLifecycleHook {
   Load
   Show
@@ -414,7 +428,7 @@ pub(all) enum PageLifecycleHook {
   Unload
   PullDownRefresh
   ReachBottom
-} derive(Eq)
+}
 pub fn PageLifecycleHook::equal(Self, Self) -> Bool
 pub fn PageLifecycleHook::not_equal(Self, Self) -> Bool
 
@@ -448,14 +462,14 @@ pub struct Query {
 }
 
 pub(all) enum RequestBody {
-  JsonBody(Json)
+  JsonBody(@json.Json)
   FormBody(Array[(String, String)])
   TextBody(String)
 }
 
 pub struct RequestResult {
   status_code : Int32
-  data : Json
+  data : @json.Json
   headers : Map[String, String]
   cookies : Array[String]
 }
@@ -478,6 +492,7 @@ pub struct ScrollDetail {
   delta_y : Double
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) enum SemanticRole {
   GenericRole
   ButtonRole
@@ -512,7 +527,7 @@ pub(all) enum SemanticRole {
   RowRole
   CellRole
   ColumnHeaderRole
-} derive(Eq, @debug.Debug)
+}
 pub fn SemanticRole::equal(Self, Self) -> Bool
 pub fn SemanticRole::not_equal(Self, Self) -> Bool
 pub fn SemanticRole::to_repr(Self) -> @debug.Repr
@@ -533,7 +548,7 @@ pub impl[T] Enumerate for Status[T]
 pub impl[T : Eq] Eq for Status[T]
 
 pub struct StorageResult {
-  data : Json
+  data : @json.Json
 }
 
 type Sub
@@ -545,22 +560,24 @@ pub struct TextareaBlurDetail {
   cursor : Int32
 }
 
+#derive(Eq, @debug.Debug)
 pub struct TouchDetail {
   touches : Array[TouchPoint]
   changed_touches : Array[TouchPoint]
   timestamp : Double
-} derive(Eq, @debug.Debug)
+}
 pub fn TouchDetail::equal(Self, Self) -> Bool
 pub fn TouchDetail::not_equal(Self, Self) -> Bool
 pub fn TouchDetail::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct TouchPoint {
   identifier : Int32
   client_x : Double
   client_y : Double
   page_x : Double
   page_y : Double
-} derive(Eq, @debug.Debug)
+}
 pub fn TouchPoint::equal(Self, Self) -> Bool
 pub fn TouchPoint::not_equal(Self, Self) -> Bool
 pub fn TouchPoint::to_repr(Self) -> @debug.Repr
@@ -593,6 +610,7 @@ pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq] Val::view7(Self[A
 pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H : Eq] Val::view8(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], Self[H], (A, B, C, D, E, F, G, H) -> Node) -> Self[Node]
 pub fn[A : Eq, B : Eq, C : Eq, D : Eq, E : Eq, F : Eq, G : Eq, H : Eq, I : Eq] Val::view9(Self[A], Self[B], Self[C], Self[D], Self[E], Self[F], Self[G], Self[H], Self[I], (A, B, C, D, E, F, G, H, I) -> Node) -> Self[Node]
 
+#derive(Eq, @debug.Debug, @json.ToJson)
 pub(all) struct WindowMetrics {
   window_width : Double
   window_height : Double
@@ -601,10 +619,10 @@ pub(all) struct WindowMetrics {
   screen_top : Double
   status_bar_height : Double
   safe_area : LayoutRect?
-} derive(Eq, ToJson, @debug.Debug)
+}
 pub fn WindowMetrics::equal(Self, Self) -> Bool
 pub fn WindowMetrics::not_equal(Self, Self) -> Bool
-pub fn WindowMetrics::to_json(Self) -> Json
+pub fn WindowMetrics::to_json(Self) -> @json.Json
 pub fn WindowMetrics::to_repr(Self) -> @debug.Repr
 
 // Type aliases

@@ -1,43 +1,49 @@
 ///|
 /// Touch-native compound sidebar adapted from RUI b1291945 (MIT).
+#derive(Eq, Debug)
 pub(all) enum SidebarSide {
   SidebarLeft
   SidebarRight
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SidebarVariant {
   SidebarDefault
   SidebarFloating
   SidebarInset
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SidebarCollapsible {
   SidebarOffcanvas
   SidebarIcon
   SidebarFixed
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SidebarMenuButtonSize {
   SidebarMenuSm
   SidebarMenuDefault
   SidebarMenuLg
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SidebarMenuButtonVariant {
   SidebarMenuButtonDefault
   SidebarMenuButtonOutline
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct SidebarState {
   collapsed : Bool
   mobile_open : Bool
   width : Double
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn sidebar_state(
@@ -52,6 +58,7 @@ pub fn sidebar_state(
 }
 
 ///|
+#derive(Eq)
 priv struct SidebarRailDrag {
   pointer : Int32
   start : Double
@@ -60,9 +67,10 @@ priv struct SidebarRailDrag {
   maximum : Double
   side : SidebarSide
   moved : Bool
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct SidebarTooltip {
   id : String
   side : Side
@@ -70,15 +78,16 @@ priv struct SidebarTooltip {
   gap : Double
   offset : Double
   bounds : @headless.Bounds?
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct SidebarTransient {
   token : Int32
   drag : SidebarRailDrag?
   suppress_tap : Bool
   tooltip : SidebarTooltip?
-} derive(Eq)
+}
 
 ///|
 priv enum SidebarMsg {

@@ -1,5 +1,6 @@
 ///|
 /// Touch-native adaptation of RUI drawer.mbt at b1291945 (MIT).
+#derive(Eq)
 priv struct DrawerDrag {
   pointer : Int32
   start : Double
@@ -11,13 +12,14 @@ priv struct DrawerDrag {
   edge : Bool
   cross_start : Double
   locked : Bool
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct DrawerState {
   token : Int32
   drag : DrawerDrag?
-} derive(Eq)
+}
 
 ///|
 priv enum DrawerMsg {

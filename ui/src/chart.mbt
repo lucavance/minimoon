@@ -1,15 +1,17 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum ChartIndicator {
   ChartDot
   ChartLine
   ChartDashed
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ChartLegendPosition {
   LegendTop
   LegendBottom
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn[C : @minimoon.IsChildren] chart_container(

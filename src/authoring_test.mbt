@@ -644,18 +644,20 @@ test "failed assoc candidate restores removed branch state and handlers" {
 }
 
 ///|
+#derive(Eq)
 priv enum KeyedLifetimeShape {
   Empty
   EmptyFragment
   Fragment
   View
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct KeyedLifetimeRowSpec {
   shape : KeyedLifetimeShape
   version : Int32
-} derive(Eq)
+}
 
 ///|
 fn keyed_lifetime_find(value : Json, id : String) -> Json? {

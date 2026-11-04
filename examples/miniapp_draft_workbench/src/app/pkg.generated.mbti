@@ -36,12 +36,13 @@ pub fn validate(Draft) -> Result[Draft, String]
 // Errors
 
 // Types and methods
+#derive(Eq)
 pub(all) struct Buffer {
   id : Int32?
   draft : Draft
   saved : Draft
   revision : Int32
-} derive(Eq)
+}
 pub fn Buffer::equal(Self, Self) -> Bool
 pub fn Buffer::not_equal(Self, Self) -> Bool
 
@@ -54,43 +55,48 @@ pub struct Deps {
   send_fetch : @minimoon.Emit[FetchMsg]
 }
 
+#derive(Eq, @json.FromJson, @json.ToJson)
 pub(all) struct Draft {
   title : String
   note : String
-} derive(Eq, ToJson, @json.FromJson)
+}
 pub fn Draft::equal(Self, Self) -> Bool
-pub fn Draft::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn Draft::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn Draft::not_equal(Self, Self) -> Bool
-pub fn Draft::to_json(Self) -> Json
+pub fn Draft::to_json(Self) -> @json.Json
 
+#derive(@json.FromJson)
 pub(all) struct DraftEcho {
   json : Draft
-} derive(@json.FromJson)
-pub fn DraftEcho::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+}
+pub fn DraftEcho::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 
+#derive(Eq)
 pub(all) struct EchoModel {
   token : Int32
   revision : Int32
   submitted : Draft
   status : EchoStatus
-} derive(Eq)
+}
 pub fn EchoModel::equal(Self, Self) -> Bool
 pub fn EchoModel::not_equal(Self, Self) -> Bool
 
+#derive(Eq)
 pub(all) enum EchoStatus {
   EchoIdle
   EchoLoading
   EchoOk(Draft)
   EchoFailed(String)
   EchoOutdated
-} derive(Eq)
+}
 pub fn EchoStatus::equal(Self, Self) -> Bool
 pub fn EchoStatus::not_equal(Self, Self) -> Bool
 
+#derive(Eq)
 pub struct FetchModel {
   epoch : Int32
   label : String
-} derive(Eq)
+}
 pub fn FetchModel::equal(Self, Self) -> Bool
 pub fn FetchModel::not_equal(Self, Self) -> Bool
 
@@ -100,53 +106,58 @@ pub(all) enum FetchMsg {
   Finished(Int32, Result[@minimoon.RequestResult, @minimoon.HostError])
 }
 
+#derive(Eq)
 pub(all) enum Intent {
   New
   Open(Int32)
   Delete(Int32)
   ClearAll
   Initialize
-} derive(Eq)
+}
 pub fn Intent::equal(Self, Self) -> Bool
 pub fn Intent::not_equal(Self, Self) -> Bool
 
+#derive(Eq)
 pub(all) struct PendingWrite {
   token : Int32
   store : Store
   intent : Intent?
   buffer : Buffer
   saved_id : Int32?
-} derive(Eq)
+}
 pub fn PendingWrite::equal(Self, Self) -> Bool
 pub fn PendingWrite::not_equal(Self, Self) -> Bool
 
+#derive(Eq, @json.FromJson, @json.ToJson)
 pub(all) struct Record {
   id : Int32
   draft : Draft
-} derive(Eq, ToJson, @json.FromJson)
+}
 pub fn Record::equal(Self, Self) -> Bool
-pub fn Record::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn Record::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn Record::not_equal(Self, Self) -> Bool
-pub fn Record::to_json(Self) -> Json
+pub fn Record::to_json(Self) -> @json.Json
 
+#derive(Eq)
 pub(all) enum StorageState {
   Loading
   Ready
   Writing
   ReadFailed
-} derive(Eq)
+}
 pub fn StorageState::equal(Self, Self) -> Bool
 pub fn StorageState::not_equal(Self, Self) -> Bool
 
+#derive(Eq, @json.FromJson, @json.ToJson)
 pub(all) struct Store {
   version : Int32
   next_id : Int32
   records : Array[Record]
-} derive(Eq, ToJson, @json.FromJson)
+}
 pub fn Store::equal(Self, Self) -> Bool
-pub fn Store::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn Store::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn Store::not_equal(Self, Self) -> Bool
-pub fn Store::to_json(Self) -> Json
+pub fn Store::to_json(Self) -> @json.Json
 
 pub(all) enum WorkMsg {
   Reload
@@ -162,6 +173,7 @@ pub(all) enum WorkMsg {
   EchoFinished(Int32, Result[DraftEcho, Error])
 }
 
+#derive(Eq)
 pub(all) struct Workbench {
   store : Store
   buffer : Buffer
@@ -172,7 +184,7 @@ pub(all) struct Workbench {
   opening : Intent?
   notice : String
   echo : EchoModel
-} derive(Eq)
+}
 pub fn Workbench::equal(Self, Self) -> Bool
 pub fn Workbench::not_equal(Self, Self) -> Bool
 

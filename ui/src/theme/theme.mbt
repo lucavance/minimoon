@@ -1,22 +1,25 @@
 ///|
 /// Skyline-safe adaptation of RUI tokens (MIT). See THIRD_PARTY_NOTICES.md.
+#derive(Eq, Debug)
 pub(all) enum ColorMode {
   Light
   Dark
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TextDirection {
   Ltr
   Rtl
-} derive(Eq, Debug)
+}
 
 ///|
 /// Nova is the current compact recipe; VegaV1 preserves the original recipe.
+#derive(Eq, Debug)
 pub(all) enum Preset {
   Nova
   VegaV1
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Preset with Eq::{equal, not_equal}
@@ -25,6 +28,7 @@ pub extend Preset with Eq::{equal, not_equal}
 pub extend Preset with @debug.Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct Tokens {
   background : String
   foreground : String
@@ -35,7 +39,7 @@ pub(all) struct Tokens {
   border : String
   destructive : String
   radius : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn tokens(mode~ : ColorMode = Light, preset~ : Preset = Nova) -> Tokens {
@@ -89,12 +93,13 @@ pub fn tokens(mode~ : ColorMode = Light, preset~ : Preset = Nova) -> Tokens {
 }
 
 ///|
+#derive(Eq, Debug)
 pub struct Theme {
   preset : Preset
   mode : ColorMode
   direction : TextDirection
   tokens : Tokens
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn theme(

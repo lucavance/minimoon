@@ -1,11 +1,13 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum ToastVariant {
   ToastDefault
   ToastDestructive
   ToastSuccess
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ToastPosition {
   ToastTopLeft
   ToastTopCenter
@@ -13,7 +15,7 @@ pub(all) enum ToastPosition {
   ToastBottomLeft
   ToastBottomCenter
   ToastBottomRight
-} derive(Eq, Debug)
+}
 
 ///|
 struct Toast {
@@ -61,11 +63,12 @@ pub fn toast_notice(
 }
 
 ///|
+#derive(Eq)
 priv struct ToastEntry {
   notice : Toast
   remaining : Int32
   swipe : (Int32, Double, Double, Double)?
-} derive(Eq)
+}
 
 ///|
 priv enum ToastMsg {

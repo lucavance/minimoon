@@ -1,4 +1,5 @@
 ///|
+#derive(Eq)
 pub(all) struct Panel {
   key : String
   title : String
@@ -6,7 +7,7 @@ pub(all) struct Panel {
   disabled : Bool
   icon : @minimoon.Node?
   trigger : @minimoon.Node?
-} derive(Eq)
+}
 
 ///|
 pub fn panel(

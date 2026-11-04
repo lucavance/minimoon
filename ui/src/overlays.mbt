@@ -1,12 +1,14 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Side {
   Top
   Right
   Bottom
   Left
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum OverlayKind {
   DialogSurface
   AlertSurface
@@ -15,7 +17,7 @@ pub(all) enum OverlayKind {
   PreviewSurface
   TooltipSurface
   ContextSurface
-} derive(Eq, Debug)
+}
 
 ///|
 fn surface_style(kind : OverlayKind, bounds : @headless.Bounds?) -> String {

@@ -1,5 +1,6 @@
 ///|
 /// A viewport-relative rectangle in logical pixels. A missing node yields None.
+#derive(Eq, Debug)
 pub struct NodeRect {
   id : String
   left : Double
@@ -8,7 +9,7 @@ pub struct NodeRect {
   bottom : Double
   width : Double
   height : Double
-} derive(Eq, Debug)
+}
 
 ///|
 fn valid_measure_id(id : String) -> Bool {

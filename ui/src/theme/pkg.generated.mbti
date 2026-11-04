@@ -13,42 +13,47 @@ pub fn tokens(mode? : ColorMode, preset? : Preset) -> Tokens
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub(all) enum ColorMode {
   Light
   Dark
-} derive(Eq, @debug.Debug)
+}
 pub fn ColorMode::equal(Self, Self) -> Bool
 pub fn ColorMode::not_equal(Self, Self) -> Bool
 pub fn ColorMode::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Preset {
   Nova
   VegaV1
-} derive(Eq, @debug.Debug)
+}
 pub fn Preset::equal(Self, Self) -> Bool
 pub fn Preset::not_equal(Self, Self) -> Bool
 pub fn Preset::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum TextDirection {
   Ltr
   Rtl
-} derive(Eq, @debug.Debug)
+}
 pub fn TextDirection::equal(Self, Self) -> Bool
 pub fn TextDirection::not_equal(Self, Self) -> Bool
 pub fn TextDirection::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct Theme {
   preset : Preset
   mode : ColorMode
   direction : TextDirection
   tokens : Tokens
-} derive(Eq, @debug.Debug)
+}
 pub fn Theme::class_name(Self) -> String
 pub fn Theme::equal(Self, Self) -> Bool
 pub fn Theme::not_equal(Self, Self) -> Bool
 pub fn Theme::style(Self) -> String
 pub fn Theme::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct Tokens {
   background : String
   foreground : String
@@ -59,7 +64,7 @@ pub(all) struct Tokens {
   border : String
   destructive : String
   radius : Int32
-} derive(Eq, @debug.Debug)
+}
 pub fn Tokens::equal(Self, Self) -> Bool
 pub fn Tokens::not_equal(Self, Self) -> Bool
 pub fn Tokens::to_repr(Self) -> @debug.Repr

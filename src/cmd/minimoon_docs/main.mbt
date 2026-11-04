@@ -2,7 +2,7 @@
 type Path = @path.Path
 
 ///|
-let renderer_version = "11.17.0"
+let renderer_version = "11.17.1"
 
 ///|
 let diagram_scale = 3
@@ -275,8 +275,8 @@ fn asset_readme(diagrams : Array[Diagram]) -> String {
     "vp run docs:diagrams\n" +
     "vp run docs:diagrams:check\n" +
     "```\n\n" +
-    "默认使用固定的 Mermaid CLI 11.17.0 和仓库内受控的无沙箱渲染配置；也可以通过 `MMDC_BIN` 和 `PUPPETEER_EXECUTABLE_PATH` 指定本地工具。\n\n" +
-    "> **English:**\n>\n> The command defaults to pinned Mermaid CLI 11.17.0 and the repository's controlled no-sandbox rendering configuration. `MMDC_BIN` and `PUPPETEER_EXECUTABLE_PATH` may select local tools.\n\n" +
+    "默认使用固定的 Mermaid CLI 11.17.1 和仓库内受控的无沙箱渲染配置；也可以通过 `MMDC_BIN` 和 `PUPPETEER_EXECUTABLE_PATH` 指定本地工具。\n\n" +
+    "> **English:**\n>\n> The command defaults to pinned Mermaid CLI 11.17.1 and the repository's controlled no-sandbox rendering configuration. `MMDC_BIN` and `PUPPETEER_EXECUTABLE_PATH` may select local tools.\n\n" +
     "## 图表索引 / Diagram Index\n\n" +
     "清单按正文出现顺序列出每张图的可缩放版本、高清位图和可审查源文件。\n\n" +
     "> **English:**\n>\n> The inventory follows document order and links each diagram's scalable export, high-resolution bitmap, and reviewable source.\n\n" +

@@ -69,23 +69,33 @@ consumer gates for another pair.
 ## Toolchain compatibility
 
 Current source, carrying core `0.3.2` / UI `0.2.0` version metadata, targets
-`moon 0.1.20261028` with
-`moonc v0.10.18+6c83a7f62` and `moonrun 0.1.20261028`. CI pins the official
+`moon 0.1.20261102` with
+`moonc v0.10.19+bee578715` and `moonrun 0.1.20261102`. CI pins the official
 prebuilt release, verifies both archive SHA-256 values and all exact tool
 versions, and does not maintain older MoonBit compatibility jobs. No Rust is
 required. Direct dependencies are
-`moonbitlang/async@0.22.5` and `moonbitlang/x@0.5.6`.
+`moonbitlang/async@0.22.7` and `moonbitlang/x@0.5.7`.
 Source UI metadata explicitly constrains `moonbit-community/ucd@0.5.2` for cmark/charclass;
-cmark `0.4.12`, casefold `0.1.7` and charclass `0.1.4` are unchanged.
+cmark is `0.4.13`; casefold `0.1.7` and charclass `0.1.4` are unchanged.
 
 The current MoonBit compiler writes `.mbti` files during `moon check`. Use
 `--no-mbti` for read-only checks; `moon info` emits canonical interfaces.
 Frozen API comparisons remain explicit and review any compiler spelling changes.
+The reviewed `0.10.19` representation migration accepts `#derive(...)` in
+place of trailing `derive(...)`, including reordered trait names, and the
+qualified core `@json.Json` / `@json.ToJson` spellings. Compatibility checks
+retain trait membership, declaration contents, local bindings and package
+identity; historical snapshots remain unchanged.
+
+Async `0.22.7` internally delegates scheduling to the experimental core async
+runtime. Moon emits three dependency-manifest notices for that upstream
+delegation; repository compiler diagnostics still pass `--deny-warn`.
+Application imports remain on the declared `moonbitlang/async` packages.
 
 Repository and generated-starter JavaScript tooling require Node `>=26.12.1`.
-Current source uses global `vp 1.4.0` to manage pinned Bun `1.4.4`;
-`devEngines.runtime` selects Node `26.12.1` without adding `.node-version`.
-CI uses Node `26.12.1` only.
+Current source uses global `vp 1.5.0` to manage pinned Bun `1.4.4`;
+`devEngines.runtime` selects Node `26.13.0` LTS without adding `.node-version`.
+CI uses Node `26.13.0` only.
 Update CI, the package consumer gate, starter guidance and compatibility notes
 together when changing these constraints.
 
@@ -100,9 +110,10 @@ For library types whose concrete derived methods are part of the published API,
 retain the derivation and explicitly export those extensions, for example:
 
 ```moonbit
+#derive(Eq, Debug)
 pub(all) struct Model {
   count : Int
-} derive(Eq, Debug)
+}
 
 pub extend Model with Eq::{equal, not_equal}
 pub extend Model with Debug::{to_repr}
@@ -147,15 +158,15 @@ Packaging checks do not prove registry availability or a host pass.
 
 Use the exact application style versions for the selected CLI:
 
-| Dependency | Published CLI `0.3.1` | Core `0.3.2` CLI |
-| --- | --- | --- |
-| `@tailwindcss/cli` and `tailwindcss` | `4.3.3` | `4.3.3` |
-| `postcss`, including `overrides.postcss` | `8.5.30` | `8.5.32` |
-| `weapp-tailwindcss` | `5.6.1` | `5.6.3` |
-| `devEngines.packageManager` | Bun `1.4.3` | Bun `1.4.4` |
-| `devEngines.runtime` | Node `26.11.1` | Node `26.12.1` |
-| `engines.node` | `>=24.20.0` | `>=26.12.1` |
-| `overrides.source-map-js` | `1.2.2` | `1.2.2` |
+| Dependency | Published CLI `0.3.1` | Published CLI `0.3.2` | Unpublished source CLI |
+| --- | --- | --- | --- |
+| `@tailwindcss/cli` and `tailwindcss` | `4.3.3` | `4.3.3` | `4.3.4` |
+| `postcss`, including `overrides.postcss` | `8.5.30` | `8.5.32` | `8.5.32` |
+| `weapp-tailwindcss` | `5.6.1` | `5.6.3` | `5.6.3` |
+| `devEngines.packageManager` | Bun `1.4.3` | Bun `1.4.4` | Bun `1.4.4` |
+| `devEngines.runtime` | Node `26.11.1` | Node `26.12.1` | Node `26.13.0` |
+| `engines.node` | `>=24.20.0` | `>=26.12.1` | `>=26.12.1` |
+| `overrides.source-map-js` | `1.2.2` | `1.2.2` | `1.2.2` |
 
 Unpublished source also generates `overrides.source-map-js: "1.2.2"` to
 remove vulnerable nested resolutions. The registry `0.2.6` CLI retains its
@@ -165,7 +176,7 @@ current audit blocks all high/critical advisories without an exception. The
 records the withdrawal of the former `braces` advisory.
 
 Only the repository needs `acorn 8.19.0` and `eslint-scope 9.1.2` for validation.
-Use `vp 1.4.0` for current source. Follow the
+Use `vp 1.5.0` for current source. Follow the
 [quickstart](../guides/miniapp_quickstart.md#prerequisites); separate Bun and
 local `vite-plus`, Vite or Vitest packages are unnecessary. The
 missing-local-`vite-plus` notice is expected.
@@ -179,7 +190,7 @@ Internal Bun tools execute through the shared launcher using
 Bun management must be enabled (`vp env on bun`); the direct managed launch
 preserves process termination and cancellation. The stylesheet adapter uses
 `vp node` because weapp-tailwindcss requires Node's `findPackageJSON`.
-The internal launcher uses the current Node 26.12.1 environment.
+The internal launcher uses the current Node 26.13.0 environment.
 
 ## Upgrade procedure
 
@@ -195,7 +206,7 @@ and regenerate all host output for protocol 9.
    [UI changelog](https://github.com/lucavance/minimoon/blob/main/ui/CHANGELOG.md)
    when applicable, and [publication status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md).
    Use the source workflow if the target versions are not available yet.
-2. Use the current MoonBit release above and global `vp 1.4.0`.
+2. Use the current MoonBit release above and global `vp 1.5.0`.
    After registry availability is recorded, install
    `moon install lampclaw/minimoon/cmd/minimoon@0.3.2`; until then follow the
    [source workflow](../guides/miniapp_quickstart.md#create-from-the-current-source)
@@ -206,7 +217,7 @@ and regenerate all host output for protocol 9.
    and confirm the resolved versions without unintended workspace overrides.
 4. Update an existing application's `package.json` to the current style
    versions above, set `engines.node: ">=26.12.1"` and the PostCSS override, and set
-   `devEngines.runtime` to `{ "name": "node", "version": "26.12.1" }` alongside
+   `devEngines.runtime` to `{ "name": "node", "version": "26.13.0" }` alongside
    `devEngines.packageManager: { "name": "bun", "version": "1.4.4" }`. Run
    `vp install` to update its lockfile. Rebuilding does not rewrite an existing
    manifest. Subsequent reproducible installs use `vp install --frozen-lockfile`.

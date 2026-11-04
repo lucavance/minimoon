@@ -1,4 +1,5 @@
 ///|
+#derive(Eq)
 pub struct Model {
   storage_input : String
   login_status : String
@@ -15,7 +16,7 @@ pub struct Model {
   location : String
   media : String
   request_error : String
-} derive(Eq)
+}
 
 ///|
 pub enum Msg {

@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum CheckState {
   Unchecked
   Checked
   Indeterminate
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn checkbox_state_controlled(

@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum MenuIndicatorPlacement {
   IndicatorStart
   IndicatorEnd
-} derive(Eq, Debug)
+}
 
 ///|
 priv struct MenuPresentation {

@@ -1,11 +1,12 @@
 ///|
 /// Touch-native pane resizing adapted from RUI b1291945 (MIT).
+#derive(Eq)
 pub(all) struct ResizablePane {
   key : String
   content : @minimoon.Node
   minimum : Double
   maximum : Double
-} derive(Eq)
+}
 
 ///|
 pub fn resizable_pane(
@@ -80,6 +81,7 @@ fn resize_sizes(
 }
 
 ///|
+#derive(Eq)
 priv struct ResizeDrag {
   pointer : Int32
   index : Int32
@@ -89,13 +91,14 @@ priv struct ResizeDrag {
   position : Double
   extent : Double?
   ended : Bool
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv struct ResizeState {
   token : Int32
   drag : ResizeDrag?
-} derive(Eq)
+}
 
 ///|
 priv enum ResizeMsg {

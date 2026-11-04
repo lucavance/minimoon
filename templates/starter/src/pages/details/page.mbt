@@ -1,8 +1,9 @@
 ///|
+#derive(Eq)
 pub struct Model {
   enabled : Bool
   visits : Int32
-} derive(Eq)
+}
 
 ///|
 pub extend Model with Eq::{equal, not_equal}

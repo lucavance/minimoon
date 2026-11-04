@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct ComboboxState {
   values : Array[String]
   query : String
   open : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn combobox_state(

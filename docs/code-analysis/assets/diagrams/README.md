@@ -13,11 +13,11 @@ vp run docs:diagrams
 vp run docs:diagrams:check
 ```
 
-默认使用固定的 Mermaid CLI 11.17.0 和仓库内受控的无沙箱渲染配置；也可以通过 `MMDC_BIN` 和 `PUPPETEER_EXECUTABLE_PATH` 指定本地工具。
+默认使用固定的 Mermaid CLI 11.17.1 和仓库内受控的无沙箱渲染配置；也可以通过 `MMDC_BIN` 和 `PUPPETEER_EXECUTABLE_PATH` 指定本地工具。
 
 > **English:**
 >
-> The command defaults to pinned Mermaid CLI 11.17.0 and the repository's controlled no-sandbox rendering configuration. `MMDC_BIN` and `PUPPETEER_EXECUTABLE_PATH` may select local tools.
+> The command defaults to pinned Mermaid CLI 11.17.1 and the repository's controlled no-sandbox rendering configuration. `MMDC_BIN` and `PUPPETEER_EXECUTABLE_PATH` may select local tools.
 
 ## 图表索引 / Diagram Index
 

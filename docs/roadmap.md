@@ -2,9 +2,19 @@
 
 ## Near-term priorities
 
+### Source dependency refresh (2026-11-04)
+
+Source and CI target `moon` / `moonrun 0.1.20261102` and
+`moonc v0.10.19+bee578715`, with checksum-pinned official archives. Refresh
+vp to `1.5.0`, managed Node to `26.13.0` LTS, async to `0.22.7`, x to `0.5.7`,
+UI cmark to `0.4.13`, paired Tailwind/CLI to `4.3.4` and Mermaid CLI to
+`11.17.1`. Retain Node `>=26.12.1`, Bun `1.4.4` and the existing public APIs
+and host protocols. Published archives remain unchanged; renewed host
+acceptance is required for every changed fixture fingerprint.
+
 ### MoonBit 2026-10-28 source alignment
 
-Current source and CI target `moon` / `moonrun 0.1.20261028` (`e1e1f15`) and
+The preceding source and CI alignment targeted `moon` / `moonrun 0.1.20261028` (`e1e1f15`) and
 `moonc v0.10.18+6c83a7f62`, with checksum-pinned official toolchain and core
 archives. Source checks use `--no-mbti`; `moon info` owns canonical interfaces.
 Keep the existing dependency versions, public APIs and protocol versions.

@@ -2,6 +2,7 @@
 type Path = @path.Path
 
 ///|
+#derive(Debug)
 struct Template {
   name : String
   package_name : String
@@ -9,7 +10,7 @@ struct Template {
   generated_by : String
   description : String
   template_files : ReadOnlyArray[String]
-} derive(Debug)
+}
 
 ///|
 let starter_template_files : ReadOnlyArray[String] = [
@@ -182,14 +183,16 @@ fn template_for(name : String) -> Template {
 }
 
 ///|
+#derive(Debug)
 struct InitArgs {
   target : String
   name : String?
   template : String
   show_help : Bool
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 struct InitPlan {
   target_dir : String
   relative_target_dir : String
@@ -197,29 +200,32 @@ struct InitPlan {
   package_name : String
   local_root : String?
   template : Template
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 struct ManifestFile {
   path : String
   content : String
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 struct InitManifest {
   target_dir : String
   relative_target_dir : String
   app_name : String
   template_name : String
   files : Array[ManifestFile]
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 struct BuildArgs {
   target : String?
   mode : String
   show_help : Bool
-} derive(Debug)
+}
 
 ///|
 fn parse_init_args(args : Array[String], start : Int32) -> InitArgs {

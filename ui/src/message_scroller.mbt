@@ -1,9 +1,10 @@
 ///|
 /// Native message viewport adapted from RUI b1291945 (MIT), with explicit keyed updates.
+#derive(Eq)
 pub(all) struct MessageItem {
   key : String
   content : @minimoon.Node
-} derive(Eq)
+}
 
 ///|
 pub fn message_item(key~ : String, content~ : @minimoon.Node) -> MessageItem {
@@ -12,12 +13,14 @@ pub fn message_item(key~ : String, content~ : @minimoon.Node) -> MessageItem {
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum MessageScrollDirection {
   ScrollStart
   ScrollEnd
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq)
 priv struct MessageScrollState {
   token : Int32
   keys : Array[String]
@@ -28,7 +31,7 @@ priv struct MessageScrollState {
   at_end : Bool
   scroll_target : String
   prepend : Bool
-} derive(Eq)
+}
 
 ///|
 priv enum MessageScrollMsg {

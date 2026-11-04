@@ -11,7 +11,8 @@ pub fn program() -> @minimoon.Page
 // Errors
 
 // Types and methods
-type Messages derive(Eq)
+#derive(Eq)
+type Messages
 pub fn Messages::equal(Self, Self) -> Bool
 pub fn Messages::not_equal(Self, Self) -> Bool
 

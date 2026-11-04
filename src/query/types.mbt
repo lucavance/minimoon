@@ -9,12 +9,13 @@ pub(all) enum QueryAction[Q] {
 }
 
 ///|
+#derive(Eq)
 pub(all) enum QueryPhase {
   Idle
   Loading
   Refreshing
   LoadingMore
-} derive(Eq)
+}
 
 ///|
 /// None ends pagination. Items retain server order, including duplicates.

@@ -1,8 +1,44 @@
 # Project status
 
-## Current source toolchain (2026-11-02)
+## Current source dependency refresh (2026-11-04)
 
-Current source targets `moon` / `moonrun 0.1.20261028` (`e1e1f15`) and
+Current source targets `moon` / `moonrun 0.1.20261102` (`ea07287`) and
+`moonc v0.10.19+bee578715`. CI verifies both official archive SHA-256 values
+and all three exact tool versions. Source uses vp `1.5.0`, managed Node
+`26.13.0` LTS with compatibility floor `>=26.12.1`, and Bun `1.4.4`.
+Direct dependencies are async `0.22.7`, x `0.5.7`, paired Tailwind/CLI `4.3.4`
+and UI cmark `0.4.13`; PostCSS `8.5.32`, weapp-tailwindcss `5.6.3`,
+source-map-js `1.2.2` and explicit UI ucd `0.5.2` remain unchanged.
+The documentation renderer uses the Mermaid CLI `11.17.1` maintenance release.
+
+Source and generated Starter/component types use `#derive(...)`. Canonical
+interfaces reflect that syntax and qualified core JSON aliases; reviewed API
+comparison accepts these representation changes while preserving the frozen
+historical snapshots and rejecting signature or derived-trait changes.
+Async's internal core runtime delegation emits three upstream experimental
+dependency notices; local compiler diagnostics retain the `--deny-warn` gate.
+
+Core `0.3.2` / UI `0.2.0` source version metadata, public APIs and Contract 11 /
+ABI 13 / renderer protocol 9 remain unchanged. This refresh is unpublished;
+registry archives and the release records below retain their original contents.
+Changed artifact fingerprints require renewed Developer Tools acceptance;
+tracked reports retain `release: false` and Developer Tools `pending`.
+
+The dependency-refresh validation branch is
+`validation/dependency-refresh-20261104`. Import the committed `dist/`
+directories or the matching CI handoff bundles without changing their bytes:
+
+| Application | Import directory |
+| --- | --- |
+| Core workbench | `examples/miniapp_draft_workbench/dist` |
+| UI showcase | `ui/examples/showcase/dist` |
+
+Read each fingerprint from its generated `verify_report.json` or the matching
+CI bundle's `HANDOFF.json`.
+
+## Previous source toolchain alignment (2026-11-02)
+
+The previous source alignment targeted `moon` / `moonrun 0.1.20261028` (`e1e1f15`) and
 `moonc v0.10.18+6c83a7f62`. CI pins that official prebuilt release, verifies
 both archive SHA-256 values and checks all three exact tool versions.
 Starter guidance and source compatibility checks use the same versions.

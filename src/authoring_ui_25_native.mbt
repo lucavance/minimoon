@@ -1,10 +1,11 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum InputType {
   TextInput
   NumberInput
   DigitInput
   IdCardInput
-} derive(Eq, Debug)
+}
 
 ///|
 fn InputType::host_name(self : InputType) -> String {
@@ -17,6 +18,7 @@ fn InputType::host_name(self : InputType) -> String {
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ImageMode {
   ScaleToFill
   AspectFit
@@ -24,7 +26,7 @@ pub(all) enum ImageMode {
   WidthFix
   HeightFix
   ImageCenter
-} derive(Eq, Debug)
+}
 
 ///|
 fn ImageMode::host_name(self : ImageMode) -> String {
@@ -39,10 +41,11 @@ fn ImageMode::host_name(self : ImageMode) -> String {
 }
 
 ///|
+#derive(Eq, Debug)
 pub struct ImageLoadDetail {
   width : Double
   height : Double
-} derive(Eq, Debug)
+}
 
 ///|
 fn finite_number(value : Double) -> Bool {
@@ -94,10 +97,11 @@ fn detail_image_error(payload : Json) -> Result[String, DecodeError] {
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum FormButtonType {
   SubmitForm
   ResetForm
-} derive(Eq, Debug)
+}
 
 ///|
 /// Native button with rich children. The existing string-label button is unchanged.
@@ -325,20 +329,22 @@ pub fn progress(
 }
 
 ///|
+#derive(Eq, Debug)
 pub struct TouchPoint {
   identifier : Int32
   client_x : Double
   client_y : Double
   page_x : Double
   page_y : Double
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub struct TouchDetail {
   touches : Array[TouchPoint]
   changed_touches : Array[TouchPoint]
   timestamp : Double
-} derive(Eq, Debug)
+}
 
 ///|
 fn touch_point(value : Json) -> Result[TouchPoint, DecodeError] {

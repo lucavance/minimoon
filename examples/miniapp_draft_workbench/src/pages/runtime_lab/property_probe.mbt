@@ -1,9 +1,10 @@
 ///|
+#derive(Eq)
 priv struct PropertyProbe {
   phase : Int32
   value : String
   checked : Bool
-} derive(Eq)
+}
 
 ///|
 fn property_probe() -> @minimoon.Val[@minimoon.Node] {

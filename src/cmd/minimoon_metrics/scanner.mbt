@@ -1,26 +1,29 @@
 ///|
+#derive(Eq, Debug)
 enum EmbeddedLiteralKind {
   Quoted
   Raw
   InterpolatedRaw
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Debug)
 struct EmbeddedLiteral {
   start : Int32
   end : Int32
   line : Int32
   kind : EmbeddedLiteralKind
   payload : String
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 struct EmbeddedDeclaration {
   name : String
   source : String
   literals : Array[EmbeddedLiteral]
   is_extern : Bool
-} derive(Debug)
+}
 
 ///|
 fn embedded_error(message : String) -> Unit raise {

@@ -41,18 +41,20 @@ pub struct HostEffectRequest {
 }
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum HostEffectOutcome {
   HostEffectOk(HostPayload)
   HostEffectErr(String, String, HostPayload)
-} derive(Debug, Eq)
+}
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum EffectResolveResult {
   EffectResolved
   EffectUnknownRequest
   EffectAlreadyResolved
   EffectContextDisposed
-} derive(Debug, Eq)
+}
 
 ///|
 pub enum Cmd[Msg] {

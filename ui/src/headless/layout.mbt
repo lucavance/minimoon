@@ -1,12 +1,14 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Bounds {
   left : Double
   top : Double
   width : Double
   height : Double
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Placement {
   BottomStart
   BottomCenter
@@ -20,7 +22,7 @@ pub(all) enum Placement {
   RightStart
   RightCenter
   RightEnd
-} derive(Eq, Debug)
+}
 
 ///|
 /// Flip on the main axis, then shift inside the measured viewport.

@@ -6,9 +6,10 @@ module or a dependency on Rabbita's browser runtime. Pages or applications
 executing requests must declare the root `Request` capability.
 
 ```moonbit
+#derive(ToJson, @json.FromJson)
 struct Profile {
   name : String
-} derive(ToJson, @json.FromJson)
+}
 
 fn save(profile : Profile, receive : @minimoon.Emit[Result[Profile, Error]]) -> @minimoon.Cmd {
   @http.post("https://example.com/profile")

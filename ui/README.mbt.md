@@ -35,8 +35,8 @@ To modify source or add UI to your own application, prepare the environment belo
 
 ## Install
 
-Current source uses `moon 0.1.20261028` / `moonc v0.10.18+6c83a7f62`, the source
-CLI, global `vp 1.4.0`, Node `26.12.1` and Bun `1.4.4`; Node `>=26.12.1` is
+Current source uses `moon 0.1.20261102` / `moonc v0.10.19+bee578715`, the source
+CLI, global `vp 1.5.0`, Node `26.13.0` and Bun `1.4.4`; Node `>=26.12.1` is
 required. Published archives retain their released requirements; see the
 [compatibility table](https://github.com/lucavance/minimoon/blob/main/docs/reference/compatibility_and_upgrades.md#packaging-and-javascript-dependencies). Follow
 the [environment setup](https://github.com/lucavance/minimoon/blob/main/docs/guides/miniapp_quickstart.md#prerequisites);
@@ -103,10 +103,10 @@ deterministic, but selecting one feature does not produce only its selectors.
 
 Upgrade the CLI and your direct core dependency to `0.3.0`, and UI to `0.2.0`.
 UI also declares core `0.3.0`. Set
-Node `26.12.1` in `devEngines.runtime` with `engines.node: ">=26.12.1"` and Bun
+Node `26.13.0` in `devEngines.runtime` with `engines.node: ">=26.12.1"` and Bun
 `1.4.4` in `devEngines.packageManager`. Update
 an existing style `package.json` to weapp-tailwindcss `5.6.3`, keeping Tailwind
-`4.3.3` and using PostCSS `8.5.32` with its matching override; run `vp install`
+`4.3.4` and using PostCSS `8.5.32` with its matching override; run `vp install`
 to refresh the lockfile. Previous CLI/core `0.2.5` / UI `0.1.3` archives remain immutable.
 `minimoon build` does not rewrite that manifest. Use explicit package
 qualifiers and public trait extensions where required by the new MoonBit

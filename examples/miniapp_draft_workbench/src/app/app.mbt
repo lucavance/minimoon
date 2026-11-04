@@ -1,8 +1,9 @@
 ///|
+#derive(Eq)
 pub struct FetchModel {
   epoch : Int32
   label : String
-} derive(Eq)
+}
 
 ///|
 pub(all) enum FetchMsg {
@@ -12,10 +13,11 @@ pub(all) enum FetchMsg {
 }
 
 ///|
+#derive(Eq, ToJson, @json.FromJson)
 pub(all) struct Draft {
   title : String
   note : String
-} derive(Eq, ToJson, @json.FromJson)
+}
 
 ///|
 pub struct Deps {

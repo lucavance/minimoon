@@ -131,11 +131,12 @@ pub fn[T : Eq, U : Eq] PageContext::select(
 }
 
 ///|
+#derive(Eq)
 pub(all) enum AppLifecycleHook {
   Launch
   Show
   Hide
-} derive(Eq)
+}
 
 ///|
 fn AppLifecycleHook::host_name(self : AppLifecycleHook) -> String {

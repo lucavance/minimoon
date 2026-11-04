@@ -2,6 +2,7 @@
 type Path = @path.Path
 
 ///|
+#derive(Debug)
 struct FileMetric {
   path : String
   owner : String
@@ -10,7 +11,7 @@ struct FileMetric {
   language : String
   bytes : Int32
   physical_lines : Int32?
-} derive(Debug)
+}
 
 ///|
 struct FileLedger {

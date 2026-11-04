@@ -1,11 +1,12 @@
 ///|
+#derive(Eq)
 enum RuntimeMsg {
   Increment
   Decrement
   IncrementThenDecrement
   StartEffect
   NavigateOnly
-} derive(Eq)
+}
 
 ///|
 fn runtime_component(
@@ -245,18 +246,20 @@ test "completed host effects retain no per-request tombstones" {
 }
 
 ///|
+#derive(Eq)
 enum OwnedEffectMsg {
   StartOwnedEffect
   StartSynchronousOwnedEffect
   OwnedEffectIncrement
   OwnedEffectAppend(Int32)
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 enum ReentrantCancelMsg {
   StartReentrantCancel
   ReentrantCancelPublished
-} derive(Eq)
+}
 
 ///|
 test "local effects are page-owned, wake after emits, and cancel on dispose" {

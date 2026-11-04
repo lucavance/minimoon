@@ -7,9 +7,15 @@ tags.
 ## [Unreleased]
 
 - Pin Developer Tools to Babel compilation; SWC 1.4.14 can emit invalid UI runtime label jumps and prevent app registration.
-- Align source tooling with MoonBit `0.10.18+6c83a7f62`
-  (`moon` / `moonrun 0.1.20261028`), checksum-pinned CI and Starter guidance;
-  preserve dependencies and public APIs.
+- Align source tooling with MoonBit `0.10.19+bee578715`
+  (`moon` / `moonrun 0.1.20261102`), checksum-pinned CI and Starter guidance.
+- Migrate source and generated Starter/component types to the compiler's
+  `#derive(...)` syntax while preserving the public API.
+- Refresh global vp to `1.5.0`, managed Node to `26.13.0` LTS, async to
+  `0.22.7`, x to `0.5.7`, and paired Tailwind/CLI to `4.3.4`; retain Node
+  `>=26.12.1`, Bun `1.4.4`, public APIs and host protocol versions.
+- Refresh Mermaid CLI to the `11.17.1` maintenance release and regenerate the
+  21 documentation diagrams; defer the Mermaid 12 migration.
 - Accept compiler abort diagnostics through a direct `console.error` call
   audit, with negative controls for other console access.
 - Remove project-imposed archive and generated-artifact size ceilings/reserves;

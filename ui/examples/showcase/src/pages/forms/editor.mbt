@@ -1,20 +1,23 @@
 ///|
+#derive(ToJson, @json.FromJson)
 priv struct Draft {
   title : String
-} derive(ToJson, @json.FromJson)
+}
 
 ///|
+#derive(@json.FromJson)
 priv struct Echo {
   json : Draft
-} derive(@json.FromJson)
+}
 
 ///|
+#derive(Eq)
 priv struct Model {
   title : String
   busy : Bool
   request_epoch : Int32
   status : String
-} derive(Eq)
+}
 
 ///|
 priv enum Msg {

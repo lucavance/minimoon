@@ -1,9 +1,10 @@
 ///|
 /// Explicit caller-owned date choices; no system clock or browser date object.
+#derive(Eq, Debug)
 pub struct DatePickerPreset {
   label : String
   value : @headless.DateSelection
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn date_picker_preset(

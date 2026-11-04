@@ -195,12 +195,13 @@ pub fn dialog(
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SheetSide {
   Top
   Right
   Bottom
   Left
-} derive(Eq, Debug)
+}
 
 ///|
 fn SheetSide::class_name(self : SheetSide) -> String {

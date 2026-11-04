@@ -1,11 +1,12 @@
 ///|
 /// Controlled native controls adapted from RUI 0.1.1 (MIT). No validation engine.
+#derive(Eq, Debug)
 pub(all) struct ChoiceOption {
   key : String
   label : String
   disabled : Bool
   group : String
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn choice_option(
@@ -30,6 +31,7 @@ fn validate_choices(options : Array[ChoiceOption]) -> Unit {
 }
 
 ///|
+#derive(Eq, Debug)
 pub struct FieldState {
   id : String
   label : String
@@ -37,7 +39,7 @@ pub struct FieldState {
   error : String
   required : Bool
   disabled : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn field_state(

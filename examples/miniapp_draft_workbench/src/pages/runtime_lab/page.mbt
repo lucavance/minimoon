@@ -1,23 +1,27 @@
 ///|
+#derive(Eq)
 struct CardEntry {
   id : String
   props : @card.Props
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 struct Item {
   id : String
   label : String
   event_key : String
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 struct Slide {
   id : String
   label : String
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub struct Model {
   cards : Array[CardEntry]
   picker_options : Array[String]
@@ -40,7 +44,7 @@ pub struct Model {
   items : Array[Item]
   selected : String
   replace_root : Bool
-} derive(Eq)
+}
 
 ///|
 pub enum Msg {

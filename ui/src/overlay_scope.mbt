@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum OverlayCloseReason {
   CloseButton
   Backdrop
   Action
   PageHidden
   Programmatic
-} derive(Eq, Debug)
+}
 
 ///|
 struct OverlayScope {

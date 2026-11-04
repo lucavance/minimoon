@@ -40,6 +40,7 @@ pub fn[T] data_column(
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct TableState {
   query : String
   page : Int32
@@ -48,7 +49,7 @@ pub(all) struct TableState {
   descending : Bool
   selected_keys : Array[String]
   hidden_columns : Array[String]
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn table_state(page_size~ : Int32 = 10) -> TableState {

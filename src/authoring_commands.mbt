@@ -57,6 +57,7 @@ pub fn PaymentParams::new(
 }
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum Capability {
   Login
   GetStorage
@@ -71,7 +72,7 @@ pub(all) enum Capability {
   SwitchTab
   NavigateBack
   MeasureNodes
-} derive(Debug, Eq)
+}
 
 ///|
 pub fn Capability::name(self : Capability) -> String {
@@ -98,11 +99,12 @@ fn Capability::to_core(self : Capability) -> @renderer.MiniappCapability {
 }
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum HostErrorKind {
   Failed
   Unavailable
   InvalidPayload
-} derive(Debug, Eq)
+}
 
 ///|
 pub struct HostError {

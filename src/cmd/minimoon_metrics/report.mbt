@@ -1,11 +1,12 @@
 ///|
+#derive(Debug)
 struct FileTotals {
   mut files : Int32
   mut bytes : Int32
   mut physical_lines : Int32
   mut text_files : Int32
   mut binary_files : Int32
-} derive(Debug)
+}
 
 ///|
 fn empty_file_totals() -> FileTotals {

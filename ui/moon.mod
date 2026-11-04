@@ -4,7 +4,7 @@ version = "0.2.0"
 
 import {
   "lampclaw/minimoon@0.3.0",
-  "moonbit-community/cmark@0.4.12",
+  "moonbit-community/cmark@0.4.13",
   "moonbit-community/ucd@0.5.2",
 }
 

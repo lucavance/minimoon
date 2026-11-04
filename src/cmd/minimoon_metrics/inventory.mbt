@@ -1,13 +1,15 @@
 ///|
+#derive(Debug)
 enum EmbeddedExtraction {
   AllLiterals
   RawLiterals
   ExceptLiterals(Array[String])
   SelectedLiterals(Bool, Array[(String, Int32)])
   Excluded
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 struct EmbeddedInventoryEntry {
   file : String
   declaration : String
@@ -15,7 +17,7 @@ struct EmbeddedInventoryEntry {
   extraction : EmbeddedExtraction
   reason : String
   ignored_literals : Array[(String, Int32)]
-} derive(Debug)
+}
 
 ///|
 fn embedded_entry(
@@ -48,6 +50,21 @@ fn embedded_inventory(
   // Each selected declaration still has an exact, audited classification.
   for
     entry in [
+      (
+        "src/cmd/minimoon_check/api_json_alias.mbt", "fn:api_json_alias", "MoonBit interface tokens and import metadata, not JavaScript",
+      ),
+      (
+        "src/cmd/minimoon_check/api_compiler_representation_wbtest.mbt", "test:API comparison preserves derives across compiler syntax and ordering",
+        "MoonBit interface representation fixtures, not JavaScript",
+      ),
+      (
+        "src/cmd/minimoon_check/api_compiler_representation_wbtest.mbt", "test:API comparison qualifies only the actual core JSON aliases",
+        "MoonBit interface representation fixtures, not JavaScript",
+      ),
+      (
+        "src/cmd/minimoon_check/api_compiler_representation_wbtest.mbt", "test:API JSON normalization preserves strings names and qualified methods",
+        "MoonBit interface representation fixtures, not JavaScript",
+      ),
       (
         "src/cmd/minimoon_check/performance_consumers.mbt", "fn:performance_consumers",
         "MoonBit performance consumer source and package metadata, not JavaScript",

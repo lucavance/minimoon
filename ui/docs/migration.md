@@ -23,7 +23,7 @@ the page or resetting component state.
 The [recipe audit](nova_recipes.md) maps all 64 native component families.
 
 Import `/markdown` explicitly and include its resource feature. It introduces
-the separately pinned cmark 0.4.12 parser only into importing applications.
+the separately pinned cmark 0.4.13 parser only into importing applications.
 Use a unique document `id`, `on_link`/`on_anchor` for application commands,
 and optional custom heading/code renderers. The public `Heading` type does not
 expose parser types. Raw HTML is text, rewritten destinations are sanitized,

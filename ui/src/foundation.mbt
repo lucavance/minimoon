@@ -1,5 +1,6 @@
 ///|
 /// RUI 0.1.1 / Rabbita b1291945 native adaptation. MIT, see THIRD_PARTY_NOTICES.md.
+#derive(Eq, Debug)
 pub(all) enum ButtonVariant {
   Default
   Outline
@@ -7,9 +8,10 @@ pub(all) enum ButtonVariant {
   Ghost
   Destructive
   Link
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ButtonSize {
   Default
   Xs
@@ -19,9 +21,10 @@ pub(all) enum ButtonSize {
   IconXs
   IconSm
   IconLg
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tone {
   Default
   Secondary
@@ -31,55 +34,62 @@ pub(all) enum Tone {
   Tinted
   Ghost
   Link
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ReactionSide {
   ReactionTop
   ReactionBottom
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum MarkerVariant {
   PlainMarker
   SeparatorMarker
   BorderMarker
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum MediaVariant {
   PlainMedia
   IconMedia
   ImageMedia
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum AddonAlign {
   InlineStart
   InlineEnd
   BlockStart
   BlockEnd
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Size {
   Small
   Medium
   Large
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Orientation {
   Horizontal
   Vertical
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Alignment {
   Start
   Center
   End
-} derive(Eq, Debug)
+}
 
 ///|
 fn tone_class(value : Tone) -> String {

@@ -29,8 +29,8 @@
 
 ## 安装
 
-当前源码使用 `moon 0.1.20261028`／`moonc v0.10.18+6c83a7f62`、源码 CLI、
-全局 `vp 1.4.0`、Node `26.12.1` 和 Bun `1.4.4`，要求 Node `>=26.12.1`。
+当前源码使用 `moon 0.1.20261102`／`moonc v0.10.19+bee578715`、源码 CLI、
+全局 `vp 1.5.0`、Node `26.13.0` 和 Bun `1.4.4`，要求 Node `>=26.12.1`。
 已发布归档保留发布时的要求，见[兼容表](https://github.com/lucavance/minimoon/blob/main/docs/reference/compatibility_and_upgrades.md#packaging-and-javascript-dependencies)（英文）。
 按[环境说明](https://github.com/lucavance/minimoon/blob/main/docs/guides/miniapp_quickstart.md#prerequisites)（英文）准备环境，
 无需另外安装 Bun 或本地 `vite-plus`。先在[项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
@@ -83,9 +83,9 @@ Contract v11/runtime ABI v13。结合共享状态时，按[App 设置](https://g
 ## 升级现有 UI 应用
 
 将 CLI 与直接核心依赖升级至 `0.3.0`，UI 升级至 `0.2.0`；UI 自身也声明核心 `0.3.0`。
-在 `devEngines.runtime` 中设置 Node `26.12.1`，`engines.node` 设为 `">=26.12.1"`，
+在 `devEngines.runtime` 中设置 Node `26.13.0`，`engines.node` 设为 `">=26.12.1"`，
 `devEngines.packageManager` 中设置 Bun `1.4.4`。现有样式 `package.json` 使用
-weapp-tailwindcss `5.6.3`、Tailwind `4.3.3` 和 PostCSS `8.5.32` 及对应 override；
+weapp-tailwindcss `5.6.3`、Tailwind `4.3.4` 和 PostCSS `8.5.32` 及对应 override；
 运行 `vp install` 更新锁文件。旧 CLI/core `0.2.5`／UI `0.1.3` 归档保持不可变。
 `minimoon build` 不会改写这些配置。按新编译器要求使用显式包限定符和公开 trait 扩展。
 完成[升级步骤](https://github.com/lucavance/minimoon/blob/main/docs/reference/compatibility_and_upgrades.md#upgrade-procedure)（英文）后，

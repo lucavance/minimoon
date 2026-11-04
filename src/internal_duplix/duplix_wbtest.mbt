@@ -1,8 +1,9 @@
 ///|
+#derive(Eq)
 priv struct DynamicTestInput {
   tag : String
   value : Int32
-} derive(Eq)
+}
 
 ///|
 test "switch keeps same-tag input reactive and rolls candidate scope back" {

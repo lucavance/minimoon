@@ -17,11 +17,12 @@ pub fn update_model(Model, Props, Msg) -> Model
 // Errors
 
 // Types and methods
+#derive(Eq)
 pub struct Model {
   enabled : Bool
   note : String
   pulses : Int32
-} derive(Eq)
+}
 pub fn Model::equal(Self, Self) -> Bool
 pub fn Model::not_equal(Self, Self) -> Bool
 
@@ -31,12 +32,13 @@ pub(all) enum Msg {
   Pulse
 }
 
+#derive(Eq)
 pub struct Props {
   id : String
   title : String
   pulse_step : Int32
   tone : String
-} derive(Eq)
+}
 pub fn Props::equal(Self, Self) -> Bool
 pub fn Props::not_equal(Self, Self) -> Bool
 

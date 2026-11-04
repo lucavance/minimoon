@@ -1,10 +1,11 @@
 ///|
+#derive(Eq)
 struct MenuState {
   open : Bool
   submenu_path : Array[String]
   checked_keys : Array[String]
   radio_values : Array[(String, String)]
-} derive(Eq)
+}
 
 ///|
 pub fn menu_state(
@@ -169,12 +170,13 @@ fn validate_menu_entries(
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum MenuPlacement {
   BottomStart
   BottomEnd
   TopStart
   TopEnd
-} derive(Eq, Debug)
+}
 
 ///|
 fn MenuPlacement::class_name(self : MenuPlacement) -> String {

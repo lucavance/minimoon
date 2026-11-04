@@ -141,20 +141,22 @@ pub enum ContextWriteResult {
 pub fn ContextWriteResult::is_disposed(Self) -> Bool
 pub fn ContextWriteResult::is_ok(Self) -> Bool
 
+#derive(Eq, @debug.Debug)
 pub(all) enum EffectResolveResult {
   EffectResolved
   EffectUnknownRequest
   EffectAlreadyResolved
   EffectContextDisposed
-} derive(Eq, @debug.Debug)
+}
 pub fn EffectResolveResult::equal(Self, Self) -> Bool
 pub fn EffectResolveResult::not_equal(Self, Self) -> Bool
 pub fn EffectResolveResult::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum HostEffectOutcome {
   HostEffectOk(String)
   HostEffectErr(String, String, String)
-} derive(Eq, @debug.Debug)
+}
 pub fn HostEffectOutcome::equal(Self, Self) -> Bool
 pub fn HostEffectOutcome::not_equal(Self, Self) -> Bool
 pub fn HostEffectOutcome::to_repr(Self) -> @debug.Repr

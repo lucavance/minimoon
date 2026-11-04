@@ -99,30 +99,33 @@ pub fn[Input : Eq] tabs_with_input(id~ : String, items~ : Array[@components.TabI
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub(all) enum MenuPlacement {
   BottomStart
   BottomEnd
   TopStart
   TopEnd
-} derive(Eq, @debug.Debug)
+}
 pub fn MenuPlacement::equal(Self, Self) -> Bool
 pub fn MenuPlacement::not_equal(Self, Self) -> Bool
 pub fn MenuPlacement::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Orientation {
   Horizontal
   Vertical
-} derive(Eq, @debug.Debug)
+}
 pub fn Orientation::equal(Self, Self) -> Bool
 pub fn Orientation::not_equal(Self, Self) -> Bool
 pub fn Orientation::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum SheetSide {
   Top
   Right
   Bottom
   Left
-} derive(Eq, @debug.Debug)
+}
 pub fn SheetSide::equal(Self, Self) -> Bool
 pub fn SheetSide::not_equal(Self, Self) -> Bool
 pub fn SheetSide::to_repr(Self) -> @debug.Repr

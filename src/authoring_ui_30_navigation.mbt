@@ -105,10 +105,11 @@ pub fn Route::url(self : Route) -> String {
 }
 
 ///|
+#derive(Eq)
 pub(all) enum NavigatorMode {
   Navigate
   Redirect
-} derive(Eq)
+}
 
 ///|
 pub fn[C : IsChildren] navigator(

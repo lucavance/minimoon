@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub struct InputOptions {
   disabled : Bool
   read_only : Bool
@@ -11,7 +12,7 @@ pub struct InputOptions {
   name : String
   selection_start : Int32?
   selection_end : Int32?
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn input_options(

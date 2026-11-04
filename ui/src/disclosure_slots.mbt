@@ -1,9 +1,10 @@
 ///|
 /// RUI disclosure compound primitives; callers own state through Val and Emit.
+#derive(Eq, Debug)
 pub(all) enum TabsListVariant {
   TabsDefault
   TabsLine
-} derive(Eq, Debug)
+}
 
 ///|
 fn validate_panels(items : Array[Panel]) -> Unit {

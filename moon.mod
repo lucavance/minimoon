@@ -3,8 +3,8 @@ name = "lampclaw/minimoon"
 version = "0.3.2"
 
 import {
-  "moonbitlang/async@0.22.5",
-  "moonbitlang/x@0.5.6",
+  "moonbitlang/async@0.22.7",
+  "moonbitlang/x@0.5.7",
 }
 
 readme = "README.mbt.md"

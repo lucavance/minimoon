@@ -1,17 +1,19 @@
 ///|
+#derive(Eq)
 pub struct Model {
   enabled : Bool
   note : String
   pulses : Int32
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub struct Props {
   id : String
   title : String
   pulse_step : Int32
   tone : String
-} derive(Eq)
+}
 
 ///|
 pub(all) enum Msg {

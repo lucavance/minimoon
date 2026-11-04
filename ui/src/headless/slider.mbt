@@ -1,11 +1,12 @@
 ///|
 /// RUI multi-thumb normalization adapted for native touch input (MIT).
+#derive(Eq, Debug)
 pub struct SliderSpec {
   min : Int32
   max : Int32
   step : Int32
   min_steps_between : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn slider_spec(

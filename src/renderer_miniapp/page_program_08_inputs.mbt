@@ -20,6 +20,7 @@ pub fn[Msg] PageInput::decode(
 }
 
 ///|
+#derive(Eq)
 pub enum PageLifecycleHook {
   Load
   Show
@@ -27,7 +28,7 @@ pub enum PageLifecycleHook {
   Unload
   PullDownRefresh
   ReachBottom
-} derive(Eq)
+}
 
 ///|
 pub fn page_lifecycle_hook(name : String) -> PageLifecycleHook {

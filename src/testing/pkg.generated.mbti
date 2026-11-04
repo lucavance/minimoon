@@ -3,6 +3,7 @@ package "lampclaw/minimoon/testing"
 
 import {
   "lampclaw/minimoon",
+  "moonbitlang/core/json",
 }
 
 // Values
@@ -18,7 +19,7 @@ pub fn by_kind(String) -> Selector
 
 pub fn by_label(String) -> Selector
 
-pub fn by_prop(String, Json) -> Selector
+pub fn by_prop(String, @json.Json) -> Selector
 
 pub fn by_role(String) -> Selector
 
@@ -41,7 +42,7 @@ pub enum Selector {
   Section(String)
   Text(String)
   TextContaining(String)
-  Prop(String, Json)
+  Prop(String, @json.Json)
   Event(String)
   BoundEvent(String)
   Role(String)
@@ -59,7 +60,7 @@ pub fn TestNode::children(Self) -> Array[Self]
 pub fn TestNode::event(Self, String) -> String?
 pub fn TestNode::identity(Self) -> String
 pub fn TestNode::kind(Self) -> String
-pub fn TestNode::prop(Self, String) -> Json?
+pub fn TestNode::prop(Self, String) -> @json.Json?
 pub fn TestNode::snapshot(Self) -> String
 pub fn TestNode::text(Self) -> String
 pub fn TestNode::text_content(Self) -> String
@@ -67,13 +68,13 @@ pub fn TestNode::text_content(Self) -> String
 type TestRuntime
 pub fn TestRuntime::blur_input(Self, Selector, String) -> String
 pub fn TestRuntime::blur_textarea(Self, Selector, String, Int32) -> String
-pub fn TestRuntime::change(Self, Selector, Json) -> String
+pub fn TestRuntime::change(Self, Selector, @json.Json) -> String
 pub fn TestRuntime::confirm(Self, Selector, String) -> String
 pub fn TestRuntime::dispose(Self) -> String
 pub fn TestRuntime::focus(Self, Selector, String, Int32) -> String
 pub fn TestRuntime::get(Self, Selector) -> TestNode
 pub fn TestRuntime::input(Self, Selector, String) -> String
-pub fn TestRuntime::lifecycle(Self, String, payload? : Json) -> String
+pub fn TestRuntime::lifecycle(Self, String, payload? : @json.Json) -> String
 pub fn TestRuntime::lower(Self, Selector) -> String
 pub fn TestRuntime::page_id(Self) -> String
 pub fn TestRuntime::query(Self, Selector) -> TestNode?
@@ -91,7 +92,7 @@ pub fn TestRuntime::within(Self, Selector) -> TestScope
 type TestScope
 pub fn TestScope::blur_input(Self, Selector, String) -> String
 pub fn TestScope::blur_textarea(Self, Selector, String, Int32) -> String
-pub fn TestScope::change(Self, Selector, Json) -> String
+pub fn TestScope::change(Self, Selector, @json.Json) -> String
 pub fn TestScope::confirm(Self, Selector, String) -> String
 pub fn TestScope::focus(Self, Selector, String, Int32) -> String
 pub fn TestScope::get(Self, Selector) -> TestNode

@@ -1,12 +1,13 @@
 ///|
 /// One native input owns IME, paste and focus; visible slots do not invent key events.
+#derive(Eq, Debug)
 pub struct OtpScope {
   value : String
   length : Int32
   active_index : Int32
   disabled : Bool
   invalid : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn input_otp_slot(

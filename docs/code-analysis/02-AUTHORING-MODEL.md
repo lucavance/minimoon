@@ -42,10 +42,11 @@ flowchart LR
 > **源码 / Source:** [`examples/miniapp_draft_workbench/src/app/app.mbt`](../../examples/miniapp_draft_workbench/src/app/app.mbt) · symbols: `FetchModel`, `FetchMsg`, `initial_fetch`, `update_fetch`
 
 ```moonbit
+#derive(Eq)
 pub struct FetchModel {
   epoch : Int
   label : String
-} derive(Eq)
+}
 
 pub(all) enum FetchMsg {
   Load

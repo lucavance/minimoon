@@ -2,6 +2,7 @@
 /// A host capability used by a page. Declaring capabilities on the page keeps
 /// generated bridge code auditable and lets verification reject undeclared
 /// `wx.*` calls.
+#derive(Eq)
 pub enum MiniappCapability {
   Login
   GetStorage
@@ -16,7 +17,7 @@ pub enum MiniappCapability {
   SwitchTab
   NavigateBack
   Custom(String)
-} derive(Eq)
+}
 
 ///|
 pub fn miniapp_capability(name : String) -> MiniappCapability {
@@ -57,6 +58,7 @@ pub fn MiniappCapability::name(self : MiniappCapability) -> String {
 }
 
 ///|
+#derive(Eq)
 pub enum PageEventKind {
   Tap
   Input
@@ -66,7 +68,7 @@ pub enum PageEventKind {
   Blur
   Submit
   CustomEvent(String)
-} derive(Eq)
+}
 
 ///|
 /// A decoding failure at the MiniApp host boundary. Decoders run before an

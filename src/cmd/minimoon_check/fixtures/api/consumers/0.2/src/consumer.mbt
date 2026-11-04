@@ -35,9 +35,10 @@ pub fn testing_snapshot() -> String raise {
 }
 
 ///|
+#derive(@json.FromJson)
 pub struct Echo {
   url : String
-} derive(@json.FromJson)
+}
 
 ///|
 pub fn load_json(receive : @minimoon.Emit[Result[Echo, Error]]) -> @minimoon.Cmd {

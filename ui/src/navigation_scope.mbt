@@ -20,10 +20,11 @@ struct NavigationMenuItemScope {
 }
 
 ///|
+#derive(Eq)
 priv struct NavigationBounds {
   value : String?
   bounds : @headless.Bounds?
-} derive(Eq)
+}
 
 ///|
 fn navigation_part_id(id : String, value : String, part : String) -> String {

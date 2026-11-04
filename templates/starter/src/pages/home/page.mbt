@@ -1,9 +1,10 @@
 ///|
+#derive(Eq)
 pub struct Model {
   count : Int32
   name : String
   visits : Int32
-} derive(Eq)
+}
 
 ///|
 pub extend Model with Eq::{equal, not_equal}

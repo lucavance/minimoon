@@ -35,23 +35,32 @@ fn api_delimiter_delta(line : String) -> Int32 {
 fn api_flush_interface_block(
   blocks : Array[String],
   lines : Array[String],
+  derives : Array[String],
 ) -> Unit {
   if !lines.is_empty() {
-    blocks.push(lines.join("\n"))
+    derives.sort()
+    let prefix = if derives.is_empty() {
+      ""
+    } else {
+      "#derive(" + derives.join(", ") + ")\n"
+    }
+    blocks.push(prefix + lines.join("\n"))
     lines.clear()
+    derives.clear()
   }
 }
 
 ///|
 fn api_interface_snapshot(source : String) -> ApiInterfaceSnapshot {
-  let source = api_integer_alias(source)
+  let source = api_integer_alias(api_json_alias(source))
   let blocks : Array[String] = []
   let lines : Array[String] = []
+  let derives : Array[String] = []
   let mut delimiter_depth = 0
   let mut complete = true
   let mut in_import = false
   for raw_line in source.split("\n") {
-    let line = api_trim_trailing_whitespace(raw_line.to_owned())
+    let mut line = api_trim_trailing_whitespace(raw_line.to_owned())
     let trimmed = line.trim()
     if trimmed.has_prefix("//") {
       continue
@@ -65,23 +74,56 @@ fn api_interface_snapshot(source : String) -> ApiInterfaceSnapshot {
       continue
     }
     if trimmed == "import {" {
-      api_flush_interface_block(blocks, lines)
+      api_flush_interface_block(blocks, lines, derives)
       in_import = true
       continue
     }
     if trimmed.has_prefix("package ") {
-      api_flush_interface_block(blocks, lines)
+      api_flush_interface_block(blocks, lines, derives)
       continue
     }
     if trimmed == "" {
       if delimiter_depth == 0 {
-        api_flush_interface_block(blocks, lines)
+        api_flush_interface_block(blocks, lines, derives)
       }
       continue
     }
     let starts_at_column_zero = line[0] != ' ' && line[0] != '\t'
     if starts_at_column_zero && !lines.is_empty() && delimiter_depth == 0 {
-      api_flush_interface_block(blocks, lines)
+      api_flush_interface_block(blocks, lines, derives)
+    }
+    if trimmed.has_prefix("#derive(") && trimmed.has_suffix(")") {
+      if !derives.is_empty() || delimiter_depth != 0 {
+        complete = false
+      }
+      for trait_name in trimmed[8:trimmed.length() - 1].split(",") {
+        let name = trait_name.trim().to_owned()
+        if name == "" {
+          complete = false
+        }
+        derives.push(name)
+      }
+      continue
+    }
+    if (
+        trimmed.has_prefix("} derive(") ||
+        trimmed.has_prefix("type ") ||
+        trimmed.has_prefix("pub type ")
+      ) &&
+      line.has_suffix(")") {
+      if line.find(" derive(") is Some(start) {
+        if !derives.is_empty() {
+          complete = false
+        }
+        for trait_name in line[start + 8:line.length() - 1].split(",") {
+          let name = trait_name.trim().to_owned()
+          if name == "" {
+            complete = false
+          }
+          derives.push(name)
+        }
+        line = line[0:start].to_owned()
+      }
     }
     lines.push(line)
     delimiter_depth = delimiter_depth + api_delimiter_delta(line)
@@ -89,8 +131,8 @@ fn api_interface_snapshot(source : String) -> ApiInterfaceSnapshot {
       complete = false
     }
   }
-  api_flush_interface_block(blocks, lines)
-  if in_import || delimiter_depth != 0 {
+  api_flush_interface_block(blocks, lines, derives)
+  if in_import || delimiter_depth != 0 || !derives.is_empty() {
     complete = false
   }
   { blocks, complete, }

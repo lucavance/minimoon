@@ -1,19 +1,21 @@
 ///|
 /// Native attachment states and slots adapted from RUI 0.1.1 (MIT).
+#derive(Eq, Debug)
 pub(all) enum AttachmentState {
   AttachmentIdle
   AttachmentUploading
   AttachmentProcessing
   AttachmentError
   AttachmentDone
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum AttachmentSize {
   AttachmentDefaultSize
   AttachmentSm
   AttachmentXs
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn[C : @minimoon.IsChildren] attachment(

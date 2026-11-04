@@ -24,12 +24,13 @@ pub(all) struct QueryPage[T, Cursor] {
   next_cursor : Cursor?
 }
 
+#derive(Eq)
 pub(all) enum QueryPhase {
   Idle
   Loading
   Refreshing
   LoadingMore
-} derive(Eq)
+}
 pub fn QueryPhase::equal(Self, Self) -> Bool
 pub fn QueryPhase::not_equal(Self, Self) -> Bool
 

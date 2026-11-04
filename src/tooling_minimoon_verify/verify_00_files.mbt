@@ -287,7 +287,7 @@ async fn run(
       )
     err => {
       let hint = if command == "vp" {
-        ". Install Vite+ CLI 1.4.0 and make sure `vp` is available on PATH."
+        ". Install Vite+ CLI 1.5.0 and make sure `vp` is available on PATH."
       } else {
         ""
       }

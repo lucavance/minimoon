@@ -34,7 +34,7 @@ application-owned native nodes. No cmark AST appears in this public API.
 Math and Mermaid are source text. Reading/callback support does not request a
 clipboard capability or provide built-in code copying.
 
-The parser is `moonbit-community/cmark@0.4.12` (Apache-2.0), a MoonBit parser
+The parser is `moonbit-community/cmark@0.4.13` (Apache-2.0), a MoonBit parser
 with casefold/charclass dependencies. Its character-entity build step invokes
 `python3`; fresh development and CI environments need Python 3. Generated
 MiniApps do not execute Python or load a browser Markdown runtime.

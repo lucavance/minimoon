@@ -21,21 +21,23 @@ pub fn slider_spec(min? : Int32, max? : Int32, step? : Int32, min_steps_between?
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub(all) struct Bounds {
   left : Double
   top : Double
   width : Double
   height : Double
-} derive(Eq, @debug.Debug)
+}
 pub fn Bounds::equal(Self, Self) -> Bool
 pub fn Bounds::not_equal(Self, Self) -> Bool
 pub fn Bounds::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct CalendarDate {
   year : Int32
   month : Int32
   day : Int32
-} derive(Eq, @debug.Debug)
+}
 pub fn CalendarDate::add_days(Self, Int32) -> Self
 pub fn CalendarDate::add_months(Self, Int32) -> Self
 pub fn CalendarDate::equal(Self, Self) -> Bool
@@ -45,17 +47,19 @@ pub fn CalendarDate::ordinal(Self) -> Int32
 pub fn CalendarDate::to_repr(Self) -> @debug.Repr
 pub fn CalendarDate::weekday(Self) -> Int32
 
+#derive(Eq, @debug.Debug)
 pub(all) enum DateSelection {
   Single(CalendarDate?)
   Multiple(Array[CalendarDate])
   Range(CalendarDate?, CalendarDate?)
-} derive(Eq, @debug.Debug)
+}
 pub fn DateSelection::choose(Self, CalendarDate) -> Self
 pub fn DateSelection::contains(Self, CalendarDate) -> Bool
 pub fn DateSelection::equal(Self, Self) -> Bool
 pub fn DateSelection::not_equal(Self, Self) -> Bool
 pub fn DateSelection::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Placement {
   BottomStart
   BottomCenter
@@ -69,17 +73,18 @@ pub(all) enum Placement {
   RightStart
   RightCenter
   RightEnd
-} derive(Eq, @debug.Debug)
+}
 pub fn Placement::equal(Self, Self) -> Bool
 pub fn Placement::not_equal(Self, Self) -> Bool
 pub fn Placement::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct SliderSpec {
   min : Int32
   max : Int32
   step : Int32
   min_steps_between : Int32
-} derive(Eq, @debug.Debug)
+}
 pub fn SliderSpec::equal(Self, Self) -> Bool
 pub fn SliderSpec::fraction(Self, Int32) -> Double
 pub fn SliderSpec::nearest(Self, Array[Int32], Double) -> Int32

@@ -1,11 +1,12 @@
 ///|
 /// Gregorian date algorithms adapted from RUI calendar.mbt at b1291945.
 /// MIT; see the module THIRD_PARTY_NOTICES.md.
+#derive(Eq, Debug)
 pub struct CalendarDate {
   year : Int32
   month : Int32
   day : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn days_in_month(year : Int32, month : Int32) -> Int32 {
@@ -102,11 +103,12 @@ pub fn CalendarDate::iso(self : CalendarDate) -> String {
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum DateSelection {
   Single(CalendarDate?)
   Multiple(Array[CalendarDate])
   Range(CalendarDate?, CalendarDate?)
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn DateSelection::choose(

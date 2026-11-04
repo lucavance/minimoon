@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Orientation {
   Horizontal
   Vertical
-} derive(Eq, Debug)
+}
 
 ///|
 fn Orientation::headless(self : Orientation) -> @headless.Orientation {
