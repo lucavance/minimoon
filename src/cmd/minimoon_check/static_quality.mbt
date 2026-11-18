@@ -1,8 +1,8 @@
 ///|
-let supported_node_engine = ">=26.12.1"
+let supported_node_engine = ">=26.13.1"
 
 ///|
-let primary_node_version = "26.13.0"
+let primary_node_version = "26.13.1"
 
 ///|
 let supported_bun_version = "1.4.4"
@@ -123,10 +123,10 @@ async fn static_suite(root : String) -> Unit {
     require_file(root, path)
   }
   require_text(
-    root, ".github/workflows/test.yml", "MOON_RELEASE: 0.10.19+bee578715",
+    root, ".github/workflows/test.yml", "MOON_RELEASE: 0.10.21+06da1ed44",
   )
   require_text(
-    root, ".github/workflows/test.yml", "MOONC_VERSION: v0.10.19+bee578715 (2026-11-02)",
+    root, ".github/workflows/test.yml", "MOONC_VERSION: v0.10.21+06da1ed44 (2026-11-16)",
   )
   for
     token in [
@@ -199,7 +199,7 @@ async fn static_suite(root : String) -> Unit {
     ] {
     for
       token in [
-        "0.1.20261102", "0.10.19+bee578715", supported_node_engine, supported_bun_version,
+        "0.1.20261117", "0.10.21+06da1ed44", supported_node_engine, supported_bun_version,
       ] {
       require_text(root, path, token)
     }

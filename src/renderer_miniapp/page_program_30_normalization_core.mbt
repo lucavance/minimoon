@@ -237,7 +237,7 @@ fn escape_miniapp_class_character(ch : Char) -> String? {
 
 ///|
 fn escape_miniapp_class_token(token : String) -> String {
-  let output = StringBuilder(size_hint=token.length())
+  let output = StringBuilder(capacity=token.length())
   let chars = token.to_array()
   for index = 0; index < chars.length(); index = index + 1 {
     let ch = chars[index]
@@ -260,7 +260,7 @@ fn escape_miniapp_class_token(token : String) -> String {
 
 ///|
 fn escape_miniapp_class_name(class_name : String) -> String {
-  let output = StringBuilder(size_hint=class_name.length())
+  let output = StringBuilder(capacity=class_name.length())
   let token = StringBuilder()
   let has_output = Ref(false)
   let flush = () => {

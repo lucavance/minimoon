@@ -1,14 +1,16 @@
 # Project status
 
-## Current source dependency refresh (2026-11-04)
+## Current source dependency refresh (2026-11-18)
 
-Current source targets `moon` / `moonrun 0.1.20261102` (`ea07287`) and
-`moonc v0.10.19+bee578715`. CI verifies both official archive SHA-256 values
-and all three exact tool versions. Source uses vp `1.5.0`, managed Node
-`26.13.0` LTS with compatibility floor `>=26.12.1`, and Bun `1.4.4`.
-Direct dependencies are async `0.22.7`, x `0.5.7`, paired Tailwind/CLI `4.3.4`
-and UI cmark `0.4.13`; PostCSS `8.5.32`, weapp-tailwindcss `5.6.3`,
-source-map-js `1.2.2` and explicit UI ucd `0.5.2` remain unchanged.
+Current source targets `moon` / `moonrun 0.1.20261117` (`eb64713`) and
+`moonc v0.10.21+06da1ed44`. CI verifies both official archive SHA-256 values
+and all three exact tool versions. Source uses vp `1.7.0`, managed Node
+`26` with compatibility floor `>=26.13.1`, and Bun `1.4.4`. CI pins Node
+`26.13.1` for reproducible validation.
+Direct dependencies are async `0.22.9`, x `0.5.7`, paired Tailwind/CLI `4.3.5`
+and UI cmark `0.4.17`; PostCSS `8.5.33`, weapp-tailwindcss `5.7.5`,
+source-map-js `1.2.2`, the pinned security fork
+`npm:@ryotsu/picomatch@4.0.7-a` and explicit UI ucd `0.5.2` are current.
 The documentation renderer uses the Mermaid CLI `11.17.1` maintenance release.
 
 Source and generated Starter/component types use `#derive(...)`. Canonical
@@ -24,8 +26,7 @@ registry archives and the release records below retain their original contents.
 Changed artifact fingerprints require renewed Developer Tools acceptance;
 tracked reports retain `release: false` and Developer Tools `pending`.
 
-The dependency-refresh validation branch is
-`validation/dependency-refresh-20261104`. Import the committed `dist/`
+The dependency-refresh validation uses the current staged source. Import the tracked `dist/`
 directories or the matching CI handoff bundles without changing their bytes:
 
 | Application | Import directory |

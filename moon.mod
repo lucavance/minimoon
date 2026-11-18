@@ -3,7 +3,7 @@ name = "lampclaw/minimoon"
 version = "0.3.2"
 
 import {
-  "moonbitlang/async@0.22.7",
+  "moonbitlang/async@0.22.9",
   "moonbitlang/x@0.5.7",
 }
 

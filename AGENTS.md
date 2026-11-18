@@ -115,7 +115,7 @@ Before starting a task:
 4. Inspect the relevant source, tests, generated artifacts, and documentation
    before proposing or implementing a change.
 
-Install global `vp 1.5.0` and initialize its managed environment
+Install global `vp 1.7.0` and initialize its managed environment
 as documented in `docs/guides/miniapp_quickstart.md`. For a fresh checkout,
 prepare the pinned environment with:
 
@@ -159,16 +159,16 @@ the user explicitly authorizes that action.
   whitespace and trailing commas when the exact formatting is not the behavior
   under test.
 
-- The current toolchain is `moon 0.1.20261102` with `moonc v0.10.19+bee578715`
-  and `moonrun 0.1.20261102`. CI pins that official prebuilt release and checks
+- The current toolchain is `moon 0.1.20261117` with `moonc v0.10.21+06da1ed44`
+  and `moonrun 0.1.20261117`. CI pins that official prebuilt release and checks
   both archive SHA-256 values and all exact tool versions. The repository targets
   this current MoonBit release; older compatibility jobs are not maintained.
   `moon check` writes `.mbti` files by default, so read-only checks use
   `--no-mbti`; `moon info` remains the explicit interface step. Rust is not
-  required. JavaScript tooling requires Node `>=26.12.1`; global `vp 1.5.0`
+  required. JavaScript tooling requires Node `>=26.13.1`; global `vp 1.7.0`
   manages Bun `1.4.4`. The repository and Starters generated from current source
-  pin Node `26.13.0` through `devEngines.runtime`. No `.node-version` is
-  committed or generated. Updating the toolchain pin requires review and
+  select Node `26` through `devEngines.runtime`; CI pins `26.13.1`.
+  No `.node-version` is committed or generated. Updating the toolchain pin requires review and
   regeneration/validation of affected artifacts.
   Empty `{}` expressions are ambiguous: use `Map([])` for empty maps,
   `Json::empty_object()` for empty JSON objects, and `{ () }` for empty blocks.
@@ -178,9 +178,11 @@ the user explicitly authorizes that action.
 
 - The current source and published pair is core `0.3.2` / UI `0.2.0`, with
   renderer protocol 9 and unchanged Contract 11 / runtime ABI 13.
-  Current source uses async `0.22.7`, x `0.5.7`, UI cmark `0.4.13` and explicit
-  UI ucd `0.5.2`. Source Starter pins are Tailwind `4.3.4`, PostCSS `8.5.32`
-  and weapp-tailwindcss `5.6.3`. Documentation diagrams use Mermaid CLI `11.17.1`.
+  Current source uses async `0.22.9`, x `0.5.7`, UI cmark `0.4.17` and explicit
+  UI ucd `0.5.2`. Source Starter pins are Tailwind `4.3.5`, PostCSS `8.5.33`
+  and weapp-tailwindcss `5.7.5`; the current Starter pins the MIT security fork
+  `npm:@ryotsu/picomatch@4.0.7-a` because upstream has no fixed npm release.
+  Documentation diagrams use Mermaid CLI `11.17.1`.
   Registry CLI `0.3.1` retains Node `26.11.1`, PostCSS `8.5.30`,
   weapp-tailwindcss `5.6.1` and source-map-js override `1.2.2`.
   Previous CLI `0.2.6` retains its original

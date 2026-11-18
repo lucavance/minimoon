@@ -407,8 +407,8 @@ test "HTTP invalid options are deferred and do not invoke the host" {
       result.val
       is Some(
         Err(
-          @http.HttpError::RequestError({ kind: @minimoon.InvalidPayload, .. })
-        )
+          @http.HttpError::RequestError({ kind: @minimoon.InvalidPayload, .. }),
+        ),
       ),
     )
     ignore(runtime.dispose())
@@ -426,7 +426,7 @@ test "HTTP malformed host response remains a root validation error" {
   assert_true(
     result.val
     is Some(
-      Err(@http.HttpError::RequestError({ kind: @minimoon.InvalidPayload, .. }))
+      Err(@http.HttpError::RequestError({ kind: @minimoon.InvalidPayload, .. })),
     ),
   )
   ignore(runtime.dispose())
@@ -459,7 +459,7 @@ test "HTTP capability availability is reported by the existing host boundary" {
   assert_true(
     result.val
     is Some(
-      Err(@http.HttpError::RequestError({ kind: @minimoon.Unavailable, .. }))
+      Err(@http.HttpError::RequestError({ kind: @minimoon.Unavailable, .. })),
     ),
   )
   ignore(runtime.dispose())

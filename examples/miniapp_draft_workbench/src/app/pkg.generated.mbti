@@ -61,7 +61,7 @@ pub(all) struct Draft {
   note : String
 }
 pub fn Draft::equal(Self, Self) -> Bool
-pub fn Draft::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn Draft::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
 pub fn Draft::not_equal(Self, Self) -> Bool
 pub fn Draft::to_json(Self) -> @json.Json
 
@@ -69,7 +69,7 @@ pub fn Draft::to_json(Self) -> @json.Json
 pub(all) struct DraftEcho {
   json : Draft
 }
-pub fn DraftEcho::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn DraftEcho::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
 
 #derive(Eq)
 pub(all) struct EchoModel {
@@ -134,7 +134,7 @@ pub(all) struct Record {
   draft : Draft
 }
 pub fn Record::equal(Self, Self) -> Bool
-pub fn Record::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn Record::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
 pub fn Record::not_equal(Self, Self) -> Bool
 pub fn Record::to_json(Self) -> @json.Json
 
@@ -155,7 +155,7 @@ pub(all) struct Store {
   records : Array[Record]
 }
 pub fn Store::equal(Self, Self) -> Bool
-pub fn Store::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn Store::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
 pub fn Store::not_equal(Self, Self) -> Bool
 pub fn Store::to_json(Self) -> @json.Json
 

@@ -161,7 +161,11 @@ async test "MiniApp TextEncoder fallback emits standard UTF-8 bytes" {
   let root = @fs.tmpdir(prefix="minimoon-text-encoder-fallback")
   let script = join(root, "fallback.js")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write(
       script,
       "globalThis.TextEncoder = undefined\n" +
@@ -261,7 +265,11 @@ test "application runtime dispatches every configured page through one bundle" {
 async test "config diagnostics report duplicate keys and missing packages without touching dist" {
   let root = @fs.tmpdir(prefix="minimoon-config-diagnostics")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write(join(root, "moon.mod"), "name = \"test/app\"\nsource = \"src\"\n")
     write(join(root, "dist/keep.txt"), "keep\n")
     let config = join(root, "miniapp.minimoon.json")
@@ -298,7 +306,11 @@ async test "config diagnostics report duplicate keys and missing packages withou
 async test "config diagnostics reject traversal paths without touching dist" {
   let root = @fs.tmpdir(prefix="minimoon-config-traversal")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write(join(root, "moon.mod"), "name = \"test/app\"\nsource = \"src\"\n")
     write(join(root, "src/pages/home/moon.pkg"), "")
     write(join(root, "dist/keep.txt"), "keep\n")
@@ -358,7 +370,11 @@ async test "config diagnostics reject traversal paths without touching dist" {
 async test "config diagnostics validate the optional component theme" {
   let root = @fs.tmpdir(prefix="minimoon-config-component-theme")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write(join(root, "moon.mod"), "name = \"test/app\"\nsource = \"src\"\n")
     write(join(root, "src/pages/home/moon.pkg"), "")
     let config = join(root, "miniapp.minimoon.json")
@@ -429,7 +445,11 @@ test "DevTools checks are trimmed and preserve declaration order" {
 async test "config diagnostics validate optional DevTools checks" {
   let root = @fs.tmpdir(prefix="minimoon-config-devtools-checks")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write(join(root, "moon.mod"), "name = \"test/app\"\nsource = \"src\"\n")
     write(join(root, "src/pages/home/moon.pkg"), "")
     let config = join(root, "miniapp.minimoon.json")
@@ -498,7 +518,11 @@ test "page route validation rejects traversal and absolute routes" {
 async test "invalid JSON records a source-located diagnostic" {
   let root = @fs.tmpdir(prefix="minimoon-config-invalid-json")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     let config = join(root, "miniapp.minimoon.json")
     write(config, "{\n  \"schemaVersion\": 8,\n  ?\n}\n")
     let failed = try {
@@ -561,7 +585,11 @@ test "project config preserves the verified CommonJS host boundary" {
 async test "Moon JavaScript bundle discovery follows relocated compiler output" {
   let root = @fs.tmpdir(prefix="minimoon-bundle-relocated")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     let target = join(root, "target")
     let relocated = join(
       target, "js/new-layout/build/example/minimoon_app_runtime/minimoon_app_runtime.js",
@@ -581,7 +609,11 @@ async test "Moon JavaScript bundle discovery follows relocated compiler output" 
 async test "Moon JavaScript bundle discovery accepts current debug and release layouts" {
   let root = @fs.tmpdir(prefix="minimoon-bundle-current-layout")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     for profile in ["debug", "release"] {
       let target = join(root, profile)
       let bundle = join(
@@ -604,7 +636,11 @@ async test "Moon JavaScript bundle discovery accepts current debug and release l
 async test "Moon JavaScript bundle discovery rejects zero and multiple outputs" {
   let root = @fs.tmpdir(prefix="minimoon-bundle-cardinality")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     let target = join(root, "target")
     @fs.mkdir(target, permission=0o700, recursive=true)
     let missing = try {

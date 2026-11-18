@@ -631,7 +631,7 @@ async fn generator_suite(root : String) -> Unit {
     require_text(app, "README.md", "vp install")
     forbid_text(app, "README.md", "bun install")
     let generated_overrides = json_field(generated_package, "overrides")
-    for dependency in ["postcss", "source-map-js"] {
+    for dependency in ["picomatch", "postcss", "source-map-js"] {
       guard json_string(generated_overrides, dependency) ==
         json_string(repository_overrides, dependency) else {
         abort(template + " template has stale override " + dependency)

@@ -1,6 +1,6 @@
 ///|
 fn encoded_path_segment(value : String) -> String {
-  let output = StringBuilder(size_hint=value.length())
+  let output = StringBuilder(capacity=value.length())
   for character in value.iter() {
     if (character >= 'a' && character <= 'z') ||
       (character >= 'A' && character <= 'Z') ||

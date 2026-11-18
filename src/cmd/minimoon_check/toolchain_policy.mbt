@@ -107,7 +107,7 @@ async fn vp_toolchain_policy(root : String) -> Unit {
     }) else {
     abort("the CI job must pin the reviewed setup-vp action")
   }
-  for setting in ["version: 1.5.0", "run-install: false"] {
+  for setting in ["version: 1.7.0", "run-install: false"] {
     guard workflow.split("\n").filter(line => line.trim() == setting).count() ==
       1 else {
       abort("the CI job must explicitly set " + setting)
@@ -115,9 +115,9 @@ async fn vp_toolchain_policy(root : String) -> Unit {
   }
   for
     token in [
-      "version: 1.5.0", "vp install --frozen-lockfile", "vp env current --json",
+      "version: 1.7.0", "vp install --frozen-lockfile", "vp env current --json",
       "vp run --no-cache check:coverage", "vp run --no-cache check:candidate", "sha256sum --check --strict",
-      "name: Setup MoonBit", "MOON_VERSION: 0.1.20261102 (ea07287 2026-11-02)", "MOONC_VERSION: v0.10.19+bee578715 (2026-11-02)",
+      "name: Setup MoonBit", "MOON_VERSION: 0.1.20261117 (eb64713 2026-11-17)", "MOONC_VERSION: v0.10.21+06da1ed44 (2026-11-16)",
       "\"moon $MOON_VERSION\"", "\"moonrun $MOON_VERSION\"", "\"moonc $MOONC_VERSION\"",
     ] {
     require_text(root, workflow_path, token)
@@ -132,9 +132,9 @@ async fn vp_toolchain_policy(root : String) -> Unit {
   let engines = json_field(manifest, "devEngines")
   let runtime = json_field(engines, "runtime")
   guard json_string(runtime, "name") == "node" &&
-    json_string(runtime, "version") == primary_node_version &&
+    json_string(runtime, "version") == "26" &&
     json_string(runtime, "onFail") == "download" else {
-    abort("repository must pin the primary vp-managed Node runtime")
+    abort("repository must select the vp-managed Node 26 runtime")
   }
   let manager = json_field(engines, "packageManager")
   guard json_string(manager, "name") == "bun" &&

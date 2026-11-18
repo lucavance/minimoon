@@ -65,7 +65,11 @@ test "resource verifier shares the generator portable relative-path policy" {
 async test "resource verification rejects missing or unsafe declared assets" {
   let root = @fs.tmpdir(prefix="minimoon-resource-verification")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     let manifest = Json::object({
       "resources": Json::array([
         Json::object({
@@ -105,7 +109,11 @@ async test "resource verification rejects missing or unsafe declared assets" {
 async test "resource SVG bytes and provider manifest descriptors bind the artifact fingerprint" {
   let root = @fs.tmpdir(prefix="minimoon-resource-fingerprint")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write_fingerprint_fixture(root, "App({})\n")
     let original = artifact_fingerprint(root)
     write(
@@ -222,7 +230,11 @@ async test "DevTools evidence scope follows the current App Contract" {
   assert_eq(current_evidence_scope(), "current-v11")
   let root = @fs.tmpdir(prefix="minimoon-evidence-scope")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     let evidence_file = join(root, "generated/devtools.evidence.json")
     write_json(
       evidence_file,
@@ -251,7 +263,11 @@ async test "DevTools evidence scope follows the current App Contract" {
 async test "candidate verification keeps local evidence private" {
   let root = @fs.tmpdir(prefix="minimoon-private-evidence")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     let fingerprint = "fixture-fingerprint"
     write_json(
       join(root, "generated/devtools.evidence.json"),
@@ -299,14 +315,14 @@ async test "artifact fingerprints are independent of checkout location" {
   let first = @fs.tmpdir(prefix="minimoon-fingerprint-first")
   let second = @fs.tmpdir(prefix="minimoon-fingerprint-second")
   {
-    errdefer {
+    errdefer @async.protect_from_cancel(() => {
       if @fs.exists(first) {
         @fs.rmdir(first, recursive=true)
       }
       if @fs.exists(second) {
         @fs.rmdir(second, recursive=true)
       }
-    }
+    })
     write_fingerprint_fixture(first, "App({})\n")
     write_fingerprint_fixture(second, "App({})\n")
     let first_fingerprint = artifact_fingerprint(first)
@@ -322,7 +338,11 @@ async test "artifact fingerprints are independent of checkout location" {
 async test "local private project config is not fingerprinted" {
   let root = @fs.tmpdir(prefix="minimoon-fingerprint-private")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write_fingerprint_fixture(root, "App({})\n")
     let expected = artifact_fingerprint(root)
     let private_config = join(root, "dist/project.private.config.json")
@@ -349,14 +369,14 @@ async test "artifact fingerprints change with protected content" {
   let first = @fs.tmpdir(prefix="minimoon-fingerprint-content-first")
   let second = @fs.tmpdir(prefix="minimoon-fingerprint-content-second")
   {
-    errdefer {
+    errdefer @async.protect_from_cancel(() => {
       if @fs.exists(first) {
         @fs.rmdir(first, recursive=true)
       }
       if @fs.exists(second) {
         @fs.rmdir(second, recursive=true)
       }
-    }
+    })
     write_fingerprint_fixture(first, "App({})\n")
     write_fingerprint_fixture(second, "App({ changed: true })\n")
     assert_not_eq(artifact_fingerprint(first), artifact_fingerprint(second))
@@ -369,7 +389,11 @@ async test "artifact fingerprints change with protected content" {
 async test "shared host and application runtime are fingerprinted" {
   let root = @fs.tmpdir(prefix="minimoon-fingerprint-shared-runtime")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write_fingerprint_fixture(root, "App({})\n")
     let original = artifact_fingerprint(root)
     let host = join(root, "dist/minimoon.host.js")
@@ -403,7 +427,11 @@ async test "shared host and application runtime are fingerprinted" {
 async test "release styles templates checklist and recursive files are fingerprinted" {
   let root = @fs.tmpdir(prefix="minimoon-fingerprint-release-boundary")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write_fingerprint_fixture(root, "App({})\n")
     let original = artifact_fingerprint(root)
     for
@@ -473,7 +501,11 @@ async test "release styles templates checklist and recursive files are fingerpri
 async test "v1 evidence never matches a v2 artifact fingerprint" {
   let root = @fs.tmpdir(prefix="minimoon-fingerprint-v1-evidence")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write_fingerprint_fixture(root, "App({})\n")
     let fingerprint = artifact_fingerprint(root)
     write_json(

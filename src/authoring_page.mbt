@@ -11,7 +11,7 @@ struct PageRuntime(
   Ref[Bool],
   Ref[Bool],
   Map[String, String],
-  PageLayoutState
+  PageLayoutState,
 )
 
 ///|

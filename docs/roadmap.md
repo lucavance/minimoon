@@ -2,13 +2,20 @@
 
 ## Near-term priorities
 
-### Source dependency refresh (2026-11-04)
+### Node compatibility floor (2026-11-18)
 
-Source and CI target `moon` / `moonrun 0.1.20261102` and
-`moonc v0.10.19+bee578715`, with checksum-pinned official archives. Refresh
-vp to `1.5.0`, managed Node to `26.13.0` LTS, async to `0.22.7`, x to `0.5.7`,
-UI cmark to `0.4.13`, paired Tailwind/CLI to `4.3.4` and Mermaid CLI to
-`11.17.1`. Retain Node `>=26.12.1`, Bun `1.4.4` and the existing public APIs
+Repository and source-generated Starters select Node `26` through
+`devEngines.runtime` and require Node `>=26.13.1` through `engines.node`.
+CI pins `26.13.1`; published archives retain their original requirements.
+
+### Source dependency refresh (2026-11-18)
+
+Source and CI target `moon` / `moonrun 0.1.20261117` and
+`moonc v0.10.21+06da1ed44`, with checksum-pinned official archives. Refresh
+vp to `1.7.0`, managed Node `26`, async to `0.22.9`, x to `0.5.7`,
+UI cmark to `0.4.17`, paired Tailwind/CLI to `4.3.5`, PostCSS to `8.5.33`,
+weapp-tailwindcss to `5.7.5` and Mermaid CLI to `11.17.1`. Retain Node
+`>=26.13.1`, Bun `1.4.4` and the existing public APIs
 and host protocols. Published archives remain unchanged; renewed host
 acceptance is required for every changed fixture fingerprint.
 

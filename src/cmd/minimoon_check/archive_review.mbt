@@ -41,8 +41,8 @@ fn archive_members(
       remaining = rest.trim_start()
     }
     let path = remaining.to_owned()
-    let uncompressed_bytes = @string.parse_int(columns[0], base=10)
-    let compressed_bytes = @string.parse_int(columns[2], base=10)
+    let uncompressed_bytes = @string.parse_int(columns[0], radix=10)
+    let compressed_bytes = @string.parse_int(columns[2], radix=10)
     guard path != "" &&
       uncompressed_bytes >= 0 &&
       compressed_bytes >= 0 &&

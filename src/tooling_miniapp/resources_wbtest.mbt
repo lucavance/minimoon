@@ -118,7 +118,11 @@ test "identical resource assets deduplicate but conflicting bytes fail" {
 async test "resource configuration failure leaves existing dist untouched and reports source location" {
   let root = @fs.tmpdir(prefix="minimoon-resource-config")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     write(join(root, "moon.mod"), "name = \"test/app\"\nsource = \"src\"\n")
     write(join(root, "src/pages/home/moon.pkg"), "")
     write(join(root, "dist/keep.txt"), "keep\n")
@@ -153,7 +157,11 @@ async test "resource configuration failure leaves existing dist untouched and re
 async test "native resource providers compile from application dependencies and clean temporary packages" {
   let root = @fs.tmpdir(prefix="minimoon-native-resource")
   {
-    errdefer (if @fs.exists(root) { @fs.rmdir(root, recursive=true) })
+    errdefer @async.protect_from_cancel(() => {
+      if @fs.exists(root) {
+        @fs.rmdir(root, recursive=true)
+      }
+    })
     let repository = run_checked(
         "git",
         ["rev-parse", "--show-toplevel"],

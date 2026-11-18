@@ -107,7 +107,7 @@ priv enum SidebarMsg {
   CloseTooltip
   TooltipMeasured(
     Int32,
-    Result[Array[@minimoon.NodeRect?], @minimoon.HostError]
+    Result[Array[@minimoon.NodeRect?], @minimoon.HostError],
   )
 }
 

@@ -1,5 +1,5 @@
 ///|
-// MoonBit 0.10.19 qualifies the builtin Json and ToJson aliases. Only the
+// MoonBit 0.10.21 qualifies the builtin Json and ToJson aliases. Only the
 // default alias of the actual core/json import can use the historical spelling.
 // Local type/generic bindings, other packages, strings and method names stay exact.
 fn api_json_alias(source : String) -> String {

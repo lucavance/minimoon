@@ -17,13 +17,13 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      VP_NODE_VERSION: 26.13.0
+      VP_NODE_VERSION: 26.13.1
       VP_PACKAGE_MANAGER: bun@1.4.4
-      MOON_RELEASE: 0.10.19+bee578715
-      MOON_VERSION: 0.1.20261102 (ea07287 2026-11-02)
-      MOONC_VERSION: v0.10.19+bee578715 (2026-11-02)
-      MOON_ARCHIVE_SHA256: dd1d6d793c9675405ef32b39bce66d40041e2052a9c3f2f403e0a9da98bd94fd
-      MOON_CORE_SHA256: b5b33afc759b8ae332346f357f42235d4c8d54afd91bb891b22ead3d746fa74f
+      MOON_RELEASE: 0.10.21+06da1ed44
+      MOON_VERSION: 0.1.20261117 (eb64713 2026-11-17)
+      MOONC_VERSION: v0.10.21+06da1ed44 (2026-11-16)
+      MOON_ARCHIVE_SHA256: 32f74e33538911313acba366d4a06e7678296aa7737945f678ff1fbc7f9f7f82
+      MOON_CORE_SHA256: 358728a14c7bbb5d1861fb48845cd1785da495b7b1836e484af499a679e328c2
 
     defaults:
       run:
@@ -59,11 +59,11 @@ jobs:
           echo "$MOON_HOME/bin" >> "$GITHUB_PATH"
           echo "MOON_HOME=$MOON_HOME" >> "$GITHUB_ENV"
 
-      - name: Setup Vite+ (26.13.0)
+      - name: Setup Vite+ (26.13.1)
         uses: voidzero-dev/setup-vp@cab1ab9eaff52d4857875f4f2c016e36af8f2c76 # v1.22.0
         with:
-          version: 1.5.0
-          node-version: 26.13.0
+          version: 1.7.0
+          node-version: 26.13.1
           run-install: false
           cache: true
 

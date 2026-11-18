@@ -16,7 +16,7 @@
   "application": null,
   "tabBar": null,
   "runtimeBytes": {
-    "application": 809982
+    "application": 797378
   },
   "rendererPatchPolicy": {
     "minSavingsPercent": 25,
@@ -881,60 +881,69 @@
                                                                                                                                 ]
                                                                                                                               }
                                                                                                                             ]
-                                                                                                                          }
-                                                                                                                        ]
-                                                                                                                      }
-                                                                                                                    ]
-                                                                                                                  },
-                                                                                                                  {
-                                                                                                                    "kind": "view",
-                                                                                                                    "identity": "i:1",
-                                                                                                                    "text": "",
-                                                                                                                    "props": {
-                                                                                                                      "className": "mmui-markdown-list-item"
-                                                                                                                    },
-                                                                                                                    "events": {},
-                                                                                                                    "children": [
-                                                                                                                      {
-                                                                                                                        "kind": "text",
-                                                                                                                        "identity": "i:0",
-                                                                                                                        "text": "☐",
-                                                                                                                        "props": {},
-                                                                                                                        "events": {},
-                                                                                                                        "children": []
-                                                                                                                      },
-                                                                                                                      {
-                                                                                                                        "kind": "view",
-                                                                                                                        "identity": "i:1",
-                                                                                                                        "text": "",
-                                                                                                                        "props": {
-                                                                                                                          "className": "mmui-markdown-list-content"
-                                                                                                                        },
-                                                                                                                        "events": {},
-                                                                                                                        "children": [
+                                                                                                                          },
                                                                                                                           {
                                                                                                                             "kind": "view",
-                                                                                                                            "identity": "i:0",
+                                                                                                                            "identity": "i:1",
                                                                                                                             "text": "",
-                                                                                                                            "props": {
-                                                                                                                              "className": "mmui-markdown-p"
-                                                                                                                            },
+                                                                                                                            "props": {},
                                                                                                                             "events": {},
                                                                                                                             "children": [
                                                                                                                               {
-                                                                                                                                "kind": "inline",
+                                                                                                                                "kind": "view",
                                                                                                                                 "identity": "i:0",
                                                                                                                                 "text": "",
-                                                                                                                                "props": {},
+                                                                                                                                "props": {
+                                                                                                                                  "className": "mmui-markdown-list-item"
+                                                                                                                                },
                                                                                                                                 "events": {},
                                                                                                                                 "children": [
                                                                                                                                   {
                                                                                                                                     "kind": "text",
                                                                                                                                     "identity": "i:0",
-                                                                                                                                    "text": "Nested task",
+                                                                                                                                    "text": "☐",
                                                                                                                                     "props": {},
                                                                                                                                     "events": {},
                                                                                                                                     "children": []
+                                                                                                                                  },
+                                                                                                                                  {
+                                                                                                                                    "kind": "view",
+                                                                                                                                    "identity": "i:1",
+                                                                                                                                    "text": "",
+                                                                                                                                    "props": {
+                                                                                                                                      "className": "mmui-markdown-list-content"
+                                                                                                                                    },
+                                                                                                                                    "events": {},
+                                                                                                                                    "children": [
+                                                                                                                                      {
+                                                                                                                                        "kind": "view",
+                                                                                                                                        "identity": "i:0",
+                                                                                                                                        "text": "",
+                                                                                                                                        "props": {
+                                                                                                                                          "className": "mmui-markdown-p"
+                                                                                                                                        },
+                                                                                                                                        "events": {},
+                                                                                                                                        "children": [
+                                                                                                                                          {
+                                                                                                                                            "kind": "inline",
+                                                                                                                                            "identity": "i:0",
+                                                                                                                                            "text": "",
+                                                                                                                                            "props": {},
+                                                                                                                                            "events": {},
+                                                                                                                                            "children": [
+                                                                                                                                              {
+                                                                                                                                                "kind": "text",
+                                                                                                                                                "identity": "i:0",
+                                                                                                                                                "text": "Nested task",
+                                                                                                                                                "props": {},
+                                                                                                                                                "events": {},
+                                                                                                                                                "children": []
+                                                                                                                                              }
+                                                                                                                                            ]
+                                                                                                                                          }
+                                                                                                                                        ]
+                                                                                                                                      }
+                                                                                                                                    ]
                                                                                                                                   }
                                                                                                                                 ]
                                                                                                                               }
