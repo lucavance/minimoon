@@ -253,6 +253,13 @@ Future frozen candidates require the `Test` CI job and its local repository
 gates. Historical compatibility-job results below belong to their original
 releases.
 
+The authorized core-only `0.3.3` publication completed on 2026-11-19 from
+frozen commit `34649c41239dbf6566fdd3acccae39d733673d06`. Test CI, local
+candidate and release gates, archive parity and fresh registry consumers passed.
+Published UI `0.2.0` declares core `0.3.0`. See the
+[publication receipt](docs/project_status.md#core-033-publication). Future
+publications require separate authorization and all release gates.
+
 The explicitly authorized core-only `0.3.2` publication completed on 2026-10-29
 from frozen commit `0b0b2f22258319d017bc3f38d105f06171b982d5`. Test CI, local
 candidate/release gates, archive parity and fresh registry consumers passed.

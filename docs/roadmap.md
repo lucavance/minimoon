@@ -2,11 +2,11 @@
 
 ## Near-term priorities
 
-### Core 0.3.3 release candidate
+### Core 0.3.3 released
 
 Core `0.3.3` incorporates the current toolchain, Babel settings and internal
-page and component lifecycle refactor. See [project status](project_status.md)
-for registry availability.
+page and component lifecycle refactor. It was published to Mooncakes on
+2026-11-19. See the [publication receipt](project_status.md#core-033-publication).
 
 ### Node compatibility floor (2026-11-18)
 
@@ -37,7 +37,7 @@ the upgraded UI runtime; verify the same settings in CI handoff artifacts.
 See the [same-source measurements](reference/performance_baseline.md#moonbit-01018-source-calibration).
 Validate packaged consumers, Starter generation and both fixture fingerprints.
 Changed fingerprints require renewed host acceptance.
-The core `0.3.2` / UI `0.2.0` metadata and published archives are unchanged.
+That alignment used core `0.3.2` and UI `0.2.0` metadata.
 
 ### Core 0.3.2 released
 

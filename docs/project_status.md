@@ -1,12 +1,41 @@
 # Project status
 
-## Core 0.3.3 release candidate
+## Core 0.3.3 publication
 
-The candidate includes the current source tooling and dependency refresh,
-Babel configuration for WeChat Developer Tools, and the internal page and
-component lifecycle refactor. It preserves the public source interfaces with
-Contract 11, runtime ABI 13 and renderer protocol 9. It targets core `0.3.3`
-with the published UI `0.2.0`, which declares core `0.3.0`.
+Core `lampclaw/minimoon@0.3.3` was published to Mooncakes on **2026-11-19
+(Asia/Shanghai)**. The frozen source is
+[`34649c41239dbf6566fdd3acccae39d733673d06`](https://github.com/lucavance/minimoon/commit/34649c41239dbf6566fdd3acccae39d733673d06).
+The [Test CI job](https://github.com/lucavance/minimoon/actions/runs/44477178047),
+native and JS tests, coverage, dependency audit, candidate checks, and local
+`check:all` and `check:mvp` passed. Both fixture fingerprints matched the local
+Developer Tools evidence. Public reports use `release: false` and Developer
+Tools `pending`.
+
+Core `0.3.3` includes the toolchain and dependency refresh below, Babel
+configuration for WeChat Developer Tools, and the internal page and component
+lifecycle refactor. It preserves the public interfaces, Contract 11, runtime
+ABI 13 and renderer protocol 9.
+
+The [core archive](https://download.mooncakes.io/user/lampclaw/minimoon/0.3.3.zip)
+matches the reviewed ZIP byte for byte. It contains 189 files in 330,057 bytes.
+Its SHA-256 and the registry index checksum are
+`15befb9299193d81eadae4101e08324d8bc5864fe5988b669fdb4fd4ff10c205`.
+The frozen publish stopped before upload because the extracted self-check
+needed to install dependencies. `moon publish` completed the self-check and
+returned HTTP `200 OK` from the same clean commit.
+
+Registry-only consumers passed CLI installation, Starter generation and first
+edit, native and JS query tests, and an App timer with a custom configuration
+and nested output. Release verification rejected a consumer missing host
+evidence. A Starter created by `0.3.2` upgraded to `0.3.3`, preserving app source,
+configuration, styles and private settings after the compiler syntax migration.
+Repeated builds produced identical output.
+
+Published UI `0.2.0` declares core `0.3.0`. The registry consumer resolved core
+`0.3.3` and UI `0.2.0`, passed native and JS tests, and built deterministic
+native UI and Markdown resources. Rejecting an unknown resource preserved the
+previous output. The [published UI archive](https://download.mooncakes.io/user/lampclaw/minimoon_ui/0.2.0.zip)
+has SHA-256 `388d5657b9c5a74fd5b212cd5fdf1bd75710404f3b0b177425b497c4d62068a9`.
 
 ## Current source dependency refresh (2026-11-18)
 
@@ -296,10 +325,13 @@ on a developer's machine. Changed fingerprints require renewed host validation.
 <!-- minimoon:historical:end -->
 ## Current published package availability
 
-Core `0.3.2` and UI `0.2.0` are available from Mooncakes, with UI retaining
-its core `0.3.0` declaration. Registry CLI `0.3.2` generates Node `26.12.1`,
-Bun `1.4.4`, PostCSS `8.5.32`, weapp-tailwindcss `5.6.3` and source-map-js
-override `1.2.2`. Previous CLI `0.3.1` retains Node `26.11.1`, Bun `1.4.3`,
+Core `0.3.3` and UI `0.2.0` are available from Mooncakes. UI declares core
+`0.3.0`. Registry CLI `0.3.3` generates Node `26` with a floor of `>=26.13.1`,
+Bun `1.4.4`, Tailwind/CLI `4.3.5`, PostCSS `8.5.33` and weapp-tailwindcss
+`5.7.5`. Its overrides pin source-map-js `1.2.2` and picomatch to the reviewed
+security fork. Previous CLI `0.3.2` uses Node `26.12.1`, Bun `1.4.4`, PostCSS
+`8.5.32`, weapp-tailwindcss `5.6.3` and source-map-js `1.2.2`. CLI `0.3.1`
+retains Node `26.11.1`, Bun `1.4.3`,
 PostCSS `8.5.30`, weapp-tailwindcss `5.6.1` and source-map-js override `1.2.2`.
 CLI `0.2.7` retains those tooling pins with its earlier framework version.
 Previous CLI `0.2.6` retains PostCSS `8.5.29`, weapp-tailwindcss `5.5.12`

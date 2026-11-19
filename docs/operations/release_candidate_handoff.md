@@ -1,9 +1,10 @@
 # Release candidate handoff
 
-Core `0.3.3` is prepared as a core-only release. Check
-[project status](../project_status.md#current-published-package-availability)
-for registry availability. Validate registry consumers of core `0.3.3` and the
-published UI `0.2.0`, whose module declares core `0.3.0`.
+The authorized core-only `0.3.3` publication completed on 2026-11-19 from
+frozen commit `34649c41239dbf6566fdd3acccae39d733673d06` after Test CI,
+local candidate and release gates, archive parity and registry consumers passed.
+The registry consumer paired core `0.3.3` with published UI `0.2.0`, which
+declares core `0.3.0`. See the [publication receipt](../project_status.md#core-033-publication).
 
 The explicitly authorized core-only `0.3.2` publication completed on 2026-10-29
 from frozen commit `0b0b2f22258319d017bc3f38d105f06171b982d5`, after Test CI,
