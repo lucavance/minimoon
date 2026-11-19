@@ -7,7 +7,7 @@
 
 ## 项目状态
 
-核心 `lampclaw/minimoon 0.3.2` 与可选的 `lampclaw/minimoon_ui 0.2.0`
+核心 `lampclaw/minimoon 0.3.3` 与可选的 `lampclaw/minimoon_ui 0.2.0`
 仍处于 1.0 之前的阶段。
 [项目状态](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
 记录注册表可用性与发布证据。
@@ -49,7 +49,7 @@
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon@0.3.2
+moon install lampclaw/minimoon/cmd/minimoon@0.3.3
 minimoon --version
 minimoon init my-app
 cd my-app
@@ -68,7 +68,7 @@ minimoon verify . --candidate
 解析；无需 `moon.work` 或框架源码目录。此流程不传 `--minimoon-root`。
 `vp install` 安装应用的样式构建工具。
 
-确认 `minimoon --version` 输出 `0.3.2`；如有其他版本，检查 PATH 中的旧 CLI。
+确认 `minimoon --version` 输出 `0.3.3`；如有其他版本，检查 PATH 中的旧 CLI。
 参见[固定版本安装](docs/guides/miniapp_quickstart.md#install-a-specific-version)及
 [已有应用升级步骤](docs/reference/compatibility_and_upgrades.md#upgrade-procedure)。
 开发框架或使用尚未发布的改动时，使用单独的

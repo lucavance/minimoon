@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.3.2` 公共 API 的轻量示例：
+Minimoon Draft Workbench 是使用核心 `lampclaw/minimoon 0.3.3` 公共 API 的轻量示例：
 **四个原生 Tab、一个编辑器、四个能力实验室，共九条路由**。
 它同时承担核心框架 conformance 验收，不是账号系统或云笔记服务。
 
@@ -120,5 +120,5 @@ UI Showcase 表单回显，共 12 项；
 `generated/verify_report.json` 与 `release_summary.json` 是公开 candidate 记录；
 `devtools.evidence.json` 私人且被 Git 忽略。证据仅对其精确产物指纹有效；
 生成字节变化后须复验所有受影响的示例，核心与 UI 的证据各自独立。
-当前源码版本为核心 `0.3.2`；候选产物、宿主验证和注册表可用性分别核验。
+当前源码版本为核心 `0.3.3`；候选产物、宿主验证和注册表可用性分别核验。
 不宣称生产请求域名或完整 HTTPS/TLS 验证，验证命令本身不会发布包。

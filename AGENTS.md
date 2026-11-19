@@ -176,8 +176,9 @@ the user explicitly authorizes that action.
   deprecated by this compiler. Keep generated sources on the same syntax.
   The aggregate gate requires `moon check` to be warning-free.
 
-- The current source and published pair is core `0.3.2` / UI `0.2.0`, with
-  renderer protocol 9 and unchanged Contract 11 / runtime ABI 13.
+- The current source pair is core `0.3.3` / UI `0.2.0`, with Contract 11,
+  runtime ABI 13 and renderer protocol 9. Registry availability is recorded
+  in [project status](docs/project_status.md#current-published-package-availability).
   Current source uses async `0.22.9`, x `0.5.7`, UI cmark `0.4.17` and explicit
   UI ucd `0.5.2`. Source Starter pins are Tailwind `4.3.5`, PostCSS `8.5.33`
   and weapp-tailwindcss `5.7.5`; the current Starter pins the MIT security fork

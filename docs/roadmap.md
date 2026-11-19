@@ -2,6 +2,12 @@
 
 ## Near-term priorities
 
+### Core 0.3.3 release candidate
+
+Core `0.3.3` incorporates the current toolchain, Babel settings and internal
+page and component lifecycle refactor. See [project status](project_status.md)
+for registry availability.
+
 ### Node compatibility floor (2026-11-18)
 
 Repository and source-generated Starters select Node `26` through
@@ -84,10 +90,10 @@ separate compatibility and host-validation review.
 
 Keep registry-based Starter onboarding and English/Chinese documentation
 consistent. Application authors use
-`moon install lampclaw/minimoon/cmd/minimoon@0.3.2` and
+`moon install lampclaw/minimoon/cmd/minimoon@0.3.3` and
 `minimoon init my-app`. Source installation remains available for framework
-development and unpublished candidates. The current source and published pair
-is core `0.3.2` / UI `0.2.0`. UI retains its core `0.3.0` declaration.
+development and unpublished candidates. Current source is core `0.3.3` with UI
+`0.2.0`. The published UI declares core `0.3.0`.
 
 Implemented capabilities are described below. CI, registry availability and
 real-host acceptance remain distinct results. Deferred directions are not

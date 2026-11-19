@@ -1,5 +1,13 @@
 # Project status
 
+## Core 0.3.3 release candidate
+
+The candidate includes the current source tooling and dependency refresh,
+Babel configuration for WeChat Developer Tools, and the internal page and
+component lifecycle refactor. It preserves the public source interfaces with
+Contract 11, runtime ABI 13 and renderer protocol 9. It targets core `0.3.3`
+with the published UI `0.2.0`, which declares core `0.3.0`.
+
 ## Current source dependency refresh (2026-11-18)
 
 Current source targets `moon` / `moonrun 0.1.20261117` (`eb64713`) and
@@ -20,14 +28,13 @@ historical snapshots and rejecting signature or derived-trait changes.
 Async's internal core runtime delegation emits three upstream experimental
 dependency notices; local compiler diagnostics retain the `--deny-warn` gate.
 
-Core `0.3.2` / UI `0.2.0` source version metadata, public APIs and Contract 11 /
-ABI 13 / renderer protocol 9 remain unchanged. This refresh is unpublished;
-registry archives and the release records below retain their original contents.
-Changed artifact fingerprints require renewed Developer Tools acceptance;
-tracked reports retain `release: false` and Developer Tools `pending`.
+The source refresh preserved public APIs, Contract 11, runtime ABI 13 and
+renderer protocol 9. Registry availability is recorded below. Changed artifact
+fingerprints require renewed Developer Tools acceptance. Tracked reports retain
+`release: false` and Developer Tools `pending`.
 
-The dependency-refresh validation uses the current staged source. Import the tracked `dist/`
-directories or the matching CI handoff bundles without changing their bytes:
+Import the tracked `dist/` directories or the matching CI handoff bundles
+without changing their bytes.
 
 | Application | Import directory |
 | --- | --- |

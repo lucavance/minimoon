@@ -8,7 +8,7 @@ or `setData` is needed.
 
 ## Project status
 
-Core `lampclaw/minimoon 0.3.2` and optional `lampclaw/minimoon_ui 0.2.0`
+Core `lampclaw/minimoon 0.3.3` and optional `lampclaw/minimoon_ui 0.2.0`
 are pre-1.0. See
 [project status](https://github.com/lucavance/minimoon/blob/main/docs/project_status.md)
 for registry availability and release evidence.
@@ -52,7 +52,7 @@ After environment setup, run these commands outside an existing Moon workspace:
 
 <!-- minimoon:onboarding:start -->
 ```bash
-moon install lampclaw/minimoon/cmd/minimoon@0.3.2
+moon install lampclaw/minimoon/cmd/minimoon@0.3.3
 minimoon --version
 minimoon init my-app
 cd my-app
@@ -71,7 +71,7 @@ Use a new or empty `my-app/`. Its `moon.mod` resolves core from Mooncakes;
 no checkout, `moon.work` or `--minimoon-root` is needed. `vp install` installs
 the style build tools.
 
-Confirm `minimoon --version` reports `0.3.2`; check PATH if another installed CLI
+Confirm `minimoon --version` reports `0.3.3`; check PATH if another installed CLI
 is selected. See [fixed-version installation](docs/guides/miniapp_quickstart.md#install-a-specific-version)
 and [upgrading an existing app](docs/reference/compatibility_and_upgrades.md#upgrade-procedure).
 To develop the framework or use unpublished changes, follow the separate

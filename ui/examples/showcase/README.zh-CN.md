@@ -3,7 +3,7 @@
 [English](README.md)
 
 这个六页示例同时承担验证职责，使用 `lampclaw/minimoon_ui 0.2.0` 与
-核心 `lampclaw/minimoon 0.3.2`。覆盖全部 64 个固定版本的 RUI 组件族，
+核心 `lampclaw/minimoon 0.3.3`。覆盖全部 64 个固定版本的 RUI 组件族，
 以及 Form、Theme 和可选 Markdown；原生替代方式见[迁移映射](../../docs/migration.md)（英文）。
 
 ## 直接导入体验

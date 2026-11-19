@@ -6,20 +6,29 @@ tags.
 
 ## [Unreleased]
 
-- Pin Developer Tools to Babel compilation; SWC 1.4.14 can emit invalid UI runtime label jumps and prevent app registration.
-- Align source tooling with MoonBit `0.10.19+bee578715`
-  (`moon` / `moonrun 0.1.20261102`), checksum-pinned CI and Starter guidance.
+## [0.3.3]
+
+- Pin Developer Tools to Babel compilation to avoid invalid UI runtime label
+  jumps emitted by SWC 1.4.14.
+- Align source tooling with MoonBit `0.10.21+06da1ed44`
+  (`moon` / `moonrun 0.1.20261117`), checksum-pinned CI and Starter guidance.
 - Migrate source and generated Starter/component types to the compiler's
   `#derive(...)` syntax while preserving the public API.
-- Refresh global vp to `1.5.0`, managed Node to `26.13.0` LTS, async to
-  `0.22.7`, x to `0.5.7`, and paired Tailwind/CLI to `4.3.4`; retain Node
-  `>=26.12.1`, Bun `1.4.4`, public APIs and host protocol versions.
+- Refresh global vp to `1.7.0`, async to `0.22.9`, x to `0.5.7`, and the Starter
+  to Tailwind/CLI `4.3.5`, PostCSS `8.5.33` and weapp-tailwindcss `5.7.5`.
+- Select managed Node `26` with a compatibility floor of `>=26.13.1`. Keep
+  Bun `1.4.4` and pin the Starter's picomatch security override to
+  `npm:@ryotsu/picomatch@4.0.7-a`.
+- Consolidate page and component lifecycle handling. Add regression coverage
+  for equal writes and independent `Val` branches.
 - Refresh Mermaid CLI to the `11.17.1` maintenance release and regenerate the
   21 documentation diagrams; defer the Mermaid 12 migration.
 - Accept compiler abort diagnostics through a direct `console.error` call
   audit, with negative controls for other console access.
-- Remove project-imposed archive and generated-artifact size ceilings/reserves;
-  retain exact measurements, archive integrity checks and platform restrictions.
+- Replace project-imposed archive and artifact size ceilings with exact
+  measurements. Keep archive integrity checks and platform restrictions.
+- Preserve public APIs, Contract 11, runtime ABI 13 and renderer protocol 9.
+  This release covers core. Published UI `0.2.0` declares core `0.3.0`.
 
 ## [0.3.2] — candidate
 
