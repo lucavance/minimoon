@@ -27,6 +27,34 @@ pub fn[Model, Msg] RunningComponent::render_to_string(
 }
 
 ///|
+/// Project a model and publish the resulting host state as one runtime command.
+/// The model is installed only after the view projection succeeds.
+fn[Model, Msg] RunningComponent::project_model(
+  self : RunningComponent[Model, Msg],
+  model : Model,
+  result : Ref[ContextWriteResult],
+) -> Bool {
+  match (self.project)(model) {
+    Err(error) => {
+      match
+        self.context.emit(RuntimeError(self.context.id, "invalid_view", error)) {
+        ContextDisposed => result.val = ContextDisposed
+        ContextWriteOk => ()
+      }
+      false
+    }
+    Ok(payload) => {
+      self.model.val = model
+      match self.context.update_state(payload) {
+        ContextDisposed => result.val = ContextDisposed
+        ContextWriteOk => ()
+      }
+      true
+    }
+  }
+}
+
+///|
 pub fn[Model, Msg] RunningComponent::mount(
   self : RunningComponent[Model, Msg],
 ) -> ContextWriteResult {
@@ -39,19 +67,11 @@ pub fn[Model, Msg] RunningComponent::mount(
   let result : Ref[ContextWriteResult] = Ref(ContextWriteOk)
   self.context.batch(fn() {
     let mount_result = self.context.mount()
-    let state_result = match (self.project)(self.model.val) {
-      Ok(payload) => self.context.update_state(payload)
-      Err(error) =>
-        self.context.emit(RuntimeError(self.context.id, "invalid_view", error))
-    }
     match mount_result {
       ContextDisposed => result.val = ContextDisposed
       ContextWriteOk => ()
     }
-    match state_result {
-      ContextDisposed => result.val = ContextDisposed
-      ContextWriteOk => ()
-    }
+    ignore(self.project_model(self.model.val, result))
   })
   result.val
 }
@@ -76,24 +96,8 @@ pub fn[Model, Msg] RunningComponent::dispatch(
       self.run_cmd(cmd, result)
       return
     }
-    match (self.project)(model) {
-      Err(error) =>
-        match
-          self.context.emit(
-            RuntimeError(self.context.id, "invalid_view", error),
-          ) {
-          ContextDisposed => result.val = ContextDisposed
-          ContextWriteOk => ()
-        }
-      Ok(payload) => {
-        self.model.val = model
-        let state_result = self.context.update_state(payload)
-        match state_result {
-          ContextDisposed => result.val = ContextDisposed
-          ContextWriteOk => ()
-        }
-        self.run_cmd(cmd, result)
-      }
+    if self.project_model(model, result) {
+      self.run_cmd(cmd, result)
     }
   })
   result.val
@@ -190,32 +194,16 @@ pub fn[Model, Msg] RunningComponent::transition(
       self.model.val = model
       return
     }
-    match (self.project)(model) {
-      Err(error) =>
-        match
-          self.context.emit(
-            RuntimeError(self.context.id, "invalid_view", error),
-          ) {
-          ContextDisposed => result.val = ContextDisposed
-          ContextWriteOk => ()
-        }
-      Ok(payload) => {
-        self.model.val = model
-        let state_result = self.context.update_state(payload)
-        match state_result {
-          ContextDisposed => result.val = ContextDisposed
-          ContextWriteOk => ()
-        }
-      }
-    }
+    ignore(self.project_model(model, result))
   })
   result.val
 }
 
 ///|
-pub fn[Model, Msg] RunningComponent::dispose(
+/// Cancel work owned by the component before its context is torn down.
+fn[Model, Msg] RunningComponent::cancel_pending_work(
   self : RunningComponent[Model, Msg],
-) -> ContextWriteResult {
+) -> Unit {
   self.pending_local_messages.clear()
   let local_cancellations = self.pending_local_effects.values().to_array()
   self.pending_local_effects.clear()
@@ -225,9 +213,15 @@ pub fn[Model, Msg] RunningComponent::dispose(
   for request_id, _ in self.pending_effects {
     let _ = self.context.emit(CancelEffect(self.context.id, request_id))
   }
-  let result = self.context.dispose()
   self.pending_effects.clear()
-  result
+}
+
+///|
+pub fn[Model, Msg] RunningComponent::dispose(
+  self : RunningComponent[Model, Msg],
+) -> ContextWriteResult {
+  self.cancel_pending_work()
+  self.context.dispose()
 }
 
 ///|

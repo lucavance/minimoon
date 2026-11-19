@@ -819,6 +819,38 @@ test "render-scoped events remove handlers with their dynamic branch" {
 }
 
 ///|
+enum CleanupMsg {
+  ToggleCleanup
+}
+
+///|
+test "accepted candidates clean removed scopes once and dispose active scopes" {
+  let cleanups = Ref(0)
+  let program = @renderer_miniapp.simple_page_program(
+    id="candidate_cleanup",
+    route="pages/candidate-cleanup/candidate-cleanup",
+    title="Candidate cleanup",
+    model=true,
+    update=(model, _message : CleanupMsg) => !model,
+    view=(events, model) => {
+      let toggle = events.tap("toggle", ToggleCleanup)
+      if model {
+        events.on_scope_cleanup("owned", fn() { cleanups.val += 1 })
+      }
+      @ui.button(on_click=toggle.key(), model.to_string())
+    },
+  )
+  let runtime = program.create_runtime()
+  let _ = runtime.mount()
+  let _ = runtime.dispatch("toggle", "{}")
+  assert_eq(cleanups.val, 1)
+  let _ = runtime.dispatch("toggle", "{}")
+  assert_eq(cleanups.val, 1)
+  let _ = runtime.dispose()
+  assert_eq(cleanups.val, 2)
+}
+
+///|
 test "dynamic tree validation rejects duplicate keyed siblings" {
   let node = @ui.keyed_fragment([
     @ui.keyed("same", @ui.text("first")),

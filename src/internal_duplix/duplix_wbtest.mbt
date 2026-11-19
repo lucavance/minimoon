@@ -280,3 +280,44 @@ test "bounded enumerate retains capacity across ten thousand committed tags" {
   assert_eq(live.val, 0)
   assert_eq(disposed.val, 10000)
 }
+
+///|
+test "incremental graph skips equal writes and unrelated sibling recomputation" {
+  let root = RootScope::new()
+  let left_computes = Ref(0)
+  let right_computes = Ref(0)
+  let (output, set_left, set_right) = root.run(fn() {
+    let (left, set_left) = input(1)
+    let (right, set_right) = input(10)
+    let left_value = left.map(value => {
+      left_computes.val += 1
+      value * 2
+    })
+    let right_value = right.map(value => {
+      right_computes.val += 1
+      value * 3
+    })
+    let output = left_value.map2(right_value, (left, right) => left + right)
+    (output, set_left, set_right)
+  })
+
+  assert_eq(root.run(fn() { output.read() }), 32)
+  assert_eq(left_computes.val, 1)
+  assert_eq(right_computes.val, 1)
+
+  set_left(1)
+  assert_eq(root.run(fn() { output.read() }), 32)
+  assert_eq(left_computes.val, 1)
+  assert_eq(right_computes.val, 1)
+
+  set_left(2)
+  assert_eq(root.run(fn() { output.read() }), 34)
+  assert_eq(left_computes.val, 2)
+  assert_eq(right_computes.val, 1)
+
+  set_right(11)
+  assert_eq(root.run(fn() { output.read() }), 37)
+  assert_eq(left_computes.val, 2)
+  assert_eq(right_computes.val, 2)
+  root.dispose()
+}

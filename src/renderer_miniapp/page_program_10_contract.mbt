@@ -140,12 +140,7 @@ pub fn[Model, Msg] page_program(
     Ok(candidate) => candidate
     Err(error) => abort(error)
   }
-  initial.commit()
-  commit_normalized_candidate(
-    initial.normalization,
-    normalization_cache,
-    normalization_roots,
-  )
+  commit_initial_candidate(initial, normalization_cache, normalization_roots)
   let active_events = Ref(initial.events)
   let active_event_index = Ref(initial.event_index)
   let active_subscriptions = Ref(initial.subscriptions)
@@ -171,22 +166,10 @@ pub fn[Model, Msg] page_program(
             normalization_cache.val,
           ) {
           Ok(candidate) => {
-            for scope, cleanup in active_scope_cleanups.val {
-              if !candidate.scope_cleanups.contains(scope) {
-                cleanup()
-              }
-            }
-            candidate.commit()
-            commit_normalized_candidate(
-              candidate.normalization,
-              normalization_cache,
-              normalization_roots,
+            accept_candidate(
+              candidate, active_tree, active_events, active_event_index, active_subscriptions,
+              active_scope_cleanups, normalization_cache, normalization_roots,
             )
-            active_tree.val = candidate.tree
-            active_events.val = candidate.events
-            active_event_index.val = candidate.event_index
-            active_subscriptions.val = candidate.subscriptions
-            active_scope_cleanups.val = candidate.scope_cleanups
             // The page runtime consumes the committed typed tree directly.
             // This token only asks runtime_core to enqueue a state boundary.
             Ok("typed-tree")
